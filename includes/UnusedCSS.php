@@ -18,8 +18,16 @@ class UnusedCSS {
                 $this->show_notice();
             }
 
+
         });
 
+        add_action('autoptimize_setup_done', function () {
+
+            if (!$this->is_enabled()) {
+                return;
+            }
+
+        });
     }
 
     public function show_notice()
@@ -34,5 +42,16 @@ class UnusedCSS {
         });
 
     }
+
+
+    public function is_enabled()
+    {
+        if (is_user_logged_in()) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 }
