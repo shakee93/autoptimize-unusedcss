@@ -47,11 +47,18 @@ class UnusedCSS {
     public function is_enabled()
     {
         if (is_user_logged_in()) {
-            return false;
+            return true;
         }
 
         return true;
     }
 
+    public function get_unusedCSS()
+    {
+        $url = UnusedCSS_Utils::get_current_url();
+
+        //error_log($url);
+        return (new UnusedCSS_Api())->get($url);
+    }
 
 }

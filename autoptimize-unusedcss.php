@@ -22,6 +22,8 @@ if (is_multisite()) {
 
 require('vendor/autoload.php');
 require('includes/UnusedCSS.php');
+require('includes/UnusedCSS_Utils.php');
+require('includes/UnusedCSS_Api.php');
 
 new UnusedCSS();
 
