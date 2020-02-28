@@ -7,25 +7,31 @@ class UnusedCSS {
 
 
     /**
-     * UnusedCSS constructor.
+     * UnusedCSS constructor. 
      */
     public function __construct()
     {
 
-        add_action('init', function () {
+        add_action('plugins_loaded', function () {
+
 
             if (!function_exists('autoptimize')) {
                 $this->show_notice();
             }
 
 
+            $this->processCss();
+
         });
+
+        
 
         add_action('autoptimize_setup_done', function () {
 
-            if (!$this->is_enabled()) {
-                return;
-            }
+           
+
+
+
 
         });
     }
@@ -53,12 +59,53 @@ class UnusedCSS {
         return true;
     }
 
-    public function get_unusedCSS()
+    public function get_unusedCSS($args)
     {
-        $url = UnusedCSS_Utils::get_current_url();
 
-        //error_log($url);
-        return (new UnusedCSS_Api())->get($url);
+        
+
     }
+
+
+    public function processCss(){
+
+        if (!$this->is_enabled()) {
+            return;
+        }
+
+        if(is_admin()) {
+            return;
+        }
+
+        if(wp_doing_ajax()) {
+            return;
+        }
+
+
+        if(UnusedCSS_Utils::is_cli()){
+            return;
+        }
+
+        // if ( defined( 'DOING_CRON' ) )
+        // {
+        //     // Do something
+        //     return;
+        // }
+
+
+
+        // $uucss_queue = new UnusedCSS_Queue();
+
+        // $url = UnusedCSS_Utils::get_current_url();
+
+        // error_log('Before Queue : ' . $url);
+
+        // $$url = $url;
+        // $uucss_queue->push_to_queue('cool yo' . $$url);
+        // $uucss_queue->save()->dispatch();
+
+    }
+
+
 
 }

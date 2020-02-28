@@ -42,4 +42,14 @@ class UnusedCSS_Utils {
         return true;
     }
 
+    public static function is_cli(){
+
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+            return true;
+        }
+
+        return false;
+        
+    }
+
 }
