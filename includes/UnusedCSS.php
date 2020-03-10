@@ -12,7 +12,7 @@ class UnusedCSS {
     public function __construct()
     {
 
-        add_action('plugins_loaded', function () {
+        add_action('init', function () {
 
 
             if (!function_exists('autoptimize')) {
@@ -20,7 +20,7 @@ class UnusedCSS {
             }
 
 
-            $this->processCss();
+           // $this->processCss();
 
         });
 
@@ -59,11 +59,14 @@ class UnusedCSS {
         return true;
     }
 
-    public function get_unusedCSS($args)
+    public function get_unusedCSS($url = null)
     {
 
-        
+        $url = UnusedCSS_Utils::get_current_url();
 
+        $css = (new UnusedCSS_Api())->get($url);
+
+        error_log(json_encode($css, JSON_PRETTY_PRINT));
     }
 
 
@@ -86,11 +89,17 @@ class UnusedCSS {
             return;
         }
 
-        // if ( defined( 'DOING_CRON' ) )
-        // {
-        //     // Do something
-        //     return;
-        // }
+
+        if ( defined( 'DOING_CRON' ) )
+        {
+            // Do something
+            return;
+        }
+
+        $url = UnusedCSS_Utils::get_current_url();
+        error_log($url);
+
+       $this->get_unusedCSS();
 
 
 
@@ -103,6 +112,8 @@ class UnusedCSS {
         // $$url = $url;
         // $uucss_queue->push_to_queue('cool yo' . $$url);
         // $uucss_queue->save()->dispatch();
+
+
 
     }
 
