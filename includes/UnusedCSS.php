@@ -5,12 +5,19 @@
  */
 class UnusedCSS {
 
+    public $ran = false;
+    public $url = null;
 
     /**
      * UnusedCSS constructor. 
      */
     public function __construct()
     {
+        // load wp filesystem related files;
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        WP_Filesystem();
+
+        $this->url = UnusedCSS_Utils::get_current_url();
 
         add_action('init', function () {
 
@@ -20,7 +27,13 @@ class UnusedCSS {
             }
 
 
-           // $this->processCss();
+            if(!$this->ran) {
+                $this->processCss();
+            }
+
+
+            $this->ran = true;
+
 
         });
 
@@ -61,12 +74,9 @@ class UnusedCSS {
 
     public function get_unusedCSS($url = null)
     {
+        $css = (new UnusedCSS_Api())->get($this->url);
 
-        $url = UnusedCSS_Utils::get_current_url();
-
-        $css = (new UnusedCSS_Api())->get($url);
-
-        error_log(json_encode($css, JSON_PRETTY_PRINT));
+        return $css;
     }
 
 
@@ -92,31 +102,73 @@ class UnusedCSS {
 
         if ( defined( 'DOING_CRON' ) )
         {
-            // Do something
+            return;
+        }
+
+        if(isset($_GET['doing_unused_fetch'])) {
             return;
         }
 
         $url = UnusedCSS_Utils::get_current_url();
-        error_log($url);
 
-       $this->get_unusedCSS();
+        $files = $this->get_unusedCSS($url);
 
-
-
-        // $uucss_queue = new UnusedCSS_Queue();
-
-        // $url = UnusedCSS_Utils::get_current_url();
-
-        // error_log('Before Queue : ' . $url);
-
-        // $$url = $url;
-        // $uucss_queue->push_to_queue('cool yo' . $$url);
-        // $uucss_queue->save()->dispatch();
-
-
+        $this->store_files($files);
 
     }
 
+    protected function store_files($files) {
+        global $wp_filesystem;
+        $base = $this->get_base_dir();
+
+        foreach( $files as $file) {
+
+            $_file = $base . '/' . $this->get_cache_source_hash() . '/' .basename($file->file);
+
+            if(!$wp_filesystem->exists($_file)) {
+                $wp_filesystem->put_contents($_file, $file->css, FS_CHMOD_FILE);
+            }
+
+        }
+        
+    }
+
+    protected function get_base_dir(){
+        global $wp_filesystem;
+        
+        $root = $wp_filesystem->wp_content_dir() . 'cache/autoptimize-uucss';
+
+        if(!$wp_filesystem->exists($root)) {
+            $wp_filesystem->mkdir($root);
+        }
+
+        return $root;
+    }
+
+    protected function get_cache_source_hash()
+    {
+        global $wp_filesystem;
+        $base = $this->get_base_dir();
+
+        $hash = $this->base64url_encode($this->url);
+
+        if(!$wp_filesystem->exists($base . '/' . $hash)) {
+            $wp_filesystem->mkdir($base . '/' . $hash);
+        }
+
+        return $hash;
+    }
+
+
+    function base64url_encode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+
+    function base64url_decode($data)
+    {
+        return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - (3 + strlen($data)) % 4));
+    }
 
 
 }

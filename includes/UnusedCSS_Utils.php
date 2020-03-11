@@ -52,4 +52,17 @@ class UnusedCSS_Utils {
         
     }
 
+    public static function log($object) {
+
+        error_log(json_encode($object));
+        
+        return $object;
+    }
+
+}
+// TODO : rename this to uucss_log
+function uucss_log($object) {
+
+    return UnusedCSS_Utils::log($object);
+    
 }

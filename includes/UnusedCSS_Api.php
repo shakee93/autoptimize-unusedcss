@@ -18,10 +18,10 @@ class UnusedCSS_Api
     public function get($url)
     {
         try {
-            $response = $this->client->get($this->apiUrl . '?url=' . $url);
+            $response = $this->client->get($this->apiUrl . '?url=' . $url . '?doing_unused_fetch=true');
 
             if ($response->getStatusCode() == 200) {
-                return $response;
+                return json_decode($response->getBody()->getContents());
             }
 
             return null;
