@@ -5,8 +5,10 @@
  */
 class UnusedCSS {
 
+    public $base = 'cache/autoptimize-uucss';
     public $ran = false;
     public $url = null;
+    public $ao_css = [];
 
     /**
      * UnusedCSS constructor. 
@@ -39,14 +41,10 @@ class UnusedCSS {
 
         
 
-        add_action('autoptimize_setup_done', function () {
+        add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
+        add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
 
-           
-
-
-
-
-        });
+        
     }
 
     public function show_notice()
@@ -136,7 +134,7 @@ class UnusedCSS {
     protected function get_base_dir(){
         global $wp_filesystem;
         
-        $root = $wp_filesystem->wp_content_dir() . 'cache/autoptimize-uucss';
+        $root = $wp_filesystem->wp_content_dir() . $this->base;
 
         if(!$wp_filesystem->exists($root)) {
             $wp_filesystem->mkdir($root);
@@ -170,5 +168,31 @@ class UnusedCSS {
         return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - (3 + strlen($data)) % 4));
     }
 
+    public function get_ao_css($ao_css){
+        //uucss_log($ao_css);
+        $this->ao_css[] = $ao_css;
+    }
 
+    public function replace_ao_css($html){
+
+        if(isset($_GET['doing_unused_fetch'])) {
+            return $html;
+        }
+
+        if(is_user_logged_in()) {
+            return $html;
+        }
+
+        $base = WP_CONTENT_URL . '/' . $this->base;
+        $hash = $this->base64url_encode($this->url);
+
+        foreach ($this->ao_css as  $css) {
+            
+            $_css = str_replace('/autoptimize/css', "/autoptimize-uucss/$hash", $css);
+            $html = str_replace($css, $_css, $html);
+            
+        }
+
+        return $html;
+    }
 }

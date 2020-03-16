@@ -4,7 +4,7 @@
 class UnusedCSS_Api
 {
 
-    public $apiUrl = 'https://api.freshpixl.com/unusedcss';
+    public $apiUrl = 'https://unusedcss.herokuapp.com';
     public $client;
 
     /**
