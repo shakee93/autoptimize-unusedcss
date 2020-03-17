@@ -24,8 +24,9 @@ class UnusedCSS {
         add_action('init', function () {
 
 
-            if (!function_exists('autoptimize')) {
+            if (!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
                 $this->show_notice();
+                return;
             }
 
 
@@ -37,13 +38,15 @@ class UnusedCSS {
             $this->ran = true;
 
 
+            add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
+            add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
+
+
         });
 
         
 
-        add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
-        add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
-
+        
         
     }
 
@@ -53,7 +56,7 @@ class UnusedCSS {
         add_action('admin_notices', function () {
 
             echo '<div class="notice notice-error is-dismissible">
-                    <p>Autoptimize UnusedCSS Plugin only works when autoptimize is installed and activated</p>
+                    <p>Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled</p>
                  </div>';
 
         });
@@ -107,6 +110,7 @@ class UnusedCSS {
             return;
         }
 
+        
         $url = UnusedCSS_Utils::get_current_url();
 
         $files = $this->get_unusedCSS($url);
@@ -121,7 +125,7 @@ class UnusedCSS {
 
         foreach( $files as $file) {
 
-            $_file = $base . '/' . $this->get_cache_source_hash() . '/' .basename($file->file);
+            $_file = $base . '/' . $this->get_cache_source_hash() . '/' . basename($file->file);
 
             if(!$wp_filesystem->exists($_file)) {
                 $wp_filesystem->put_contents($_file, $file->css, FS_CHMOD_FILE);
@@ -148,7 +152,7 @@ class UnusedCSS {
         global $wp_filesystem;
         $base = $this->get_base_dir();
 
-        $hash = $this->base64url_encode($this->url);
+        $hash = $this->encode($this->url);
 
         if(!$wp_filesystem->exists($base . '/' . $hash)) {
             $wp_filesystem->mkdir($base . '/' . $hash);
@@ -158,14 +162,9 @@ class UnusedCSS {
     }
 
 
-    function base64url_encode($data)
+    function encode($data)
     {
-        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-    }
-
-    function base64url_decode($data)
-    {
-        return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - (3 + strlen($data)) % 4));
+        return rtrim(md5($data));
     }
 
     public function get_ao_css($ao_css){
@@ -184,7 +183,7 @@ class UnusedCSS {
         }
 
         $base = WP_CONTENT_URL . '/' . $this->base;
-        $hash = $this->base64url_encode($this->url);
+        $hash = $this->encode($this->url);
 
         foreach ($this->ao_css as  $css) {
             
