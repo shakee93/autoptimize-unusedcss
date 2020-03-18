@@ -120,9 +120,10 @@ class UnusedCSS {
         global $wp_filesystem;
 
         foreach( $files as $file) {
-
-            $_file = $this->get_cache_source_dir() . '/' . basename($file->file);
-
+            
+            $url = explode("?", basename($file->file));
+            $_file = $this->get_cache_source_dir() . '/' . $url[0];
+            
             if(!$wp_filesystem->exists($_file)) {
                 $wp_filesystem->put_contents($_file, $file->css, FS_CHMOD_FILE);
             }
@@ -186,6 +187,7 @@ class UnusedCSS {
 
         $hash = $this->encode($this->url);
 
+        uucss_log($this->css);
         foreach ($this->css as  $css) {
             
             $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
