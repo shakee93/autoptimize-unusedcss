@@ -5,10 +5,12 @@
  */
 class UnusedCSS {
 
-    public $base = 'cache/autoptimize-uucss';
+    public $base = 'cache/uucss';
+    public $provider = 'autoptimize';
+
     public $ran = false;
     public $url = null;
-    public $ao_css = [];
+    public $css = [];
 
     /**
      * UnusedCSS constructor. 
@@ -19,10 +21,10 @@ class UnusedCSS {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         WP_Filesystem();
 
-        $this->url = UnusedCSS_Utils::get_current_url();
-
+        
         add_action('init', function () {
 
+            $this->url = UnusedCSS_Utils::get_current_url();
 
             if (!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
                 $this->show_notice();
@@ -31,23 +33,13 @@ class UnusedCSS {
 
 
             if(!$this->ran) {
-                $this->processCss();
+               $this->processCss();
             }
 
 
             $this->ran = true;
-
-
-            add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
-            add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
-
-
         });
 
-        
-
-        
-        
     }
 
     public function show_notice()
@@ -73,14 +65,7 @@ class UnusedCSS {
         return true;
     }
 
-    public function get_unusedCSS($url = null)
-    {
-        $css = (new UnusedCSS_Api())->get($this->url);
-
-        return $css;
-    }
-
-
+    
     public function processCss(){
 
         if (!$this->is_enabled()) {
@@ -95,11 +80,13 @@ class UnusedCSS {
             return;
         }
 
+        if(is_404()) {
+            return;
+        }
 
         if(UnusedCSS_Utils::is_cli()){
             return;
         }
-
 
         if ( defined( 'DOING_CRON' ) )
         {
@@ -110,27 +97,35 @@ class UnusedCSS {
             return;
         }
 
+
+        $files = $this->get_unusedCSS();
+
+        if($files && count($files) > 0) {
+           $this->store_files($files);    
         
-        $url = UnusedCSS_Utils::get_current_url();
+           add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
+           add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
+        }
+        
+    }
 
-        $files = $this->get_unusedCSS($url);
+    public function get_unusedCSS($url = null)
+    {
+        $css = (new UnusedCSS_Api())->get($this->url);
 
-        $this->store_files($files);
-
+        return $css;
     }
 
     protected function store_files($files) {
         global $wp_filesystem;
-        $base = $this->get_base_dir();
 
         foreach( $files as $file) {
 
-            $_file = $base . '/' . $this->get_cache_source_hash() . '/' . basename($file->file);
+            $_file = $this->get_cache_source_dir() . '/' . basename($file->file);
 
             if(!$wp_filesystem->exists($_file)) {
                 $wp_filesystem->put_contents($_file, $file->css, FS_CHMOD_FILE);
             }
-
         }
         
     }
@@ -138,27 +133,35 @@ class UnusedCSS {
     protected function get_base_dir(){
         global $wp_filesystem;
         
-        $root = $wp_filesystem->wp_content_dir() . $this->base;
+        $root = $wp_filesystem->wp_content_dir()  . $this->base;
+        $root_with_provider = $root . '/' . $this->provider;
 
         if(!$wp_filesystem->exists($root)) {
             $wp_filesystem->mkdir($root);
+
+            if(!$wp_filesystem->exists($root_with_provider)) {
+                $wp_filesystem->mkdir($root_with_provider);
+            }
+            
         }
 
-        return $root;
+
+        return $root_with_provider;
     }
 
-    protected function get_cache_source_hash()
+    protected function get_cache_source_dir()
     {
         global $wp_filesystem;
-        $base = $this->get_base_dir();
-
+        
         $hash = $this->encode($this->url);
 
-        if(!$wp_filesystem->exists($base . '/' . $hash)) {
-            $wp_filesystem->mkdir($base . '/' . $hash);
+        $source_dir = $this->get_base_dir() . '/' . $hash;
+
+        if(!$wp_filesystem->exists($source_dir)) {
+            $wp_filesystem->mkdir($source_dir);
         }
 
-        return $hash;
+        return $source_dir;
     }
 
 
@@ -168,8 +171,7 @@ class UnusedCSS {
     }
 
     public function get_ao_css($ao_css){
-        //uucss_log($ao_css);
-        $this->ao_css[] = $ao_css;
+        $this->css[] = $ao_css;
     }
 
     public function replace_ao_css($html){
@@ -182,12 +184,11 @@ class UnusedCSS {
             return $html;
         }
 
-        $base = WP_CONTENT_URL . '/' . $this->base;
         $hash = $this->encode($this->url);
 
-        foreach ($this->ao_css as  $css) {
+        foreach ($this->css as  $css) {
             
-            $_css = str_replace('/autoptimize/css', "/autoptimize-uucss/$hash", $css);
+            $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
             $html = str_replace($css, $_css, $html);
             
         }

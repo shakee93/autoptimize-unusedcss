@@ -5,29 +5,39 @@ class UnusedCSS_Api
 {
 
     public $apiUrl = 'https://unusedcss.herokuapp.com';
-    public $client;
 
     /**
      * UnusedCSS_Api constructor.
      */
     public function __construct()
     {
-        $this->client = new GuzzleHttp\Client();
+    
     }
 
-    public function get($url)
-    {
-        try {
-            $response = $this->client->get($this->apiUrl . '?url=' . $url . '?doing_unused_fetch=true');
+    public function get($url) {
 
-            if ($response->getStatusCode() == 200) {
-                return json_decode($response->getBody()->getContents());
-            }
-
-            return null;
+        $appender = '?';
+        if (strpos($url, '?') !== false) {
+            $appender = '&';
         }
-        catch(\GuzzleHttp\Exception\ServerException $e) {
-            error_log($e->getMessage());
+
+        $url = $this->apiUrl . '?url=' . urlencode($url . $appender . 'doing_unused_fetch=true');
+
+        // if (strpos($url, 'doing_unused_fetch=true') !== true) {
+        //     $url = urlencode($url . $appender . 'doing_unused_fetch=true');
+        // }
+
+        uucss_log($url);
+        
+        $response = wp_remote_get($url);
+ 
+        if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+            $headers = $response['headers'];
+            $body    = $response['body'];
+
+            return json_decode($body);
+        }
+        else {
             return null;
         }
 
