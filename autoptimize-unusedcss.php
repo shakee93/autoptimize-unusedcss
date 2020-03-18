@@ -20,8 +20,7 @@ if (is_multisite()) {
     define( 'AO_UUCSS_DIR', WP_CONTENT_DIR . '/uploads/ao_uucss/' );
 }
 
-require('vendor/autoload.php');
-require('includes/UnusedCSS_Queue.php');
+//require('includes/UnusedCSS_Queue.php');
 require('includes/UnusedCSS.php');
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
