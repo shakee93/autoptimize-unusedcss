@@ -19,24 +19,22 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function enabled() {
 
-        return function_exists('autoptimize') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on";
+        if(is_multisite()) {
 
+            UnusedCSS_Utils::add_admin_notice("UnusedCSS not supported for multisite");
+
+            return false;
+        }
+
+        if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
+                    
+            UnusedCSS::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
+            
+            return false;
+        }
+
+        return true;
     }
-
-
-    public function show_notice()
-    {
-
-        add_action('admin_notices', function () {
-
-            echo '<div class="notice notice-error is-dismissible">
-                    <p>Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled</p>
-                 </div>';
-
-        });
-
-    }
-
 
     public function get_css(){
 
@@ -51,28 +49,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-
         add_action('autoptimize_html_after_minify', function($html){
 
-            if(isset($_GET['doing_unused_fetch'])) {
-                return $html;
+            foreach($this->purged_files as $file){
+                $html = str_replace($file->file, $this->cache_file_location($file->file, WP_CONTENT_URL . "/cache/uucss"), $html);
             }
-    
-            if(is_user_logged_in()) {
-                return $html;
-            }
-    
-            $hash = $this->encode($this->url);
-    
-            foreach ($this->css as  $css) {
-                
-                $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
-                $html = str_replace($css, $_css, $html);
-                
-            }
-    
-            return $html;
-            
+
+            return $html;            
         });
 
         

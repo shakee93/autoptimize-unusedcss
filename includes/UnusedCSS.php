@@ -10,7 +10,9 @@ abstract class UnusedCSS {
 
     public $url = null;
     public $css = [];
+    public $purged_files = [];
 
+    
     /**
      * UnusedCSS constructor. 
      */
@@ -28,9 +30,6 @@ abstract class UnusedCSS {
             if($this->enabled()) {
                 $this->purge_css();
             }
-            else {
-                $this->show_notice();
-            }
             
         });
 
@@ -41,14 +40,14 @@ abstract class UnusedCSS {
         return true;
 
     }
-
-
-    abstract public function show_notice();
-
     
     protected function purge_css(){
 
         if(is_admin()) {
+            return;
+        }
+
+        if(is_user_logged_in()) {
             return;
         }
 
@@ -69,16 +68,16 @@ abstract class UnusedCSS {
             return;
         }
 
-        if(isset($_GET['doing_unused_fetch'])) {
+        if($this->is_doing_api_fetch()) {
             return;
         }
 
         $uucss_api = new UnusedCSS_Api();
-        $files = $uucss_api->get($this->url);
+        $this->purged_files = $uucss_api->get($this->url);
 
-        if($files && count($files) > 0) {
+        if($this->purged_files && count($this->purged_files) > 0) {
            
-            $this->cache_files($files);    
+            $this->cache_files();    
            
             $this->get_css();
            
@@ -88,31 +87,34 @@ abstract class UnusedCSS {
         
     }
 
-    protected function get_base_dir(){
+    protected function is_doing_api_fetch(){
+        return isset($_GET['doing_unused_fetch']);
+    }
+
+    protected function get_base_dir($url = false){
         global $wp_filesystem;
         
-        $root = $wp_filesystem->wp_content_dir()  . $this->base;
+        $root = ($url) ? $url : $wp_filesystem->wp_content_dir()  . $this->base;
         $root_with_provider = $root . '/' . $this->provider;
 
         if(!$wp_filesystem->exists($root)) {
             $wp_filesystem->mkdir($root);
+        }
 
-            if(!$wp_filesystem->exists($root_with_provider)) {
-                $wp_filesystem->mkdir($root_with_provider);
-            }
-            
+        if(!$wp_filesystem->exists($root_with_provider)) {
+            $wp_filesystem->mkdir($root_with_provider);
         }
 
         return $root_with_provider;
     }
 
-    protected function get_cache_source_dir()
+    protected function get_cache_source_dir($url = false)
     {
         global $wp_filesystem;
         
         $hash = $this->encode($this->url);
 
-        $source_dir = $this->get_base_dir() . '/' . $hash;
+        $source_dir = $this->get_base_dir($url) . '/' . $hash;
 
         if(!$wp_filesystem->exists($source_dir)) {
             $wp_filesystem->mkdir($source_dir);
@@ -128,10 +130,10 @@ abstract class UnusedCSS {
     }
 
 
-    protected function cache_files($files) {
+    protected function cache_files() {
         global $wp_filesystem;
 
-        foreach( $files as $file) {
+        foreach($this->purged_files as $file) {
             
             $file_location = $this->cache_file_location($file->file);
             
@@ -142,9 +144,12 @@ abstract class UnusedCSS {
         
     }
 
-    public function cache_file_location($file){
-        $url = explode("?", basename($file));
-        return $this->get_cache_source_dir() . '/' . $url[0];
+    protected function cache_file_location($file, $link = false){
+        return $this->get_cache_source_dir($link) . '/' . $this->get_file_name($file);
+    }
+
+    protected function get_file_name($file){
+        return explode("?", basename($file))[0];
     }
 
 

@@ -59,6 +59,18 @@ class UnusedCSS_Utils {
         return $object;
     }
 
+    public static function add_admin_notice($message, $type='error') {
+
+        add_action('admin_notices', function () {
+
+            echo "<div class=\"notice notice-$type is-dismissible\">
+                    <p>$message</p>
+                 </div>";
+
+        });
+
+    }
+
 }
 // TODO : rename this to uucss_log
 function uucss_log($object) {
