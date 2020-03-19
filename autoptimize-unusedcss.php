@@ -20,10 +20,10 @@ if (is_multisite()) {
     define( 'AO_UUCSS_DIR', WP_CONTENT_DIR . '/uploads/ao_uucss/' );
 }
 
-//require('includes/UnusedCSS_Queue.php');
-require('includes/UnusedCSS.php');
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
+require('includes/UnusedCSS.php');
+require('includes/UnusedCSS_Autoptimize.php');
 
-new UnusedCSS();
+new UnusedCSS_Autoptimize();
 

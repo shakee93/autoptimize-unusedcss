@@ -3,12 +3,11 @@
 /**
  * Class UnusedCSS
  */
-class UnusedCSS {
+abstract class UnusedCSS {
 
     public $base = 'cache/uucss';
-    public $provider = 'autoptimize';
+    public $provider = null;
 
-    public $ran = false;
     public $url = null;
     public $css = [];
 
@@ -26,51 +25,28 @@ class UnusedCSS {
 
             $this->url = UnusedCSS_Utils::get_current_url();
 
-            if (!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
+            if($this->enabled()) {
+                $this->purge_css();
+            }
+            else {
                 $this->show_notice();
-                return;
             }
-
-
-            if(!$this->ran) {
-               $this->processCss();
-            }
-
-
-            $this->ran = true;
+            
         });
 
     }
 
-    public function show_notice()
-    {
-
-        add_action('admin_notices', function () {
-
-            echo '<div class="notice notice-error is-dismissible">
-                    <p>Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled</p>
-                 </div>';
-
-        });
-
-    }
-
-
-    public function is_enabled()
-    {
-        if (is_user_logged_in()) {
-            return true;
-        }
+    public function enabled() {
 
         return true;
+
     }
 
-    
-    public function processCss(){
 
-        if (!$this->is_enabled()) {
-            return;
-        }
+    abstract public function show_notice();
+
+    
+    protected function purge_css(){
 
         if(is_admin()) {
             return;
@@ -97,36 +73,17 @@ class UnusedCSS {
             return;
         }
 
-
-        $files = $this->get_unusedCSS();
+        $uucss_api = new UnusedCSS_Api();
+        $files = $uucss_api->get($this->url);
 
         if($files && count($files) > 0) {
-           $this->store_files($files);    
-        
-           add_action('autoptimize_filter_cache_getname', [$this, 'get_ao_css']);
-           add_action('autoptimize_html_after_minify', [$this, 'replace_ao_css']);
-        }
-        
-    }
-
-    public function get_unusedCSS($url = null)
-    {
-        $css = (new UnusedCSS_Api())->get($this->url);
-
-        return $css;
-    }
-
-    protected function store_files($files) {
-        global $wp_filesystem;
-
-        foreach( $files as $file) {
+           
+            $this->cache_files($files);    
+           
+            $this->get_css();
+           
+            $this->replace_css();
             
-            $url = explode("?", basename($file->file));
-            $_file = $this->get_cache_source_dir() . '/' . $url[0];
-            
-            if(!$wp_filesystem->exists($_file)) {
-                $wp_filesystem->put_contents($_file, $file->css, FS_CHMOD_FILE);
-            }
         }
         
     }
@@ -145,7 +102,6 @@ class UnusedCSS {
             }
             
         }
-
 
         return $root_with_provider;
     }
@@ -166,35 +122,34 @@ class UnusedCSS {
     }
 
 
-    function encode($data)
+    protected function encode($data)
     {
         return rtrim(md5($data));
     }
 
-    public function get_ao_css($ao_css){
-        $this->css[] = $ao_css;
+
+    protected function cache_files($files) {
+        global $wp_filesystem;
+
+        foreach( $files as $file) {
+            
+            $file_location = $this->cache_file_location($file->file);
+            
+            if(!$wp_filesystem->exists($file_location)) {
+                $wp_filesystem->put_contents($file_location, $file->css, FS_CHMOD_FILE);
+            }
+        }
+        
     }
 
-    public function replace_ao_css($html){
-
-        if(isset($_GET['doing_unused_fetch'])) {
-            return $html;
-        }
-
-        if(is_user_logged_in()) {
-            return $html;
-        }
-
-        $hash = $this->encode($this->url);
-
-        uucss_log($this->css);
-        foreach ($this->css as  $css) {
-            
-            $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
-            $html = str_replace($css, $_css, $html);
-            
-        }
-
-        return $html;
+    public function cache_file_location($file){
+        $url = explode("?", basename($file));
+        return $this->get_cache_source_dir() . '/' . $url[0];
     }
+
+
+    abstract public function get_css();
+
+    abstract public function replace_css();
+
 }
