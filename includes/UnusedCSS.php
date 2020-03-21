@@ -91,7 +91,7 @@ abstract class UnusedCSS {
         return isset($_GET['doing_unused_fetch']);
     }
 
-    protected function get_base_dir($url = false){
+    public function get_base_dir($url = false){
         global $wp_filesystem;
         
         $root = ($url) ? $url : $wp_filesystem->wp_content_dir()  . $this->base;
@@ -150,6 +150,14 @@ abstract class UnusedCSS {
 
     protected function get_file_name($file){
         return explode("?", basename($file))[0];
+    }
+
+    public function clear_cache(){
+
+        global $wp_filesystem;
+        uucss_log($this->get_base_dir());
+        $wp_filesystem->delete($this->get_base_dir(), true);
+        
     }
 
 
