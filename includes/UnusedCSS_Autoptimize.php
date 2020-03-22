@@ -30,8 +30,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         }
 
         if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-                    
-            UnusedCSS::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
+
+            UnusedCSS_Utils::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
             
             return false;
         }
