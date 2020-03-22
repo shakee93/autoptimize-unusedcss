@@ -15,8 +15,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
-
         parent::__construct();
+
     }
 
 

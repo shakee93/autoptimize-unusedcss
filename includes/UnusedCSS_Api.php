@@ -33,6 +33,7 @@ class UnusedCSS_Api
                 return json_decode($body);
             }
 
+            uucss_log($response['response']);
             return null;
         }
         else {

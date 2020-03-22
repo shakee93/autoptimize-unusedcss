@@ -15,7 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
 require('includes/UnusedCSS.php');
-require('includes/UnusedCSS_Autoptimize.php');
+require('includes/Autoptimize/UnusedCSS_Autoptimize.php');
 
 new UnusedCSS_Autoptimize();
 
+if (is_admin()) {
+    require('includes/Autoptimize/UnusedCSS_Autoptimize_Admin.php');
+    new UnusedCSS_Autoptimize_Admin();
+}
