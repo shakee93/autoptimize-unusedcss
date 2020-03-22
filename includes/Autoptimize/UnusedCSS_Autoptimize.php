@@ -6,6 +6,8 @@
 class UnusedCSS_Autoptimize extends UnusedCSS {
 
 
+    protected $options = [];
+
     /**
      * UnusedCSS constructor. 
      */
@@ -15,12 +17,17 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
+
         parent::__construct();
 
     }
 
 
     public function enabled() {
+
+        if (!UnusedCSS_Autoptimize_Admin::enabled()) {
+            return false;
+        }
 
         if(is_multisite()) {
 

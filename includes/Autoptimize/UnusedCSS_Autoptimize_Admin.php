@@ -14,12 +14,42 @@ class UnusedCSS_Autoptimize_Admin {
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
 
+        add_action( 'admin_bar_menu', function () {
+
+            global $wp_admin_bar;
+
+            $wp_admin_bar->add_node( array(
+                'id'     => 'autoptimize-uucss',
+                'title'  => __( '🔥 Unused CSS', 'autoptimize' ),
+                'parent' => 'autoptimize',
+                'href' =>   admin_url('options-general.php?page=uucss')
+            ));
+
+        }, 100 );
+
     }
 
     public static function fetch_options()
     {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
+
+    public static function enabled(){
+        if (empty(static::fetch_options()['autoptimize_uucss_enabled'])) {
+            return false;
+        }
+        return true;
+    }
+
+    public function add_ao_tab($in){
+
+        $in = array_merge( $in, array(
+            'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
+        ) );
+
+        return $in;
+    }
+
 
     public function add_ao_page(){
 
@@ -69,15 +99,5 @@ class UnusedCSS_Autoptimize_Admin {
         
 <?php
     }
-    public function add_ao_tab($in){
-
-        $in = array_merge( $in, array(
-            'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
-        ) );
-
-        return $in;
-    }
-
-
 
 }
