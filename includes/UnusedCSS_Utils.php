@@ -61,7 +61,7 @@ class UnusedCSS_Utils {
 
     public static function add_admin_notice($message, $type='error') {
 
-        add_action('admin_notices', function () {
+        add_action('admin_notices', function () use ($message, $type) {
 
             echo "<div class=\"notice notice-$type is-dismissible\">
                     <p>$message</p>
