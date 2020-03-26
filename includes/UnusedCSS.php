@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Class UnusedCSS
  */
@@ -12,29 +13,39 @@ abstract class UnusedCSS {
     public $css = [];
     public $purged_files = [];
 
-    
+
     /**
-     * UnusedCSS constructor. 
+     * UnusedCSS constructor.
      */
     public function __construct()
     {
+        add_action('uucss_queue', [$this, 'store'], 10, 2);
+
+        if(defined('DOING_CRON')) {
+            return;
+        }
+
         // load wp filesystem related files;
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         WP_Filesystem();
 
-        
-        add_action('init', function () {
+        $this->url = UnusedCSS_Utils::get_current_url();
 
-            $this->url = UnusedCSS_Utils::get_current_url();
+        add_action('init', function () {
 
             if($this->enabled()) {
                 $this->purge_css();
                 $this->get_css();
                 $this->replace_css();
             }
-            
+
         });
 
+    }
+
+    public function store($provider, $url)
+    {
+        new UnusedCSS_Store($provider, $url);
     }
 
     public function enabled() {
@@ -42,10 +53,14 @@ abstract class UnusedCSS {
         return true;
 
     }
-    
+
     protected function purge_css(){
 
         if(is_admin()) {
+            return;
+        }
+
+        if($this->is_doing_api_fetch()) {
             return;
         }
 
@@ -70,12 +85,12 @@ abstract class UnusedCSS {
             return;
         }
 
-        if($this->is_doing_api_fetch()) {
-            return;
-        }
+        wp_schedule_single_event( time(), 'uucss_queue', [
+            $this->provider,
+            $this->url
+        ] );
 
-        new UnusedCSS_Store($this->provider, $this->url);
-        
+
     }
 
     protected function is_doing_api_fetch(){
@@ -84,7 +99,7 @@ abstract class UnusedCSS {
 
     public function get_base_dir($url = false){
         global $wp_filesystem;
-        
+
         $root = ($url) ? $url : $wp_filesystem->wp_content_dir()  . $this->base;
         $root_with_provider = $root . '/' . $this->provider;
 
@@ -122,9 +137,8 @@ abstract class UnusedCSS {
     public function clear_cache(){
 
         global $wp_filesystem;
-        uucss_log($this->get_base_dir());
         $wp_filesystem->delete($this->get_base_dir(), true);
-        
+
     }
 
 

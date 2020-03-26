@@ -11,7 +11,7 @@ Author URI:  http://shakee93.me/
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-require('vendor/autoload.php');
+
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
 require('includes/UnusedCSS_Store.php');
@@ -24,4 +24,3 @@ if (is_admin()) {
 }
 
 new UnusedCSS_Autoptimize();
-
