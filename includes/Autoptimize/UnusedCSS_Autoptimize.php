@@ -74,21 +74,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function parsAllCSS($html)
     {
-        $dom = new PHPHtmlParser\Dom();
-        $dom->setOptions([
-            "removeStyles" => false
-        ]);
-        $dom->load($html);
-        $sheets = $dom->getElementsbyTag('link');
+
+        $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
+
+        $sheets = $dom->find('link');
 
         foreach ($sheets as $sheet) {
-            $link = $sheet->getAttribute('href');
+            $link = $sheet->href;
 
 //            TODO : when duplicate CSS file name comes this breaks. we need to save the file with URL hash and retrieve it with it
             if(strpos($link, '.css') !== false){
-                $css[] = $link;
                 $newLink = $this->cache_file_location($link, WP_CONTENT_URL . "/cache/uucss");
-                $sheet->setAttribute('href', $newLink);
+                $sheet->href = $newLink ;
             }
 
         }
