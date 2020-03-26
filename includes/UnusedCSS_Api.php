@@ -5,14 +5,13 @@ class UnusedCSS_Api
 {
 
     public $apiUrl = 'https://unusedcss.herokuapp.com/api';
-    public $apiUrl_debug = 'http://localhost:8080/api';
 
     /**
      * UnusedCSS_Api constructor.
      */
     public function __construct()
     {
-
+        $this->apiUrl = 'http://localhost:9300/api';
     }
 
     public function get($url) {

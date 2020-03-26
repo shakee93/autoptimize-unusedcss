@@ -29,6 +29,8 @@ abstract class UnusedCSS {
 
             if($this->enabled()) {
                 $this->purge_css();
+                $this->get_css();
+                $this->replace_css();
             }
             
         });
@@ -72,18 +74,7 @@ abstract class UnusedCSS {
             return;
         }
 
-        $uucss_api = new UnusedCSS_Api();
-        $this->purged_files = $uucss_api->get($this->url);
-
-        if($this->purged_files && count($this->purged_files) > 0) {
-           
-            $this->cache_files();    
-           
-            $this->get_css();
-           
-            $this->replace_css();
-            
-        }
+        new UnusedCSS_Store($this->provider, $this->url);
         
     }
 
@@ -108,48 +99,24 @@ abstract class UnusedCSS {
         return $root_with_provider;
     }
 
-    protected function get_cache_source_dir($url = false)
-    {
+    protected function cache_source_dir_exists(){
         global $wp_filesystem;
-        
+
         $hash = $this->encode($this->url);
 
-        $source_dir = $this->get_base_dir($url) . '/' . $hash;
+        $source_dir = $this->get_base_dir(false) . '/' . $hash;
 
         if(!$wp_filesystem->exists($source_dir)) {
-            $wp_filesystem->mkdir($source_dir);
+            return false;
         }
 
-        return $source_dir;
-    }
+        return true;
 
+    }
 
     protected function encode($data)
     {
         return rtrim(md5($data));
-    }
-
-
-    protected function cache_files() {
-        global $wp_filesystem;
-
-        foreach($this->purged_files as $file) {
-            
-            $file_location = $this->cache_file_location($file->file);
-            
-            if(!$wp_filesystem->exists($file_location)) {
-                $wp_filesystem->put_contents($file_location, $file->css, FS_CHMOD_FILE);
-            }
-        }
-        
-    }
-
-    protected function cache_file_location($file, $link = false){
-        return $this->get_cache_source_dir($link) . '/' . $this->get_file_name($file);
-    }
-
-    protected function get_file_name($file){
-        return explode("?", basename($file))[0];
     }
 
     public function clear_cache(){

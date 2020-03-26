@@ -17,7 +17,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
-
         parent::__construct();
 
     }
@@ -59,10 +58,23 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-        add_action('autoptimize_html_after_minify', function($html){
+        if (!$this->cache_source_dir_exists()) {
+            return;
+        }
 
-            foreach($this->purged_files as $file){
-                $html = str_replace($file->file, $this->cache_file_location($file->file, WP_CONTENT_URL . "/cache/uucss"), $html);
+        add_action('autoptimize_html_after_minify', function($html) {
+
+//            foreach($this->purged_files as $file){
+//                $html = str_replace($file->file, $this->cache_file_location($file->file, WP_CONTENT_URL . "/cache/uucss"), $html);
+//            }
+
+            $hash = $this->encode($this->url);
+
+            foreach ($this->css as  $css) {
+
+                $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
+                $html = str_replace($css, $_css, $html);
+
             }
 
             return $html;            
