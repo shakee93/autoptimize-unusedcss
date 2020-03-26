@@ -5,17 +5,6 @@
  */
 class UnusedCSS_Utils {
 
-
-    public static function hash($string)
-    {
-        return md5($string);
-    }
-
-    public static function checkHash($string, $hash)
-    {
-        return md5($string) == $hash;
-    }
-
     public static function url_origin( $s, $use_forwarded_host = false )
     {
         $ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
@@ -31,15 +20,6 @@ class UnusedCSS_Utils {
     public static function get_current_url()
     {
         return static::url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
-    }
-
-    public static function is_enabled()
-    {
-        if (is_user_logged_in()) {
-            return false;
-        }
-
-        return true;
     }
 
     public static function is_cli(){
@@ -72,7 +52,7 @@ class UnusedCSS_Utils {
     }
 
 }
-// TODO : rename this to uucss_log
+
 function uucss_log($object) {
 
     return UnusedCSS_Utils::log($object);
