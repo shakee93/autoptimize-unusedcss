@@ -5,14 +5,14 @@ class UnusedCSS_Api
 {
 
     public $apiUrl = 'https://unusedcss.herokuapp.com';
-    public $apiUrl_debug = 'http://localhost:9300/';
+    public $apiUrl_debug = 'http://localhost:8080/api';
 
     /**
      * UnusedCSS_Api constructor.
      */
     public function __construct()
     {
-    
+
     }
 
     public function get($url) {
@@ -22,7 +22,7 @@ class UnusedCSS_Api
             $appender = '&';
         }
 
-        $url = $this->apiUrl_debug . '?url=' . urlencode($url . $appender . 'doing_unused_fetch=true');
+        $url = $this->apiUrl . '?url=' . urlencode($url . $appender . 'doing_unused_fetch=true');
 
         $response = wp_remote_get($url);
 
