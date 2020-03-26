@@ -4,7 +4,7 @@
 class UnusedCSS_Api
 {
 
-    public $apiUrl = 'https://unusedcss.herokuapp.com';
+    public $apiUrl = 'https://unusedcss.herokuapp.com/api';
     public $apiUrl_debug = 'http://localhost:8080/api';
 
     /**
