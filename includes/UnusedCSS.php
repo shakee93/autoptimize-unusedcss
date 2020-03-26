@@ -141,6 +141,29 @@ abstract class UnusedCSS {
 
     }
 
+    protected function cache_file_location($file, $link = false){
+        return $this->get_cache_source_dir($link) . '/' . $this->get_file_name($file);
+    }
+
+    protected function get_file_name($file){
+        return explode("?", basename($file))[0];
+    }
+
+    protected function get_cache_source_dir($url = false)
+    {
+        global $wp_filesystem;
+
+        $hash = $this->encode($this->url);
+
+        $source_dir = $this->get_base_dir($url) . '/' . $hash;
+
+        if(!$wp_filesystem->exists($source_dir)) {
+            $wp_filesystem->mkdir($source_dir);
+        }
+
+        return $source_dir;
+    }
+
 
     abstract public function get_css();
 

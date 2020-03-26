@@ -1,6 +1,5 @@
 {
   "require": {
-    "guzzlehttp/guzzle": "~6.0",
-    "a5hleyrich/wp-background-processing": "^1.0"
+    "paquettg/php-html-parser": "^2.2"
   }
 }

@@ -64,23 +64,50 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action('autoptimize_html_after_minify', function($html) {
 
-//            foreach($this->purged_files as $file){
-//                $html = str_replace($file->file, $this->cache_file_location($file->file, WP_CONTENT_URL . "/cache/uucss"), $html);
-//            }
+//          $html = $this->getCSSviaAutoptimize($html);
 
-            $hash = $this->encode($this->url);
-
-            foreach ($this->css as  $css) {
-
-                $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
-                $html = str_replace($css, $_css, $html);
-
-            }
-
-            return $html;            
+            return $this->parsAllCSS($html);
         });
 
         
+    }
+
+    public function parsAllCSS($html)
+    {
+        $dom = new PHPHtmlParser\Dom();
+        $dom->setOptions([
+            "removeStyles" => false
+        ]);
+        $dom->load($html);
+        $sheets = $dom->getElementsbyTag('link');
+
+        foreach ($sheets as $sheet) {
+            $link = $sheet->getAttribute('href');
+
+//            TODO : when duplicate CSS file name comes this breaks. we need to save the file with URL hash and retrieve it with it
+            if(strpos($link, '.css') !== false){
+                $css[] = $link;
+                $newLink = $this->cache_file_location($link, WP_CONTENT_URL . "/cache/uucss");
+                $sheet->setAttribute('href', $newLink);
+            }
+
+        }
+
+        return $dom;
+    }
+
+    public function getCSSviaAutoptimize($html)
+    {
+        $hash = $this->encode($this->url);
+
+        foreach ($this->css as  $css) {
+
+            $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
+            $html = str_replace($css, $_css, $html);
+
+        }
+
+        return $html;
     }
 
 }
