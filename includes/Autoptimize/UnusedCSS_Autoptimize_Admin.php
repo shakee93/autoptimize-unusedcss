@@ -11,6 +11,7 @@ class UnusedCSS_Autoptimize_Admin {
     public function __construct()
     {
 
+
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
 
@@ -35,6 +36,15 @@ class UnusedCSS_Autoptimize_Admin {
     }
 
     public static function enabled(){
+
+        if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
+
+            UnusedCSS_Utils::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
+
+            return false;
+        }
+
+
         if (empty(static::fetch_options()['autoptimize_uucss_enabled'])) {
             return false;
         }
