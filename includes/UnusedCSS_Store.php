@@ -3,7 +3,7 @@
 /**
  * Class UnusedCSS
  */
-class UnusedCSS_Store extends WP_Async_Request{
+class UnusedCSS_Store {
 
     public $base = 'cache/uucss';
     public $provider = null;
@@ -15,18 +15,15 @@ class UnusedCSS_Store extends WP_Async_Request{
 
 
     /**
-     * @var string
+     * UnusedCSS_Store constructor.
+     * @param $provider
+     * @param $url
      */
-    public $action = 'uucss_async_queue';
-
-    public function handle()
+    public function __construct($provider, $url)
     {
-        if(!isset($_POST['provider']) || !isset($_POST['url'])) {
-            return;
-        }
 
-        $this->provider = $_POST['provider'];
-        $this->url = $_POST['url'];
+        $this->provider = $provider;
+        $this->url = $url;
 
         // load wp filesystem related files;
         if (!class_exists('WP_Filesystem_Base')) {
@@ -39,16 +36,6 @@ class UnusedCSS_Store extends WP_Async_Request{
 
         $this->purge_css();
 
-    }
-
-    public function dispatch()
-    {
-
-        if(isset($_GET['action']) && $_GET['action'] == $this->identifier) {
-            return null;
-        }
-
-        return parent::dispatch();
     }
 
 

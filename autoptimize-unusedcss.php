@@ -16,7 +16,6 @@ define( 'UUCSS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 require('vendor/autoload.php');
-require('classes/wp-async-request.php');
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
 require('includes/UnusedCSS_Store.php');

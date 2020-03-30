@@ -24,13 +24,15 @@ abstract class UnusedCSS {
     {
 
         // load wp filesystem related files;
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-        WP_Filesystem();
+        if (!class_exists('WP_Filesystem_Base')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            WP_Filesystem();
+        }
 
         global $wp_filesystem;
         $this->file_system = $wp_filesystem;
 
-        add_action('plugins_loaded', [$this, 'init_async_store']);
+        add_action('uucss_async_queue', [$this, 'init_async_store']);
 
         add_action('init', function () {
 
@@ -46,7 +48,7 @@ abstract class UnusedCSS {
 
     public function init_async_store()
     {
-        $this->store = new UnusedCSS_Store();
+        $this->store = new UnusedCSS_Store($this->provider, $this->url);
     }
 
     public function enabled() {
@@ -93,10 +95,8 @@ abstract class UnusedCSS {
     }
 
     public function cache() {
-        $this->store->data([
-            'provider' => $this->provider,
-            'url' => $this->url
-        ])->dispatch();
+        wp_schedule_single_event( time(), 'uucss_async_queue' );
+        spawn_cron();
     }
 
     protected function is_doing_api_fetch(){
