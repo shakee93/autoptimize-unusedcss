@@ -11,7 +11,7 @@ class UnusedCSS_Api
      */
     public function __construct()
     {
-        //$this->apiUrl = 'http://localhost:9300/api';
+        $this->apiUrl = 'http://localhost:9300/api';
     }
 
     public function get($url) {
@@ -36,6 +36,7 @@ class UnusedCSS_Api
             return null;
         }
         else {
+            uucss_log($response->get_error_message());
             return null;
         }
 

@@ -48,6 +48,7 @@ class UnusedCSS_Autoptimize_Admin {
         if (empty(static::fetch_options()['autoptimize_uucss_enabled'])) {
             return false;
         }
+
         return true;
     }
 

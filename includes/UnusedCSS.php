@@ -85,7 +85,9 @@ abstract class UnusedCSS {
             return;
         }
 
-        wp_schedule_single_event( time(), 'uucss_queue', [
+        uucss_log('sent to server');
+        wp_clear_scheduled_hook( 'uucss_queue' );
+        wp_schedule_single_event( time() , 'uucss_queue', [
             $this->provider,
             $this->url
         ] );

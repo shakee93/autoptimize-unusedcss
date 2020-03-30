@@ -17,6 +17,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
+        add_action('uucss_cache_completed', [$this, 'flushCacheProviders']);
+
         parent::__construct();
 
     }
@@ -107,4 +109,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return $html;
     }
 
+    public function flushCacheProviders()
+    {
+        autoptimizeCache::flushPageCache();
+
+        if(class_exists('Cache_Enabler')) {
+            Cache_Enabler::clear_total_cache();
+        }
+
+    }
 }

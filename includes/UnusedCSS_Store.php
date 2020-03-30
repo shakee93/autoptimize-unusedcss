@@ -33,6 +33,7 @@ class UnusedCSS_Store {
     
     protected function purge_css(){
 
+        uucss_log('is running now');
         $uucss_api = new UnusedCSS_Api();
         $this->purged_files = $uucss_api->get($this->url);
 
@@ -92,6 +93,8 @@ class UnusedCSS_Store {
                 $wp_filesystem->put_contents($file_location, $file->css, FS_CHMOD_FILE);
             }
         }
+
+        do_action('uucss_cache_completed');
         
     }
 
