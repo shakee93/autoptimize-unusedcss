@@ -38,8 +38,6 @@ abstract class UnusedCSS {
 
             if($this->enabled()) {
                 $this->purge_css();
-                $this->get_css();
-                $this->replace_css();
             }
 
         });
@@ -53,42 +51,45 @@ abstract class UnusedCSS {
 
     public function enabled() {
 
+        if(is_admin()) {
+            return false;
+        }
+
+        if($this->is_doing_api_fetch()) {
+            return false;
+        }
+
+        if(is_user_logged_in()) {
+            return false;
+        }
+
+        if(wp_doing_ajax()) {
+            return false;
+        }
+
+        if(is_404()) {
+            return false;
+        }
+
+        if(UnusedCSS_Utils::is_cli()){
+            return false;
+        }
+
+        if ( defined( 'DOING_CRON' ) )
+        {
+            return false;
+        }
+
         return true;
 
     }
 
     protected function purge_css(){
 
-        if(is_admin()) {
-            return;
-        }
-
-        if($this->is_doing_api_fetch()) {
-            return;
-        }
-
-        if(is_user_logged_in()) {
-            return;
-        }
-
-        if(wp_doing_ajax()) {
-            return;
-        }
-
-        if(is_404()) {
-            return;
-        }
-
-        if(UnusedCSS_Utils::is_cli()){
-            return;
-        }
-
-        if ( defined( 'DOING_CRON' ) )
-        {
-            return;
-        }
-
         $this->cache();
+        $this->get_css();
+        $this->replace_css();
+
     }
 
     public function cache() {

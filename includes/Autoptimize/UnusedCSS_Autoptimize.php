@@ -28,6 +28,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function enabled() {
 
+        if (!parent::enabled()) {
+            return false;
+        }
+
         if (!UnusedCSS_Autoptimize_Admin::enabled()) {
             return false;
         }
