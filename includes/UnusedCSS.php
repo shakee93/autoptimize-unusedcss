@@ -32,7 +32,7 @@ abstract class UnusedCSS {
         global $wp_filesystem;
         $this->file_system = $wp_filesystem;
 
-        add_action('uucss_async_queue', [$this, 'init_async_store']);
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 2);
 
         add_action('init', function () {
 
@@ -46,9 +46,9 @@ abstract class UnusedCSS {
 
     }
 
-    public function init_async_store()
+    public function init_async_store($provider, $url)
     {
-        $this->store = new UnusedCSS_Store($this->provider, $this->url);
+        $this->store = new UnusedCSS_Store($provider, $url);
     }
 
     public function enabled() {
@@ -95,8 +95,13 @@ abstract class UnusedCSS {
     }
 
     public function cache() {
-        wp_schedule_single_event( time(), 'uucss_async_queue' );
+
+        wp_schedule_single_event( time(), 'uucss_async_queue' , [
+            'provider' => $this->provider,
+            'url' => $this->url
+        ]);
         spawn_cron();
+
     }
 
     protected function is_doing_api_fetch(){
