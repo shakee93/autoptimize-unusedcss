@@ -14,6 +14,8 @@ abstract class UnusedCSS {
     public $purged_files = [];
     public $store = null;
 
+    public $file_system = null;
+
 
     /**
      * UnusedCSS constructor.
@@ -24,6 +26,9 @@ abstract class UnusedCSS {
         // load wp filesystem related files;
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         WP_Filesystem();
+
+        global $wp_filesystem;
+        $this->file_system = $wp_filesystem;
 
         add_action('plugins_loaded', [$this, 'init_async_store']);
 
@@ -98,30 +103,28 @@ abstract class UnusedCSS {
     }
 
     public function get_base_dir($url = false){
-        global $wp_filesystem;
 
-        $root = ($url) ? $url : $wp_filesystem->wp_content_dir()  . $this->base;
+        $root = ($url) ? $url : $this->file_system->wp_content_dir()  . $this->base;
         $root_with_provider = $root . '/' . $this->provider;
 
-        if(!$wp_filesystem->exists($root)) {
-            $wp_filesystem->mkdir($root);
+        if(!$this->file_system->exists($root)) {
+            $this->file_system->mkdir($root);
         }
 
-        if(!$wp_filesystem->exists($root_with_provider)) {
-            $wp_filesystem->mkdir($root_with_provider);
+        if(!$this->file_system->exists($root_with_provider)) {
+            $this->file_system->mkdir($root_with_provider);
         }
 
         return $root_with_provider;
     }
 
     protected function cache_source_dir_exists(){
-        global $wp_filesystem;
 
         $hash = $this->encode($this->url);
 
         $source_dir = $this->get_base_dir(false) . '/' . $hash;
 
-        if(!$wp_filesystem->exists($source_dir)) {
+        if(!$this->file_system->exists($source_dir)) {
             return false;
         }
 
@@ -135,10 +138,7 @@ abstract class UnusedCSS {
     }
 
     public function clear_cache(){
-
-        global $wp_filesystem;
-        $wp_filesystem->delete($this->get_base_dir(), true);
-
+        $this->file_system->delete($this->get_base_dir(), true);
     }
 
     protected function cache_file_location($file, $link = false){
@@ -149,16 +149,19 @@ abstract class UnusedCSS {
         return explode("?", basename($file))[0];
     }
 
+    protected function cache_file_exists($file){
+        return $this->file_system->exists($this->get_cache_source_dir() . '/' . $this->get_file_name($file));
+    }
+
     protected function get_cache_source_dir($url = false)
     {
-        global $wp_filesystem;
 
         $hash = $this->encode($this->url);
 
         $source_dir = $this->get_base_dir($url) . '/' . $hash;
 
-        if(!$wp_filesystem->exists($source_dir)) {
-            $wp_filesystem->mkdir($source_dir);
+        if(!$this->file_system->exists($source_dir)) {
+            $this->file_system->mkdir($source_dir);
         }
 
         return $source_dir;

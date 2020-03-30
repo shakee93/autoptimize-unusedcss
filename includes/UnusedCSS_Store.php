@@ -11,6 +11,8 @@ class UnusedCSS_Store extends WP_Async_Request{
     public $url = null;
     public $purged_files = [];
 
+    public $file_system = null;
+
 
     /**
      * @var string
@@ -27,8 +29,13 @@ class UnusedCSS_Store extends WP_Async_Request{
         $this->url = $_POST['url'];
 
         // load wp filesystem related files;
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-        WP_Filesystem();
+        if (!class_exists('WP_Filesystem_Base')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            WP_Filesystem();
+        }
+
+        global $wp_filesystem;
+        $this->file_system = $wp_filesystem;
 
         $this->purge_css();
 
@@ -58,17 +65,16 @@ class UnusedCSS_Store extends WP_Async_Request{
     }
 
     public function get_base_dir($url = false){
-        global $wp_filesystem;
 
-        $root = ($url) ? $url : $wp_filesystem->wp_content_dir()  . $this->base;
+        $root = ($url) ? $url : $this->file_system->wp_content_dir()  . $this->base;
         $root_with_provider = $root . '/' . $this->provider;
 
-        if(!$wp_filesystem->exists($root)) {
-            $wp_filesystem->mkdir($root);
+        if(!$this->file_system->exists($root)) {
+            $this->file_system->mkdir($root);
         }
 
-        if(!$wp_filesystem->exists($root_with_provider)) {
-            $wp_filesystem->mkdir($root_with_provider);
+        if(!$this->file_system->exists($root_with_provider)) {
+            $this->file_system->mkdir($root_with_provider);
         }
 
         return $root_with_provider;
@@ -76,14 +82,12 @@ class UnusedCSS_Store extends WP_Async_Request{
 
     protected function get_cache_source_dir($url = false)
     {
-        global $wp_filesystem;
-        
         $hash = $this->encode($this->url);
 
         $source_dir = $this->get_base_dir($url) . '/' . $hash;
 
-        if(!$wp_filesystem->exists($source_dir)) {
-            $wp_filesystem->mkdir($source_dir);
+        if(!$this->file_system->exists($source_dir)) {
+            $this->file_system->mkdir($source_dir);
         }
 
         return $source_dir;
@@ -97,14 +101,13 @@ class UnusedCSS_Store extends WP_Async_Request{
 
 
     protected function cache_files() {
-        global $wp_filesystem;
 
         foreach($this->purged_files as $file) {
             
             $file_location = $this->cache_file_location($file->file);
             
-            if(!$wp_filesystem->exists($file_location)) {
-                $wp_filesystem->put_contents($file_location, $file->css, FS_CHMOD_FILE);
+            if(!$this->file_system->exists($file_location)) {
+                $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
             }
         }
 

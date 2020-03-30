@@ -66,9 +66,20 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action('autoptimize_html_after_minify', function($html) {
 
+            $time_start = microtime(true);
+
 //          $html = $this->getCSSviaAutoptimize($html);
 
-            return $this->parsAllCSS($html);
+            $html = $this->parsAllCSS($html);
+
+
+            $time_end = microtime(true);
+
+            $execution_time = ($time_end - $time_start);
+
+        //    uucss_log('Exe : ' . $execution_time);
+
+            return $html;
         });
 
         
@@ -86,8 +97,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 //            TODO : when duplicate CSS file name comes this breaks. we need to save the file with URL hash and retrieve it with it
             if(strpos($link, '.css') !== false){
-                $newLink = $this->cache_file_location($link, WP_CONTENT_URL . "/cache/uucss");
-                $sheet->href = $newLink ;
+
+                if ($this->cache_file_exists($link)) {
+                    $newLink = $this->cache_file_location($link, WP_CONTENT_URL . "/cache/uucss");
+                    $sheet->href = $newLink ;
+                }
             }
 
         }

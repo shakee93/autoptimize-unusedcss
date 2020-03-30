@@ -1,6 +1,5 @@
 {
   "require": {
-    "caophihung94/php-simple-html-dom-parser": "^1.7",
-    "a5hleyrich/wp-background-processing": "^1.0"
+    "caophihung94/php-simple-html-dom-parser": "^1.7"
   }
 }

@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require('vendor/autoload.php');
+require('classes/wp-async-request.php');
 require('includes/UnusedCSS_Utils.php');
 require('includes/UnusedCSS_Api.php');
 require('includes/UnusedCSS_Store.php');
@@ -24,4 +25,4 @@ if (is_admin()) {
     new UnusedCSS_Autoptimize_Admin();
 }
 
-new UnusedCSS_Autoptimize();
+$ao_uucss = new UnusedCSS_Autoptimize();
