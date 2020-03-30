@@ -12,6 +12,7 @@ abstract class UnusedCSS {
     public $url = null;
     public $css = [];
     public $purged_files = [];
+    public $store = null;
 
 
     /**
@@ -19,19 +20,16 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
-        add_action('uucss_queue', [$this, 'store'], 10, 2);
-
-        if(defined('DOING_CRON')) {
-            return;
-        }
 
         // load wp filesystem related files;
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         WP_Filesystem();
 
-        $this->url = UnusedCSS_Utils::get_current_url();
+        add_action('plugins_loaded', [$this, 'init_async_store']);
 
         add_action('init', function () {
+
+            $this->url = UnusedCSS_Utils::get_current_url();
 
             if($this->enabled()) {
                 $this->purge_css();
@@ -43,9 +41,9 @@ abstract class UnusedCSS {
 
     }
 
-    public function store($provider, $url)
+    public function init_async_store()
     {
-        new UnusedCSS_Store($provider, $url);
+        $this->store = new UnusedCSS_Store();
     }
 
     public function enabled() {
@@ -85,14 +83,14 @@ abstract class UnusedCSS {
             return;
         }
 
-        uucss_log('sent to server');
-        wp_clear_scheduled_hook( 'uucss_queue' );
-        wp_schedule_single_event( time() , 'uucss_queue', [
-            $this->provider,
-            $this->url
-        ] );
+        $this->cache();
+    }
 
-
+    public function cache() {
+        $this->store->data([
+            'provider' => $this->provider,
+            'url' => $this->url
+        ])->dispatch();
     }
 
     protected function is_doing_api_fetch(){

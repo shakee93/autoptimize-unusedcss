@@ -3,7 +3,7 @@
 /**
  * Class UnusedCSS
  */
-class UnusedCSS_Store {
+class UnusedCSS_Store extends WP_Async_Request{
 
     public $base = 'cache/uucss';
     public $provider = null;
@@ -13,14 +13,18 @@ class UnusedCSS_Store {
 
 
     /**
-     * UnusedCSS constructor.
-     * @param $provider
-     * @param $url
+     * @var string
      */
-    public function __construct($provider, $url)
+    public $action = 'uucss_async_queue';
+
+    public function handle()
     {
-        $this->provider = $provider;
-        $this->url = $url;
+        if(!isset($_POST['provider']) || !isset($_POST['url'])) {
+            return;
+        }
+
+        $this->provider = $_POST['provider'];
+        $this->url = $_POST['url'];
 
         // load wp filesystem related files;
         require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -30,10 +34,20 @@ class UnusedCSS_Store {
 
     }
 
-    
+    public function dispatch()
+    {
+
+        if(isset($_GET['action']) && $_GET['action'] == $this->identifier) {
+            return null;
+        }
+
+        return parent::dispatch();
+    }
+
+
     protected function purge_css(){
 
-        uucss_log('is running now');
+        uucss_log('is caching now');
         $uucss_api = new UnusedCSS_Api();
         $this->purged_files = $uucss_api->get($this->url);
 
