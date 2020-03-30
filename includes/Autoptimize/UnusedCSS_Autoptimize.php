@@ -19,6 +19,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action('uucss_cache_completed', [$this, 'flushCacheProviders']);
 
+        register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
+
         parent::__construct();
 
     }

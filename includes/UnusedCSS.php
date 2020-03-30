@@ -167,6 +167,10 @@ abstract class UnusedCSS {
         return $source_dir;
     }
 
+    public function vanish()
+    {
+        $this->file_system->delete($this->file_system->wp_content_dir()  . $this->base, true);
+    }
 
     abstract public function get_css();
 
