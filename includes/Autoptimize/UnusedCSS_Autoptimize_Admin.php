@@ -22,20 +22,29 @@ class UnusedCSS_Autoptimize_Admin {
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
 
-        $this->cache_trigger_hooks();
+        add_action('admin_init', function () {
 
-        add_action( 'admin_bar_menu', function () {
+            if (!self::enabled()) {
+                return;
+            }
 
-            global $wp_admin_bar;
+            $this->cache_trigger_hooks();
 
-            $wp_admin_bar->add_node( array(
-                'id'     => 'autoptimize-uucss',
-                'title'  => __( '🔥 Unused CSS', 'autoptimize' ),
-                'parent' => 'autoptimize',
-                'href' =>   admin_url('options-general.php?page=uucss')
-            ));
+            add_action( 'admin_bar_menu', function () {
 
-        }, 100 );
+                global $wp_admin_bar;
+
+                $wp_admin_bar->add_node( array(
+                    'id'     => 'autoptimize-uucss',
+                    'title'  => __( 'Unused CSS', 'autoptimize' ),
+                    'parent' => 'autoptimize',
+                    'href' =>   admin_url('options-general.php?page=uucss')
+                ));
+
+            }, 1 );
+        });
+
+
 
     }
 
