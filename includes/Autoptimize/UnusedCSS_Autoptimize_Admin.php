@@ -211,14 +211,15 @@ class UnusedCSS_Autoptimize_Admin {
             return;
         }
 
-        if (isset($_POST['clear'])) {
-            wp_send_json_success($this->ao_uucss->clear_cache($_POST['url']));
-            return;
-        }
-
         if (isset($_POST['args'])){
             $args = $_POST['args'];
         }
+
+        if (isset($_POST['clear'])) {
+            wp_send_json_success($this->ao_uucss->clear_cache($_POST['url'], $args));
+            return;
+        }
+
 
         $this->ao_uucss->cache($_POST['url'], $args);
 

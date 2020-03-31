@@ -19,6 +19,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
         add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
+        add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
 
         register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
@@ -134,7 +135,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     {
         $post_id = null;
 
-        autoptimizeCache::flushPageCache();
+        //autoptimizeCache::flushPageCache();
 
         if(isset($args['post_id'])) {
             $post_id = $args['post_id'];

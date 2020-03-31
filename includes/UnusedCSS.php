@@ -90,6 +90,20 @@ abstract class UnusedCSS {
     }
 
     protected function purge_css(){
+
+        if (!$this->cache_source_dir_exists()) {
+            global $post;
+            $args = [];
+
+            if ($post) {
+                $args = [
+                    'post_id' => $post->ID
+                ];
+            }
+
+            $this->init_async_store($this->provider, $this->url, $args);
+        }
+
         $this->get_css();
         $this->replace_css();
     }
@@ -148,16 +162,19 @@ abstract class UnusedCSS {
         return rtrim(md5($data));
     }
 
-    public function clear_cache($url = null){
+    public function clear_cache($url = null, $args = []){
 
         if ($url && $this->cache_source_dir_exists($url)) {
 
             $results = $this->file_system->delete($this->get_cache_source_dir(false, $url), true);
+            do_action('uucss_cache_cleared', $args);
             return !is_wp_error($results);
 
         }
 
-        return $this->file_system->delete($this->get_base_dir(), true);
+        $results = $this->file_system->delete($this->get_base_dir(), true);
+        do_action('uucss_cache_cleared', $args);
+        return !is_wp_error($results);
     }
 
     protected function cache_file_location($file, $link = false){
