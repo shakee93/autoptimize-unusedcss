@@ -177,6 +177,26 @@ abstract class UnusedCSS {
         return !is_wp_error($results);
     }
 
+    public function size()
+    {
+        $size = $this->dirSize($this->get_base_dir());
+        return $this->human_filesize($size);
+    }
+
+    function dirSize($directory) {
+        $size = 0;
+        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file){
+            $size+=$file->getSize();
+        }
+        return $size;
+    }
+
+    function human_filesize($bytes, $decimals = 2) {
+        $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+    }
+
     protected function cache_file_location($file, $link = false){
         return $this->get_cache_source_dir($link) . '/' . $this->get_file_name($file);
     }

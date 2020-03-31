@@ -36,9 +36,10 @@ class UnusedCSS_Autoptimize_Admin {
 
                 $wp_admin_bar->add_node( array(
                     'id'     => 'autoptimize-uucss',
-                    'title'  => __( 'Unused CSS', 'autoptimize' ),
+                    'title'  => $this->get_node_text(),
                     'parent' => 'autoptimize',
-                    'href' =>   admin_url('options-general.php?page=uucss')
+                    'href' =>   admin_url('options-general.php?page=uucss'),
+                    'tag' => 'div'
                 ));
 
             }, 1 );
@@ -46,6 +47,59 @@ class UnusedCSS_Autoptimize_Admin {
 
 
 
+    }
+
+    public function get_node_text()
+    {
+        ob_start();
+
+        ?>
+
+        <style>
+
+            li#wp-admin-bar-autoptimize-uucss {
+                display: inline-block !important;
+                padding: 12px 0 5px !important;
+                background: #01579B !important;
+            }
+
+            .uucss-stats span {
+                line-height: 0 !important;
+            }
+
+            li#wp-admin-bar-autoptimize-uucss a{
+                height: auto;
+            }
+
+            li#wp-admin-bar-autoptimize-uucss a:hover{
+                color : whitesmoke !important;
+            }
+
+            .uucss-stats {
+                line-height: 0 !important;
+            }
+
+            span.uucss-stats__size {
+                font-size: .7em !important;
+            }
+
+        </style>
+
+        <div class="uucss-stats">
+            <span>UnusedCSS</span>
+            <div class="uucss-stats__actions">
+                <span class="uucss-stats__size">
+                    Size : <?php echo $this->ao_uucss->size(); ?>
+                </span>
+            </div>
+
+        </div>
+        <?php
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $output;
     }
 
     public static function fetch_options()
