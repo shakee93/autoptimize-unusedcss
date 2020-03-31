@@ -141,8 +141,8 @@ class UnusedCSS_Autoptimize_Admin {
 
             (function ($) {
 
-                var el = $('#edit-slug-buttons button').clone()
-                    .removeClass('edit-slug').css('margin-left', '5px').text('Purge CSS');
+                var el = $('<button type="button"></button>')
+                    .addClass('button button-small hide-if-no-js').css('margin-left', '5px').text('Purge CSS');
 
                 el.click(function (e) {
                     e.preventDefault();
@@ -175,9 +175,11 @@ class UnusedCSS_Autoptimize_Admin {
 
                 });
 
-                $('#edit-slug-buttons')
-                    .after(el_clear)
-                    .after(el)
+                var slugButtons = $('#edit-slug-buttons');
+                var appendTo = (slugButtons.length) ? slugButtons : $('#sample-permalink');
+                appendTo.after(el_clear)
+                    .after(el);
+
             }(jQuery))
 
         </script>
