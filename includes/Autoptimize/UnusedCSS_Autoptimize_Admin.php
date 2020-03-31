@@ -150,7 +150,10 @@ class UnusedCSS_Autoptimize_Admin {
 
                     $this.text('loading...');
                     wp.ajax.post('uucss_purge_url', {
-                        url : '<?php echo get_permalink($post) ?>'
+                        url : '<?php echo get_permalink($post) ?>',
+                        args: {
+                            post_id: <?php echo $post->ID ?>
+                        }
                     }).done(function (d) {
                         $this.text('Job Queued');
                         console.log(d);
@@ -166,8 +169,11 @@ class UnusedCSS_Autoptimize_Admin {
 
                         $this.text('loading...');
                     wp.ajax.post('uucss_purge_url', {
-                        clear : true,
-                        url : '<?php echo get_permalink($post) ?>'
+                        clear: true,
+                        url: '<?php echo get_permalink($post) ?>',
+                        args: {
+                            post_id: <?php echo $post->ID ?>
+                        }
                     }).done(function (d) {
                         $this.text('Cleared');
                         console.log(d);
@@ -188,6 +194,8 @@ class UnusedCSS_Autoptimize_Admin {
 
     public function ajax_purge_url()
     {
+        $args = [];
+
 
         if (!isset($_POST['url'])){
             wp_send_json_error();
@@ -199,7 +207,11 @@ class UnusedCSS_Autoptimize_Admin {
             return;
         }
 
-        $this->ao_uucss->cache($_POST['url']);
+        if (isset($_POST['args'])){
+            $args = $_POST['args'];
+        }
+
+        $this->ao_uucss->cache($_POST['url'], $args);
 
         wp_send_json_success();
     }

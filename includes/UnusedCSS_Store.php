@@ -9,6 +9,7 @@ class UnusedCSS_Store {
     public $provider = null;
 
     public $url = null;
+    public $args = null;
     public $purged_files = [];
 
     public $file_system = null;
@@ -18,12 +19,14 @@ class UnusedCSS_Store {
      * UnusedCSS_Store constructor.
      * @param $provider
      * @param $url
+     * @param $args
      */
-    public function __construct($provider, $url)
+    public function __construct($provider, $url, $args = [])
     {
 
         $this->provider = $provider;
         $this->url = $url;
+        $this->args = $args;
 
         // load wp filesystem related files;
         if (!class_exists('WP_Filesystem_Base')) {
@@ -98,7 +101,7 @@ class UnusedCSS_Store {
             }
         }
 
-        do_action('uucss_cache_completed');
+        do_action('uucss_cache_completed', $this->args);
         
     }
 

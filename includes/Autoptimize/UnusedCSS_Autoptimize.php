@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Class UnusedCSS
  */
@@ -17,7 +18,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
-        add_action('uucss_cache_completed', [$this, 'flushCacheProviders']);
+        add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
 
         register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
@@ -129,13 +130,42 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return $html;
     }
 
-    public function flushCacheProviders()
+    public function flushCacheProviders($args)
     {
+        $post_id = null;
+
         autoptimizeCache::flushPageCache();
 
-        if(class_exists('Cache_Enabler')) {
-            Cache_Enabler::clear_total_cache();
+        if(isset($args['post_id'])) {
+            $post_id = $args['post_id'];
         }
 
+        if(class_exists('Cache_Enabler')) {
+
+            if ($post_id) {
+                Cache_Enabler::clear_page_cache_by_post_id($post_id);
+            } else {
+                Cache_Enabler::clear_total_cache();
+            }
+
+        }
+
+        $this->flush_lw_varnish($post_id);
+
+    }
+
+    public function flush_lw_varnish($post_id = null)
+    {
+        if (!class_exists('LW_Varnish_Cache_Purger')) {
+            return;
+        }
+
+        if ($post_id) {
+            LW_Varnish_Cache_Purger::get_instance()->purge_post($post_id);
+            LW_Varnish_Cache_Purger::get_instance()->do_purge();
+            return;
+        }
+
+        LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
     }
 }

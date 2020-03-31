@@ -35,7 +35,7 @@ abstract class UnusedCSS {
         global $wp_filesystem;
         $this->file_system = $wp_filesystem;
 
-        add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 2);
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
         add_action('init', function () {
 
@@ -49,9 +49,9 @@ abstract class UnusedCSS {
 
     }
 
-    public function init_async_store($provider, $url)
+    public function init_async_store($provider, $url, $args)
     {
-        $this->store = new UnusedCSS_Store($provider, $url);
+        $this->store = new UnusedCSS_Store($provider, $url, $args);
     }
 
     public function enabled() {
@@ -94,11 +94,12 @@ abstract class UnusedCSS {
         $this->replace_css();
     }
 
-    public function cache($url = null) {
+    public function cache($url = null, $args = []) {
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
             'provider' => $this->provider,
-            'url' => $url
+            'url' => $url,
+            'args' => $args
         ]);
         spawn_cron();
 
