@@ -6,7 +6,7 @@
 class UnusedCSS_Autoptimize_Admin {
 
     /**
-     * UnusedCSS constructor. 
+     * UnusedCSS constructor.
      */
     public function __construct()
     {
@@ -14,6 +14,9 @@ class UnusedCSS_Autoptimize_Admin {
 
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
+
+        add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
+        add_action( 'admin_print_footer_scripts', [$this, 'show_purge_button']);
 
         add_action( 'admin_bar_menu', function () {
 
@@ -107,8 +110,60 @@ class UnusedCSS_Autoptimize_Admin {
             </table>
             <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes', 'autoptimize' ); ?>" /></p>
         </form>
-        
-<?php
+
+        <?php
+    }
+
+    public function show_purge_button()
+    {
+        global $hook_suffix, $post;
+
+        if ('post.php' !== $hook_suffix) {
+            return;
+        }
+
+        ?>
+        <script type="text/javascript">
+
+            (function ($) {
+
+                var el = $('#edit-slug-buttons button').clone()
+                    .removeClass('edit-slug').css('margin-left', '5px').text('Purge CSS');
+
+                el.click(function (e) {
+                    e.preventDefault();
+
+                    el.text('loading...');
+                    wp.ajax.post('uucss_purge_url', {
+                        url : '<?php echo get_permalink($post) ?>'
+                    }).done(function (d) {
+                        el.text('Job Queued');
+                        console.log(d);
+                    })
+                });
+
+                $('#edit-slug-buttons').after(el);
+            }(jQuery))
+
+        </script>
+        <?php
+    }
+
+    public function ajax_purge_url()
+    {
+        $url = null;
+
+        if (!isset($_POST['url'])){
+            wp_send_json_error();
+            return;
+        }
+
+        $url = $_POST['url'];
+
+        $ao_uucss = new UnusedCSS_Autoptimize();
+        $ao_uucss->cache($url);
+
+        wp_send_json_success();
     }
 
 }

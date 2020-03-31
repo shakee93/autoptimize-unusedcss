@@ -87,18 +87,15 @@ abstract class UnusedCSS {
     }
 
     protected function purge_css(){
-
-        $this->cache();
         $this->get_css();
         $this->replace_css();
-
     }
 
-    public function cache() {
+    public function cache($url = null) {
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
             'provider' => $this->provider,
-            'url' => $this->url
+            'url' => $url
         ]);
         spawn_cron();
 
