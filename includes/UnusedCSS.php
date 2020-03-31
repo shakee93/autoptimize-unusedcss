@@ -101,7 +101,7 @@ abstract class UnusedCSS {
                 ];
             }
 
-            $this->init_async_store($this->provider, $this->url, $args);
+            $this->cache($this->url, $args);
         }
 
         $this->get_css();
