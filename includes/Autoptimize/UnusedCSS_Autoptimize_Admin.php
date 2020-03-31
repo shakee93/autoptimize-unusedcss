@@ -6,17 +6,23 @@
 class UnusedCSS_Autoptimize_Admin {
 
     /**
-     * UnusedCSS constructor.
+     * @var UnusedCSS_Autoptimize
      */
-    public function __construct()
+    public $ao_uucss;
+
+    /**
+     * UnusedCSS constructor.
+     * @param $ao_uucss
+     */
+    public function __construct($ao_uucss)
     {
 
+        $this->ao_uucss = $ao_uucss;
 
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
 
-        add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
-        add_action( 'admin_print_footer_scripts', [$this, 'show_purge_button']);
+        $this->cache_trigger_hooks();
 
         add_action( 'admin_bar_menu', function () {
 
@@ -85,6 +91,7 @@ class UnusedCSS_Autoptimize_Admin {
 
     }
 
+
     public function render_form()
     {
         $options       = $this->fetch_options();
@@ -114,6 +121,13 @@ class UnusedCSS_Autoptimize_Admin {
         <?php
     }
 
+    public function cache_trigger_hooks()
+    {
+        add_action( 'save_post', [$this, 'cache_on_actions'], 10, 3 );
+        add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
+        add_action( 'admin_print_footer_scripts', [$this, 'show_purge_button']);
+    }
+
     public function show_purge_button()
     {
         global $hook_suffix, $post;
@@ -132,17 +146,38 @@ class UnusedCSS_Autoptimize_Admin {
 
                 el.click(function (e) {
                     e.preventDefault();
+                    var $this = $(this);
 
-                    el.text('loading...');
+                    $this.text('loading...');
                     wp.ajax.post('uucss_purge_url', {
                         url : '<?php echo get_permalink($post) ?>'
                     }).done(function (d) {
-                        el.text('Job Queued');
+                        $this.text('Job Queued');
                         console.log(d);
                     })
                 });
 
-                $('#edit-slug-buttons').after(el);
+                var el_clear = el.clone().text('Clear Cache').off()
+                    .click(function (e) {
+
+                    e.preventDefault();
+
+                        var $this = $(this);
+
+                        $this.text('loading...');
+                    wp.ajax.post('uucss_purge_url', {
+                        clear : true,
+                        url : '<?php echo get_permalink($post) ?>'
+                    }).done(function (d) {
+                        $this.text('Cleared');
+                        console.log(d);
+                    })
+
+                });
+
+                $('#edit-slug-buttons')
+                    .after(el_clear)
+                    .after(el)
             }(jQuery))
 
         </script>
@@ -151,19 +186,33 @@ class UnusedCSS_Autoptimize_Admin {
 
     public function ajax_purge_url()
     {
-        $url = null;
 
         if (!isset($_POST['url'])){
             wp_send_json_error();
             return;
         }
 
-        $url = $_POST['url'];
+        if (isset($_POST['clear'])) {
+            wp_send_json_success($this->ao_uucss->clear_cache($_POST['url']));
+            return;
+        }
 
-        $ao_uucss = new UnusedCSS_Autoptimize();
-        $ao_uucss->cache($url);
+        $this->ao_uucss->cache($_POST['url']);
 
         wp_send_json_success();
+    }
+
+    /**
+     * @param $post_ID
+     * @param $post WP_Post
+     * @param $update
+     */
+    public function cache_on_actions($post_ID, $post, $update)
+    {
+        if($post->post_status == "publish") {
+           // uucss_log('triggered via save' . get_permalink($post));
+            $this->ao_uucss->cache(get_permalink($post));
+        }
     }
 
 }

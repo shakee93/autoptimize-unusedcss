@@ -14,7 +14,10 @@ abstract class UnusedCSS {
     public $purged_files = [];
     public $store = null;
 
-    public $file_system = null;
+    /**
+     * @var WP_Filesystem_Direct
+     */
+    public $file_system;
 
 
     /**
@@ -121,9 +124,13 @@ abstract class UnusedCSS {
         return $root_with_provider;
     }
 
-    protected function cache_source_dir_exists(){
+    protected function cache_source_dir_exists($url = null){
 
-        $hash = $this->encode($this->url);
+        if (!$url) {
+            $url = $this->url;
+        }
+
+        $hash = $this->encode($url);
 
         $source_dir = $this->get_base_dir(false) . '/' . $hash;
 
@@ -140,8 +147,16 @@ abstract class UnusedCSS {
         return rtrim(md5($data));
     }
 
-    public function clear_cache(){
-        $this->file_system->delete($this->get_base_dir(), true);
+    public function clear_cache($url = null){
+
+        if ($url && $this->cache_source_dir_exists($url)) {
+
+            $results = $this->file_system->delete($this->get_cache_source_dir(false, $url), true);
+            return !is_wp_error($results);
+
+        }
+
+        return $this->file_system->delete($this->get_base_dir(), true);
     }
 
     protected function cache_file_location($file, $link = false){
@@ -156,10 +171,14 @@ abstract class UnusedCSS {
         return $this->file_system->exists($this->get_cache_source_dir() . '/' . $this->get_file_name($file));
     }
 
-    protected function get_cache_source_dir($url = false)
+    protected function get_cache_source_dir($url = false, $link = null)
     {
 
-        $hash = $this->encode($this->url);
+        if (!$link) {
+            $link = $this->url;
+        }
+
+        $hash = $this->encode($link);
 
         $source_dir = $this->get_base_dir($url) . '/' . $hash;
 

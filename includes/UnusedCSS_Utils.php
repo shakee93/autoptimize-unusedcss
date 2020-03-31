@@ -34,7 +34,8 @@ class UnusedCSS_Utils {
 
     public static function log($object) {
 
-        error_log( "UUCSS_LOG : " . json_encode($object, JSON_PRETTY_PRINT));
+        $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
+        error_log( "[UUCSS_LOG] " . $data);
         
         return $object;
     }
