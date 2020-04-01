@@ -12,7 +12,9 @@ class UnusedCSS_Api
      */
     public function __construct()
     {
-        //$this->apiUrl = 'http://localhost:9300/api';
+        if (defined('UUCSS_API_URL')) {
+            $this->apiUrl = UUCSS_API_URL;
+        }
     }
 
     public function get($url) {
