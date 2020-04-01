@@ -3,9 +3,9 @@
 /**
  * Class UnusedCSS
  */
-class UnusedCSS_Utils {
+trait UnusedCSS_Utils {
 
-    public static function url_origin( $s, $use_forwarded_host = false )
+    public function url_origin( $s, $use_forwarded_host = false )
     {
         $ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
         $sp       = strtolower( $s['SERVER_PROTOCOL'] );
@@ -17,12 +17,12 @@ class UnusedCSS_Utils {
         return $protocol . '://' . $host;
     }
 
-    public static function get_current_url()
+    public function get_current_url()
     {
-        return static::url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
+        return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
     }
 
-    public static function is_cli(){
+    public function is_cli(){
 
         if ( defined( 'WP_CLI' ) && WP_CLI ) {
             return true;
@@ -32,7 +32,7 @@ class UnusedCSS_Utils {
         
     }
 
-    public static function log($object) {
+    public function log($object) {
 
         $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
         error_log( "[UUCSS_LOG] " . $data);
@@ -52,10 +52,4 @@ class UnusedCSS_Utils {
 
     }
 
-}
-
-function uucss_log($object) {
-
-    return UnusedCSS_Utils::log($object);
-    
 }

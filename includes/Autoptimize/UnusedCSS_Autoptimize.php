@@ -6,6 +6,7 @@
  */
 class UnusedCSS_Autoptimize extends UnusedCSS {
 
+    use UnusedCSS_Utils;
 
     protected $options = [];
 
@@ -40,14 +41,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         if(is_multisite()) {
 
-            UnusedCSS_Utils::add_admin_notice("UnusedCSS not supported for multisite");
+            $this->add_admin_notice("UnusedCSS not supported for multisite");
 
             return false;
         }
 
         if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
 
-            UnusedCSS_Utils::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
+            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
             
             return false;
         }
@@ -74,18 +75,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_action('autoptimize_html_after_minify', function($html) {
 
-            $time_start = microtime(true);
-
-//          $html = $this->getCSSviaAutoptimize($html);
-
             $html = $this->parsAllCSS($html);
-
-
-            $time_end = microtime(true);
-
-            $execution_time = ($time_end - $time_start);
-
-        //    uucss_log('Exe : ' . $execution_time);
 
             return $html;
         });

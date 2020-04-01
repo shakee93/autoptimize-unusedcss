@@ -6,6 +6,8 @@
  */
 abstract class UnusedCSS {
 
+    use UnusedCSS_Utils;
+
     public $base = 'cache/uucss';
     public $provider = null;
 
@@ -39,7 +41,7 @@ abstract class UnusedCSS {
 
         add_action('init', function () {
 
-            $this->url = UnusedCSS_Utils::get_current_url();
+            $this->url = $this->get_current_url();
 
             if($this->enabled()) {
                 $this->purge_css();
@@ -76,7 +78,7 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if(UnusedCSS_Utils::is_cli()){
+        if($this->is_cli()){
             return false;
         }
 

@@ -5,6 +5,8 @@
  */
 class UnusedCSS_Store {
 
+    use UnusedCSS_Utils;
+
     public $base = 'cache/uucss';
     public $provider = null;
 
@@ -44,7 +46,7 @@ class UnusedCSS_Store {
 
     protected function purge_css(){
 
-        uucss_log('is caching now : ' . $this->url);
+        $this->log('is caching now : ' . $this->url);
         $uucss_api = new UnusedCSS_Api();
         $this->purged_files = $uucss_api->get($this->url);
 

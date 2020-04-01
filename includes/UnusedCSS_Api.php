@@ -3,6 +3,7 @@
 
 class UnusedCSS_Api
 {
+    use UnusedCSS_Utils;
 
     public $apiUrl = 'https://unusedcss.herokuapp.com/api';
 
@@ -32,11 +33,11 @@ class UnusedCSS_Api
                 return json_decode($body);
             }
 
-            uucss_log($response['response']);
+            $this->log($response['response']);
             return null;
         }
         else {
-            uucss_log($response->get_error_message());
+            $this->log($response->get_error_message());
             return null;
         }
 
