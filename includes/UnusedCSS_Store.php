@@ -109,11 +109,11 @@ class UnusedCSS_Store {
 
 
     protected function append_cache_file_dir($file){
-        return $this->get_cache_page_dir() . '/' . $this->remove_query_string($file);
+        return $this->get_cache_page_dir() . '/' . $this->file_name($file);
     }
 
 
-    protected function remove_query_string($file){
+    protected function file_name($file){
         return explode("?", basename($file))[0];
     }
 

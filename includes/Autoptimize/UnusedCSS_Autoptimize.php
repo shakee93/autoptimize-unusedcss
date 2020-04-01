@@ -69,7 +69,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-        if (!$this->cache_source_dir_exists()) {
+        if (!$this->cache_page_dir_exists()) {
             return;
         }
 
@@ -80,7 +80,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return $html;
         });
 
-        
     }
 
     public function parsAllCSS($html)
@@ -97,7 +96,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             if(strpos($link, '.css') !== false){
 
                 if ($this->cache_file_exists($link)) {
-                    $newLink = $this->cache_file_location($link, WP_CONTENT_URL . "/cache/uucss");
+                    $newLink = $this->get_cached_file($link);
                     $sheet->href = $newLink ;
                 }
             }

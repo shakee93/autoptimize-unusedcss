@@ -57,4 +57,17 @@ trait UnusedCSS_Utils {
         return rtrim(md5($data));
     }
 
+    function dirSize($directory) {
+        $size = 0;
+        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file){
+            $size+=$file->getSize();
+        }
+        return $size;
+    }
+
+    function human_file_size($bytes, $decimals = 2) {
+        $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+    }
 }
