@@ -22,7 +22,7 @@ class UnusedCSS_Autoptimize_Admin {
         $this->ao_uucss = $ao_uucss;
 
         add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
-        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 10, 1 );
+        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 20, 1 );
 
         add_action('admin_init', function () {
 
