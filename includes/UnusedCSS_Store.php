@@ -112,10 +112,4 @@ class UnusedCSS_Store {
         return $this->get_cache_page_dir() . '/' . $this->file_name($file);
     }
 
-
-    protected function file_name($file){
-        return explode("?", basename($file))[0];
-    }
-
-
 }

@@ -47,7 +47,7 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
-        add_action('init', function () {
+        add_action('wp_enqueue_scripts', function () {
 
             $this->url = $this->get_current_url();
 
@@ -62,15 +62,11 @@ abstract class UnusedCSS {
 
     public function enabled() {
 
-        if(is_admin()) {
-            return false;
-        }
-
         if($this->is_doing_api_fetch()) {
             return false;
         }
 
-        if(is_user_logged_in()) {
+        if(is_admin()) {
             return false;
         }
 
@@ -86,6 +82,10 @@ abstract class UnusedCSS {
             return false;
         }
 
+        if (is_search()) {
+            return false;
+        }
+
         if ( defined( 'DOING_CRON' ) )
         {
             return false;
@@ -93,6 +93,15 @@ abstract class UnusedCSS {
 
         return true;
 
+    }
+
+    function enabled_frontend(){
+
+        if(is_user_logged_in()) {
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -115,6 +124,11 @@ abstract class UnusedCSS {
             }
 
             $this->cache($this->url, $args);
+        }
+
+        // disabled exceptions only for frontend
+        if (!$this->enabled_frontend()) {
+            return;
         }
 
         $this->get_css();
@@ -203,12 +217,6 @@ abstract class UnusedCSS {
             $this->file_name($file_url)
         ]);
     }
-
-
-    protected function file_name($file){
-        return explode("?", basename($file))[0];
-    }
-
 
     protected function get_cache_page_dir($url = null)
     {
