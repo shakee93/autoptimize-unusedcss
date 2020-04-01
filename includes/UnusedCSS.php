@@ -201,6 +201,9 @@ abstract class UnusedCSS {
     public function size()
     {
 
+        if (!$this->file_system->exists($this->base_dir_with_provider)) {
+            return "0 KB";
+        }
         $size = $this->dirSize($this->base_dir_with_provider);
         return $this->human_file_size($size);
     }
@@ -232,7 +235,13 @@ abstract class UnusedCSS {
 
     public function vanish()
     {
-        $this->file_system->delete($this->file_system->wp_content_dir()  . $this->base, true);
+        $delete = $this->file_system->wp_content_dir()  . $this->base;
+
+        if (!$this->file_system->exists($delete)) {
+            return;
+        }
+
+        $this->file_system->delete($delete, true);
     }
 
 }

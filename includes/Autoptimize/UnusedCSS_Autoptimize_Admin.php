@@ -189,6 +189,8 @@ class UnusedCSS_Autoptimize_Admin {
     public function cache_trigger_hooks()
     {
         add_action( 'save_post', [$this, 'cache_on_actions'], 10, 3 );
+        add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
+        add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
         add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
         add_action( 'admin_print_footer_scripts', [$this, 'show_purge_button']);
     }
@@ -287,12 +289,19 @@ class UnusedCSS_Autoptimize_Admin {
      * @param $post WP_Post
      * @param $update
      */
-    public function cache_on_actions($post_ID, $post, $update)
+    public function cache_on_actions($post_ID, $post = null, $update = null)
     {
+        $post = get_post($post_ID);
         if($post->post_status == "publish") {
            // uucss_log('triggered via save' . get_permalink($post));
             $this->ao_uucss->cache(get_permalink($post));
         }
+    }
+
+    public function clear_on_actions($post_ID)
+    {
+        $link = get_permalink($post_ID);
+        $this->ao_uucss->clear_cache($link);
     }
 
 }
