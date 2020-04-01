@@ -159,10 +159,6 @@ abstract class UnusedCSS {
 
     }
 
-    protected function encode($data)
-    {
-        return rtrim(md5($data));
-    }
 
     public function clear_cache($url = null, $args = []){
 

@@ -8,13 +8,16 @@ class UnusedCSS_Store {
     use UnusedCSS_Utils;
 
     public $base = 'cache/uucss';
-    public $provider = null;
+    public $provider;
 
-    public $url = null;
-    public $args = null;
+    public $url;
+    public $args;
     public $purged_files = [];
 
-    public $file_system = null;
+    /**
+     * @var WP_Filesystem_Direct
+     */
+    public $file_system;
 
 
     /**
@@ -56,9 +59,27 @@ class UnusedCSS_Store {
         
     }
 
-    public function get_base_dir($url = false){
 
-        $root = ($url) ? $url : $this->file_system->wp_content_dir()  . $this->base;
+    protected function cache_files() {
+
+        foreach($this->purged_files as $file) {
+            
+            $file_location = $this->append_cache_file_dir($file->file);
+            
+            if(!$this->file_system->exists($file_location)) {
+                $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
+            }
+        }
+
+        do_action('uucss_cache_completed', $this->args);
+        
+    }
+
+
+    public function get_base_dir(){
+
+        $root = $this->file_system->wp_content_dir()  . $this->base;
+
         $root_with_provider = $root . '/' . $this->provider;
 
         if(!$this->file_system->exists($root)) {
@@ -72,11 +93,12 @@ class UnusedCSS_Store {
         return $root_with_provider;
     }
 
-    protected function get_cache_source_dir($url = false)
+
+    protected function get_cache_page_dir()
     {
         $hash = $this->encode($this->url);
 
-        $source_dir = $this->get_base_dir($url) . '/' . $hash;
+        $source_dir = $this->get_base_dir() . '/' . $hash;
 
         if(!$this->file_system->exists($source_dir)) {
             $this->file_system->mkdir($source_dir);
@@ -86,32 +108,12 @@ class UnusedCSS_Store {
     }
 
 
-    protected function encode($data)
-    {
-        return rtrim(md5($data));
+    protected function append_cache_file_dir($file){
+        return $this->get_cache_page_dir() . '/' . $this->remove_query_string($file);
     }
 
 
-    protected function cache_files() {
-
-        foreach($this->purged_files as $file) {
-            
-            $file_location = $this->cache_file_location($file->file);
-            
-            if(!$this->file_system->exists($file_location)) {
-                $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
-            }
-        }
-
-        do_action('uucss_cache_completed', $this->args);
-        
-    }
-
-    protected function cache_file_location($file, $link = false){
-        return $this->get_cache_source_dir($link) . '/' . $this->get_file_name($file);
-    }
-
-    protected function get_file_name($file){
+    protected function remove_query_string($file){
         return explode("?", basename($file))[0];
     }
 

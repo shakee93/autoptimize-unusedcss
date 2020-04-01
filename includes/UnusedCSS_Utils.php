@@ -52,4 +52,9 @@ trait UnusedCSS_Utils {
 
     }
 
+    protected function encode($data)
+    {
+        return rtrim(md5($data));
+    }
+
 }
