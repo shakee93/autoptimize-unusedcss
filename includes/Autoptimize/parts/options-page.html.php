@@ -7,7 +7,7 @@
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
     <?php settings_fields( 'autoptimize_uucss_settings' ); ?>
     <h2><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></h2>
-    <span id='autoptimize_imgopt_descr'><?php _e( 'Boost  your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
+    <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
     <table class="form-table">
         <tr>
             <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
