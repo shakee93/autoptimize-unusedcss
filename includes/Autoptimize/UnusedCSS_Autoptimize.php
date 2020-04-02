@@ -152,6 +152,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         if ($post_id) {
             LW_Varnish_Cache_Purger::get_instance()->purge_post($post_id);
+            LW_Varnish_Cache_Purger::get_instance()->purge_url(get_permalink($post_id));
             LW_Varnish_Cache_Purger::get_instance()->do_purge();
             return;
         }
