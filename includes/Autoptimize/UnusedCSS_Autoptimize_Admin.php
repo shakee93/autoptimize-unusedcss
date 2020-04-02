@@ -55,48 +55,7 @@ class UnusedCSS_Autoptimize_Admin {
     {
         ob_start();
 
-        ?>
-
-        <style>
-
-            li#wp-admin-bar-autoptimize-uucss {
-                display: inline-block !important;
-                padding: 12px 0 5px !important;
-                background: #01579B !important;
-            }
-
-            .uucss-stats span {
-                line-height: 0 !important;
-            }
-
-            li#wp-admin-bar-autoptimize-uucss a{
-                height: auto;
-            }
-
-            li#wp-admin-bar-autoptimize-uucss a:hover{
-                color : whitesmoke !important;
-            }
-
-            .uucss-stats {
-                line-height: 0 !important;
-            }
-
-            span.uucss-stats__size {
-                font-size: .7em !important;
-            }
-
-        </style>
-
-        <div class="uucss-stats">
-            <span>UnusedCSS</span>
-            <div class="uucss-stats__actions">
-                <span class="uucss-stats__size">
-                    Size : <?php echo $this->ao_uucss->size(); ?>
-                </span>
-            </div>
-
-        </div>
-        <?php
+        include('parts/admin-node.html.php');
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -112,9 +71,7 @@ class UnusedCSS_Autoptimize_Admin {
     public static function enabled(){
 
         if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-
             self::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
-
             return false;
         }
 
@@ -160,30 +117,7 @@ class UnusedCSS_Autoptimize_Admin {
     public function render_form()
     {
         $options       = $this->fetch_options();
-
-        ?>
-        <style>
-            #ao_settings_form {background: white;border: 1px solid #ccc;padding: 1px 15px;margin: 15px 10px 10px 0;}
-            #ao_settings_form .form-table th {font-weight: normal;}
-            #autoptimize_imgopt_descr{font-size: 120%;}
-        </style>
-        <script>document.title = "Autoptimize: UnusedCSS " + document.title;</script>
-        <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
-            <?php settings_fields( 'autoptimize_uucss_settings' ); ?>
-            <h2><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></h2>
-            <span id='autoptimize_imgopt_descr'><?php _e( 'Boost  your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
-            <table class="form-table">
-                <tr>
-                    <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
-                    <td>
-                        <label><input id='autoptimize_uucss_enabled' type='checkbox' name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) { echo 'checked="checked"'; } ?> value='1'></label>
-                    </td>
-                </tr>
-            </table>
-            <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes', 'autoptimize' ); ?>" /></p>
-        </form>
-
-        <?php
+        include('parts/options-page.html.php');
     }
 
     public function cache_trigger_hooks()
@@ -203,66 +137,12 @@ class UnusedCSS_Autoptimize_Admin {
             return;
         }
 
-        ?>
-        <script type="text/javascript">
-
-            (function ($) {
-
-                var el = $('<button type="button"></button>')
-                    .addClass('button button-small hide-if-no-js').css('margin-left', '5px').text('Purge CSS');
-
-                el.click(function (e) {
-                    e.preventDefault();
-                    var $this = $(this);
-
-                    $this.text('loading...');
-                    wp.ajax.post('uucss_purge_url', {
-                        url : '<?php echo get_permalink($post) ?>',
-                        args: {
-                            post_id: <?php echo $post->ID ?>
-                        }
-                    }).done(function (d) {
-                        $this.text('Job Queued');
-                        console.log(d);
-                    })
-                });
-
-                var el_clear = el.clone().text('Clear Cache').off()
-                    .click(function (e) {
-
-                    e.preventDefault();
-
-                        var $this = $(this);
-
-                        $this.text('loading...');
-                    wp.ajax.post('uucss_purge_url', {
-                        clear: true,
-                        url: '<?php echo get_permalink($post) ?>',
-                        args: {
-                            post_id: <?php echo $post->ID ?>
-                        }
-                    }).done(function (d) {
-                        $this.text('Cleared');
-                        console.log(d);
-                    })
-
-                });
-
-                var slugButtons = $('#edit-slug-buttons');
-                var appendTo = (slugButtons.length) ? slugButtons : $('#sample-permalink');
-                appendTo.after(el_clear)
-                    .after(el);
-
-            }(jQuery))
-
-        </script>
-        <?php
+        ?><script type="text/javascript"><?php include('parts/admin-post.js.php') ?></script><?php
     }
 
     public function ajax_purge_url()
     {
         $args = [];
-
 
         if (!isset($_POST['url'])){
             wp_send_json_error();
