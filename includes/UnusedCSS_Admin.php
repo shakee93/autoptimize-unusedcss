@@ -12,6 +12,8 @@ abstract class UnusedCSS_Admin {
      */
     public $uucss;
 
+    public static $enabled = true;
+
     /**
      * UnusedCSS constructor.
      * @param UnusedCSS $uucss
@@ -24,20 +26,64 @@ abstract class UnusedCSS_Admin {
 
         add_action('admin_init', function () {
 
-            if (!self::enabled()) {
+            if (!self::$enabled) {
                 return;
             }
 
-            $this->cache_trigger_hooks();
-            add_action( 'admin_print_footer_scripts', [$this, 'show_purge_button']);
 
+            $this->cache_trigger_hooks();
+            add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
+            add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         });
 
     }
 
+    public function add_meta_boxes()
+    {
+        add_meta_box(
+            'uucsss-options',
+            __( 'Unused CSS Options', 'uucss' ),
+            [$this, 'meta_box'],
+            ['post', 'page'],
+            'side'
+        );
+    }
 
-    public static function enabled(){
-        return true;
+    function meta_box( $post ) {
+
+        $whitelist = get_post_meta( $post->ID, '_uucss_whitelist_classes', true );
+        $exclude = get_post_meta( $post->ID, '_uucss_exclude', true );
+
+        include('parts/admin-post.html.php');
+    }
+
+    public function save_meta_box_options($post_id, $post)
+    {
+
+        $options = [
+            'whitelist_classes',
+            'exclude'
+        ];
+
+        if ( !isset( $_POST['uucss_nonce'] ) || !wp_verify_nonce( $_POST['uucss_nonce'], 'uucss_option_save' ) ) {
+            return;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        foreach ($options as $option) {
+
+            if (!isset($_POST['uucss_' . $option] )) {
+                delete_post_meta($post_id, '_uucss_' . $option);
+                continue;
+            }
+
+            $value = sanitize_text_field($_POST['uucss_' . $option]);
+            update_post_meta($post_id, '_uucss_' . $option, $value);
+        }
+
     }
 
 
@@ -47,18 +93,6 @@ abstract class UnusedCSS_Admin {
         add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
         add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
         add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
-    }
-
-
-    public function show_purge_button()
-    {
-        global $hook_suffix, $post;
-
-        if ('post.php' !== $hook_suffix) {
-            return;
-        }
-
-        ?><script type="text/javascript"><?php include('parts/admin-post.js.php') ?></script><?php
     }
 
     public function ajax_purge_url()

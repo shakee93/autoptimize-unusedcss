@@ -20,6 +20,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         add_action('admin_init', function () {
 
             if (!self::enabled()) {
+                self::$enabled = false;
                 return;
             }
 

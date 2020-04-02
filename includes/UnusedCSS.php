@@ -23,10 +23,12 @@ abstract class UnusedCSS {
 
     public $base_dir, $base_dir_with_provider;
 
+
     abstract public function get_css();
 
 
     abstract public function replace_css();
+
 
     /**
      * UnusedCSS constructor.
@@ -94,6 +96,7 @@ abstract class UnusedCSS {
         return true;
 
     }
+
 
     function enabled_frontend(){
 
@@ -220,6 +223,7 @@ abstract class UnusedCSS {
             $this->file_name($file_url)
         ]);
     }
+
 
     protected function get_cache_page_dir($url = null)
     {
