@@ -58,7 +58,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        ?><script type="text/javascript"><?php include('Autoptimize/parts/admin-post.js.php') ?></script><?php
+        ?><script type="text/javascript"><?php include('parts/admin-post.js.php') ?></script><?php
     }
 
     public function ajax_purge_url()
