@@ -13,11 +13,11 @@
 </style>
 
 <div class="uucss-fields">
-    <?php echo  wp_nonce_field('uucss_option_save','uucss_nonce') ?>
+    <?php wp_nonce_field('uucss_option_save','uucss_nonce') ?>
 
     <p>
         <label>
-            <input id="uucss_exclude" type="checkbox" name="uucss_exclude" <?php echo empty($exclude) ? '' : 'checked="checked"'   ?>">
+            <input id="uucss_exclude" type="checkbox" name="uucss_exclude" <?php echo empty($options['exclude']) ? '' : 'checked="checked"'   ?>">
             Exclude
         </label>
     </p>
@@ -25,7 +25,7 @@
     <p>
         <label>
             Whitelisted Classes (, separated)
-            <textarea name="uucss_whitelist_classes" id="uucss_whitelist_classes" style="width: 100%" ><?php echo esc_attr( $whitelist )  ?></textarea>
+            <textarea name="uucss_whitelist_classes" id="uucss_whitelist_classes" style="width: 100%" ><?php echo esc_attr( $options['whitelist_classes'] )  ?></textarea>
         </label>
     </p>
 </div>

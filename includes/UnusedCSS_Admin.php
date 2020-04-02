@@ -12,7 +12,19 @@ abstract class UnusedCSS_Admin {
      */
     public $uucss;
 
+    /**
+     * @var bool
+     */
     public static $enabled = true;
+
+    /**
+     * Page related meta options
+     * @var array
+     */
+    public $page_options = [
+        'whitelist_classes',
+        'exclude'
+    ];
 
     /**
      * UnusedCSS constructor.
@@ -51,20 +63,23 @@ abstract class UnusedCSS_Admin {
 
     function meta_box( $post ) {
 
-        $whitelist = get_post_meta( $post->ID, '_uucss_whitelist_classes', true );
-        $exclude = get_post_meta( $post->ID, '_uucss_exclude', true );
+        $options = $this->get_page_options($post->ID);
 
         include('parts/admin-post.html.php');
     }
 
+    public function get_page_options($post_id)
+    {
+        $options = [];
+        foreach ($this->page_options as $option) {
+            $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
+        }
+
+        return $options;
+    }
+
     public function save_meta_box_options($post_id, $post)
     {
-
-        $options = [
-            'whitelist_classes',
-            'exclude'
-        ];
-
         if ( !isset( $_POST['uucss_nonce'] ) || !wp_verify_nonce( $_POST['uucss_nonce'], 'uucss_option_save' ) ) {
             return;
         }
@@ -73,7 +88,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        foreach ($options as $option) {
+        foreach ($this->page_options as $option) {
 
             if (!isset($_POST['uucss_' . $option] )) {
                 delete_post_meta($post_id, '_uucss_' . $option);
