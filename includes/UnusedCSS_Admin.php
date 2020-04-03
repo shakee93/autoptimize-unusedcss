@@ -53,11 +53,12 @@ abstract class UnusedCSS_Admin {
     public function add_meta_boxes()
     {
         add_meta_box(
-            'uucsss-options',
+            'uucss-options',
             __( 'Unused CSS Options', 'uucss' ),
             [$this, 'meta_box'],
             ['post', 'page'],
-            'side'
+            'side',
+            'high'
         );
     }
 

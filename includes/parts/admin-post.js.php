@@ -1,5 +1,10 @@
 (function ($) {
 
+    $(document).ready(function () {
+        tagBox.init();
+    });
+
+
     $('#button-uucss-purge').click(function (e) {
         e.preventDefault();
         var $this = $(this);
