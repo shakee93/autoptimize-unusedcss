@@ -86,13 +86,15 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
 
-    public function add_ao_page(){
+    public function add_ao_page()
+    {
 
-        add_submenu_page( null, 'UnusedCSS', 'UnusedCSS', 'manage_options', 'uucss', function () {
+        add_submenu_page(null, 'UnusedCSS', 'UnusedCSS', 'manage_options', 'uucss', function () {
+            wp_enqueue_script('post');
 
             ?>
             <div class="wrap">
-                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+                <h1><?php _e('Autoptimize Settings', 'autoptimize'); ?></h1>
                 <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
                 <div>
                     <?php $this->render_form() ?>
@@ -100,9 +102,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             </div>
 
             <?php
-        } );
+        });
 
-        register_setting( 'autoptimize_uucss_settings', 'autoptimize_uucss_settings' );
+        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
     }
 
