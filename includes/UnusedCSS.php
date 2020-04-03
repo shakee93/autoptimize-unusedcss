@@ -163,10 +163,6 @@ abstract class UnusedCSS {
 
         //$this->log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 
-        if ($this->is_doing_api_fetch()) {
-            return;
-        }
-
         if (!$this->is_url_allowed($url, $args)) {
             return;
         }

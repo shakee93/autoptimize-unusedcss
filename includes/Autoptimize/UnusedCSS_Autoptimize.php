@@ -28,6 +28,38 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     }
 
+    public function is_url_allowed($url = null, $args = null)
+    {
+        if (!$url) {
+            $url = $this->url;
+        }
+
+        if(!parent::is_url_allowed($url, $args)){
+            return false;
+        }
+
+        $options = UnusedCSS_Autoptimize_Admin::fetch_options();
+
+        if (isset($options['uucss_excluded_links'])) {
+            $exploded = explode(',', $options['uucss_excluded_links']);
+
+            // TODO : improve this
+            foreach ($exploded as $pattern) {
+
+                if (filter_var($pattern, FILTER_VALIDATE_URL)) {
+                    $pattern = parse_url($pattern)['path'];
+                }
+
+                if (preg_match($pattern, $url, $x)) {
+                    $this->log('skipped : ' . $url);
+                    return false;
+                }
+
+            }
+        }
+
+        return true;
+    }
 
     public function enabled() {
 
