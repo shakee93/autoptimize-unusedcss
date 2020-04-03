@@ -88,6 +88,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
+    public static function global_options()
+    {
+        return UnusedCSS_Autoptimize_Admin::fetch_options();
+    }
+
     public function get_css(){
 
 

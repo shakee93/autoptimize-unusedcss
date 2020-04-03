@@ -143,7 +143,8 @@ abstract class UnusedCSS {
 
             if ($post) {
                 $args = [
-                    'post_id' => $post->ID
+                    'post_id' => $post->ID,
+                    'options' => $this->api_options($post->ID)
                 ];
             }
 
@@ -176,6 +177,26 @@ abstract class UnusedCSS {
 
     }
 
+    public static function api_options($post_id)
+    {
+        $post_options = UnusedCSS_Admin::get_page_options($post_id);
+        $global_options = self::global_options();
+
+        $whitelist = explode(',', $post_options['whitelist_classes']);
+        $whitelist_global = explode(',', $global_options['uucss_whitelist_classes']);
+
+        return [
+            "whitelist" => array_filter(array_merge($whitelist, $whitelist_global)),
+            "keyframes" => true,
+            "fontFace" => true,
+            "variables" => true,
+        ];
+    }
+
+    public static function global_options()
+    {
+        return UnusedCSS_Autoptimize_Admin::fetch_options();
+    }
 
     protected function is_doing_api_fetch(){
         return isset($_GET['doing_unused_fetch']);

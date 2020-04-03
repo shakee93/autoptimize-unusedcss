@@ -32,7 +32,7 @@ trait UnusedCSS_Utils {
         
     }
 
-    public function log($object) {
+    public static function log($object) {
 
         $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
         error_log( "[UUCSS_LOG] " . $data);
