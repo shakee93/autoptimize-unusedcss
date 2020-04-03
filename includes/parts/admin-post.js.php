@@ -17,7 +17,6 @@
             }
         }).done(function (d) {
             $this.text('Job Queued');
-            console.log(d);
         })
     });
 

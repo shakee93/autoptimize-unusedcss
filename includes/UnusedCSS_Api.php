@@ -7,6 +7,7 @@ class UnusedCSS_Api
 
     public $apiUrl = 'https://unusedcss.herokuapp.com/api';
 
+    public $options = [];
     /**
      * UnusedCSS_Api constructor.
      */
@@ -19,12 +20,13 @@ class UnusedCSS_Api
 
     public function get($url) {
 
-        $appender = '?';
-        if (strpos($url, '?') !== false) {
-            $appender = '&';
-        }
+        $args = [
+            'url' => urlencode($url),
+            'doing_unused_fetch' => true,
+            'options' => $this->options
+        ];
 
-        $url = $this->apiUrl . '?url=' . urlencode($url . $appender . 'doing_unused_fetch=true');
+        $url = $this->apiUrl . '?' . http_build_query($args);
 
         $response = wp_remote_get($url);
 
