@@ -21,7 +21,7 @@ abstract class UnusedCSS_Admin {
      * Page related meta options
      * @var array
      */
-    public $page_options = [
+    public static $page_options = [
         'whitelist_classes',
         'exclude'
     ];
@@ -69,10 +69,10 @@ abstract class UnusedCSS_Admin {
         include('parts/admin-post.html.php');
     }
 
-    public function get_page_options($post_id)
+    public static function get_page_options($post_id)
     {
         $options = [];
-        foreach ($this->page_options as $option) {
+        foreach (self::$page_options as $option) {
             $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
         }
 
@@ -89,7 +89,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        foreach ($this->page_options as $option) {
+        foreach (self::$page_options as $option) {
 
             if (!isset($_POST['uucss_' . $option] )) {
                 delete_post_meta($post_id, '_uucss_' . $option);
@@ -129,6 +129,9 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
+        if (isset($args["post_id"])) {
+            $args['options'] = $this->get_page_options($args["post_id"]);
+        }
 
         $this->uucss->cache($_POST['url'], $args);
 

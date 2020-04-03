@@ -13,7 +13,6 @@ abstract class UnusedCSS {
 
     public $url = null;
     public $css = [];
-    public $purged_files = [];
     public $store = null;
 
     /**
@@ -68,6 +67,10 @@ abstract class UnusedCSS {
             return false;
         }
 
+        if (!$this->is_url_allowed()) {
+            return false;
+        }
+
         if(is_admin()) {
             return false;
         }
@@ -113,6 +116,24 @@ abstract class UnusedCSS {
         $this->store = new UnusedCSS_Store($provider, $url, $args);
     }
 
+    public function is_url_allowed($url = null, $args = null)
+    {
+        global $post;
+
+        if (isset($args['post_id'])) {
+            $post = get_post($args['post_id']);
+        }
+
+        if ($post) {
+            $page_options = UnusedCSS_Admin::get_page_options($post->ID);
+            if (isset($page_options['exclude']) && $page_options['exclude'] == "on") {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
 
     protected function purge_css(){
 
@@ -139,6 +160,16 @@ abstract class UnusedCSS {
     }
 
     public function cache($url = null, $args = []) {
+
+        //$this->log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+
+        if ($this->is_doing_api_fetch()) {
+            return;
+        }
+
+        if (!$this->is_url_allowed($url, $args)) {
+            return;
+        }
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
             'provider' => $this->provider,
