@@ -15,6 +15,22 @@
         background: none;
     }
 
+    #uucss-options em {
+        color: #9E9E9E;
+    }
+
+    #uucss-options span {
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+
+    #uucss-options span em {
+        background: #F5F5F5;
+        color: #3F51B5;
+        border: 1px solid #E0E0E0;
+        border-radius: 3px;
+        padding: 3px 8px;
+    }
 </style>
 
 <div id="uucss-settings">
@@ -45,6 +61,20 @@
                 </p>
             </div>
             <ul class="tagchecklist" role="list"></ul>
+            <div class="example">
+                <p><strong>Rule : </strong><span><em>red</em></span>
+                    <br>
+                    <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
+                </p>
+                <p><strong>Rule : </strong><span><em>/^orange/</em></span>
+                    <br>
+                    <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
+                </p>
+                <p><strong>Rule (<small>with children</small>) : </strong> <span><em>c:/red$/</em></span>
+                    <br>
+                    <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
+                </p>
+            </div>
         </div>
     </div>
 

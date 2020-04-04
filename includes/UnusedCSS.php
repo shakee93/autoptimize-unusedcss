@@ -165,7 +165,7 @@ abstract class UnusedCSS {
         //$this->log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 
         if (!$this->is_url_allowed($url, $args)) {
-            return;
+            return false;
         }
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
@@ -175,6 +175,7 @@ abstract class UnusedCSS {
         ]);
         spawn_cron();
 
+        return true;
     }
 
     public static function api_options($post_id)
@@ -240,7 +241,6 @@ abstract class UnusedCSS {
             $results = $this->file_system->delete($this->get_cache_page_dir($url), true);
             do_action('uucss_cache_cleared', $args);
             return !is_wp_error($results);
-
         }
 
         $results = $this->file_system->delete($this->base_dir_with_provider, true);
