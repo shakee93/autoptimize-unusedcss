@@ -133,10 +133,7 @@ abstract class UnusedCSS_Admin {
             $args['options'] = UnusedCSS::api_options($args["post_id"]);
         }
 
-        // TODO : fix duplicate requests
-        if($this->uucss->clear_cache($_POST['url'], $args)) {
-            wp_send_json_success($this->uucss->cache($_POST['url'], $args));
-        }
+        wp_send_json_success($this->uucss->cache($_POST['url'], $args));
     }
 
     /**

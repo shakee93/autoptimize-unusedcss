@@ -64,12 +64,8 @@ class UnusedCSS_Store {
     protected function cache_files() {
 
         foreach($this->purged_files as $file) {
-            
             $file_location = $this->append_cache_file_dir($file->file);
-            
-            if(!$this->file_system->exists($file_location)) {
-                $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
-            }
+            $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
         }
 
         do_action('uucss_cache_completed', $this->args);
