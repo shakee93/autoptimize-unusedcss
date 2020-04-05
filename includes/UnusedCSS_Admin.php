@@ -89,16 +89,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        foreach (self::$page_options as $option) {
-
-            if (!isset($_POST['uucss_' . $option] )) {
-                delete_post_meta($post_id, '_uucss_' . $option);
-                continue;
-            }
-
-            $value = sanitize_text_field($_POST['uucss_' . $option]);
-            update_post_meta($post_id, '_uucss_' . $option, $value);
-        }
+        $this->update_meta($post_id);
 
     }
 
@@ -113,6 +104,7 @@ abstract class UnusedCSS_Admin {
 
     public function ajax_purge_url()
     {
+        // TODO : add nonce
         $args = [];
 
         if (!isset($_POST['url'])){
@@ -131,9 +123,11 @@ abstract class UnusedCSS_Admin {
 
         if (isset($args["post_id"])) {
             $args['options'] = UnusedCSS::api_options($args["post_id"]);
+            $this->update_meta($args['post_id']);
         }
 
         wp_send_json_success($this->uucss->cache($_POST['url'], $args));
+
     }
 
     /**
@@ -153,6 +147,20 @@ abstract class UnusedCSS_Admin {
     {
         $link = get_permalink($post_ID);
         $this->uucss->clear_cache($link);
+    }
+
+    public function update_meta($post_id)
+    {
+        foreach (self::$page_options as $option) {
+
+            if (!isset($_POST['uucss_' . $option] )) {
+                delete_post_meta($post_id, '_uucss_' . $option);
+                continue;
+            }
+
+            $value = sanitize_text_field($_POST['uucss_' . $option]);
+            update_post_meta($post_id, '_uucss_' . $option, $value);
+        }
     }
 
 }
