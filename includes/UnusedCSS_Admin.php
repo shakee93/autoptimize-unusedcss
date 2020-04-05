@@ -105,7 +105,7 @@ abstract class UnusedCSS_Admin {
 
     public function cache_trigger_hooks()
     {
-        add_action( 'save_post', [$this, 'cache_on_actions'], 10, 3 );
+        add_action( 'save_post', [$this, 'cache_on_actions'], 110, 3 );
         add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
         add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
         add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
@@ -137,13 +137,13 @@ abstract class UnusedCSS_Admin {
     }
 
     /**
-     * @param $post_ID
+     * @param $post_id
      * @param $post WP_Post
      * @param $update
      */
-    public function cache_on_actions($post_ID, $post = null, $update = null)
+    public function cache_on_actions($post_id, $post = null, $update = null)
     {
-        $post = get_post($post_ID);
+        $post = get_post($post_id);
         if($post->post_status == "publish") {
             $this->uucss->cache(get_permalink($post));
         }
