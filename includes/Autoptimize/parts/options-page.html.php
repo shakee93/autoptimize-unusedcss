@@ -105,13 +105,50 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <th scope="row"><?php _e( 'Other Options', 'autoptimize' ); ?></th>
+            <td>
+                <p>
+                    <label for="uucss_minify">
+                        <input id='uucss_minify'
+                               type='checkbox'
+                               name='autoptimize_uucss_settings[uucss_minify]'
+                            <?php
+                                if ( ! empty( $options['uucss_minify'] ) && '1' === $options['uucss_minify'] ) {
+                                    echo 'checked="checked"';
+                                }
+                            ?> value='1'>
+                        Disable Minify <em>-- minify and remove css comments via the api</em>
+                    </label>
+                </p>
 
+                <p>
+                    <label for="uucss_variables">
+                        <input id='uucss_variables' type='checkbox' name='autoptimize_uucss_settings[uucss_variables]' <?php if ( ! empty( $options['uucss_variables'] ) && '1' === $options['uucss_variables'] ) { echo 'checked="checked"'; } ?> value='1'>
+                        Disable Variables <em>-- remove unused css variables</em>
+                    </label>
+                </p>
+
+                <p>
+                    <label for="uucss_keyframes">
+                        <input id='uucss_keyframes' type='checkbox' name='autoptimize_uucss_settings[uucss_keyframes]' <?php if ( ! empty( $options['uucss_keyframes'] ) && '1' === $options['uucss_keyframes'] ) { echo 'checked="checked"'; } ?> value='1'>
+                        Disable Keyframes <em>-- remove unused keyframe animations</em>
+                    </label>
+                </p>
+
+                <p>
+                    <label for="uucss_fontface">
+                        <input id='uucss_fontface' type='checkbox' name='autoptimize_uucss_settings[uucss_fontface]' <?php if ( ! empty( $options['uucss_fontface'] ) && '1' === $options['uucss_fontface'] ) { echo 'checked="checked"'; } ?> value='1'>
+                        Disable Fontface <em>-- remove unused @font-face rules</em>
+                    </label>
+                </p>
+
+            </td>
+        </tr>
 
         <script>
             jQuery(document).ready(function () {
-
                 window.tagBox.init();
-
             })
         </script>
     </table>

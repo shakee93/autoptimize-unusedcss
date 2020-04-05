@@ -186,13 +186,18 @@ abstract class UnusedCSS {
         $global_options = self::global_options();
 
         $whitelist = explode(',', $post_options['whitelist_classes']);
-        $whitelist_global = explode(',', $global_options['uucss_whitelist_classes']);
+        $whitelist_global = [];
+
+        if (isset($global_options['uucss_whitelist_classes'])) {
+            $whitelist_global = explode(',', $global_options['uucss_whitelist_classes']);
+        }
 
         return [
             "whitelist" => array_filter(array_merge($whitelist, $whitelist_global)),
-            "keyframes" => true,
-            "fontFace" => true,
-            "variables" => true,
+            "keyframes" => !isset($global_options['uucss_keyframes']),
+            "fontFace" => !isset($global_options['uucss_fontface']),
+            "variables" => !isset($global_options['uucss_variables']),
+            "minify" => !isset($global_options['uucss_minify']),
         ];
     }
 
