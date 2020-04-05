@@ -16,6 +16,23 @@
         background: none;
     }
 
+    #uucss-options em {
+        color: #9E9E9E;
+    }
+
+    #uucss-options span {
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+
+    #uucss-options span em {
+        background: #F5F5F5;
+        color: #3F51B5;
+        border: 1px solid #E0E0E0;
+        border-radius: 3px;
+        padding: 3px 8px;
+    }
+
 
 </style>
 <script>document.title = "Autoptimize: UnusedCSS " + document.title;</script>
@@ -23,7 +40,7 @@
     <?php settings_fields( 'autoptimize_uucss_settings' ); ?>
     <h2><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></h2>
     <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
-    <table class="form-table">
+    <table class="form-table" id="uucss-options">
         <tr>
             <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
             <td>
@@ -45,10 +62,24 @@
                             <input type="button" class="button tagadd" value="Add Class">
                         </div>
                         <p class="howto" >
-                            Whitelisted Classes (regex supported)
+                            Whitelisted Selectors (regex supported)
                         </p>
                     </div>
                     <ul class="tagchecklist" role="list"></ul>
+                    <div class="example">
+                        <p><strong>Rule : </strong><span><em>red</em></span>
+                            <br>
+                            <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
+                        </p>
+                        <p><strong>Rule : </strong><span><em>/^orange/</em></span>
+                            <br>
+                            <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
+                        </p>
+                        <p><strong>Rule (<small>with children</small>) : </strong> <span><em>c:/red$/</em></span>
+                            <br>
+                            <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
+                        </p>
+                    </div>
                 </div>
             </td>
         </tr>

@@ -57,7 +57,7 @@
                     <input type="button" class="button tagadd" value="Add">
                 </div>
                 <p class="howto" >
-                    Whitelisted Classes (regex supported)
+                    Whitelisted Selectors (regex supported)
                 </p>
             </div>
             <ul class="tagchecklist" role="list"></ul>

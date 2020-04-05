@@ -138,17 +138,7 @@ abstract class UnusedCSS {
     protected function purge_css(){
 
         if (!$this->cache_page_dir_exists()) {
-            global $post;
-            $args = [];
-
-            if ($post) {
-                $args = [
-                    'post_id' => $post->ID,
-                    'options' => $this->api_options($post->ID)
-                ];
-            }
-
-            $this->cache($this->url, $args);
+            $this->cache($this->url);
         }
 
         // disabled exceptions only for frontend
@@ -162,11 +152,17 @@ abstract class UnusedCSS {
 
     public function cache($url = null, $args = []) {
 
-        //$this->log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
-
         if (!$this->is_url_allowed($url, $args)) {
             return false;
         }
+
+        global $post;
+
+        if (!isset($args['post_id']) && $post) {
+            $args['post_id'] = $post->ID;
+        }
+
+        $args['options'] = self::api_options();
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
             'provider' => $this->provider,
@@ -178,8 +174,14 @@ abstract class UnusedCSS {
         return true;
     }
 
-    public static function api_options($post_id)
+    public static function api_options($post_id = null)
     {
+        global $post;
+
+        if ($post) {
+            $post_id = $post->ID;
+        }
+
         $post_options = UnusedCSS_Admin::get_page_options($post_id);
         $global_options = self::global_options();
 
