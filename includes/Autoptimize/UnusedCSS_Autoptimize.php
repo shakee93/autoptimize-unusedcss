@@ -13,7 +13,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	public $deps_available = false;
 
     /**
-     * UnusedCSS constructor. 
+     * UnusedCSS constructor.
      */
     public function __construct()
     {
@@ -27,14 +27,24 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			    return;
 		    }
 
-		    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+		    add_action('wp_enqueue_scripts', function () {
 
-		    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
-		    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+			    if ( ! $this->enabled() ) {
+				    return;
+			    }
 
-		    parent::__construct();
+			    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+
+			    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
+			    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+
+
+		    });
+
 
 	    });
+
+	    parent::__construct();
 
     }
 
@@ -103,10 +113,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
 
-            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when optimization is enabled", "info");
-            
+            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when optimization is enabled", "warning");
+
             return false;
         }
+
+	    if (empty(static::global_options()['autoptimize_uucss_enabled'])) {
+		    return false;
+	    }
 
         return true;
     }
@@ -124,8 +138,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         add_action('autoptimize_filter_cache_getname', function($ao_css){
             $this->css[] = $ao_css;
         });
-           
-        
+
+
     }
 
 

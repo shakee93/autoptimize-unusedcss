@@ -57,8 +57,7 @@ abstract class UnusedCSS_Admin {
             __( 'Unused CSS Options', 'uucss' ),
             [$this, 'meta_box'],
             ['post', 'page'],
-            'side',
-            'high'
+            'side'
         );
     }
 
