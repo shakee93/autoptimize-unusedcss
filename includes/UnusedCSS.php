@@ -38,10 +38,10 @@ abstract class UnusedCSS {
         // load wp filesystem related files;
         if (!class_exists('WP_Filesystem_Base')) {
             require_once(ABSPATH . 'wp-admin/includes/file.php');
-            WP_Filesystem();
         }
 
-        global $wp_filesystem;
+	    WP_Filesystem();
+	    global $wp_filesystem;
         $this->file_system = $wp_filesystem;
 
         $this->set_base_dir();
