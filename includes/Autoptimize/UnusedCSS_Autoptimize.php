@@ -123,7 +123,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 
-    public static function global_option≤s()
+    public static function global_options()
     {
         return UnusedCSS_Autoptimize_Admin::fetch_options();
     }
