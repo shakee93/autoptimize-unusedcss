@@ -10,6 +10,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     protected $options = [];
 
+	public $deps_available = false;
+
     /**
      * UnusedCSS constructor. 
      */
@@ -17,14 +19,22 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     {
         $this->provider = 'autoptimize';
 
-        add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+	    add_action('plugins_loaded', function () {
 
-        add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
-        add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+		    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-        register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
+		    if ( ! $this->check_dependencies() ) {
+			    return;
+		    }
 
-        parent::__construct();
+		    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+
+		    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
+		    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+
+		    parent::__construct();
+
+	    });
 
     }
 
@@ -40,7 +50,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
-        if (isset($options['uucss_excluded_links'])) {
+        if (isset($options['uucss_excluded_links']) && !empty($options['uucss_excluded_links'])) {
             $exploded = explode(',', $options['uucss_excluded_links']);
 
             // TODO : improve this
@@ -61,6 +71,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
+
+	public function check_dependencies() {
+
+		if(function_exists('autoptimize')) {
+			$this->deps_available = true;
+		}else {
+			self::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed");
+		}
+
+		return $this->deps_available;
+	}
+
+
     public function enabled() {
 
         if (!parent::enabled()) {
@@ -78,9 +101,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return false;
         }
 
-        if(!function_exists('autoptimize') || autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
+        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
 
-            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed and css optimization is enabled");
+            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when optimization is enabled", "info");
             
             return false;
         }
@@ -88,10 +111,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
+
     public static function global_options()
     {
         return UnusedCSS_Autoptimize_Admin::fetch_options();
     }
+
 
     public function get_css(){
 
