@@ -48,9 +48,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	        });
 
-	        parent::__construct($ao_uucss);
 
         });
+
+	    parent::__construct($ao_uucss);
 
     }
 
