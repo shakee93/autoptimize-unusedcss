@@ -74,7 +74,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     public static function enabled(){
 
         if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-            self::add_admin_notice("Autoptimize UnusedCSS Plugin only works css optimization is enabled");
+            self::add_admin_notice("Autoptimize UnusedCSS Plugin only works css optimization is enabled", 'warning');
             return false;
         }
 

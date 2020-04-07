@@ -112,9 +112,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         }
 
         if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-
-            $this->add_admin_notice("Autoptimize UnusedCSS Plugin only works when optimization is enabled", "warning");
-
             return false;
         }
 
@@ -126,7 +123,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 
-    public static function global_options()
+    public static function global_option≤s()
     {
         return UnusedCSS_Autoptimize_Admin::fetch_options();
     }
