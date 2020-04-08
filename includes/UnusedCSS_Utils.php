@@ -17,8 +17,12 @@ trait UnusedCSS_Utils {
         return $protocol . '://' . $host;
     }
 
-    public function get_current_url()
+    public function get_current_url($post_id = null)
     {
+	    if ( $post_id ) {
+		    return get_permalink( get_post( $post_id ) );
+	    }
+
         return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
     }
 

@@ -19,30 +19,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     {
         $this->provider = 'autoptimize';
 
-	    add_action('plugins_loaded', function () {
+	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-		    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
+	    if ( ! $this->check_dependencies() ) {
+		    return;
+	    }
 
-		    if ( ! $this->check_dependencies() ) {
-			    return;
-		    }
+	    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
-		    add_action('wp_enqueue_scripts', function () {
-
-			    if ( ! $this->enabled() ) {
-				    return;
-			    }
-
-			    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
-
-			    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
-			    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
-
-
-		    });
-
-
-	    });
+	    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
+	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
 
 	    parent::__construct();
 
@@ -110,14 +96,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
             return false;
         }
-
-        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-            return false;
-        }
-
-	    if (empty(static::global_options()['autoptimize_uucss_enabled'])) {
-		    return false;
-	    }
 
         return true;
     }

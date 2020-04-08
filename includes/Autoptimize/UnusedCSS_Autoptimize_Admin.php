@@ -15,41 +15,33 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     public function __construct($ao_uucss)
     {
 
-        add_action('plugins_loaded', function () use ($ao_uucss) {
+	    if ( !$ao_uucss->deps_available ) {
+		    return;
+	    }
 
-	        if ( !$ao_uucss->deps_available ) {
-		        return;
-	        }
-
-	        add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
-
-	        add_action('admin_init', function () {
-
-		        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 20, 1 );
-
-		        if (!self::enabled()) {
-			        self::$enabled = false;
-			        return;
-		        }
-
-		        add_action( 'admin_bar_menu', function () {
-
-			        global $wp_admin_bar;
-
-			        $wp_admin_bar->add_node( array(
-				        'id'     => 'autoptimize-uucss',
-				        'title'  => $this->get_node_text(),
-				        'parent' => 'autoptimize',
-				        'href' =>   admin_url('options-general.php?page=uucss'),
-				        'tag' => 'div'
-			        ));
-
-		        }, 1 );
-
-	        });
+	    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 
 
-        });
+	    add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'add_ao_tab'], 20, 1 );
+
+	    if (!self::enabled()) {
+		    self::$enabled = false;
+		    return;
+	    }
+
+	    add_action( 'admin_bar_menu', function () {
+
+		    global $wp_admin_bar;
+
+		    $wp_admin_bar->add_node( array(
+			    'id'     => 'autoptimize-uucss',
+			    'title'  => $this->get_node_text(),
+			    'parent' => 'autoptimize',
+			    'href' =>   admin_url('options-general.php?page=uucss'),
+			    'tag' => 'div'
+		    ));
+
+	    }, 1 );
 
 	    parent::__construct($ao_uucss);
 
@@ -79,8 +71,18 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             return false;
         }
 
+	    if ( ! self::enabled_via_ao() ) {
+		    return false;
+	    }
+
         return true;
     }
+
+
+	public static function enabled_via_ao() {
+		return isset(static::fetch_options()['autoptimize_uucss_enabled']);
+    }
+
 
     public function add_ao_tab($in){
 
