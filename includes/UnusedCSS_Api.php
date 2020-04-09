@@ -32,7 +32,9 @@ class UnusedCSS_Api
 
         $url = $this->apiUrl . '?' . http_build_query($args);
 
-        $response = wp_remote_get($url);
+        $response = wp_remote_get($url, [
+        	'timeout' => 20
+        ]);
 
         if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 
