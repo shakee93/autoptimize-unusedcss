@@ -207,7 +207,7 @@ abstract class UnusedCSS {
     }
 
     protected function is_doing_api_fetch(){
-        return isset($_GET['doing_unused_fetch']);
+        return strpos($_SERVER['HTTP_USER_AGENT'] , 'UnusedCSS_bot') !== false;
     }
 
 

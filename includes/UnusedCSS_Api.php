@@ -20,13 +20,8 @@ class UnusedCSS_Api
 
     public function get($url) {
 
-        $appender = '?';
-        if (strpos($url, '?') !== false) {
-            $appender = '&';
-        }
-
         $args = [
-            'url' => urlencode($url .  $appender . 'doing_unused_fetch=true'),
+            'url' => $url,
             'options' => $this->options
         ];
 
