@@ -90,13 +90,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return false;
         }
 
-        if(is_multisite()) {
-
-            $this->add_admin_notice("UnusedCSS not supported for multisite");
-
-            return false;
-        }
-
         return true;
     }
 
