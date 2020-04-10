@@ -145,7 +145,16 @@
 
             </td>
         </tr>
-
+        <tr>
+            <th scope="row"><?php _e( 'Include all CSS files', 'autoptimize' ); ?></th>
+            <td>
+                <label><input id='autoptimize_uucss_include_all_files' type='checkbox' name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) { echo 'checked="checked"'; } ?> value='1'>
+                    <i>
+                        Include css files which are excluded by autoptimize as well (experimental)
+                    </i>
+                </label>
+            </td>
+        </tr>
         <script>
             jQuery(document).ready(function () {
                 window.tagBox.init();

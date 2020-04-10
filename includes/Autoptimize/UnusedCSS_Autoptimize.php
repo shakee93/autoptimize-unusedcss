@@ -128,6 +128,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function parsAllCSS($html)
     {
+	    $options = self::global_options();
 
         $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
 
@@ -136,12 +137,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         foreach ($sheets as $sheet) {
             $link = $sheet->href;
 
-//            TODO : when duplicate CSS file name comes this breaks. we need to save the file with URL hash and retrieve it with it
             if(strpos($link, '.css') !== false){
 
                 if ($this->cache_file_exists($link)) {
                     $newLink = $this->get_cached_file($link);
-                    $sheet->href = $newLink ;
+
+	                if (in_array($link, $this->css) ) {
+		                $sheet->href = $newLink;
+	                }else if ( isset( $options['autoptimize_uucss_include_all_files'] ) ) {
+		                $sheet->href = $newLink;
+	                }
                 }
             }
 
