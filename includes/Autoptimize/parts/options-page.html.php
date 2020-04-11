@@ -161,5 +161,5 @@
             })
         </script>
     </table>
-    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes', 'autoptimize' ); ?>" /></p>
+    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>" /></p>
 </form>
