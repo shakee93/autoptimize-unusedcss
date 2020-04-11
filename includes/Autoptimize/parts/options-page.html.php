@@ -98,7 +98,7 @@
                             <input type="button" class="button tagadd" value="Add Link">
                         </div>
                         <p class="howto" >
-                            Whitelisted Links (regex supported)
+                            Whitelisted Links example <em> example.com/some-url, /another-url/some-url </em>
                         </p>
                     </div>
                     <ul class="tagchecklist" role="list"></ul>

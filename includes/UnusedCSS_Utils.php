@@ -82,4 +82,12 @@ trait UnusedCSS_Utils {
         return 'uucss-' . $file_hash . '-'. explode("?", basename($file))[0];
     }
 
+    function str_contains($string, $find){
+	    if (strpos( $string, $find ) !== false ) {
+		    return true;
+	    }
+
+	    return false;
+    }
+
 }

@@ -52,11 +52,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             // TODO : improve this
             foreach ($exploded as $pattern) {
 
-                if (filter_var($pattern, FILTER_VALIDATE_URL)) {
-                    $pattern = parse_url($pattern)['path'];
-                }
-
-                if (preg_match($pattern, $url, $x)) {
+            	// check using string contains instead of regex
+                if (self::str_contains( $url, $pattern )) {
                     $this->log('skipped : ' . $url);
                     return false;
                 }
