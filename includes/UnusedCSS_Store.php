@@ -63,13 +63,38 @@ class UnusedCSS_Store {
 
     protected function cache_files() {
 
+	    $options = UnusedCSS_Autoptimize_Admin::fetch_options();
+
         foreach($this->purged_files as $file) {
+
+        	// don't cache excluded files
+	        if ( $this->is_file_excluded( $options, $file->file ) ) {
+		        return;
+	        }
+
             $file_location = $this->append_cache_file_dir($file->file);
             $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
         }
 
         do_action('uucss_cache_completed', $this->args);
         
+    }
+
+	public function is_file_excluded( $options, $file ) {
+
+		if ( isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ) {
+			$files = explode( ',', $options['uucss_excluded_files'] );
+
+			foreach ( $files as $excluded_file ) {
+
+				if ( $this->str_contains( $file, trim($excluded_file) ) ) {
+					return true;
+				}
+
+			}
+		}
+
+		return false;
     }
 
 
