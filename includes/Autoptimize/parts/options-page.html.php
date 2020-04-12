@@ -4,8 +4,8 @@
     #autoptimize_imgopt_descr{font-size: 120%;}
 
     .uucss-tag-links .newtag {
-        width: calc(60% - 100px);
-        min-width: 180px;
+        width: 100%;
+        max-width: 300px;
     }
 
     .uucss-tag-links .tagchecklist>li {
@@ -98,7 +98,29 @@
                             <input type="button" class="button tagadd" value="Add Link">
                         </div>
                         <p class="howto" >
-                            Whitelisted Links example <em> example.com/some-url, /another-url/some-url </em>
+                            Whitelisted links example <em> example.com/some-url, /another-url/some-url </em>
+                        </p>
+                    </div>
+                    <ul class="tagchecklist" role="list"></ul>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row"><?php _e( 'Exclude Css files', 'autoptimize' ); ?></th>
+            <td>
+                <div class="uucss-tag uucss-tag-links tagsdiv" id="uucss_excluded_files">
+                    <div class="">
+                        <div class="nojs-tags hide-if-js">
+                            <label for="tax-input-post_tag">Add or remove tags</label>
+                            <p><textarea name="autoptimize_uucss_settings[uucss_excluded_files]" rows="3" cols="20" class="the-tags" aria-describedby="new-tag-post_tag-desc"><?php echo empty( $options['uucss_excluded_files'] ) ? '' : $options['uucss_excluded_files'] ?></textarea></p>
+                        </div>
+                        <div class="ajaxtag hide-if-no-js">
+                            <label class="screen-reader-text" for="new-tag-post_tag">Add New Tag</label>
+                            <input type="text" class="newtag form-input-tip ui-autocomplete-input" size="16" autocomplete="off" aria-describedby="new-tag-post_tag-desc" value="" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="ui-id-1">
+                            <input type="button" class="button tagadd" value="Add File">
+                        </div>
+                        <p class="howto" >
+                            Whitelisted files example <em> my-styles.css, /my-theme/style.css </em>
                         </p>
                     </div>
                     <ul class="tagchecklist" role="list"></ul>
