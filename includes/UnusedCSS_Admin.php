@@ -119,7 +119,7 @@ abstract class UnusedCSS_Admin {
         }
 
         if (isset($args["post_id"])) {
-            $args['options'] = UnusedCSS::api_options($args["post_id"]);
+            $args['options'] = $this->uucss->api_options($args["post_id"]);
             $this->update_meta($args['post_id']);
         }
 

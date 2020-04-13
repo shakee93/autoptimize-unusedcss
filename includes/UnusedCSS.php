@@ -14,6 +14,7 @@ abstract class UnusedCSS {
     public $url = null;
     public $css = [];
     public $store = null;
+    public $options = [];
 
     /**
      * @var WP_Filesystem_Direct
@@ -162,7 +163,7 @@ abstract class UnusedCSS {
             $args['post_id'] = $post->ID;
         }
 
-        $args['options'] = self::api_options();
+        $args['options'] = $this->api_options();
 
         wp_schedule_single_event( time(), 'uucss_async_queue' , [
             'provider' => $this->provider,
@@ -174,7 +175,7 @@ abstract class UnusedCSS {
         return true;
     }
 
-    public static function api_options($post_id = null)
+    public function api_options($post_id = null)
     {
         global $post;
 
@@ -183,27 +184,21 @@ abstract class UnusedCSS {
         }
 
         $post_options = UnusedCSS_Admin::get_page_options($post_id);
-        $global_options = self::global_options();
 
         $whitelist = explode(',', $post_options['whitelist_classes']);
         $whitelist_global = [];
 
-        if (isset($global_options['uucss_whitelist_classes'])) {
-            $whitelist_global = explode(',', $global_options['uucss_whitelist_classes']);
+        if (isset($this->options['uucss_whitelist_classes'])) {
+            $whitelist_global = explode(',', $this->options['uucss_whitelist_classes']);
         }
 
         return [
             "whitelist" => array_filter(array_merge($whitelist, $whitelist_global)),
-            "keyframes" => !isset($global_options['uucss_keyframes']),
-            "fontFace" => !isset($global_options['uucss_fontface']),
-            "variables" => !isset($global_options['uucss_variables']),
-            "minify" => !isset($global_options['uucss_minify']),
+            "keyframes" => !isset($this->options['uucss_keyframes']),
+            "fontFace" => !isset($this->options['uucss_fontface']),
+            "variables" => !isset($this->options['uucss_variables']),
+            "minify" => !isset($this->options['uucss_minify']),
         ];
-    }
-
-    public static function global_options()
-    {
-        return UnusedCSS_Autoptimize_Admin::fetch_options();
     }
 
     protected function is_doing_api_fetch(){
@@ -218,7 +213,7 @@ abstract class UnusedCSS {
 
 
     protected function cache_file_exists($file){
-        return $this->file_system->exists($this->get_cache_page_dir() . '/' . $this->file_name($file, self::global_options()));
+        return $this->file_system->exists($this->get_cache_page_dir() . '/' . $this->file_name($file, $this->options));
     }
 
 
@@ -275,7 +270,7 @@ abstract class UnusedCSS {
             $this->base,
             $this->provider,
             $hash,
-            $this->file_name($file_url, self::global_options())
+            $this->file_name($file_url, $this->options)
         ]);
     }
 

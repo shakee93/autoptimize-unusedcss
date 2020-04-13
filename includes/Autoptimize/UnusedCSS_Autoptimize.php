@@ -8,8 +8,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     use UnusedCSS_Utils;
 
-    protected $options = [];
-
 	public $deps_available = false;
 
     /**
@@ -29,6 +27,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
 	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+
+	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
 	    parent::__construct();
 
@@ -95,12 +95,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 
-    public static function global_options()
-    {
-        return UnusedCSS_Autoptimize_Admin::fetch_options();
-    }
-
-
     public function get_css(){
 
 
@@ -129,8 +123,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function parsAllCSS($html)
     {
-	    $options = self::global_options();
-
         $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
 
         $sheets = $dom->find('link');
@@ -145,7 +137,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	                if (in_array($link, $this->css) ) {
 		                $sheet->href = $newLink;
-	                }else if ( isset( $options['autoptimize_uucss_include_all_files'] ) ) {
+	                }else if ( isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 		                $sheet->href = $newLink;
 	                }
                 }
