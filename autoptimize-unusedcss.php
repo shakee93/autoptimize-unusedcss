@@ -27,9 +27,6 @@ require('includes/Autoptimize/UnusedCSS_Autoptimize_Admin.php');
 add_action('plugins_loaded', function () {
 
 	$ao_uucss = new UnusedCSS_Autoptimize();
-
-	if (is_admin()) {
-		new UnusedCSS_Autoptimize_Admin($ao_uucss);
-	}
+	new UnusedCSS_Autoptimize_Admin($ao_uucss);
 
 });

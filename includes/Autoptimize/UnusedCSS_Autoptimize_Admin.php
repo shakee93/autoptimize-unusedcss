@@ -19,9 +19,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return;
 	    }
 
-	    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
-	    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
-	    add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+	    if ( is_admin() ) {
+		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
+		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
+		    add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+	    }
 
 	    if (!self::enabled()) {
 		    self::$enabled = false;
