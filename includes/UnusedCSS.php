@@ -218,7 +218,7 @@ abstract class UnusedCSS {
 
 
     protected function cache_file_exists($file){
-        return $this->file_system->exists($this->get_cache_page_dir() . '/' . $this->file_name($file));
+        return $this->file_system->exists($this->get_cache_page_dir() . '/' . $this->file_name($file, self::global_options()));
     }
 
 
@@ -275,7 +275,7 @@ abstract class UnusedCSS {
             $this->base,
             $this->provider,
             $hash,
-            $this->file_name($file_url)
+            $this->file_name($file_url, self::global_options())
         ]);
     }
 

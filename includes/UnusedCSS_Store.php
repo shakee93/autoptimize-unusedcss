@@ -14,6 +14,8 @@ class UnusedCSS_Store {
     public $args;
     public $purged_files = [];
 
+    public $options;
+
     /**
      * @var WP_Filesystem_Direct
      */
@@ -32,6 +34,7 @@ class UnusedCSS_Store {
         $this->provider = $provider;
         $this->url = $url;
         $this->args = $args;
+        $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
         // load wp filesystem related files;
         if (!class_exists('WP_Filesystem_Base')) {
@@ -63,12 +66,10 @@ class UnusedCSS_Store {
 
     protected function cache_files() {
 
-	    $options = UnusedCSS_Autoptimize_Admin::fetch_options();
-
         foreach($this->purged_files as $file) {
 
         	// don't cache excluded files
-	        if ( $this->is_file_excluded( $options, $file->file ) ) {
+	        if ( $this->is_file_excluded( $this->options, $file->file ) ) {
 		        return;
 	        }
 
@@ -79,6 +80,7 @@ class UnusedCSS_Store {
         do_action('uucss_cache_completed', $this->args);
         
     }
+
 
 	public function is_file_excluded( $options, $file ) {
 
@@ -131,7 +133,7 @@ class UnusedCSS_Store {
 
 
     protected function append_cache_file_dir($file){
-        return $this->get_cache_page_dir() . '/' . $this->file_name($file);
+        return $this->get_cache_page_dir() . '/' . $this->file_name($file, $this->options);
     }
 
 }
