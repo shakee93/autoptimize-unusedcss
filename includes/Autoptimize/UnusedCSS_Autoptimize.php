@@ -136,8 +136,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     $newLink = $this->get_cached_file($link);
 
 	                if (in_array($link, $this->css) ) {
+		                $sheet->uucss = true;
 		                $sheet->href = $newLink;
 	                }else if ( isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
+		                $sheet->uucss = true;
 		                $sheet->href = $newLink;
 	                }
                 }
