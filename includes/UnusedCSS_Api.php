@@ -21,7 +21,7 @@ class UnusedCSS_Api
     public function get($url) {
 
         $args = [
-            'url' => $url,
+            'url' => urlencode($url),
             'options' => $this->options
         ];
 
