@@ -77,6 +77,7 @@ class UnusedCSS_Store {
             $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
         }
 
+	    $this->args['url'] = $this->url;
         do_action('uucss_cache_completed', $this->args);
         
     }

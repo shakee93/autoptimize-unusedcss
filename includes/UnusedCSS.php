@@ -238,6 +238,8 @@ abstract class UnusedCSS {
 
     public function clear_cache($url = null, $args = []){
 
+	    $args['url'] = $url;
+
         if ($url && $this->cache_page_dir_exists($url)) {
 
             $results = $this->file_system->delete($this->get_cache_page_dir($url), true);

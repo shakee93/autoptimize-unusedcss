@@ -23,12 +23,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
+	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
+
 	    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
 
 	    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
 	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
 
-	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
 	    parent::__construct();
 
@@ -166,37 +167,36 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function flushCacheProviders($args)
     {
-        $post_id = null;
+        $url = null;
 
         //autoptimizeCache::flushPageCache();
 
-        if(isset($args['post_id'])) {
-            $post_id = $args['post_id'];
+        if(isset($args['url'])) {
+            $url = $args['url'];
         }
 
         if(class_exists('Cache_Enabler')) {
 
-            if ($post_id) {
-                Cache_Enabler::clear_page_cache_by_post_id($post_id);
+            if ($url) {
+                Cache_Enabler::clear_page_cache_by_url($url);
             } else {
                 Cache_Enabler::clear_total_cache();
             }
 
         }
 
-        $this->flush_lw_varnish($post_id);
+        $this->flush_lw_varnish($url);
 
     }
 
-    public function flush_lw_varnish($post_id = null)
+    public function flush_lw_varnish($url = null)
     {
         if (!class_exists('LW_Varnish_Cache_Purger')) {
             return;
         }
 
-        if ($post_id) {
-            LW_Varnish_Cache_Purger::get_instance()->purge_post($post_id);
-            LW_Varnish_Cache_Purger::get_instance()->purge_url(get_permalink($post_id));
+        if ($url) {
+            LW_Varnish_Cache_Purger::get_instance()->purge_url($url);
             LW_Varnish_Cache_Purger::get_instance()->do_purge();
             return;
         }
