@@ -50,7 +50,7 @@
 <div class="uucss-stats">
     <span>UnusedCSS</span>
     <div class="uucss-stats__stats">
-        <span class="uucss-stats__size">Size : <?php echo $this->uucss->size(); ?></span>
+        <span class="uucss-stats__size">Total Size : <?php echo $this->uucss->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
 
