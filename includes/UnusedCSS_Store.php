@@ -55,7 +55,7 @@ class UnusedCSS_Store {
         $this->log('is caching now : ' . $this->url);
         $uucss_api = new UnusedCSS_Api();
         $uucss_api->options = (isset($this->args['options'])) ? $this->args['options'] : [];
-        $this->purged_files = $uucss_api->get($this->url);
+        $this->purged_files = $uucss_api->get($this->url)->data;
 
         if($this->purged_files && count($this->purged_files) > 0) {
             $this->cache_files();
