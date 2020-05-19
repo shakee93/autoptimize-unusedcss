@@ -1,3 +1,4 @@
+<?php global $post; ?>
 <style>
 
     li#wp-admin-bar-autoptimize-uucss {
@@ -10,6 +11,10 @@
 
     .uucss-stats span {
         line-height: 0 !important;
+    }
+
+    .uucss-stats .hidden {
+        display: none;
     }
 
     li#wp-admin-bar-autoptimize-uucss a{
@@ -39,6 +44,8 @@
         cursor: pointer;
     }
 
+
+
 </style>
 <div class="uucss-stats">
     <span>UnusedCSS</span>
@@ -46,8 +53,10 @@
         <span class="uucss-stats__size">Size : <?php echo $this->uucss->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
-        <div id="button-uucss-clear">clear</div>
-        <div id="button-uucss-purge">regenerate</div>
+        <?php $exists = $this->uucss->cache_page_dir_exists(get_permalink($post)); ?>
+        <div id="button-uucss-clear" <?php if($exists) echo 'class="hidden"' ?> title="clear page cache">clear</div>
+        <div id="button-uucss-purge" <?php if(!$exists) echo 'class="hidden"' ?> title="generate page cache">generate</div>
+        <div id="button-uucss-clear-ll" title="clear all unusedcss cache">clear all</div>
     </div>
 
 </div>
@@ -55,7 +64,6 @@
 
     (function ($) {
 
-	    <?php global $post; ?>
         $('#button-uucss-purge').click(function (e) {
             e.preventDefault();
             var $this = $(this);
@@ -70,7 +78,9 @@
             }
 
             wp.ajax.post('uucss_purge_url', data).done(function (d) {
-                $this.text('job queued');
+                $this.text('generate')
+                $this.hide();
+                $('#button-uucss-clear').css('display', 'inline-block')
             })
         });
 
@@ -87,7 +97,9 @@
                     post_id: <?php echo $post->ID ?>
                 }
             }).done(function (d) {
-                $this.text('cleared');
+                $this.text('clear')
+                $this.hide();
+                $('#button-uucss-purge').css('display', 'inline-block')
             })
 
         });

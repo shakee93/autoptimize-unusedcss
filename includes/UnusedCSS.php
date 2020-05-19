@@ -218,7 +218,7 @@ abstract class UnusedCSS {
     }
 
 
-    protected function cache_page_dir_exists($url = null){
+    public function cache_page_dir_exists($url = null){
 
         if (!$url) {
             $url = $this->url;
