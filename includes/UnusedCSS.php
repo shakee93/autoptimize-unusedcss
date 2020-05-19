@@ -198,6 +198,7 @@ abstract class UnusedCSS {
             "fontFace" => !isset($this->options['uucss_fontface']),
             "variables" => !isset($this->options['uucss_variables']),
             "minify" => !isset($this->options['uucss_minify']),
+            "whitelistPacks" => ['wp']
         ];
     }
 

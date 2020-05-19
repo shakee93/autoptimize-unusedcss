@@ -118,7 +118,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             $html = $this->parsAllCSS($html);
 
             return $html;
-        });
+        }, 101);
 
     }
 
@@ -126,29 +126,35 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     {
         $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
 
-        $sheets = $dom->find('link');
+	    if ( $dom ) {
 
-        foreach ($sheets as $sheet) {
-            $link = $sheet->href;
+		    $sheets = $dom->find('link');
 
-            if(strpos($link, '.css') !== false){
+		    foreach ($sheets as $sheet) {
+			    $link = $sheet->href;
 
-                if ($this->cache_file_exists($link)) {
-                    $newLink = $this->get_cached_file($link);
+			    if(strpos($link, '.css') !== false){
 
-	                if (in_array($link, $this->css) ) {
-		                $sheet->uucss = true;
-		                $sheet->href = $newLink;
-	                }else if ( isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
-		                $sheet->uucss = true;
-		                $sheet->href = $newLink;
-	                }
-                }
-            }
+				    if ($this->cache_file_exists($link)) {
+					    $newLink = $this->get_cached_file($link);
 
-        }
+					    if (in_array($link, $this->css) ) {
+						    $sheet->uucss = true;
+						    $sheet->href = $newLink;
+					    }else if ( isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
+						    $sheet->uucss = true;
+						    $sheet->href = $newLink;
+					    }
+				    }
+			    }
 
-        return $dom;
+		    }
+
+		    return $dom;
+
+	    }
+
+	    return $html;
     }
 
     public function getCSSviaAutoptimize($html)
