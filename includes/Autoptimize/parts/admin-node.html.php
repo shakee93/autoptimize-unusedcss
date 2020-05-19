@@ -53,16 +53,21 @@
         <span class="uucss-stats__size">Size : <?php echo $this->uucss->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
-        <?php $exists = $this->uucss->cache_page_dir_exists(get_permalink($post)); ?>
-        <div id="button-uucss-clear" <?php if($exists) echo 'class="hidden"' ?> title="clear page cache">clear</div>
-        <div id="button-uucss-purge" <?php if(!$exists) echo 'class="hidden"' ?> title="generate page cache">generate</div>
-        <div id="button-uucss-clear-ll" title="clear all unusedcss cache">clear all</div>
+
+        <?php if($post) { $exists = $this->uucss->cache_page_dir_exists(get_permalink($post)); ?>
+        <div id="button-uucss-clear" <?php if(!$exists) echo 'class="hidden"' ?> title="clear page cache">clear</div>
+        <div id="button-uucss-purge" <?php if($exists) echo 'class="hidden"' ?> title="generate page cache">generate</div>
+        <?php } ?>
+        <div id="button-uucss-clear-all" title="clear all unusedcss cache">clear all</div>
     </div>
 
 </div>
 <script>
 
     (function ($) {
+
+
+        <?php if($post) : ?>
 
         $('#button-uucss-purge').click(function (e) {
             e.preventDefault();
@@ -100,6 +105,26 @@
                 $this.text('clear')
                 $this.hide();
                 $('#button-uucss-purge').css('display', 'inline-block')
+            })
+
+        });
+
+        <?php endif ?>
+
+        $('#button-uucss-clear-all').click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            $this.text('loading...');
+            wp.ajax.post('uucss_purge_url', {
+                clear: true,
+                url: null,
+            }).done(function (d) {
+                $this.text('cleared all')
+                $('#button-uucss-purge').css('display', 'inline-block')
+                $('#button-uucss-clear').hide()
+
             })
 
         });
