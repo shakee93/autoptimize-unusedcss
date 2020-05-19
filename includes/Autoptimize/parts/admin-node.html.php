@@ -4,6 +4,8 @@
         display: inline-block !important;
         padding: 12px 0 5px !important;
         background: #01579B !important;
+        color: white;
+        cursor: ;
     }
 
     .uucss-stats span {
@@ -11,11 +13,12 @@
     }
 
     li#wp-admin-bar-autoptimize-uucss a{
+        cursor: default;
         height: auto;
     }
 
-    li#wp-admin-bar-autoptimize-uucss a:hover{
-        color : whitesmoke !important;
+    li#wp-admin-bar-autoptimize-uucss a:hover, a.ab-item:hover{
+        color : rgba(240, 245, 250, 0.7) !important;
     }
 
     .uucss-stats {
@@ -26,11 +29,69 @@
         font-size: .7em !important;
     }
 
+    .uucss-stats__actions div {
+        display: inline-block;
+        padding: 0 7px !important;
+        background: #009688;
+        line-height: 1.5 !important;
+        border-radius: 3px !important;
+        margin-right: 3px !important;
+        cursor: pointer;
+    }
+
 </style>
 <div class="uucss-stats">
     <span>UnusedCSS</span>
-    <div class="uucss-stats__actions">
+    <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Size : <?php echo $this->uucss->size(); ?></span>
+    </div>
+    <div class="uucss-stats__actions">
+        <div id="button-uucss-clear">clear</div>
+        <div id="button-uucss-purge">regenerate</div>
     </div>
 
 </div>
+<script>
+
+    (function ($) {
+
+	    <?php global $post; ?>
+        $('#button-uucss-purge').click(function (e) {
+            e.preventDefault();
+            var $this = $(this);
+
+            $this.text('loading...');
+
+            var data = {
+                url: '<?php echo get_permalink($post) ?>',
+                args: {
+                    post_id: <?php echo $post->ID ?>
+                }
+            }
+
+            wp.ajax.post('uucss_purge_url', data).done(function (d) {
+                $this.text('job queued');
+            })
+        });
+
+        $('#button-uucss-clear').click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            $this.text('loading...');
+            wp.ajax.post('uucss_purge_url', {
+                clear: true,
+                url: '<?php echo get_permalink($post) ?>',
+                args: {
+                    post_id: <?php echo $post->ID ?>
+                }
+            }).done(function (d) {
+                $this.text('cleared');
+            })
+
+        });
+
+    })(jQuery)
+
+</script>

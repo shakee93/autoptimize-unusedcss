@@ -32,13 +32,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    add_action( 'admin_bar_menu', function () {
 
+		    wp_enqueue_script('wp-util');
+
 		    global $wp_admin_bar;
 
 		    $wp_admin_bar->add_node( array(
 			    'id'     => 'autoptimize-uucss',
 			    'title'  => $this->get_node_text(),
 			    'parent' => 'autoptimize',
-			    'href' =>   admin_url('options-general.php?page=uucss'),
 			    'tag' => 'div'
 		    ));
 
