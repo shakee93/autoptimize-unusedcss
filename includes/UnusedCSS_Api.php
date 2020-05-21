@@ -8,6 +8,9 @@ class UnusedCSS_Api
     public $apiUrl = 'https://unusedcss.herokuapp.com/api';
 
     public $options = [];
+
+    public $legacyApi = true;
+
     /**
      * UnusedCSS_Api constructor.
      */
@@ -20,16 +23,7 @@ class UnusedCSS_Api
 
     public function get($url) {
 
-        $args = [
-            'url' => urlencode($url),
-            'options' => $this->options
-        ];
-
-        $url = $this->apiUrl . '?' . http_build_query($args);
-
-        $response = wp_remote_get($url, [
-        	'timeout' => 20
-        ]);
+	    $response = ($this->legacyApi) ? $this->legacyApi( $url ) : $this->api($url);
 
         if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 
@@ -48,5 +42,31 @@ class UnusedCSS_Api
 
     }
 
+	function api($url) {
+		$this->options['url'] = $url;
+		$args = $this->options;
+
+		$url = $this->apiUrl . '?' . http_build_query($args);
+
+		return wp_remote_get($url, [
+			'timeout' => 20,
+			'headers' => [
+				'Authorization' => 'Bearer b2729838c86b48be8d3b03da2cd1c531'
+			]
+		]);
+	}
+
+	function legacyApi($url) {
+		$args = [
+			'url' => urlencode($url),
+			'options' => $this->options
+		];
+
+		$url = $this->apiUrl . '?' . http_build_query($args);
+
+		return wp_remote_get($url, [
+			'timeout' => 20
+		]);
+	}
 
 }

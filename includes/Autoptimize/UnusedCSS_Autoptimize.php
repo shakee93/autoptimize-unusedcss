@@ -31,6 +31,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
 
 
+	    add_filter( 'query_vars', function ($vars) {
+
+		    $vars[] = 'no_uucss';
+		    return $vars;
+
+	    });
+
 	    parent::__construct();
 
     }
@@ -113,6 +120,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return;
         }
 
+	    if ( get_query_var( 'no_uucss' ) == 'true') {
+		    return;
+	    }
+
         add_action('autoptimize_html_after_minify', function($html) {
 
             $html = $this->parsAllCSS($html);
@@ -127,6 +138,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
 
 	    if ( $dom ) {
+
+	    	$dom->find('html')[0]->uucss = true;
 
 		    $sheets = $dom->find('link');
 
