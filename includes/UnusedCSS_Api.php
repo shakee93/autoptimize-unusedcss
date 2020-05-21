@@ -19,9 +19,13 @@ class UnusedCSS_Api
         if (defined('UUCSS_API_URL')) {
             $this->apiUrl = UUCSS_API_URL;
         }
+
+	    if (defined('UUCSS_NEXT')) {
+		    $this->legacyApi = false;
+	    }
     }
 
-    public function get($url) {
+	public function get($url) {
 
 	    $response = ($this->legacyApi) ? $this->legacyApi( $url ) : $this->api($url);
 
