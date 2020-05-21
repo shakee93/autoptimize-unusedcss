@@ -103,16 +103,15 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if (is_search()) {
-            return false;
-        }
+	    if ( is_search() ) {
+		    return false;
+	    }
 
-        if ( defined( 'DOING_CRON' ) )
-        {
-            return false;
-        }
+	    if ( defined( 'DOING_CRON' ) ) {
+		    return false;
+	    }
 
-        return true;
+	    return true;
 
     }
 
