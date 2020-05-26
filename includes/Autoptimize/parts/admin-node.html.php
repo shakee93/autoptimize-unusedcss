@@ -124,6 +124,7 @@
                 $this.text('cleared all')
                 $('#button-uucss-purge').css('display', 'inline-block')
                 $('#button-uucss-clear').hide()
+                $('.uucss-stats__size').text('Total Size : 0.00KB')
 
             })
 
