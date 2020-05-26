@@ -36,12 +36,22 @@ trait UnusedCSS_Utils {
         
     }
 
-    public static function log($object) {
+    public static function log($object, $callee = true) {
 
         $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
         error_log( "[UUCSS_LOG] " . $data);
-        
-        return $object;
+
+	    if ( $callee ) {
+
+		    error_log( "[UUCSS_LOG] " . json_encode( [
+				    "file" => debug_backtrace()[1]['file'],
+				    "function" => debug_backtrace()[1]['function'],
+				    "class" => debug_backtrace()[1]['class'],
+				    "args" => debug_backtrace()[1]['args'],
+			    ], JSON_PRETTY_PRINT));
+
+	    }
+	    return $object;
     }
 
     public static function add_admin_notice($message, $type='error') {
