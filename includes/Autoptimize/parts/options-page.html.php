@@ -48,6 +48,15 @@
             </td>
         </tr>
         <tr>
+            <th scope="row"><?php _e( 'Api Key', 'autoptimize' ); ?></th>
+            <td>
+                <label>
+                    <input id='uucss_api_key' type='text' name='autoptimize_uucss_settings[uucss_api_key]'  value="<?php echo (isset($options['uucss_api_key'])) ? $options['uucss_api_key'] : '' ?>">
+                    <input type="button" class="button" value="Verify">
+                </label>
+            </td>
+        </tr>
+        <tr>
             <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?></th>
             <td>
                 <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">
@@ -130,6 +139,7 @@
         <tr>
             <th scope="row"><?php _e( 'Other Options', 'autoptimize' ); ?></th>
             <td>
+
                 <p>
                     <label for="uucss_minify">
                         <input id='uucss_minify'
@@ -165,12 +175,7 @@
                     </label>
                 </p>
 
-                <p>
-                    <label for="uucss_analyze_javascript">
-                        <input id='uucss_analyze_javascript' type='checkbox' name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) { echo 'checked="checked"'; } ?> value='1'>
-                        Analyze javascript <em>-- analyze javascript and remove unused css which are not used in JS (experimental)</em>
-                    </label>
-                </p>
+
             </td>
         </tr>
         <tr>
