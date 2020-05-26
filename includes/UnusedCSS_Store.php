@@ -54,6 +54,7 @@ class UnusedCSS_Store {
 
         $this->log('is caching now : ' . $this->url);
         $uucss_api = new UnusedCSS_Api();
+	    $uucss_api->apiKey = $this->options['uucss_api_key'];
         $uucss_api->options = (isset($this->args['options'])) ? $this->args['options'] : [];
 
 	    $result = $uucss_api->get( $this->url );

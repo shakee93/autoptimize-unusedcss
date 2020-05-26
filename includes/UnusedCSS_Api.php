@@ -7,6 +7,8 @@ class UnusedCSS_Api
 
     public $apiUrl = 'https://unusedcss.herokuapp.com/api';
 
+    public $apiKey = null;
+
     public $options = [];
 
     /**
@@ -49,7 +51,7 @@ class UnusedCSS_Api
 		return wp_remote_get($url, [
 			'timeout' => 20,
 			'headers' => [
-				'Authorization' => 'Bearer b2729838c86b48be8d3b03da2cd1c531'
+				'Authorization' => 'Bearer ' . $this->apiKey
 			]
 		]);
 	}
