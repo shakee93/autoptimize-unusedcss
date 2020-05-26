@@ -38,6 +38,10 @@ trait UnusedCSS_Utils {
 
     public static function log($object, $callee = true) {
 
+	    if ( ! defined( 'UUCSS_DEBUG' ) || UUCSS_DEBUG == false ) {
+		    return false;
+	    }
+
         $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
         error_log( "[UUCSS_LOG] " . $data);
 
@@ -51,6 +55,7 @@ trait UnusedCSS_Utils {
 			    ], JSON_PRETTY_PRINT));
 
 	    }
+
 	    return $object;
     }
 
