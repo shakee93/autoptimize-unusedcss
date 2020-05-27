@@ -18,6 +18,9 @@ class UnusedCSS_Api
         if (defined('UUCSS_API_URL')) {
             $this->apiUrl = UUCSS_API_URL;
         }
+
+	    $key = isset( UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] ) ? UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] : null;
+	    $this->apiKey = $key;
     }
 
 
