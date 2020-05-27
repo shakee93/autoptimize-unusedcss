@@ -112,8 +112,6 @@ abstract class UnusedCSS_Admin {
 
 		$results = $uucss_api->get( 'verify' );
 
-		self::log( $results, false );
-
 		if ( isset( $results->data ) ) {
 			wp_send_json_success(true);
 		}
