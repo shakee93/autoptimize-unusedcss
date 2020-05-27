@@ -7,7 +7,7 @@ class UnusedCSS_Store {
 
     use UnusedCSS_Utils;
 
-    public $base = 'cache/uucss';
+    public $base = 'cache/ao_uucss';
     public $provider;
 
     public $url;
