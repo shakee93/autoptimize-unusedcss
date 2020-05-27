@@ -97,7 +97,30 @@ abstract class UnusedCSS_Admin {
         add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
         add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
         add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
+        add_action( "wp_ajax_verify_api_key", [$this, 'verify_api_key']);
     }
+
+	public function verify_api_key() {
+
+		if (!isset($_POST['api_key'])){
+			wp_send_json_error();
+			return;
+		}
+
+		$uucss_api = new UnusedCSS_Api();
+		$uucss_api->apiKey = $_POST['api_key'];
+
+		$results = $uucss_api->get( 'verify' );
+
+		self::log( $results, false );
+
+		if ( isset( $results->data ) ) {
+			wp_send_json_success(true);
+		}
+
+		wp_send_json_error();
+
+	}
 
     public function ajax_purge_url()
     {

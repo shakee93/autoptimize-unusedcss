@@ -24,7 +24,7 @@ class UnusedCSS_Api
     }
 
 
-	function get($endpoint, $data) {
+	function get($endpoint, $data = []) {
 
 		$url = $this->apiUrl . '/' . $endpoint . '?' . http_build_query($data);
 
