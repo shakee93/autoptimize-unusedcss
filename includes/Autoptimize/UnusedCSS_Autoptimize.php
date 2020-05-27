@@ -170,19 +170,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    return $html;
     }
 
-    public function getCSSviaAutoptimize($html)
-    {
-        $hash = $this->encode($this->url);
-
-        foreach ($this->css as  $css) {
-
-            $_css = str_replace('/autoptimize/css', "/uucss/$this->provider/$hash", $css);
-            $html = str_replace($css, $_css, $html);
-
-        }
-
-        return $html;
-    }
 
     public function flushCacheProviders($args)
     {

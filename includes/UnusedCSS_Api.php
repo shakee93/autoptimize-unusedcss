@@ -9,7 +9,6 @@ class UnusedCSS_Api
 
     public $apiKey = null;
 
-    public $options = [];
 
     /**
      * UnusedCSS_Api constructor.
@@ -21,39 +20,47 @@ class UnusedCSS_Api
         }
     }
 
-	public function get($url) {
 
-	    $response = $this->api($url);
+	function get($endpoint, $data) {
 
-        if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+		$url = $this->apiUrl . '/' . $endpoint . '?' . http_build_query($data);
 
-            if($response['response']['code'] == 200) {
-                $body    = $response['body'];
-                return json_decode($body);
-            }
+		self::log( $data, false );
 
-            $this->log($response['response']);
-            return null;
-        }
-        else {
-            $this->log($response->get_error_message());
-            return null;
-        }
-
-    }
-
-	function api($url) {
-		$this->options['url'] = $url;
-		$args = $this->options;
-
-		$url = $this->apiUrl . '?' . http_build_query($args);
-
-		return wp_remote_get($url, [
+		$response = wp_remote_get($url, [
 			'timeout' => 20,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			]
 		]);
+
+		return $this->handle_response($response);
 	}
+
+
+	/**
+	 * @param $response array|WP_Error
+	 *
+	 * @return mixed|null
+	 */
+	public function handle_response($response) {
+
+		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+
+			if($response['response']['code'] == 200) {
+				$body    = $response['body'];
+				return json_decode($body);
+			}
+
+			$this->log($response['response']);
+			return null;
+		}
+		else {
+			$this->log($response->get_error_message());
+			return null;
+		}
+
+	}
+
 
 }
