@@ -21,7 +21,7 @@ abstract class UnusedCSS {
      */
     public $file_system;
 
-    public $base_dir, $base_dir_with_provider;
+    public $base_dir;
 
 
     abstract public function get_css();
@@ -224,7 +224,6 @@ abstract class UnusedCSS {
 
     public function set_base_dir(){
         $this->base_dir = $this->file_system->wp_content_dir()  . $this->base;
-        $this->base_dir_with_provider = "$this->base_dir/$this->provider";
     }
 
 
@@ -241,7 +240,7 @@ abstract class UnusedCSS {
 
         $hash = $this->encode($url);
 
-        $source_dir = $this->base_dir_with_provider . '/' . $hash;
+        $source_dir = $this->base_dir . '/' . $hash;
 
         if(!$this->file_system->exists($source_dir)) {
             return false;
@@ -265,7 +264,7 @@ abstract class UnusedCSS {
             return !is_wp_error($results);
         }
 
-        $results = $this->file_system->delete($this->base_dir_with_provider, true);
+        $results = $this->file_system->delete($this->base_dir, true);
         do_action('uucss_cache_cleared', $args);
         return !is_wp_error($results);
     }
@@ -274,10 +273,10 @@ abstract class UnusedCSS {
     public function size()
     {
 
-        if (!$this->file_system->exists($this->base_dir_with_provider)) {
+        if (!$this->file_system->exists($this->base_dir)) {
             return "0 KB";
         }
-        $size = $this->dirSize($this->base_dir_with_provider);
+        $size = $this->dirSize($this->base_dir);
         return $this->human_file_size($size);
     }
 
@@ -288,7 +287,6 @@ abstract class UnusedCSS {
         return implode('/', [
             WP_CONTENT_URL,
             $this->base,
-            $this->provider,
             $hash,
             $this->file_name($file_url, $this->options)
         ]);
@@ -303,7 +301,7 @@ abstract class UnusedCSS {
         }
 
         $hash = $this->encode($url);
-        return $this->base_dir_with_provider . '/' . $hash;
+        return $this->base_dir . '/' . $hash;
     }
 
 

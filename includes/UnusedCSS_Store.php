@@ -113,17 +113,11 @@ class UnusedCSS_Store {
 
         $root = $this->file_system->wp_content_dir()  . $this->base;
 
-        $root_with_provider = $root . '/' . $this->provider;
-
         if(!$this->file_system->exists($root)) {
             $this->file_system->mkdir($root);
         }
 
-        if(!$this->file_system->exists($root_with_provider)) {
-            $this->file_system->mkdir($root_with_provider);
-        }
-
-        return $root_with_provider;
+        return $root;
     }
 
 
