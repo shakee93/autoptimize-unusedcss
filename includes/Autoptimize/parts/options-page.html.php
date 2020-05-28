@@ -184,6 +184,13 @@
             <td>
 
                 <p>
+                    <label for="uucss_analyze_javascript">
+                        <input id='uucss_analyze_javascript' type='checkbox' name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) { echo 'checked="checked"'; } ?> value='1'>
+                        Analyze javascript <em>-- analyze javascript and remove unused css which are not used in JS (experimental)</em>
+                    </label>
+                </p>
+
+                <p>
                     <label for="uucss_minify">
                         <input id='uucss_minify'
                                type='checkbox'
