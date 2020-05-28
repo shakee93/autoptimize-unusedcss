@@ -14,6 +14,7 @@
         font-size: 120%;
     }
 
+    .uucss-tag .newtag,
     .uucss-tag-links .newtag {
         width: 100%;
         max-width: 300px;
@@ -69,8 +70,8 @@
                 <label>
                     <input id='autoptimize_uucss_enabled' type='checkbox'
                            name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
-						echo 'checked="checked"';
-					} ?> value='1'>
+	                    echo 'checked="checked"';
+                    } ?> value='1'>
                 </label>
             </td>
         </tr>
@@ -79,7 +80,8 @@
             <td>
                 <label>
                     <input id='uucss_api_key' type='text' name='autoptimize_uucss_settings[uucss_api_key]'
-                           value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>">
+                           value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
+                           size="40">
                     <em id="verification_status"></em>
                 </label>
             </td>
