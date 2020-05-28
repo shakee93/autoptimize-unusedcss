@@ -52,7 +52,7 @@
         color: green;
     }
 
-    #uucss-options em#verification_status {
+    #uucss-options em#verification_status.failed {
         color: red;
     }
 
@@ -261,6 +261,12 @@
                     var $input = $('#uucss_api_key')
 
                     function verifyApiKey() {
+
+                        if ($input.val().length === 0) {
+                            $status.removeClass().text('please fill your api key here !');
+                            return;
+                        }
+
 
                         $status.text('loading...');
 
