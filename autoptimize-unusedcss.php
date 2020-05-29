@@ -5,7 +5,7 @@ Plugin URI:  unusedcss.io
 Description: Removes Unused CSS from your website pages.
 Version:     1.0.0
 Author:      Shakeeb Sadikeen
-Author URI:  http://shakee93.me/
+Author URI:  https://shakeeb.dev/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {

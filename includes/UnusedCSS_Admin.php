@@ -97,7 +97,7 @@ abstract class UnusedCSS_Admin {
         add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
         add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
         add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
-        add_action( "wp_ajax_verify_api_key", [$this, 'verify_api_key']);
+
     }
 
 	public function verify_api_key() {

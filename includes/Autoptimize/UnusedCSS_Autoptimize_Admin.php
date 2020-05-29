@@ -20,19 +20,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    }
 
 	    if ( is_admin() ) {
+
 		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
 		    add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+		    add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 	    }
 
-	    if (!self::enabled()) {
+	    add_action( 'wp_print_scripts', function () {
+		    wp_enqueue_script( 'wp-util' );
+	    } );
+
+	    if ( ! self::enabled() ) {
 		    self::$enabled = false;
+
 		    return;
 	    }
 
 	    add_action( 'admin_bar_menu', function () {
 
-		    wp_enqueue_script('wp-util');
 
 		    global $wp_admin_bar;
 
@@ -68,39 +74,53 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
-    public static function enabled(){
+    public static function enabled() {
 
-        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-            self::add_admin_notice("Autoptimize UnusedCSS Plugin only works css optimization is enabled", 'warning');
-            return false;
-        }
+	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
+		    self::add_admin_notice( "Autoptimize UnusedCSS Plugin only works css optimization is enabled", 'warning' );
+
+		    return false;
+	    }
 
 	    if ( ! self::enabled_via_ao() ) {
 		    return false;
 	    }
 
-	    if(is_multisite()) {
-		    self::add_admin_notice("UnusedCSS not supported for multisite");
+	    if ( ! self::is_api_key_verified() ) {
 		    return false;
 	    }
 
-        return true;
+	    if ( is_multisite() ) {
+		    self::add_admin_notice( "UnusedCSS not supported for multisite" );
+
+		    return false;
+	    }
+
+	    return true;
     }
 
 
 	public static function enabled_via_ao() {
-		return isset(static::fetch_options()['autoptimize_uucss_enabled']);
-    }
+		return isset( static::fetch_options()['autoptimize_uucss_enabled'] );
+	}
+
+	public static function is_api_key_verified() {
+
+		$api_key_status = isset( static::fetch_options()['uucss_api_key_verified'] ) ? static::fetch_options()['uucss_api_key_verified'] : '';
+
+		return $api_key_status == '1';
+
+	}
 
 
-    public function add_ao_tab($in){
+	public function add_ao_tab( $in ) {
 
-        $in = array_merge( $in, array(
-            'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
-        ) );
+		$in = array_merge( $in, array(
+			'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
+		) );
 
-        return $in;
-    }
+		return $in;
+	}
 
 
     public function add_ao_page()
@@ -134,7 +154,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function clear_cache_on_option_update( $option ) {
 
-		if ( $option == 'autoptimize_uucss_settings' ) {
+		if ( $option == 'autoptimize_uucss_settings' && $this->uucss ) {
 			$this->uucss->clear_cache();
 		}
 
