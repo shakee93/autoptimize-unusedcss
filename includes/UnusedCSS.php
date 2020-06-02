@@ -276,31 +276,46 @@ abstract class UnusedCSS {
         if (!$this->file_system->exists($this->base_dir)) {
             return "0 KB";
         }
+
         $size = $this->dirSize($this->base_dir);
         return $this->human_file_size($size);
     }
 
 
-    protected function get_cached_file($file_url){
-        $hash = $this->encode($this->url);
+	protected function get_cached_file( $file_url ) {
+		$hash = $this->encode( $this->url );
 
-        return implode('/', [
-            WP_CONTENT_URL,
-            $this->base,
-            $hash,
-            $this->file_name($file_url, $this->options)
-        ]);
-    }
+		return implode( '/', [
+			WP_CONTENT_URL,
+			$this->base,
+			$hash,
+			$this->file_name( $file_url, $this->options )
+		] );
+	}
+
+	protected function get_inline_content( $file_url ) {
+		$hash = $this->encode( $this->url );
+
+		$file = implode( '/', [
+			$this->base_dir,
+			$hash,
+			$this->file_name( $file_url, $this->options )
+		] );
+
+		return [
+			'size'    => $this->file_system->size( $file ),
+			'content' => $this->file_system->get_contents( $file )
+		];
+	}
 
 
-    protected function get_cache_page_dir($url = null)
-    {
+	protected function get_cache_page_dir( $url = null ) {
 
-        if (!$url) {
-            $url = $this->url;
-        }
+		if ( ! $url ) {
+			$url = $this->url;
+		}
 
-        $hash = $this->encode($url);
+		$hash = $this->encode( $url );
         return $this->base_dir . '/' . $hash;
     }
 

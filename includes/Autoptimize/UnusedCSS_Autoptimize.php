@@ -149,15 +149,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			    if(strpos($link, '.css') !== false){
 
 				    if ($this->cache_file_exists($link)) {
-					    $newLink = $this->get_cached_file($link);
+					    $newLink = $this->get_cached_file( $link );
 
-					    if (in_array($link, $this->css) ) {
+					    if ( in_array( $link, $this->css ) || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
+
 						    $sheet->uucss = true;
-						    $sheet->href = $newLink;
-					    }else if ( isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
-						    $sheet->uucss = true;
-						    $sheet->href = $newLink;
+						    $sheet->href  = $newLink;
+
+						    if ( isset( $this->options['uucss_inline_css'] ) ) {
+							    $this->inlineSheet( $sheet, $link );
+						    }
+
 					    }
+
 				    }
 			    }
 
@@ -171,17 +175,29 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 
-    public function flushCacheProviders($args)
-    {
-        $url = null;
+	protected function inlineSheet( $sheet, $link ) {
 
-        //autoptimizeCache::flushPageCache();
+		$inline = $this->get_inline_content( $link );
 
-        if(isset($args['url'])) {
-            $url = $args['url'];
-        }
+		if ( ! isset( $inline['size'] ) || $inline['size'] <= apply_filters( 'uucss/inline-css-limit', 15 * 1000 ) ) {
+			return;
+		}
 
-        if(class_exists('Cache_Enabler')) {
+		$sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
+
+	}
+
+
+	public function flushCacheProviders( $args ) {
+		$url = null;
+
+		//autoptimizeCache::flushPageCache();
+
+		if ( isset( $args['url'] ) ) {
+			$url = $args['url'];
+		}
+
+		if ( class_exists( 'Cache_Enabler' ) ) {
 
             if ($url) {
                 Cache_Enabler::clear_page_cache_by_url($url);
@@ -209,4 +225,5 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
     }
+
 }
