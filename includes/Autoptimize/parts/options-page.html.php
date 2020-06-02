@@ -281,8 +281,8 @@
                             $status.text('verified !').removeClass().addClass('success')
 
                         }).fail(function () {
-                            $verified.val(undefined)
 
+                            $verified.val(undefined)
                             $status.text('failed !').removeClass().addClass('failed')
 
                         });
