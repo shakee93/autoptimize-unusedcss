@@ -5,7 +5,7 @@ class UnusedCSS_Api
 {
     use UnusedCSS_Utils;
 
-    public $apiUrl = 'https://unusedcss.herokuapp.com/api';
+    public $apiUrl = 'https://app.unusedcss.io/api/v1';
 
     public $apiKey = null;
 
