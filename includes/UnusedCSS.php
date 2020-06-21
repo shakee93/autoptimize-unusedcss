@@ -8,8 +8,8 @@ abstract class UnusedCSS {
 
     use UnusedCSS_Utils;
 
-    public $base = 'cache/ao_uucss';
-    public $provider = null;
+    public $base = 'cache/autoptimize/uucss';
+	public $provider = null;
 
     public $url = null;
     public $css = [];
