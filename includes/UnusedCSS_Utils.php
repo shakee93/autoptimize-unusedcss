@@ -36,14 +36,14 @@ trait UnusedCSS_Utils {
         
     }
 
-    public static function log($object, $callee = true) {
+    public static function log( $object, $callee = false ) {
 
 	    if ( ! defined( 'UUCSS_DEBUG' ) || UUCSS_DEBUG == false ) {
 		    return false;
 	    }
 
-        $data = is_string($object) ? $object : json_encode($object, JSON_PRETTY_PRINT);
-        error_log( "[UUCSS_LOG] " . $data);
+	    $data = is_string( $object ) ? $object : json_encode( $object, JSON_PRETTY_PRINT );
+	    error_log( "[UUCSS_LOG] " . $data );
 
 	    if ( $callee ) {
 

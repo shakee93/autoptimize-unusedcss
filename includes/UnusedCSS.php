@@ -322,6 +322,10 @@ abstract class UnusedCSS {
 
     public function vanish()
     {
+	    if ( ! $this->initFileSystem() ) {
+		    return;
+	    }
+
         $delete = $this->file_system->wp_content_dir()  . $this->base;
 
         if (!$this->file_system->exists($delete)) {
