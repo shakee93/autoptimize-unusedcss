@@ -82,13 +82,18 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }
 
+
+	    if ( ! self::is_api_key_verified() ) {
+		    self::add_admin_notice( "Please get your api key for Autoptimize UnusedCSS from <a target='_blank' href='https://unusedcss.io/'>https://unusedcss.io</a>", 'warning' );
+
+		    return false;
+	    }
+
+
 	    if ( ! self::enabled_via_ao() ) {
 		    return false;
 	    }
 
-	    if ( ! self::is_api_key_verified() ) {
-		    return false;
-	    }
 
 	    if ( is_multisite() ) {
 		    self::add_admin_notice( "UnusedCSS not supported for multisite" );
