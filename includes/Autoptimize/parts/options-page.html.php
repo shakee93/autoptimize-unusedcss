@@ -289,6 +289,8 @@
                             return;
                         }
 
+                        $status.text('loading...')
+
                         wp.ajax.post('verify_api_key', {api_key: $input.val()}).done(function () {
 
                             $verified.val('1')
