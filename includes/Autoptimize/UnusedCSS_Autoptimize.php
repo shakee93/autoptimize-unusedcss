@@ -124,32 +124,48 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
-        add_action('autoptimize_html_after_minify', function($html) {
+        add_action( 'autoptimize_html_after_minify', function ( $html ) {
 
-            $html = $this->parsAllCSS($html);
+	        $html = $this->parsAllCSS( $html );
 
-            return $html;
-        }, 101);
+	        return $html;
+        }, 99 );
 
     }
 
-    public function parsAllCSS($html)
-    {
-        $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html($html);
+    public function parsAllCSS($html) {
+	    $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
+
+	    $inject = (object) [
+		    "parsed_html"           => false,
+		    "found_sheets"          => false,
+		    "found_css_files"       => [],
+		    "found_css_cache_files" => [],
+		    "injected_css_files"    => [],
+	    ];
 
 	    if ( $dom ) {
+		    $inject->parsed_html = true;
 
-	    	$dom->find('html')[0]->uucss = true;
+		    $dom->find( 'html' )[0]->uucss = true;
 
-		    $sheets = $dom->find('link');
+		    $sheets = $dom->find( 'link' );
 
-		    foreach ($sheets as $sheet) {
+		    foreach ( $sheets as $sheet ) {
 			    $link = $sheet->href;
 
-			    if(strpos($link, '.css') !== false){
+			    $inject->found_sheets = true;
 
-				    if ($this->cache_file_exists($link)) {
+			    if ( strpos( $link, '.css' ) !== false ) {
+
+				    array_push( $inject->found_css_files, $link );
+
+				    if ( $this->cache_file_exists( $link ) ) {
+					    array_push( $inject->found_css_cache_files, $link );
+
 					    $newLink = $this->get_cached_file( $link );
+
+					    array_push( $inject->injected_css_files, $newLink );
 
 					    if ( in_array( $link, $this->css ) || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
@@ -167,9 +183,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
+		    self::log( $inject );
+
 		    return $dom;
 
 	    }
+
+	    self::log( $inject );
 
 	    return $html;
     }

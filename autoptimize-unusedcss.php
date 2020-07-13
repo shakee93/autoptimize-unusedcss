@@ -9,12 +9,15 @@ Author URI:  https://shakeeb.dev/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 define( 'UUCSS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
-define( 'UUCSS_DEBUG', true );
+
+if ( ! defined( 'UUCSS_DEBUG' ) ) {
+	define( 'UUCSS_DEBUG', true );
+}
 
 require( 'vendor/autoload.php' );
 

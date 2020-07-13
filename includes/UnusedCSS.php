@@ -286,7 +286,7 @@ abstract class UnusedCSS {
 		$hash = $this->encode( $this->url );
 
 		return implode( '/', [
-			WP_CONTENT_URL,
+			content_url(),
 			$this->base,
 			$hash,
 			$this->file_name( $file_url, $this->options )
