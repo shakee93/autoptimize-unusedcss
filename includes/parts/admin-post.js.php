@@ -5,7 +5,7 @@
     });
 
 
-    $('#button-uucss-purge').click(function (e) {
+    $('#button-page-uucss-purge').click(function (e) {
         e.preventDefault();
         var $this = $(this);
 
@@ -31,7 +31,7 @@
         })
     });
 
-    $('#button-uucss-clear').click(function (e) {
+    $('#button-page-uucss-clear').click(function (e) {
         e.preventDefault();
 
         var $this = $(this);
