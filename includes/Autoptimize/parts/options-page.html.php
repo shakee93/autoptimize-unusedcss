@@ -32,7 +32,7 @@
         color: #9E9E9E;
     }
 
-    #uucss-options span {
+    #uucss-options .example span {
         display: inline-block;
         margin-bottom: 4px;
     }
@@ -260,8 +260,8 @@
             <td>
                 <label><input id='uucss_inline_css' type='checkbox'
                               name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
-					    echo 'checked="checked"';
-				    } ?> value='1'>
+		                echo 'checked="checked"';
+	                } ?> value='1'>
                     <i>
                         inline CSS files which are smaller than 15kb after unusedcss are removed
                     </i>
@@ -269,49 +269,25 @@
             </td>
         </tr>
 
-        <script>
-            (function ($) {
+        <tr>
+            <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?></th>
+            <td>
+                <label>
+                    <!--                    <input id="xwhitelist_packs" type="text" name="autoptimize_uucss_settings[uucss_whitelist_packs]"-->
+                    <!--                           value="--><?php //if ( isset( $options['uucss_whitelist_packs'] ) )
+				    //					           echo $options['uucss_whitelist_packs'] ?><!--">-->
 
-                $(document).ready(function () {
-                    window.tagBox.init();
+                    <select id="whitelist_packs" multiple="multiple" class="js-example-basic-single" name="state">
+                        <option value="Ax">Alabama</option>
+                        <option value="At">Alabama</option>
+                        <option value="Ao">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
 
+                </label>
+            </td>
+        </tr>
 
-                    var $status = $('#verification_status')
-                    var $input = $('#uucss_api_key')
-                    var $verified = $('input[name="autoptimize_uucss_settings[uucss_api_key_verified]"]')
-
-                    function verifyApiKey() {
-
-
-                        $verified.val(undefined)
-                        if ($input.val().length === 0) {
-                            $status.removeClass().text('please fill your api key here !');
-                            return;
-                        }
-
-                        $status.text('loading...')
-
-                        wp.ajax.post('verify_api_key', {api_key: $input.val()}).done(function () {
-
-                            $verified.val('1')
-                            $status.text('verified !').removeClass().addClass('success')
-
-                        }).fail(function () {
-
-                            $verified.val(undefined)
-                            $status.text('failed !').removeClass().addClass('failed')
-
-                        });
-
-                    }
-
-                    verifyApiKey()
-                    $input.on('input', verifyApiKey)
-
-                })
-
-            })(jQuery)
-        </script>
     </table>
     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
                              value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/></p>

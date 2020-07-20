@@ -15,16 +15,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     public function __construct($ao_uucss)
     {
 
-	    if ( !$ao_uucss->deps_available ) {
+	    if ( ! $ao_uucss->deps_available ) {
 		    return;
 	    }
+
+	    add_action( 'current_screen', function () {
+		    if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
+			    add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+		    }
+	    } );
+
 
 	    if ( is_admin() ) {
 
 		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
 		    add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+
 		    add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
+
 	    }
 
 	    add_action( 'wp_print_scripts', function () {
@@ -46,25 +55,32 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			    'id'     => 'autoptimize-uucss',
 			    'title'  => $this->get_node_text(),
 			    'parent' => 'autoptimize',
-			    'tag' => 'div'
-		    ));
+			    'tag'    => 'div'
+		    ) );
 
 	    }, 1 );
 
-	    parent::__construct($ao_uucss);
+	    parent::__construct( $ao_uucss );
 
     }
 
+	public function enqueueScripts() {
+
+		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery' ) );
+
+		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.css' );
+
+	}
 
 
-    public function get_node_text()
-    {
-        ob_start();
+	public function get_node_text() {
+		ob_start();
 
-        include('parts/admin-node.html.php');
+		include( 'parts/admin-node.html.php' );
 
-        $output = ob_get_contents();
-        ob_end_clean();
+		$output = ob_get_contents();
+		ob_end_clean();
 
         return $output;
     }
