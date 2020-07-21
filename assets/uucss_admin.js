@@ -37,6 +37,41 @@
         $input.on('input', verifyApiKey)
 
         $('#whitelist_packs').select2({
+            ajax: {
+                url: window.uucss.api + '/whitelist-packs',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                headers: {
+                    "Authorization": "Bearer " + $input.val(),
+                    "Content-Type": "application/json",
+                },
+                delay: 150,
+                cache: true,
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+
+                    let d = data.data.map(function (item) {
+
+                        return {
+                            id: item.id,
+                            text: item.name
+                        }
+
+                    })
+                    return {
+                        results: d,
+                        pagination: {
+                            more: false
+                        }
+                    };
+                }
+            },
             maximumSelectionLength: 5,
             width: '80%',
         })
