@@ -67,7 +67,16 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function enqueueScripts() {
 
 		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.js', array( 'jquery' ) );
-		wp_enqueue_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery' ) );
+
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery' ) );
+
+		$data = array(
+			'api' => UnusedCSS_Api::get_key(),
+		);
+
+		wp_localize_script( 'uucss_admin', 'uucss', $data );
+
+		wp_enqueue_script( 'uucss_admin' );
 
 		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.css' );
 

@@ -5,7 +5,7 @@ class UnusedCSS_Api
 {
     use UnusedCSS_Utils;
 
-    public $apiUrl = 'https://app.unusedcss.io/api/v1';
+    public static $apiUrl = 'https://app.unusedcss.io/api/v1';
 
     public $apiKey = null;
 
@@ -13,29 +13,33 @@ class UnusedCSS_Api
     /**
      * UnusedCSS_Api constructor.
      */
-    public function __construct()
-    {
-        if (defined('UUCSS_API_URL')) {
-            $this->apiUrl = UUCSS_API_URL;
-        }
+	public function __construct() {
+		if ( defined( 'UUCSS_API_URL' ) ) {
+			self::$apiUrl = UUCSS_API_URL;
+		}
 
-	    $key = isset( UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] ) ? UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] : null;
-	    $this->apiKey = $key;
-    }
+		$key          = isset( UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] ) ? UnusedCSS_Autoptimize_Admin::fetch_options()['uucss_api_key'] : null;
+		$this->apiKey = $key;
+	}
 
+	static function get_key() {
+		new self();
 
-	function get($endpoint, $data = []) {
+		return self::$apiUrl;
+	}
 
-		$url = $this->apiUrl . '/' . $endpoint . '?' . http_build_query($data);
+	function get( $endpoint, $data = [] ) {
 
-		$response = wp_remote_get($url, [
+		$url = self::$apiUrl . '/' . $endpoint . '?' . http_build_query( $data );
+
+		$response = wp_remote_get( $url, [
 			'timeout' => 20,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			]
-		]);
+		] );
 
-		return $this->handle_response($response);
+		return $this->handle_response( $response );
 	}
 
 
