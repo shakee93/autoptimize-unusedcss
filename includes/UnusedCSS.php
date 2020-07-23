@@ -197,24 +197,37 @@ abstract class UnusedCSS {
             $post_id = $post->ID;
         }
 
-        $post_options = UnusedCSS_Admin::get_page_options($post_id);
+	    $post_options = UnusedCSS_Admin::get_page_options( $post_id );
 
-        $whitelist = explode(',', $post_options['whitelist_classes']);
-        $whitelist_global = [];
+	    $whitelist        = explode( ',', $post_options['whitelist_classes'] );
+	    $whitelist_global = [];
 
-        if (isset($this->options['uucss_whitelist_classes'])) {
-            $whitelist_global = explode(',', $this->options['uucss_whitelist_classes']);
-        }
+	    if ( isset( $this->options['uucss_whitelist_classes'] ) ) {
+		    $whitelist_global = explode( ',', $this->options['uucss_whitelist_classes'] );
+	    }
 
-        return [
-            "whitelist" => array_filter(array_merge($whitelist, $whitelist_global)),
-            "keyframes" => !isset($this->options['uucss_keyframes']),
-            "fontFace" => !isset($this->options['uucss_fontface']),
-            "variables" => !isset($this->options['uucss_variables']),
-            "minify" => !isset($this->options['uucss_minify']),
-            "analyzeJavascript" => isset($this->options['uucss_analyze_javascript']),
-            "whitelistPacks" => ['wp']
-        ];
+	    $whitelist_packs = [ 'wp' ];
+	    if ( isset( $this->options['whitelist_packs'] ) ) {
+
+		    foreach ( $this->options['whitelist_packs'] as $whitelist_pack ) {
+
+			    // 9:wordpress
+			    $pack              = $name = explode( ':', $whitelist_pack );
+			    $whitelist_packs[] = $pack[0];
+
+		    }
+
+	    }
+
+	    return [
+		    "whitelist"         => array_filter( array_merge( $whitelist, $whitelist_global ) ),
+		    "keyframes"         => ! isset( $this->options['uucss_keyframes'] ),
+		    "fontFace"          => ! isset( $this->options['uucss_fontface'] ),
+		    "variables"         => ! isset( $this->options['uucss_variables'] ),
+		    "minify"            => ! isset( $this->options['uucss_minify'] ),
+		    "analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
+		    "whitelistPacks"    => $whitelist_packs
+	    ];
     }
 
     protected function is_doing_api_fetch(){
