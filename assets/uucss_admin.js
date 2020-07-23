@@ -60,7 +60,7 @@
                     let d = data.data.map(function (item) {
 
                         return {
-                            id: item.key,
+                            id: item.key + ":" + item.name,
                             text: item.name
                         }
 

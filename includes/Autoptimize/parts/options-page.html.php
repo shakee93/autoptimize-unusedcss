@@ -273,9 +273,6 @@
             <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?></th>
             <td>
                 <label>
-                    <!--                    <input id="xwhitelist_packs" type="text" name="autoptimize_uucss_settings[uucss_whitelist_packs]"-->
-                    <!--                           value="--><?php //if ( isset( $options['uucss_whitelist_packs'] ) )
-				    //					           echo $options['uucss_whitelist_packs'] ?><!--">-->
 
                     <select id="whitelist_packs" multiple class="js-example-basic-single"
                             name="autoptimize_uucss_settings[whitelist_packs][]">
