@@ -8,6 +8,7 @@
         var $status = $('#verification_status')
         var $input = $('#uucss_api_key')
         var $verified = $('input[name="autoptimize_uucss_settings[uucss_api_key_verified]"]')
+        var $packs = $('input[name="autoptimize_uucss_settings[uucss_whitelist_packs]"]')
 
         function verifyApiKey() {
 
@@ -59,7 +60,7 @@
                     let d = data.data.map(function (item) {
 
                         return {
-                            id: item.id,
+                            id: item.key,
                             text: item.name
                         }
 

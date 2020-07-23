@@ -277,11 +277,13 @@
                     <!--                           value="--><?php //if ( isset( $options['uucss_whitelist_packs'] ) )
 				    //					           echo $options['uucss_whitelist_packs'] ?><!--">-->
 
-                    <select id="whitelist_packs" multiple="multiple" class="js-example-basic-single" name="state">
-                        <option value="Ax">Alabama</option>
-                        <option value="At">Alabama</option>
-                        <option value="Ao">Alabama</option>
-                        <option value="WY">Wyoming</option>
+                    <select id="whitelist_packs" multiple class="js-example-basic-single"
+                            name="autoptimize_uucss_settings[whitelist_packs][]">
+					    <?php foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
+                            <option selected
+                                    value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
+							    echo end( $name ) ?></option>
+					    <?php } ?>
                     </select>
 
                 </label>
