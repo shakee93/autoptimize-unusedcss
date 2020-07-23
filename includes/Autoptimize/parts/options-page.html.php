@@ -57,6 +57,20 @@
         color: red;
     }
 
+    #uucss-options ul.select2-selection__rendered {
+        max-height: 25px;
+        padding: 0 !important;
+        margin-top: 5px;
+    }
+
+    #uucss-options li.select2-selection__choice {
+        margin: 5px !important;
+    }
+
+    #uucss-options li.select2-search.select2-search--inline {
+        margin-left: 5px;
+    }
+
 </style>
 <script>document.title = "Autoptimize: UnusedCSS " + document.title;</script>
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
@@ -270,10 +284,12 @@
         </tr>
 
         <tr>
-            <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?></th>
-            <td>
-                <label>
+            <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?>
 
+            </th>
+            <td>
+
+                <label>
                     <select id="whitelist_packs" multiple class="js-example-basic-single"
                             name="autoptimize_uucss_settings[whitelist_packs][]">
 					    <?php if ( isset( $options['whitelist_packs'] ) ) {
@@ -284,7 +300,7 @@
 						    <?php }
 					    } ?>
                     </select>
-
+                    <input type="button" class="button" value="Load Recommended Packs">
                 </label>
             </td>
         </tr>

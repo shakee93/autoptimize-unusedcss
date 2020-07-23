@@ -91,23 +91,35 @@ abstract class UnusedCSS_Admin {
     }
 
 
-    public function cache_trigger_hooks()
-    {
-        add_action( 'save_post', [$this, 'cache_on_actions'], 110, 3 );
-        add_action( 'untrash_post', [$this, 'cache_on_actions'], 10, 1 );
-        add_action( 'wp_trash_post', [$this, 'clear_on_actions'], 10, 1 );
-        add_action( "wp_ajax_uucss_purge_url", [$this, 'ajax_purge_url']);
+	public function cache_trigger_hooks() {
+		add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
+		add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
+		add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
+		add_action( "wp_ajax_uucss_purge_url", [ $this, 'ajax_purge_url' ] );
 
-    }
+	}
+
+	public function suggest_whitelist_packs() {
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$active_plugins = get_plugins();
+
+
+	}
+
 
 	public function verify_api_key() {
 
-		if (!isset($_POST['api_key'])){
+		if ( ! isset( $_POST['api_key'] ) ) {
 			wp_send_json_error();
+
 			return;
 		}
 
-		$uucss_api = new UnusedCSS_Api();
+		$uucss_api         = new UnusedCSS_Api();
 		$uucss_api->apiKey = $_POST['api_key'];
 
 		$results = $uucss_api->get( 'verify' );

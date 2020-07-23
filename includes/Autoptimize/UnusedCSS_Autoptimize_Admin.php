@@ -33,6 +33,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
 
 		    add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
+		    add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 
 	    }
 
