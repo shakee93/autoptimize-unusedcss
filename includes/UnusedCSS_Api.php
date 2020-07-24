@@ -46,7 +46,6 @@ class UnusedCSS_Api
 
 		$url = self::$apiUrl . '/' . $endpoint;
 
-		self::log( $this->apiKey );
 		$response = wp_remote_post( $url, [
 			'timeout' => 20,
 			'headers' => [

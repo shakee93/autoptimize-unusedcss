@@ -116,7 +116,8 @@ abstract class UnusedCSS_Admin {
 		$api = new UnusedCSS_Api();
 
 		$data = $api->post( 'whitelist-packs/wp-suggest', [
-			'plugins' => $active_plugins
+			'plugins' => $active_plugins,
+			'theme'   => get_template()
 		] );
 
 		wp_send_json_success( $data->data );
