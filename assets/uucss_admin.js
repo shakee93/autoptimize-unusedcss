@@ -42,12 +42,9 @@
             ajax: {
                 url: window.uucss.api + '/whitelist-packs',
                 data: function (params) {
-                    var query = {
+                    return {
                         s: params.term,
-                    }
-
-                    // Query parameters will be ?search=[term]&type=public
-                    return query;
+                    };
                 },
                 headers: {
                     "Authorization": "Bearer " + $input.val(),
