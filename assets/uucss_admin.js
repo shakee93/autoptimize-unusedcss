@@ -77,6 +77,19 @@
             width: '80%',
         })
 
+        $('#uucss-pack-suggest').click(function () {
+
+            wp.ajax.post('suggest_whitelist_packs', {}).done(function (data) {
+
+                console.log(data);
+
+            }).fail(function () {
+
+
+            });
+
+        });
+
         console.log('loaded');
 
     });

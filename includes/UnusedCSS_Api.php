@@ -42,13 +42,29 @@ class UnusedCSS_Api
 		return $this->handle_response( $response );
 	}
 
+	function post( $endpoint, $data = [] ) {
+
+		$url = self::$apiUrl . '/' . $endpoint;
+
+		self::log( $this->apiKey );
+		$response = wp_remote_post( $url, [
+			'timeout' => 20,
+			'headers' => [
+				'Authorization' => 'Bearer ' . $this->apiKey
+			],
+			'body'    => $data
+		] );
+
+		return $this->handle_response( $response );
+	}
+
 
 	/**
 	 * @param $response array|WP_Error
 	 *
 	 * @return mixed|null
 	 */
-	public function handle_response($response) {
+	public function handle_response( $response ) {
 
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 

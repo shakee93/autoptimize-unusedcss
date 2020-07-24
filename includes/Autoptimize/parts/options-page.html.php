@@ -300,8 +300,9 @@
 						    <?php }
 					    } ?>
                     </select>
-                    <input type="button" class="button" value="Load Recommended Packs">
+                    <input id="uucss-pack-suggest" type="button" class="button" value="Load Recommended Packs">
                 </label>
+
             </td>
         </tr>
 

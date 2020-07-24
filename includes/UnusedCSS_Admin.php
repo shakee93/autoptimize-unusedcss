@@ -105,8 +105,21 @@ abstract class UnusedCSS_Admin {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$active_plugins = get_plugins();
+		$plugins        = get_plugins();
+		$active_plugins = array_map( function ( $key, $item ) {
 
+			$item['slug'] = $key;
+
+			return $item;
+		}, array_keys( $plugins ), $plugins );
+
+		$api = new UnusedCSS_Api();
+
+		$data = $api->post( 'whitelist-packs/wp-suggest', [
+			'plugins' => $active_plugins
+		] );
+
+		wp_send_json_success( $data->data );
 
 	}
 
