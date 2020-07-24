@@ -302,6 +302,7 @@
                     </select>
                     <input id="uucss-pack-suggest" type="button" class="button" value="Load Recommended Packs">
                 </label>
+                <p style="color: red" id="uucss-pack-suggest-error"></p>
 
             </td>
         </tr>

@@ -37,7 +37,8 @@
         verifyApiKey()
         $input.on('input', verifyApiKey)
 
-        $('#whitelist_packs').select2({
+        var whitelist_pack_el = $('#whitelist_packs');
+        whitelist_pack_el.select2({
             ajax: {
                 url: window.uucss.api + '/whitelist-packs',
                 data: function (params) {
@@ -79,12 +80,26 @@
 
         $('#uucss-pack-suggest').click(function () {
 
+            var $button = $(this)
+            var oldText = $button.val()
+
+            $button.val('loading..')
             wp.ajax.post('suggest_whitelist_packs', {}).done(function (data) {
 
-                console.log(data);
+                $button.val(oldText)
+
+                data.forEach(function (item) {
+
+                    if (!whitelist_pack_el.find("option[value='" + item.id + ':' + item.name + "']").length) {
+                        var newOption = new Option(item.name, item.id + ':' + item.name, true, true);
+                        whitelist_pack_el.append(newOption).trigger('change');
+                    }
+
+                })
 
             }).fail(function () {
 
+                $('#uucss-pack-suggest-error').text('error : something went wrong, please contact support')
 
             });
 
