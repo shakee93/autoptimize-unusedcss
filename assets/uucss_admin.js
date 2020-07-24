@@ -53,7 +53,6 @@
                 delay: 150,
                 cache: true,
                 processResults: function (data) {
-                    // Transforms the top-level key of the response object from 'items' to 'results'
 
                     let d = data.data.map(function (item) {
 
@@ -85,14 +84,18 @@
 
                 $button.val(oldText)
 
+                if (!data) {
+                    return;
+                }
+
                 data.forEach(function (item) {
 
-                    if (!whitelist_pack_el.find("option[value='" + item.id + ':' + item.name + "']").length) {
+                    if ($("li[title='" + item.name + "']").length === 0) {
                         var newOption = new Option(item.name, item.id + ':' + item.name, true, true);
                         whitelist_pack_el.append(newOption).trigger('change');
                     }
 
-                })
+                });
 
             }).fail(function () {
 
