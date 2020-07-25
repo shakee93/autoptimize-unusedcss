@@ -94,7 +94,8 @@ trait UnusedCSS_Utils {
 
     protected function file_name($file, $hash_suffix = null){
     	$file_hash = $this->encode($file . json_encode($hash_suffix));
-        return 'uucss-' . $file_hash . '-'. explode("?", basename($file))[0];
+
+	    return 'uucss-' . $file_hash . '-'. explode("?", basename($file))[0];
     }
 
     function str_contains($string, $find){

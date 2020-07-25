@@ -116,19 +116,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-        if (!$this->cache_page_dir_exists()) {
-            return;
-        }
+//        if (!$this->cache_page_dir_exists()) {
+//            return;
+//        }
 
-	    if ( get_query_var( 'no_uucss' ) == 'true') {
+	    if ( get_query_var( 'no_uucss' ) == 'true' ) {
 		    return;
 	    }
 
-        add_action( 'autoptimize_html_after_minify', function ( $html ) {
+	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
 
-	        $html = $this->parsAllCSS( $html );
+		    $html = $this->parsAllCSS( $html );
 
-	        return $html;
+		    return $html;
         }, 99 );
 
     }
@@ -150,6 +150,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    $dom->find( 'html' )[0]->uucss = true;
 
 		    $sheets = $dom->find( 'link' );
+
+		    $data = UnusedCSS_Settings::get_link( $this->url );
+
+		    self::log( $data );
 
 		    foreach ( $sheets as $sheet ) {
 			    $link = $sheet->href;

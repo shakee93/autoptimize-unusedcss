@@ -76,20 +76,30 @@ class UnusedCSS_Store {
 
     protected function cache_files() {
 
-        foreach($this->purged_files as $file) {
+	    $files = [];
 
-        	// don't cache excluded files
-	        if ( $this->is_file_excluded( $this->options, $file->file ) ) {
-		        return;
-	        }
+	    foreach ( $this->purged_files as $file ) {
 
-            $file_location = $this->append_cache_file_dir($file->file);
-            $this->file_system->put_contents($file_location, $file->css, FS_CHMOD_FILE);
-        }
+		    // don't cache excluded files
+		    if ( $this->is_file_excluded( $this->options, $file->file ) ) {
+			    return;
+		    }
+
+		    $file_location = $this->append_cache_file_dir( $file->file, $file->css );
+
+		    $files[] = [
+			    'original' => $file->file,
+			    'uucss'    => $this->hashed_file_name( $file->file, $file->css ),
+		    ];
+
+		    $this->file_system->put_contents( $file_location, $file->css, FS_CHMOD_FILE );
+	    }
+
+	    UnusedCSS_Settings::add_link( $this->url, $files );
 
 	    $this->args['url'] = $this->url;
-        do_action('uucss_cache_completed', $this->args);
-        
+	    do_action( 'uucss_cache_completed', $this->args );
+
     }
 
 
@@ -127,18 +137,26 @@ class UnusedCSS_Store {
     {
         $hash = $this->encode($this->url);
 
-        $source_dir = $this->get_base_dir() . '/' . $hash;
+	    $source_dir = $this->get_base_dir() . '/' . $hash;
 
-        if(!$this->file_system->exists($source_dir)) {
-            $this->file_system->mkdir($source_dir);
-        }
+	    if ( ! $this->file_system->exists( $source_dir ) ) {
+		    $this->file_system->mkdir( $source_dir );
+	    }
 
-        return $source_dir;
+	    return $source_dir;
     }
 
 
-    protected function append_cache_file_dir($file){
-        return $this->get_cache_page_dir() . '/' . $this->file_name($file, $this->options);
-    }
+	protected function append_cache_file_dir( $file, $content ) {
+		return $this->get_base_dir() . '/' . $this->hashed_file_name( $file, $content );
+	}
+
+	protected function hashed_file_name( $file, $content ) {
+
+		$hash_made_from            = $this->options;
+		$hash_made_from['content'] = $content;
+
+		return $this->file_name( $file, $hash_made_from );
+	}
 
 }
