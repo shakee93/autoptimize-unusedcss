@@ -183,7 +183,8 @@ abstract class UnusedCSS_Admin {
     {
         $post = get_post($post_id);
         if($post->post_status == "publish") {
-            $this->uucss->cache(get_permalink($post));
+	        $this->clear_on_actions( $post->ID );
+	        $this->uucss->cache( get_permalink( $post ) );
         }
     }
 
