@@ -52,13 +52,13 @@ class UnusedCSS_Store {
 
     protected function purge_css(){
 
-        $this->log('is caching now : ' . $this->url);
-        $uucss_api = new UnusedCSS_Api();
+	    $this->log( 'is caching now : ' . $this->url );
+	    $uucss_api = new UnusedCSS_Api();
 
-	    $result = $uucss_api->get('purger',
-		    array_merge((isset($this->args['options'])) ? $this->args['options'] : [],
-		    [ 'url' => $this->url ]
-	    ));
+	    $result = $uucss_api->post( 'purger',
+		    array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+			    [ 'url' => $this->url ]
+		    ) );
 
 
 	    if ( ! $result ) {
