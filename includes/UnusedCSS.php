@@ -241,7 +241,7 @@ abstract class UnusedCSS {
 
 
     protected function cache_file_exists($file){
-        return $this->file_system->exists($this->get_cache_page_dir() . '/' . $this->file_name($file, $this->options));
+        return $this->file_system->exists( $this->base_dir . '/' . $file );
     }
 
 
@@ -296,23 +296,18 @@ abstract class UnusedCSS {
 
 
 	protected function get_cached_file( $file_url ) {
-		$hash = $this->encode( $this->url );
-
 		return implode( '/', [
 			content_url(),
 			$this->base,
-			$hash,
-			$this->file_name( $file_url, $this->options )
+			$file_url
 		] );
 	}
 
 	protected function get_inline_content( $file_url ) {
-		$hash = $this->encode( $this->url );
 
 		$file = implode( '/', [
 			$this->base_dir,
-			$hash,
-			$this->file_name( $file_url, $this->options )
+			$file_url
 		] );
 
 		return [

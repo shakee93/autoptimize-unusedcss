@@ -120,6 +120,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 //            return;
 //        }
 
+
+	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
+		    return;
+	    }
+
 	    if ( get_query_var( 'no_uucss' ) == 'true' ) {
 		    return;
 	    }
@@ -153,8 +158,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    $data = UnusedCSS_Settings::get_link( $this->url );
 
-		    self::log( $data );
-
 		    foreach ( $sheets as $sheet ) {
 			    $link = $sheet->href;
 
@@ -164,10 +167,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    if ( $this->cache_file_exists( $link ) ) {
+				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
+
+				    if ( $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
 					    array_push( $inject->found_css_cache_files, $link );
 
-					    $newLink = $this->get_cached_file( $link );
+					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'] );
 
 					    array_push( $inject->injected_css_files, $newLink );
 
@@ -177,7 +182,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    $sheet->href  = $newLink;
 
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
-							    $this->inlineSheet( $sheet, $link );
+							    $this->inlineSheet( $sheet, $data['files'][ $key ]['uucss'] );
 						    }
 
 					    }
@@ -187,7 +192,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-		    self::log( $inject );
+//		    self::log( $inject );
 
 		    return $dom;
 
