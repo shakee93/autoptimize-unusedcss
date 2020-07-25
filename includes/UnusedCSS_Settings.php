@@ -49,4 +49,20 @@ class UnusedCSS_Settings {
 
 	}
 
+	public static function delete_link( $link ) {
+
+		$map = get_option( self::$map_key );
+
+		unset( $map[ md5( $link ) ] );
+
+		update_option( self::$map_key, $map );
+	}
+
+	public static function clear_links() {
+
+		delete_option( self::$map_key );
+
+	}
+
+
 }

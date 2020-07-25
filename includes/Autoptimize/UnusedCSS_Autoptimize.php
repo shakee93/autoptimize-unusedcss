@@ -116,11 +116,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-//        if (!$this->cache_page_dir_exists()) {
-//            return;
-//        }
-
-
 	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 		    return;
 	    }

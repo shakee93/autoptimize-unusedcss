@@ -45,7 +45,6 @@
     }
 
 
-
 </style>
 <div class="uucss-stats">
     <span>UnusedCSS</span>
@@ -54,10 +53,15 @@
     </div>
     <div class="uucss-stats__actions">
 
-        <?php if($post) { $exists = $this->uucss->cache_page_dir_exists(get_permalink($post)); ?>
-        <div id="button-uucss-clear" <?php if(!$exists) echo 'class="hidden"' ?> title="clear page cache">clear</div>
-        <div id="button-uucss-purge" <?php if($exists) echo 'class="hidden"' ?> title="generate page cache">generate</div>
-        <?php } ?>
+		<?php if ( $post ) {
+			$exists = UnusedCSS_Settings::link_exists( get_permalink( $post ) ); ?>
+            <div id="button-uucss-clear" <?php if ( ! $exists )
+				echo 'class="hidden"' ?> title="clear page cache">clear
+            </div>
+            <div id="button-uucss-purge" <?php if ( $exists )
+				echo 'class="hidden"' ?> title="generate page cache">generate
+            </div>
+		<?php } ?>
         <div id="button-uucss-clear-all" title="clear all unusedcss cache">clear all</div>
     </div>
 

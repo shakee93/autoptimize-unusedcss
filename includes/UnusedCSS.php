@@ -152,8 +152,8 @@ abstract class UnusedCSS {
 
     protected function purge_css(){
 
-        if (!$this->cache_page_dir_exists()) {
-            $this->cache($this->url);
+        if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
+	        $this->cache( $this->url );
         }
 
         // disabled exceptions only for frontend
@@ -245,41 +245,27 @@ abstract class UnusedCSS {
     }
 
 
-    public function cache_page_dir_exists($url = null){
-
-        if (!$url) {
-            $url = $this->url;
-        }
-
-        $hash = $this->encode($url);
-
-        $source_dir = $this->base_dir . '/' . $hash;
-
-        if(!$this->file_system->exists($source_dir)) {
-            return false;
-        }
-
-        return true;
-
-    }
-
-
-    public function clear_cache($url = null, $args = []){
+    public function clear_cache($url = null, $args = []) {
 
 	    $args['url'] = $url;
 
 	    self::log( 'cleared : ' . $url );
 
-	    if ($url && $this->cache_page_dir_exists($url)) {
+	    if ( $url && UnusedCSS_Settings::link_exists( $url ) ) {
 
-            $results = $this->file_system->delete($this->get_cache_page_dir($url), true);
-            do_action('uucss_cache_cleared', $args);
-            return !is_wp_error($results);
-        }
+		    // TODO : find shared files, if not found delete the files
+		    UnusedCSS_Settings::delete_link( $url );
 
-        $results = $this->file_system->delete($this->base_dir, true);
-        do_action('uucss_cache_cleared', $args);
-        return !is_wp_error($results);
+		    do_action( 'uucss_cache_cleared', $args );
+
+		    return true;
+	    }
+
+	    $results = $this->file_system->delete( $this->base_dir, true );
+	    UnusedCSS_Settings::clear_links();
+	    do_action( 'uucss_cache_cleared', $args );
+
+	    return ! is_wp_error( $results );
     }
 
 
@@ -317,30 +303,20 @@ abstract class UnusedCSS {
 	}
 
 
-	protected function get_cache_page_dir( $url = null ) {
-
-		if ( ! $url ) {
-			$url = $this->url;
-		}
-
-		$hash = $this->encode( $url );
-        return $this->base_dir . '/' . $hash;
-    }
-
-
-    public function vanish()
-    {
+    public function vanish() {
 	    if ( ! $this->initFileSystem() ) {
 		    return;
 	    }
 
-        $delete = $this->file_system->wp_content_dir()  . $this->base;
+	    $delete = $this->file_system->wp_content_dir() . $this->base;
 
-        if (!$this->file_system->exists($delete)) {
-            return;
-        }
+	    if ( ! $this->file_system->exists( $delete ) ) {
+		    return;
+	    }
 
-        $this->file_system->delete($delete, true);
+	    UnusedCSS_Settings::clear_links();
+
+	    $this->file_system->delete( $delete, true );
     }
 
 }
