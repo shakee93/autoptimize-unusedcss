@@ -253,16 +253,21 @@ abstract class UnusedCSS {
 
 	    if ( $url && UnusedCSS_Settings::link_exists( $url ) ) {
 
-		    // TODO : find shared files, if not found delete the files
-		    UnusedCSS_Settings::delete_link( $url );
+		    $unused_files = UnusedCSS_Settings::link_files_used_elsewhere( $url );
+
+		    foreach ( $unused_files as $unused_file ) {
+			    $this->file_system->delete( $this->base_dir . '/' . $unused_file );
+		    }
 
 		    do_action( 'uucss_cache_cleared', $args );
 
 		    return true;
 	    }
 
+
 	    $results = $this->file_system->delete( $this->base_dir, true );
 	    UnusedCSS_Settings::clear_links();
+
 	    do_action( 'uucss_cache_cleared', $args );
 
 	    return ! is_wp_error( $results );
