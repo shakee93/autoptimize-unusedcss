@@ -78,12 +78,7 @@
         </div>
     </div>
 
-    <div class="uucss-actions">
-        <button id="button-page-uucss-clear" type="button" class="button button-small button-link button-link-delete"
-                style="margin-right: 5px;">Clear Cache
-        </button>
-        <button id="button-page-uucss-purge" type="button" class="button button-small hide-if-no-js">Regenerate</button>
-    </div>
+
 </div>
 <script>
 	<?php include ("admin-post.js.php"); ?>
