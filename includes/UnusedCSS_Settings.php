@@ -19,7 +19,6 @@ class UnusedCSS_Settings {
 		update_option( self::$map_key, $map );
 	}
 
-
 	public static function get_link( $link ) {
 
 		$map = get_option( self::$map_key );
@@ -63,7 +62,6 @@ class UnusedCSS_Settings {
 		delete_option( self::$map_key );
 
 	}
-
 
 	public static function link_files_used_elsewhere( $link ) {
 

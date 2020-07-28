@@ -82,7 +82,7 @@ class UnusedCSS_Store {
 
 		    // don't cache excluded files
 		    if ( $this->is_file_excluded( $this->options, $file->file ) ) {
-			    return;
+			    continue;
 		    }
 
 		    $file_location = $this->append_cache_file_dir( $file->file, $file->css );

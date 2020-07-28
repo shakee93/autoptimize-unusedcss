@@ -253,6 +253,7 @@ abstract class UnusedCSS {
 
 	    if ( $url && UnusedCSS_Settings::link_exists( $url ) ) {
 
+		    UnusedCSS_Settings::delete_link( $url );
 		    // get unused files
 		    $unused_files = UnusedCSS_Settings::link_files_used_elsewhere( $url );
 
