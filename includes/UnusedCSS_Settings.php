@@ -13,6 +13,7 @@ class UnusedCSS_Settings {
 		$map = get_option( self::$map_key );
 
 		$map[ md5( $link ) ] = [
+			"url"   => $link,
 			"files" => $files
 		];
 
