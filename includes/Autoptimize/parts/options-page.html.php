@@ -4,6 +4,30 @@
 	<?php settings_fields( 'autoptimize_uucss_settings' ); ?>
     <div>
         <ul id="uucss-wrapper">
+            <li class="uucss-intro">
+                <h2>Slash load times and boost PageSpeed scores by loading only CSS you need.</h2>
+                <div class="content">
+                    <div class="left-section">
+                        <p>
+                            <strong>Slow load times</strong> are the <strong>#1</strong> reason for <strong>high bounce
+                                rates</strong> and one of the root causes of poor <strong>Google Rankings</strong>.
+                        </p>
+                        <p>
+                            Wordpress themes and plugins can load up to __mb of unused CSS on every page. That
+                            translates to anywhere from __to__ additional seconds of load time. <strong>That's up to __
+                                additional seconds to load unnecessary code!</strong>
+                        </p>
+                        <p>
+                            By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces load times
+                            , boosts <strong>Boosts Google PageSpeed scores,</strong> and <strong>improves user
+                                experience.</strong>
+                        </p>
+                    </div>
+                    <div class="right-section">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/intro.png' ?>" alt="">
+                    </div>
+                </div>
+            </li>
             <li>
                 <h2>
                     UnusedCSS : Completed URLs
@@ -12,12 +36,18 @@
                 </span>
                 </h2>
                 <div class="content">
-					<?php
+
+                    <ul>
+						<?php
 
 					if ( $x = UnusedCSS_Settings::get_links() ) {
 						foreach ( $x as $item ) {
 							if ( isset( $item['url'] ) ) {
-								echo urldecode( $item['url'] ) . '<br>';
+								echo '<li>';
+								echo '<button>x</button>';
+								echo '<span class="success">success</span>';
+								echo urldecode( $item['url'] );
+								echo '</li>';
 							}
 						}
 					} else {
@@ -25,6 +55,7 @@
 					}
 
 					?>
+                    </ul>
                 </div>
             </li>
             <li>
@@ -34,7 +65,7 @@
                     <span class="dashicons dashicons-arrow-down-alt2"></span>
                 </span>
                 </h2>
-                <div class="content">
+                <div class="content" style="display:none;">
                     <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
                     <table class="form-table" id="uucss-options">
                         <tr>
@@ -268,7 +299,7 @@
                     <span class="dashicons dashicons-arrow-down-alt2"></span>
                 </span>
                 </h2>
-                <div class="content">
+                <div class="content" style="display: none">
                     <table class="form-table" id="uucss-options">
                         <tr>
                             <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>

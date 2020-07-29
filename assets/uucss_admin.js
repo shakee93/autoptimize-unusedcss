@@ -105,6 +105,13 @@
 
         });
 
+
+        $('#uucss-wrapper li h2').click(function () {
+
+            var $content = $(this).parent().find('.content').toggle('fast');
+
+        });
+
         console.log('loaded');
 
     });

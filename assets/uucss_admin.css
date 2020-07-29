@@ -100,3 +100,23 @@
     font-size: 16px;
     line-height: 1.35;
 }
+
+.uucss-intro {
+    width: 100%;
+    margin: 0 auto 15px;
+    max-width: 690px;
+}
+
+.uucss-intro .content {
+    display: flex;
+}
+
+.uucss-intro img {
+    width: 200px;
+    padding: 0 25px;
+}
+
+#uucss-wrapper h2 {
+    cursor: pointer;
+    user-select: none;
+}
