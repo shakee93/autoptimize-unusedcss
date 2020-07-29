@@ -70,6 +70,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.js', array( 'jquery' ) );
 
 		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery' ) );
+		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
 
 		$data = array(
 			'api' => UnusedCSS_Api::get_key(),

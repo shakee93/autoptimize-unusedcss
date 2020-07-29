@@ -1,0 +1,102 @@
+
+#ao_settings_form .form-table th {
+    font-weight: normal;
+}
+
+#autoptimize_imgopt_descr {
+    font-size: 120%;
+}
+
+.uucss-tag .newtag,
+.uucss-tag-links .newtag {
+    width: 100%;
+    max-width: 300px;
+}
+
+.uucss-tag-links .tagchecklist > li {
+    width: 100%;
+}
+
+.uucss-tag input[type="text"].ui-autocomplete-loading {
+    background: none;
+}
+
+#uucss-options em {
+    color: #9E9E9E;
+}
+
+#uucss-options .example span {
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+#uucss-options span em {
+    background: #F5F5F5;
+    color: #3F51B5;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    padding: 3px 8px;
+}
+
+#uucss-options em#verification_status {
+    margin-left: 10px;
+}
+
+#uucss-options em#verification_status.success {
+    color: green;
+}
+
+#uucss-options em#verification_status.failed {
+    color: red;
+}
+
+#uucss-options ul.select2-selection__rendered {
+    max-height: 25px;
+    padding: 0 !important;
+    margin-top: 5px;
+}
+
+#uucss-options li.select2-selection__choice {
+    margin: 5px !important;
+}
+
+#uucss-options li.select2-search.select2-search--inline {
+    margin-left: 5px;
+}
+
+#uucss-wrapper > li {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+#uucss-wrapper > li h2 {
+    margin: 0;
+}
+
+#uucss-wrapper > li .content {
+    margin-top: 12px;
+}
+
+#uucss-wrapper .form-table th {
+    font-weight: normal;
+}
+
+.uucss-toggle-section {
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    display: inline-block;
+    background: #f1f1f1;
+    border-radius: 100%;
+    border: 1px solid #9e9e9e;
+}
+
+.uucss-toggle-section .dashicons {
+    font-size: 16px;
+    line-height: 1.35;
+}
