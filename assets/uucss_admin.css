@@ -69,8 +69,10 @@
     background-color: white;
     padding: 20px;
     border-radius: 4px;
-    margin-bottom: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    margin: 0 auto 15px;
+    max-width: 690px;
 }
 
 #uucss-wrapper > li h2 {
@@ -119,4 +121,38 @@
 #uucss-wrapper h2 {
     cursor: pointer;
     user-select: none;
+    line-height: 1;
+}
+
+#uucss-wrapper > li.submit {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0 20px;
+    text-align: right;
+}
+
+#uucss-wrapper > li.submit p.submit {
+    text-align: right;
+}
+
+span.valid {
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #4CAF50;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    margin-left: 3px;
+}
+
+span.invalid {
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    background: #f44336;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    margin-left: 3px;
 }
