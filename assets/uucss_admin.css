@@ -66,8 +66,9 @@
 
 #uucss-wrapper > li {
     position: relative;
+    display: table;
     background-color: white;
-    padding: 20px;
+    padding: 0 20px;
     border-radius: 4px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
@@ -80,7 +81,7 @@
 }
 
 #uucss-wrapper > li .content {
-    margin-top: 12px;
+    margin: 12px 0;
 }
 
 #uucss-wrapper .form-table th {
@@ -90,23 +91,19 @@
 .uucss-toggle-section {
     cursor: pointer;
     position: absolute;
-    right: 15px;
-    top: 15px;
+    right: 10px;
+    top: 8px;
     display: inline-block;
-    background: #f1f1f1;
     border-radius: 100%;
-    border: 1px solid #9e9e9e;
 }
 
 .uucss-toggle-section .dashicons {
     font-size: 16px;
-    line-height: 1.35;
+    line-height: 1.25;
 }
 
 .uucss-intro {
-    width: 100%;
-    margin: 0 auto 15px;
-    max-width: 690px;
+    margin: 32px auto 15px !important;
 }
 
 .uucss-intro .content {
@@ -122,6 +119,10 @@
     cursor: pointer;
     user-select: none;
     line-height: 1;
+    padding: 10px 15px;
+    border-bottom: 1px solid #cdd0d4;
+    margin: 0 -20px !important;
+    font-size: 15px;
 }
 
 #uucss-wrapper > li.submit {
