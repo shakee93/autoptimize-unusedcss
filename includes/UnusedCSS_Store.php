@@ -13,6 +13,7 @@ class UnusedCSS_Store {
     public $url;
     public $args;
     public $purged_files = [];
+	public $result;
 
     public $options;
 
@@ -50,7 +51,7 @@ class UnusedCSS_Store {
     }
 
 
-    protected function purge_css(){
+    protected function purge_css() {
 
 	    $this->log( 'is caching now : ' . $this->url );
 	    $uucss_api = new UnusedCSS_Api();
@@ -60,17 +61,17 @@ class UnusedCSS_Store {
 			    [ 'url' => $this->url ]
 		    ) );
 
-
-	    if ( ! $result ) {
+	    if ( ! isset( $result ) || gettype( $result ) !== 'object' || ! $result->data ) {
 		    return;
 	    }
 
+	    $this->result       = $result;
 	    $this->purged_files = $result->data;
 
-        if($this->purged_files && count($this->purged_files) > 0) {
-            $this->cache_files();
-        }
-        
+	    if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
+		    $this->cache_files();
+	    }
+
     }
 
 
@@ -95,7 +96,10 @@ class UnusedCSS_Store {
 		    $this->file_system->put_contents( $file_location, $file->css, FS_CHMOD_FILE );
 	    }
 
-	    UnusedCSS_Settings::add_link( $this->url, $files );
+	    UnusedCSS_Settings::add_link( $this->url, $files, "success", [
+		    "stats"   => $this->result->meta->stats,
+		    "options" => $this->result->meta->options,
+	    ] );
 
 	    $this->args['url'] = $this->url;
 	    do_action( 'uucss_cache_completed', $this->args );

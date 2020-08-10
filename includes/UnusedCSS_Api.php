@@ -67,17 +67,20 @@ class UnusedCSS_Api
 
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 
-			if($response['response']['code'] == 200) {
-				$body    = $response['body'];
-				return json_decode($body);
+			if ( $response['response']['code'] == 200 ) {
+				$body = $response['body'];
+
+				return json_decode( $body );
 			}
 
-			$this->log($response['response']);
-			return null;
+			$this->log( $response['response'] );
+
+			return $response['response'];
 		}
 		else {
-			$this->log($response->get_error_message());
-			return null;
+			$this->log( $response->get_error_message() );
+
+			return $response->get_error_message();
 		}
 
 	}

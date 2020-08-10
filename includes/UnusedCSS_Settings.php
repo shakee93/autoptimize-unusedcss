@@ -13,13 +13,15 @@ class UnusedCSS_Settings {
 
 	}
 
-	public static function add_link( $link, $files ) {
+	public static function add_link( $link, $files = null, $status = 'success', $meta = null ) {
 
 		$map = get_option( self::$map_key );
 
 		$map[ md5( $link ) ] = [
-			"url"   => $link,
-			"files" => $files
+			"url"    => $link,
+			"files"  => $files,
+			"status" => $status,
+			"meta"   => $meta,
 		];
 
 		update_option( self::$map_key, $map );
