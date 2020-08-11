@@ -134,6 +134,7 @@
 
 #uucss-wrapper > li.submit p.submit {
     text-align: right;
+    margin-top: 0;
 }
 
 span.valid {

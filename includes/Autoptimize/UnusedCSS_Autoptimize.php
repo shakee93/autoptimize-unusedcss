@@ -124,25 +124,31 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
-	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
+	    $data = UnusedCSS_Settings::get_link( $this->url );
 
-		    $html = $this->parsAllCSS( $html );
+	    if ( $data['status'] !== 'success' && ! $data['files'] ) {
+		    return;
+	    }
+
+	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
+
+		    $html = $this->parsAllCSS( $html, $data );
 
 		    return $html;
-        }, 99 );
+	    }, 99 );
 
     }
 
-    public function parsAllCSS($html) {
-	    $dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
+	public function parsAllCSS( $html, $data ) {
+		$dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
 
-	    $inject = (object) [
-		    "parsed_html"           => false,
-		    "found_sheets"          => false,
-		    "found_css_files"       => [],
-		    "found_css_cache_files" => [],
-		    "injected_css_files"    => [],
-	    ];
+		$inject = (object) [
+			"parsed_html"           => false,
+			"found_sheets"          => false,
+			"found_css_files"       => [],
+			"found_css_cache_files" => [],
+			"injected_css_files"    => [],
+		];
 
 	    if ( $dom ) {
 		    $inject->parsed_html = true;
@@ -150,8 +156,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    $dom->find( 'html' )[0]->uucss = true;
 
 		    $sheets = $dom->find( 'link' );
-
-		    $data = UnusedCSS_Settings::get_link( $this->url );
 
 		    foreach ( $sheets as $sheet ) {
 			    $link = $sheet->href;

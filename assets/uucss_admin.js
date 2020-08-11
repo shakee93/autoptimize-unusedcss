@@ -71,7 +71,7 @@
                 }
             },
             maximumSelectionLength: 5,
-            width: '80%',
+            width: '100%',
         })
 
         $('#uucss-pack-suggest').click(function () {

@@ -62,6 +62,10 @@ class UnusedCSS_Store {
 		    ) );
 
 	    if ( ! isset( $result ) || gettype( $result ) !== 'object' || ! $result->data ) {
+		    UnusedCSS_Settings::add_link( $this->url, null, "failed", [
+			    "error" => $this->extract_error( $result )
+		    ] );
+
 		    return;
 	    }
 
@@ -162,5 +166,18 @@ class UnusedCSS_Store {
 
 		return $this->file_name( $file, $hash_made_from );
 	}
+
+	protected function extract_error( $result ) {
+		if ( gettype( $result ) === 'string' ) {
+			return $result;
+		}
+
+		if ( gettype( $result ) === 'object' && isset( $result->code ) ) {
+			return $result->message;
+		}
+
+		return $result;
+	}
+
 
 }

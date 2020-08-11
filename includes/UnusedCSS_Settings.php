@@ -31,7 +31,7 @@ class UnusedCSS_Settings {
 
 		$map = get_option( self::$map_key );
 
-		if ( $map && isset( $map[ md5( $link ) ] ) ) {
+		if ( $map && isset( $map[ md5( $link ) ] ) && $map[ md5( $link ) ]['status'] == 'success' ) {
 
 			return $map[ md5( $link ) ];
 
@@ -46,7 +46,7 @@ class UnusedCSS_Settings {
 
 		$map = get_option( self::$map_key );
 
-		if ( $map && isset( $map[ md5( $link ) ] ) ) {
+		if ( $map && isset( $map[ md5( $link ) ] ) && $map[ md5( $link ) ]['status'] == 'success' ) {
 
 			return true;
 
