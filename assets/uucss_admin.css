@@ -158,3 +158,31 @@ span.invalid {
     font-size: 12px;
     margin-left: 3px;
 }
+
+table.dataTable thead td, table.dataTable.no-footer {
+    border-color: #c5b1e7;
+}
+
+table.dataTable thead th {
+    border: none;
+}
+
+#uucss-history thead {
+    background: #673AB7;
+    color: white;
+    border-radius: 10px;
+}
+
+#uucss-history_wrapper div#uucss-history_info {
+    font-size: 11px !important;
+    margin: 2px 8px;
+}
+
+#uucss-history_wrapper {
+    margin: -12px -20px;
+    padding-bottom: 5px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 8px 10px;
+}

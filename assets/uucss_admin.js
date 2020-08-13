@@ -112,6 +112,34 @@
 
         });
 
+
+        $('#uucss-history').DataTable({
+            data: Object.values(uucss.data),
+            searching: false,
+            pageLength: 25,
+            pagingType: "simple",
+            bLengthChange: false,
+            tfoot: false,
+            columns: [
+                {
+                    "data": "url",
+                    title: "Link"
+                },
+                {
+                    "data": "status",
+                    title: "Status"
+                },
+                {
+                    "data": "status",
+                    "targets": 0,
+                    title: "Actions",
+                    render: function (data, type, row, meta) {
+                        return '<button>Clear</button>';
+                    }
+                },
+            ]
+        });
+
         console.log('loaded');
 
     });

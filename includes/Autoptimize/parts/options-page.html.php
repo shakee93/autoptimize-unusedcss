@@ -44,26 +44,7 @@
                 </span>
                     </h2>
                     <div class="content">
-
-                        <ul>
-							<?php
-
-							if ( $x = UnusedCSS_Settings::get_links() ) {
-								foreach ( $x as $item ) {
-									if ( isset( $item['url'] ) ) {
-										echo '<li>';
-										echo '<button>x</button>';
-										echo '<span class="success">success</span>';
-										echo urldecode( $item['url'] );
-										echo '</li>';
-									}
-								}
-							} else {
-								echo 'No URLs being completed yet';
-							}
-
-							?>
-                        </ul>
+                        <table id="uucss-history" width="100%"></table>
                     </div>
                 </li>
 
