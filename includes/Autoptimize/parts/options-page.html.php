@@ -36,7 +36,7 @@
                 </li>
 			<?php endif; ?>
 			<?php if ( $api_key_verified ) : ?>
-                <li>
+                <li class="uucss-history">
                     <h2>
                         UnusedCSS : Completed URLs
                         <span class="uucss-toggle-section">

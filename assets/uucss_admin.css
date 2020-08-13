@@ -159,6 +159,8 @@ span.invalid {
     margin-left: 3px;
 }
 
+/*UUCSS HISTORY*/
+
 table.dataTable thead td, table.dataTable.no-footer {
     border-color: #c5b1e7;
 }
@@ -176,13 +178,22 @@ table.dataTable thead th {
 #uucss-history_wrapper div#uucss-history_info {
     font-size: 11px !important;
     margin: 2px 8px;
-}
-
-#uucss-history_wrapper {
-    margin: -12px -20px;
-    padding-bottom: 5px;
+    padding-bottom: 8px;
 }
 
 table.dataTable tbody th, table.dataTable tbody td {
     padding: 8px 10px;
+}
+
+li.uucss-history {
+    padding: 0 !important;
+    max-width: 728px !important;
+}
+
+#uucss-wrapper li.uucss-history h2, li.uucss-history .content {
+    margin: 0 !IMPORTANT;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 8px 18px;
 }
