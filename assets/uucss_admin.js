@@ -112,8 +112,9 @@
             $(this).find('.uucss-toggle-section').toggleClass('rotate')
         });
 
+        var table = $('#uucss-history')
 
-        $('#uucss-history').DataTable({
+        table = table.DataTable({
             data: Object.values(uucss.data),
             searching: false,
             pageLength: 25,
@@ -124,7 +125,7 @@
                 {
                     "data": "status",
                     title: "Status",
-                    className: 'dt-body-center',
+                    className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).wrapInner($('<span></span>').addClass(cellData))
                     }
@@ -139,7 +140,7 @@
                 },
                 {
                     "data": "url",
-                    className: 'dt-body-right action',
+                    className: 'dt-body-center dt-head-center action',
                     "targets": 0,
                     title: "Actions",
                     render: function (data, type, row, meta) {
@@ -148,6 +149,18 @@
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).find('button').click(function (e) {
                             e.preventDefault()
+                            var _row = table.row(':eq(' + row + ')');
+
+                            var data = {
+                                url: cellData,
+                                clear: true
+                            }
+
+                            $(td).parent().addClass('loading')
+
+                            wp.ajax.post('uucss_purge_url', data).done(function (d) {
+                                _row.remove().draw()
+                            })
 
                         });
                     }

@@ -223,7 +223,7 @@ table.dataTable thead th, table.dataTable thead td {
     border-radius: 4px;
 }
 
-.action button {
+#uucss-history .action button {
     position: relative;
     font-size: 11px;
     border: none;
@@ -235,8 +235,13 @@ table.dataTable thead th, table.dataTable thead td {
     cursor: pointer;
 }
 
-.action button span.dashicons.dashicons-no-alt {
+#uucss-history .action button span.dashicons.dashicons-no-alt {
     position: absolute;
     left: 1px;
     top: 2px;
+}
+
+#uucss-history tr.loading {
+    opacity: .5;
+    background: #f2f2f2 !important;
 }
