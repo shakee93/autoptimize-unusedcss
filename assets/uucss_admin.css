@@ -95,6 +95,11 @@
     top: 8px;
     display: inline-block;
     border-radius: 100%;
+    transition: cubic-bezier(0.46, 0.03, 0.52, 0.96) transform .5s;
+}
+
+span.uucss-toggle-section.rotate {
+    transform: rotate(180deg);
 }
 
 .uucss-toggle-section .dashicons {
@@ -167,6 +172,8 @@ table.dataTable thead td, table.dataTable.no-footer {
 
 table.dataTable thead th {
     border: none;
+    font-size: 10px;
+    text-transform: uppercase;
 }
 
 #uucss-history thead {
@@ -196,4 +203,40 @@ li.uucss-history {
 
 table.dataTable thead th, table.dataTable thead td {
     padding: 8px 18px;
+}
+
+#uucss-history tr td.url {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#uucss-history {
+    table-layout: fixed;
+}
+
+#uucss-history .success {
+    background: #ebe4f6;
+    color: #9C27B0;
+    padding: 3px 6px 5px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.action button {
+    position: relative;
+    font-size: 11px;
+    border: none;
+    padding: 5px 5px 5px 22px;
+    background: #F44336;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+}
+
+.action button span.dashicons.dashicons-no-alt {
+    position: absolute;
+    left: 1px;
+    top: 2px;
 }

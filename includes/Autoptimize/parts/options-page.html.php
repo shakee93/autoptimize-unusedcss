@@ -40,11 +40,11 @@
                     <h2>
                         UnusedCSS : Completed URLs
                         <span class="uucss-toggle-section">
-                    <span class="dashicons dashicons-arrow-down-alt2"></span>
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
                     <div class="content">
-                        <table id="uucss-history" width="100%"></table>
+                        <table id="uucss-history" width="100%" style=""></table>
                     </div>
                 </li>
 
@@ -52,8 +52,8 @@
                 <li>
                     <h2>
                         UnusedCSS : Advanced Settings
-                        <span class="uucss-toggle-section">
-                    <span class="dashicons dashicons-arrow-down-alt2"></span>
+                        <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
                     <div class="content" style="display:none;">
@@ -288,8 +288,8 @@
                 <h2>
                     UnusedCSS : API
                     <span<?php echo ( $api_key_verified ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
-                    <span class="uucss-toggle-section">
-                    <span class="dashicons dashicons-arrow-down-alt2"></span>
+                    <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                 </h2>
                 <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>">

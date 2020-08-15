@@ -22,6 +22,7 @@ class UnusedCSS_Settings {
 			"files"  => $files,
 			"status" => $status,
 			"meta"   => $meta,
+			"time"   => current_time( 'timestamp' )
 		];
 
 		update_option( self::$map_key, $map );

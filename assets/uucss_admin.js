@@ -109,7 +109,7 @@
         $('#uucss-wrapper li h2').click(function () {
 
             var $content = $(this).parent().find('.content').slideToggle('fast');
-
+            $(this).find('.uucss-toggle-section').toggleClass('rotate')
         });
 
 
@@ -122,19 +122,34 @@
             tfoot: false,
             columns: [
                 {
+                    "data": "status",
+                    title: "Status",
+                    className: 'dt-body-center',
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).wrapInner($('<span></span>').addClass(cellData))
+                    }
+                },
+                {
                     "data": "url",
-                    title: "Link"
+                    title: "Link",
+                    className: "url",
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).wrapInner($('<a></a>').attr('href', cellData).attr('target', '_blank'))
+                    }
                 },
                 {
-                    "data": "status",
-                    title: "Status"
-                },
-                {
-                    "data": "status",
+                    "data": "url",
+                    className: 'dt-body-right action',
                     "targets": 0,
                     title: "Actions",
                     render: function (data, type, row, meta) {
-                        return '<button>Clear</button>';
+                        return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Clear</button>';
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).find('button').click(function (e) {
+                            e.preventDefault()
+
+                        });
                     }
                 },
             ]
