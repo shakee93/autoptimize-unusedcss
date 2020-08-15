@@ -121,6 +121,7 @@
             pagingType: "simple",
             bLengthChange: false,
             tfoot: false,
+            bSort: false,
             columns: [
                 {
                     "data": "status",
@@ -137,6 +138,12 @@
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).wrapInner($('<a></a>').attr('href', cellData).attr('target', '_blank'))
                     }
+                },
+                {
+                    data: "meta.stats.reductionSize",
+                    className: 'dt-body-center dt-head-center',
+                    title: "Saved 🔥",
+                    width: '56px'
                 },
                 {
                     "data": "url",

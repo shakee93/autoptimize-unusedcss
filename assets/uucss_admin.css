@@ -223,6 +223,14 @@ table.dataTable thead th, table.dataTable thead td {
     border-radius: 4px;
 }
 
+#uucss-history .failed {
+    background: #ffd8d5;
+    color: #f44337;
+    padding: 3px 6px 5px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
 #uucss-history .action button {
     position: relative;
     font-size: 11px;

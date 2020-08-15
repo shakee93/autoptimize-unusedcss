@@ -44,7 +44,7 @@
                 </span>
                     </h2>
                     <div class="content">
-                        <table id="uucss-history" width="100%" style=""></table>
+                        <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>
 
