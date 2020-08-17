@@ -150,6 +150,8 @@
                         var innerTippy2
 
                         var stat = $(td).wrapInner($('<span></span>'))
+
+                        stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>')
                         tippy(stat.find('span')[0], {
                             theme: 'light',
                             triggerTarget: td,
