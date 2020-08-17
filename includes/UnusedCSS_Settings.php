@@ -57,6 +57,22 @@ class UnusedCSS_Settings {
 
 	}
 
+
+	public static function link_exists_with_error( $link ) {
+
+
+		$map = get_option( self::$map_key );
+
+		if ( $map && isset( $map[ md5( $link ) ] ) ) {
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
 	public static function delete_link( $link ) {
 
 		$map = get_option( self::$map_key );
