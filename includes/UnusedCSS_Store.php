@@ -169,14 +169,25 @@ class UnusedCSS_Store {
 
 	protected function extract_error( $result ) {
 		if ( gettype( $result ) === 'string' ) {
-			return $result;
+			return [
+				'code'    => 500,
+				'message' => $result
+			];
 		}
 
 		if ( gettype( $result ) === 'object' && isset( $result->code ) ) {
-			return $result->message;
+			return [
+				'code'    => $result->code,
+				'message' => $result->message
+			];
 		}
 
-		return $result;
+		self::log( $result );
+
+		return [
+			'code'    => 500,
+			'message' => 'Unknown Error Occurred'
+		];
 	}
 
 

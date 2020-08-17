@@ -197,7 +197,7 @@
 
                                 return c[0]
                             },
-                            placement: 'top',
+                            placement: 'right',
                             // trigger: 'click',
                             allowHTML: true,
                             animation: "shift-toward-extreme",
@@ -222,7 +222,7 @@
                             }
 
                             var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
-                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <span>' + rowData.meta.error + '</span></div>';
+                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <span>' + rowData.meta.error.message + '</span></div>';
 
                             tippy(stat.find('span')[0], tippyOptions);
                             return
