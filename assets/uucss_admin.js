@@ -140,10 +140,17 @@
                     }
                 },
                 {
-                    data: "meta.stats.reductionSize",
+                    data: "url",
                     className: 'dt-body-center dt-head-center stats',
                     title: "Removed unused CSS Size 🔥",
                     width: '145px',
+                    render: function (data, type, row, meta) {
+                        if (row.status === 'success') {
+                            return row.meta.stats.reductionSize
+                        }
+
+                        return '0 KB'
+                    },
                     createdCell: function (td, cellData, rowData) {
 
                         var innerTippy
@@ -151,8 +158,7 @@
 
                         var stat = $(td).wrapInner($('<span></span>'))
 
-                        stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>')
-                        tippy(stat.find('span')[0], {
+                        var tippyOptions = {
                             theme: 'light',
                             triggerTarget: td,
                             content: function () {
@@ -187,32 +193,11 @@
                                     theme: 'ketchup',
                                     interactive: true,
                                     delay: 0,
-                                    popperOptions: {
-                                        strategy: 'absolute',
-                                        modifiers: [
-                                            {
-                                                name: 'flip',
-                                                options: {
-                                                    fallbackPlacements: ['bottom', 'right'],
-                                                },
-                                            },
-                                            {
-                                                name: 'preventOverflow',
-                                                options: {
-                                                    altAxis: true,
-                                                    mainAxis: false,
-                                                    tether: false,
-                                                    padding: 4,
-                                                    boundary: stat.find('.tippy-content')
-                                                },
-                                            },
-                                        ],
-                                    },
                                 })
 
                                 return c[0]
-                            }(),
-                            placement: 'right',
+                            },
+                            placement: 'top',
                             // trigger: 'click',
                             allowHTML: true,
                             animation: "shift-toward-extreme",
@@ -226,7 +211,27 @@
                                 innerTippy2.hide()
                             }
 
-                        });
+                        }
+
+                        if (rowData.status === 'failed') {
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+
+                            tippyOptions.onShow = function () {
+                            }
+                            tippyOptions.onHide = function () {
+                            }
+
+                            var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
+                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <span>' + rowData.meta.error + '</span></div>';
+
+                            tippy(stat.find('span')[0], tippyOptions);
+                            return
+                        }
+
+                        if (rowData.status === 'success') {
+                            stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
+                        }
 
                     }
                 },

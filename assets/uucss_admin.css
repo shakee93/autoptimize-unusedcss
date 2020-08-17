@@ -260,6 +260,10 @@ table.dataTable thead th, table.dataTable thead td {
     line-height: 2;
 }
 
+#uucss-history .stat-tooltip {
+    min-width: 260px;
+}
+
 #uucss-history .stat-tooltip p {
     margin: 0;
 }
@@ -324,7 +328,7 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .tippy-box[data-theme~=light] {
-    min-width: 260px;
+
 }
 
 .tippy-box[data-theme~=light] > .tippy-content {
@@ -356,4 +360,25 @@ table.dataTable thead th, table.dataTable thead td {
     font-size: 16px;
     vertical-align: middle;
     margin-left: 1px;
+}
+
+#uucss-history td span span.dashicons.error {
+    color: #f44337;
+}
+
+#uucss-history .tippy-content .error-tooltip span {
+    font-size: 11px;
+    line-height: 1.4 !important;
+    display: inline-block;
+}
+
+#uucss-history .tippy-content .error-tooltip {
+    margin: 5px 0;
+    max-width: 230px;
+}
+
+#uucss-history .tippy-content .error-tooltip h5 {
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
 }
