@@ -253,3 +253,98 @@ table.dataTable thead th, table.dataTable thead td {
     opacity: .5;
     background: #f2f2f2 !important;
 }
+
+.stats {
+    cursor: pointer;
+}
+
+.stat-tooltip p {
+    margin: 0;
+}
+
+.stat-tooltip .progress-bar {
+    height: 6px;
+    position: relative;
+    background: hsl(262 52% 85% / 1);
+    border-radius: 25px;
+    padding: 3px 4px;
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.stat-tooltip .progress-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 10px;
+    background-color: #009687;
+    position: relative;
+}
+
+.stat-tooltip .progress-bar-wrapper {
+    text-align: right;
+    margin: 40px 0;
+    position: relative;
+}
+
+.stat-tooltip .progress-bar-wrapper em {
+    font-size: 10px;
+    border: 1px solid #b9a8d7;
+    padding: 3px 5px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 3px;
+    background: #f4f1f9;
+    margin-right: 4px;
+}
+
+.stat-tooltip .progress-bar em {
+    position: absolute;
+    right: -5px;
+    top: 12px;
+}
+
+.tippy-box[data-theme~='tomato'] {
+    background-color: #ebe4f6;
+    color: #a134b4;
+    font-size: 10px;
+}
+
+.tippy-box[data-theme~='tomato'] .perc {
+    background: #673ab7;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: -4px;
+    margin-right: 4px;
+}
+
+.tippy-box[data-theme~='tomato'] .tippy-arrow {
+    color: #ebe4f6;
+}
+
+.tippy-box[data-theme~=light] {
+    min-width: 260px;
+}
+
+.tippy-box[data-theme~=light] > .tippy-content {
+    padding: 4px 10px;
+}
+
+
+.tippy-box[data-theme~='ketchup'] {
+    background-color: #d4f7f3;
+    color: #009687;
+    font-size: 10px;
+}
+
+.tippy-box[data-theme~='ketchup'] .tippy-arrow {
+    color: #d5f7f3;
+}
+
+.tippy-box[data-theme~='ketchup'] .perc {
+    background: #009687;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: -4px;
+    margin-right: 4px;
+}

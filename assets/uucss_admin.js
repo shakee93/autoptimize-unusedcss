@@ -141,9 +141,92 @@
                 },
                 {
                     data: "meta.stats.reductionSize",
-                    className: 'dt-body-center dt-head-center',
-                    title: "Saved 🔥",
-                    width: '56px'
+                    className: 'dt-body-center dt-head-center stats',
+                    title: "Removed unused CSS Size 🔥",
+                    width: '145px',
+                    createdCell: function (td, cellData, rowData) {
+
+                        var innerTippy
+                        var innerTippy2
+
+                        var stat = $(td).wrapInner($('<span></span>'))
+                        tippy(stat.find('span')[0], {
+                            theme: 'light',
+                            triggerTarget: td,
+                            content: function () {
+                                var c = $('<div class="stat-tooltip">' +
+                                    '<div class="progress-bar-wrapper">' +
+                                    '    <div class="progress-bar">' +
+                                    '      <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' +
+                                    '      </span>' +
+                                    '    </div>' +
+                                    '  </div>' +
+                                    '</div>')
+
+                                innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
+                                    content: '<span class="perc">100%</span>Before Unused CSS : <strong>' + rowData.meta.stats.before + '</strong>',
+                                    allowHTML: true,
+                                    placement: 'top-end',
+                                    trigger: 'manual',
+                                    hideOnClick: false,
+                                    animation: null,
+                                    theme: 'tomato',
+                                    interactive: true,
+                                    delay: 0
+                                })
+
+                                innerTippy2 = tippy(c.find('.progress-bar')[0], {
+                                    content: '<span class="perc">' + (100 - rowData.meta.stats.reduction).toFixed() + '%</span> After Unused CSS : <strong>' + rowData.meta.stats.after + '</strong>',
+                                    allowHTML: true,
+                                    placement: 'bottom-start',
+                                    trigger: 'manual',
+                                    hideOnClick: false,
+                                    animation: null,
+                                    theme: 'ketchup',
+                                    interactive: true,
+                                    delay: 0,
+                                    popperOptions: {
+                                        strategy: 'absolute',
+                                        modifiers: [
+                                            {
+                                                name: 'flip',
+                                                options: {
+                                                    fallbackPlacements: ['bottom', 'right'],
+                                                },
+                                            },
+                                            {
+                                                name: 'preventOverflow',
+                                                options: {
+                                                    altAxis: true,
+                                                    mainAxis: false,
+                                                    tether: false,
+                                                    padding: 4,
+                                                    boundary: stat.find('.tippy-content')
+                                                },
+                                            },
+                                        ],
+                                    },
+                                })
+
+                                return c[0]
+                            }(),
+                            placement: 'right',
+                            // trigger: 'click',
+                            allowHTML: true,
+                            animation: "shift-toward-extreme",
+                            interactive: true,
+                            onShow: function () {
+                                innerTippy.show()
+                                innerTippy2.show()
+                            },
+                            onHide: function () {
+                                innerTippy.hide()
+                                innerTippy2.hide()
+                            }
+
+                        });
+
+                    }
                 },
                 {
                     "data": "url",
@@ -174,6 +257,7 @@
                 },
             ]
         });
+
 
         console.log('loaded');
 
