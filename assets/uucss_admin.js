@@ -116,7 +116,6 @@
         table = table.DataTable({
             data: Object.values(uucss.data),
             searching: false,
-            pageLength: 25,
             pagingType: "simple",
             bLengthChange: false,
             tfoot: false,
