@@ -107,8 +107,7 @@
 
 
         $('#uucss-wrapper li h2').click(function () {
-
-            var $content = $(this).parent().find('.content').slideToggle('fast');
+            $(this).parent().find('.content').slideToggle('fast');
             $(this).find('.uucss-toggle-section').toggleClass('rotate')
         });
 
@@ -224,13 +223,15 @@
                             var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
                             tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <span>' + rowData.meta.error.message + '</span></div>';
 
-                            tippy(stat.find('span')[0], tippyOptions);
+                            tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy($(td).closest('tr')[0], tippyOptions);
                             return
                         }
 
                         if (rowData.status === 'success') {
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
-                            tippy(stat.find('span')[0], tippyOptions);
+                            tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy($(td).closest('tr')[0], tippyOptions);
                         }
 
                     }

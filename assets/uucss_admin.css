@@ -255,7 +255,6 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 #uucss-history .stats {
-    cursor: pointer;
     vertical-align: middle;
     line-height: 2;
 }
