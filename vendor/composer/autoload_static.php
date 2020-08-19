@@ -4,8 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbd25e974f31fac6f689976bb94cba155
-{
+class ComposerStaticInitbd25e974f31fac6f689976bb94cba155 {
 	public static $prefixesPsr0 = array(
 		'H' =>
 			array(
@@ -17,7 +16,6 @@ class ComposerStaticInitbd25e974f31fac6f689976bb94cba155
 	);
 
 	public static $classMap = array(
-		'PAnD'                        => __DIR__ . '/..' . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
 		'UnusedCSS'                   => __DIR__ . '/../..' . '/includes/UnusedCSS.php',
 		'UnusedCSS_Admin'             => __DIR__ . '/../..' . '/includes/UnusedCSS_Admin.php',
 		'UnusedCSS_Api'               => __DIR__ . '/../..' . '/includes/UnusedCSS_Api.php',

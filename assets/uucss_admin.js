@@ -135,6 +135,9 @@
                     className: "url",
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).wrapInner($('<a></a>').attr('href', cellData).attr('target', '_blank'))
+                    },
+                    render(data) {
+                        return decodeURI(data)
                     }
                 },
                 {

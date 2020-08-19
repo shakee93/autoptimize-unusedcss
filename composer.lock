@@ -4,27 +4,27 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "fcfffba24e9de2a72dd1e882c66efd71",
+  "content-hash": "19ad0f6c8b633a3b4729a59efc38620a",
   "packages": [
     {
       "name": "caophihung94/php-simple-html-dom-parser",
-      "version": "v1.7.3",
+      "version": "v1.7.5",
       "source": {
         "type": "git",
         "url": "https://github.com/caophihung94/php-simple-html-dom-parser.git",
-        "reference": "84876d96cb39518ca2a1a5a1ac560d3531a9cc95"
+        "reference": "c93cd0caea5f77e7f214b98a691e90340a2e2d45"
       },
       "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/caophihung94/php-simple-html-dom-parser/zipball/84876d96cb39518ca2a1a5a1ac560d3531a9cc95",
-                "reference": "84876d96cb39518ca2a1a5a1ac560d3531a9cc95",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "type": "library",
-            "autoload": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/caophihung94/php-simple-html-dom-parser/zipball/c93cd0caea5f77e7f214b98a691e90340a2e2d45",
+        "reference": "c93cd0caea5f77e7f214b98a691e90340a2e2d45",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=5.3.2"
+      },
+      "type": "library",
+      "autoload": {
                 "psr-0": {
                     "HungCP\\PhpSimpleHtmlDom\\HtmlDomParser": "src/"
                 }
@@ -33,17 +33,17 @@
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "S.C. Chen",
-                    "email": "me578022@gmail.com"
-                },
-                {
-                    "name": "Cao Phi Hung",
-                    "email": "hungcp94@gmail.com"
-                }
-            ],
-      "description": "PHP Simple HTML DOM Parser with namespace and PHP 7.3 compatible",
+      "authors": [
+        {
+          "name": "S.C. Chen",
+          "email": "me578022@gmail.com"
+        },
+        {
+          "name": "Cao Phi Hung",
+          "email": "hungcp94@gmail.com"
+        }
+      ],
+      "description": "PHP Simple HTML DOM Parser with namespace and PHP 7.4 compatible",
       "homepage": "http://simplehtmldom.sourceforge.net/",
       "keywords": [
         "Simple",
@@ -51,37 +51,7 @@
         "html",
         "html dom parser"
       ],
-      "time": "2019-02-27T11:00:03+00:00"
-    },
-    {
-      "name": "collizo4sky/persist-admin-notices-dismissal",
-      "version": "1.4.3",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/w3guy/persist-admin-notices-dismissal.git",
-        "reference": "2d7d8bb3cba631ad227c92296a4b675d7cbc71d7"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/w3guy/persist-admin-notices-dismissal/zipball/2d7d8bb3cba631ad227c92296a4b675d7cbc71d7",
-        "reference": "2d7d8bb3cba631ad227c92296a4b675d7cbc71d7",
-        "shasum": ""
-      },
-      "type": "library",
-      "autoload": {
-        "classmap": [
-          "persist-admin-notices-dismissal.php"
-        ]
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "authors": [
-        {
-          "name": "Collins Agbonghama",
-          "email": "me@w3guy.com"
-        }
-      ],
-      "description": "Simple library to persist dismissal of admin notices across pages in WordPress dashboard.",
-      "time": "2019-03-12T05:19:51+00:00"
+      "time": "2020-08-18T07:09:03+00:00"
     }
   ],
   "packages-dev": [],

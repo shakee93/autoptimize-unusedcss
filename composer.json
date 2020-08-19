@@ -1,7 +1,6 @@
 {
   "require": {
-    "caophihung94/php-simple-html-dom-parser": "^1.7",
-    "collizo4sky/persist-admin-notices-dismissal": "^1.4"
+    "caophihung94/php-simple-html-dom-parser": "^1.7"
   },
   "autoload": {
     "classmap": ["includes/"]
