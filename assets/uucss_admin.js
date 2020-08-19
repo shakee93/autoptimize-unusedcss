@@ -124,6 +124,7 @@
                 {
                     "data": "status",
                     title: "Status",
+                    width: '40px',
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).wrapInner($('<span></span>').addClass(cellData))
@@ -204,7 +205,7 @@
                             // trigger: 'click',
                             allowHTML: true,
                             animation: "shift-toward-extreme",
-                            interactive: true,
+                            appendTo: "parent",
                             onShow: function () {
                                 innerTippy.show()
                                 innerTippy2.show()
@@ -238,8 +239,8 @@
 
                         if (rowData.status === 'success') {
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
-                            tippyOptions.triggerTarget = $(td).closest('tr')[0]
-                            tippy($(td).closest('tr')[0], tippyOptions);
+                            // tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy(stat.find('span')[0], tippyOptions);
                         }
 
                     }
@@ -249,6 +250,7 @@
                     className: 'dt-body-center dt-head-center action',
                     "targets": 0,
                     title: "Actions",
+                    width: '60px',
                     render: function (data, type, row, meta) {
                         return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Clear</button>';
                     },

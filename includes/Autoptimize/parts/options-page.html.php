@@ -325,8 +325,11 @@
             </li>
 
             <li class="submit">
+
                 <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
-                                         value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/></p>
+                                         value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/> <img
+                            src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo.svg' ?>" width="130"
+                            alt="UnusedCSS.io logo"></p>
             </li>
         </ul>
     </div>

@@ -73,7 +73,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
     margin: 0 15px 15px;
-    max-width: 850px;
+    max-width: 1125px;
 }
 
 #uucss-wrapper > li h2 {
@@ -138,8 +138,12 @@ span.uucss-toggle-section.rotate {
 }
 
 #uucss-wrapper > li.submit p.submit {
-    text-align: right;
+    text-align: left;
     margin-top: 0;
+}
+
+#uucss-wrapper > li.submit p img {
+    float: right;
 }
 
 span.valid {
@@ -194,7 +198,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
 li.uucss-history {
     padding: 0 !important;
-    max-width: 890px !important;
+    max-width: 1165px !important;
 }
 
 #uucss-wrapper li.uucss-history h2, li.uucss-history .content {
