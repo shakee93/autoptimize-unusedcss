@@ -39,13 +39,45 @@
                 "email": "hungcp94@gmail.com"
             }
         ],
-        "description": "PHP Simple HTML DOM Parser with namespace and PHP 7.3 compatible",
-        "homepage": "http://simplehtmldom.sourceforge.net/",
-        "keywords": [
-            "Simple",
-            "dom",
-            "html",
-            "html dom parser"
-        ]
-    }
+      "description": "PHP Simple HTML DOM Parser with namespace and PHP 7.3 compatible",
+      "homepage": "http://simplehtmldom.sourceforge.net/",
+      "keywords": [
+        "Simple",
+        "dom",
+        "html",
+        "html dom parser"
+      ]
+    },
+  {
+    "name": "collizo4sky/persist-admin-notices-dismissal",
+    "version": "1.4.3",
+    "version_normalized": "1.4.3.0",
+    "source": {
+      "type": "git",
+      "url": "https://github.com/w3guy/persist-admin-notices-dismissal.git",
+      "reference": "2d7d8bb3cba631ad227c92296a4b675d7cbc71d7"
+    },
+    "dist": {
+      "type": "zip",
+      "url": "https://api.github.com/repos/w3guy/persist-admin-notices-dismissal/zipball/2d7d8bb3cba631ad227c92296a4b675d7cbc71d7",
+      "reference": "2d7d8bb3cba631ad227c92296a4b675d7cbc71d7",
+      "shasum": ""
+    },
+    "time": "2019-03-12T05:19:51+00:00",
+    "type": "library",
+    "installation-source": "dist",
+    "autoload": {
+      "classmap": [
+        "persist-admin-notices-dismissal.php"
+      ]
+    },
+    "notification-url": "https://packagist.org/downloads/",
+    "authors": [
+      {
+        "name": "Collins Agbonghama",
+        "email": "me@w3guy.com"
+      }
+    ],
+    "description": "Simple library to persist dismissal of admin notices across pages in WordPress dashboard."
+  }
 ]

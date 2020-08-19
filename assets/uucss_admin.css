@@ -268,25 +268,33 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 #uucss-history .stat-tooltip .progress-bar {
-    height: 6px;
+    height: 13px;
     position: relative;
-    background: hsl(262 52% 85% / 1);
+    background: #f34337;
     border-radius: 25px;
-    padding: 3px 4px;
     box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+}
+
+#uucss-history .stat-tooltip .progress-bar.w-100 > span {
+    width: 100% !important;
 }
 
 #uucss-history .stat-tooltip .progress-bar > span {
     display: block;
     height: 100%;
     border-radius: 10px;
-    background-color: #009687;
+    background-color: #069583;
     position: relative;
+    transition: ease width .3s;
+    font-size: 7px;
+    color: white;
+    padding-right: 5px;
+    line-height: 12px;
 }
 
 .stat-tooltip .progress-bar-wrapper {
     text-align: right;
-    margin: 40px 0;
+    margin: 38px 0 34px;
     position: relative;
 }
 
@@ -308,18 +316,16 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .tippy-box[data-theme~='tomato'] {
-    background-color: #ebe4f6;
-    color: #a134b4;
+    background-color: #fde4e2;
+    color: #f24237;
     font-size: 10px;
 }
 
 .tippy-box[data-theme~='tomato'] .perc {
-    background: #673ab7;
+    background: #f34337;
     color: white;
     padding: 2px 5px;
     border-radius: 4px;
-    margin-left: -4px;
-    margin-right: 4px;
 }
 
 .tippy-box[data-theme~='tomato'] .tippy-arrow {
@@ -331,7 +337,7 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .tippy-box[data-theme~=light] > .tippy-content {
-    padding: 4px 10px;
+    padding: 5px 10px;
 }
 
 
@@ -343,6 +349,7 @@ table.dataTable thead th, table.dataTable thead td {
 
 .tippy-box[data-theme~='ketchup'] .tippy-arrow {
     color: #d5f7f3;
+    transform: translate3d(15px, 0px, 0px) !important;
 }
 
 .tippy-box[data-theme~='ketchup'] .perc {
@@ -350,8 +357,8 @@ table.dataTable thead th, table.dataTable thead td {
     color: white;
     padding: 2px 5px;
     border-radius: 4px;
-    margin-left: -4px;
-    margin-right: 4px;
+    margin-left: 2px;
+    margin-right: -2px;
 }
 
 #uucss-history td span span.dashicons {

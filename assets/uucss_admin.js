@@ -140,11 +140,11 @@
                 {
                     data: "url",
                     className: 'dt-body-center dt-head-center stats',
-                    title: "Removed unused CSS Size 🔥",
+                    title: "Removed unused CSS 🔥",
                     width: '145px',
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
-                            return row.meta.stats.reductionSize
+                            return row.meta.stats.reduction + '%'
                         }
 
                         return '0 KB'
@@ -162,29 +162,31 @@
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
                                     '<div class="progress-bar-wrapper">' +
-                                    '    <div class="progress-bar">' +
-                                    '      <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' +
+                                    '    <div class="progress-bar w-100">' +
+                                    '      <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
                                     '      </span>' +
                                     '    </div>' +
                                     '  </div>' +
                                     '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
-                                    content: '<span class="perc">100%</span>Before Unused CSS : <strong>' + rowData.meta.stats.before + '</strong>',
+                                    content: 'Total CSS Earlier <span class="perc">' + rowData.meta.stats.before + '</span>',
                                     allowHTML: true,
-                                    placement: 'top-end',
+                                    placement: 'bottom-end',
                                     trigger: 'manual',
                                     hideOnClick: false,
                                     animation: null,
                                     theme: 'tomato',
                                     interactive: true,
-                                    delay: 0
+                                    delay: 0,
+                                    arrow: false,
+                                    offset: [0, 7]
                                 })
 
                                 innerTippy2 = tippy(c.find('.progress-bar')[0], {
-                                    content: '<span class="perc">' + (100 - rowData.meta.stats.reduction).toFixed() + '%</span> After Unused CSS : <strong>' + rowData.meta.stats.after + '</strong>',
+                                    content: 'After UnusedCSS <span class="perc"> ' + rowData.meta.stats.after + '</span>',
                                     allowHTML: true,
-                                    placement: 'bottom-start',
+                                    placement: 'top-start',
                                     trigger: 'manual',
                                     hideOnClick: false,
                                     animation: null,
@@ -204,9 +206,13 @@
                                 innerTippy.show()
                                 innerTippy2.show()
                             },
-                            onHide: function () {
+                            onShown: function (instance) {
+                                $(instance.popper).find('.progress-bar.w-100').removeClass('w-100')
+                            },
+                            onHide: function (instance) {
                                 innerTippy.hide()
                                 innerTippy2.hide()
+                                $(instance.popper).find('.progress-bar').addClass('w-100')
                             }
 
                         }
