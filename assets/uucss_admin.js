@@ -201,7 +201,7 @@
 
                                 return c[0]
                             },
-                            placement: 'right',
+                            placement: 'left',
                             // trigger: 'click',
                             allowHTML: true,
                             animation: "shift-toward-extreme",
@@ -245,6 +245,7 @@
 
                     }
                 },
+
                 {
                     "data": "url",
                     className: 'dt-body-center dt-head-center action',
@@ -255,6 +256,12 @@
                         return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Clear</button>';
                     },
                     createdCell: function (td, cellData, rowData, row, col) {
+
+                        tippy($(td).find('button')[0], {
+                            content: 'Clear UnusedCSS files',
+                            placement: 'top',
+                            appendTo: "parent"
+                        })
                         $(td).find('button').click(function (e) {
                             e.preventDefault()
                             var _row = table.row(':eq(' + row + ')');

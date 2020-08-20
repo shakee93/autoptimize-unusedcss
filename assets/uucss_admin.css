@@ -393,3 +393,7 @@ table.dataTable thead th, table.dataTable thead td {
     font-size: 12px;
     text-transform: uppercase;
 }
+
+#uucss-history .action .tippy-box {
+    font-size: 9px;
+}
