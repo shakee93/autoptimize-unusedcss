@@ -406,6 +406,8 @@ table.dataTable thead th, table.dataTable thead td {
     padding-bottom: .5em !important;
 }
 
-.uucss-notice.notice-success .dashicons, .uucss-notice.notice-success strong {
+.uucss-notice.notice-success .dashicons,
+.uucss-notice.notice-success strong,
+#uucss-wrapper .left-section strong {
     color: #009688;
 }
