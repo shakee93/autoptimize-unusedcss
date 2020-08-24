@@ -30,6 +30,10 @@
                                 countless files, no matching up styles to elements - just enable UnusedCSS and see the
                                 benefits immediately!
                             </p>
+                            <p>
+                                When the plugin is activated. you will start seeing results
+                                <strong>automatically</strong> when you or the users start visiting the pages.
+                            </p>
                         </div>
                         <div class="right-section">
                             <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/intro.png' ?>" alt="">
