@@ -25,6 +25,12 @@
                 $verified.val('1')
                 $status.text('verified !').removeClass().addClass('success')
 
+                // autoload whitelist packs
+                if ($('[name="autoptimize_uucss_settings[uucss_api_key_verified]"]').val() === '1' && $('#whitelist_packs').select2('data').length === 0) {
+                    console.log('inside');
+                    $('#uucss-pack-suggest').trigger('click')
+                }
+
             }).fail(function () {
 
                 $verified.val(undefined)
