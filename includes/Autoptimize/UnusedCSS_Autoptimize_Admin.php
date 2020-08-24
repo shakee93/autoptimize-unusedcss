@@ -35,6 +35,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 		    add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 
+
+		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 	    }
 
 	    add_action( 'wp_print_scripts', function () {
@@ -96,6 +98,20 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
+	function first_uucss_job() {
+
+		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job' ) ) {
+			return;
+		}
+
+		if ( $job = UnusedCSS_Settings::get_first_link() ) : ?>
+            <div data-dismissible="first-uucss-job"
+                 class="updated notice uucss-notice notice-success is-dismissible">
+                <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS Successfully ran your first job!</h4>
+                <p><?php _e( 'We slashed your CSS size by <strong>' . $job['meta']['stats']->reductionSize . ' </strong> that is <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Great 👏', 'sample-text-domain' ); ?></p>
+            </div>
+		<?php endif;
+	}
 
 	public function get_node_text() {
 		ob_start();
@@ -105,7 +121,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$output = ob_get_contents();
 		ob_end_clean();
 
-        return $output;
+		return $output;
     }
 
     public static function fetch_options()

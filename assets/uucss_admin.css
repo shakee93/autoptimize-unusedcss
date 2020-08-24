@@ -397,3 +397,15 @@ table.dataTable thead th, table.dataTable thead td {
 #uucss-history .action .tippy-box {
     font-size: 9px;
 }
+
+.uucss-notice h4 {
+    margin-bottom: .5em;
+}
+
+.uucss-notice {
+    padding-bottom: .5em !important;
+}
+
+.uucss-notice.notice-success .dashicons, .uucss-notice.notice-success strong {
+    color: #009688;
+}

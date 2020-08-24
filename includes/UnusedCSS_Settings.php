@@ -42,6 +42,20 @@ class UnusedCSS_Settings {
 
 	}
 
+	public static function get_first_link() {
+
+		if ( $map = (array) get_option( self::$map_key ) ) {
+
+			if ( count( $map ) > 0 && current( $map )['status'] == 'success' ) {
+				return current( $map );
+			}
+
+		}
+
+		return false;
+
+	}
+
 	public static function link_exists( $link ) {
 
 
