@@ -18,15 +18,17 @@
                                     rates</strong> and one of the root causes of poor <strong>Google Rankings</strong>.
                             </p>
                             <p>
-                                Wordpress themes and plugins can load up to __mb of unused CSS on every page. That
-                                translates to anywhere from __to__ additional seconds of load time. <strong>That's up to __
-                                    additional seconds to load unnecessary code!</strong>
+                                Up to 95% of each CSS file in Wordpress themes and plugins is loaded and never used.
+                                That translates to anywhere from 1 to 4 additional seconds of load time.
+                                <strong>That’s up to 4 additional seconds to load completely unnecessary code!</strong>
                             </p>
                             <p>
                                 By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces load
-                                times
-                                , boosts <strong>Boosts Google PageSpeed scores,</strong> and <strong>improves user
-                                    experience.</strong>
+                                times by <strong> up to 50%, boosts Boosts Google PageSpeed scores,</strong> and
+                                <strong>improves user
+                                    experience.</strong> Best of all, it’s totally automated. No combing through
+                                countless files, no matching up styles to elements - just enable UnusedCSS and see the
+                                benefits immediately!
                             </p>
                         </div>
                         <div class="right-section">
