@@ -38,20 +38,3 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $li
 
 	return array_merge( $_links, $links );
 } );
-
-//function sample_admin_notice__success() {
-//
-//	if ( ! PAnD::is_admin_notice_active( 'disable-done-notice-forever-x' ) ) {
-//		return;
-//	}
-//
-//	?>
-    <!--    <div data-dismissible="disable-done-notice-forever-x"-->
-    <!--         class="updated notice uucss-notice notice-success is-dismissible">-->
-    <!--        <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS Successfully ran your first job !</h4>-->
-    <!--        <p>--><?php //_e( 'We have successfully completed your first unused CSS removal !', 'sample-text-domain' ); ?><!--</p>-->
-    <!--    </div>-->
-    <!--	--><?php
-//}
-// // //
-//add_action( 'admin_notices', 'sample_admin_notice__success' );
