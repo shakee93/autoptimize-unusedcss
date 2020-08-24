@@ -46,6 +46,10 @@ class UnusedCSS_Settings {
 
 		if ( $map = (array) get_option( self::$map_key ) ) {
 
+			if ( isset( $map[0] ) && $map[0] === false ) {
+				return false;
+			}
+
 			if ( count( $map ) > 0 && current( $map )['status'] == 'success' ) {
 				return current( $map );
 			}
