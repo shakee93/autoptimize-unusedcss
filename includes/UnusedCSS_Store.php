@@ -61,7 +61,7 @@ class UnusedCSS_Store {
 			    [ 'url' => $this->url ]
 		    ) );
 
-	    if ( ! isset( $result ) || gettype( $result ) !== 'object' || ! $result->data ) {
+	    if ( ! isset( $result ) || isset( $result->errors ) ) {
 		    UnusedCSS_Settings::add_link( $this->url, null, "failed", [
 			    "error" => $this->extract_error( $result )
 		    ] );
@@ -175,14 +175,14 @@ class UnusedCSS_Store {
 			];
 		}
 
-		if ( gettype( $result ) === 'object' && isset( $result->code ) ) {
-			return [
-				'code'    => $result->code,
-				'message' => $result->message
-			];
-		}
+		if ( gettype( $result ) === 'object' && isset( $result->errors ) ) {
 
-		self::log( $result );
+			return [
+				'code'    => $result->errors[0]->code,
+				'message' => $result->errors[0]->detail
+			];
+
+		}
 
 		return [
 			'code'    => 500,

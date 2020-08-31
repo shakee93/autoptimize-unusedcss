@@ -73,9 +73,9 @@ class UnusedCSS_Api
 				return json_decode( $body );
 			}
 
-			$this->log( $response['response'] );
+			$this->log( $response['body'] );
 
-			return $response['response'];
+			return json_decode( $response['body'] );
 		}
 		else {
 			$this->log( $response->get_error_message() );
