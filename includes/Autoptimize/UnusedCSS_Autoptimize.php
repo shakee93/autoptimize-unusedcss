@@ -139,6 +139,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     }
 
+	public static function isCSS( $el ) {
+		return $el->rel === 'stylesheet' || $el->rel === 'preload' && $el->as === 'style';
+	}
+
+
 	public function parsAllCSS( $html, $data ) {
 		$dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
 
@@ -162,11 +167,15 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 			    $inject->found_sheets = true;
 
-			    if ( strpos( $link, '.css' ) !== false ) {
+			    if ( self::isCSS( $sheet ) ) {
 
 				    array_push( $inject->found_css_files, $link );
 
 				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
+
+				    if ( ! $key ) {
+					    continue;
+				    }
 
 				    if ( $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
 					    array_push( $inject->found_css_cache_files, $link );
