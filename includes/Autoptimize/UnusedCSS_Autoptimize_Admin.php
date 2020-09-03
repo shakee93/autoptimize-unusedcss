@@ -39,10 +39,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 	    }
 
-	    add_action( 'wp_print_scripts', function () {
-		    wp_enqueue_script( 'wp-util' );
-	    } );
-
 	    if ( ! self::enabled() ) {
 		    self::$enabled = false;
 
@@ -51,6 +47,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    add_action( 'admin_bar_menu', function () {
 
+		    wp_enqueue_script( 'wp-util' );
 
 		    global $wp_admin_bar;
 
@@ -82,7 +79,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery' ) );
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery', 'wp-util' ) );
 		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
 
 		$data = array(
