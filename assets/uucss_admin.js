@@ -120,7 +120,9 @@
         var table = $('#uucss-history')
 
         table = table.DataTable({
-            data: Object.values(uucss.data),
+            data: Object.values(uucss.data).sort(function (a, b) {
+                return b.time - a.time
+            }),
             searching: false,
             pagingType: "simple",
             bLengthChange: false,
