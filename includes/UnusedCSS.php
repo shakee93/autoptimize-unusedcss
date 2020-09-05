@@ -285,18 +285,29 @@ abstract class UnusedCSS {
     public function size()
     {
 
-        if (!$this->file_system->exists($this->base_dir)) {
-            return "0 KB";
-        }
+	    if ( ! $this->file_system->exists( $this->base_dir ) ) {
+		    return "0 KB";
+	    }
 
-        $size = $this->dirSize($this->base_dir);
-        return $this->human_file_size($size);
+	    $size = $this->dirSize( $this->base_dir );
+
+	    return $this->human_file_size( $size );
     }
 
 
-	protected function get_cached_file( $file_url ) {
+	protected function get_cached_file( $file_url, $cdn = null ) {
+
+		if ( ! $cdn || empty( $cdn ) ) {
+			$cdn = content_url();
+		} else {
+
+			// see if we can do this dynamically
+			$cdn = rtrim( $cdn, '/' ) . '/wp-content';
+
+		}
+
 		return implode( '/', [
-			content_url(),
+			$cdn,
 			$this->base,
 			$file_url
 		] );

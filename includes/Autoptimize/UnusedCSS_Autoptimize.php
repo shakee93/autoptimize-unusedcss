@@ -176,7 +176,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    if ( $key && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
 					    array_push( $inject->found_css_cache_files, $link );
 
-					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'] );
+					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'], autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
 
 					    array_push( $inject->injected_css_files, $newLink );
 
