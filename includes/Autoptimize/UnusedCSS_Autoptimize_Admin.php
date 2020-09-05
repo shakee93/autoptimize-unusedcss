@@ -97,12 +97,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	function first_uucss_job() {
 
-		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job' ) ) {
+		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
 			return;
 		}
 
 		if ( $job = UnusedCSS_Settings::get_first_link() ) : ?>
-            <div data-dismissible="first-uucss-job"
+            <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS Successfully ran your first job!</h4>
                 <p><?php _e( 'We slashed your CSS size by <strong>' . $job['meta']['stats']->reductionSize . ' </strong> that is <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Great 👏', 'sample-text-domain' ); ?></p>
