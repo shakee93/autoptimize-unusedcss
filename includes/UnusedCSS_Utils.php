@@ -95,15 +95,28 @@ trait UnusedCSS_Utils {
     protected function file_name($file, $hash_suffix = null){
     	$file_hash = $this->encode($file . json_encode($hash_suffix));
 
-	    return 'uucss-' . $file_hash . '-'. explode("?", basename($file))[0];
+	    return 'uucss-' . $file_hash . '-' . explode( "?", basename( $file ) )[0];
     }
 
-    function str_contains($string, $find){
-	    if (strpos( $string, $find ) !== false ) {
-		    return true;
-	    }
+	function str_contains( $string, $find ) {
+		if ( strpos( $string, $find ) !== false ) {
+			return true;
+		}
 
-	    return false;
-    }
+		return false;
+	}
+
+	function transform_url( $url ) {
+
+		$url_parts = parse_url( $url );
+
+		$options = UnusedCSS_Autoptimize_Admin::fetch_options();
+
+		if ( ! isset( $options['uucss_query_string'] ) || empty( $options['uucss_query_string'] ) ) {
+			$url = $url_parts['scheme'] . '://' . $url_parts['host'] . $url_parts['path'];
+		}
+
+		return $url;
+	}
 
 }

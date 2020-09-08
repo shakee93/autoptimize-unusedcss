@@ -116,6 +116,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
+	    $this->url = $this->transform_url( $this->url );
+
 	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 		    return;
 	    }

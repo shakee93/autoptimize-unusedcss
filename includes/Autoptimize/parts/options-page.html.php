@@ -251,10 +251,23 @@
                                 <td>
                                     <label><input id='uucss_inline_css' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
+				                            echo 'checked="checked"';
+			                            } ?> value='1'>
                                         <i>
                                             inline CSS files which are smaller than 15kb after unusedcss are removed
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Query String', 'autoptimize' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_inline_css' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
+					                        echo 'checked="checked"';
+				                        } ?> value='1'>
+                                        <i>
+                                            Consider links with query strings as separate links.
                                         </i>
                                     </label>
                                 </td>
