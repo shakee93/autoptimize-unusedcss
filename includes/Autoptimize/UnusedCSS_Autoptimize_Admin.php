@@ -86,7 +86,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$data = array(
 			'api'   => UnusedCSS_Api::get_key(),
 			'data'  => UnusedCSS_Settings::get_links(),
-			'nonce' => wp_create_nonce( 'uucss_nonce' ) . 'x',
+			'nonce' => wp_create_nonce( 'uucss_nonce' ),
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
