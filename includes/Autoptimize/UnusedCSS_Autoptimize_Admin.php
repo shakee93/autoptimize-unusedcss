@@ -5,19 +5,20 @@
  */
 class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
-    use UnusedCSS_Utils;
+	use UnusedCSS_Utils;
 
-    public $deactivated = false;
+	public static $deactivating = false;
+	public static $activating = false;
 
-    /**
-     * UnusedCSS constructor.
-     * @param UnusedCSS_Autoptimize $ao_uucss
-     */
-    public function __construct($ao_uucss)
-    {
+	/**
+	 * UnusedCSS constructor.
+	 *
+	 * @param UnusedCSS_Autoptimize $ao_uucss
+	 */
+	public function __construct( $ao_uucss ) {
 
-	    if ( ! $ao_uucss->deps_available ) {
-		    return;
+		if ( ! $ao_uucss->deps_available ) {
+			return;
 	    }
 
 	    add_action( 'current_screen', function () {
@@ -41,14 +42,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
 		    // license activation hooks
-		    add_action( 'admin_init', [ $this, 'activate' ] );
-		    add_action( 'admin_init', [ $this, 'deactivate' ] );
-
+		    $this->activate();
+		    $this->deactivate();
 	    }
 
 	    if ( ! self::enabled() ) {
 		    self::$enabled = false;
-
 		    return;
 	    }
 
@@ -56,7 +55,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		    wp_enqueue_script( 'wp-util' );
 
-		    if ( $this->deactivated ) {
+		    if ( self::$deactivating ) {
 			    return;
 		    }
 
@@ -155,8 +154,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    }
 
 
-	    if ( ! self::is_api_key_verified() ) {
-		    self::add_admin_notice( "Please get your api key for Autoptimize UnusedCSS from <a target='_blank' href='https://unusedcss.io/'>https://unusedcss.io</a>", 'warning' );
+	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
+		    self::add_admin_notice( "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds", 'warning' );
 
 		    return false;
 	    }
@@ -255,6 +254,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
+		self::$activating = true;
+
 		self::add_admin_notice( 'UnusedCSS : Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
 
@@ -279,7 +280,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
-		$this->deactivated = true;
+		self::$deactivating = true;
 
 		self::add_admin_notice( 'UnusedCSS : Deactivated your license for this site.', 'success' );
 	}
