@@ -119,19 +119,20 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
-                <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS Successfully ran your first job!</h4>
-                <p><?php _e( 'We slashed your CSS size by <strong>' . $job['meta']['stats']->reductionSize . ' </strong> that is <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Great 👏', 'sample-text-domain' ); ?></p>
+                <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS successfully ran your first job!</h4>
+                <p><?php _e( 'You slashed <strong>' . $job['meta']['stats']->reductionSize . ' </strong> of unused CSS - that\'s <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Way to go 👏', 'sample-text-domain' ); ?></p>
             </div>
 		<?php endif;
 
 		if ( $job && $job['status'] == 'failed' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="error notice uucss-notice notice-error is-dismissible">
-                <h4><span class="dashicons dashicons-no-alt"></span> UnusedCSS : we were unable to remove unusedcss from
+                <h4><span class="dashicons dashicons-no-alt"></span> UnusedCSS : We were unable to remove unusedcss from
                     your site 🤕</h4>
 
                 <div>
-                    <p> Our Team can help you get over this issue. Contact our support to get assistance. </p>
+                    <p> Our team can help. Get in touch with support <a target="_blank"
+                                                                        href="mailto:support@unusedcss.io">here</a></p>
                     <blockquote class="error notice">
                         <strong>Link :</strong> <?php echo $job['url'] ?> <br>
                         <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>
@@ -285,7 +286,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$this->uucss->url   = get_site_url();
 		$this->uucss->purge_css();
 
-		self::add_admin_notice( 'UnusedCSS : Thank you 🙏 for using our plugin. if you have any questions feel free to contact us.', 'success' );
+		self::add_admin_notice( 'UnusedCSS : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
 
 
