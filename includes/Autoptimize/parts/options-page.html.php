@@ -262,7 +262,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Query String', 'autoptimize' ); ?></th>
                                 <td>
-                                    <label><input id='uucss_inline_css' type='checkbox'
+                                    <label><input id='uucss_query_string' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
 					                        echo 'checked="checked"';
 				                        } ?> value='1'>
