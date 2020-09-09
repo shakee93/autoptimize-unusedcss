@@ -87,6 +87,17 @@
                         <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
                         <table class="form-table" id="uucss-options">
                             <tr>
+                                <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
+                                <td>
+                                    <label>
+                                        <input id='autoptimize_uucss_enabled' type='checkbox'
+                                               name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
+											echo 'checked="checked"';
+										} ?> value='1'>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?></th>
                                 <td>
                                     <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">
@@ -334,29 +345,32 @@
                     </h2>
                     <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>">
                         <table class="form-table" id="uucss-options">
+
                             <tr>
-                                <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
-                                <td>
-                                    <label>
-                                        <input id='autoptimize_uucss_enabled' type='checkbox'
-                                               name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><?php _e( 'Api Key', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'License', 'autoptimize' ); ?></th>
                                 <td>
                                     <label>
                                         <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                                value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-											       echo $options['uucss_api_key_verified'] ?>">
-                                        <input id='uucss_api_key' type='text'
+							                       echo $options['uucss_api_key_verified'] ?>">
+                                        <input id='uucss_api_key' type='hidden'
                                                name='autoptimize_uucss_settings[uucss_api_key]'
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
+						                <?php
+
+						                $query = build_query( [
+							                'type'  => 'deactivate',
+							                'nonce' => wp_create_nonce( 'uucss_activation' ),
+							                'site'  => get_site_url(),
+							                'back'  => admin_url( 'options-general.php?page=uucss' ),
+							                'goto'  => UUCSS_ACTIVATION_URL
+						                ] );
+
+						                ?>
+                                        <a href="<? echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Deactivate
+                                            License</a>
                                     </label>
                                 </td>
                             </tr>

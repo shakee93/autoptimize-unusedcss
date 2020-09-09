@@ -7,6 +7,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     use UnusedCSS_Utils;
 
+    public $deactivated = false;
 
     /**
      * UnusedCSS constructor.
@@ -38,7 +39,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+
+		    // license activation hooks
 		    add_action( 'admin_init', [ $this, 'activate' ] );
+		    add_action( 'admin_init', [ $this, 'deactivate' ] );
+
 	    }
 
 	    if ( ! self::enabled() ) {
@@ -50,6 +55,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    add_action( 'admin_bar_menu', function () {
 
 		    wp_enqueue_script( 'wp-util' );
+
+		    if ( $this->deactivated ) {
+			    return;
+		    }
 
 		    global $wp_admin_bar;
 
@@ -219,6 +228,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		include( 'parts/options-page.html.php' );
 	}
 
+
 	public function activate() {
 
 		if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
@@ -227,7 +237,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
 			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
-
 			return;
 		}
 
@@ -235,7 +244,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( strlen( $token ) !== 32 ) {
 			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
-
 			return;
 		}
 
@@ -249,6 +257,33 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		self::add_admin_notice( 'UnusedCSS : Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
+
+
+	public function deactivate() {
+
+
+		if ( ! isset( $_REQUEST['deactivated'] ) || empty( $_REQUEST['deactivated'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
+			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
+			return;
+		}
+
+		$options = get_option( 'autoptimize_uucss_settings' );
+
+		unset( $options['uucss_api_key_verified'] );
+		unset( $options['uucss_api_key'] );
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		$this->deactivated = true;
+
+		self::add_admin_notice( 'UnusedCSS : Deactivated your license for this site.', 'success' );
+	}
+
 
 	public function clear_cache_on_option_update( $option ) {
 
