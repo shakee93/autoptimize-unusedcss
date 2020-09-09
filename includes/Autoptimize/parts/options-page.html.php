@@ -45,7 +45,17 @@
                             </div>
                         </div>
                         <div class="uucss-row">
-                            <a href="#" class="uucss-activate">Connect & Activate License</a>
+		                    <?php
+
+		                    $query = build_query( [
+			                    'site'       => get_site_url(),
+			                    'back'       => admin_url( 'options-general.php?page=uucss' ),
+			                    'activation' => admin_url( 'options-general.php?page=uucss' ),
+		                    ] );
+
+		                    ?>
+                            <a href="<? echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Connect &
+                                Activate License</a>
                         </div>
                     </div>
                 </li>
