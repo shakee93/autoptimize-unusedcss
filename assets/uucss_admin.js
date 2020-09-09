@@ -40,8 +40,8 @@
 
         }
 
-        verifyApiKey()
-        $input.on('input', verifyApiKey)
+        // verifyApiKey()
+        // $input.on('input', verifyApiKey)
 
         var whitelist_pack_el = $('#whitelist_packs');
         whitelist_pack_el.select2({

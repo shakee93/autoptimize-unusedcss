@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'UUCSS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
+define( 'UUCSS_ACTIVATION_URL', '' );
 
 if ( ! defined( 'UUCSS_DEBUG' ) ) {
 	define( 'UUCSS_DEBUG', true );

@@ -11,32 +11,41 @@
                 <li class="uucss-intro">
                     <h2>Slash load times and boost PageSpeed scores by loading only CSS you need.</h2>
                     <div class="content">
-                        <div class="left-section">
-                            <p>
-                                <strong>Slow load times</strong> are the <strong>#1</strong> reason for <strong>high
-                                    bounce
-                                    rates</strong> and one of the root causes of poor <strong>Google Rankings</strong>.
-                            </p>
-                            <p>
-                                Up to 95% of each CSS file in Wordpress themes and plugins is loaded and never used.
-                                That translates to anywhere from 1 to 4 additional seconds of load time.
-                                <strong>That’s up to 4 additional seconds to load completely unnecessary code!</strong>
-                            </p>
-                            <p>
-                                By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces load
-                                times by <strong> up to 50%, boosts Boosts Google PageSpeed scores,</strong> and
-                                <strong>improves user
-                                    experience.</strong> Best of all, it’s totally automated. No combing through
-                                countless files, no matching up styles to elements - just enable UnusedCSS and see the
-                                benefits immediately!
-                            </p>
-                            <p>
-                                When the plugin is activated. you will start seeing results
-                                <strong>automatically</strong> when you or the users start visiting the pages.
-                            </p>
+                        <div class="uucss-row">
+                            <div class="left-section">
+                                <p>
+                                    <strong>Slow load times</strong> are the <strong>#1</strong> reason for <strong>high
+                                        bounce
+                                        rates</strong> and one of the root causes of poor <strong>Google
+                                        Rankings</strong>.
+                                </p>
+                                <p>
+                                    Up to 95% of each CSS file in Wordpress themes and plugins is loaded and never used.
+                                    That translates to anywhere from 1 to 4 additional seconds of load time.
+                                    <strong>That’s up to 4 additional seconds to load completely unnecessary
+                                        code!</strong>
+                                </p>
+                                <p>
+                                    By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces
+                                    load
+                                    times by <strong> up to 50%, boosts Boosts Google PageSpeed scores,</strong> and
+                                    <strong>improves user
+                                        experience.</strong> Best of all, it’s totally automated. No combing through
+                                    countless files, no matching up styles to elements - just enable UnusedCSS and see
+                                    the
+                                    benefits immediately!
+                                </p>
+                                <p>
+                                    When the plugin is activated. you will start seeing results
+                                    <strong>automatically</strong> when you or the users start visiting the pages.
+                                </p>
+                            </div>
+                            <div class="right-section">
+                                <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/intro.png' ?>" alt="">
+                            </div>
                         </div>
-                        <div class="right-section">
-                            <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/intro.png' ?>" alt="">
+                        <div class="uucss-row">
+                            <a href="#" class="uucss-activate">Connect & Activate License</a>
                         </div>
                     </div>
                 </li>
@@ -301,60 +310,63 @@
                         </table>
                     </div>
                 </li>
-			<?php endif; ?>
-            <li>
 
-                <h2>
-                    UnusedCSS : API
-                    <span<?php echo ( $api_key_verified ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
-                    <span class="uucss-toggle-section rotate">
+                <li>
+
+                    <h2>
+                        UnusedCSS : API
+                        <span<?php echo ( $api_key_verified ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                        <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
-                </h2>
-                <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>">
-                    <table class="form-table" id="uucss-options">
-                        <tr>
-                            <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
-                            <td>
-                                <label>
-                                    <input id='autoptimize_uucss_enabled' type='checkbox'
-                                           name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
-										echo 'checked="checked"';
-									} ?> value='1'>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><?php _e( 'Api Key', 'autoptimize' ); ?></th>
-                            <td>
-                                <label>
-                                    <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
-                                           value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-										       echo $options['uucss_api_key_verified'] ?>">
-                                    <input id='uucss_api_key' type='text'
-                                           name='autoptimize_uucss_settings[uucss_api_key]'
-                                           value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
-                                           size="40">
-                                    <em id="verification_status"></em>
-                                </label>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </li>
+                    </h2>
+                    <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>">
+                        <table class="form-table" id="uucss-options">
+                            <tr>
+                                <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
+                                <td>
+                                    <label>
+                                        <input id='autoptimize_uucss_enabled' type='checkbox'
+                                               name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
+											echo 'checked="checked"';
+										} ?> value='1'>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Api Key', 'autoptimize' ); ?></th>
+                                <td>
+                                    <label>
+                                        <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
+                                               value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
+											       echo $options['uucss_api_key_verified'] ?>">
+                                        <input id='uucss_api_key' type='text'
+                                               name='autoptimize_uucss_settings[uucss_api_key]'
+                                               value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
+                                               size="40">
+                                        <em id="verification_status"></em>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
 
-            <li class="submit">
+                <li class="submit">
 
-                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
-                                         value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/>
+                    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
+                                             value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/>
 
-                    <a target="_blank" href="https://unusedcss.io/">
-                        <img
-                                src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo.svg' ?>" width="130"
-                                alt="UnusedCSS.io logo">
-                    </a>
-                </p>
-            </li>
+                        <a target="_blank" href="https://unusedcss.io/">
+                            <img
+                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo.svg' ?>" width="130"
+                                    alt="UnusedCSS.io logo">
+                        </a>
+                    </p>
+                </li>
+
+			<?php endif; ?>
+
         </ul>
     </div>
 

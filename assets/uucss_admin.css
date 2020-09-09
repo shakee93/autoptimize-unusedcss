@@ -1,3 +1,6 @@
+#uucss-wrapper * {
+    font-family: Roboto, Helvetica Neue”, Helvetica, Arial, sans-serif;
+}
 
 #ao_settings_form .form-table th {
     font-weight: normal;
@@ -113,7 +116,34 @@ span.uucss-toggle-section.rotate {
 
 .uucss-intro .content {
     display: flex;
+    flex-direction: column;
 }
+
+#uucss-wrapper a.uucss-activate {
+    background: #009688;
+    padding: 12px 28px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 8px;
+    transition: ease background .3s;
+
+}
+
+#uucss-wrapper a.uucss-activate:hover {
+    background: #00665c;
+}
+
+.uucss-row {
+    width: 100%;
+    display: flex;
+}
+
 
 .uucss-intro img {
     width: 150px;
