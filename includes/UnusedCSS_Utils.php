@@ -112,8 +112,13 @@ trait UnusedCSS_Utils {
 
 		$options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
+		if ( ! isset( $url_parts['host'] ) || ! isset( $url_parts['scheme'] ) ) {
+			return $url;
+		}
+
 		if ( ! isset( $options['uucss_query_string'] ) || empty( $options['uucss_query_string'] ) ) {
-			$url = $url_parts['scheme'] . '://' . $url_parts['host'] . $url_parts['path'];
+			$path = ( isset( $url_parts['path'] ) ) ? $url_parts['path'] : '';
+			$url  = $url_parts['scheme'] . '://' . $url_parts['host'] . $path;
 		}
 
 		return $url;

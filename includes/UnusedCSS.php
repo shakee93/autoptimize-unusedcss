@@ -6,25 +6,26 @@
  */
 abstract class UnusedCSS {
 
-    use UnusedCSS_Utils;
+	use UnusedCSS_Utils;
 
-    public $base = 'cache/autoptimize/uucss';
+	public $base = 'cache/autoptimize/uucss';
 	public $provider = null;
 
-    public $url = null;
-    public $css = [];
-    public $store = null;
-    public $options = [];
+	public $url = null;
+	public $css = [];
+	public $store = null;
+	public $options = [];
+	public $async = true;
 
-    /**
-     * @var WP_Filesystem_Direct
-     */
-    public $file_system;
+	/**
+	 * @var WP_Filesystem_Direct
+	 */
+	public $file_system;
 
-    public $base_dir;
+	public $base_dir;
 
 
-    abstract public function get_css();
+	abstract public function get_css();
 
 
     abstract public function replace_css();
@@ -116,13 +117,17 @@ abstract class UnusedCSS {
     }
 
 
-    function enabled_frontend(){
+    function enabled_frontend() {
 
-        if(is_user_logged_in()) {
-            return false;
-        }
+	    if ( is_user_logged_in() ) {
+		    return false;
+	    }
 
-        return true;
+	    if ( is_admin() ) {
+		    return false;
+	    }
+
+	    return true;
     }
 
 
@@ -150,17 +155,17 @@ abstract class UnusedCSS {
         return true;
     }
 
-    protected function purge_css(){
+	public function purge_css() {
 
-	    $this->url = $this->transform_url( $this->url );
+		$this->url = $this->transform_url( $this->url );
 
-	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
-		    $this->cache( $this->url );
-	    }
+		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
+			$this->cache( $this->url );
+		}
 
-	    // disabled exceptions only for frontend
-	    if ( ! $this->enabled_frontend() ) {
-		    return;
+		// disabled exceptions only for frontend
+		if ( ! $this->enabled_frontend() ) {
+			return;
 	    }
 
         $this->get_css();
@@ -173,22 +178,26 @@ abstract class UnusedCSS {
             return false;
         }
 
-        global $post;
+	    global $post;
 
-        if (!isset($args['post_id']) && $post) {
-            $args['post_id'] = $post->ID;
-        }
+	    if ( ! isset( $args['post_id'] ) && $post ) {
+		    $args['post_id'] = $post->ID;
+	    }
 
-        $args['options'] = $this->api_options();
+	    $args['options'] = $this->api_options();
 
-        wp_schedule_single_event( time(), 'uucss_async_queue' , [
-            'provider' => $this->provider,
-            'url' => $url,
-            'args' => $args
-        ]);
-        spawn_cron();
+	    if ( $this->async ) {
+		    wp_schedule_single_event( time(), 'uucss_async_queue', [
+			    'provider' => $this->provider,
+			    'url'      => $url,
+			    'args'     => $args
+		    ] );
+		    spawn_cron();
+	    } else {
+		    $this->init_async_store( $this->provider, $url, $args );
+	    }
 
-        return true;
+	    return true;
     }
 
     public function api_options($post_id = null)

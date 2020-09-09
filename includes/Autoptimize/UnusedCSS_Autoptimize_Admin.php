@@ -17,15 +17,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	 */
 	public function __construct( $ao_uucss ) {
 
+		$this->uucss = $ao_uucss;
+
 		if ( ! $ao_uucss->deps_available ) {
 			return;
-	    }
+		}
 
-	    add_action( 'current_screen', function () {
-		    if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
-			    add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
-		    }
-	    } );
+		add_action( 'current_screen', function () {
+			if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
+				add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+			}
+		} );
 
 
 	    if ( is_admin() ) {
@@ -42,6 +44,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
 		    // license activation hooks
+//		    add_action('admin_init', [$this, 'activate']);
 		    $this->activate();
 		    $this->deactivate();
 	    }
@@ -243,20 +246,26 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( strlen( $token ) !== 32 ) {
 			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
+
 			return;
 		}
 
 		$options = get_option( 'autoptimize_uucss_settings' );
 
 		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
-		$options['uucss_api_key_verified'] = 1;
-		$options['uucss_api_key']          = $token;
+		$options['uucss_api_key_verified']    = 1;
+		$options['autoptimize_uucss_enabled'] = 1;
+		$options['uucss_api_key']             = $token;
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
 		self::$activating = true;
 
-		self::add_admin_notice( 'UnusedCSS : Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+		$this->uucss->async = false;
+		$this->uucss->url   = get_site_url();
+		$this->uucss->purge_css();
+
+		self::add_admin_notice( 'UnusedCSS : Thank you 🙏 for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
 
 
@@ -276,9 +285,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$options = get_option( 'autoptimize_uucss_settings' );
 
 		unset( $options['uucss_api_key_verified'] );
+		unset( $options['autoptimize_uucss_enabled'] );
 		unset( $options['uucss_api_key'] );
 
 		update_option( 'autoptimize_uucss_settings', $options );
+
+		$cache_key = 'pand-' . md5( 'first-uucss-job' );
+		delete_site_option( $cache_key );
 
 		self::$deactivating = true;
 
