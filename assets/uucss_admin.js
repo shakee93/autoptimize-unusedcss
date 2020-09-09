@@ -43,6 +43,19 @@
         // verifyApiKey()
         // $input.on('input', verifyApiKey)
 
+        try {
+            var _url = new URL(window.location.href);
+
+            if (_url.search.includes('token')) {
+                _url.searchParams.delete('token');
+                _url.searchParams.delete('nonce');
+                history.pushState('', document.title, _url);
+            }
+
+        } catch (e) {
+
+        }
+
         var whitelist_pack_el = $('#whitelist_packs');
         whitelist_pack_el.select2({
             ajax: {

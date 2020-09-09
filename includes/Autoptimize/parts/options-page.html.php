@@ -326,7 +326,7 @@
                 <li>
 
                     <h2>
-                        UnusedCSS : API
+                        UnusedCSS License
                         <span<?php echo ( $api_key_verified ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>

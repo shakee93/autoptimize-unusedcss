@@ -38,6 +38,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+		    add_action( 'admin_init', [ $this, 'activate' ] );
 	    }
 
 	    if ( ! self::enabled() ) {
@@ -213,11 +214,41 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
 
-    public function render_form()
-    {
-        $options       = $this->fetch_options();
-        include('parts/options-page.html.php');
-    }
+	public function render_form() {
+		$options = $this->fetch_options();
+		include( 'parts/options-page.html.php' );
+	}
+
+	public function activate() {
+
+		if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
+			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
+			return;
+		}
+
+		$token = $_REQUEST['token'];
+
+		if ( strlen( $token ) !== 32 ) {
+			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
+
+			return;
+		}
+
+		$options = get_option( 'autoptimize_uucss_settings' );
+
+		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
+		$options['uucss_api_key_verified'] = 1;
+		$options['uucss_api_key']          = $token;
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		self::add_admin_notice( 'UnusedCSS : Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+	}
 
 	public function clear_cache_on_option_update( $option ) {
 

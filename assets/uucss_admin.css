@@ -1,4 +1,4 @@
-#uucss-wrapper * {
+#uucss-wrapper *:not(.dashicons) {
     font-family: Roboto, Helvetica Neue”, Helvetica, Arial, sans-serif;
 }
 
