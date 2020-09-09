@@ -17,7 +17,7 @@ define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-	define( 'UUCSS_ACTIVATION_URL', 'http://localhost:3000/activate' );
+	define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
 }
 
 
