@@ -114,11 +114,31 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		if ( $job = UnusedCSS_Settings::get_first_link() ) : ?>
+		$job = UnusedCSS_Settings::get_first_link();
+
+		if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS Successfully ran your first job!</h4>
                 <p><?php _e( 'We slashed your CSS size by <strong>' . $job['meta']['stats']->reductionSize . ' </strong> that is <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Great 👏', 'sample-text-domain' ); ?></p>
+            </div>
+		<?php endif;
+
+		if ( $job && $job['status'] == 'failed' ) : ?>
+            <div data-dismissible="first-uucss-job-forever"
+                 class="error notice uucss-notice notice-error is-dismissible">
+                <h4><span class="dashicons dashicons-no-alt"></span> UnusedCSS : we were unable to remove unusedcss from
+                    your site 🤕</h4>
+
+                <div>
+                    <p> Our Team can help you get over this issue. Contact our support to get assistance. </p>
+                    <blockquote class="error notice">
+                        <strong>Link :</strong> <?php echo $job['url'] ?> <br>
+                        <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>
+                        <strong>Message :</strong> <?php echo $job['meta']['error']['message'] ?>
+                    </blockquote>
+                </div>
+
             </div>
 		<?php endif;
 	}

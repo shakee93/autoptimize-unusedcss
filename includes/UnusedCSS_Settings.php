@@ -50,7 +50,7 @@ class UnusedCSS_Settings {
 				return false;
 			}
 
-			if ( count( $map ) > 0 && current( $map )['status'] == 'success' ) {
+			if ( count( $map ) > 0 ) {
 				return current( $map );
 			}
 
