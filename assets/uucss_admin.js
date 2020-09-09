@@ -120,9 +120,25 @@
         var table = $('#uucss-history')
 
         table = table.DataTable({
-            data: Object.values(uucss.data).sort(function (a, b) {
-                return b.time - a.time
-            }),
+            ajax: {
+                url: wp.ajax.settings.url + '?action=uucss_data',
+                data: function (d) {
+                    d.nonce = uucss.nonce
+
+                    return d;
+                },
+                dataSrc: function (d) {
+
+                    if (!d.success) {
+                        alert(d.data)
+                        return [];
+                    }
+
+                    return Object.values(d.data).sort(function (a, b) {
+                        return b.time = a.time
+                    });
+                }
+            },
             searching: false,
             pagingType: "simple",
             bLengthChange: false,

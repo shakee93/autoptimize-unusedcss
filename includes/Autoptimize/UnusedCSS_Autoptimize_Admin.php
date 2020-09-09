@@ -34,6 +34,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		    add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 		    add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
+		    add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
 
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
@@ -83,8 +84,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
 
 		$data = array(
-			'api'  => UnusedCSS_Api::get_key(),
-			'data' => UnusedCSS_Settings::get_links(),
+			'api'   => UnusedCSS_Api::get_key(),
+			'data'  => UnusedCSS_Settings::get_links(),
+			'nonce' => wp_create_nonce( 'uucss_nonce' ) . 'x',
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
@@ -108,6 +110,15 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                 <p><?php _e( 'We slashed your CSS size by <strong>' . $job['meta']['stats']->reductionSize . ' </strong> that is <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Great 👏', 'sample-text-domain' ); ?></p>
             </div>
 		<?php endif;
+	}
+
+	function uucss_data() {
+
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
+			wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
+		}
+
+		wp_send_json_success( UnusedCSS_Settings::get_links() );
 	}
 
 	public function get_node_text() {
