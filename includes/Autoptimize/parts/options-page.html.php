@@ -369,7 +369,8 @@
 						                ] );
 
 						                ?>
-                                        <a href="<? echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Deactivate
+                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . $query ?>"
+                                           class="uucss-activate">Deactivate
                                             License</a>
                                     </label>
                                 </td>
