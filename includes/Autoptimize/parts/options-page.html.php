@@ -48,9 +48,11 @@
 		                    <?php
 
 		                    $query = build_query( [
-			                    'site'       => get_site_url(),
-			                    'back'       => admin_url( 'options-general.php?page=uucss' ),
-			                    'activation' => admin_url( 'options-general.php?page=uucss' ),
+			                    'type'  => 'authorize',
+			                    'nonce' => wp_create_nonce( 'uucss_activation' ),
+			                    'site'  => get_site_url(),
+			                    'back'  => admin_url( 'options-general.php?page=uucss' ),
+			                    'goto'  => UUCSS_ACTIVATION_URL
 		                    ] );
 
 		                    ?>
