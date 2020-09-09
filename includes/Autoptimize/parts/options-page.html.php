@@ -56,7 +56,7 @@
 		                    ] );
 
 		                    ?>
-                            <a href="<? echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Connect &
+                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Connect &
                                 Activate License</a>
                         </div>
                     </div>
