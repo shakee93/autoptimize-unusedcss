@@ -49,15 +49,11 @@ add_action('admin_enqueue_scripts',function(){
     wp_enqueue_script('uucss_global_admin_js', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=' . getRandomNum());
 });
 
-
-add_action('init', function (){
-    if(AUTOPTIMIZE_PLUGIN_FILE){
-        register_activation_hook( __FILE, function(){
-            error_log(plugin_dir_path());
-        });
-    }
-});
-
+if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+    register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
+        autoptimizeOptionWrapper::update_option('autoptimize_css',true);
+    });
+}
 
 function getRandomNum(){
     if(is_user_logged_in()){

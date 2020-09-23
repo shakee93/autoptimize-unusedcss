@@ -52,7 +52,6 @@ abstract class UnusedCSS {
             }
 
         });
-
     }
 
 	public function initFileSystem() {
