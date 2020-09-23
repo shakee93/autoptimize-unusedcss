@@ -17,7 +17,7 @@ define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-	define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
+    define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
 }
 
 
@@ -43,4 +43,27 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $li
 
 	return array_merge( $_links, $links );
 } );
+
+add_action('admin_enqueue_scripts',function(){
+    wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=' . getRandomNum() );
+    wp_enqueue_script('uucss_global_admin_js', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=' . getRandomNum());
+});
+
+
+add_action('init', function (){
+    if(AUTOPTIMIZE_PLUGIN_FILE){
+        register_activation_hook( __FILE, function(){
+            error_log(plugin_dir_path());
+        });
+    }
+});
+
+
+function getRandomNum(){
+    if(is_user_logged_in()){
+        return rand();
+    }else{
+        return '1.0';
+    }
+}
 

@@ -24,8 +24,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		}
 
 		add_action( 'current_screen', function () {
+
 			if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
-				add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+                add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
 			}
 		} );
 
@@ -93,7 +94,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
 
 		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery', 'wp-util' ) );
-		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css?v=' . $this->getRandomNum() );
 
 		$data = array(
 			'api'   => UnusedCSS_Api::get_key(),
@@ -107,6 +108,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.css' );
 
 	}
+
+    function getRandomNum(){
+        if(is_user_logged_in()){
+            return rand();
+        }else{
+            return '1.0';
+        }
+    }
 
 	function first_uucss_job() {
 
@@ -179,8 +188,26 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 
 	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
-		    self::add_admin_notice( "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds", 'warning' );
+		    //self::add_admin_notice( "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds", 'warning' );
 
+            $query = build_query( [
+                'action'  => 'authorize',
+                'nonce' => wp_create_nonce( 'uucss_activation' ),
+                'site'  => get_site_url(),
+                'back'  => admin_url( 'options-general.php?page=uucss' ),
+                'goto'  => UUCSS_ACTIVATION_URL
+            ] );
+
+		    self::add_admin_notice_actions(
+                    "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds",
+                    "warning",
+                    "activate",
+                    null,
+                    [
+                            'key' => 'Activate',
+                            'value' =>  UUCSS_ACTIVATION_URL . '?' . $query
+                    ]
+            );
 		    return false;
 	    }
 
@@ -316,7 +343,26 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		self::$deactivating = true;
 
-		self::add_admin_notice( 'UnusedCSS : Deactivated your license for this site.', 'success' );
+		//self::add_admin_notice( 'UnusedCSS : Deactivated your license for this site.', 'success' );
+
+        $query = build_query( [
+            'action'  => 'authorize',
+            'nonce' => wp_create_nonce( 'uucss_activation' ),
+            'site'  => get_site_url(),
+            'back'  => admin_url( 'options-general.php?page=uucss' ),
+            'goto'  => UUCSS_ACTIVATION_URL
+        ] );
+
+        self::add_admin_notice_actions(
+            "UnusedCSS : Deactivated your license for this site.",
+            "success",
+            "activate",
+            null,
+            [
+                'key' => 'Click here to reactivate',
+                'value' =>  UUCSS_ACTIVATION_URL . '?' . $query
+            ]
+        );
 	}
 
 

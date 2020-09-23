@@ -71,6 +71,48 @@ trait UnusedCSS_Utils {
 
     }
 
+    public static function add_admin_notice_actions($message, $type='error', $action_name, $actions, $main_action) {
+
+        add_action('admin_notices', function () use ($message, $type, $action_name, $actions, $main_action) {
+
+           ?>
+            <div class="uucss-notice-action notice notice-action notice-action-<?php echo $action_name; ?> notice-<?php echo $type; ?> is-dismissible">
+                <div class="notice-action-inner">
+                    <div class="notice-icon">
+                        <div class="logo-wrapper">
+                            <img
+                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo-icon.png' ?>" width="60"
+                                    alt="UnusedCSS.io logo">
+                        </div>
+                    </div>
+                    <div class="notice-icon-content">
+                        <p>
+                            <?php echo $message; ?>
+                        </p>
+                        <?php if(!empty($actions)): ?>
+                            <p>
+                                <?php foreach ($actions as $key => $value) : ?>
+                                    <a class="button button-primary" href="<?php echo $value?>"><?php echo $key?></a>
+                                <?php endforeach; ?>
+                            </p>
+                        <?php endif;  ?>
+
+                    </div>
+                    <?php if(!empty($main_action)): ?>
+                    <div class="notice-main-action">
+                        <p>
+                            <a class="button button-primary" href="<?php echo $main_action['value'] ?>"><?php echo $main_action['key']?></a>
+                        </p>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php
+
+        });
+
+    }
+
     protected function encode($data)
     {
         return rtrim(md5($data));

@@ -48,7 +48,7 @@
 		                    <?php
 
 		                    $query = build_query( [
-			                    'type'  => 'authorize',
+			                    'action'  => 'authorize',
 			                    'nonce' => wp_create_nonce( 'uucss_activation' ),
 			                    'site'  => get_site_url(),
 			                    'back'  => admin_url( 'options-general.php?page=uucss' ),
@@ -361,7 +361,7 @@
 						                <?php
 
 						                $query = build_query( [
-							                'type'  => 'deactivate',
+							                'action'  => 'deactivate',
 							                'nonce' => wp_create_nonce( 'uucss_activation' ),
 							                'site'  => get_site_url(),
 							                'back'  => admin_url( 'options-general.php?page=uucss' ),

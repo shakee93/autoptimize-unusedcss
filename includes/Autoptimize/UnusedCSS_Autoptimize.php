@@ -82,7 +82,17 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
-			self::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed");
+			//self::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed");
+            self::add_admin_notice_actions(
+                "Autoptimize UnusedCSS Plugin only works when autoptimize is installed",
+                "danger",
+                "activate",
+                null,
+                [
+                    'key' => 'Click here to install autoptimize plugin',
+                    'value' =>  network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' )
+                ]
+            );
 		}
 
 		return $this->deps_available;
