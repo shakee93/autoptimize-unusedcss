@@ -81,7 +81,7 @@ trait UnusedCSS_Utils {
                     <div class="notice-icon">
                         <div class="logo-wrapper">
                             <img
-                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo-icon.png' ?>" width="60"
+                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo-icon.svg' ?>" width="40"
                                     alt="UnusedCSS.io logo">
                         </div>
                     </div>
