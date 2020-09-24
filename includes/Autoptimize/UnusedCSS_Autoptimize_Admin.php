@@ -177,23 +177,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
-    public static function generatePluginActivationLinkUrl($plugin)
-    {
-        // the plugin might be located in the plugin folder directly
-
-        if (strpos($plugin, '/')) {
-            $plugin = str_replace('/', '%2F', $plugin);
-        }
-
-        $activateUrl = sprintf(admin_url('plugins.php?action=activate&plugin=%s&plugin_status=all&paged=1&s'), $plugin);
-
-        // change the plugin request to the plugin to pass the nonce check
-        $_REQUEST['plugin'] = $plugin;
-        $activateUrl = wp_nonce_url($activateUrl, 'activate-plugin_' . $plugin);
-
-        return $activateUrl;
-    }
-
     public static function na_action_link( $plugin, $action = 'activate' ) {
         if ( strpos( $plugin, '/' ) ) {
             $plugin = str_replace( '\/', '%2F', $plugin );
