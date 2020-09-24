@@ -45,18 +45,13 @@
                             </div>
                         </div>
                         <div class="uucss-row">
-		                    <?php
-
-		                    $query = build_query( [
-			                    'action'  => 'authorize',
-			                    'nonce' => wp_create_nonce( 'uucss_activation' ),
-			                    'site'  => get_site_url(),
-			                    'back'  => admin_url( 'options-general.php?page=uucss' ),
-			                    'goto'  => UUCSS_ACTIVATION_URL
-		                    ] );
-
-		                    ?>
-                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . $query ?>" class="uucss-activate">Connect &
+                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(
+                                    'authorize',
+                                    wp_create_nonce( 'uucss_activation' ),
+                                    get_site_url(),
+                                    admin_url( 'options-general.php?page=uucss' ),
+                                    UUCSS_ACTIVATION_URL
+                                ) ?>" class="uucss-activate">Connect &
                                 Activate License</a>
                         </div>
                     </div>
@@ -358,18 +353,13 @@
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
-						                <?php
-
-						                $query = build_query( [
-							                'action'  => 'deactivate',
-							                'nonce' => wp_create_nonce( 'uucss_activation' ),
-							                'site'  => get_site_url(),
-							                'back'  => admin_url( 'options-general.php?page=uucss' ),
-							                'goto'  => UUCSS_ACTIVATION_URL
-						                ] );
-
-						                ?>
-                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . $query ?>"
+                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(
+                                                'deactivate',
+                                                wp_create_nonce( 'uucss_activation' ),
+                                                get_site_url(),
+                                                admin_url( 'options-general.php?page=uucss' ),
+                                                UUCSS_ACTIVATION_URL
+                                            ) ?>"
                                            class="uucss-activate">Deactivate
                                             License</a>
                                     </label>

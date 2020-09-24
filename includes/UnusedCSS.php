@@ -36,7 +36,6 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
-
 	    if ( ! $this->initFileSystem() ) {
 		    return;
 	    }
@@ -51,6 +50,12 @@ abstract class UnusedCSS {
                 $this->purge_css();
             }
 
+        });
+    }
+
+    public static function enqueueGlobalScript(){
+        add_action('admin_enqueue_scripts',function (){
+            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css' );
         });
     }
 

@@ -40,13 +40,14 @@ abstract class UnusedCSS_Admin {
 		    return;
 	    }
 
-
 	    $this->cache_trigger_hooks();
 	    add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
 	    add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
 
 
     }
+
+
 
     public function add_meta_boxes()
     {

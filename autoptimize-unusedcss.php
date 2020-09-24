@@ -35,7 +35,6 @@ add_action( 'plugins_loaded', function () {
 
 } );
 
-
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $links ) {
 	$_links = array(
 		'<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
@@ -44,22 +43,5 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $li
 	return array_merge( $_links, $links );
 } );
 
-add_action('admin_enqueue_scripts',function(){
-    wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=' . getRandomNum() );
-    wp_enqueue_script('uucss_global_admin_js', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=' . getRandomNum());
-});
 
-if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
-    register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
-        autoptimizeOptionWrapper::update_option('autoptimize_css',true);
-    });
-}
-
-function getRandomNum(){
-    if(is_user_logged_in()){
-        return rand();
-    }else{
-        return '1.0';
-    }
-}
 

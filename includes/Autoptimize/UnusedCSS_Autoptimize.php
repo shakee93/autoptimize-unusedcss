@@ -15,9 +15,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
      */
     public function __construct()
     {
+        parent::enqueueGlobalScript();
+
         $this->provider = 'autoptimize';
 
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
+
+        $this->register_dependency_activation_hook();
 
 	    if ( ! $this->check_dependencies() ) {
 		    return;
@@ -40,6 +44,30 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    parent::__construct();
 
+    }
+
+    public function register_dependency_activation_hook(){
+
+        if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+
+            require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
+            register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
+
+                $fields = [
+                    "autoptimize_css" => true,
+                    "autoptimize_css_aggregate" => true,
+                    "autoptimize_css_include_inline" => true,
+                    "autoptimize_cache_nogzip" => true,
+                    "autoptimize_minify_excluded" => true,
+                    "autoptimize_cache_fallback" => true,
+                    "autoptimize_optimize_logged" => true
+                ];
+                foreach ($fields as $key => $value){
+                    autoptimizeOptionWrapper::update_option($key,$value);
+                }
+
+            });
+        }
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -86,7 +114,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             self::add_admin_notice_actions(
                 "Autoptimize UnusedCSS Plugin only works when autoptimize is installed",
                 "danger",
-                "activate",
+                "install",
                 null,
                 [
                     'key' => 'Click here to install autoptimize plugin',

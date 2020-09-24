@@ -41,7 +41,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 		    add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
-
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
 		    // license activation hooks
@@ -94,7 +93,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
 
 		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery', 'wp-util' ) );
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css?v=' . $this->getRandomNum() );
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
 
 		$data = array(
 			'api'   => UnusedCSS_Api::get_key(),
@@ -178,25 +177,53 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
+    public static function generatePluginActivationLinkUrl($plugin)
+    {
+        // the plugin might be located in the plugin folder directly
+
+        if (strpos($plugin, '/')) {
+            $plugin = str_replace('/', '%2F', $plugin);
+        }
+
+        $activateUrl = sprintf(admin_url('plugins.php?action=activate&plugin=%s&plugin_status=all&paged=1&s'), $plugin);
+
+        // change the plugin request to the plugin to pass the nonce check
+        $_REQUEST['plugin'] = $plugin;
+        $activateUrl = wp_nonce_url($activateUrl, 'activate-plugin_' . $plugin);
+
+        return $activateUrl;
+    }
+
+    public static function na_action_link( $plugin, $action = 'activate' ) {
+        if ( strpos( $plugin, '/' ) ) {
+            $plugin = str_replace( '\/', '%2F', $plugin );
+        }
+        $url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
+        $_REQUEST['plugin'] = $plugin;
+        $url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
+        return $url;
+    }
+
     public static function enabled() {
 
 	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
-		    self::add_admin_notice( "Autoptimize UnusedCSS Plugin only works css optimization is enabled", 'warning' );
+
+            self::add_admin_notice_actions(
+                "Autoptimize UnusedCSS Plugin only works css optimization is enabled",
+                "warning",
+                "activate",
+                null,
+                [
+                    'key' => 'Activate',
+                    'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
+                ]
+            );
 
 		    return false;
 	    }
 
 
 	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
-		    //self::add_admin_notice( "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds", 'warning' );
-
-            $query = build_query( [
-                'action'  => 'authorize',
-                'nonce' => wp_create_nonce( 'uucss_activation' ),
-                'site'  => get_site_url(),
-                'back'  => admin_url( 'options-general.php?page=uucss' ),
-                'goto'  => UUCSS_ACTIVATION_URL
-            ] );
 
 		    self::add_admin_notice_actions(
                     "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds",
@@ -205,7 +232,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                     null,
                     [
                             'key' => 'Activate',
-                            'value' =>  UUCSS_ACTIVATION_URL . '?' . $query
+                            'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query(
+                            "authorize",
+                                    wp_create_nonce( 'uucss_activation' ),
+                                    get_site_url(),
+                                    admin_url( 'options-general.php?page=uucss' ),
+                            UUCSS_ACTIVATION_URL
+                            )
                     ]
             );
 		    return false;
@@ -343,16 +376,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		self::$deactivating = true;
 
-		//self::add_admin_notice( 'UnusedCSS : Deactivated your license for this site.', 'success' );
-
-        $query = build_query( [
-            'action'  => 'authorize',
-            'nonce' => wp_create_nonce( 'uucss_activation' ),
-            'site'  => get_site_url(),
-            'back'  => admin_url( 'options-general.php?page=uucss' ),
-            'goto'  => UUCSS_ACTIVATION_URL
-        ] );
-
         self::add_admin_notice_actions(
             "UnusedCSS : Deactivated your license for this site.",
             "success",
@@ -360,7 +383,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             null,
             [
                 'key' => 'Click here to reactivate',
-                'value' =>  UUCSS_ACTIVATION_URL . '?' . $query
+                'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query(
+                        'authorize',
+                        wp_create_nonce( 'uucss_activation' ),
+                        get_site_url(),
+                        admin_url( 'options-general.php?page=uucss' ),
+                        UUCSS_ACTIVATION_URL
+                    )
             ]
         );
 	}
@@ -373,4 +402,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		}
 
 	}
+
+	public static function get_build_query($action, $nonce, $site, $back, $goto){
+        return build_query( [
+            'action'  => $action,
+            'nonce' => $nonce,
+            'site'  => $site,
+            'back'  => $back,
+            'goto'  => $goto
+        ] );
+    }
 }
