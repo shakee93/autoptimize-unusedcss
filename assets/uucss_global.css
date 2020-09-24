@@ -15,6 +15,10 @@
     border-color: #7f54b3;
 }
 
+.uucss-notice-action.notice-action .notice-action-inner a.button.button-primary:focus{
+    outline: none;
+}
+
 .uucss-notice-action.notice-action .notice-action-inner .notice-icon{
     font-size: 20px;
 }

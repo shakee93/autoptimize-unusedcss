@@ -192,12 +192,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
 
             $notice = [
-                'action' => 'activate',
+                'action' => 'enable',
                 'title' => 'UnusedCSS Power Up',
                 'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                 'main_action' => [
-                    'key' => 'Activate',
-                    'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
+                    'key' => 'Enable',
+                    'value' =>  admin_url('/options-general.php?page=autoptimize')
                 ],
                 'type' => 'warning'
             ];

@@ -50,6 +50,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
 
+            if(get_option('ao_css_options_updated') != null){
+                return;
+            }
             require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
             register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
 
@@ -65,7 +68,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 foreach ($fields as $key => $value){
                     autoptimizeOptionWrapper::update_option($key,$value);
                 }
-
+                update_option('ao_css_options_updated', true);
             });
         }
     }
@@ -104,21 +107,47 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
+    public static function na_action_link( $plugin, $action = 'activate' ) {
+        if ( strpos( $plugin, '/' ) ) {
+            $plugin = str_replace( '\/', '%2F', $plugin );
+        }
+        $url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
+        $_REQUEST['plugin'] = $plugin;
+        $url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
+        return $url;
+    }
 
 	public function check_dependencies() {
 
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
-			$notice = [
-                'action' => 'install',
-                'message' => 'Autoptimize UnusedCSS Plugin only works when autoptimize is installed',
-                'main_action' => [
-                    'key' => 'Install',
-                    'value' =>  network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' )
-                ],
-                'type' => 'danger'
-            ];
+            $notice = null;
+
+		    if(file_exists(AUTOPTIMIZE_PLUGIN_FIle)){
+                $notice = [
+                    'action' => 'activate',
+                    'title' => 'UnusedCSS Power Up',
+                    'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+                    'main_action' => [
+                        'key' => 'Activate',
+                        'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
+                    ],
+                    'type' => 'warning'
+                ];
+            }else{
+                $notice = [
+                    'action' => 'install',
+                    'message' => 'Autoptimize UnusedCSS Plugin only works when autoptimize is installed',
+                    'main_action' => [
+                        'key' => 'Install',
+                        'value' =>  network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' )
+                    ],
+                    'type' => 'danger'
+                ];
+            }
+
+
             self::add_advanced_admin_notice($notice);
 		}
 

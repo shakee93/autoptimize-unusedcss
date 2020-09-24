@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'UUCSS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
+define( 'AUTOPTIMIZE_PLUGIN_FIle', ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
 
 if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
     define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
