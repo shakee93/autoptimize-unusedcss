@@ -45,13 +45,7 @@
                             </div>
                         </div>
                         <div class="uucss-row">
-                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(
-                                    'authorize',
-                                    wp_create_nonce( 'uucss_activation' ),
-                                    get_site_url(),
-                                    admin_url( 'options-general.php?page=uucss' ),
-                                    UUCSS_ACTIVATION_URL
-                                ) ?>" class="uucss-activate">Connect &
+                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query('authorize') ?>" class="uucss-activate">Connect &
                                 Activate License</a>
                         </div>
                     </div>
@@ -353,13 +347,7 @@
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
-                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(
-                                                'deactivate',
-                                                wp_create_nonce( 'uucss_activation' ),
-                                                get_site_url(),
-                                                admin_url( 'options-general.php?page=uucss' ),
-                                                UUCSS_ACTIVATION_URL
-                                            ) ?>"
+                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(deactivate) ?>"
                                            class="uucss-activate">Deactivate
                                             License</a>
                                     </label>

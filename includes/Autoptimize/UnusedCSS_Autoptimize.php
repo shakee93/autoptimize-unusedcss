@@ -117,7 +117,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 "install",
                 null,
                 [
-                    'key' => 'Click here to install autoptimize plugin',
+                    'key' => 'Install',
                     'value' =>  network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' )
                 ]
             );

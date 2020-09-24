@@ -215,13 +215,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                     null,
                     [
                             'key' => 'Activate',
-                            'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query(
-                            "authorize",
-                                    wp_create_nonce( 'uucss_activation' ),
-                                    get_site_url(),
-                                    admin_url( 'options-general.php?page=uucss' ),
-                            UUCSS_ACTIVATION_URL
-                            )
+                            'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query("authorize")
                     ]
             );
 		    return false;
@@ -365,14 +359,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             "activate",
             null,
             [
-                'key' => 'Click here to reactivate',
-                'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query(
-                        'authorize',
-                        wp_create_nonce( 'uucss_activation' ),
-                        get_site_url(),
-                        admin_url( 'options-general.php?page=uucss' ),
-                        UUCSS_ACTIVATION_URL
-                    )
+                'key' => 'Reactivate',
+                'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query('authorize')
             ]
         );
 	}
@@ -386,13 +374,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-	public static function get_build_query($action, $nonce, $site, $back, $goto){
+	public static function get_build_query($action){
         return build_query( [
             'action'  => $action,
-            'nonce' => $nonce,
-            'site'  => $site,
-            'back'  => $back,
-            'goto'  => $goto
+            'nonce' => wp_create_nonce( 'uucss_activation' ),
+            'site'  => get_site_url(),
+            'back'  => admin_url( 'options-general.php?page=uucss' ),
+            'goto'  => UUCSS_ACTIVATION_URL
         ] );
     }
 }
