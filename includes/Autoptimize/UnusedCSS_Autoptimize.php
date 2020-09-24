@@ -111,7 +111,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$this->deps_available = true;
 		}else {
 			//self::add_admin_notice("Autoptimize UnusedCSS Plugin only works when autoptimize is installed");
-            self::add_admin_notice_actions(
+            self::add_advanced_admin_notice(
                 "Autoptimize UnusedCSS Plugin only works when autoptimize is installed",
                 "danger",
                 "install",

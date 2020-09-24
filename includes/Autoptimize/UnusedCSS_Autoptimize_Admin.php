@@ -191,7 +191,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
 
-            self::add_admin_notice_actions(
+            self::add_advanced_admin_notice(
                 "Autoptimize UnusedCSS Plugin only works css optimization is enabled",
                 "warning",
                 "activate",
@@ -208,7 +208,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
 
-		    self::add_admin_notice_actions(
+		    self::add_advanced_admin_notice(
                     "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds",
                     "warning",
                     "activate",
@@ -353,7 +353,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		self::$deactivating = true;
 
-        self::add_admin_notice_actions(
+        self::add_advanced_admin_notice(
             "UnusedCSS : Deactivated your license for this site.",
             "success",
             "activate",

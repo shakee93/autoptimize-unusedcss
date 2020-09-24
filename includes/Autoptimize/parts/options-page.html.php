@@ -347,7 +347,7 @@
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
-                                        <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url(deactivate) ?>"
+                                        <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url('deactivate') ?>"
                                            class="uucss-activate">Deactivate
                                             License</a>
                                     </label>

@@ -71,12 +71,12 @@ trait UnusedCSS_Utils {
 
     }
 
-    public static function add_admin_notice_actions($message, $type='error', $action_name, $actions, $main_action) {
+    public static function add_advanced_admin_notice($message, $action_name, $actions, $main_action, $type = 'error') {
 
-        add_action('admin_notices', function () use ($message, $type, $action_name, $actions, $main_action) {
+        add_action('admin_notices', function () use ($message, $action_name, $actions, $main_action, $type) {
 
            ?>
-            <div class="uucss-notice-action notice notice-action notice-action-<?php echo $action_name; ?> notice-<?php echo $type; ?> is-dismissible">
+            <div class="uucss-notice-action notice notice-action notice-action-<?php echo $action_name; ?> notice-<?php echo $type; ?>">
                 <div class="notice-action-inner">
                     <div class="notice-icon">
                         <div class="logo-wrapper">
