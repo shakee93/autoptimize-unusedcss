@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="uucss-row">
-                            <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query('authorize') ?>" class="uucss-activate">Connect &
+                            <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>" class="uucss-activate">Connect &
                                 Activate License</a>
                         </div>
                     </div>
@@ -347,7 +347,7 @@
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
-                                        <a href="<?php echo UUCSS_ACTIVATION_URL . '?' . UnusedCSS_Autoptimize_Admin::get_build_query(deactivate) ?>"
+                                        <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url(deactivate) ?>"
                                            class="uucss-activate">Deactivate
                                             License</a>
                                     </label>

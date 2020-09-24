@@ -214,8 +214,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                     "activate",
                     null,
                     [
-                            'key' => 'Activate',
-                            'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query("authorize")
+                            'key' => 'Connect & Activate',
+                            'value' =>  self::activation_url("authorize")
                     ]
             );
 		    return false;
@@ -360,7 +360,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             null,
             [
                 'key' => 'Reactivate',
-                'value' =>  UUCSS_ACTIVATION_URL . '?' . self::get_build_query('authorize')
+                'value' => self::activation_url('authorize')
             ]
         );
 	}
@@ -374,8 +374,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-	public static function get_build_query($action){
-        return build_query( [
+	public static function activation_url($action){
+        return UUCSS_ACTIVATION_URL . '?' . build_query( [
             'action'  => $action,
             'nonce' => wp_create_nonce( 'uucss_activation' ),
             'site'  => get_site_url(),
