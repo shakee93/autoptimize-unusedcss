@@ -71,12 +71,38 @@ trait UnusedCSS_Utils {
 
     }
 
-    public static function add_advanced_admin_notice($message, $action_name, $actions, $main_action, $type = 'error') {
+    public static function add_advanced_admin_notice($notice) {
+        if(!isset($notice)){
+            return;
+        }
+        add_action('admin_notices', function () use ($notice) {
 
-        add_action('admin_notices', function () use ($message, $action_name, $actions, $main_action, $type) {
+            if(!isset($notice['action'])){
+                $notice['action'] = 'uucss-action';
+            }
+
+            if(!isset($notice['type'])){
+                $notice['type'] = 'error';
+            }
+
+            if(!isset($notice['title'])){
+                $notice['title'] = null;
+            }
+
+            if(!isset($notice['message'])){
+                $notice['message'] = null;
+            }
+
+            if(!isset($notice['actions'])){
+                $notice['actions'] = [];
+            }
+
+            if(!isset($notice['main_action'])){
+                $notice['main_action'] = [];
+            }
 
            ?>
-            <div class="uucss-notice-action notice notice-action notice-action-<?php echo $action_name; ?> notice-<?php echo $type; ?>">
+            <div class="uucss-notice-action notice notice-action notice-action-<?php echo $notice['action']; ?> notice-<?php echo $notice['type']; ?>">
                 <div class="notice-action-inner">
                     <div class="notice-icon">
                         <div class="logo-wrapper">
@@ -86,22 +112,25 @@ trait UnusedCSS_Utils {
                         </div>
                     </div>
                     <div class="notice-icon-content">
+                        <?php if(isset($notice['title'])) : ?>
+                            <h2 class="uucss-notice-title"><?php echo $notice['title'] ?></h2>
+                        <?php endif; ?>
                         <p>
-                            <?php echo $message; ?>
+                            <?php echo $notice['message']; ?>
                         </p>
-                        <?php if(!empty($actions)): ?>
+                        <?php if(!empty($notice['actions'])): ?>
                             <p>
-                                <?php foreach ($actions as $key => $value) : ?>
+                                <?php foreach ($notice['actions'] as $key => $value) : ?>
                                     <a class="button button-primary" href="<?php echo $value?>"><?php echo $key?></a>
                                 <?php endforeach; ?>
                             </p>
                         <?php endif;  ?>
 
                     </div>
-                    <?php if(!empty($main_action)): ?>
+                    <?php if(!empty($notice['main_action'])): ?>
                     <div class="notice-main-action">
                         <p>
-                            <a class="button button-primary" href="<?php echo $main_action['value'] ?>"><?php echo $main_action['key']?></a>
+                            <a class="button button-primary" href="<?php echo $notice['main_action']['value'] ?>"><?php echo $notice['main_action']['key']?></a>
                         </p>
                     </div>
                     <?php endif; ?>

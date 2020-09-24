@@ -191,16 +191,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
 
-            self::add_advanced_admin_notice(
-                "Autoptimize UnusedCSS Plugin only works css optimization is enabled",
-                "warning",
-                "activate",
-                null,
-                [
+            $notice = [
+                'action' => 'activate',
+                'title' => 'UnusedCSS Power Up',
+                'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+                'main_action' => [
                     'key' => 'Activate',
                     'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
-                ]
-            );
+                ],
+                'type' => 'warning'
+            ];
+            self::add_advanced_admin_notice($notice);
 
 		    return false;
 	    }
@@ -208,16 +209,16 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
 
-		    self::add_advanced_admin_notice(
-                    "Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds",
-                    "warning",
-                    "activate",
-                    null,
-                    [
-                            'key' => 'Connect & Activate',
-                            'value' =>  self::activation_url("authorize")
-                    ]
-            );
+            $notice = [
+                'action' => 'activate',
+                'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
+                'main_action' => [
+                    'key' => 'Connect & Activate',
+                    'value' =>  self::activation_url("authorize")
+                ],
+                'type' => 'warning'
+            ];
+		    self::add_advanced_admin_notice($notice);
 		    return false;
 	    }
 
@@ -353,16 +354,16 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		self::$deactivating = true;
 
-        self::add_advanced_admin_notice(
-            "UnusedCSS : Deactivated your license for this site.",
-            "success",
-            "activate",
-            null,
-            [
+        $notice = [
+            'action' => 'activate',
+            'message' => 'UnusedCSS : Deactivated your license for this site.',
+            'main_action' => [
                 'key' => 'Reactivate',
-                'value' => self::activation_url('authorize')
-            ]
-        );
+                'value' =>  self::activation_url('authorize')
+            ],
+            'type' => 'success'
+        ];
+        self::add_advanced_admin_notice($notice);
 	}
 
 

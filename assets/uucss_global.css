@@ -1,6 +1,7 @@
 .uucss-notice-action.notice-action{
     margin: 5px 0 15px;
-    padding: 10px 10px;
+    padding: 15px 20px;
+    border-left-color: #7f54b3;
 }
 
 .uucss-notice-action.notice-action .notice-action-inner{
@@ -9,8 +10,18 @@
     justify-content: space-between;
 }
 
+.uucss-notice-action.notice-action .notice-action-inner a.button.button-primary{
+    background-color: #7f54b3;
+    border-color: #7f54b3;
+}
+
 .uucss-notice-action.notice-action .notice-action-inner .notice-icon{
     font-size: 20px;
+}
+
+.uucss-notice-action.notice-action .notice-action-inner h2.uucss-notice-title{
+    padding: 2px 0;
+    margin: 0 0 0 3px !important;
 }
 
 .uucss-notice-action.notice-action .notice-action-inner .notice-icon-content{
