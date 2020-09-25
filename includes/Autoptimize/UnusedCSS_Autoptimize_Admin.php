@@ -177,7 +177,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
-    public static function na_action_link( $plugin, $action = 'activate' ) {
+    public static function plugin_activation_link($plugin, $action = 'activate' ) {
         if ( strpos( $plugin, '/' ) ) {
             $plugin = str_replace( '\/', '%2F', $plugin );
         }
@@ -195,8 +195,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                 'title' => 'UnusedCSS Power Up',
                 'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                 'main_action' => [
-	                'key'   => 'Activate Autoptimize',
-	                'value' => self::na_action_link( 'autoptimize/autoptimize.php', 'activate' )
+                    'key' => 'Activate',
+                    'value' =>  self::plugin_activation_link('autoptimize/autoptimize.php', 'activate')
                 ],
                 'type' => 'warning'
             ];
@@ -226,8 +226,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                 'action' => 'activate',
                 'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
                 'main_action' => [
-	                'key'   => 'Connect & Activate UnusedCSS',
-	                'value' => self::activation_url( "authorize" )
+                    'key' => 'Connect & Activate',
+                    'value' =>  self::activation_url("authorize")
                 ],
                 'type' => 'warning'
             ];
