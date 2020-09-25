@@ -136,6 +136,7 @@ abstract class UnusedCSS_Admin {
 
 		$uucss_api         = new UnusedCSS_Api();
 		$uucss_api->apiKey = $_POST['api_key'];
+		$uucss_api->url = site_url();
 
 		$results = $uucss_api->get( 'verify' );
 

@@ -2,6 +2,7 @@
 
     $(document).ready(function () {
 
+
         // options page
         window.tagBox.init();
 
@@ -18,21 +19,25 @@
                 return;
             }
 
-            $status.text('loading...')
+            $status.text('loading...');
 
-            wp.ajax.post('verify_api_key', {api_key: $input.val()}).done(function () {
+            wp.ajax.post('verify_api_key',
+                {
+                    api_key: $input.val(),
+                    url: uucss.url,
+                }
+                ).done(function (response) {
 
                 $verified.val('1')
                 $status.text('verified !').removeClass().addClass('success')
 
                 // autoload whitelist packs
                 if ($('[name="autoptimize_uucss_settings[uucss_api_key_verified]"]').val() === '1' && $('#whitelist_packs').select2('data').length === 0) {
-                    console.log('inside');
+
                     $('#uucss-pack-suggest').trigger('click')
                 }
 
             }).fail(function () {
-
                 $verified.val(undefined)
                 $status.text('failed !').removeClass().addClass('failed')
 
@@ -40,7 +45,7 @@
 
         }
 
-        // verifyApiKey()
+        // verifyApiKey();
         // $input.on('input', verifyApiKey)
 
         try {
