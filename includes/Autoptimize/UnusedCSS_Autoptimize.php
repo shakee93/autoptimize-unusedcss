@@ -123,7 +123,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$this->deps_available = true;
 		}else {
             $notice = null;
-
 		    if(file_exists(AUTOPTIMIZE_PLUGIN_FIle)){
                 $notice = [
                     'action' => 'activate',

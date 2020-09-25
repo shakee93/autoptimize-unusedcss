@@ -189,7 +189,22 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function enabled() {
 
-	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "" ) {
+        if(!is_plugin_active('autoptimize/autoptimize.php')){
+            $notice = [
+                'action' => 'activate',
+                'title' => 'UnusedCSS Power Up',
+                'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+                'main_action' => [
+                    'key' => 'Activate',
+                    'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
+                ],
+                'type' => 'warning'
+            ];
+            self::add_advanced_admin_notice($notice);
+            return false;
+        }
+
+	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
 
             $notice = [
                 'action' => 'enable',
@@ -206,10 +221,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }
 
-
 	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
-
-            $notice = [
+	        $notice = [
                 'action' => 'activate',
                 'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
                 'main_action' => [
