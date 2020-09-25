@@ -129,8 +129,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'title' => 'UnusedCSS Power Up',
                     'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                     'main_action' => [
-                        'key' => 'Activate',
-                        'value' =>  self::na_action_link('autoptimize/autoptimize.php', 'activate')
+	                    'key'   => 'Activate Autoptimize',
+	                    'value' => self::na_action_link( 'autoptimize/autoptimize.php', 'activate' )
                     ],
                     'type' => 'warning'
                 ];
