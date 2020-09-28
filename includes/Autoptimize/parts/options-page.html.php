@@ -5,19 +5,6 @@
 
 	$api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
 
-	$valid_domain = true;
-	$error_message = null;
-
-    $uucss_api         = new UnusedCSS_Api();
-	$uucss_api->apiKey = isset( $options['uucss_api_key'] ) ? $options['uucss_api_key'] : null;
-
-    $results = $uucss_api->get( 'verify',['url' => site_url()] );
-
-    $data = json_decode(json_encode($results),true);
-    if(isset($data['errors'])){
-        $valid_domain = false;
-        $error_message = $data['errors'][0]['detail'];
-    }
 	?>
     <div>
         <ul id="uucss-wrapper">
@@ -341,7 +328,7 @@
 
                     <h2>
                         UnusedCSS License
-                        <span<?php echo ( $api_key_verified && $valid_domain ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                        <span<?php echo ( $api_key_verified && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -361,10 +348,10 @@
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
-                                        <a href="<?php echo ( $valid_domain ) ? UnusedCSS_Autoptimize_Admin::activation_url('deactivate') :
+                                        <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url('deactivate') :
                                             UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>"
                                            class="uucss-activate">
-                                            <?php echo ( $valid_domain ) ? 'Deactivate License' : 'Reactivate License' ?>
+                                            <?php echo ( $options['valid_domain'] ) ? 'Deactivate License' : 'Reactivate License' ?>
                                         </a>
                                     </label>
                                 </td>
