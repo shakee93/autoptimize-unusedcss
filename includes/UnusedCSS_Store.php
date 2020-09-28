@@ -61,9 +61,6 @@ class UnusedCSS_Store {
 			    [ 'url' => $this->url ]
 		    ) );
 
-	    error_log('result');
-	    error_log($result);
-
 	    if ( ! isset( $result ) || isset( $result->errors ) ) {
 		    UnusedCSS_Settings::add_link( $this->url, null, "failed", [
 			    "error" => $this->extract_error( $result )

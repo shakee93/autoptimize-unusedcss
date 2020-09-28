@@ -9,7 +9,7 @@
 	$error_message = null;
 
     $uucss_api         = new UnusedCSS_Api();
-    $uucss_api->apiKey = $options['uucss_api_key'];
+	$uucss_api->apiKey = isset( $options['uucss_api_key'] ) ? $options['uucss_api_key'] : null;
 
     $results = $uucss_api->get( 'verify',['url' => site_url()] );
 
