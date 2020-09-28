@@ -48,17 +48,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function register_dependency_activation_hook(){
 
-        if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+	    // TODO : only run when ao installed first time for unusedCSS
 
-            if(get_option('ao_css_options_updated') != null){
-                return;
-            }
-            require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
-            register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
+	    if ( $this->is_autoptimize_installed() ) {
 
-                $fields = [
-                    "autoptimize_css" => true,
-                    "autoptimize_css_aggregate" => true,
+		    if ( get_option( 'ao_css_options_updated' ) != null ) {
+			    return;
+		    }
+		    require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
+		    register_activation_hook( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function () {
+
+			    $fields = [
+				    "autoptimize_css"                => true,
+				    "autoptimize_css_aggregate"      => true,
                     "autoptimize_css_include_inline" => true,
                     "autoptimize_cache_nogzip" => true,
                     "autoptimize_minify_excluded" => true,
@@ -112,18 +114,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
-            $notice = null;
-		    if(file_exists(AUTOPTIMIZE_PLUGIN_FIle)){
-                $notice = [
-                    'action' => 'activate',
-                    'title' => 'UnusedCSS Power Up',
-                    'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
-                    'main_action' => [
-	                    'key'   => 'Activate Autoptimize',
-	                    'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
-                    ],
-                    'type' => 'warning'
-                ];
+			$notice = null;
+			if ( $this->is_autoptimize_installed() ) {
+				$notice = [
+					'action'      => 'activate',
+					'title'       => 'UnusedCSS Power Up',
+					'message'     => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+					'main_action' => [
+						'key'   => 'Activate Autoptimize',
+						'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
+					],
+					'type'        => 'warning'
+				];
             }else{
                 $notice = [
                     'action' => 'install',
@@ -307,13 +309,21 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return;
         }
 
-        if ($url) {
-            LW_Varnish_Cache_Purger::get_instance()->purge_url($url);
-            LW_Varnish_Cache_Purger::get_instance()->do_purge();
-            return;
-        }
+	    if ( $url ) {
+		    LW_Varnish_Cache_Purger::get_instance()->purge_url( $url );
+		    LW_Varnish_Cache_Purger::get_instance()->do_purge();
 
-        LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
+		    return;
+	    }
+
+	    LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
     }
+
+
+	public function is_autoptimize_installed() {
+		$file = ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php';
+
+		return file_exists( $file );
+	}
 
 }
