@@ -222,7 +222,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }
 
-	    if ( ! self::is_api_key_verified() && ! self::$deactivating ) {
+	    if ( ! self::is_api_key_verified() && ! self::$deactivating || ! self::is_domain_verified()) {
 	        $notice = [
                 'action' => 'activate',
                 'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
@@ -235,7 +235,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    self::add_advanced_admin_notice($notice);
 		    return false;
 	    }
-
 
 	    if ( ! self::enabled_via_ao() ) {
 		    return false;
@@ -263,6 +262,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		return $api_key_status == '1';
 
 	}
+
+	public static function is_domain_verified(){
+
+        $uucss_api         = new UnusedCSS_Api();
+        $options = get_option( 'autoptimize_uucss_settings' );
+
+        $results = $uucss_api->get( 'verify',['url' => site_url()] );
+
+        $data = json_decode(json_encode($results),true);
+
+        if(isset($data['errors'])){
+            $options['valid_domain'] = false;
+            update_option('autoptimize_uucss_settings', $options);
+            return false;
+        }
+        $options['valid_domain'] = true;
+        update_option('autoptimize_uucss_settings', $options);
+        return true;
+    }
 
 
 	public function add_ao_tab( $in ) {
@@ -302,7 +320,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$options = $this->fetch_options();
 		include( 'parts/options-page.html.php' );
 	}
-
 
 	public function activate() {
 
