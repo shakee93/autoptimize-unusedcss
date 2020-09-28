@@ -107,16 +107,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
-    public static function na_action_link( $plugin, $action = 'activate' ) {
-        if ( strpos( $plugin, '/' ) ) {
-            $plugin = str_replace( '\/', '%2F', $plugin );
-        }
-        $url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
-        $_REQUEST['plugin'] = $plugin;
-        $url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
-        return $url;
-    }
-
 	public function check_dependencies() {
 
 		if(function_exists('autoptimize')) {
@@ -130,7 +120,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                     'main_action' => [
 	                    'key'   => 'Activate Autoptimize',
-	                    'value' => self::na_action_link( 'autoptimize/autoptimize.php', 'activate' )
+	                    'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
                     ],
                     'type' => 'warning'
                 ];

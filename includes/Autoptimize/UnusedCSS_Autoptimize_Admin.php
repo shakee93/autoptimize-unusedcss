@@ -178,31 +178,24 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
-    public static function plugin_activation_link($plugin, $action = 'activate' ) {
-        if ( strpos( $plugin, '/' ) ) {
-            $plugin = str_replace( '\/', '%2F', $plugin );
-        }
-        $url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
-        $_REQUEST['plugin'] = $plugin;
-        $url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
-        return $url;
-    }
 
     public static function enabled() {
 
         if(!is_plugin_active('autoptimize/autoptimize.php')){
+
             $notice = [
                 'action' => 'activate',
                 'title' => 'UnusedCSS Power Up',
                 'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                 'main_action' => [
-                    'key' => 'Activate',
-                    'value' =>  self::plugin_activation_link('autoptimize/autoptimize.php', 'activate')
+	                'key' => 'Activate',
+	                'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
                 ],
                 'type' => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
-            return false;
+
+	        return false;
         }
 
 	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
