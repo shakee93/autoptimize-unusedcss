@@ -23,7 +23,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-        $this->register_dependency_activation_hook();
+	    $this->register_dependency_activation_hook();
 
 	    if ( ! $this->check_dependencies() ) {
 		    return;
@@ -31,18 +31,20 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
-	    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
 
-	    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
-	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+	    add_action( 'uucss/content_updated', [ $this, 'cache' ], 10, 1 );
+	    add_action( 'uucss/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
+	    add_action( 'uucss/cache_cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
 
 
-	    add_filter( 'query_vars', function ($vars) {
+	    add_filter( 'query_vars', function ( $vars ) {
 
 		    $vars[] = 'no_uucss';
+
 		    return $vars;
 
-	    });
+	    } );
 
 	    parent::__construct();
 
@@ -61,17 +63,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function register_dependency_activation_hook(){
 
-        if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+	    // TODO : only run when ao installed first time for unusedCSS
 
-            if(get_option('ao_css_options_updated') != null){
-                return;
-            }
-            require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
-            register_activation_hook(  ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function(){
+	    if ( $this->is_autoptimize_installed() ) {
 
-                $fields = [
-                    "autoptimize_css" => true,
-                    "autoptimize_css_aggregate" => true,
+		    if ( get_option( 'ao_css_options_updated' ) != null ) {
+			    return;
+		    }
+		    require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
+		    register_activation_hook( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function () {
+
+			    $fields = [
+				    "autoptimize_css"                => true,
+				    "autoptimize_css_aggregate"      => true,
                     "autoptimize_css_include_inline" => true,
                     "autoptimize_cache_nogzip" => true,
                     "autoptimize_minify_excluded" => true,
@@ -125,18 +129,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
-            $notice = null;
-		    if(file_exists(AUTOPTIMIZE_PLUGIN_FIle)){
-                $notice = [
-                    'action' => 'activate',
-                    'title' => 'UnusedCSS Power Up',
-                    'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
-                    'main_action' => [
-	                    'key'   => 'Activate Autoptimize',
-	                    'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
-                    ],
-                    'type' => 'warning'
-                ];
+			$notice = null;
+			if ( $this->is_autoptimize_installed() ) {
+				$notice = [
+					'action'      => 'activate',
+					'title'       => 'UnusedCSS Power Up',
+					'message'     => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+					'main_action' => [
+						'key'   => 'Activate Autoptimize',
+						'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
+					],
+					'type'        => 'warning'
+				];
             }else{
                 $notice = [
                     'action' => 'install',
@@ -202,6 +206,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
+		    UnusedCSS_Settings::content_hash( $this->url, md5( $html ) );
+
 		    $html = $this->parsAllCSS( $html, $data );
 
 		    return $html;
@@ -243,7 +249,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
 
-				    if ( $key && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+				    if ( isset( $data['files'][ $key ] ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+
 					    array_push( $inject->found_css_cache_files, $link );
 
 					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'], autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
@@ -266,7 +273,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-//		    self::log( $inject );
+		    self::log( $inject );
 
 		    return $dom;
 
@@ -320,13 +327,21 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return;
         }
 
-        if ($url) {
-            LW_Varnish_Cache_Purger::get_instance()->purge_url($url);
-            LW_Varnish_Cache_Purger::get_instance()->do_purge();
-            return;
-        }
+	    if ( $url ) {
+		    LW_Varnish_Cache_Purger::get_instance()->purge_url( $url );
+		    LW_Varnish_Cache_Purger::get_instance()->do_purge();
 
-        LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
+		    return;
+	    }
+
+	    LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
     }
+
+
+	public function is_autoptimize_installed() {
+		$file = ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php';
+
+		return file_exists( $file );
+	}
 
 }
