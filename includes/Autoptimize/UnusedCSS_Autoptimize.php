@@ -33,8 +33,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
 
-	    add_action( 'uucss_cache/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
-	    add_action( 'uucss_cache/cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
+	    add_action( 'uucss/cache_cached', [ $this, 'flushCacheProviders' ], 10, 2 );
+	    add_action( 'uucss/cache_cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
 
 
 	    add_filter( 'query_vars', function ( $vars ) {
