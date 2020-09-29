@@ -106,7 +106,7 @@ class UnusedCSS_Store {
 	    ] );
 
 	    $this->args['url'] = $this->url;
-	    do_action( 'uucss_cache_completed', $this->args );
+	    do_action( 'uucss/cached', $this->args );
 
     }
 

@@ -21,7 +21,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-        $this->register_dependency_activation_hook();
+	    $this->register_dependency_activation_hook();
 
 	    if ( ! $this->check_dependencies() ) {
 		    return;
@@ -29,18 +29,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
-	    add_action( 'autoptimize_action_cachepurged', [$this, 'clear_cache'] );
+	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
 
-	    add_action('uucss_cache_completed', [$this, 'flushCacheProviders'], 10, 2);
-	    add_action('uucss_cache_cleared', [$this, 'flushCacheProviders'], 10, 2);
+	    add_action( 'uucss_cache/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
+	    add_action( 'uucss_cache/cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
 
 
-	    add_filter( 'query_vars', function ($vars) {
+	    add_filter( 'query_vars', function ( $vars ) {
 
 		    $vars[] = 'no_uucss';
+
 		    return $vars;
 
-	    });
+	    } );
 
 	    parent::__construct();
 
@@ -190,6 +191,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    }
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
+
+		    UnusedCSS_Settings::content_hash( $this->url, md5( $html ) );
 
 		    $html = $this->parsAllCSS( $html, $data );
 

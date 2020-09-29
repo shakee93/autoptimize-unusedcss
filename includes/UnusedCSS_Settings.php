@@ -19,6 +19,7 @@ class UnusedCSS_Settings {
 
 		$map[ md5( $link ) ] = [
 			"url"    => $link,
+			"hash"   => null,
 			"files"  => $files,
 			"status" => $status,
 			"meta"   => $meta,
@@ -26,6 +27,43 @@ class UnusedCSS_Settings {
 		];
 
 		update_option( self::$map_key, $map );
+	}
+
+
+	public static function content_hash_changed( $link, $hash ) {
+
+		$map = get_option( self::$map_key );
+
+		if ( isset( $map[ md5( $link ) ]['hash'] ) ) {
+
+			// content hash
+			return $map[ md5( $link ) ]["hash"] !== $hash;
+		}
+
+		return false;
+
+	}
+
+
+	public static function content_hash( $link, $hash ) {
+		$map = get_option( self::$map_key );
+
+		if ( isset( $map[ md5( $link ) ] ) ) {
+
+			$_hash = $map[ md5( $link ) ]["hash"];
+
+			if ( $_hash !== null && $_hash !== $hash ) {
+
+				do_action( 'uucss/content_updated', $link );
+
+			}
+
+			// content hash
+			$map[ md5( $link ) ]["hash"] = $hash;
+			update_option( self::$map_key, $map );
+		}
+
+		return false;
 	}
 
 	public static function get_link( $link ) {

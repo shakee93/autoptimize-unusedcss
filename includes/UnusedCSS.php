@@ -163,18 +163,19 @@ abstract class UnusedCSS {
 
 		$this->url = $this->transform_url( $this->url );
 
+		// disabled exceptions only for frontend
+		if ( ! $this->enabled_frontend() ) {
+			return;
+		}
+
+		$this->get_css();
+		$this->replace_css();
+
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 			$this->cache( $this->url );
 		}
 
-		// disabled exceptions only for frontend
-		if ( ! $this->enabled_frontend() ) {
-			return;
-	    }
-
-        $this->get_css();
-        $this->replace_css();
-    }
+	}
 
     public function cache($url = null, $args = []) {
 
@@ -280,7 +281,7 @@ abstract class UnusedCSS {
 				    $this->file_system->delete( $this->base_dir . '/' . $unused_file );
 			    }
 
-			    do_action( 'uucss_cache_cleared', $args );
+			    do_action( 'uucss/cache_cleared', $args );
 		    }
 
 
@@ -291,7 +292,7 @@ abstract class UnusedCSS {
 	    $results = $this->file_system->delete( $this->base_dir, true );
 	    UnusedCSS_Settings::clear_links();
 
-	    do_action( 'uucss_cache_cleared', $args );
+	    do_action( 'uucss/cache_cleared', $args );
 
 	    return ! is_wp_error( $results );
     }
