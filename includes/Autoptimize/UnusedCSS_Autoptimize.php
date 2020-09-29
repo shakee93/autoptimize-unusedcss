@@ -19,6 +19,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $this->provider = 'autoptimize';
 
+        register_activation_hook(UUCSS_PLUGIN_FILE, [$this, 'set_default_option_values']);
+
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
         $this->register_dependency_activation_hook();
@@ -44,6 +46,17 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    parent::__construct();
 
+    }
+
+    public function set_default_option_values(){
+        $options = get_option( 'autoptimize_uucss_settings' );
+        if(!isset($options['is_first_activation'])){
+
+
+
+            $options['is_first_activation'] = true;
+            update_option('autoptimize_uucss_settings', $options);
+        }
     }
 
     public function register_dependency_activation_hook(){
@@ -107,7 +120,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
-    public static function na_action_link( $plugin, $action = 'activate' ) {
+    public static function plugin_activation_link( $plugin, $action = 'activate' ) {
         if ( strpos( $plugin, '/' ) ) {
             $plugin = str_replace( '\/', '%2F', $plugin );
         }
@@ -130,7 +143,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
                     'main_action' => [
 	                    'key'   => 'Activate Autoptimize',
-	                    'value' => self::na_action_link( 'autoptimize/autoptimize.php', 'activate' )
+	                    'value' => self::plugin_activation_link( 'autoptimize/autoptimize.php', 'activate' )
                     ],
                     'type' => 'warning'
                 ];
