@@ -19,6 +19,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $this->provider = 'autoptimize';
 
+        register_activation_hook(UUCSS_PLUGIN_FILE, [$this, 'set_default_option_values']);
+
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
 	    $this->register_dependency_activation_hook();
@@ -45,6 +47,17 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    parent::__construct();
 
+    }
+
+    public function set_default_option_values(){
+        $options = get_option( 'autoptimize_uucss_settings' );
+        if(!isset($options['is_first_activation'])){
+
+
+
+            $options['is_first_activation'] = true;
+            update_option('autoptimize_uucss_settings', $options);
+        }
     }
 
     public function register_dependency_activation_hook(){
