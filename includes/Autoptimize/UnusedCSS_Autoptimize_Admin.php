@@ -30,8 +30,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			}
 		} );
 
-
 	    if ( is_admin() ) {
+
+	        self::validate_domain();
 
 		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
@@ -215,7 +216,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }
 
-	    if ( ! self::is_api_key_verified() && ! self::$deactivating || ! self::is_domain_verified()) {
+	    if ( ! self::is_api_key_verified() && ! self::$deactivating) {
 	        $notice = [
                 'action' => 'activate',
                 'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
@@ -256,7 +257,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-	public static function is_domain_verified(){
+	public static function validate_domain(){
 
         $uucss_api         = new UnusedCSS_Api();
         $options = get_option( 'autoptimize_uucss_settings' );
@@ -264,15 +265,18 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         $results = $uucss_api->get( 'verify',['url' => site_url()] );
 
         $data = json_decode(json_encode($results),true);
-
         if(isset($data['errors'])){
             $options['valid_domain'] = false;
             update_option('autoptimize_uucss_settings', $options);
-            return false;
+            return;
         }
         $options['valid_domain'] = true;
         update_option('autoptimize_uucss_settings', $options);
-        return true;
+    }
+
+	public static function is_domain_verified(){
+        $options = get_option( 'autoptimize_uucss_settings' );
+        return  $options['valid_domain'];
     }
 
 
@@ -340,7 +344,19 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$options['autoptimize_uucss_enabled'] = 1;
 		$options['uucss_api_key']             = $token;
 
+        update_option( 'autoptimize_uucss_settings', $options );
+
+        $data = self::suggest_whitelist_packs(false);
+
+        $white_packs = $data->data;
+
+        foreach ($white_packs as $white_pack){
+            $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+        }
+
 		update_option( 'autoptimize_uucss_settings', $options );
+
+        self::validate_domain();
 
 		self::$activating = true;
 
@@ -370,6 +386,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		unset( $options['uucss_api_key_verified'] );
 		unset( $options['autoptimize_uucss_enabled'] );
 		unset( $options['uucss_api_key'] );
+		unset( $options['whitelist_packs'] );
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
@@ -388,6 +405,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             'type' => 'success'
         ];
         self::add_advanced_admin_notice($notice);
+        return;
 	}
 
 

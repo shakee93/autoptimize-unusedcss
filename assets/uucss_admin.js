@@ -64,7 +64,11 @@
             var oldText = $button.val()
 
             $button.val('loading..')
-            wp.ajax.post('suggest_whitelist_packs', {}).done(function (data) {
+            wp.ajax.post('suggest_whitelist_packs', {
+                body : {
+                    url : uucss.url
+                }
+            }).done(function (data) {
 
                 $button.val(oldText)
 

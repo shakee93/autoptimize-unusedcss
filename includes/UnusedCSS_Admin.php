@@ -44,7 +44,6 @@ abstract class UnusedCSS_Admin {
 	    add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
 	    add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
 
-
     }
 
 
@@ -100,7 +99,7 @@ abstract class UnusedCSS_Admin {
 
 	}
 
-	public function suggest_whitelist_packs() {
+	public function suggest_whitelist_packs($ajax = true) {
 
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -118,11 +117,15 @@ abstract class UnusedCSS_Admin {
 
 		$data = $api->post( 'whitelist-packs/wp-suggest', [
 			'plugins' => $active_plugins,
-			'theme'   => get_template()
+			'theme'   => get_template(),
+            'url' => site_url()
 		] );
 
-		wp_send_json_success( $data->data );
+		if($ajax){
+            wp_send_json_success( $data->data );
+        }
 
+		return $data;
 	}
 
 
@@ -136,7 +139,6 @@ abstract class UnusedCSS_Admin {
 
 		$uucss_api         = new UnusedCSS_Api();
 		$uucss_api->apiKey = $_POST['api_key'];
-		$uucss_api->url = site_url();
 
 		$results = $uucss_api->get( 'verify' );
 

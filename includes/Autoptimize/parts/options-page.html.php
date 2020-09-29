@@ -300,11 +300,11 @@
 
                                 </th>
                                 <td>
-
                                     <label>
                                         <select id="whitelist_packs" multiple class="js-example-basic-single"
                                                 name="autoptimize_uucss_settings[whitelist_packs][]">
 											<?php if ( isset( $options['whitelist_packs'] ) ) {
+
 												foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
                                                     <option selected
                                                             value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
@@ -325,10 +325,9 @@
                 </li>
 
                 <li>
-
                     <h2>
                         UnusedCSS License
-                        <span<?php echo ( $api_key_verified && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                        <span<?php echo ( $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -351,7 +350,7 @@
                                         <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url('deactivate') :
                                             UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>"
                                            class="uucss-activate">
-                                            <?php echo ( $options['valid_domain'] ) ? 'Deactivate License' : 'Reactivate License' ?>
+                                            <?php echo ( $options['valid_domain']) ? 'Deactivate License' : 'Reactivate License' ?>
                                         </a>
                                     </label>
                                 </td>
