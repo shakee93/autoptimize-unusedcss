@@ -249,7 +249,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
 
-				    if ( $key && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+				    if ( isset( $data['files'][ $key ] ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+
 					    array_push( $inject->found_css_cache_files, $link );
 
 					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'], autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
@@ -272,7 +273,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-//		    self::log( $inject );
+		    self::log( $inject );
 
 		    return $dom;
 
