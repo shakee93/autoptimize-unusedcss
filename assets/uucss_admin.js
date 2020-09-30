@@ -289,7 +289,6 @@
             ]
         });
 
-
         console.log('loaded');
 
     });
