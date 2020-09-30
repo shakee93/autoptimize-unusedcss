@@ -45,24 +45,25 @@ class UnusedCSS_Settings {
 
 
 	public static function content_hash( $link, $hash ) {
-		$map = get_option( self::$map_key );
+		$map     = get_option( self::$map_key );
+		$changed = false;
 
-		if ( isset( $map[ md5( $link ) ] ) && isset( $map[ md5( $link ) ]["hash"] ) ) {
+		if ( isset( $map[ md5( $link ) ] ) ) {
 
 			$_hash = $map[ md5( $link ) ]["hash"];
 
 			if ( $_hash !== null && $_hash !== $hash ) {
-
 				do_action( 'uucss/content_updated', $link );
-
+				$changed = true;
 			}
 
 			// content hash
 			$map[ md5( $link ) ]["hash"] = $hash;
 			update_option( self::$map_key, $map );
+
 		}
 
-		return false;
+		return $changed;
 	}
 
 	public static function get_link( $link ) {
