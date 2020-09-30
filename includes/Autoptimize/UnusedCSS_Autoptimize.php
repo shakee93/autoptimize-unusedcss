@@ -31,7 +31,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
 
-	    add_action( 'uucss/content_updated', [ $this, 'cache' ], 10, 1 );
+	    add_action( 'uucss/content_updated', function ( $link ) {
+		    $this->clear_cache( $link );
+		    $this->cache( $link );
+	    }, 10, 1 );
+
 	    add_action( 'uucss/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
 
@@ -194,8 +198,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
-		    UnusedCSS_Settings::content_hash( $this->url, md5( $html ) );
-
 		    $html = $this->parsAllCSS( $html, $data );
 
 		    return $html;
@@ -221,6 +223,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    if ( $dom ) {
 		    $inject->parsed_html = true;
+
+
+		    if ( $head = $dom->find( 'head', 0 ) ) {
+
+			    // dont inject if we found content is being updated
+			    if ( UnusedCSS_Settings::content_hash( $this->url, md5( $head->innertext ) ) ) {
+				    return $dom;
+			    }
+
+		    }
 
 		    $dom->find( 'html' )[0]->uucss = true;
 
@@ -261,13 +273,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-		    self::log( $inject );
+//		    self::log( $inject );
 
 		    return $dom;
 
 	    }
 
-	    self::log( $inject );
+//	    self::log( $inject );
 
 	    return $html;
     }
