@@ -120,7 +120,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				$notice = [
 					'action'      => 'activate',
 					'title'       => 'UnusedCSS Power Up',
-					'message'     => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
+					'message'     => 'Please activate autoptimize plugin',
 					'main_action' => [
 						'key'   => 'Activate Autoptimize',
 						'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
