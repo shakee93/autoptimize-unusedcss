@@ -113,15 +113,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-    function getRandomNum(){
-        if(is_user_logged_in()){
-            return rand();
-        }else{
-            return '1.0';
-        }
-    }
-
-	function first_uucss_job() {
+    function first_uucss_job() {
 
 		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
 			return;
@@ -357,6 +349,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $white_packs = $data->data;
 
+        $options['whitelist_packs'] = array();
         foreach ($white_packs as $white_pack){
             $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
         }

@@ -21,7 +21,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-//	    $this->register_dependency_activation_hook();
+	    //$this->register_dependency_activation_hook();
 
 	    if ( ! $this->check_dependencies() ) {
 		    return;
@@ -55,14 +55,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function register_dependency_activation_hook(){
 
-	    // TODO : only run when ao installed first time for unusedCSS
-
-	    if ( $this->is_autoptimize_installed() ) {
+	    if ( $this->is_autoptimize_installed() && ! is_plugin_active(AUTOPTIMIZE_PLUGIN_FILE)) {
 
 		    if ( get_option( 'ao_css_options_updated' ) != null ) {
 			    return;
 		    }
-		    require_once( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php' );
+
 		    register_activation_hook( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function () {
 
 			    $fields = [
