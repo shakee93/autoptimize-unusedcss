@@ -164,16 +164,12 @@ abstract class UnusedCSS {
 		$this->url = $this->transform_url( $this->url );
 
 		// disabled exceptions only for frontend
-		if ( ! $this->enabled_frontend() ) {
-
-			return;
+		if ( $this->enabled_frontend() ) {
+			$this->get_css();
+			$this->replace_css();
 		}
 
-		$this->get_css();
-		$this->replace_css();
-
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
-
 			$this->cache( $this->url );
 		}
 

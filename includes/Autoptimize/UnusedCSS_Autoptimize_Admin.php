@@ -33,10 +33,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    if ( is_admin() ) {
 
             $this->activate();
-
             $this->deactivate();
 
-            self::validate_domain();
+            $this->validate_domain();
 
 		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
@@ -261,16 +260,16 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-	public static function validate_domain(){
+	public function validate_domain() {
 
-        $uucss_api         = new UnusedCSS_Api();
-        $options = get_option( 'autoptimize_uucss_settings' );
+		$uucss_api = new UnusedCSS_Api();
+		$options   = get_option( 'autoptimize_uucss_settings' );
 
-        if(!isset($options['uucss_api_key'])){
-            return;
-        }
+		if ( ! isset( $options['uucss_api_key'] ) ) {
+			return;
+		}
 
-        $results = $uucss_api->get( 'verify',['url' => site_url()] );
+		$results = $uucss_api->get( 'verify', [ 'url' => site_url() ] );
 
         $data = json_decode(json_encode($results),true);
         if(isset($data['errors'])){

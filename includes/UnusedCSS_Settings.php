@@ -47,7 +47,7 @@ class UnusedCSS_Settings {
 	public static function content_hash( $link, $hash ) {
 		$map = get_option( self::$map_key );
 
-		if ( isset( $map[ md5( $link ) ] ) ) {
+		if ( isset( $map[ md5( $link ) ] ) && isset( $map[ md5( $link ) ]["hash"] ) ) {
 
 			$_hash = $map[ md5( $link ) ]["hash"];
 
