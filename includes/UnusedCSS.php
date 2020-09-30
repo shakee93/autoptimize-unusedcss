@@ -165,6 +165,7 @@ abstract class UnusedCSS {
 
 		// disabled exceptions only for frontend
 		if ( ! $this->enabled_frontend() ) {
+
 			return;
 		}
 
@@ -172,6 +173,7 @@ abstract class UnusedCSS {
 		$this->replace_css();
 
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
+
 			$this->cache( $this->url );
 		}
 

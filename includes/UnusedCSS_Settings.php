@@ -8,7 +8,6 @@ class UnusedCSS_Settings {
 	static $map_key = 'uucss_map';
 
 	public static function get_links() {
-
 		return get_option( self::$map_key );
 
 	}

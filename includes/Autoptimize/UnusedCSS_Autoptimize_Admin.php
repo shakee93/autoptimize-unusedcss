@@ -32,7 +32,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    if ( is_admin() ) {
 
-	        self::validate_domain();
+            $this->activate();
+
+            $this->deactivate();
+
+            self::validate_domain();
 
 		    add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 		    add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
@@ -44,10 +48,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
+
 		    // license activation hooks
 //		    add_action('admin_init', [$this, 'activate']);
-		    $this->activate();
-		    $this->deactivate();
+
 	    }
 
 	    if ( ! self::enabled() ) {
@@ -262,6 +266,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         $uucss_api         = new UnusedCSS_Api();
         $options = get_option( 'autoptimize_uucss_settings' );
 
+        if(!isset($options['uucss_api_key'])){
+            return;
+        }
+
         $results = $uucss_api->get( 'verify',['url' => site_url()] );
 
         $data = json_decode(json_encode($results),true);
@@ -355,8 +363,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         }
 
 		update_option( 'autoptimize_uucss_settings', $options );
-
-        self::validate_domain();
 
 		self::$activating = true;
 
