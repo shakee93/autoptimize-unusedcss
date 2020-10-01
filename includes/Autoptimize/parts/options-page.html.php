@@ -77,17 +77,6 @@
                         <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
                         <table class="form-table" id="uucss-options">
                             <tr>
-                                <th scope="row"><?php _e( 'Remove Unused CSS', 'autoptimize' ); ?></th>
-                                <td>
-                                    <label>
-                                        <input id='autoptimize_uucss_enabled' type='checkbox'
-                                               name='autoptimize_uucss_settings[autoptimize_uucss_enabled]' <?php if ( ! empty( $options['autoptimize_uucss_enabled'] ) && '1' === $options['autoptimize_uucss_enabled'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
                                 <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?></th>
                                 <td>
                                     <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">

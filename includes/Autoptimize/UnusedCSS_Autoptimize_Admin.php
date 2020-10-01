@@ -225,10 +225,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }
 
-	    if ( ! self::enabled_via_ao() ) {
-		    return false;
-	    }
-
 
 	    if ( is_multisite() ) {
 		    self::add_admin_notice( "UnusedCSS not supported for multisite" );
@@ -239,10 +235,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    return true;
     }
 
-
-	public static function enabled_via_ao() {
-		return isset( static::fetch_options()['autoptimize_uucss_enabled'] );
-	}
 
 	public static function is_api_key_verified() {
 
@@ -340,7 +332,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
 		$options['uucss_api_key_verified']    = 1;
-		$options['autoptimize_uucss_enabled'] = 1;
 		$options['uucss_api_key']             = $token;
 
         update_option( 'autoptimize_uucss_settings', $options );
@@ -382,7 +373,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$options = get_option( 'autoptimize_uucss_settings' );
 
 		unset( $options['uucss_api_key_verified'] );
-		unset( $options['autoptimize_uucss_enabled'] );
 		unset( $options['uucss_api_key'] );
 		unset( $options['whitelist_packs'] );
 
