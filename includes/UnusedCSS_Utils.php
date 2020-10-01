@@ -72,6 +72,11 @@ trait UnusedCSS_Utils {
     }
 
     public static function add_advanced_admin_notice($notice) {
+
+        if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
+            return;
+        }
+
         if(!isset($notice)){
             return;
         }
