@@ -66,7 +66,8 @@
             $button.val('loading..')
             wp.ajax.post('suggest_whitelist_packs', {
                 body : {
-                    url : uucss.url
+                    url : uucss.url,
+                    ajax: true
                 }
             }).done(function (data) {
 
@@ -86,7 +87,7 @@
                 });
 
             }).fail(function () {
-
+                $button.val('Load Recommended Packs');
                 $('#uucss-pack-suggest-error').text('error : something went wrong, please contact support')
 
             });
