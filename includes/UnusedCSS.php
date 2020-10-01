@@ -93,20 +93,24 @@ abstract class UnusedCSS {
         }
 
         if(is_admin()) {
-            return false;
+	        return false;
         }
 
-        if(wp_doing_ajax()) {
-            return false;
-        }
+	    if ( wp_doing_ajax() ) {
+		    return false;
+	    }
 
-        if(is_404()) {
-            return false;
-        }
+	    if ( is_404() ) {
+		    return false;
+	    }
 
-        if($this->is_cli()){
-            return false;
-        }
+	    if ( is_preview() ) {
+		    return false;
+	    }
+
+	    if ( $this->is_cli() ) {
+		    return false;
+	    }
 
 	    if ( is_search() ) {
 		    return false;
