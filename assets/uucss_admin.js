@@ -151,7 +151,8 @@
                 {
                     data: "url",
                     className: 'dt-body-center dt-head-center stats',
-                    title: "Removed unused CSS 🔥",
+                    //title: "Removed unused CSS 🔥",
+                    title: "File Size Reduction",
                     width: '145px',
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
@@ -181,7 +182,7 @@
                                     '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
-                                    content: 'Total CSS Earlier <span class="perc">' + rowData.meta.stats.before + '</span>',
+                                    content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
                                     allowHTML: true,
                                     placement: 'bottom-end',
                                     trigger: 'manual',

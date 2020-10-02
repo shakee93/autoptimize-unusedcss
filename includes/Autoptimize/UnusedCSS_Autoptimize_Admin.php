@@ -282,7 +282,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function add_ao_tab( $in ) {
 
 		$in = array_merge( $in, array(
-			'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
+			//'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
+			'uucss' => __( '<span class="uucss-tab-title"><img src="/wp-content/plugins/autoptimize-unusedcss/assets/logo-icon.svg" width="15" alt="UnusedCSS.io logo"><span>UnusedCSS</span></span>', 'autoptimize' ),
 		) );
 
 		return $in;
