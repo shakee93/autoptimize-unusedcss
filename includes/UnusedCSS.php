@@ -84,17 +84,22 @@ abstract class UnusedCSS {
 
     public function enabled() {
 
-        if($this->is_doing_api_fetch()) {
-            return false;
-        }
+	    if ( $this->is_doing_api_fetch() ) {
+		    return false;
+	    }
 
-        if (!$this->is_url_allowed()) {
-            return false;
-        }
+	    // fix for uucss fallback css files being purged as url's
+	    if ( $this->is_uucss_file() ) {
+		    return false;
+	    }
 
-        if(is_admin()) {
-	        return false;
-        }
+	    if ( ! $this->is_url_allowed() ) {
+		    return false;
+	    }
+
+	    if ( is_admin() ) {
+		    return false;
+	    }
 
 	    if ( wp_doing_ajax() ) {
 		    return false;
@@ -152,16 +157,20 @@ abstract class UnusedCSS {
             $post = get_post($args['post_id']);
         }
 
-        if ($post) {
-            $page_options = UnusedCSS_Admin::get_page_options($post->ID);
-            if (isset($page_options['exclude']) && $page_options['exclude'] == "on") {
-                return false;
-            }
+	    if ( $post ) {
+		    $page_options = UnusedCSS_Admin::get_page_options( $post->ID );
+		    if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
+			    return false;
+		    }
 
-        }
+	    }
 
-        return true;
+	    return true;
     }
+
+	public function is_uucss_file() {
+		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $this->url );
+	}
 
 	public function purge_css() {
 
