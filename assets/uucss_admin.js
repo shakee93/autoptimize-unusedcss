@@ -113,7 +113,7 @@
                     }
 
                     return Object.values(d.data).sort(function (a, b) {
-                        return b.time = a.time
+                        return b.time - a.time
                     });
                 }
             },
