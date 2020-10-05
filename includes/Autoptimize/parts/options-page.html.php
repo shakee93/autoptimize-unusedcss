@@ -122,7 +122,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude Links', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Exclude URLs', 'autoptimize' ); ?></th>
                                 <td>
                                     <div class="uucss-tag uucss-tag-links tagsdiv" id="uucss_excluded_links">
                                         <div class="">

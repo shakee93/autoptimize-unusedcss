@@ -134,7 +134,7 @@
                 },
                 {
                     "data": "url",
-                    title: "Link",
+                    title: "URL",
                     className: "url",
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).wrapInner($('<a></a>').attr('href', cellData).attr('target', '_blank'))
@@ -145,7 +145,7 @@
                 },
                 {
                     data: "url",
-                    className: 'dt-body-center dt-head-center stats',
+                    className: 'dt-body-center dt-head-center stats th-reduction',
                     //title: "Removed unused CSS 🔥",
                     title: "File Size Reduction",
                     width: '145px',
@@ -251,7 +251,7 @@
 
                 {
                     "data": "url",
-                    className: 'dt-body-center dt-head-center action',
+                    className: 'dt-body-center dt-head-center action th-actions',
                     "targets": 0,
                     title: "Actions",
                     width: '60px',

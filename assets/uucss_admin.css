@@ -71,16 +71,12 @@
     position: relative;
     display: table;
     background-color: white;
-    padding: 0 20px;
+    padding: 0;
     border-radius: 4px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
     margin: 0 15px 15px;
     max-width: 1165px;
-}
-
-#uucss-wrapper > li .content {
-    margin: 12px 0;
 }
 
 #uucss-wrapper .form-table th {
@@ -153,14 +149,15 @@ span.uucss-toggle-section.rotate {
     padding: 10px 15px;
     border-bottom: 1px solid #cdd0d4;
     font-size: 15px;
-    margin: 0 0 0 -20px;
+    margin: 0;
 }
 
 #uucss-wrapper > li.submit {
     background-color: transparent;
     box-shadow: none;
-    padding: 0;
     text-align: right;
+    padding: 0;
+    max-width: 1165px;
 }
 
 #uucss-wrapper > li.submit p.submit {
@@ -170,6 +167,10 @@ span.uucss-toggle-section.rotate {
 
 #uucss-wrapper > li.submit p img {
     float: right;
+}
+
+#uucss-wrapper li.uucss-history h2{
+    padding-left: 15px;
 }
 
 span.valid {
@@ -224,6 +225,19 @@ table.dataTable tbody th, table.dataTable tbody td {
 
 table.dataTable thead th, table.dataTable thead td {
     padding: 8px 18px;
+}
+
+#uucss-wrapper li.uucss-history{
+    padding: 0;
+}
+
+#uucss-wrapper li .content{
+    padding: 10px 15px;
+}
+
+#uucss-wrapper li.uucss-history .content{
+    margin-top: 0;
+    padding: 0;
 }
 
 #uucss-history tr td.url {
