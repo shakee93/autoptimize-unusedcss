@@ -302,22 +302,30 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		//autoptimizeCache::flushPageCache();
 
 		if ( isset( $args['url'] ) ) {
-			$url = $args['url'];
+			$url = $this->transform_url( $args['url'] );
 		}
 
 		if ( class_exists( 'Cache_Enabler' ) ) {
 
-            if ($url) {
-                Cache_Enabler::clear_page_cache_by_url($url);
-            } else {
-                Cache_Enabler::clear_total_cache();
-            }
+			if ( $url ) {
+				Cache_Enabler::clear_page_cache_by_url( $url );
+			} else {
+				Cache_Enabler::clear_total_cache();
+			}
 
-        }
+		}
 
-        $this->flush_lw_varnish($url);
+		if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
+			if ( $url ) {
+				rocket_clean_post( url_to_postid( $url ) );
+			} else {
+				rocket_clean_domain();
+			}
+		}
 
-    }
+		$this->flush_lw_varnish( $url );
+
+	}
 
     public function flush_lw_varnish($url = null)
     {

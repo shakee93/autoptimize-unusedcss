@@ -64,12 +64,7 @@
             var oldText = $button.val()
 
             $button.val('loading..')
-            wp.ajax.post('suggest_whitelist_packs', {
-                body : {
-                    url : uucss.url,
-                    ajax: true
-                }
-            }).done(function (data) {
+            wp.ajax.post('suggest_whitelist_packs').done(function (data) {
 
                 $button.val(oldText)
 
@@ -118,7 +113,7 @@
                     }
 
                     return Object.values(d.data).sort(function (a, b) {
-                        return b.time = a.time
+                        return b.time - a.time
                     });
                 }
             },
