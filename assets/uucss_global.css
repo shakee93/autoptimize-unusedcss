@@ -44,3 +44,15 @@ span.uucss-tab-title{
 span.uucss-tab-title img{
     margin-right: 5px;
 }
+
+/* On Boarding Page Style */
+
+div.uucss-on-board{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 99999;
+    width: 100%;
+    height: 100vh;
+}
