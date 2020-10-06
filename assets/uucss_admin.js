@@ -89,6 +89,19 @@
 
         });
 
+        $.each($('span.dashicons.has-tooltip'),function(index, value){
+            tippy($(value)[0], {
+                content: $($(value)[0]).data('message'),
+                allowHTML: true,
+                placement: 'auto',
+                animation: null,
+                theme: 'light',
+                interactive: true,
+                delay: 0,
+                arrow: false,
+                offset: [0, 7]
+            });
+        });
 
         $('#uucss-wrapper li h2').click(function () {
             $(this).parent().find('.content').slideToggle('fast');
@@ -274,11 +287,25 @@
                                 clear: true
                             }
 
-                            $(td).parent().addClass('loading')
+                            var parent = $(td).parent();
 
-                            wp.ajax.post('uucss_purge_url', data).done(function (d) {
-                                _row.remove().draw()
-                            })
+                            parent.addClass('loading')
+
+                            $.ajax({
+                                method : 'POST',
+                                url: wp.ajax.settings.url + '?action=uucss_purge_url',
+                                data : {
+                                    url: cellData,
+                                    clear: true
+                                },
+                                success : function(response){
+                                    if(response.success){
+                                        _row.remove().draw()
+                                    }else{
+                                        parent.removeClass('loading')
+                                    }
+                                }
+                            });
 
                         });
                     }
