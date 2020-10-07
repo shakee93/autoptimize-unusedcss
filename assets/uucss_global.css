@@ -56,3 +56,28 @@ div.uucss-on-board{
     width: 100%;
     height: 100vh;
 }
+
+.uucss-on-board-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.uucss-on-board-popup.show{
+    display: flex;
+}
+
+.uucss-popup-model {
+    max-width: 500px;
+    width: 100%;
+}
+
+.uucss-popup-model iframe{
+    border-radius: 5px;
+}

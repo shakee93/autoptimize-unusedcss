@@ -63,6 +63,15 @@ function uucss_on_boarding_page(){
         <h2>My Plugin Page Title</h2>
         <div class="footer">
             <span><a href="<?php echo admin_url() ?>">Skip</a></span>
+            <span><a class="js-install-ao" href="<?php echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' ) ?>" target="_blank">Install</a></span>
+            <span><a class="js-install-ao" href="<?php echo UnusedCSS_Utils::activate_plugin( 'autoptimize/autoptimize.php' ) ?>" target="_blank">Activate</a></span>
+        </div>
+        <div class="uucss-on-board-popup">
+            <div class="uucss-popup-model">
+                <div class="on-board-popup-content">
+                    <iframe id="on-board-popup-frame" src="<?php echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' ) ?>" frameborder="0" width="500" height="450"></iframe>
+                </div>
+            </div>
         </div>
     </div>
     <?php
