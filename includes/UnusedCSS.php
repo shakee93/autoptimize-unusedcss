@@ -152,11 +152,17 @@ abstract class UnusedCSS {
 
     public function is_url_allowed($url = null, $args = null)
     {
-        global $post;
 
-        if (isset($args['post_id'])) {
-            $post = get_post($args['post_id']);
-        }
+	    // remove .css .js files from being analyzed
+	    if ( preg_match( '/(.js|.css)$/', $url ) ) {
+		    return false;
+	    }
+
+	    global $post;
+
+	    if ( isset( $args['post_id'] ) ) {
+		    $post = get_post( $args['post_id'] );
+	    }
 
 	    if ( $post ) {
 		    $page_options = UnusedCSS_Admin::get_page_options( $post->ID );
