@@ -156,7 +156,7 @@ span.uucss-toggle-section.rotate {
     font-weight: bold;
     letter-spacing: 0.5px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    margin-bottom: 8px;
+    margin: 12px 12px 15px;
     transition: ease background .3s;
 
 }
@@ -265,8 +265,11 @@ table.dataTable thead th, table.dataTable thead td {
     padding: 0;
 }
 
-#uucss-wrapper li .content{
+#uucss-wrapper li .content {
     padding: 10px 15px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    border-radius: 4px;
 }
 
 #uucss-wrapper li.uucss-history .content{

@@ -11,7 +11,8 @@
 			<?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
                     <h2>Slash load times and boost PageSpeed scores by loading only CSS you need.</h2>
-                    <div class="content">
+                    <div class="content"
+                         style="background-image: url('<?php echo UUCSS_PLUGIN_URL . '/assets/intro.svg' ?>')">
                         <div class="uucss-row">
                             <div class="left-section">
                                 <p>
@@ -41,8 +42,8 @@
                                     <strong>automatically</strong> when you or the users start visiting the pages.
                                 </p>
                             </div>
-                            <div class="right-section">
-                                <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/intro.png' ?>" alt="">
+                            <div class="right-section" style="visibility: hidden">
+                                <img>
                             </div>
                         </div>
                         <div class="uucss-row">
