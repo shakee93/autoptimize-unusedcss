@@ -1,3 +1,12 @@
+/*
+
+regular
+#674399
+
+dark
+#7f54b3
+
+*/
 #uucss-wrapper *:not(.dashicons) {
     font-family: Roboto, Helvetica Neue”, Helvetica, Arial, sans-serif;
 }
@@ -137,7 +146,7 @@ span.uucss-toggle-section.rotate {
 }
 
 #uucss-wrapper a.uucss-activate {
-    background: #009688;
+    background: #7f54b3;
     padding: 12px 28px;
     font-size: 14px;
     text-transform: uppercase;
@@ -153,7 +162,7 @@ span.uucss-toggle-section.rotate {
 }
 
 #uucss-wrapper a.uucss-activate:hover {
-    background: #00665c;
+    background: #674399;
 }
 
 .uucss-row {
@@ -198,11 +207,11 @@ span.uucss-toggle-section.rotate {
     padding-left: 15px;
 }
 
-span.valid {
+#uucss-wrapper span.valid {
     color: white;
     text-transform: uppercase;
     font-weight: 700;
-    background: #4CAF50;
+    background: #009688;
     padding: 3px 6px;
     border-radius: 3px;
     font-size: 12px;
@@ -233,7 +242,7 @@ table.dataTable thead th {
 }
 
 #uucss-history thead {
-    background: #673AB7;
+    background: #674399;
     color: white;
     border-radius: 10px;
 }
@@ -276,8 +285,8 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 #uucss-history .success {
-    background: #ebe4f6;
-    color: #9C27B0;
+    background: #f2edf7;
+    color: #7f54b3;
     padding: 3px 6px 5px;
     font-size: 11px;
     border-radius: 4px;
@@ -469,5 +478,5 @@ table#uucss-history{
 .uucss-notice.notice-success .dashicons,
 .uucss-notice.notice-success strong,
 #uucss-wrapper .left-section strong {
-    color: #009688;
+    color: #332e3a;
 }

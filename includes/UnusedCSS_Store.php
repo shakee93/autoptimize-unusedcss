@@ -81,9 +81,15 @@ class UnusedCSS_Store {
 
     protected function cache_files() {
 
-	    $files = [];
+	    $files              = [];
+	    $found_uucssed_file = false;
 
 	    foreach ( $this->purged_files as $file ) {
+
+		    if ( $this->is_uucss_file( $file->file ) ) {
+			    $found_uucssed_file = true;
+			    continue;
+		    }
 
 		    // don't cache excluded files
 		    if ( $this->is_file_excluded( $this->options, $file->file ) ) {
@@ -98,6 +104,12 @@ class UnusedCSS_Store {
 		    ];
 
 		    $this->file_system->put_contents( $file_location, $file->css, FS_CHMOD_FILE );
+	    }
+
+	    if ( $found_uucssed_file ) {
+		    self::log( 'uucssed file found : ' . $this->url );
+
+		    return;
 	    }
 
 	    UnusedCSS_Settings::add_link( $this->url, $files, "success", [

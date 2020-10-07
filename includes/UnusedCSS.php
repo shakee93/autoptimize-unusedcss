@@ -169,9 +169,6 @@ abstract class UnusedCSS {
 	    return true;
     }
 
-	public function is_uucss_file() {
-		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $this->url );
-	}
 
 	public function purge_css() {
 
