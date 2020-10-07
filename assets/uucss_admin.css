@@ -110,10 +110,6 @@ span.uucss-toggle-section.rotate {
     line-height: 1.25;
 }
 
-.uucss-intro {
-    margin: 25px 15px 15px !important;
-}
-
 .uucss-intro .content {
     display: flex;
     flex-direction: column;
@@ -267,7 +263,7 @@ table.dataTable thead th, table.dataTable thead td {
 
 #uucss-wrapper li .content {
     padding: 10px 15px;
-    background-position: right bottom;
+    background-position: right -15px bottom;
     background-repeat: no-repeat;
     border-radius: 4px;
 }
