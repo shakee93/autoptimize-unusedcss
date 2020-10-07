@@ -75,7 +75,6 @@
     border-radius: 4px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
-    margin: 0 15px 15px;
     max-width: 1165px;
 }
 
@@ -109,6 +108,32 @@ span.uucss-toggle-section.rotate {
 .uucss-intro .content {
     display: flex;
     flex-direction: column;
+}
+
+#uucss-wrapper li .dashicons{
+    font-size: 16px;
+}
+
+#uucss-wrapper li .example{
+    max-width: 460px;
+    width: 100%;
+}
+
+#uucss-wrapper li .example .title h2{
+    padding-left: 0;
+}
+
+#uucss-wrapper li .example .rules-content{
+    padding-top: 5px;
+}
+
+#uucss-wrapper li .example .rules{
+    display: flex;
+}
+
+#uucss-wrapper li .example .rules .rule{
+    max-width: 225px;
+    width: 100%;
 }
 
 #uucss-wrapper a.uucss-activate {

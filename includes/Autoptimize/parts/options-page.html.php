@@ -77,7 +77,10 @@
                         <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
                         <table class="form-table" id="uucss-options">
                             <tr>
-                                <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?>
+                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip" data-message="Whitelisted Selectors (regex supported)">
+
+                                    </span></th>
                                 <td>
                                     <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">
                                         <div class="">
@@ -104,25 +107,45 @@
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
                                         <div class="example">
-                                            <p><strong>Rule : </strong><span><em>red</em></span>
-                                                <br>
-                                                <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
-                                            </p>
-                                            <p><strong>Rule : </strong><span><em>/^orange/</em></span>
-                                                <br>
-                                                <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
-                                            </p>
-                                            <p><strong>Rule (<small>with children</small>) : </strong>
-                                                <span><em>c:/red$/</em></span>
-                                                <br>
-                                                <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
-                                            </p>
+                                            <div class="title">
+                                                <h2>Examples</h2>
+                                            </div>
+                                            <div class="rules-content">
+                                                <div class="rules">
+                                                    <div class="rule"><p>
+                                                            <strong>Rule : </strong><span><em>red</em></span>
+                                                        </p></div>
+                                                    <div><p>
+                                                            <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
+                                                        </p></div>
+                                                </div>
+                                                <div class="rules">
+                                                    <div class="rule"><p>
+                                                            <strong>Rule : </strong><span><em>/^orange/</em></span>
+                                                        </p></div>
+                                                    <div><p>
+                                                            <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
+                                                        </p></div>
+                                                </div>
+                                                <div class="rules">
+                                                    <div class="rule"><p>
+                                                            <strong>Rule (<small>with children</small>) : </strong>
+                                                            <span><em>c:/red$/</em></span>
+                                                        </p></div>
+                                                    <div><p>
+                                                            <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
+                                                        </p></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude URLs', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Exclude URLs', 'autoptimize' ); ?>
+                                    <span class="dashicons dashicons-info-outline exclude-links has-tooltip" data-message="Whitelisted links example example.com/some-url, /another-url/some-url">
+
+                                    </span></th>
                                 <td>
                                     <div class="uucss-tag uucss-tag-links tagsdiv" id="uucss_excluded_links">
                                         <div class="">
@@ -153,7 +176,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude Css files', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Exclude Css files', 'autoptimize' ); ?>
+                                    <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip" data-message="Whitelisted files example my-styles.css, /my-theme/style.css">
+
+                                    </span></th>
                                 <td>
                                     <div class="uucss-tag uucss-tag-links tagsdiv" id="uucss_excluded_files">
                                         <div class="">
@@ -245,14 +271,14 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Include all CSS files', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Parse all CSS files', 'autoptimize' ); ?></th>
                                 <td>
                                     <label><input id='autoptimize_uucss_include_all_files' type='checkbox'
                                                   name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) {
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Include css files which are excluded by autoptimize as well (experimental)
+                                            Parse css files which are excluded by autoptimize as well (experimental)
                                         </i>
                                     </label>
                                 </td>
