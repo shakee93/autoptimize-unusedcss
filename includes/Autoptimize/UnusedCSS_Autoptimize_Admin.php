@@ -115,21 +115,21 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     function first_uucss_job() {
 
-		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
-			return;
-		}
+	    if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+		    return;
+	    }
 
-		$job = UnusedCSS_Settings::get_first_link();
+	    $job = UnusedCSS_Settings::get_first_link();
 
-		if ( $job && $job['status'] == 'success' ) : ?>
+	    if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS successfully ran your first job!</h4>
                 <p><?php _e( 'You slashed <strong>' . $job['meta']['stats']->reductionSize . ' </strong> of unused CSS - that\'s <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Way to go 👏', 'sample-text-domain' ); ?></p>
             </div>
-		<?php endif;
+	    <?php endif;
 
-		if ( $job && $job['status'] == 'failed' ) : ?>
+	    if ( $job && $job['status'] == 'failed' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="error notice uucss-notice notice-error is-dismissible">
                 <h4><span class="dashicons dashicons-no-alt"></span> UnusedCSS : We were unable to remove unusedcss from
@@ -367,7 +367,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
 			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
-
 			return;
 		}
 
@@ -382,15 +381,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
 		delete_site_option( $cache_key );
 
+		$this->uucss->vanish();
+
 		self::$deactivating = true;
 
-        $notice = [
-            'action' => 'activate',
-            'message' => 'UnusedCSS : Deactivated your license for this site.',
-            'main_action' => [
-                'key' => 'Reactivate',
-                'value' =>  self::activation_url('authorize')
-            ],
+		$notice = [
+			'action'      => 'activate',
+			'message'     => 'UnusedCSS : Deactivated your license for this site.',
+			'main_action' => [
+				'key'   => 'Reactivate',
+				'value' => self::activation_url( 'authorize' )
+			],
             'type' => 'success'
         ];
         self::add_advanced_admin_notice($notice);
