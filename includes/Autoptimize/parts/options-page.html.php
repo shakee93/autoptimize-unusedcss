@@ -55,7 +55,7 @@
 			<?php if ( $api_key_verified) : ?>
                 <li class="uucss-history">
                     <h2>
-                        UnusedCSS : Completed URLs
+                        Job Queue
                         <span class="uucss-toggle-section">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -68,13 +68,12 @@
 
                 <li>
                     <h2>
-                        UnusedCSS : Advanced Settings
+                        Advanced Settings
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
                     <div class="content" style="display:none;">
-                        <span id='autoptimize_imgopt_descr'><?php _e( 'Boost your site speed by removing all unwanted CSS files. Get your Google Page Speed Scores Spiked UP !!', 'autoptimize' ); ?></span>
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?>
@@ -341,7 +340,7 @@
 
                 <li>
                     <h2>
-                        UnusedCSS License
+                        License Information
                         <span<?php echo ( $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
