@@ -31,17 +31,9 @@ require( 'vendor/autoload.php' );
 add_action( 'plugins_loaded', function () {
 
     new UnusedCSS_Autoptimize_Onboard();
+
 	$ao_uucss = new UnusedCSS_Autoptimize();
 	new UnusedCSS_Autoptimize_Admin( $ao_uucss );
 
 } );
-
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function ( $links ) {
-	$_links = array(
-		'<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
-	);
-
-	return array_merge( $_links, $links );
-} );
-
 

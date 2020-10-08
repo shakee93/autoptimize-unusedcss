@@ -23,14 +23,19 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
+		add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+			$this,
+			'add_plugin_action_link'
+		] );
+
 		add_action( 'current_screen', function () {
 
 			if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
-                add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+				add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
 			}
 		} );
 
-	    if ( is_admin() ) {
+		if ( is_admin() ) {
 
             $this->activate();
             $this->deactivate();
@@ -46,10 +51,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
 		    add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
-
-
-		    // license activation hooks
-//		    add_action('admin_init', [$this, 'activate']);
 
 	    }
 
@@ -113,15 +114,26 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-    function first_uucss_job() {
 
-	    if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
-		    return;
-	    }
+	public function add_plugin_action_link( $links ) {
 
-	    $job = UnusedCSS_Settings::get_first_link();
+		$_links = array(
+			'<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
+		);
 
-	    if ( $job && $job['status'] == 'success' ) : ?>
+		return array_merge( $_links, $links );
+	}
+
+
+	function first_uucss_job() {
+
+		if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+			return;
+		}
+
+		$job = UnusedCSS_Settings::get_first_link();
+
+		if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS successfully ran your first job!</h4>
