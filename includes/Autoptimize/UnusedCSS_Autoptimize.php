@@ -36,8 +36,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    $this->cache( $link );
 	    }, 10, 1 );
 
-	    add_action( 'uucss/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
-	    add_action( 'uucss/cache_cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
+	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
+	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 
 	    add_filter( 'query_vars', function ( $vars ) {
@@ -196,19 +196,19 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
-		    $html = $this->parsAllCSS( $html, $data );
+		    $html = $this->inject_css( $html, $data );
 
 		    return $html;
 	    }, 99 );
 
     }
 
-	public static function isCSS( $el ) {
+	public static function is_css( $el ) {
 		return $el->rel === 'stylesheet' || $el->rel === 'preload' && $el->as === 'style';
 	}
 
 
-	public function parsAllCSS( $html, $data ) {
+	public function inject_css( $html, $data ) {
 		$dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
 
 		$inject = (object) [
@@ -241,7 +241,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 			    $inject->found_sheets = true;
 
-			    if ( self::isCSS( $sheet ) ) {
+			    if ( self::is_css( $sheet ) ) {
 
 				    array_push( $inject->found_css_files, $link );
 
@@ -261,7 +261,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    $sheet->href  = $newLink;
 
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
-							    $this->inlineSheet( $sheet, $data['files'][ $key ]['uucss'] );
+							    $this->inline_sheet( $sheet, $data['files'][ $key ]['uucss'] );
 						    }
 
 					    }
@@ -279,11 +279,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 //	    self::log( $inject );
 
-	    return $html;
-    }
+		return $html;
+	}
 
 
-	protected function inlineSheet( $sheet, $link ) {
+	protected function inline_sheet( $sheet, $link ) {
 
 		$inline = $this->get_inline_content( $link );
 
@@ -296,7 +296,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	}
 
 
-	public function flushCacheProviders( $args ) {
+	public function flush_page_cache( $args ) {
 		$url = null;
 
 		//autoptimizeCache::flushPageCache();
