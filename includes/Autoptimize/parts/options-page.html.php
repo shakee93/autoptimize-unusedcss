@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) or die(); ?>
+
 <script>document.title = "Autoptimize: UnusedCSS " + document.title;</script>
 
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
@@ -288,8 +290,8 @@
                                 <td>
                                     <label><input id='uucss_inline_css' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
-				                            echo 'checked="checked"';
-			                            } ?> value='1'>
+											echo 'checked="checked"';
+										} ?> value='1'>
                                         <i>
                                             inline CSS files which are smaller than 15kb after unusedcss are removed
                                         </i>
@@ -301,8 +303,8 @@
                                 <td>
                                     <label><input id='uucss_query_string' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
-					                        echo 'checked="checked"';
-				                        } ?> value='1'>
+											echo 'checked="checked"';
+										} ?> value='1'>
                                         <i>
                                             Consider links with query strings as separate links.
                                         </i>
@@ -356,16 +358,16 @@
                                     <label>
                                         <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                                value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-							                       echo $options['uucss_api_key_verified'] ?>">
+											       echo $options['uucss_api_key_verified'] ?>">
                                         <input id='uucss_api_key' type='hidden'
                                                name='autoptimize_uucss_settings[uucss_api_key]'
                                                value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                                size="40">
                                         <em id="verification_status"></em>
                                         <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url('deactivate') :
-                                            UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>"
+											UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>"
                                            class="uucss-activate">
-                                            <?php echo ( $options['valid_domain']) ? 'Deactivate License' : 'Reactivate License' ?>
+											<?php echo ( $options['valid_domain']) ? 'Deactivate License' : 'Reactivate License' ?>
                                         </a>
                                     </label>
                                 </td>

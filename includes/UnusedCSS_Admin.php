@@ -1,14 +1,16 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 /**
  * Class UnusedCSS
  */
 abstract class UnusedCSS_Admin {
 
-    use UnusedCSS_Utils;
+	use UnusedCSS_Utils;
 
-    /**
-     * @var UnusedCSS_Autoptimize
+	/**
+	 * @var UnusedCSS_Autoptimize
      */
     public $uucss;
 

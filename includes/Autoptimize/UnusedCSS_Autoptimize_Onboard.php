@@ -1,14 +1,14 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 /**
  * Class UnusedCSS
  */
+class UnusedCSS_Autoptimize_Onboard {
+	public function __construct() {
 
-class UnusedCSS_Autoptimize_Onboard
-{
-    public function __construct() {
-
-        register_activation_hook(UUCSS_PLUGIN_FILE, [$this,'register_plugin_activation_hook']);
+		register_activation_hook( UUCSS_PLUGIN_FILE, [ $this, 'register_plugin_activation_hook' ] );
 
         add_action('admin_menu', [$this,'uucss_register_on_board_page']);
 

@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) or die(); ?>
+
 <style>
     #uucss-options .inside {
         padding-bottom: 0;
@@ -36,7 +38,7 @@
 <div id="uucss-settings">
 
     <div class="uucss-fields">
-        <?php wp_nonce_field('uucss_option_save','uucss_nonce') ?>
+		<?php wp_nonce_field('uucss_option_save','uucss_nonce') ?>
 
         <p>
             <label>

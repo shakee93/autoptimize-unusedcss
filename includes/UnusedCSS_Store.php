@@ -1,13 +1,15 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 /**
  * Class UnusedCSS
  */
 class UnusedCSS_Store {
 
-    use UnusedCSS_Utils;
+	use UnusedCSS_Utils;
 
-    public $base = 'cache/autoptimize/uucss';
+	public $base = 'cache/autoptimize/uucss';
 	public $provider;
 
     public $url;

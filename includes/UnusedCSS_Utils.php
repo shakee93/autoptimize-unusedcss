@@ -1,14 +1,15 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 /**
  * Class UnusedCSS
  */
 trait UnusedCSS_Utils {
 
-    public function url_origin( $s, $use_forwarded_host = false )
-    {
-        $ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
-        $sp       = strtolower( $s['SERVER_PROTOCOL'] );
+	public function url_origin( $s, $use_forwarded_host = false ) {
+		$ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
+		$sp       = strtolower( $s['SERVER_PROTOCOL'] );
         $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
         $port     = $s['SERVER_PORT'];
         $port     = ( ( ! $ssl && $port=='80' ) || ( $ssl && $port=='443' ) ) ? '' : ':'.$port;

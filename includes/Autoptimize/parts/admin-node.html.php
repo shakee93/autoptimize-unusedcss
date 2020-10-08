@@ -1,4 +1,10 @@
-<?php global $post; ?>
+<?php
+
+defined( 'ABSPATH' ) or die();
+
+global $post;
+?>
+
 <style>
 
     li#wp-admin-bar-autoptimize-uucss {
