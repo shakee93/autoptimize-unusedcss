@@ -2,8 +2,8 @@
 /*
 Plugin Name: Autoptimize UnusedCSS Power-Up
 Plugin URI:  unusedcss.io
-Description: Removes Unused CSS from your website pages.
-Version:     0.0.1
+Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
+Version:     0.0.2
 Author:      Shakeeb Sadikeen
 Author URI:  https://shakeeb.dev/
 */
@@ -12,21 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'UUCSS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
-if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-    define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
-}
-
-
-if ( ! defined( 'UUCSS_DEBUG' ) ) {
-	define( 'UUCSS_DEBUG', true );
-}
-
 require( 'vendor/autoload.php' );
-
 
 add_action( 'plugins_loaded', function () {
 
