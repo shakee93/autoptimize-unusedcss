@@ -38,7 +38,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'uucss/cached', [ $this, 'flushCacheProviders' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flushCacheProviders' ], 10, 2 );
-
+	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 
 	    add_filter( 'query_vars', function ( $vars ) {
 
@@ -349,5 +349,23 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		return file_exists( $file );
 	}
+
+
+	public function create_server_compressed_files( $file_location, $css ) {
+
+		if ( apply_filters( 'autoptimize_filter_cache_create_static_gzip', false ) ) {
+
+			// Create an additional cached gzip file.
+			file_put_contents( $file_location . '.gz', gzencode( $css, 9, FORCE_GZIP ) );
+
+			// If PHP Brotli extension is installed, create an additional cached Brotli file.
+			if ( function_exists( 'brotli_compress' ) ) {
+				file_put_contents( $file_location . '.br', brotli_compress( $css, 11, BROTLI_GENERIC ) );
+			}
+
+		}
+
+	}
+
 
 }
