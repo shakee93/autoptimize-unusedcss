@@ -31,14 +31,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
 
-	    add_action( 'uucss/content_updated', function ( $link ) {
-		    $this->clear_cache( $link );
-		    $this->cache( $link );
-	    }, 10, 1 );
 
+	    add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
 	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
+
 
 	    add_filter( 'query_vars', function ( $vars ) {
 

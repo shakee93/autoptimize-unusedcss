@@ -220,15 +220,21 @@ abstract class UnusedCSS {
 	    return true;
     }
 
-    public function api_options($post_id = null)
-    {
-        global $post;
 
-        if ($post) {
-            $post_id = $post->ID;
-        }
+	public function refresh( $url ) {
+		$this->clear_cache( $url );
+		$this->cache( $url );
+	}
 
-	    $post_options = UnusedCSS_Admin::get_page_options( $post_id );
+
+	public function api_options( $post_id = null ) {
+		global $post;
+
+		if ( $post ) {
+			$post_id = $post->ID;
+		}
+
+		$post_options = UnusedCSS_Admin::get_page_options( $post_id );
 
 	    $whitelist        = explode( ',', $post_options['whitelist_classes'] );
 	    $whitelist_global = [];
