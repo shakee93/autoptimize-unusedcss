@@ -273,7 +273,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-			self::log( $inject );
+//			self::log( $inject );
 
 			return $dom;
 
