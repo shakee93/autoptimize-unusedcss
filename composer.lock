@@ -4,60 +4,84 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "19ad0f6c8b633a3b4729a59efc38620a",
+  "content-hash": "b857cb7c7c6891dc9c5684e7f6903147",
   "packages": [
     {
-      "name": "caophihung94/php-simple-html-dom-parser",
-      "version": "v1.7.5",
+      "name": "simplehtmldom/simplehtmldom",
+      "version": "dev-master",
       "source": {
         "type": "git",
-        "url": "https://github.com/caophihung94/php-simple-html-dom-parser.git",
-        "reference": "c93cd0caea5f77e7f214b98a691e90340a2e2d45"
+        "url": "https://github.com/simplehtmldom/simplehtmldom.git",
+        "reference": "31ce157e7ba0c6ca35f94faedf031a945c3f6427"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/caophihung94/php-simple-html-dom-parser/zipball/c93cd0caea5f77e7f214b98a691e90340a2e2d45",
-        "reference": "c93cd0caea5f77e7f214b98a691e90340a2e2d45",
+        "url": "https://api.github.com/repos/simplehtmldom/simplehtmldom/zipball/31ce157e7ba0c6ca35f94faedf031a945c3f6427",
+        "reference": "31ce157e7ba0c6ca35f94faedf031a945c3f6427",
         "shasum": ""
       },
       "require": {
-        "php": ">=5.3.2"
+        "ext-iconv": "*",
+        "php": ">=5.6"
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^6 || ^7"
+      },
+      "suggest": {
+        "ext-curl": "Needed to support cURL downloads in class HtmlWeb",
+        "ext-mbstring": "Allows better decoding for multi-byte documents",
+        "ext-openssl": "Allows loading HTTPS pages when using cURL"
       },
       "type": "library",
       "autoload": {
-                "psr-0": {
-                    "HungCP\\PhpSimpleHtmlDom\\HtmlDomParser": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
+        "classmap": [
+          "./"
+        ],
+        "exclude-from-classmap": [
+          "/example/",
+          "/manual/",
+          "/testcase/",
+          "/tests/",
+          "simple_html_dom.php"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
       "authors": [
         {
           "name": "S.C. Chen",
-          "email": "me578022@gmail.com"
+          "role": "Developer"
         },
         {
-          "name": "Cao Phi Hung",
-          "email": "hungcp94@gmail.com"
+          "name": "John Schlick",
+          "role": "Developer"
+        },
+        {
+          "name": "logmanoriginal",
+          "role": "Developer"
         }
       ],
-      "description": "PHP Simple HTML DOM Parser with namespace and PHP 7.4 compatible",
-      "homepage": "http://simplehtmldom.sourceforge.net/",
+      "description": "A fast, simple and reliable HTML document parser for PHP.",
+      "homepage": "https://simplehtmldom.sourceforge.io/",
       "keywords": [
         "Simple",
         "dom",
         "html",
-        "html dom parser"
+        "parser",
+        "php",
+        "simplehtmldom"
       ],
-      "time": "2020-08-18T07:09:03+00:00"
+      "time": "2019-12-06T18:20:19+00:00"
     }
   ],
   "packages-dev": [],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": [],
+  "stability-flags": {
+    "simplehtmldom/simplehtmldom": 20
+  },
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": [],

@@ -208,7 +208,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 
 	public function inject_css( $html, $data ) {
-		$dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
+
+		$dom = str_get_html( $html );
 
 		$inject = (object) [
 			"parsed_html"           => false,
@@ -218,7 +219,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"injected_css_files"    => [],
 		];
 
-	    if ( $dom ) {
+		if ( $dom ) {
 		    $inject->parsed_html = true;
 
 
