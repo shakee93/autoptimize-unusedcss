@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
-//require( 'vendor/autoload.php' );
-//
-//add_action( 'plugins_loaded', function () {
-//
-//    new UnusedCSS_Autoptimize_Onboard();
-//
-//	$ao_uucss = new UnusedCSS_Autoptimize();
-//	new UnusedCSS_Autoptimize_Admin( $ao_uucss );
-//
-//} );
+require( 'vendor/autoload.php' );
+
+add_action( 'plugins_loaded', function () {
+
+	new UnusedCSS_Autoptimize_Onboard();
+
+	$ao_uucss = new UnusedCSS_Autoptimize();
+	new UnusedCSS_Autoptimize_Admin( $ao_uucss );
+
+} );
 

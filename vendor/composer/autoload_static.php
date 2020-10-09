@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39 {
+class ComposerStaticInit0846b02cb01ca9de966b580779093b89 {
 	public static $files = array(
 		'691395991fe1099c3e8332668bd4347c' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/simple_html_dom.php',
 	);
@@ -27,7 +27,7 @@ class ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39 {
 
 	public static function getInitializer( ClassLoader $loader ) {
 		return \Closure::bind( function () use ( $loader ) {
-			$loader->classMap = ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39::$classMap;
+			$loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
 
 		}, null, ClassLoader::class );
 	}
