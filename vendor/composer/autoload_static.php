@@ -25,11 +25,10 @@ class ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39 {
 		'simplehtmldom\\HtmlWeb'        => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlWeb.php',
 	);
 
-    public static function getInitializer(ClassLoader $loader)
-    {
-        return \Closure::bind(function () use ($loader) {
-	        $loader->classMap = ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39::$classMap;
+	public static function getInitializer( ClassLoader $loader ) {
+		return \Closure::bind( function () use ( $loader ) {
+			$loader->classMap = ComposerStaticInitc084725c6f55fd18ad00c31b5a736e39::$classMap;
 
-        }, null, ClassLoader::class);
-    }
+		}, null, ClassLoader::class );
+	}
 }
