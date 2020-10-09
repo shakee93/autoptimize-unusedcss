@@ -209,7 +209,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-		$dom = str_get_html( $html );
+		$dom = new simple_html_dom();
+		$dom->load( $html );
 
 		$inject = (object) [
 			"parsed_html"           => false,
