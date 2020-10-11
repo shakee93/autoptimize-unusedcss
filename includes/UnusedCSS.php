@@ -259,10 +259,10 @@ abstract class UnusedCSS {
 
 	    return [
 		    "whitelist"         => array_filter( array_merge( $whitelist, $whitelist_global ) ),
-		    "keyframes"         => ! isset( $this->options['uucss_keyframes'] ),
-		    "fontFace"          => ! isset( $this->options['uucss_fontface'] ),
-		    "variables"         => ! isset( $this->options['uucss_variables'] ),
-		    "minify"            => ! isset( $this->options['uucss_minify'] ),
+		    "keyframes"         => isset( $this->options['uucss_keyframes'] ),
+		    "fontFace"          => isset( $this->options['uucss_fontface'] ),
+		    "variables"         => isset( $this->options['uucss_variables'] ),
+		    "minify"            => isset( $this->options['uucss_minify'] ),
 		    "analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
 		    "whitelistPacks"    => $whitelist_packs
 	    ];
