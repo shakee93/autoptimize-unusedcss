@@ -150,11 +150,19 @@ div.uucss-on-board{
     border-radius: 3px 3px 3px 3px;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 10px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     margin-bottom: 10px;
-    width: 120px;
+    width: 135px;
     text-decoration: none;
+    display: inline-block;
+}
+
+.uucss-on-board .act-button span.dashicons{
+    display: none;
+}
+
+.uucss-on-board .actions.done .act-button span.dashicons{
     display: inline-block;
 }
 
@@ -212,6 +220,7 @@ div.uucss-on-board{
     color: #000;
     font-size: 10px;
     line-height: 20px;
+    cursor: pointer;
 }
 .uucss-on-board span.previous {
     left: 5px;

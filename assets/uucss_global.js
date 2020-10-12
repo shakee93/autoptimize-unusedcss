@@ -173,6 +173,9 @@
         }
 
         function runFirstJob(){
+            if(ajax_pending){
+                return;
+            }
             $.ajax({
                 url : uucss.ajax_url,
                 type : 'GET',
@@ -180,10 +183,12 @@
                     action : 'uucss_run_first_job',
                 },
                 beforeSend : function(){
-
+                    ajax_pending = true;
+                    $('.js-uucss-first-job').html('Loading... <span class="dashicons dashicons-yes-alt"></span>')
                 },
                 complete : function(){
-
+                    ajax_pending = false;
+                    $('.js-uucss-first-job').html('Run First Job <span class="dashicons dashicons-yes-alt"></span>')
                 },
                 success : function (response) {
                     if(response.data){
@@ -209,6 +214,10 @@
 
         $('.js-enable-css-ao').click(function(e){
             e.preventDefault();
+            if(!$('.uucss-on-board .install.actions').hasClass('done')){
+                alert('Install and Activate Autoptimize before configure');
+                return;
+            }
             child_open($(this).attr('href'));
             clearInterval(progress_check);
             progress_check = setInterval(checkAutoptimizeCssEnabled,6000);
@@ -216,6 +225,14 @@
 
         $('.js-uucss-connect').click(function(e){
             e.preventDefault();
+            if(!$('.uucss-on-board .install.actions').hasClass('done')){
+                alert('Install and Activate Autoptimize before configure');
+                return;
+            }
+            if(!$('.uucss-on-board .enable.actions').hasClass('done')){
+                alert('Configure Autoptimize before connect');
+                return;
+            }
             child_open($(this).attr('href'));
             clearInterval(progress_check);
             progress_check = setInterval(checkUnusedCssConnected,6000);
@@ -223,6 +240,10 @@
 
         $('.js-uucss-first-job').click(function(e){
             e.preventDefault();
+            if(!$('.uucss-on-board .connect.actions').hasClass('done')){
+                alert('Connect UnusedCSS before run first job');
+                return;
+            }
             clearInterval(progress_check);
             runFirstJob();
         });
@@ -236,6 +257,58 @@
         });
 
         markCompletion();
+
+        $('.uucss-on-board .actions .nav').click(function(){
+            var left = 0;
+            var plus = false;
+            if($(this).hasClass('next')){
+                plus = true;
+                origin = $contentWrap.position().left;
+                left = origin - $contentWrap.find(content).outerWidth();
+            }else{
+                origin = $contentWrap.position().left;
+                left = origin + $contentWrap.find(content).outerWidth();
+            }
+
+            switch ($('.uucss-on-board .steps-wrap .step-text .current').text()) {
+                case '1':{
+                    if(plus){
+                        $('.uucss-on-board .steps-wrap .step-text .current').text('2');
+                        $('.uucss-on-board #progress-bar').css('width','50%');
+                    }
+                    break;
+                }
+                case '2':{
+                    if(plus){
+                        $('.uucss-on-board .steps-wrap .step-text .current').text('3');
+                        $('.uucss-on-board #progress-bar').css('width','75%');
+                    }else{
+                        $('.uucss-on-board .steps-wrap .step-text .current').text('1');
+                        $('.uucss-on-board #progress-bar').css('width','25%');
+                    }
+                    break;
+                }
+                case '3':{
+                    if(plus){
+                        $('.uucss-on-board .steps-wrap .step-text .current').text('4');
+                        $('.uucss-on-board #progress-bar').css('width','100%');
+                    }else{
+                        $('.uucss-on-board .steps-wrap .step-text .current').text('2');
+                        $('.uucss-on-board #progress-bar').css('width','50%');
+                    }
+                    break;
+                }
+                case '4':{
+                    $('.uucss-on-board .steps-wrap .step-text .current').text('3');
+                    $('.uucss-on-board #progress-bar').css('width','75%');
+                    break;
+                }
+            }
+
+
+            $contentWrap.css('transform','translate3d('+ left + 'px,0px,0px)');
+            $contentWrap.css('transition-duration','0.5s');
+        })
     });
 
 }(jQuery))

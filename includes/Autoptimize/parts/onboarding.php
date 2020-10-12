@@ -45,7 +45,7 @@
                         echo sprintf('transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;',(($step - 1) * 223 * -1));
                     }
                 ?>">
-                    <div class="actions slide-content <?php echo is_plugin_active('autoptimize/autoptimize.php') ? 'done' : null ?>">
+                    <div class="install actions slide-content <?php echo is_plugin_active('autoptimize/autoptimize.php') ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/macbook_isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
@@ -59,11 +59,11 @@
                            ?>"
                            data-activation_url="<?php  echo UnusedCSS_Utils::activate_plugin( 'autoptimize/autoptimize.php' ); ?>"
                            target="_blank">
-                        Install  & Activate
+                        Install  & Activate <span class="dashicons dashicons-yes-alt"></span>
                         </a>
-                        <span class="next">2</span>
+                        <span class="next nav">2</span>
                     </div>
-                    <div class="actions slide-content <?php
+                    <div class="enable actions slide-content <?php
                         if(class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on") {
                             echo 'done';
                         }
@@ -71,11 +71,14 @@
                         <h2>Configure Autoptimize</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/innovation_isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
-                        <a class="act-button js-enable-css-ao " href="<?php echo admin_url('/options-general.php?page=autoptimize') ?>" target="_blank">Configure</a>
-                        <span class="previous">1</span>
-                        <span class="next">3</span>
+                        <a class="act-button js-enable-css-ao "
+                           href="<?php echo admin_url('/options-general.php?page=autoptimize') ?>" target="_blank">
+                            Configure <span class="dashicons dashicons-yes-alt"></span>
+                        </a>
+                        <span class="previous nav">1</span>
+                        <span class="next nav">3</span>
                     </div>
-                    <div class="actions slide-content <?php
+                    <div class="connect actions slide-content <?php
                         if(UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
                             echo 'done';
                         }
@@ -84,11 +87,15 @@
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/money_transfer__isometric.svg'?>" alt="">
                         <p>Connect with UnusedCSS.io engine to automatically remove unused css from your website and
                             unleash your page speed and speed scores.</p>
-                        <a class="act-button js-uucss-connect " href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>" target="_blank">Connect</a>
-                        <span class="previous">2</span>
-                        <span class="next">4</span>
+                        <a class="act-button js-uucss-connect "
+                           href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
+                           target="_blank">
+                            Connect <span class="dashicons dashicons-yes-alt"></span>
+                        </a>
+                        <span class="previous nav">2</span>
+                        <span class="next nav">4</span>
                     </div>
-                    <div class="actions slide-content <?php
+                    <div class="run-job actions slide-content <?php
                         if(count(UnusedCSS_Settings::get_links())>0){
                             echo 'done';
                         }
@@ -96,8 +103,10 @@
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/career__isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
-                        <a class="act-button js-uucss-first-job" href="#" target="_blank">Run</a>
-                        <span class="previous">3</span>
+                        <a class="act-button js-uucss-first-job" href="#" target="_blank">
+                            Run First Job <span class="dashicons dashicons-yes-alt"></span>
+                        </a>
+                        <span class="previous nav">3</span>
                     </div>
                     <div class="actions slide-content">
                         <h2>Congratulations!</h2>

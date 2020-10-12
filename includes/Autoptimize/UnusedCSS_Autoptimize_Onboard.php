@@ -35,6 +35,9 @@ class UnusedCSS_Autoptimize_Onboard
     }
 
     function ao_css_enabled(){
+        if(!class_exists('autoptimizeOptionWrapper')){
+            wp_send_json_error(false);
+        }
         wp_send_json_success(!( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""));
     }
 
