@@ -17,6 +17,11 @@
                 history.pushState('', document.title, _url);
             }
 
+            if(_url.search.includes('deactivated')){
+                _url.searchParams.delete('deactivated');
+                history.pushState('', document.title, _url);
+            }
+
         } catch (e) {
 
         }
