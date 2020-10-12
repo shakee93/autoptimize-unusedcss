@@ -56,7 +56,7 @@ abstract class UnusedCSS {
 
     public static function enqueueGlobalScript(){
         add_action('admin_enqueue_scripts',function (){
-            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.04');
+            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.05');
             $data = array(
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
             );
