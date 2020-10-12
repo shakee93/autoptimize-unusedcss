@@ -48,7 +48,9 @@
 
         function markCompletion(){
             if($('.uucss-on-board .card .actions.done').length == 4){
-                $('.uucss-on-board .card ').addClass('complete')
+                $('.uucss-on-board').addClass('complete')
+                $contentWrap.css('transform','translate3d(-892px,0px,0px)');
+                $contentWrap.css('transition-duration','0.5s');
             }
         }
 
@@ -233,7 +235,7 @@
             parent_disable();
         });
 
-
+        markCompletion();
     });
 
 }(jQuery))

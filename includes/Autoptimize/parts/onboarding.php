@@ -88,7 +88,11 @@
                         <span class="previous">2</span>
                         <span class="next">4</span>
                     </div>
-                    <div class="actions slide-content">
+                    <div class="actions slide-content <?php
+                        if(count(UnusedCSS_Settings::get_links())>0){
+                            echo 'done';
+                        }
+                    ?>">
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/career__isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
@@ -99,7 +103,7 @@
                         <h2>Congratulations!</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/career__isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
-                        <a class="act-button js-goto-settings" href="#" target="_blank">View Jobs</a>
+                        <a class="act-button js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
                     </div>
                 </div>
             </div>

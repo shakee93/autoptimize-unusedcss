@@ -219,3 +219,7 @@ span.previous {
 span.next  {
     right: 5px;
 }
+
+.uucss-on-board.complete .steps-wrap {
+    opacity: 0;
+}
