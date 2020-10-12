@@ -6,7 +6,9 @@
 
 class UnusedCSS_Autoptimize_Onboard
 {
-    public function __construct() {
+    public function __construct($ao_uucss) {
+
+        $this->uucss = $ao_uucss;
 
         register_activation_hook(UUCSS_PLUGIN_FILE, [$this,'register_plugin_activation_hook']);
 
@@ -19,6 +21,8 @@ class UnusedCSS_Autoptimize_Onboard
         add_action( "wp_ajax_ao_css_enabled", [ $this, 'ao_css_enabled' ] );
 
         add_action( "wp_ajax_uucss_connected", [ $this, 'uucss_connected' ] );
+
+        add_action( "wp_ajax_uucss_run_first_job", [ $this, 'run_first_job' ] );
     }
 
     function ao_installed(){
@@ -34,6 +38,24 @@ class UnusedCSS_Autoptimize_Onboard
 
     function uucss_connected(){
         wp_send_json_success(UnusedCSS_Autoptimize_Admin::is_api_key_verified());
+    }
+
+    function run_first_job(){
+        if(!is_plugin_active('autoptimize/autoptimize.php')){
+            wp_send_json_error(false);
+        }
+        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""){
+            wp_send_json_error(false);
+        }
+        if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
+            wp_send_json_error(false);
+        }
+
+        $this->uucss->async = false;
+        $this->uucss->url = get_site_url();
+        $this->uucss->purge_css();
+
+        wp_send_json_success(true);
     }
 
     function uucss_on_boarding_page(){
