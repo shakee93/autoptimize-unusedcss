@@ -189,7 +189,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function fetch_options()
     {
-        return class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
+        if(class_exists('autoptimizeOptionWrapper')){
+            return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
+        }else{
+            return  false;
+        }
     }
 
 
@@ -355,8 +359,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         update_option( 'autoptimize_uucss_settings', $options );
 
-        $data = self::suggest_whitelist_packs(false);
-
+        $data = self::suggest_whitelist_packs();
         $white_packs = $data->data;
 
         $options['whitelist_packs'] = array();
