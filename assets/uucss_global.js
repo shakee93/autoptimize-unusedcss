@@ -154,6 +154,35 @@
             })
         }
 
+        function runFirstJob(){
+            $.ajax({
+                url : uucss.ajax_url,
+                type : 'GET',
+                data : {
+                    action : 'uucss_run_first_job',
+                },
+                beforeSend : function(){
+
+                },
+                complete : function(){
+
+                },
+                success : function (response) {
+                    /*if(response.data){
+                        clearInterval(progress_check);
+                        popupWindow.close();
+                        popupWindow = null;
+                        $('.js-uucss-connect').toggleClass('done');
+                        $('.uucss-on-board #progress-bar').css('width','100%');
+                        $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
+                        $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
+                        moveAction();
+                    }*/
+                    console.log(response)
+                }
+            })
+        }
+
         $('.js-activate-ao').click(function(e){
             e.preventDefault();
             if($(this).data('installed')){
@@ -177,6 +206,12 @@
             child_open($(this).attr('href'));
             clearInterval(progress_check);
             progress_check = setInterval(checkUnusedCssConnected,6000);
+        });
+
+        $('.js-uucss-first-job').click(function(e){
+            e.preventDefault();
+            clearInterval(progress_check);
+            runFirstJob();
         });
 
         $('body').focus(function () {
