@@ -82,36 +82,36 @@ div.uucss-on-board{
     border-radius: 5px;
 }
 
-.plugin-steps {
+.uucss-on-board .plugin-steps {
     display: block;
     padding: 20px;
     max-width: 600px;
     margin: 0 auto;
 }
-.step-text li {
+.uucss-on-board .step-text li {
     list-style: none;
     font-size: 12px;
     font-weight: 500;
     text-align: center;
 }
-.step-text ul {
+.uucss-on-board .step-text ul {
     padding: 0;
     margin: 5px 0;
 }
-.progress-bar-wrap {
+.uucss-on-board .progress-bar-wrap {
     width: 100%;
     background-color: #69459978;
     border-radius: 3px;
     margin: 0 auto;
 }
-#progress-bar {
+.uucss-on-board #progress-bar {
     width: 1%;
     height: 6px;
     background-color: #7f54b3;
     transition: width .5s ease;
     border-radius: 3px;
 }
-.card {
+.uucss-on-board .card {
     max-width: 230px;
     margin: 15px auto 25px;
     padding: 20px 15px;
@@ -120,29 +120,29 @@ div.uucss-on-board{
     display: flex;
     border: none;
 }
-.steps-wrap {
+.uucss-on-board .steps-wrap {
     max-width: 230px;
     margin: 5px auto;
 }
-.actions {
+.uucss-on-board .actions {
     text-align: center;
     position: relative;
 }
-.actions h2 {
+.uucss-on-board .actions h2 {
     font-size: 16px;
     color: #585858;
     font-weight: 400;
     margin: 0 0 10px;
 }
 
-.actions p {
+.uucss-on-board .actions p {
     font-size: 12px;
     line-height: 1.2;
     color: #585858;
     padding: 0 10px;
     margin: 0 0 20px;
 }
-.act-button {
+.uucss-on-board .act-button {
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -158,22 +158,22 @@ div.uucss-on-board{
     display: inline-block;
 }
 
-.act-button:hover {
+.uucss-on-board .act-button:hover {
     background-color: hsl(267 38% 52% / 0.9);
     color: #fff;
 }
-.act-button:focus {
+.uucss-on-board .act-button:focus {
     outline: none;
 }
-.skip-wrap {
+.uucss-on-board .skip-wrap {
     text-align: center;
 }
 
-.skip-wrap a {
+.uucss-on-board .skip-wrap a {
     color: #b0b0b0;
     font-size: 14px;
 }
-.slide-contents-wrap{
+.uucss-on-board .slide-contents-wrap{
     max-width: 255px;
     width: 100%;
     float: none;
@@ -181,11 +181,11 @@ div.uucss-on-board{
     position: relative;
 }
 
-.slide-contents {
+.uucss-on-board .slide-contents {
     width: 2000%;
 }
 
-.slide-content {
+.uucss-on-board .slide-content {
     max-width: 223px;
     width: 100%;
     float: left;
@@ -201,7 +201,7 @@ div.uucss-on-board{
     width: 100%;
 }
 
-span.previous,span.next  {
+.uucss-on-board span.previous,span.next  {
     width: 20px;
     height: 20px;
     background-color: #d4d4d4;
@@ -213,10 +213,10 @@ span.previous,span.next  {
     font-size: 10px;
     line-height: 20px;
 }
-span.previous {
+.uucss-on-board span.previous {
     left: 5px;
 }
-span.next  {
+.uucss-on-board span.next  {
     right: 5px;
 }
 
