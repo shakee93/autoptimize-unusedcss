@@ -103,8 +103,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js', array( 'jquery', 'wp-util' ) );
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css' );
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js?v=1.5', array( 'jquery', 'wp-util' ) );
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css?v=1.3' );
 
 		$data = array(
 			'api'   => UnusedCSS_Api::get_key(),
@@ -189,7 +189,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function fetch_options()
     {
-        return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
+        return class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
     }
 
 
@@ -425,13 +425,5 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-	public static function activation_url($action){
-        return UUCSS_ACTIVATION_URL . '?' . build_query( [
-            'action'  => $action,
-            'nonce' => wp_create_nonce( 'uucss_activation' ),
-            'site'  => get_site_url(),
-            'back'  => admin_url( 'options-general.php?page=uucss' ),
-            'goto'  => UUCSS_ACTIVATION_URL
-        ] );
-    }
+
 }

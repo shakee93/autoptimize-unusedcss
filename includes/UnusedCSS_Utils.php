@@ -223,4 +223,14 @@ trait UnusedCSS_Utils {
 
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
 	}
+
+    public static function activation_url($action){
+        return UUCSS_ACTIVATION_URL . '?' . build_query( [
+                'action'  => $action,
+                'nonce' => wp_create_nonce( 'uucss_activation' ),
+                'site'  => get_site_url(),
+                'back'  => admin_url( 'options-general.php?page=uucss' ),
+                'goto'  => UUCSS_ACTIVATION_URL
+            ] );
+    }
 }

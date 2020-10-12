@@ -56,8 +56,8 @@ abstract class UnusedCSS {
 
     public static function enqueueGlobalScript(){
         add_action('admin_enqueue_scripts',function (){
-            wp_enqueue_script('uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.02');
-            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=1.03' );
+            wp_enqueue_script('uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.04');
+            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=1.04' );
         });
     }
 
