@@ -51,7 +51,7 @@
                 return;
             }
             $.ajax({
-                url : wp.ajax.settings.url,
+                url : uucss.ajax_url,
                 type : 'GET',
                 data : {
                     action : 'ao_installed',
@@ -93,7 +93,7 @@
                 return;
             }
             $.ajax({
-                url : wp.ajax.settings.url,
+                url : uucss.ajax_url,
                 type : 'GET',
                 data : {
                     action : 'ao_css_enabled',
@@ -128,7 +128,7 @@
                 return;
             }
             $.ajax({
-                url : wp.ajax.settings.url,
+                url : uucss.ajax_url,
                 type : 'GET',
                 data : {
                     action : 'uucss_connected',
