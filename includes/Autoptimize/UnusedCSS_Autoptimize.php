@@ -208,7 +208,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 
 	public function inject_css( $html, $data ) {
-		$dom = HungCP\PhpSimpleHtmlDom\HtmlDomParser::str_get_html( $html );
+
+		$dom = new simple_html_dom();
+		$dom->load( $html );
 
 		$inject = (object) [
 			"parsed_html"           => false,
@@ -218,7 +220,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"injected_css_files"    => [],
 		];
 
-	    if ( $dom ) {
+		if ( $dom ) {
 		    $inject->parsed_html = true;
 
 
@@ -246,7 +248,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
 
-				    if ( isset( $data['files'][ $key ] ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+				    // check if we found a script index and the file exists
+				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
 
 					    array_push( $inject->found_css_cache_files, $link );
 
@@ -270,11 +273,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
-//		    self::log( $inject );
+//			self::log( $inject );
 
-		    return $dom;
+			return $dom;
 
-	    }
+		}
 
 //	    self::log( $inject );
 

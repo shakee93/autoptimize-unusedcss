@@ -1,8 +1,13 @@
 {
   "require": {
-    "caophihung94/php-simple-html-dom-parser": "^1.7"
+    "simplehtmldom/simplehtmldom": "@dev"
   },
   "autoload": {
-    "classmap": ["includes/"]
+    "classmap": [
+      "includes/"
+    ],
+    "files": [
+      "vendor/simplehtmldom/simplehtmldom/simple_html_dom.php"
+    ]
   }
 }

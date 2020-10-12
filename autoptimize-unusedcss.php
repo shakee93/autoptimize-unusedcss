@@ -19,7 +19,7 @@ require( 'vendor/autoload.php' );
 
 add_action( 'plugins_loaded', function () {
 
-    new UnusedCSS_Autoptimize_Onboard();
+	new UnusedCSS_Autoptimize_Onboard();
 
 	$ao_uucss = new UnusedCSS_Autoptimize();
 	new UnusedCSS_Autoptimize_Admin( $ao_uucss );

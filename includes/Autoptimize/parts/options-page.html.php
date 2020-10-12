@@ -215,61 +215,61 @@
                                 <td>
 
                                     <p>
-                                        <label for="uucss_analyze_javascript">
-                                            <input id='uucss_analyze_javascript' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
-												echo 'checked="checked"';
-											} ?> value='1'>
-                                            Analyze javascript <em>-- analyze javascript and remove unused css which are not
-                                                used in JS (experimental)</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
                                         <label for="uucss_minify">
                                             <input id='uucss_minify'
                                                    type='checkbox'
                                                    name='autoptimize_uucss_settings[uucss_minify]'
-												<?php
-												if ( ! empty( $options['uucss_minify'] ) && '1' === $options['uucss_minify'] ) {
-													echo 'checked="checked"';
-												}
-												?> value='1'>
-                                            Disable Minify <em>-- minify and remove css comments via the api</em>
+						                        <?php if ( isset( $options['uucss_minify'] ) )
+							                        echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            Minify <em>-- minify and remove css comments via the api</em>
                                         </label>
                                     </p>
 
                                     <p>
                                         <label for="uucss_variables">
                                             <input id='uucss_variables' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_variables]' <?php if ( ! empty( $options['uucss_variables'] ) && '1' === $options['uucss_variables'] ) {
-												echo 'checked="checked"';
-											} ?> value='1'>
-                                            Disable Variables <em>-- remove unused css variables</em>
+                                                   name='autoptimize_uucss_settings[uucss_variables]'
+						                        <?php if ( isset( $options['uucss_variables'] ) )
+							                        echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Variables <em>-- remove unused css variables</em>
                                         </label>
                                     </p>
 
                                     <p>
                                         <label for="uucss_keyframes">
                                             <input id='uucss_keyframes' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_keyframes]' <?php if ( ! empty( $options['uucss_keyframes'] ) && '1' === $options['uucss_keyframes'] ) {
-												echo 'checked="checked"';
-											} ?> value='1'>
-                                            Disable Keyframes <em>-- remove unused keyframe animations</em>
+                                                   name='autoptimize_uucss_settings[uucss_keyframes]'
+						                        <?php if ( isset( $options['uucss_keyframes'] ) )
+							                        echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Animation keyframes <em>-- remove unused keyframe animations</em>
                                         </label>
                                     </p>
 
                                     <p>
                                         <label for="uucss_fontface">
                                             <input id='uucss_fontface' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_fontface]' <?php if ( ! empty( $options['uucss_fontface'] ) && '1' === $options['uucss_fontface'] ) {
-												echo 'checked="checked"';
-											} ?> value='1'>
-                                            Disable Fontface <em>-- remove unused @font-face rules</em>
+                                                   name='autoptimize_uucss_settings[uucss_fontface]'
+						                        <?php if ( isset( $options['uucss_fontface'] ) )
+							                        echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Font-face rules <em>-- remove unused @font-face rules</em>
                                         </label>
                                     </p>
 
-
+                                    <p>
+                                        <label for="uucss_analyze_javascript">
+                                            <input id='uucss_analyze_javascript' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
+						                        echo 'checked="checked"';
+					                        } ?> value='1'>
+                                            Analyze javascript <em>-- analyze javascript and remove unused css which are
+                                                not
+                                                used in JS (experimental)</em>
+                                        </label>
+                                    </p>
                                 </td>
                             </tr>
                             <tr>
@@ -277,8 +277,8 @@
                                 <td>
                                     <label><input id='autoptimize_uucss_include_all_files' type='checkbox'
                                                   name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
+					                        echo 'checked="checked"';
+				                        } ?> value='1'>
                                         <i>
                                             Parse css files which are excluded by autoptimize as well (experimental)
                                         </i>
