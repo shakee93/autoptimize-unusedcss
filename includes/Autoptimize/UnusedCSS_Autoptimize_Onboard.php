@@ -29,6 +29,8 @@ class UnusedCSS_Autoptimize_Onboard
         $status = [];
         $status['installed'] = file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php');
         $status['active'] = is_plugin_active('autoptimize/autoptimize.php');
+        $status['css_enabled'] = class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on";
+        $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
         wp_send_json_success($status);
     }
 
