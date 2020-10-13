@@ -96,8 +96,8 @@
                         <span class="next nav">4</span>
                     </div>
                     <div class="run-job actions slide-content <?php
-                        if(count(UnusedCSS_Settings::get_links())>0){
-                            echo 'done';
+                        if ( UnusedCSS_Settings::get_first_link() ) {
+	                        echo 'done';
                         }
                     ?>">
                         <h2>Run First Job</h2>
