@@ -18,7 +18,27 @@ class UnusedCSS_Autoptimize_Onboard
 
         add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
 
+        add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
+
         add_action('admin_head', [ $this, 'remove_notices' ]);
+    }
+
+    function run_first_job(){
+        if(!is_plugin_active('autoptimize/autoptimize.php')){
+            wp_send_json_error(false);
+        }
+        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""){
+            wp_send_json_error(false);
+        }
+        if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
+            wp_send_json_error(false);
+        }
+
+        $this->uucss->async = false;
+        $this->uucss->url = get_site_url();
+        $this->uucss->purge_css();
+
+        $this->ao_installed();
     }
 
     function remove_notices(){
@@ -45,7 +65,11 @@ class UnusedCSS_Autoptimize_Onboard
         $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
         $status['uucss_first_job_done'] = UnusedCSS_Settings::get_first_link() ? true : false;
 
-        wp_send_json_success($status);
+        if(wp_doing_ajax()){
+            wp_send_json_success($status);
+        }else{
+            return $status;
+        }
     }
 
     function uucss_on_boarding_page(){

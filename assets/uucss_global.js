@@ -255,7 +255,7 @@
                 url : uucss.ajax_url,
                 type : 'GET',
                 data : {
-                    action : 'ao_installed',
+                    action : 'run_first_job',
                 },
                 beforeSend : function(){
                     ajax_pending = true;

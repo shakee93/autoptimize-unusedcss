@@ -56,13 +56,13 @@ abstract class UnusedCSS {
 
     public static function enqueueGlobalScript(){
         add_action('admin_enqueue_scripts',function (){
-            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.11');
+            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.12');
             $data = array(
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
-            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=1.08' );
+            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=1.09' );
         });
     }
 

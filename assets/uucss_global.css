@@ -201,7 +201,12 @@ div.uucss-on-board{
     max-width: 223px;
     width: 100%;
     float: left;
-    overflow: hidden;
+    padding-bottom: 50px;
+}
+
+.uucss-on-board .slide-content .action-wrap {
+    position: absolute;
+    left: 35px;
 }
 
 .uucss-on-board .logo-section {
@@ -226,10 +231,10 @@ div.uucss-on-board{
     cursor: pointer;
 }
 .uucss-on-board span.previous {
-    left: 5px;
+    left: -30px;
 }
 .uucss-on-board span.next  {
-    right: 5px;
+    right: -30px;
 }
 
 .uucss-on-board.complete .steps-wrap {
