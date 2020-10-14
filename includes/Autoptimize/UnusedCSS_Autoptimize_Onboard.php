@@ -114,7 +114,10 @@ class UnusedCSS_Autoptimize_Onboard
     }
 
     public static function get_on_board_step(){
-        if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
+        if(!UnusedCSS_Autoptimize_Admin::ao_active()){
+            return 1;
+        }
+        else if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
             return 2;
         }else if(
             UnusedCSS_Autoptimize_Admin::ao_active() &&

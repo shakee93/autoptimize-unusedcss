@@ -118,31 +118,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
-			$notice = null;
-			if ( $this->is_autoptimize_installed() ) {
-				$notice = [
-					'action'      => 'activate',
-					'title'       => 'UnusedCSS Power Up',
-					'message'     => 'Please activate autoptimize plugin',
-					'main_action' => [
-						'key'   => 'Activate Autoptimize',
-						'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
-					],
-					'type'        => 'warning'
-				];
-            }else{
-                $notice = [
-                    'action' => 'install',
-                    'message' => 'Autoptimize UnusedCSS Plugin only works when autoptimize is installed',
-                    'main_action' => [
-                        'key' => 'Install',
-                        'value' =>  network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' )
-                    ],
-                    'type' => 'danger'
-                ];
-            }
-
-
+            $notice = [
+                'action'      => 'on-board',
+                'title'       => 'UnusedCSS Power Up',
+                'message'     => 'Please Complete UnusedCSS Onboarding',
+                'main_action' => [
+                    'key'   => 'Get Start',
+                    'value' => admin_url('options-general.php?page=uucss-onboarding')
+                ],
+                'type'        => 'warning'
+            ];
             self::add_advanced_admin_notice($notice);
 		}
 

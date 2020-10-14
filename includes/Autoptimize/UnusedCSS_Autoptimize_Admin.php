@@ -199,54 +199,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function enabled() {
 
-        if(!is_plugin_active('autoptimize/autoptimize.php')){
-
+        if(!self::ao_active() ||
+            !self::ao_css_option_enabled() ||
+            !self::is_api_key_verified() && ! self::$deactivating ||
+            !self::first_job_done()
+        ){
             $notice = [
-                'action' => 'activate',
-                'title' => 'UnusedCSS Power Up',
-                'message' => 'Please activate autoptimize plugin',
+                'action'      => 'on-board',
+                'title'       => 'UnusedCSS Power Up',
+                'message'     => 'Please Complete UnusedCSS Onboarding',
                 'main_action' => [
-	                'key' => 'Activate',
-	                'value' => self::activate_plugin( 'autoptimize/autoptimize.php' )
+                    'key'   => 'Get Start',
+                    'value' => admin_url('options-general.php?page=uucss-onboarding')
                 ],
-                'type' => 'warning'
+                'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
 
 	        return false;
         }
-
-	    if ( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "") {
-
-            $notice = [
-                'action' => 'enable',
-                'title' => 'UnusedCSS Power Up',
-                'message' => 'Autoptimize UnusedCSS Plugin only works css optimization is enabled',
-                'main_action' => [
-                    'key' => 'Enable',
-                    'value' =>  admin_url('/options-general.php?page=autoptimize')
-                ],
-                'type' => 'warning'
-            ];
-            self::add_advanced_admin_notice($notice);
-
-		    return false;
-	    }
-
-	    if ( ! self::is_api_key_verified() && ! self::$deactivating) {
-	        $notice = [
-                'action' => 'activate',
-                'message' => 'Activate UnusedCSS license to reduce CSS file sizes upto 90% and increase site speeds',
-                'main_action' => [
-                    'key' => 'Connect & Activate',
-                    'value' =>  self::activation_url("authorize")
-                ],
-                'type' => 'warning'
-            ];
-		    self::add_advanced_admin_notice($notice);
-		    return false;
-	    }
-
 
 	    if ( is_multisite() ) {
 		    self::add_admin_notice( "UnusedCSS not supported for multisite" );
@@ -447,5 +418,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	        return 'autoptimize-beta/autoptimize.php';
         }
 	    return null;
+    }
+
+    public static function first_job_done(){
+	    return (UnusedCSS_Settings::get_first_link() ? true :  false);
     }
 }
