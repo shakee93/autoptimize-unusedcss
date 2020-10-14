@@ -57,8 +57,8 @@
         }
 
         function markActionDone($element) {
-            if(!$element.parent().hasClass('done')){
-                $element.parent().addClass('done')
+            if(!$element.parent().parent().hasClass('done')){
+                $element.parent().parent().addClass('done')
             }
             markCompletion();
         }
