@@ -22,6 +22,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$this->uucss = $ao_uucss;
 
 		if ( ! $ao_uucss->deps_available ) {
+            add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+                $this,
+                'add_on_board_action_link'
+            ] );
 			return;
 		}
 
@@ -120,6 +124,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
+	public function add_on_board_action_link($links){
+
+        $_links = array(
+            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Start</a>',
+        );
+
+        return array_merge( $_links, $links );
+    }
 
 	public function add_plugin_action_link( $links ) {
 
