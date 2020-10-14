@@ -18,11 +18,23 @@ class UnusedCSS_Autoptimize_Onboard
 
         add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
 
-        add_action( "wp_ajax_ao_css_enabled", [ $this, 'ao_css_enabled' ] );
+        add_action('admin_head', [ $this, 'remove_notices' ]);
+    }
 
-        add_action( "wp_ajax_uucss_connected", [ $this, 'uucss_connected' ] );
+    function remove_notices(){
+        if(!isset($_REQUEST['action'])){
+            return;
+        }
+        if(!isset($_REQUEST['plugin'])){
+            return;
+        }
 
-        add_action( "wp_ajax_uucss_run_first_job", [ $this, 'run_first_job' ] );
+        if(get_current_screen() &&
+            get_current_screen()->base == 'update' &&
+            $_REQUEST['action'] = 'install-plugin' &&
+                $_REQUEST['plugin'] == 'autoptimize'){
+                echo '<style>div.notice{display: none !important;}</style>';
+        }
     }
 
     function ao_installed(){
@@ -31,41 +43,13 @@ class UnusedCSS_Autoptimize_Onboard
         $status['active'] = is_plugin_active('autoptimize/autoptimize.php');
         $status['css_enabled'] = class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on";
         $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
+        $status['uucss_first_job_done'] = UnusedCSS_Settings::get_first_link() ? true : false;
+
         wp_send_json_success($status);
-    }
-
-    function ao_css_enabled(){
-        if(!class_exists('autoptimizeOptionWrapper')){
-            wp_send_json_error(false);
-        }
-        wp_send_json_success(!( autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""));
-    }
-
-    function uucss_connected(){
-        wp_send_json_success(UnusedCSS_Autoptimize_Admin::is_api_key_verified());
-    }
-
-    function run_first_job(){
-        if(!is_plugin_active('autoptimize/autoptimize.php')){
-            wp_send_json_error(false);
-        }
-        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""){
-            wp_send_json_error(false);
-        }
-        if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
-            wp_send_json_error(false);
-        }
-
-        $this->uucss->async = false;
-        $this->uucss->url = get_site_url();
-        $this->uucss->purge_css();
-
-        wp_send_json_success(true);
     }
 
     function uucss_on_boarding_page(){
         wp_enqueue_script('post');
-
         ?>
         <div class="uucss-on-board">
             <?php

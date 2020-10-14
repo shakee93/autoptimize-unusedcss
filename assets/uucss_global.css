@@ -128,11 +128,15 @@ div.uucss-on-board{
     text-align: center;
     position: relative;
 }
+.uucss-on-board .actions.done a{
+    pointer-events: none;
+}
 .uucss-on-board .actions h2 {
     font-size: 16px;
     color: #585858;
     font-weight: 400;
     margin: 0 0 10px;
+    min-height: 36px;
 }
 
 .uucss-on-board .actions p {
@@ -209,15 +213,14 @@ div.uucss-on-board{
     width: 100%;
 }
 
-.uucss-on-board span.previous,span.next  {
+.uucss-on-board span.previous, .uucss-on-board span.next  {
     width: 20px;
     height: 20px;
-    background-color: #d4d4d4;
     display: block;
     position: absolute;
     border-radius: 50%;
     bottom: 20px;
-    color: #000;
+    color: #b1a0c8;
     font-size: 10px;
     line-height: 20px;
     cursor: pointer;

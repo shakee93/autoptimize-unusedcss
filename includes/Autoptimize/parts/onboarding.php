@@ -59,9 +59,16 @@
                            ?>"
                            data-activation_url="<?php  echo UnusedCSS_Utils::activate_plugin( 'autoptimize/autoptimize.php' ); ?>"
                            target="_blank">
-                        Install  & Activate <span class="dashicons dashicons-yes-alt"></span>
+                            <?php
+                            if(!file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+                                echo 'Install';
+                            }else{
+                                echo 'Activate';
+                            }
+                            ?>
+                            <span class="dashicons dashicons-yes-alt"></span>
                         </a>
-                        <span class="next nav">2</span>
+                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                     </div>
                     <div class="enable actions slide-content <?php
                         if(class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on") {
@@ -72,11 +79,11 @@
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/innovation_isometric.svg'?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
                         <a class="act-button js-enable-css-ao "
-                           href="<?php echo admin_url('/options-general.php?page=autoptimize') ?>" target="_blank">
+                           href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>" target="_blank">
                             Configure <span class="dashicons dashicons-yes-alt"></span>
                         </a>
-                        <span class="previous nav">1</span>
-                        <span class="next nav">3</span>
+                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
+                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                     </div>
                     <div class="connect actions slide-content <?php
                         if(UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
@@ -92,8 +99,8 @@
                            target="_blank">
                             Connect <span class="dashicons dashicons-yes-alt"></span>
                         </a>
-                        <span class="previous nav">2</span>
-                        <span class="next nav">4</span>
+                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
+                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                     </div>
                     <div class="run-job actions slide-content <?php
                         if ( UnusedCSS_Settings::get_first_link() ) {
@@ -106,7 +113,7 @@
                         <a class="act-button js-uucss-first-job" href="#" target="_blank">
                             Run First Job <span class="dashicons dashicons-yes-alt"></span>
                         </a>
-                        <span class="previous nav">3</span>
+                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
                     </div>
                     <div class="actions slide-content">
                         <h2>Congratulations!</h2>

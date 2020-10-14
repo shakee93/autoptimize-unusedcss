@@ -22,13 +22,16 @@
             $contentWrap.css('transition-duration','0.5s');
         }
 
-        function child_open(url){
+        function child_open(url, width = 600, height = 400){
             if(popupWindow && !popupWindow.closed){
                 popupWindow.focus();
             }
             else{
-
-                popupWindow = window.open(url,"_blank","directories=no, status=no, menubar=no, scrollbars=yes, resizable=no,width=600, height=280,top=200,left=200");
+                var left  = ($(window).width()/2)-(width/2);
+                var top   = ($(window).height()/2)-(height/2);
+                console.log(left);
+                console.log(top);
+                popupWindow = window.open(url,"_blank","directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, width=" + width + ", height=" + height + ",  top=" + top + ", left=" + left);
 
                 $(window).bind("beforeunload", function() {
                     popupWindow = null;
@@ -48,7 +51,6 @@
 
         function markCompletion(){
             if($('.uucss-on-board .card .actions.done').length == 4){
-                $('.uucss-on-board').addClass('complete')
                 $contentWrap.css('transform','translate3d(-892px,0px,0px)');
                 $contentWrap.css('transition-duration','0.5s');
             }
@@ -59,6 +61,55 @@
                 $element.parent().addClass('done')
             }
             markCompletion();
+        }
+
+        function gotoConnect() {
+            $('.uucss-on-board #progress-bar').css('width','75%');
+            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(3);
+            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Connect');
+            $contentWrap.css('transform','translate3d(-446px,0px,0px)');
+            $contentWrap.css('transition-duration','0.5s');
+        }
+
+        function gotoRunFirstJob() {
+            $('.uucss-on-board #progress-bar').css('width','100%');
+            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
+            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
+            $contentWrap.css('transform','translate3d(-669px,0px,0px)');
+            $contentWrap.css('transition-duration','0.5s');
+        }
+
+        function gotoConfigure() {
+            $('.uucss-on-board #progress-bar').css('width','50%');
+            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(2);
+            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Configure');
+            $contentWrap.css('transform','translate3d(-223px,0px,0px)');
+            $contentWrap.css('transition-duration','0.5s');
+        }
+
+        function markCompleteActions(response){
+            if(response.data.installed &&
+                response.data.active){
+                markActionDone($('.js-activate-ao'));
+            }
+            if(response.data.css_enabled){
+                markActionDone($('.js-enable-css-ao '));
+            }
+            if(response.data.uucss_connected){
+                markActionDone($('.js-uucss-connect'));
+            }
+            if(response.data.uucss_first_job_done){
+                markActionDone($('.js-uucss-first-job'));
+            }
+            if($('.uucss-on-board .card .actions.done').length == 4){
+                $('.uucss-on-board').addClass('complete')
+            }
+        }
+
+        function closePopWindow() {
+            popupWindow.close();
+            popupWindow = null;
+            clearInterval(progress_check);
         }
 
         function checkAutoptimizeInstalled(){
@@ -79,20 +130,37 @@
                 },
                 success : function (response) {
                     if(response.data){
-                        if(response.data.installed && response.data.active){
-                            markActionDone($('.js-activate-ao'));
-                            $('.uucss-on-board #progress-bar').css('width','50%');
-                            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(2);
-                            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Configure');
-                            clearInterval(progress_check);
-                            moveAction();
-                            if(response.data.css_enabled){
-                                markActionDone($('.js-enable-css-ao '));
-                            }
-                            popupWindow.close();
-                            popupWindow = null;
+                        markCompleteActions(response);
+                        if(response.data.installed &&
+                            response.data.active &&
+                            response.data.css_enabled &&
+                            response.data.uucss_connected &&
+                            response.data.uucss_first_job_done
+                        ){
+                            closePopWindow();
+                            markCompletion();
+                        }
+                        else if(response.data.installed &&
+                            response.data.active &&
+                            response.data.css_enabled &&
+                            response.data.uucss_connected
+                        ){
+                            closePopWindow();
+                            gotoRunFirstJob();
+                        }
+                        else if(response.data.installed &&
+                            response.data.active &&
+                            response.data.css_enabled
+                        ){
+                            closePopWindow();
+                            gotoConnect();
+                        }
+                        else if(response.data.installed && response.data.active){
+                            closePopWindow();
+                            gotoConfigure();
                         }else if(response.data.installed){
                             $('.js-activate-ao ').data('installed', true);
+                            $('.js-activate-ao ').html('Activate <span class="dashicons dashicons-yes-alt"></span>');
                             if(popupWindow.closed){
                                 clearInterval(progress_check);
                             }
@@ -114,7 +182,7 @@
                 url : uucss.ajax_url,
                 type : 'GET',
                 data : {
-                    action : 'ao_css_enabled',
+                    action : 'ao_installed',
                 },
                 beforeSend : function(){
                     ajax_pending = true;
@@ -124,15 +192,21 @@
                 },
                 success : function (response) {
                     if(response.data){
-                        clearInterval(progress_check);
-                        popupWindow.close();
-                        popupWindow = null;
-                        markActionDone($('.js-enable-css-ao '));
-                        $('.uucss-on-board #progress-bar').css('width','75%');
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current').text(3);
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Connect');
-                        moveAction();
+                        markCompleteActions(response);
+                        if(response.data.installed &&
+                            response.data.active &&
+                            response.data.css_enabled &&
+                            response.data.uucss_connected
+                        ){
+                            closePopWindow();
+                            gotoRunFirstJob();
+                        }
+                        else if(response.data.css_enabled){
+                            closePopWindow();
+                            gotoConnect();
+                        }
                     }
+
                 }
             })
         }
@@ -149,7 +223,7 @@
                 url : uucss.ajax_url,
                 type : 'GET',
                 data : {
-                    action : 'uucss_connected',
+                    action : 'ao_installed',
                 },
                 beforeSend : function(){
                     ajax_pending = true;
@@ -159,14 +233,15 @@
                 },
                 success : function (response) {
                     if(response.data){
-                        clearInterval(progress_check);
-                        popupWindow.close();
-                        popupWindow = null;
-                        markActionDone($('.js-uucss-connect'));
-                        $('.uucss-on-board #progress-bar').css('width','100%');
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
-                        moveAction();
+                        markCompleteActions(response);
+                        if(response.data.uucss_connected && response.data.uucss_first_job_done){
+                            closePopWindow();
+                            markCompletion();
+                        }
+                        if(response.data.uucss_connected ){
+                            closePopWindow();
+                            gotoRunFirstJob();
+                        }
                     }
                 }
             })
@@ -180,7 +255,7 @@
                 url : uucss.ajax_url,
                 type : 'GET',
                 data : {
-                    action : 'uucss_run_first_job',
+                    action : 'ao_installed',
                 },
                 beforeSend : function(){
                     ajax_pending = true;
@@ -192,10 +267,12 @@
                 },
                 success : function (response) {
                     if(response.data){
-                        markActionDone($('.js-uucss-first-job'));
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current').text('');
-                        $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('');
-                        moveAction();
+                        markCompleteActions(response);
+                        if(response.data.uucss_first_job_done){
+                            $('.uucss-on-board .plugin-steps .steps-wrap .current').text('');
+                            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('');
+                            moveAction();
+                        }
                     }
                 }
             })
@@ -209,7 +286,7 @@
                 child_open($(this).attr('href'));
             }
             clearInterval(progress_check);
-            progress_check = setInterval(checkAutoptimizeInstalled,6000);
+            progress_check = setInterval(checkAutoptimizeInstalled,1000);
         });
 
         $('.js-enable-css-ao').click(function(e){
@@ -220,7 +297,7 @@
             }
             child_open($(this).attr('href'));
             clearInterval(progress_check);
-            progress_check = setInterval(checkAutoptimizeCssEnabled,6000);
+            progress_check = setInterval(checkAutoptimizeCssEnabled,1000);
         });
 
         $('.js-uucss-connect').click(function(e){
@@ -235,7 +312,7 @@
             }
             child_open($(this).attr('href'));
             clearInterval(progress_check);
-            progress_check = setInterval(checkUnusedCssConnected,6000);
+            progress_check = setInterval(checkUnusedCssConnected,1000);
         });
 
         $('.js-uucss-first-job').click(function(e){
@@ -309,6 +386,13 @@
             $contentWrap.css('transform','translate3d('+ left + 'px,0px,0px)');
             $contentWrap.css('transition-duration','0.5s');
         })
+
+        if(window.location.href.includes('#configure_autoptimize_css')){
+            $(document).ready(function(){
+                $(window).scrollTop($('#autoptimize_css').position().top-50)
+            })
+
+        }
     });
 
 }(jQuery))
