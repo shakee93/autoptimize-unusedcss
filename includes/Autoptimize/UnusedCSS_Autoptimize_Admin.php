@@ -22,10 +22,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$this->uucss = $ao_uucss;
 
 		if ( ! $ao_uucss->deps_available ) {
-            add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
-                $this,
-                'add_on_board_action_link'
-            ] );
 			return;
 		}
 
@@ -227,7 +223,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                 'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
-
+            UnusedCSS_Autoptimize_Onboard::display_get_start_link();
 	        return false;
         }
 

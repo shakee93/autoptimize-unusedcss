@@ -74,9 +74,9 @@ class UnusedCSS_Autoptimize_Onboard
 
     public static function get_on_board_steps(){
         return [
-            'Install and Actvate',
+            'Install and Activate',
             'Enable',
-            'Connnect',
+            'Connect',
             'Run First Job'
         ];
     }
@@ -129,5 +129,14 @@ class UnusedCSS_Autoptimize_Onboard
             return 4;
         }
         return 1;
+    }
+
+    public static function  display_get_start_link(){
+        add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ($links){
+            $_links = array(
+                '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Start</a>',
+            );
+            return array_merge( $_links, $links );
+        } );
     }
 }

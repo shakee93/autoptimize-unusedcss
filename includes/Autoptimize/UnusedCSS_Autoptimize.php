@@ -129,6 +129,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
+            UnusedCSS_Autoptimize_Onboard::display_get_start_link();
 		}
 
 		return $this->deps_available;
