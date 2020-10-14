@@ -24,10 +24,10 @@ class UnusedCSS_Autoptimize_Onboard
     }
 
     function run_first_job(){
-        if(!is_plugin_active('autoptimize/autoptimize.php')){
+        if(!UnusedCSS_Autoptimize_Admin::ao_active()){
             wp_send_json_error(false);
         }
-        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == ""){
+        if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
             wp_send_json_error(false);
         }
         if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
@@ -59,9 +59,9 @@ class UnusedCSS_Autoptimize_Onboard
 
     function ao_installed(){
         $status = [];
-        $status['installed'] = file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php');
-        $status['active'] = is_plugin_active('autoptimize/autoptimize.php');
-        $status['css_enabled'] = class_exists('autoptimizeOptionWrapper') && autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on";
+        $status['installed'] = UnusedCSS_Autoptimize_Admin::ao_installed();
+        $status['active'] = UnusedCSS_Autoptimize_Admin::ao_active();
+        $status['css_enabled'] = UnusedCSS_Autoptimize_Admin::ao_css_option_enabled();
         $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
         $status['uucss_first_job_done'] = UnusedCSS_Settings::get_first_link() ? true : false;
 
@@ -70,6 +70,15 @@ class UnusedCSS_Autoptimize_Onboard
         }else{
             return $status;
         }
+    }
+
+    public static function get_on_board_steps(){
+        return [
+            'Install and Actvate',
+            'Enable',
+            'Connnect',
+            'Run First Job'
+        ];
     }
 
     function uucss_on_boarding_page(){
@@ -102,5 +111,20 @@ class UnusedCSS_Autoptimize_Onboard
             'uucss-onboarding',
             [$this, 'uucss_on_boarding_page']
         );
+    }
+
+    public static function get_on_board_step(){
+        if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
+            return 2;
+        }else if(
+            UnusedCSS_Autoptimize_Admin::ao_active() &&
+            UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() &&
+            ! UnusedCSS_Autoptimize_Admin::is_api_key_verified()
+        ) {
+            return 3;
+        } else if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
+            return 4;
+        }
+        return 1;
     }
 }

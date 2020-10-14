@@ -424,5 +424,28 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
+    public static function ao_installed(){
+	    return file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php') ||
+            file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php');
+    }
 
+    public static function ao_active(){
+        return is_plugin_active('autoptimize/autoptimize.php') ||
+            is_plugin_active('autoptimize-beta/autoptimize.php');
+    }
+
+    public static function ao_css_option_enabled(){
+        return class_exists('autoptimizeOptionWrapper') &&
+        autoptimizeOptionWrapper::get_option( 'autoptimize_css' ) == "on";
+    }
+
+    public static function get_installed_ao_plugin(){
+	    if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
+	        return 'autoptimize/autoptimize.php';
+        }
+	    if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
+	        return 'autoptimize-beta/autoptimize.php';
+        }
+	    return null;
+    }
 }
