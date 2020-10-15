@@ -21,7 +21,7 @@
         color: #9E9E9E;
     }
 
-    #uucss-options span {
+    #uucss-options .example span {
         display: inline-block;
         margin-bottom: 4px;
     }
