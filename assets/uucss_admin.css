@@ -479,3 +479,22 @@ table#uucss-history{
 #uucss-wrapper .left-section strong {
     color: #332e3a;
 }
+
+.safelist-list ul {
+    margin-top: 1em;
+}
+
+.safelist-list span.dashicons.dashicons-remove {
+    vertical-align: middle;
+    line-height: 1.25;
+    color: #F44336;
+}
+
+.safelist-list .safelist-list-type {
+    background: #674499;
+    padding: 4px 8px;
+    color: white;
+    border-radius: 3px;
+    margin-right: 2px;
+    font-size: 12px;
+}
