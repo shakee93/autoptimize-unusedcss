@@ -22,8 +22,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
 
-	    //$this->register_dependency_activation_hook();
-
 	    if ( ! $this->check_dependencies() ) {
 		    return;
 	    }
@@ -51,33 +49,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     }
 
-
-    public function register_dependency_activation_hook(){
-
-	    if ( $this->is_autoptimize_installed() && ! is_plugin_active(AUTOPTIMIZE_PLUGIN_FILE)) {
-
-		    if ( get_option( 'ao_css_options_updated' ) != null ) {
-			    return;
-		    }
-
-		    register_activation_hook( ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php', function () {
-
-			    $fields = [
-				    "autoptimize_css"                => true,
-				    "autoptimize_css_aggregate"      => true,
-                    "autoptimize_css_include_inline" => true,
-                    "autoptimize_cache_nogzip" => true,
-                    "autoptimize_minify_excluded" => true,
-                    "autoptimize_cache_fallback" => true,
-                    "autoptimize_optimize_logged" => true
-                ];
-                foreach ($fields as $key => $value){
-                    autoptimizeOptionWrapper::update_option($key,$value);
-                }
-                update_option('ao_css_options_updated', true);
-            });
-        }
-    }
 
     public function is_url_allowed($url = null, $args = null)
     {

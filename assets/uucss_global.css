@@ -233,10 +233,15 @@ div.uucss-on-board{
 .uucss-on-board span.previous {
     left: -30px;
 }
-.uucss-on-board span.next  {
+
+.uucss-on-board span.next {
     right: -30px;
 }
 
 .uucss-on-board.complete .steps-wrap {
     opacity: 0;
+}
+
+.plugins-php [data-slug="autoptimize-unusedcss-power-up"] a span {
+    display: inline-block;
 }

@@ -17,10 +17,12 @@ define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 require( 'vendor/autoload.php' );
 
+register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::activate' );
+
 add_action( 'plugins_loaded', function () {
 
 	$ao_uucss = new UnusedCSS_Autoptimize();
-    new UnusedCSS_Autoptimize_Onboard( $ao_uucss );
+	new UnusedCSS_Autoptimize_Onboard( $ao_uucss );
 	new UnusedCSS_Autoptimize_Admin( $ao_uucss );
 
 } );

@@ -4,19 +4,18 @@
  * Class UnusedCSS
  */
 
-class UnusedCSS_Autoptimize_Onboard
-{
-    public function __construct($ao_uucss) {
+class UnusedCSS_Autoptimize_Onboard {
+	use UnusedCSS_Utils;
 
-        $this->uucss = $ao_uucss;
+	public function __construct( $ao_uucss ) {
 
-        register_activation_hook(UUCSS_PLUGIN_FILE, [$this,'register_plugin_activation_hook']);
+		$this->uucss = $ao_uucss;
 
-        add_action('admin_menu', [$this,'uucss_register_on_board_page']);
+		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
 
-        add_action('admin_init', [$this,'uucss_redirect']);
+		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
 
-        add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
+		add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
 
         add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
 
@@ -99,9 +98,9 @@ class UnusedCSS_Autoptimize_Onboard
         }
     }
 
-    function register_plugin_activation_hook(){
-        add_option('uucss_do_activation_redirect', true);
-    }
+	public static function activate() {
+		add_option( 'uucss_do_activation_redirect', true );
+	}
 
     function uucss_register_on_board_page() {
         add_options_page(
@@ -134,7 +133,7 @@ class UnusedCSS_Autoptimize_Onboard
     public static function  display_get_start_link(){
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ($links){
             $_links = array(
-	            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">🌟 Get Started</a>',
+	            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
             );
             return array_merge( $_links, $links );
         } );
