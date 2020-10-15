@@ -36,7 +36,7 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display:;">
+                    <div class="content" style="display:block;">
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
@@ -45,22 +45,20 @@
                                     </span>
                                 </th>
                                 <td class="safelist-wrapper">
+                                    <textarea hidden id="autoptimize_uucss_settings_safelist"
+                                              name="autoptimize_uucss_settings[uucss_safelist]"><?php echo empty( $options['uucss_safelist'] ) ? '' : $options['uucss_safelist'] ?></textarea>
                                     <div class="safelist-add">
                                         <select name="" id="safelist-type">
                                             <option value="single">Single</option>
                                             <option value="deep">Deep</option>
                                             <option value="greedy">Greedy</option>
                                         </select>
-                                        <input type="text" placeholder="/re/ to add regexp" size="27"
+                                        <input id="safelist-add" type="text" placeholder="/re/ to add regexp" size="27"
                                                autocomplete="off">
-                                        <input type="button" class="button" value="Add Item">
+                                        <button class="button">Add Item</button>
                                     </div>
                                     <div class="safelist-list">
-                                        <ul>
-                                            <li><span class="dashicons dashicons-remove"></span> <span
-                                                        class="safelist-list-type">greedy</span> input[type=search]
-                                            </li>
-                                        </ul>
+                                        <ul></ul>
                                     </div>
                                 </td>
                             </tr>

@@ -488,6 +488,7 @@ table#uucss-history{
     vertical-align: middle;
     line-height: 1.25;
     color: #F44336;
+    cursor: pointer;
 }
 
 .safelist-list .safelist-list-type {

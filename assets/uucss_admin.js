@@ -318,6 +318,71 @@
             ]
         });
 
+        /**
+         * Safelist input in options
+         *
+         * @type {any}
+         */
+
+        window.safelist = JSON.parse($('#autoptimize_uucss_settings_safelist').val());
+        drawSafeList();
+
+        $('#uucss-wrapper .safelist-add button').click(function (e) {
+            e.preventDefault();
+            var type = $('#safelist-type');
+            var item = $('#safelist-add');
+
+            var pattern = {
+                type: type.val(),
+                pattern: item.val()
+            }
+
+            var exists = window.safelist.findIndex(function (p) {
+                return p.pattern === pattern.pattern
+            });
+
+            if (exists >= 0) {
+                return;
+            }
+
+            safelist.push(pattern);
+
+            item.val('')
+            type.val('single')
+
+            drawSafeList();
+        });
+
+
+        function updateInput() {
+            $('#autoptimize_uucss_settings_safelist').val(JSON.stringify(window.safelist))
+        }
+
+
+        function drawSafeList() {
+
+            $('.safelist-list ul').empty();
+
+            window.safelist.forEach(function (item) {
+
+                var li = $(`<li><span data-item="` + item.pattern + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> ` + item.pattern + `</li>`)
+
+                li.find('.dashicons-remove').click(function () {
+                    var item = $(this).data('item')
+
+                    window.safelist = window.safelist.filter(function (i) {
+                        return i.pattern !== item
+                    });
+
+                    drawSafeList();
+                });
+
+                $('.safelist-list ul').append(li)
+
+            });
+
+            updateInput();
+        }
 
         console.log('loaded');
 
