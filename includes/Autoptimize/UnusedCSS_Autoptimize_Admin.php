@@ -203,10 +203,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function enabled() {
 
-        if(!self::ao_active() ||
+        if( !self::ao_active() ||
             !self::ao_css_option_enabled() ||
-            !self::is_api_key_verified() && ! self::$deactivating ||
-            !self::first_job_done()
+            ! self::is_api_key_verified() && ! self::$deactivating
         ){
             $notice = [
                 'action'      => 'on-board',
