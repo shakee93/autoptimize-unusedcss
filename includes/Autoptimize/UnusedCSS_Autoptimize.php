@@ -123,8 +123,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 'title'       => 'UnusedCSS Power Up',
                 'message'     => 'Please Complete UnusedCSS Onboarding',
                 'main_action' => [
-                    'key'   => 'Get Start',
-                    'value' => admin_url('options-general.php?page=uucss-onboarding')
+	                'key'   => 'Get Started',
+	                'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
                 ],
                 'type'        => 'warning'
             ];

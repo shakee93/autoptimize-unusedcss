@@ -197,11 +197,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function fetch_options()
     {
-        if(class_exists('autoptimizeOptionWrapper')){
-            return autoptimizeOptionWrapper::get_option( 'autoptimize_uucss_settings' );
-        }else{
-            return  false;
-        }
+	    return get_site_option( 'autoptimize_uucss_settings', false );
     }
 
 
@@ -217,8 +213,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
                 'title'       => 'UnusedCSS Power Up',
                 'message'     => 'Please Complete UnusedCSS Onboarding',
                 'main_action' => [
-                    'key'   => 'Get Start',
-                    'value' => admin_url('options-general.php?page=uucss-onboarding')
+	                'key'   => 'Get Started',
+	                'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
                 ],
                 'type'        => 'warning'
             ];

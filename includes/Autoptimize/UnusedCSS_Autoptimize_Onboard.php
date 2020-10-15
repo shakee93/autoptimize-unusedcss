@@ -86,7 +86,7 @@ class UnusedCSS_Autoptimize_Onboard
         ?>
         <div class="uucss-on-board">
             <?php
-                include 'parts/onboarding.php';
+                include 'parts/onboarding.html.php';
             ?>
         </div>
         <?php
@@ -134,7 +134,7 @@ class UnusedCSS_Autoptimize_Onboard
     public static function  display_get_start_link(){
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ($links){
             $_links = array(
-                '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Start</a>',
+	            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">🌟 Get Started</a>',
             );
             return array_merge( $_links, $links );
         } );
