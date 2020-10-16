@@ -103,7 +103,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js?v=1.6', array( 'jquery', 'wp-util' ) );
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js?v=1.7', array( 'jquery', 'wp-util' ) );
         wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css?v=1.3' );
 
 		$data = array(

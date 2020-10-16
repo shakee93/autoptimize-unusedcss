@@ -116,8 +116,31 @@
                 </div>
             </div>
         </div>
+
         <div class="skip-wrap">
             <a href="<?php echo admin_url()?>">Skip</a>
+        </div>
+    </div>
+    <div class="card-complete">
+        <div class="content">
+            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/party-popper.gif'?>" alt="">
+            <h2 class="title">Congratulations</h2>
+            <p>You have reduced css size successfully</p>
+            <div class="first-result">
+                <div id="cpb">
+                    <strong></strong>
+                </div>
+                <div class="details">
+                    <p>URL : <span class="url-value"></span></p>
+                    <p>Reduction : <span class="reduction-value"></span></p>
+                </div>
+            </div>
+            <div class="error-result">
+
+            </div>
+            <div class="action-wrap">
+                <a class="act-button js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
+            </div>
         </div>
     </div>
 </div>

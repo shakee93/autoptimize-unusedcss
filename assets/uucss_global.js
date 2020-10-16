@@ -104,6 +104,15 @@
             }
             if($('.uucss-on-board .card .actions.done').length == 4){
                 $('.uucss-on-board').addClass('complete')
+                if(response.data.uucss_first_job){
+                    animateProgressBar(response.data.uucss_first_job.meta.stats.reduction / 100);
+                    $('.uucss-on-board .card-complete .content .first-result .details .url-value').text(response.data.uucss_first_job.url);
+                    $('.uucss-on-board .card-complete .content .first-result .details .reduction-value').text(response.data.uucss_first_job.meta.stats.reductionSize);
+                    $('.uucss-on-board .card-complete .content img').css('animation-name','imageFadeIn');
+                    setTimeout(function(){
+                        $('.uucss-on-board .card-complete .content img').css('opacity',1);
+                    },2000);
+                }
             }
         }
 
@@ -243,6 +252,40 @@
                             closePopWindow();
                             gotoRunFirstJob();
                         }
+                    }
+                }
+            })
+        }
+
+        function animateProgressBar(value){
+            var progressBarOptions = {
+                startAngle: -1.55,
+                size: 75,
+                value: value,
+                lineCap: 'round',
+                fill: {
+                    color: '#7f54b3'
+                }
+            }
+
+            setTimeout(function(){
+                $('#cpb').circleProgress(progressBarOptions).on('circle-animation-progress', function(event, progress, stepValue) {
+                    var text = String((stepValue * 100).toFixed(0)) + '%';
+                    $(this).find('strong').text(text);
+                });
+            },1000);
+        }
+
+        function getStatus(){
+            $.ajax({
+                url : uucss.ajax_url,
+                type : 'GET',
+                data : {
+                    action : 'ao_installed',
+                },
+                success : function (response) {
+                    if(response.data){
+                        markCompleteActions(response);
                     }
                 }
             })
@@ -394,6 +437,10 @@
             })
 
         }
+
+        getStatus();
+
+        animateProgressBar(0);
     });
 
 }(jQuery))

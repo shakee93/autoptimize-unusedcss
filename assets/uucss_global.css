@@ -245,3 +245,140 @@ div.uucss-on-board{
 .plugins-php [data-slug="autoptimize-unusedcss-power-up"] a span {
     display: inline-block;
 }
+
+
+.uucss-on-board .card-complete{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Roboto, Helvetica Neue”, Helvetica, Arial, sans-serif;
+}
+
+.uucss-on-board .card-complete .content {
+    max-width: 350px;
+    background-color: white;
+    width: 100%;
+    height: 350px;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.uucss-on-board .card-complete .content img{
+    width: 75px;
+    margin: 0 auto;
+    display: block;
+    margin-left: 125px;
+    margin-top: 20px;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: none;
+    transform-origin: bottom right;
+    opacity: 0;
+}
+
+.uucss-on-board .card-complete .content > p{
+    text-align: center;
+    margin: 0;
+    margin-bottom: 18px;
+    font-style: italic;
+}
+
+.uucss-on-board .card-complete .content .action-wrap{
+    position: absolute;
+    bottom: 25px;
+    left: 115px;
+    text-align: center;
+}
+
+.uucss-on-board .card-complete .content .action-wrap a{
+    width: 100px !important;
+}
+
+.uucss-on-board .card-complete .content .title{
+    text-align: center;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0;
+    line-height: 42px;
+}
+
+.uucss-on-board .card-complete .content .first-result{
+    display: flex;
+    align-items: center;
+    max-width: 265px;
+    margin: 0 auto;
+}
+
+.uucss-on-board .card-complete .content .first-result .details{
+    flex: 2;
+}
+
+.uucss-on-board .card-complete .content .first-result .details p{
+    font-size: 14px;
+    margin: 0;
+    font-weight: 400;
+}
+
+#cpb {
+    width: 100px;
+    position: relative;
+    text-align: center;
+    vertical-align: top;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    margin-right: 10px;
+}
+
+#cpb strong {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 100px;
+    font-size: 20px;
+}
+
+.uucss-on-board.complete .plugin-steps{
+    display: none;
+}
+
+.uucss-on-board .card-complete{
+    display: none;
+    opacity: 0;
+    animation-name: fadeIn;
+    transition-timing-function: cubic-bezier(0.55, 0.59, 0, 0.92);
+    animation-duration: 0.5s;
+}
+
+.uucss-on-board.complete .card-complete{
+    display: flex;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.95);}
+    100% { opacity: 1; transform: scale(1.0);}
+}
+
+@keyframes imageFadeIn {
+    0%{
+        transform: translateY(20px) translateX(20px) scale(0.0);
+        opacity: 0;
+    }
+    100%{
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
