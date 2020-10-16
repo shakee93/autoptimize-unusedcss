@@ -30,10 +30,12 @@
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/macbook_isometic.svg'?>" alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
+                        <p>
+                            Autoptimize (AO) is free to use and must be installed and active before running UnusedCSS.
+                        </p>
                         <div class="action-wrap">
-                        <a class="act-button js-activate-ao"
-                           href="<?php
+                            <a class="act-button js-activate-ao"
+                               href="<?php
                             if(UnusedCSS_Autoptimize_Admin::ao_installed()){
                                 echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
                             }else{
@@ -61,10 +63,12 @@
                     ?>">
                         <h2>Configure Autoptimize</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/innovation_isometric.svg'?>" alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
+                        <p>
+                            Enable the <strong><em>Optimize CSS</em></strong> option of Autoptimize in the settings.
+                        </p>
                         <div class="action-wrap">
-                        <a class="act-button js-enable-css-ao "
-                           href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>" target="_blank">
+                            <a class="act-button js-enable-css-ao "
+                               href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>" target="_blank">
                             Configure <span class="dashicons dashicons-yes-alt"></span>
                         </a>
                         <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
@@ -77,12 +81,14 @@
                         }
                     ?>">
                         <h2>Connect & Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/money_transfer__isometric.svg'?>" alt="">
-                        <p>Connect with UnusedCSS.io engine to automatically remove unused css from your website and
-                            unleash your page speed and speed scores.</p>
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/money_transfer__isometric.svg'?>"
+                             alt="">
+                        <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
+                            your website and
+                            watch your page speed and speed scores spike up.</p>
                         <div class="action-wrap">
-                        <a class="act-button js-uucss-connect "
-                           href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
+                            <a class="act-button js-uucss-connect "
+                               href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
                            target="_blank">
                             Connect <span class="dashicons dashicons-yes-alt"></span>
                         </a>
