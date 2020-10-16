@@ -283,15 +283,14 @@
                             placement: 'top',
                             appendTo: "parent"
                         })
+                        $(td).find('button').data('index',row);
                         $(td).find('button').click(function (e) {
                             e.preventDefault()
-                            var _row = table.row(':eq(' + row + ')');
-
+                            var _row = table.row($(this).parents('tr'));
                             var data = {
                                 url: cellData,
                                 clear: true
                             }
-
                             var parent = $(td).parent();
 
                             parent.addClass('loading')
@@ -305,7 +304,7 @@
                                 },
                                 success : function(response){
                                     if(response.success){
-                                        _row.remove().draw()
+                                        (_row.length>0) && _row.remove().draw()
                                     }else{
                                         parent.removeClass('loading')
                                     }
