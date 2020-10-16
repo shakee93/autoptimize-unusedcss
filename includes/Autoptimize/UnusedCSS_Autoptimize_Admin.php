@@ -404,8 +404,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
     public static function ao_active(){
-        return is_plugin_active('autoptimize/autoptimize.php') ||
-            is_plugin_active('autoptimize-beta/autoptimize.php');
+
+	    if ( ! function_exists( 'is_plugin_active' ) ) {
+		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	    }
+
+	    return is_plugin_active( 'autoptimize/autoptimize.php' ) ||
+	           is_plugin_active( 'autoptimize-beta/autoptimize.php' );
     }
 
     public static function ao_css_option_enabled(){
