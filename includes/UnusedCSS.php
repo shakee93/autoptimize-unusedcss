@@ -269,7 +269,8 @@ abstract class UnusedCSS {
 		    "variables"         => isset( $this->options['uucss_variables'] ),
 		    "minify"            => isset( $this->options['uucss_minify'] ),
 		    "analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
-		    "whitelistPacks"    => $whitelist_packs
+		    "whitelistPacks"    => $whitelist_packs,
+		    "safelist"          => isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [],
 	    ];
     }
 
