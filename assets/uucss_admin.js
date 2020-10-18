@@ -327,18 +327,27 @@
         window.safelist = JSON.parse($('#autoptimize_uucss_settings_safelist').val());
         drawSafeList();
 
-        $('#uucss-wrapper .safelist-add button').click(function (e) {
+        $('#uucss-wrapper .safelist-add button').on('click keydown', function (e) {
             e.preventDefault();
+
+            if (e.key && e.key !== 'Enter') {
+                return;
+            }
+
             var type = $('#safelist-type');
             var item = $('#safelist-add');
 
             var pattern = {
                 type: type.val(),
-                pattern: item.val()
+                rule: item.val().trim()
+            }
+
+            if (!pattern.rule) {
+                return;
             }
 
             var exists = window.safelist.findIndex(function (p) {
-                return p.pattern === pattern.pattern && p.type === pattern.type
+                return p.rule === pattern.rule && p.type === pattern.type
             });
 
             if (exists >= 0) {
@@ -348,7 +357,7 @@
             safelist.push(pattern);
 
             item.val('')
-            type.val('single')
+            type.val('greedy')
 
             drawSafeList();
         });
@@ -365,13 +374,13 @@
 
             window.safelist.forEach(function (item) {
 
-                var li = $(`<li><span data-pattern="` + item.pattern + `" data-type="` + item.type + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> ` + item.pattern + `</li>`)
+                var li = $(`<li><span data-rule="` + item.rule + `" data-type="` + item.type + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> <span>` + item.rule + `</span></li>`)
 
                 li.find('.dashicons-remove').click(function () {
                     var _item = $(this).data()
 
                     window.safelist = window.safelist.filter(function (i) {
-                        return !(i.pattern === _item.pattern && i.type === _item.type)
+                        return !(i.rule === _item.rule && i.type === _item.type)
                     });
 
                     drawSafeList();

@@ -51,11 +51,11 @@
                                         <select name="" id="safelist-type">
                                             <option value="single">Single</option>
                                             <option value="deep">Deep</option>
-                                            <option value="greedy">Greedy</option>
+                                            <option selected value="greedy">Greedy</option>
                                         </select>
-                                        <input id="safelist-add" type="text" placeholder="/re/ to add regexp" size="27"
+                                        <input id="safelist-add" type="text" placeholder="*my-class" size="27"
                                                autocomplete="off">
-                                        <button class="button">Add Item</button>
+                                        <button class="button">Add Rule</button>
                                     </div>
                                     <div class="safelist-list">
                                         <ul></ul>
