@@ -62,73 +62,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr hidden>
-                                <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?>
-                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
-                                          data-message="Whitelisted Selectors (regex supported)">
-                                    </span>
-                                </th>
-                                <td>
-
-                                    <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">
-                                        <div class="">
-                                            <div class="nojs-tags hide-if-js">
-                                                <label for="tax-input-post_tag">Add or remove tags</label>
-                                                <p><textarea name="autoptimize_uucss_settings[uucss_whitelist_classes]"
-                                                             rows="3" cols="20"
-                                                             class="the-tags"
-                                                             aria-describedby="new-tag-post_tag-desc"><?php echo empty( $options['uucss_whitelist_classes'] ) ? '' : $options['uucss_whitelist_classes'] ?></textarea>
-                                                </p>
-                                            </div>
-                                            <div class="ajaxtag hide-if-no-js">
-                                                <label class="screen-reader-text" for="new-tag-post_tag">Add New Tag</label>
-                                                <input type="text" class="newtag form-input-tip ui-autocomplete-input"
-                                                       size="16"
-                                                       autocomplete="off" aria-describedby="new-tag-post_tag-desc" value=""
-                                                       role="combobox"
-                                                       aria-autocomplete="list" aria-expanded="false" aria-owns="ui-id-1">
-                                                <input type="button" class="button tagadd" value="Add Class">
-                                            </div>
-                                            <p class="howto">
-                                                Whitelisted Selectors (regex supported)
-                                            </p>
-                                        </div>
-                                        <ul class="tagchecklist" role="list"></ul>
-                                        <div class="example">
-                                            <div class="title">
-                                                <h2>Examples</h2>
-                                            </div>
-                                            <div class="rules-content">
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule : </strong><span><em>red</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
-                                                        </p></div>
-                                                </div>
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule : </strong><span><em>/^orange/</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
-                                                        </p></div>
-                                                </div>
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule (<small>with children</small>) : </strong>
-                                                            <span><em>c:/red$/</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
-                                                        </p></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
                             <tr>
                                 <th scope="row"><?php _e( 'Exclude URLs', 'autoptimize' ); ?>
                                     <span class="dashicons dashicons-info-outline exclude-links has-tooltip" data-message="Whitelisted links example example.com/some-url, /another-url/some-url">
@@ -289,8 +222,8 @@
                                 <td>
                                     <label><input id='uucss_query_string' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
+		                                    echo 'checked="checked"';
+	                                    } ?> value='1'>
                                         <i>
                                             Consider links with query strings as separate links.
                                         </i>
@@ -299,16 +232,16 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?>
+                                <th scope="row"><?php _e( 'Safelist Packs', 'autoptimize' ); ?>
 
                                 </th>
                                 <td>
                                     <label>
                                         <select id="whitelist_packs" multiple class="js-example-basic-single"
                                                 name="autoptimize_uucss_settings[whitelist_packs][]">
-											<?php if ( isset( $options['whitelist_packs'] ) ) {
+					                        <?php if ( isset( $options['whitelist_packs'] ) ) {
 
-												foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
+						                        foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
                                                     <option selected
                                                             value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
 														echo end( $name ) ?></option>
