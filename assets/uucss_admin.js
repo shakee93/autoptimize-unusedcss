@@ -338,7 +338,7 @@
             }
 
             var exists = window.safelist.findIndex(function (p) {
-                return p.pattern === pattern.pattern
+                return p.pattern === pattern.pattern && p.type === pattern.type
             });
 
             if (exists >= 0) {
@@ -365,13 +365,13 @@
 
             window.safelist.forEach(function (item) {
 
-                var li = $(`<li><span data-item="` + item.pattern + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> ` + item.pattern + `</li>`)
+                var li = $(`<li><span data-pattern="` + item.pattern + `" data-type="` + item.type + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> ` + item.pattern + `</li>`)
 
                 li.find('.dashicons-remove').click(function () {
-                    var item = $(this).data('item')
+                    var _item = $(this).data()
 
                     window.safelist = window.safelist.filter(function (i) {
-                        return i.pattern !== item
+                        return !(i.pattern === _item.pattern && i.type === _item.type)
                     });
 
                     drawSafeList();
