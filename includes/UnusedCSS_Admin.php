@@ -173,7 +173,6 @@ abstract class UnusedCSS_Admin {
 
         if (isset($args["post_id"])) {
             $args['options'] = $this->uucss->api_options($args["post_id"]);
-            $this->update_meta($args['post_id']);
         }
 
         wp_send_json_success($this->uucss->cache($_POST['url'], $args));
