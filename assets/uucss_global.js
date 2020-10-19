@@ -22,7 +22,7 @@
             $contentWrap.css('transition-duration','0.5s');
         }
 
-        function child_open(url, width = 600, height = 400){
+        function child_open(url, width = 600, height = 510){
             if(popupWindow && !popupWindow.closed){
                 popupWindow.focus();
             }
