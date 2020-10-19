@@ -24,8 +24,8 @@ abstract class UnusedCSS_Admin {
      * @var array
      */
     public static $page_options = [
-        'whitelist_classes',
-        'exclude'
+	    'safelist',
+	    'exclude'
     ];
 
     /**
@@ -204,13 +204,15 @@ abstract class UnusedCSS_Admin {
     {
         foreach (self::$page_options as $option) {
 
-            if (!isset($_POST['uucss_' . $option] )) {
-                delete_post_meta($post_id, '_uucss_' . $option);
-                continue;
-            }
+	        if ( ! isset( $_POST[ 'uucss_' . $option ] ) ) {
+		        delete_post_meta( $post_id, '_uucss_' . $option );
+		        continue;
+	        }
 
-            $value = sanitize_text_field($_POST['uucss_' . $option]);
-            update_post_meta($post_id, '_uucss_' . $option, $value);
+	        $value = sanitize_text_field( $_POST[ 'uucss_' . $option ] );
+
+	        self::log( $value );
+	        update_post_meta( $post_id, '_uucss_' . $option, $value );
         }
     }
 

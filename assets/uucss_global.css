@@ -245,3 +245,27 @@ div.uucss-on-board{
 .plugins-php [data-slug="autoptimize-unusedcss-power-up"] a span {
     display: inline-block;
 }
+
+/**
+    Safelist
+ */
+
+.safelist-list ul {
+    margin-top: 1em;
+}
+
+.safelist-list span.dashicons.dashicons-remove {
+    vertical-align: middle;
+    line-height: 1.25;
+    color: #F44336;
+    cursor: pointer;
+}
+
+.safelist-list .safelist-list-type {
+    background: #674499;
+    padding: 4px 8px;
+    color: white;
+    border-radius: 3px;
+    margin-right: 2px;
+    font-size: 12px;
+}

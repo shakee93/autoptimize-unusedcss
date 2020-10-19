@@ -28,7 +28,6 @@
                     </div>
                 </li>
 
-
                 <li>
                     <h2>
                         Advanced Settings
@@ -53,7 +52,7 @@
                                             <option value="deep">Deep</option>
                                             <option selected value="greedy">Greedy</option>
                                         </select>
-                                        <input id="safelist-add" type="text" placeholder="*my-class" size="27"
+                                        <input id="safelist-add" type="text" size="27"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
                                     </div>
