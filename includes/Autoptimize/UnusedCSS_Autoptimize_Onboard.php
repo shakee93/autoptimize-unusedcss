@@ -112,6 +112,7 @@ class UnusedCSS_Autoptimize_Onboard {
 	}
 
     function uucss_register_on_board_page() {
+        global $submenu;
         add_options_page(
             'UnusedCSS',
             'UnusedCSS',
@@ -119,6 +120,12 @@ class UnusedCSS_Autoptimize_Onboard {
             'uucss-onboarding',
             [$this, 'uucss_on_boarding_page']
         );
+        $key = null;
+        $key = array_search(["UnusedCSS","manage_options","uucss-onboarding","UnusedCSS"], $submenu['options-general.php']);
+        error_log($key);
+        if(isset($submenu['options-general.php'][$key])){
+            unset($submenu['options-general.php'][$key]);
+        }
     }
 
     public static function get_on_board_step(){

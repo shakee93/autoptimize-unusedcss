@@ -314,6 +314,10 @@ div.uucss-on-board{
     line-height: 42px;
 }
 
+.uucss-on-board .card-complete .content .title.error{
+    color: #f44336;
+}
+
 .uucss-on-board .card-complete .content .title.error,
 .uucss-on-board .card-complete .content .action-wrap a.uucss-support,
 .uucss-on-board .card-complete .content p.error{

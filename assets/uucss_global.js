@@ -376,11 +376,11 @@
             runFirstJob();
         });
 
-        $('body').focus(function () {
+        $('body.settings_page_uucss-onboarding').focus(function () {
             parent_disable();
         });
 
-        $('body').click(function () {
+        $('body.settings_page_uucss-onboarding').click(function () {
             parent_disable();
         });
 
