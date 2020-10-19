@@ -12,47 +12,7 @@
         <ul id="uucss-wrapper">
 			<?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
-                    <h2>Slash load times and boost PageSpeed scores by loading only CSS you need.</h2>
-                    <div class="content"
-                         style="background-image: url('<?php echo UUCSS_PLUGIN_URL . '/assets/intro.svg' ?>')">
-                        <div class="uucss-row">
-                            <div class="left-section">
-                                <p>
-                                    <strong>Slow load times</strong> are the <strong>#1</strong> reason for <strong>high
-                                        bounce
-                                        rates</strong> and one of the root causes of poor <strong>Google
-                                        Rankings</strong>.
-                                </p>
-                                <p>
-                                    Up to 95% of each CSS file in Wordpress themes and plugins is loaded and never used.
-                                    That translates to anywhere from 1 to 4 additional seconds of load time.
-                                    <strong>That’s up to 4 additional seconds to load completely unnecessary
-                                        code!</strong>
-                                </p>
-                                <p>
-                                    By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces
-                                    load
-                                    times by <strong> up to 50%, boosts Boosts Google PageSpeed scores,</strong> and
-                                    <strong>improves user
-                                        experience.</strong> Best of all, it’s totally automated. No combing through
-                                    countless files, no matching up styles to elements - just enable UnusedCSS and see
-                                    the
-                                    benefits immediately!
-                                </p>
-                                <p>
-                                    When the plugin is activated. you will start seeing results
-                                    <strong>automatically</strong> when you or the users start visiting the pages.
-                                </p>
-                            </div>
-                            <div class="right-section" style="visibility: hidden">
-                                <img>
-                            </div>
-                        </div>
-                        <div class="uucss-row">
-                            <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>" class="uucss-activate">Connect &
-                                Activate License</a>
-                        </div>
-                    </div>
+					<?php include_once 'intro.html.php' ?>
                 </li>
 			<?php endif; ?>
 			<?php if ( $api_key_verified) : ?>
@@ -68,7 +28,6 @@
                     </div>
                 </li>
 
-
                 <li>
                     <h2>
                         Advanced Settings
@@ -79,67 +38,26 @@
                     <div class="content" style="display:none;">
                         <table class="form-table" id="uucss-options">
                             <tr>
-                                <th scope="row"><?php _e( 'Global CSS Whitelist', 'autoptimize' ); ?>
-                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip" data-message="Whitelisted Selectors (regex supported)">
-
-                                    </span></th>
-                                <td>
-                                    <div class="uucss-tag tagsdiv" id="uucss_whitelist_classes">
-                                        <div class="">
-                                            <div class="nojs-tags hide-if-js">
-                                                <label for="tax-input-post_tag">Add or remove tags</label>
-                                                <p><textarea name="autoptimize_uucss_settings[uucss_whitelist_classes]"
-                                                             rows="3" cols="20"
-                                                             class="the-tags"
-                                                             aria-describedby="new-tag-post_tag-desc"><?php echo empty( $options['uucss_whitelist_classes'] ) ? '' : $options['uucss_whitelist_classes'] ?></textarea>
-                                                </p>
-                                            </div>
-                                            <div class="ajaxtag hide-if-no-js">
-                                                <label class="screen-reader-text" for="new-tag-post_tag">Add New Tag</label>
-                                                <input type="text" class="newtag form-input-tip ui-autocomplete-input"
-                                                       size="16"
-                                                       autocomplete="off" aria-describedby="new-tag-post_tag-desc" value=""
-                                                       role="combobox"
-                                                       aria-autocomplete="list" aria-expanded="false" aria-owns="ui-id-1">
-                                                <input type="button" class="button tagadd" value="Add Class">
-                                            </div>
-                                            <p class="howto">
-                                                Whitelisted Selectors (regex supported)
-                                            </p>
-                                        </div>
-                                        <ul class="tagchecklist" role="list"></ul>
-                                        <div class="example">
-                                            <div class="title">
-                                                <h2>Examples</h2>
-                                            </div>
-                                            <div class="rules-content">
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule : </strong><span><em>red</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>#red</em>, <em>.red</em>, <em>red</em>
-                                                        </p></div>
-                                                </div>
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule : </strong><span><em>/^orange/</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>.orange-large</em>, <em>#orange</em>
-                                                        </p></div>
-                                                </div>
-                                                <div class="rules">
-                                                    <div class="rule"><p>
-                                                            <strong>Rule (<small>with children</small>) : </strong>
-                                                            <span><em>c:/red$/</em></span>
-                                                        </p></div>
-                                                    <div><p>
-                                                            <strong>Ignores : </strong><em>red p</em>, <em>.bg-red .child-of-bg</em>
-                                                        </p></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
+                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
+                                          data-message="Whitelisted Selectors (regex supported)">
+                                    </span>
+                                </th>
+                                <td class="safelist-wrapper">
+                                    <textarea hidden id="uucss_safelist"
+                                              name="autoptimize_uucss_settings[uucss_safelist]"><?php echo empty( $options['uucss_safelist'] ) ? '' : $options['uucss_safelist'] ?></textarea>
+                                    <div class="safelist-add">
+                                        <select name="" id="safelist-type">
+                                            <option value="single">Single</option>
+                                            <option value="deep">Deep</option>
+                                            <option selected value="greedy">Greedy</option>
+                                        </select>
+                                        <input id="safelist-add" type="text" size="27"
+                                               autocomplete="off">
+                                        <button class="button">Add Rule</button>
+                                    </div>
+                                    <div class="safelist-list">
+                                        <ul></ul>
                                     </div>
                                 </td>
                             </tr>
@@ -303,8 +221,8 @@
                                 <td>
                                     <label><input id='uucss_query_string' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
+		                                    echo 'checked="checked"';
+	                                    } ?> value='1'>
                                         <i>
                                             Consider links with query strings as separate links.
                                         </i>
@@ -313,16 +231,16 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><?php _e( 'Whitelist Packs', 'autoptimize' ); ?>
+                                <th scope="row"><?php _e( 'Safelist Packs', 'autoptimize' ); ?>
 
                                 </th>
                                 <td>
                                     <label>
                                         <select id="whitelist_packs" multiple class="js-example-basic-single"
                                                 name="autoptimize_uucss_settings[whitelist_packs][]">
-											<?php if ( isset( $options['whitelist_packs'] ) ) {
+					                        <?php if ( isset( $options['whitelist_packs'] ) ) {
 
-												foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
+						                        foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
                                                     <option selected
                                                             value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
 														echo end( $name ) ?></option>

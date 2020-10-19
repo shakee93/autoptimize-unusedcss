@@ -471,3 +471,27 @@ div.uucss-on-board{
 .uucss-on-board.complete .card-complete.has-error .first-result{
     display: none;
 }
+
+/**
+    Safelist
+ */
+
+.safelist-list ul {
+    margin-top: 1em;
+}
+
+.safelist-list span.dashicons.dashicons-remove {
+    vertical-align: middle;
+    line-height: 1.25;
+    color: #F44336;
+    cursor: pointer;
+}
+
+.safelist-list .safelist-list-type {
+    background: #674499;
+    padding: 4px 8px;
+    color: white;
+    border-radius: 3px;
+    margin-right: 2px;
+    font-size: 12px;
+}

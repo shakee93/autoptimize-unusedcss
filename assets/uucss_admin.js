@@ -317,8 +317,6 @@
             ]
         });
 
-        console.log('loaded');
-
     });
 
 }(jQuery))

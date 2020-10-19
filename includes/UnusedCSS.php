@@ -243,15 +243,6 @@ abstract class UnusedCSS {
 			$post_id = $post->ID;
 		}
 
-		$post_options = UnusedCSS_Admin::get_page_options( $post_id );
-
-	    $whitelist        = explode( ',', $post_options['whitelist_classes'] );
-	    $whitelist_global = [];
-
-	    if ( isset( $this->options['uucss_whitelist_classes'] ) ) {
-		    $whitelist_global = explode( ',', $this->options['uucss_whitelist_classes'] );
-	    }
-
 	    $whitelist_packs = [ 'wp' ];
 	    if ( isset( $this->options['whitelist_packs'] ) ) {
 
@@ -265,15 +256,24 @@ abstract class UnusedCSS {
 
 	    }
 
-	    return [
-		    "whitelist"         => array_filter( array_merge( $whitelist, $whitelist_global ) ),
-		    "keyframes"         => isset( $this->options['uucss_keyframes'] ),
-		    "fontFace"          => isset( $this->options['uucss_fontface'] ),
-		    "variables"         => isset( $this->options['uucss_variables'] ),
-		    "minify"            => isset( $this->options['uucss_minify'] ),
-		    "analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
-		    "whitelistPacks"    => $whitelist_packs
-	    ];
+		$post_options = UnusedCSS_Admin::get_page_options( $post_id );
+
+		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
+
+		// merge post and global safelists
+		if ( ! empty( $post_options['safelist'] ) ) {
+			$safelist = array_merge( json_decode( $this->options['uucss_safelist'] ), json_decode( $post_options['safelist'] ) );
+		}
+
+		return [
+			"keyframes"         => isset( $this->options['uucss_keyframes'] ),
+			"fontFace"          => isset( $this->options['uucss_fontface'] ),
+			"variables"         => isset( $this->options['uucss_variables'] ),
+			"minify"            => isset( $this->options['uucss_minify'] ),
+			"analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
+			"whitelistPacks"    => $whitelist_packs,
+			"safelist"          => $safelist,
+		];
     }
 
     protected function is_doing_api_fetch(){
