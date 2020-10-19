@@ -249,7 +249,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		$results = $uucss_api->get( 'verify', [ 'url' => site_url() ] );
+		$results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
 
         $data = json_decode(json_encode($results),true);
         if(isset($data['errors'])){
@@ -257,7 +257,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             update_option('autoptimize_uucss_settings', $options);
             return;
         }
-        $options['valid_domain'] = true;
+        error_log(json_encode($data));
+        if(isset($data['data']) && isset($data['data']['success']) && $data['data']['success']){
+            $options['valid_domain'] = true;
+        }else{
+            $options['valid_domain'] = false;
+        }
         update_option('autoptimize_uucss_settings', $options);
     }
 
