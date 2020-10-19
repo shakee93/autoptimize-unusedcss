@@ -127,11 +127,15 @@
             <a href="<?php echo admin_url()?>">Skip</a>
         </div>
     </div>
-    <div class="card-complete">
+    <div class="card-complete loading">
         <div class="content">
-            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/party-popper.gif'?>" alt="">
-            <h2 class="title">Congratulations</h2>
-            <p>You have reduced css size successfully</p>
+            <div class="loading-spinner"></div>
+            <img class="success" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/party-popper.gif'?>" alt="">
+            <img class="sad" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/sad-smiley.gif'?>" alt="">
+            <h2 class="title success">Congratulations</h2>
+            <h2 class="title error">OOPS!</h2>
+            <p class="success">You have reduced css size successfully</p>
+            <p class="error">An error occurred</p>
             <div class="first-result">
                 <div id="cpb">
                     <strong></strong>
@@ -142,10 +146,14 @@
                 </div>
             </div>
             <div class="error-result">
-
+                <div>
+                    <p>Error Code  : <span class="code"></span></p>
+                    <p><span class="description"></span></p>
+                </div>
             </div>
             <div class="action-wrap">
-                <a class="act-button js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
+                <a class="act-button uucss-settings js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
+                <a class="act-button uucss-support js-goto-support" href="https://unusedcss.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
             </div>
         </div>
     </div>

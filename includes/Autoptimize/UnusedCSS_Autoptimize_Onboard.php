@@ -56,6 +56,10 @@ class UnusedCSS_Autoptimize_Onboard {
         }
     }
 
+    public static function on_board_completed(){
+	    return UnusedCSS_Autoptimize_Admin::ao_active() && UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() && UnusedCSS_Autoptimize_Admin::is_api_key_verified();
+    }
+
     function ao_installed(){
         $status = [];
         $status['installed'] = UnusedCSS_Autoptimize_Admin::ao_installed();
@@ -93,7 +97,11 @@ class UnusedCSS_Autoptimize_Onboard {
     }
 
     function uucss_redirect() {
-        if (get_option('uucss_do_activation_redirect', false)) {
+	    if(strpos(home_url($_SERVER['REQUEST_URI']),'/options-general.php?page=uucss-onboarding') &&
+        self::on_board_completed()){
+	        wp_redirect(admin_url('options-general.php?page=uucss'));
+        }
+        else if (get_option('uucss_do_activation_redirect', false)) {
             delete_option('uucss_do_activation_redirect');
             wp_redirect('/wp-admin/options-general.php?page=uucss-onboarding');
         }

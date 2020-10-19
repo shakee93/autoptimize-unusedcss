@@ -82,7 +82,6 @@ class UnusedCSS_Settings {
 	}
 
 	public static function get_first_link() {
-
 		if ( $map = (array) get_option( self::$map_key ) ) {
 
 			if ( isset( $map[0] ) && $map[0] === false ) {

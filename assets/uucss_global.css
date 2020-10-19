@@ -263,7 +263,6 @@ div.uucss-on-board{
     max-width: 350px;
     background-color: white;
     width: 100%;
-    height: 350px;
     position: relative;
     border-radius: 10px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -293,14 +292,17 @@ div.uucss-on-board{
 }
 
 .uucss-on-board .card-complete .content .action-wrap{
-    position: absolute;
-    bottom: 25px;
-    left: 115px;
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
 }
 
 .uucss-on-board .card-complete .content .action-wrap a{
     width: 100px !important;
+}
+
+.uucss-on-board .card-complete .content .action-wrap a.uucss-support{
+    width: 120px !important;
 }
 
 .uucss-on-board .card-complete .content .title{
@@ -310,6 +312,27 @@ div.uucss-on-board{
     font-weight: 600;
     margin: 0;
     line-height: 42px;
+}
+
+.uucss-on-board .card-complete .content .title.error,
+.uucss-on-board .card-complete .content .action-wrap a.uucss-support,
+.uucss-on-board .card-complete .content p.error{
+    display: none;
+}
+
+.uucss-on-board .card-complete.has-error .content .title.error,
+.uucss-on-board .card-complete.has-error .content p.error{
+    display: block;
+}
+
+.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-support{
+    display: inline-block;
+}
+
+.uucss-on-board .card-complete.has-error .content .title.success,
+.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-settings,
+.uucss-on-board .card-complete.has-error .content p.success{
+    display: none;
 }
 
 .uucss-on-board .card-complete .content .first-result{
@@ -382,3 +405,64 @@ div.uucss-on-board{
     }
 }
 
+@keyframes sadImageFadeIn {
+    0%{
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100%{
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.uucss-on-board.complete .card-complete .error-result{
+    display: none;
+    align-items: center;
+    max-width: 265px;
+    margin: 0 auto;
+    justify-content: center;
+    background-color: lightgray;
+    padding: 10px 15px;
+}
+
+.uucss-on-board.complete .card-complete .error-result p{
+    margin: 0;
+    line-height: 20px;
+}
+
+.uucss-on-board.complete .card-complete .content img.sad{
+    display: none;
+    transform-origin: unset;
+    animation-delay: 0s;
+    margin-left: auto;
+    animation-duration: 2s;
+}
+
+.uucss-on-board.complete .card-complete.has-error .content img.sad{
+    display: block;
+}
+
+.uucss-on-board.complete .card-complete.has-error .content img.success{
+    display: none;
+}
+
+.uucss-on-board.complete .card-complete .content img.sad{
+    display: none;
+}
+
+.uucss-on-board.complete .card-complete .error-result p.error-code{
+    font-size: 20px;
+}
+
+.uucss-on-board.complete .card-complete .error-result p.error-description{
+    font-size: 18px;
+}
+
+.uucss-on-board.complete .card-complete.has-error .error-result{
+    display: block;
+}
+
+.uucss-on-board.complete .card-complete.has-error .first-result{
+    display: none;
+}
