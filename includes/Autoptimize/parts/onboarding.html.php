@@ -124,15 +124,16 @@
         </div>
 
         <div class="skip-wrap">
-            <a href="<?php echo admin_url()?>">Skip</a>
+            <a href="<?php echo admin_url() ?>">Skip</a>
         </div>
     </div>
     <div class="card-complete loading">
         <div class="content">
             <div class="loading-spinner"></div>
-            <img class="success" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/party-popper.gif'?>" alt="">
-            <img class="sad" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/sad-smiley.gif'?>" alt="">
+            <img class="sad intro" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/sad-smiley.gif' ?>" alt="">
             <h2 class="title success">Congratulations</h2>
+            <img style="width: 300px;margin: 0 auto;display: block;"
+                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/congrats.svg' ?>" alt="">
             <h2 class="title error">OOPS!</h2>
             <p class="success">You have reduced css size successfully</p>
             <p class="error">An error occurred</p>
