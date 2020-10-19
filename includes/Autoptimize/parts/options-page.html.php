@@ -44,7 +44,7 @@
                                     </span>
                                 </th>
                                 <td class="safelist-wrapper">
-                                    <textarea hidden id="autoptimize_uucss_settings_safelist"
+                                    <textarea hidden id="uucss_safelist"
                                               name="autoptimize_uucss_settings[uucss_safelist]"><?php echo empty( $options['uucss_safelist'] ) ? '' : $options['uucss_safelist'] ?></textarea>
                                     <div class="safelist-add">
                                         <select name="" id="safelist-type">

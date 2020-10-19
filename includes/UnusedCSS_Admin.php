@@ -210,7 +210,6 @@ abstract class UnusedCSS_Admin {
 
 	        $value = sanitize_text_field( $_POST[ 'uucss_' . $option ] );
 
-	        self::log( $value );
 	        update_post_meta( $post_id, '_uucss_' . $option, $value );
         }
     }

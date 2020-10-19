@@ -75,6 +75,3 @@
 
 
 </div>
-<script>
-	<?php include( "admin-post.js.php" ); ?>
-</script>
