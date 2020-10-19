@@ -122,8 +122,8 @@ class UnusedCSS_Autoptimize_Onboard {
         );
         $key = null;
         $key = array_search(["UnusedCSS","manage_options","uucss-onboarding","UnusedCSS"], $submenu['options-general.php']);
-        error_log($key);
-        if(isset($submenu['options-general.php'][$key])){
+
+	    if(isset($submenu['options-general.php'][$key])){
             unset($submenu['options-general.php'][$key]);
         }
     }
