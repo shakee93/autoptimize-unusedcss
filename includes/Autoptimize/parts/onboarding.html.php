@@ -23,23 +23,23 @@
         <div class="card">
             <div class="slide-contents-wrap">
                 <div class="slide-contents" style="<?php
-				if ( ( $step - 1 ) !== 0 ) {
-                        echo sprintf('transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;',(($step - 1) * 223 * -1));
-                    }
-                ?>">
+			    if ( ( $step - 1 ) !== 0 ) {
+				    echo sprintf( 'transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', ( ( $step - 1 ) * 223 * - 1 ) );
+			    }
+			    ?>">
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/macbook_isometic.svg'?>" alt="">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/install-autoptimize.svg' ?>" alt="">
                         <p>
                             Autoptimize (AO) is free to use and must be installed and active before running UnusedCSS.
                         </p>
                         <div class="action-wrap">
                             <a class="act-button js-activate-ao"
                                href="<?php
-                            if(UnusedCSS_Autoptimize_Admin::ao_installed()){
-                                echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
-                            }else{
-                                echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' );
+						       if ( UnusedCSS_Autoptimize_Admin::ao_installed() ) {
+							       echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
+						       } else {
+							       echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' );
                             }
                            ?>"
                            data-activation_url="<?php  echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() ); ?>"
@@ -52,63 +52,65 @@
                             }
                             ?>
                             <span class="dashicons dashicons-yes-alt"></span>
-                        </a>
-                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
+                            </a>
+                            <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
                     <div class="enable actions slide-content <?php
-                        if(UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()) {
-                            echo 'done';
-                        }
-                    ?>">
+				    if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
+					    echo 'done';
+				    }
+				    ?>">
                         <h2>Configure Autoptimize</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/innovation_isometric.svg'?>" alt="">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/configure.svg' ?>" alt="">
                         <p>
                             Enable the <strong><em>Optimize CSS</em></strong> option of Autoptimize in the settings.
                         </p>
                         <div class="action-wrap">
                             <a class="act-button js-enable-css-ao "
-                               href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>" target="_blank">
-                            Configure <span class="dashicons dashicons-yes-alt"></span>
-                        </a>
-                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
-                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
+                               href="<?php echo admin_url( '/options-general.php?page=autoptimize#configure_autoptimize_css' ) ?>"
+                               target="_blank">
+                                Configure <span class="dashicons dashicons-yes-alt"></span>
+                            </a>
+                            <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
+                            <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
                     <div class="connect actions slide-content <?php
-                        if(UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
-                            echo 'done';
-                        }
-                    ?>">
+				    if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
+					    echo 'done';
+				    }
+				    ?>">
                         <h2>Connect & Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/money_transfer__isometric.svg'?>"
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/connect.svg' ?>"
                              alt="">
                         <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
                             your website and
                             watch your page speed and speed scores spike up.</p>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-connect "
-                               href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
-                           target="_blank">
-                            Connect <span class="dashicons dashicons-yes-alt"></span>
-                        </a>
-                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
-                        <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
+                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize" ) ?>"
+                               target="_blank">
+                                Connect <span class="dashicons dashicons-yes-alt"></span>
+                            </a>
+                            <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
+                            <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
                     <div class="run-job actions slide-content <?php
-                        if ( UnusedCSS_Settings::get_first_link() ) {
-	                        echo 'done';
-                        }
-                    ?>">
+				    if ( UnusedCSS_Settings::get_first_link() ) {
+					    echo 'done';
+				    }
+				    ?>">
                         <h2>Run First Job</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/career__isometric.svg'?>" alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/run-first-job.svg' ?>" alt="">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy</p>
                         <div class="action-wrap">
-                        <a class="act-button js-uucss-first-job" href="#" target="_blank">
-                            Run First Job <span class="dashicons dashicons-yes-alt"></span>
-                        </a>
-                        <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
+                            <a class="act-button js-uucss-first-job" href="#" target="_blank">
+                                Run First Job <span class="dashicons dashicons-yes-alt"></span>
+                            </a>
+                            <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
                         </div>
                     </div>
                     <div class="actions slide-content">
