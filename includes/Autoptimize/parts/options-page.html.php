@@ -35,7 +35,7 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display:block;">
+                    <div class="content" style="display:none;">
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
