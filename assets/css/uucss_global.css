@@ -301,7 +301,7 @@ div.uucss-on-board{
 .uucss-on-board .card-complete .content .title{
     text-align: center;
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0;
     line-height: 42px;
     color: #7f54b3;
@@ -451,11 +451,12 @@ div.uucss-on-board{
     border-radius: 10px;
     background-color: #069583;
     position: relative;
-    transition: ease width .3s;
+    transition: ease width 1s;
     font-size: 7px;
     color: white;
     padding-right: 5px;
     line-height: 12px;
+    animation-delay: 1s;
 }
 
 .uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper {

@@ -121,7 +121,7 @@
                         theme: 'tomato',
                         interactive: true,
                         delay: 0,
-                        offset: [0, 7]
+                        offset: [0, 14]
                     })
                     innerTippy.show();
                     var innerTippy2 = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
