@@ -35,7 +35,7 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display:none;">
+                    <div class="content" style="display:block;">
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
@@ -58,6 +58,17 @@
                                     </div>
                                     <div class="safelist-list">
                                         <ul></ul>
+                                    </div>
+
+                                    <div class="uucss-info-wrapper" style="max-width: 350px;">
+                                        <div class="info-icon">
+                                            <span class="dashicons dashicons-info"></span>
+                                        </div>
+                                        <div class="info-details">
+                                            <p>You can add rules to specify which css classes or id's are safe to left
+                                                in the final UnusedCSS output.</p>
+                                            <!--                                            <p class="divider"></p>-->
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
