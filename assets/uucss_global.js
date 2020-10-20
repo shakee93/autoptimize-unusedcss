@@ -74,6 +74,7 @@
 
         function gotoRunFirstJob() {
             $('.uucss-on-board #progress-bar').css('width','100%');
+            $('.uucss-on-board .steps-wrap').css('opacity',0);
             $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
             $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
             $contentWrap.css('transform','translate3d(-669px,0px,0px)');
@@ -397,38 +398,39 @@
                 origin = $contentWrap.position().left;
                 left = origin + $contentWrap.find(content).outerWidth();
             }
-
+            $('.uucss-on-board .steps-wrap').css('opacity',1);
             switch ($('.uucss-on-board .steps-wrap .step-text .current').text()) {
                 case '1':{
                     if(plus){
                         $('.uucss-on-board .steps-wrap .step-text .current').text('2');
-                        $('.uucss-on-board #progress-bar').css('width','50%');
+                        $('.uucss-on-board #progress-bar').css('width','66.66%');
                     }
                     break;
                 }
                 case '2':{
                     if(plus){
                         $('.uucss-on-board .steps-wrap .step-text .current').text('3');
-                        $('.uucss-on-board #progress-bar').css('width','75%');
+                        $('.uucss-on-board #progress-bar').css('width','100%');
                     }else{
                         $('.uucss-on-board .steps-wrap .step-text .current').text('1');
-                        $('.uucss-on-board #progress-bar').css('width','25%');
+                        $('.uucss-on-board #progress-bar').css('width','33.33%');
                     }
                     break;
                 }
                 case '3':{
                     if(plus){
+                        $('.uucss-on-board .steps-wrap').css('opacity',0);
                         $('.uucss-on-board .steps-wrap .step-text .current').text('4');
                         $('.uucss-on-board #progress-bar').css('width','100%');
                     }else{
                         $('.uucss-on-board .steps-wrap .step-text .current').text('2');
-                        $('.uucss-on-board #progress-bar').css('width','50%');
+                        $('.uucss-on-board #progress-bar').css('width','66.66%');
                     }
                     break;
                 }
                 case '4':{
                     $('.uucss-on-board .steps-wrap .step-text .current').text('3');
-                    $('.uucss-on-board #progress-bar').css('width','75%');
+                    $('.uucss-on-board #progress-bar').css('width','100%');
                     break;
                 }
             }

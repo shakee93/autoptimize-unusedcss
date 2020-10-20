@@ -13,11 +13,11 @@
                     $step = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
 				?>
                 <ul>
-                    <li><span class="current"><?php echo $step ?></span>/4</li>
+                    <li><span class="current"><?php echo $step ?></span>/3</li>
                 </ul>
             </div>
             <div class="progress-bar-wrap">
-                <div id="progress-bar" style="width: <?php echo $step * 25 ?>%;"></div>
+                <div id="progress-bar" style="width: <?php echo $step * 33.33333333333 ?>%;"></div>
             </div>
         </div>
         <div class="card">
@@ -27,6 +27,22 @@
 				    echo sprintf( 'transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', ( ( $step - 1 ) * 223 * - 1 ) );
 			    }
 			    ?>">
+                    <div class="connect actions slide-content <?php if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) { echo 'done'; } ?>">
+                        <h2>Connect & Activate</h2>
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/connect.svg' ?>"
+                             alt="">
+                        <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
+                            your website and
+                            watch your page speed and speed scores spike up.</p>
+                        <div class="action-wrap">
+                            <a class="act-button js-uucss-connect "
+                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize" ) ?>"
+                               target="_blank">
+                                Connect <span class="dashicons dashicons-yes-alt"></span>
+                            </a>
+                            <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
+                        </div>
+                    </div>
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/install-autoptimize.svg' ?>" alt="">
@@ -53,14 +69,11 @@
                             ?>
                             <span class="dashicons dashicons-yes-alt"></span>
                             </a>
+                            <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="enable actions slide-content <?php
-				    if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
-					    echo 'done';
-				    }
-				    ?>">
+                    <div class="enable actions slide-content <?php if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) { echo 'done'; } ?>">
                         <h2>Configure Autoptimize</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/configure.svg' ?>" alt="">
                         <p>
@@ -76,32 +89,7 @@
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="connect actions slide-content <?php
-				    if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
-					    echo 'done';
-				    }
-				    ?>">
-                        <h2>Connect & Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/connect.svg' ?>"
-                             alt="">
-                        <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
-                            your website and
-                            watch your page speed and speed scores spike up.</p>
-                        <div class="action-wrap">
-                            <a class="act-button js-uucss-connect "
-                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize" ) ?>"
-                               target="_blank">
-                                Connect <span class="dashicons dashicons-yes-alt"></span>
-                            </a>
-                            <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
-                            <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
-                        </div>
-                    </div>
-                    <div class="run-job actions slide-content <?php
-				    if ( UnusedCSS_Settings::get_first_link() ) {
-					    echo 'done';
-				    }
-				    ?>">
+                    <div class="run-job actions slide-content <?php if ( UnusedCSS_Settings::get_first_link() ) { echo 'done'; } ?>">
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/run-first-job.svg' ?>" alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has

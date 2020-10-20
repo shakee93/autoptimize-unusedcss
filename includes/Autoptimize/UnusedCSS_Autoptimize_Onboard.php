@@ -78,9 +78,9 @@ class UnusedCSS_Autoptimize_Onboard {
 
     public static function get_on_board_steps(){
         return [
+            'Connect',
             'Install and Activate',
             'Enable',
-            'Connect',
             'Run First Job'
         ];
     }
@@ -129,18 +129,14 @@ class UnusedCSS_Autoptimize_Onboard {
     }
 
     public static function get_on_board_step(){
-        if(!UnusedCSS_Autoptimize_Admin::ao_active()){
+        if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
             return 1;
         }
-        else if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
+        else if(!UnusedCSS_Autoptimize_Admin::ao_active()){
             return 2;
-        }else if(
-            UnusedCSS_Autoptimize_Admin::ao_active() &&
-            UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() &&
-            ! UnusedCSS_Autoptimize_Admin::is_api_key_verified()
-        ) {
+        }else if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()) {
             return 3;
-        } else if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
+        } else if ( !UnusedCSS_Autoptimize_Admin::first_job_done() ) {
             return 4;
         }
         return 1;
