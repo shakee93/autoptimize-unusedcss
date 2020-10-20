@@ -105,20 +105,39 @@
             }
             if($('.uucss-on-board .card .actions.done').length == 4){
                 if(response.data.uucss_first_job.meta && response.data.uucss_first_job.meta.error){
-                    //$('.uucss-on-board .card-complete .content img.sad').css('animation-name','sadImageFadeIn');
-                    //$('.uucss-on-board .card-complete .content img.sad').css('opacity',1)
                     $('.uucss-on-board.complete .card-complete .error-result p span.code').text(response.data.uucss_first_job.meta.error.code);
                     $('.uucss-on-board.complete .card-complete .error-result p span.description').text(response.data.uucss_first_job.meta.error.message);
                     $('.uucss-on-board .card-complete').addClass('has-error');
                 }
                 else if(response.data.uucss_first_job){
                     animateProgressBar(response.data.uucss_first_job.meta.stats.reduction / 100);
-                    $('.uucss-on-board .card-complete .content .first-result .details .url-value').text(response.data.uucss_first_job.url);
-                    $('.uucss-on-board .card-complete .content .first-result .details .reduction-value').text(response.data.uucss_first_job.meta.stats.reductionSize);
-                    //$('.uucss-on-board .card-complete .content img.success').css('animation-name','imageFadeIn');
-                    setTimeout(function(){
-                        //$('.uucss-on-board .card-complete .content img.success').css('opacity',1);
-                    },2000);
+                    var innerTippy = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
+                        content: 'Before UnusedCSS <span class="perc">' + response.data.uucss_first_job.meta.stats.before + '</span>',
+                        allowHTML: true,
+                        placement: 'bottom-end',
+                        trigger: 'manual',
+                        hideOnClick: false,
+                        animation: null,
+                        theme: 'tomato',
+                        interactive: true,
+                        delay: 0,
+                        offset: [0, 7]
+                    })
+                    innerTippy.show();
+                    var innerTippy2 = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
+                        content: 'After UnusedCSS <span class="perc"> ' + response.data.uucss_first_job.meta.stats.after + '</span>',
+                        allowHTML: true,
+                        placement: 'top-start',
+                        trigger: 'manual',
+                        hideOnClick: false,
+                        animation: null,
+                        theme: 'ketchup',
+                        interactive: true,
+                        delay: 0,
+                    })
+                    innerTippy2.show();
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').text(response.data.uucss_first_job.meta.stats.reduction + '%');
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').css('width', response.data.uucss_first_job.meta.stats.reduction + '%');
                 }
                 $('.uucss-on-board').addClass('complete')
             }
@@ -426,11 +445,6 @@
                         $('.uucss-on-board .steps-wrap .step-text .current').text('2');
                         $('.uucss-on-board #progress-bar').css('width','66.66%');
                     }
-                    break;
-                }
-                case '4':{
-                    $('.uucss-on-board .steps-wrap .step-text .current').text('3');
-                    $('.uucss-on-board #progress-bar').css('width','100%');
                     break;
                 }
             }

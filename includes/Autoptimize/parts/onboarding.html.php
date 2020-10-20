@@ -1,4 +1,4 @@
-<?php defined( 'ABSPATH' ) or die(); ?>
+<?php defined('ABSPATH') or die(); ?>
 
 <div class="main-section">
     <div class="plugin-steps">
@@ -7,11 +7,11 @@
         </div>
         <div class="steps-wrap">
             <div class="step-text">
-				<?php
-				$step  = 1;
-				$steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
-				$step  = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
-				?>
+                <?php
+                $step = 1;
+                $steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
+                $step = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
+                ?>
                 <ul>
                     <li><span class="current"><?php echo $step ?></span>/3</li>
                 </ul>
@@ -23,13 +23,13 @@
         <div class="card">
             <div class="slide-contents-wrap">
                 <div class="slide-contents" style="<?php
-				if ( ( $step - 1 ) !== 0 ) {
-					echo sprintf( 'transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', ( ( $step - 1 ) * 223 * - 1 ) );
-				}
-				?>">
-                    <div class="connect actions slide-content <?php if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
-						echo 'done';
-					} ?>">
+                if (($step - 1) !== 0) {
+                    echo sprintf('transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', (($step - 1) * 223 * -1));
+                }
+                ?>">
+                    <div class="connect actions slide-content <?php if (UnusedCSS_Autoptimize_Admin::is_api_key_verified()) {
+                        echo 'done';
+                    } ?>">
                         <h2>Connect & Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                              alt="">
@@ -38,7 +38,7 @@
                             watch your page speed and speed scores spike up.</p>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-connect "
-                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize" ) ?>"
+                               href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
                                target="_blank">
                                 Connect <span class="dashicons dashicons-yes-alt"></span>
                             </a>
@@ -55,30 +55,30 @@
                         <div class="action-wrap">
                             <a class="act-button js-activate-ao"
                                href="<?php
-							   if ( UnusedCSS_Autoptimize_Admin::ao_installed() ) {
-								   echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
-							   } else {
-								   echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' );
-                            }
-                           ?>"
-                           data-activation_url="<?php  echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() ); ?>"
-                           target="_blank">
-                            <?php
-                            if(!UnusedCSS_Autoptimize_Admin::ao_installed()){
-                                echo 'Install';
-                            }else{
-                                echo 'Activate';
-                            }
-                            ?>
+                               if (UnusedCSS_Autoptimize_Admin::ao_installed()) {
+                                   echo UnusedCSS_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin());
+                               } else {
+                                   echo network_admin_url('plugin-install.php?tab=plugin-information&plugin=autoptimize');
+                               }
+                               ?>"
+                               data-activation_url="<?php echo UnusedCSS_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin()); ?>"
+                               target="_blank">
+                                <?php
+                                if (!UnusedCSS_Autoptimize_Admin::ao_installed()) {
+                                    echo 'Install';
+                                } else {
+                                    echo 'Activate';
+                                }
+                                ?>
                                 <span class="dashicons dashicons-yes-alt"></span>
                             </a>
                             <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="enable actions slide-content <?php if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
-						echo 'done';
-					} ?>">
+                    <div class="enable actions slide-content <?php if (UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()) {
+                        echo 'done';
+                    } ?>">
                         <h2>Configure Autoptimize</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/configure.svg' ?>" alt="">
                         <p>
@@ -86,7 +86,7 @@
                         </p>
                         <div class="action-wrap">
                             <a class="act-button js-enable-css-ao "
-                               href="<?php echo admin_url( '/options-general.php?page=autoptimize#configure_autoptimize_css' ) ?>"
+                               href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>"
                                target="_blank">
                                 Configure <span class="dashicons dashicons-yes-alt"></span>
                             </a>
@@ -94,9 +94,9 @@
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="run-job actions slide-content <?php if ( UnusedCSS_Settings::get_first_link() ) {
-						echo 'done';
-					} ?>">
+                    <div class="run-job actions slide-content <?php if (UnusedCSS_Settings::get_first_link()) {
+                        echo 'done';
+                    } ?>">
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
                              alt="">
@@ -107,17 +107,6 @@
                                 Run First Job <span class="dashicons dashicons-yes-alt"></span>
                             </a>
                             <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
-                        </div>
-                    </div>
-                    <div class="actions slide-content">
-                        <h2>Congratulations!</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/career__isometric.svg' ?>"
-                             alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry's standard dummy</p>
-                        <div class="action-wrap">
-                            <a class="act-button js-goto-settings"
-                               href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">View Jobs</a>
                         </div>
                     </div>
                 </div>
@@ -140,23 +129,29 @@
             <p class="success">You have reduced css size successfully</p>
             <p class="error">An error occurred</p>
             <div class="first-result">
-                <div id="cpb">
-                    <strong></strong>
-                </div>
-                <div class="details">
-                    <p>URL : <span class="url-value"></span></p>
-                    <p>Reduction : <span class="reduction-value"></span></p>
+                <div class="result-stat">
+                    <div class="tippy-content" data-state="visible" style="transition-duration: 1000ms;">
+                        <div class="stat-tooltip">
+                            <div class="progress-bar-wrapper" aria-expanded="true">
+                                <div class="progress-bar" aria-expanded="true">
+                                    <span style="width:100%"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="error-result">
                 <div>
-                    <p>Error Code  : <span class="code"></span></p>
+                    <p>Error Code : <span class="code"></span></p>
                     <p><span class="description"></span></p>
                 </div>
             </div>
             <div class="action-wrap">
-                <a class="act-button uucss-settings js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
-                <a class="act-button uucss-support js-goto-support" href="https://unusedcss.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
+                <a class="act-button uucss-settings js-goto-settings"
+                   href="<?php echo admin_url('options-general.php?page=uucss') ?>">View Jobs</a>
+                <a class="act-button uucss-support js-goto-support"
+                   href="https://unusedcss.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
             </div>
         </div>
     </div>
