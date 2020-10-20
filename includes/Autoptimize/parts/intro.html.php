@@ -1,6 +1,6 @@
 <h2>Slash load times and boost PageSpeed scores by loading only CSS you need.</h2>
 <div class="content"
-     style="background-image: url('<?php echo UUCSS_PLUGIN_URL . '/assets/intro.svg' ?>')">
+     style="background-image: url('<?php echo UUCSS_PLUGIN_URL . 'assets/images/intro.svg' ?>')">
     <div class="uucss-row">
         <div class="left-section">
             <p>

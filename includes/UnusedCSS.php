@@ -56,16 +56,16 @@ abstract class UnusedCSS {
 
     public static function enqueueGlobalScript(){
         add_action('admin_enqueue_scripts',function (){
-            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/uucss_global.js?v=1.22');
-            $data = array(
-                'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'setting_url' => admin_url('options-general.php?page=uucss'),
-                'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed()
-            );
-            wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
-            wp_enqueue_script( 'uucss_global_admin_script' );
-            wp_enqueue_script( 'uucss_progress_bar_script', UUCSS_PLUGIN_URL . 'assets/circle-progress.js' );
-            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/uucss_global.css?v=1.18' );
+	        wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js?v=1.22' );
+	        $data = array(
+		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
+		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed()
+	        );
+	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
+	        wp_enqueue_script( 'uucss_global_admin_script' );
+	        wp_enqueue_script( 'uucss_progress_bar_script', UUCSS_PLUGIN_URL . 'assets/js/circle-progress.js' );
+	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css?v=1.18' );
         });
     }
 

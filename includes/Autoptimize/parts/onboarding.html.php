@@ -3,14 +3,14 @@
 <div class="main-section">
     <div class="plugin-steps">
         <div class="logo-section">
-            <img src="https://unusedcss.io/wp-content/uploads/2020/09/logo.svg" alt="UnusedCSS.io logo">
+            <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" alt="UnusedCSS.io logo">
         </div>
         <div class="steps-wrap">
             <div class="step-text">
 				<?php
-                    $step = 1;
-                    $steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
-                    $step = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
+				$step  = 1;
+				$steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
+				$step  = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
 				?>
                 <ul>
                     <li><span class="current"><?php echo $step ?></span>/4</li>
@@ -23,23 +23,24 @@
         <div class="card">
             <div class="slide-contents-wrap">
                 <div class="slide-contents" style="<?php
-			    if ( ( $step - 1 ) !== 0 ) {
-				    echo sprintf( 'transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', ( ( $step - 1 ) * 223 * - 1 ) );
-			    }
-			    ?>">
+				if ( ( $step - 1 ) !== 0 ) {
+					echo sprintf( 'transform: translate3d(%spx, 0px, 0px); transition-duration: 0.5s;', ( ( $step - 1 ) * 223 * - 1 ) );
+				}
+				?>">
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/install-autoptimize.svg' ?>" alt="">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/install-autoptimize.svg' ?>"
+                             alt="">
                         <p>
                             Autoptimize (AO) is free to use and must be installed and active before running UnusedCSS.
                         </p>
                         <div class="action-wrap">
                             <a class="act-button js-activate-ao"
                                href="<?php
-						       if ( UnusedCSS_Autoptimize_Admin::ao_installed() ) {
-							       echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
-						       } else {
-							       echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' );
+							   if ( UnusedCSS_Autoptimize_Admin::ao_installed() ) {
+								   echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() );
+							   } else {
+								   echo network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=autoptimize' );
                             }
                            ?>"
                            data-activation_url="<?php  echo UnusedCSS_Utils::activate_plugin( UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin() ); ?>"
@@ -57,12 +58,12 @@
                         </div>
                     </div>
                     <div class="enable actions slide-content <?php
-				    if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
-					    echo 'done';
-				    }
-				    ?>">
+					if ( UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
+						echo 'done';
+					}
+					?>">
                         <h2>Configure Autoptimize</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/configure.svg' ?>" alt="">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/configure.svg' ?>" alt="">
                         <p>
                             Enable the <strong><em>Optimize CSS</em></strong> option of Autoptimize in the settings.
                         </p>
@@ -77,12 +78,12 @@
                         </div>
                     </div>
                     <div class="connect actions slide-content <?php
-				    if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
-					    echo 'done';
-				    }
-				    ?>">
+					if ( UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
+						echo 'done';
+					}
+					?>">
                         <h2>Connect & Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/connect.svg' ?>"
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                              alt="">
                         <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
                             your website and
@@ -98,12 +99,13 @@
                         </div>
                     </div>
                     <div class="run-job actions slide-content <?php
-				    if ( UnusedCSS_Settings::get_first_link() ) {
-					    echo 'done';
-				    }
-				    ?>">
+					if ( UnusedCSS_Settings::get_first_link() ) {
+						echo 'done';
+					}
+					?>">
                         <h2>Run First Job</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/run-first-job.svg' ?>" alt="">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
+                             alt="">
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
                             been the industry's standard dummy</p>
                         <div class="action-wrap">
@@ -115,10 +117,13 @@
                     </div>
                     <div class="actions slide-content">
                         <h2>Congratulations!</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/career__isometric.svg'?>" alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
+                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/career__isometric.svg' ?>"
+                             alt="">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy</p>
                         <div class="action-wrap">
-                        <a class="act-button js-goto-settings" href="<?php echo admin_url('options-general.php?page=uucss')?>">View Jobs</a>
+                            <a class="act-button js-goto-settings"
+                               href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">View Jobs</a>
                         </div>
                     </div>
                 </div>
@@ -134,10 +139,10 @@
             <div class="loading-spinner"></div>
             <h2 class="title error">OOPS!</h2>
             <img class="sad intro" style=""
-                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/result_error.svg' ?>" alt="">
+                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/result_error.svg' ?>" alt="">
             <h2 class="title success">Congratulations</h2>
             <img class="success" style=""
-                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/congrats.svg' ?>" alt="">
+                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/congrats.svg' ?>" alt="">
             <p class="success">You have reduced css size successfully</p>
             <p class="error">An error occurred</p>
             <div class="first-result">

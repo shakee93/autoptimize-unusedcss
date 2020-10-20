@@ -103,26 +103,26 @@ trait UnusedCSS_Utils {
                 $notice['actions'] = [];
             }
 
-            if(!isset($notice['main_action'])){
-                $notice['main_action'] = [];
-            }
+	        if ( ! isset( $notice['main_action'] ) ) {
+		        $notice['main_action'] = [];
+	        }
 
-           ?>
+	        ?>
             <div class="uucss-notice-action notice notice-action notice-action-<?php echo $notice['action']; ?> notice-<?php echo $notice['type']; ?>">
                 <div class="notice-action-inner">
                     <div class="notice-icon">
                         <div class="logo-wrapper">
                             <img
-                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo-icon.svg' ?>" width="40"
+                                    src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/logo-icon.svg' ?>" width="40"
                                     alt="UnusedCSS.io logo">
                         </div>
                     </div>
                     <div class="notice-icon-content">
-                        <?php if(isset($notice['title'])) : ?>
+				        <?php if ( isset( $notice['title'] ) ) : ?>
                             <h2 class="uucss-notice-title"><?php echo $notice['title'] ?></h2>
-                        <?php endif; ?>
+				        <?php endif; ?>
                         <p>
-                            <?php echo $notice['message']; ?>
+					        <?php echo $notice['message']; ?>
                         </p>
                         <?php if(!empty($notice['actions'])): ?>
                             <p>
