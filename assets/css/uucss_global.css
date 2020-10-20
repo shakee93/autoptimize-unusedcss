@@ -130,6 +130,7 @@ div.uucss-on-board{
 }
 .uucss-on-board .actions.done a{
     pointer-events: none;
+    opacity: 0.6;
 }
 .uucss-on-board .actions h2 {
     font-size: 16px;
