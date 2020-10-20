@@ -301,7 +301,7 @@
 
                         <a target="_blank" href="https://unusedcss.io/">
                             <img
-                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/logo.svg' ?>" width="130"
+                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" width="130"
                                     alt="UnusedCSS.io logo">
                         </a>
                     </p>

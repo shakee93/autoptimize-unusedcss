@@ -90,33 +90,36 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function enqueueScripts() {
 
-		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
 
-		wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/datatables/jquery.dataTables.min.js', array(
+		wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.js', array(
 			'jquery',
 			'uucss_admin'
 		) );
-		wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/datatables/jquery.dataTables.min.css' );
+		wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
 
 
-		wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/tippy/popper.min.js', array( 'jquery' ) );
-		wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/tippy/tippy.css' );
+		wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
+		wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.js?v=1.7', array( 'jquery', 'wp-util' ) );
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/uucss_admin.css?v=1.3' );
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js?v=1.7', array(
+			'jquery',
+			'wp-util'
+		) );
+		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css?v=1.3' );
 
 		$data = array(
-			'api'   => UnusedCSS_Api::get_key(),
+			'api' => UnusedCSS_Api::get_key(),
 			'nonce' => wp_create_nonce( 'uucss_nonce' ),
-            'url' => site_url(),
+			'url' => site_url(),
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
 
 		wp_enqueue_script( 'uucss_admin' );
 
-		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/select2/select2.min.css' );
+		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.css' );
 
 	}
 
@@ -277,8 +280,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function add_ao_tab( $in ) {
 
 		$in = array_merge( $in, array(
-			//'uucss' => __( '🔥 UnusedCSS', 'autoptimize' ),
-			'uucss' => __( '<span class="uucss-tab-title"><img src="/wp-content/plugins/autoptimize-unusedcss/assets/logo-icon.svg" width="15" alt="UnusedCSS.io logo"><span>UnusedCSS</span></span>', 'autoptimize' ),
+			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="UnusedCSS.io logo"><span>UnusedCSS</span></span>', 'autoptimize' ),
 		) );
 
 		return $in;
