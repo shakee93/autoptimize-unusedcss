@@ -261,18 +261,20 @@ div.uucss-on-board{
 }
 
 .uucss-on-board .card-complete .content {
-    max-width: 350px;
+    max-width: 300px;
     background-color: white;
     width: 100%;
     position: relative;
     border-radius: 10px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     text-align: center;
+    padding-top: 25px;
+    padding-bottom: 20px;
 }
 
 .uucss-on-board .card-complete .content img{
     margin: 0 auto;
-    width: 300px;
+    width: 230px;
 }
 
 .uucss-on-board .card-complete .content > p{
@@ -299,10 +301,10 @@ div.uucss-on-board{
 .uucss-on-board .card-complete .content .title{
     text-align: center;
     font-size: 24px;
-    text-transform: uppercase;
     font-weight: 600;
     margin: 0;
     line-height: 42px;
+    color: #7f54b3;
 }
 
 .uucss-on-board .card-complete .content .title.error{
@@ -331,41 +333,10 @@ div.uucss-on-board{
 }
 
 .uucss-on-board .card-complete .content .first-result{
-    display: flex;
     align-items: center;
-    max-width: 265px;
+    max-width: 230px;
     margin: 0 auto;
     text-align: left;
-}
-
-.uucss-on-board .card-complete .content .first-result .details{
-    flex: 2;
-}
-
-.uucss-on-board .card-complete .content .first-result .details p{
-    font-size: 14px;
-    margin: 0;
-    font-weight: 400;
-}
-
-#cpb {
-    width: 100px;
-    position: relative;
-    text-align: center;
-    vertical-align: top;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    margin-right: 10px;
-}
-
-#cpb strong {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    line-height: 100px;
-    font-size: 20px;
 }
 
 .uucss-on-board.complete .plugin-steps{
@@ -390,32 +361,10 @@ div.uucss-on-board{
     100% { opacity: 1; transform: scale(1.0);}
 }
 
-@keyframes imageFadeIn {
-    0%{
-        transform: translateY(20px) translateX(20px) scale(0.0);
-        opacity: 0;
-    }
-    100%{
-        transform: translateY(0) translateX(0) scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes sadImageFadeIn {
-    0%{
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    100%{
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 .uucss-on-board.complete .card-complete .error-result{
     display: none;
     align-items: center;
-    max-width: 265px;
+    max-width: 235px;
     margin: 0 auto;
     justify-content: center;
     background-color: lightgray;
@@ -457,6 +406,128 @@ div.uucss-on-board{
 
 .uucss-on-board.complete .card-complete.has-error .first-result{
     display: none;
+}
+
+.uucss-on-board.complete .card-complete .tippy-content .error-tooltip span {
+    font-size: 11px;
+    line-height: 1.4 !important;
+    display: inline-block;
+}
+
+.uucss-on-board.complete .card-complete .tippy-content .error-tooltip {
+    margin: 5px 0;
+    max-width: 230px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-content .error-tooltip h5 {
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip {
+    min-width: 220px;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip p {
+    margin: 0;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar {
+    height: 13px;
+    position: relative;
+    background: #f34337;
+    border-radius: 25px;
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar.w-100 > span {
+    width: 100% !important;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 10px;
+    background-color: #069583;
+    position: relative;
+    transition: ease width .3s;
+    font-size: 7px;
+    color: white;
+    padding-right: 5px;
+    line-height: 12px;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper {
+    text-align: right;
+    margin: 38px 0 34px;
+    position: relative;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper em {
+    font-size: 10px;
+    border: 1px solid #b9a8d7;
+    padding: 3px 5px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 3px;
+    background: #f4f1f9;
+    margin-right: 4px;
+}
+
+.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar em {
+    position: absolute;
+    right: -5px;
+    top: 12px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] {
+    background-color: #fde4e2;
+    color: #f24237;
+    font-size: 10px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] .perc {
+    background: #f34337;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] .tippy-arrow {
+    color: #ebe4f6;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~=light] > .tippy-content {
+    padding: 5px 10px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] {
+    background-color: #d4f7f3;
+    color: #009687;
+    font-size: 10px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] .tippy-arrow {
+    color: #d5f7f3;
+    transform: translate3d(15px, 0px, 0px) !important;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] .perc {
+    background: #009687;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 2px;
+    margin-right: -2px;
+}
+
+.uucss-on-board.complete .card-complete .tippy-box[data-placement^=bottom]>.tippy-arrow:before{
+    left: 90px !important;
+}
+
+.uucss-on-board.complete .card-complete .tippy-content{
+    padding: 5px 5px;
 }
 
 /**
