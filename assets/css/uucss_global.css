@@ -207,7 +207,7 @@ div.uucss-on-board{
 
 .uucss-on-board .slide-content .action-wrap {
     position: absolute;
-    left: 33px;
+    left: 33.5px;
 }
 
 .uucss-on-board .logo-section {
@@ -267,6 +267,7 @@ div.uucss-on-board{
     position: relative;
     border-radius: 10px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    text-align: center;
 }
 
 .uucss-on-board .card-complete .content img{
@@ -334,6 +335,7 @@ div.uucss-on-board{
     align-items: center;
     max-width: 265px;
     margin: 0 auto;
+    text-align: left;
 }
 
 .uucss-on-board .card-complete .content .first-result .details{
