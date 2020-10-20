@@ -447,11 +447,6 @@
                     }
                     break;
                 }
-                case '4':{
-                    $('.uucss-on-board .steps-wrap .step-text .current').text('3');
-                    $('.uucss-on-board #progress-bar').css('width','100%');
-                    break;
-                }
             }
 
 

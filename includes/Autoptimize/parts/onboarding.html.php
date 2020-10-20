@@ -109,15 +109,6 @@
                             <span class="previous nav"><span class="dashicons dashicons-arrow-left-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="actions slide-content">
-                        <h2>Congratulations!</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry's standard dummy</p>
-                        <div class="action-wrap">
-                            <a class="act-button js-goto-settings"
-                               href="<?php echo admin_url('options-general.php?page=uucss') ?>">View Jobs</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
