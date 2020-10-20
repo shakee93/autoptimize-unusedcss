@@ -247,6 +247,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( ! isset( $options['uucss_api_key'] ) ) {
             $options['valid_domain'] = false;
+            update_option('autoptimize_uucss_settings', $options);
 			return;
 		}
 
