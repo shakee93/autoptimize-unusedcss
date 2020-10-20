@@ -3,7 +3,7 @@
 <div class="main-section">
     <div class="plugin-steps">
         <div class="logo-section">
-            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/logo.svg' ?>" alt="UnusedCSS.io logo">
+            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/ao+logo.svg' ?>" alt="UnusedCSS.io logo">
         </div>
         <div class="steps-wrap">
             <div class="step-text">
@@ -100,8 +100,8 @@
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
                              alt="">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry's standard dummy</p>
+                        <p>Run your first UnusedCSS removal job and see how much weight it could remove from your
+                            website. <strong>it could reduce css file size upto 98% on larger websites. </strong></p>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-first-job" href="#" target="_blank">
                                 Run First Job <span class="dashicons dashicons-yes-alt"></span>

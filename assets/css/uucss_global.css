@@ -130,6 +130,7 @@ div.uucss-on-board{
 }
 .uucss-on-board .actions.done a{
     pointer-events: none;
+    opacity: 0.6;
 }
 .uucss-on-board .actions h2 {
     font-size: 16px;
@@ -211,7 +212,7 @@ div.uucss-on-board{
 }
 
 .uucss-on-board .logo-section {
-    width: 150px;
+    width: 220px;
     margin: 30px auto 0;
 }
 
@@ -553,4 +554,39 @@ div.uucss-on-board{
     border-radius: 3px;
     margin-right: 2px;
     font-size: 12px;
+}
+
+/**
+    info box
+ */
+
+.uucss-info-wrapper {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px 10px 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.uucss-info-wrapper .info-icon .dashicons {
+    color: #6eb9f7;
+    font-size: 25px !important;
+}
+
+.uucss-info-wrapper .info-icon {
+    position: absolute;
+}
+
+.uucss-info-wrapper .info-details p {
+    margin: 0 !important;
+}
+
+.uucss-info-wrapper .info-details {
+    padding-left: 36px;
+}
+
+.uucss-info-wrapper p.divider {
+    margin-top: 5px !important;
+    height: 1px;
+    background: #d9d9d9;
 }
