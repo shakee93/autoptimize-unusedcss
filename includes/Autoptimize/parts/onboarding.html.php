@@ -3,7 +3,7 @@
 <div class="main-section">
     <div class="plugin-steps">
         <div class="logo-section">
-            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/logo.svg' ?>" alt="UnusedCSS.io logo">
+            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/ao+logo.svg' ?>" alt="UnusedCSS.io logo">
         </div>
         <div class="steps-wrap">
             <div class="step-text">
