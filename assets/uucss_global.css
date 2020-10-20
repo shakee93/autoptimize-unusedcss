@@ -114,7 +114,7 @@ div.uucss-on-board{
 .uucss-on-board .card {
     max-width: 230px;
     margin: 15px auto 25px;
-    padding: 20px 15px 10px 20px;
+    padding: 20px 15px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-radius: 5px;
     display: flex;
@@ -269,20 +269,9 @@ div.uucss-on-board{
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.uucss-on-board .card-complete .content img.intro {
-    width: 75px;
+.uucss-on-board .card-complete .content img{
     margin: 0 auto;
-    display: block;
-    margin-left: 125px;
-    margin-top: 20px;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-delay: 1s;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-    animation-fill-mode: none;
-    transform-origin: bottom right;
-    opacity: 0;
+    width: 300px;
 }
 
 .uucss-on-board .card-complete .content > p{
@@ -438,10 +427,6 @@ div.uucss-on-board{
 
 .uucss-on-board.complete .card-complete .content img.sad{
     display: none;
-    transform-origin: unset;
-    animation-delay: 0s;
-    margin-left: auto;
-    animation-duration: 2s;
 }
 
 .uucss-on-board.complete .card-complete.has-error .content img.sad{

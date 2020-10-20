@@ -104,8 +104,8 @@
             }
             if($('.uucss-on-board .card .actions.done').length == 4){
                 if(response.data.uucss_first_job.meta && response.data.uucss_first_job.meta.error){
-                    $('.uucss-on-board .card-complete .content img.sad').css('animation-name','sadImageFadeIn');
-                    $('.uucss-on-board .card-complete .content img.sad').css('opacity',1)
+                    //$('.uucss-on-board .card-complete .content img.sad').css('animation-name','sadImageFadeIn');
+                    //$('.uucss-on-board .card-complete .content img.sad').css('opacity',1)
                     $('.uucss-on-board.complete .card-complete .error-result p span.code').text(response.data.uucss_first_job.meta.error.code);
                     $('.uucss-on-board.complete .card-complete .error-result p span.description').text(response.data.uucss_first_job.meta.error.message);
                     $('.uucss-on-board .card-complete').addClass('has-error');
@@ -114,9 +114,9 @@
                     animateProgressBar(response.data.uucss_first_job.meta.stats.reduction / 100);
                     $('.uucss-on-board .card-complete .content .first-result .details .url-value').text(response.data.uucss_first_job.url);
                     $('.uucss-on-board .card-complete .content .first-result .details .reduction-value').text(response.data.uucss_first_job.meta.stats.reductionSize);
-                    $('.uucss-on-board .card-complete .content img.success').css('animation-name','imageFadeIn');
+                    //$('.uucss-on-board .card-complete .content img.success').css('animation-name','imageFadeIn');
                     setTimeout(function(){
-                        $('.uucss-on-board .card-complete .content img.success').css('opacity',1);
+                        //$('.uucss-on-board .card-complete .content img.success').css('opacity',1);
                     },2000);
                 }
                 $('.uucss-on-board').addClass('complete')

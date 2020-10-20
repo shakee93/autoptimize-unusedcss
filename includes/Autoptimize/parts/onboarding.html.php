@@ -132,11 +132,12 @@
     <div class="card-complete loading">
         <div class="content">
             <div class="loading-spinner"></div>
-            <img class="sad intro" src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/sad-smiley.gif' ?>" alt="">
-            <h2 class="title success">Congratulations</h2>
-            <img style="width: 300px;margin: 0 auto;display: block;"
-                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/congrats.svg' ?>" alt="">
             <h2 class="title error">OOPS!</h2>
+            <img class="sad intro" style=""
+                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/result_error.svg' ?>" alt="">
+            <h2 class="title success">Congratulations</h2>
+            <img class="success" style=""
+                 src="<?php echo UUCSS_PLUGIN_URL . 'assets/on-boarding/congrats.svg' ?>" alt="">
             <p class="success">You have reduced css size successfully</p>
             <p class="error">An error occurred</p>
             <div class="first-result">
