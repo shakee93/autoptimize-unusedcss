@@ -479,3 +479,44 @@ table#uucss-history{
 #uucss-wrapper .left-section strong {
     color: #332e3a;
 }
+
+/**
+    license info
+ */
+
+#uucss-wrapper .license-info {
+    padding: 10px;
+}
+
+#uucss-wrapper .license-info.loading ul {
+    visibility: hidden;
+    display: block !important;
+    min-height: 90px;
+}
+
+#uucss-wrapper .license-info ul {
+    margin-bottom: 12px;
+}
+
+#uucss-wrapper .license-info a.uucss-activate {
+    display: inline-block;
+    padding: 10px 16px;
+    margin: 0;
+    font-size: 11px;
+    border-radius: 3px;
+    line-height: 1;
+}
+
+#uucss-wrapper .license-info span#license-message {
+    margin-bottom: 5px;
+    margin-left: 1px;
+    display: inline-block;
+}
+
+#uucss-wrapper .license-info.loading .spinner {
+    position: absolute;
+    visibility: visible;
+    opacity: 1;
+    top: calc(50% - 20px);
+    left: 85px;
+}

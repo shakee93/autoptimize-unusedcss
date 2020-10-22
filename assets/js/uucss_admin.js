@@ -317,6 +317,32 @@
             ]
         });
 
+        updateLicense();
     });
+
+
+    function updateLicense() {
+
+        var container = $('.license-info')
+
+        container.addClass('loading');
+
+        wp.ajax.post('uucss_license').then(function (i) {
+            $('.license-info ul').show();
+            console.log(i);
+
+            $('#license-name').text(i.name)
+            $('#license-email').text(i.email)
+            $('#license-next_billing').text(new Date(i.next_billing * 1000).toLocaleDateString())
+            $('#license-plan').text(i.plan)
+
+            container.removeClass('loading');
+        }).fail(function (i) {
+            $('.license-info ul').hide()
+            $('.license-info #license-message').show().html('Sorry, we couldn\'t collect license information of yours.')
+            container.removeClass('loading');
+        })
+
+    }
 
 }(jQuery))

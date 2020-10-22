@@ -120,14 +120,34 @@ abstract class UnusedCSS_Admin {
 		$data = $api->post( 'whitelist-packs/wp-suggest', [
 			'plugins' => $active_plugins,
 			'theme'   => get_template(),
-            'url' => site_url()
+			'url'     => site_url()
 		] );
 
-		if(wp_doing_ajax()){
-            wp_send_json_success( $data->data );
-        }
+		if ( wp_doing_ajax() ) {
+			wp_send_json_success( $data->data );
+		}
 
 		return $data;
+	}
+
+
+	public function uucss_license() {
+
+
+		$api = new UnusedCSS_Api();
+
+		$data = $api->get( 'license' );
+
+		if ( ! is_wp_error( $data ) ) {
+
+			if ( isset( $data->errors ) ) {
+				wp_send_json_error( $data->errors[0]->detail );
+			}
+
+			wp_send_json_success( $data->data );
+		}
+
+		wp_send_json_error( 'unknown error occurred' );
 	}
 
 

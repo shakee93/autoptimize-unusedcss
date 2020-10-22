@@ -35,7 +35,7 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display:block;">
+                    <div class="content" style="display:none;">
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
@@ -278,30 +278,35 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>">
-                        <table class="form-table" id="uucss-options">
+                    <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>; ">
 
-                            <tr>
-                                <th scope="row"><?php _e( 'License', 'autoptimize' ); ?></th>
-                                <td>
-                                    <label>
-                                        <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
-                                               value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-											       echo $options['uucss_api_key_verified'] ?>">
-                                        <input id='uucss_api_key' type='hidden'
-                                               name='autoptimize_uucss_settings[uucss_api_key]'
-                                               value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
-                                               size="40">
-                                        <em id="verification_status"></em>
-                                        <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url('deactivate') :
-											UnusedCSS_Autoptimize_Admin::activation_url('authorize') ?>"
-                                           class="uucss-activate">
-											<?php echo ( $options['valid_domain']) ? 'Deactivate License' : 'Reactivate License' ?>
-                                        </a>
-                                    </label>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="license-info">
+                            <span id="license-message" style="display: none"></span>
+                            <div class="spinner"></div>
+                            <ul style="display: none">
+                                <li><strong>Name : </strong> <span id="license-name"></span></li>
+                                <li><strong>Email : </strong> <span id="license-email"></span></li>
+                                <li><strong>Plan : </strong><span id="license-plan"></span></li>
+                                <li><strong>Next Billing : </strong><span id="license-next_billing"></span></li>
+                            </ul>
+
+                            <div>
+                                <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
+                                       value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
+									       echo $options['uucss_api_key_verified'] ?>">
+                                <input id='uucss_api_key' type='hidden'
+                                       name='autoptimize_uucss_settings[uucss_api_key]'
+                                       value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
+                                       size="40">
+                                <em id="verification_status"></em>
+                                <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) :
+									UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
+                                   class="uucss-activate">
+									<?php echo ( $options['valid_domain'] ) ? 'Deactivate License' : 'Reactivate License' ?>
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
                 </li>
 
