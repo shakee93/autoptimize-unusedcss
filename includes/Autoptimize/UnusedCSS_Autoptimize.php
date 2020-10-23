@@ -36,15 +36,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 
-
-	    add_filter( 'query_vars', function ( $vars ) {
-
-		    $vars[] = 'no_uucss';
-
-		    return $vars;
-
-	    } );
-
 	    parent::__construct();
 
     }
@@ -140,7 +131,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
-	    if ( get_query_var( 'no_uucss' ) == 'true' ) {
+	    if ( isset( $_REQUEST['no_uucss'] ) ) {
 		    return;
 	    }
 
