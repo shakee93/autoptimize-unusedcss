@@ -21,9 +21,7 @@ register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::act
 
 add_action( 'plugins_loaded', function () {
 
-	$ao_uucss = new UnusedCSS_Autoptimize();
-	new UnusedCSS_Autoptimize_Onboard( $ao_uucss );
-	new UnusedCSS_Autoptimize_Admin( $ao_uucss );
+	new UnusedCSS_Autoptimize();
 
 } );
 

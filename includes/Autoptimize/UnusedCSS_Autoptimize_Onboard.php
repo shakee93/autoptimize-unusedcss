@@ -7,6 +7,11 @@
 class UnusedCSS_Autoptimize_Onboard {
 	use UnusedCSS_Utils;
 
+	/**
+	 * @var UnusedCSS_Autoptimize
+	 */
+	private $uucss;
+
 	public function __construct( $ao_uucss ) {
 
 		$this->uucss = $ao_uucss;

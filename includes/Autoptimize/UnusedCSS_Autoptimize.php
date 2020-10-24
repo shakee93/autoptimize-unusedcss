@@ -16,11 +16,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
      */
     public function __construct()
     {
-        parent::enqueueGlobalScript();
+	    parent::enqueueGlobalScript();
 
-        $this->provider = 'autoptimize';
+	    $this->provider = 'autoptimize';
 
-	    register_deactivation_hook(UUCSS_PLUGIN_FILE, [$this, 'vanish']);
+	    register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
+
+	    /**
+	     * initialize on-boarding functions
+	     */
+	    new UnusedCSS_Autoptimize_Onboard( $this );
 
 	    if ( ! $this->check_dependencies() ) {
 		    return;
@@ -37,6 +42,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 
 	    parent::__construct();
+
+	    /**
+	     * Initialize admin area functions
+	     */
+	    new UnusedCSS_Autoptimize_Admin( $this );
 
     }
 
