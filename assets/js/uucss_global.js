@@ -110,7 +110,6 @@
                     $('.uucss-on-board .card-complete').addClass('has-error');
                 }
                 else if(response.data.uucss_first_job){
-                    animateProgressBar(response.data.uucss_first_job.meta.stats.reduction / 100);
                     var innerTippy = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
                         content: 'Before UnusedCSS <span class="perc">' + response.data.uucss_first_job.meta.stats.before + '</span>',
                         allowHTML: true,
@@ -136,8 +135,8 @@
                         delay: 0,
                     })
                     innerTippy2.show();
-                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').text(response.data.uucss_first_job.meta.stats.reduction + '%');
-                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').css('width', response.data.uucss_first_job.meta.stats.reduction + '%');
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').text((100 - Number(response.data.uucss_first_job.meta.stats.reduction)) + '%');
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').css('width', (100 - Number(response.data.uucss_first_job.meta.stats.reduction)) + '%');
                 }
                 $('.uucss-on-board').addClass('complete')
             }
@@ -282,25 +281,6 @@
                     }
                 }
             })
-        }
-
-        function animateProgressBar(value){
-            var progressBarOptions = {
-                startAngle: -1.55,
-                size: 75,
-                value: value,
-                lineCap: 'round',
-                fill: {
-                    color: '#7f54b3'
-                }
-            }
-
-            setTimeout(function(){
-                $('#cpb').circleProgress(progressBarOptions).on('circle-animation-progress', function(event, progress, stepValue) {
-                    var text = String((stepValue * 100).toFixed(0)) + '%';
-                    $(this).find('strong').text(text);
-                });
-            },1000);
         }
 
         function getStatus(){

@@ -48,14 +48,14 @@ class UnusedCSS_Api
 		$url = self::$apiUrl . '/' . $endpoint;
 
 		$response = wp_remote_post( $url, [
-			'timeout' => 20,
+			'timeout' => 40,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			],
 			'body'    => $data
 		] );
 
-		return $this->handle_response( $response );
+		return $this->handle_response( $response , $data);
 	}
 
 
@@ -64,7 +64,7 @@ class UnusedCSS_Api
 	 *
 	 * @return mixed|null
 	 */
-	public function handle_response( $response ) {
+	public function handle_response( $response , $data = null) {
 
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 
@@ -73,12 +73,13 @@ class UnusedCSS_Api
 
 				return json_decode( $body );
 			}
-
+            $this->log($data);
 			$this->log( $response['body'] );
 
 			return json_decode( $response['body'] );
 		}
 		else {
+		    $this->log($data);
 			$this->log( $response->get_error_message() );
 
 			return $response->get_error_message();
