@@ -443,9 +443,6 @@
 
         getStatus();
 
-        animateProgressBar(0);
-
-
         /**
          * Safelist input in options
          *
