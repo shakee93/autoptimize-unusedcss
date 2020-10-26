@@ -329,7 +329,6 @@
 
         wp.ajax.post('uucss_license').then(function (i) {
             $('.license-info ul').show();
-            console.log(i);
 
             $('#license-name').text(i.name)
             $('#license-email').text(i.email)
