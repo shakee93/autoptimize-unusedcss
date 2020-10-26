@@ -45,9 +45,7 @@ abstract class UnusedCSS {
 
         add_action('wp_enqueue_scripts', function () {
 
-	        $url = get_the_permalink();
-
-	        $this->url = ( empty( $url ) ) ? $this->get_current_url() : $url;
+	        $this->url = $this->get_current_url();
 
 	        if ( $this->enabled() ) {
 		        $this->purge_css();
