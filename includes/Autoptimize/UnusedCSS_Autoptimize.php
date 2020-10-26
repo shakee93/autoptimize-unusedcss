@@ -53,29 +53,26 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function is_url_allowed($url = null, $args = null)
     {
-        if (!$url) {
-            $url = $this->url;
-        }
+	    if ( ! $url ) {
+		    $url = $this->url;
+	    }
 
-        if(!parent::is_url_allowed($url, $args)){
-            return false;
-        }
+	    if ( ! parent::is_url_allowed( $url, $args ) ) {
+		    return false;
+	    }
 
-        $options = UnusedCSS_Autoptimize_Admin::fetch_options();
+	    if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
+		    $exploded = explode( ',', $this->options['uucss_excluded_links'] );
 
-        if (isset($options['uucss_excluded_links']) && !empty($options['uucss_excluded_links'])) {
-            $exploded = explode(',', $options['uucss_excluded_links']);
+		    foreach ( $exploded as $pattern ) {
 
-            // TODO : improve this
-            foreach ($exploded as $pattern) {
+			    if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+				    $pattern = parse_url( $pattern )['path'];
+			    }
 
-	            if (filter_var($pattern, FILTER_VALIDATE_URL)) {
-		            $pattern = parse_url($pattern)['path'];
-	            }
-
-            	// check using string contains instead of regex
-                if (self::str_contains( $url, $pattern )) {
-                    $this->log('skipped : ' . $url);
+			    // check using string contains instead of regex
+			    if ( self::str_contains( $url, $pattern ) ) {
+				    $this->log( 'skipped : ' . $url );
                     return false;
                 }
 

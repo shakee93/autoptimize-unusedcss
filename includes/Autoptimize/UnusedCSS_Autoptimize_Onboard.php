@@ -12,23 +12,22 @@ class UnusedCSS_Autoptimize_Onboard {
 	 */
 	private $uucss;
 
+
 	public function __construct( $ao_uucss ) {
 
 		$this->uucss = $ao_uucss;
 
 		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
-
 		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
-
 		add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
-
         add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
-
         add_action('admin_head', [ $this, 'remove_notices' ]);
     }
 
-    function run_first_job(){
-        if(!UnusedCSS_Autoptimize_Admin::ao_active()){
+
+	function run_first_job(){
+
+		if(!UnusedCSS_Autoptimize_Admin::ao_active()){
             wp_send_json_error(false);
         }
         if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()){
@@ -43,10 +42,13 @@ class UnusedCSS_Autoptimize_Onboard {
         $this->uucss->purge_css();
 
         $this->ao_installed();
-    }
 
-    function remove_notices(){
-        if(!isset($_REQUEST['action'])){
+	}
+
+
+	function remove_notices(){
+
+		if(!isset($_REQUEST['action'])){
             return;
         }
         if(!isset($_REQUEST['plugin'])){
@@ -134,16 +136,15 @@ class UnusedCSS_Autoptimize_Onboard {
     }
 
     public static function get_on_board_step(){
-        if(!UnusedCSS_Autoptimize_Admin::is_api_key_verified()){
-            return 1;
-        }
-        else if(!UnusedCSS_Autoptimize_Admin::ao_active()){
-            return 2;
-        }else if(!UnusedCSS_Autoptimize_Admin::ao_css_option_enabled()) {
-            return 3;
-        } else if ( !UnusedCSS_Autoptimize_Admin::first_job_done() ) {
-            return 4;
-        }
+	    if ( ! UnusedCSS_Autoptimize_Admin::is_api_key_verified() ) {
+		    return 1;
+	    } else if ( ! UnusedCSS_Autoptimize_Admin::ao_active() ) {
+		    return 2;
+	    } else if ( ! UnusedCSS_Autoptimize_Admin::ao_css_option_enabled() ) {
+		    return 3;
+	    } else if ( ! UnusedCSS_Autoptimize_Admin::first_job_done() ) {
+		    return 4;
+	    }
         return 1;
     }
 
