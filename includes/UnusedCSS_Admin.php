@@ -144,6 +144,10 @@ abstract class UnusedCSS_Admin {
 				wp_send_json_error( $data->errors[0]->detail );
 			}
 
+			if ( gettype( $data ) === 'string' ) {
+				wp_send_json_error( $data );
+			}
+
 			wp_send_json_success( $data->data );
 		}
 
