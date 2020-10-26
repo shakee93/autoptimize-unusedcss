@@ -34,7 +34,7 @@ class UnusedCSS_Api
 		$url = self::$apiUrl . '/' . $endpoint . '?' . http_build_query( $data );
 
 		$response = wp_remote_get( $url, [
-			'timeout' => 20,
+			'timeout' => 40,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			]
