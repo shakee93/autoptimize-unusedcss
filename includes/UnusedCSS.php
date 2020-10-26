@@ -45,11 +45,13 @@ abstract class UnusedCSS {
 
         add_action('wp_enqueue_scripts', function () {
 
-            $this->url = $this->get_current_url();
+	        $url = get_the_permalink();
 
-            if($this->enabled()) {
-                $this->purge_css();
-            }
+	        $this->url = ( empty( $url ) ) ? $this->get_current_url() : $url;
+
+	        if ( $this->enabled() ) {
+		        $this->purge_css();
+	        }
 
         });
     }
