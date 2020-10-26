@@ -222,7 +222,7 @@
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            inline CSS files which are smaller than 15kb after unusedcss are removed
+                                            inline CSS files which are smaller than 5kb after unusedcss are removed
                                         </i>
                                     </label>
                                 </td>

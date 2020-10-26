@@ -244,7 +244,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		$inline = $this->get_inline_content( $link );
 
-		if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/inline-css-limit', 15 * 1000 ) ) {
+		if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/inline-css-limit', 5 * 1000 ) ) {
 			return;
 		}
 
