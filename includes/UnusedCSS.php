@@ -207,9 +207,9 @@ abstract class UnusedCSS {
 
     public function cache($url = null, $args = []) {
 
-        if (!$this->is_url_allowed($url, $args)) {
-            return false;
-        }
+	    if ( ! $this->is_url_allowed( $url, $args ) ) {
+		    return false;
+	    }
 
 	    global $post;
 
@@ -217,7 +217,9 @@ abstract class UnusedCSS {
 		    $args['post_id'] = $post->ID;
 	    }
 
-	    $args['options'] = $this->api_options();
+	    if ( ! isset( $args['options'] ) ) {
+		    $args['options'] = $this->api_options();
+	    }
 
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
@@ -234,9 +236,9 @@ abstract class UnusedCSS {
     }
 
 
-	public function refresh( $url ) {
+	public function refresh( $url, $args = [] ) {
 		$this->clear_cache( $url );
-		$this->cache( $url );
+		$this->cache( $url, $args );
 	}
 
 
