@@ -38,7 +38,7 @@
                     <div class="content" style="display:none;">
                         <table class="form-table" id="uucss-options">
                             <tr>
-                                <th scope="row"><?php _e( 'Sitewide Safelist', 'autoptimize' ); ?>
+                                <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
                                           data-message="Whitelisted Selectors (regex supported)">
                                     </span>
@@ -67,14 +67,22 @@
                                         <div class="info-details">
                                             <p>You can add rules to specify which css classes or id's are safe to left
                                                 in the final UnusedCSS output.</p>
-                                            <!--                                            <p class="divider"></p>-->
+                                            <p class="divider"></p>
+                                            <p> use * expressions and add one rule at a time, <br>
+                                            </p>
+                                            <p class="divider"></p>
+                                            <p>
+
+                                                examples : <em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
+                                            </p>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude URLs', 'autoptimize' ); ?>
-                                    <span class="dashicons dashicons-info-outline exclude-links has-tooltip" data-message="Whitelisted links example example.com/some-url, /another-url/some-url">
+                                <th scope="row"><?php _e( 'Exclude URLs', 'uucss' ); ?>
+                                    <span class="dashicons dashicons-info-outline exclude-links has-tooltip"
+                                          data-message="Whitelisted links example example.com/some-url, /another-url/some-url">
 
                                     </span></th>
                                 <td>
@@ -107,8 +115,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude Css files', 'autoptimize' ); ?>
-                                    <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip" data-message="Whitelisted files example my-styles.css, /my-theme/style.css">
+                                <th scope="row"><?php _e( 'Exclude Css files', 'uucss' ); ?>
+                                    <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip"
+                                          data-message="Whitelisted files example my-styles.css, /my-theme/style.css">
 
                                     </span></th>
                                 <td>
@@ -140,7 +149,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Other Options', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Other Options', 'uucss' ); ?></th>
                                 <td>
 
                                     <p>
@@ -148,8 +157,8 @@
                                             <input id='uucss_minify'
                                                    type='checkbox'
                                                    name='autoptimize_uucss_settings[uucss_minify]'
-						                        <?php if ( isset( $options['uucss_minify'] ) )
-							                        echo 'checked="checked"' ?>
+												<?php if ( isset( $options['uucss_minify'] ) )
+													echo 'checked="checked"' ?>
                                                    value='1'>
                                             Minify <em>-- minify and remove css comments via the api</em>
                                         </label>
@@ -192,8 +201,8 @@
                                         <label for="uucss_analyze_javascript">
                                             <input id='uucss_analyze_javascript' type='checkbox'
                                                    name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
-						                        echo 'checked="checked"';
-					                        } ?> value='1'>
+	                                            echo 'checked="checked"';
+                                            } ?> value='1'>
                                             Analyze javascript <em>-- analyze javascript and remove unused css which are
                                                 not
                                                 used in JS (experimental)</em>
@@ -202,12 +211,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Parse all CSS files', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Parse all CSS files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='autoptimize_uucss_include_all_files' type='checkbox'
                                                   name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) {
-					                        echo 'checked="checked"';
-				                        } ?> value='1'>
+											echo 'checked="checked"';
+										} ?> value='1'>
                                         <i>
                                             Parse css files which are excluded by autoptimize as well (experimental)
                                         </i>
@@ -215,7 +224,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Inline small CSS files', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Inline small CSS files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='uucss_inline_css' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
@@ -228,12 +237,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Query String', 'autoptimize' ); ?></th>
+                                <th scope="row"><?php _e( 'Query String', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='uucss_query_string' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_query_string]' <?php if ( ! empty( $options['uucss_query_string'] ) && '1' === $options['uucss_query_string'] ) {
-		                                    echo 'checked="checked"';
-	                                    } ?> value='1'>
+											echo 'checked="checked"';
+										} ?> value='1'>
                                         <i>
                                             Consider links with query strings as separate links.
                                         </i>
@@ -242,16 +251,16 @@
                             </tr>
 
                             <tr>
-                                <th scope="row"><?php _e( 'Safelist Packs', 'autoptimize' ); ?>
+                                <th scope="row"><?php _e( 'Safelist Packs', 'uucss' ); ?>
 
                                 </th>
                                 <td>
                                     <label>
                                         <select id="whitelist_packs" multiple class="js-example-basic-single"
                                                 name="autoptimize_uucss_settings[whitelist_packs][]">
-					                        <?php if ( isset( $options['whitelist_packs'] ) ) {
+											<?php if ( isset( $options['whitelist_packs'] ) ) {
 
-						                        foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
+												foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
                                                     <option selected
                                                             value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
 														echo end( $name ) ?></option>
@@ -313,7 +322,7 @@
                 <li class="submit">
 
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
-                                             value="<?php _e( 'Save & Clear Cache', 'autoptimize' ); ?>"/>
+                                             value="<?php _e( 'Save & Clear Cache', 'uucss' ); ?>"/>
 
                         <a target="_blank" href="https://unusedcss.io/">
                             <img

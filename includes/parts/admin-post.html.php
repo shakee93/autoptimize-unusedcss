@@ -1,44 +1,5 @@
 <?php defined( 'ABSPATH' ) or die(); ?>
 
-<style>
-    #uucss-options .inside {
-        padding-bottom: 0;
-    }
-
-    #uucss-options .uucss-actions {
-        text-align: right;
-        background: whitesmoke;
-        border-top: 1px solid #dddddd;
-        padding: 10px;
-        margin: 0 -12px;
-    }
-
-    #uucss-options input[type="text"].ui-autocomplete-loading {
-        background: none;
-    }
-
-    #uucss-options em {
-        color: #9E9E9E;
-    }
-
-    #uucss-options .example span {
-        display: inline-block;
-        margin-bottom: 4px;
-    }
-
-    #uucss-options span em {
-        background: #F5F5F5;
-        color: #3F51B5;
-        border: 1px solid #E0E0E0;
-        border-radius: 3px;
-        padding: 3px 8px;
-    }
-
-    #uucss-options .safelist-add button.button {
-        width: 100%;
-        margin-top: 8px;
-    }
-</style>
 
 <div id="uucss-settings">
 
@@ -71,6 +32,24 @@
         </div>
 
         </p>
+
+        <div class="uucss-info-wrapper" style="margin-bottom: 10px">
+            <div class="info-icon">
+                <span class="dashicons dashicons-info"></span>
+            </div>
+            <div class="info-details">
+                <p>You can add rules to specify which css classes or id's are safe to left
+                    in the final UnusedCSS output.</p>
+                <p class="divider"></p>
+                <p>
+                    use * expressions and add one rule at a time,
+                </p>
+                <p class="divider"></p>
+                <p>
+                    examples : <br><em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
+                </p>
+            </div>
+        </div>
     </div>
 
 
