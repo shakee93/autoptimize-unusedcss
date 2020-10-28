@@ -520,3 +520,85 @@ table#uucss-history{
     top: calc(50% - 20px);
     left: 85px;
 }
+
+.uucss-support a {
+    padding: 14px 20px 12px 13px;
+    position: fixed;
+    right: 3em;
+    bottom: 2em;
+    background: #674499;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: ease background .3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-radius: 100px;
+}
+
+.uucss-support a:hover {
+    background: #8055b2;
+}
+
+.uucss-support a .dashicons {
+    margin-right: 8px;
+    font-size: 1.8em;
+    line-height: 0.7;
+}
+
+.tippy-content {
+    background: white;
+    color: black;
+    border-radius: 4px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+#uucss-support-tooltip h3 {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 100px;
+    font-size: 16px;
+    margin: 5px 0;
+    color: #484350;
+}
+
+#uucss-support-tooltip {
+    font-size: 12px;
+    margin: 0 10px 10px 10px;
+    display: inline-block;
+}
+
+#uucss-support-tooltip h3 {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 100px;
+    font-size: 16px;
+    margin: 5px 0;
+    color: #484350;
+}
+
+#uucss-support-tooltip {
+    font-size: 12px;
+    margin: 0 10px 10px 10px;
+    display: inline-block;
+}
+
+.tippy-box[data-animation=shift-toward][data-state=hidden] {
+    opacity: 0
+}
+
+.tippy-box[data-animation=shift-toward][data-state=hidden][data-placement^=top] {
+    transform: translateY(-10px)
+}
+
+.tippy-box[data-animation=shift-toward][data-state=hidden][data-placement^=bottom] {
+    transform: translateY(10px)
+}
+
+.tippy-box[data-animation=shift-toward][data-state=hidden][data-placement^=left] {
+    transform: translateX(-10px)
+}
+
+.tippy-box[data-animation=shift-toward][data-state=hidden][data-placement^=right] {
+    transform: translateX(10px)
+}

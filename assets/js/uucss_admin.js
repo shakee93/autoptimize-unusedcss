@@ -342,6 +342,14 @@
             container.removeClass('loading');
         })
 
+        tippy('.uucss-support a', {
+            allowHTML: true,
+            arrow: false,
+            animation: 'shift-toward',
+            placement: 'top-end',
+            content: document.getElementById('uucss-support-tooltip'),
+        });
+
     }
 
 }(jQuery))
