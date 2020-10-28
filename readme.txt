@@ -1,4 +1,4 @@
-=== Autoptimize UnusedCSS Power-Up ===
+=== UnusedCSS Power-Up for Autoptimize ===
 Contributors: Shakeeb Sadikeen, futtta
 Donate link:
 Tags: unusedcss, unused css, autoptimize
