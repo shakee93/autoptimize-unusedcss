@@ -25,9 +25,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-			define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
-		}
 
 		add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
 			$this,

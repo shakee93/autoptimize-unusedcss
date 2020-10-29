@@ -232,12 +232,17 @@ trait UnusedCSS_Utils {
 	}
 
     public static function activation_url($action){
-        return UUCSS_ACTIVATION_URL . '?' . build_query( [
-                'action'  => $action,
-                'nonce' => wp_create_nonce( 'uucss_activation' ),
-                'site'  => get_site_url(),
-                'back'  => admin_url( 'options-general.php?page=uucss' ),
-                'goto'  => UUCSS_ACTIVATION_URL
-            ] );
+
+	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
+		    define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
+	    }
+
+	    return UUCSS_ACTIVATION_URL . '?' . build_query( [
+			    'action' => $action,
+			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
+			    'site'   => get_site_url(),
+			    'back'   => admin_url( 'options-general.php?page=uucss' ),
+			    'goto'   => UUCSS_ACTIVATION_URL
+		    ] );
     }
 }
