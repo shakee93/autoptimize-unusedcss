@@ -546,7 +546,7 @@ table#uucss-history{
     line-height: 0.7;
 }
 
-.tippy-content {
+.uucss-support .tippy-content {
     background: white;
     color: black;
     border-radius: 4px;

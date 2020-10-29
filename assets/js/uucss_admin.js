@@ -345,6 +345,7 @@
         tippy('.uucss-support a', {
             allowHTML: true,
             arrow: false,
+            appendTo: 'parent',
             animation: 'shift-toward',
             placement: 'top-end',
             content: document.getElementById('uucss-support-tooltip'),
