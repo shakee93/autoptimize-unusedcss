@@ -195,9 +195,7 @@ abstract class UnusedCSS_Admin {
 	    }
 
 	    if ( isset( $_POST['args'] ) ) {
-		    $_args = $_POST['args'];
-
-		    $args['post_id'] = ( isset( $_args['post_id'] ) ) ? intval( $_args['post_id'] ) : null;
+		    $args['post_id'] = ( isset( $_POST['args']['post_id'] ) ) ? intval( $_POST['args']['post_id'] ) : null;
 	    }
 
 	    $url = esc_url_raw( $_POST['url'] );

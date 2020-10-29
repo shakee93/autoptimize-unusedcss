@@ -216,7 +216,7 @@ trait UnusedCSS_Utils {
 
 		$url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
 
-		$_REQUEST['plugin'] = $plugin;
+		$_REQUEST['plugin'] = sanitize_text_field( $plugin );
 		$url                = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
 
 		return $url;

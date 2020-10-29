@@ -319,10 +319,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
 			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
 			return;
 		}
 
-		$token = $_REQUEST['token'];
+		$token = sanitize_text_field( $_REQUEST['token'] );
 
 		if ( strlen( $token ) !== 32 ) {
 			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
