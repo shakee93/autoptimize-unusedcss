@@ -3,7 +3,7 @@
 Plugin Name: UnusedCSS Power-Up for Autoptimize
 Plugin URI:  https://unusedcss.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     0.0.3
+Version:     0.0.4
 Author:      Shakeeb Sadikeen
 Author URI:  https://shakeeb.dev/
 */
