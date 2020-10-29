@@ -107,6 +107,7 @@
                 if(response.data.uucss_first_job.meta && response.data.uucss_first_job.meta.error){
                     $('.uucss-on-board.complete .card-complete .error-result p span.code').text(response.data.uucss_first_job.meta.error.code);
                     $('.uucss-on-board.complete .card-complete .error-result p span.description').text(response.data.uucss_first_job.meta.error.message);
+                    $('.uucss-on-board.complete .card-complete a.js-goto-settings').text('Settings');
                     $('.uucss-on-board .card-complete').addClass('has-error');
                 }
                 else if(response.data.uucss_first_job){

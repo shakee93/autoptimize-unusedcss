@@ -328,7 +328,7 @@ div.uucss-on-board{
 }
 
 .uucss-on-board .card-complete.has-error .content .title.success,
-.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-settings,
+/*.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-settings,*/
 .uucss-on-board .card-complete.has-error .content p.success{
     display: none;
 }
