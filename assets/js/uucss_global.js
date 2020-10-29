@@ -64,29 +64,29 @@
             markCompletion();
         }
 
-        function gotoConnect() {
-            $('.uucss-on-board #progress-bar').css('width','75%');
+        function gotoConfigure() {
+            $('.uucss-on-board #progress-bar').css('width', '75%');
             $('.uucss-on-board .plugin-steps .steps-wrap .current').text(3);
             $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Connect');
-            $contentWrap.css('transform','translate3d(-446px,0px,0px)');
-            $contentWrap.css('transition-duration','0.5s');
+            $contentWrap.css('transform', 'translate3d(-446px,0px,0px)');
+            $contentWrap.css('transition-duration', '0.5s');
         }
 
         function gotoRunFirstJob() {
-            $('.uucss-on-board #progress-bar').css('width','100%');
-            $('.uucss-on-board .steps-wrap').css('opacity',0);
+            $('.uucss-on-board #progress-bar').css('width', '100%');
+            $('.uucss-on-board .steps-wrap').css('opacity', 0);
             $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
             $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
-            $contentWrap.css('transform','translate3d(-669px,0px,0px)');
-            $contentWrap.css('transition-duration','0.5s');
+            $contentWrap.css('transform', 'translate3d(-669px,0px,0px)');
+            $contentWrap.css('transition-duration', '0.5s');
         }
 
-        function gotoConfigure() {
-            $('.uucss-on-board #progress-bar').css('width','50%');
+        function gotoConnect() {
+            $('.uucss-on-board #progress-bar').css('width', '50%');
             $('.uucss-on-board .plugin-steps .steps-wrap .current').text(2);
             $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Configure');
-            $contentWrap.css('transform','translate3d(-223px,0px,0px)');
-            $contentWrap.css('transition-duration','0.5s');
+            $contentWrap.css('transform', 'translate3d(-223px,0px,0px)');
+            $contentWrap.css('transition-duration', '0.5s');
         }
 
         function markCompleteActions(response){
@@ -276,7 +276,7 @@
                         }
                         if(response.data.uucss_connected ){
                             closePopWindow();
-                            gotoConfigure()
+                            gotoRunFirstJob();
                         }
                     }
                 }

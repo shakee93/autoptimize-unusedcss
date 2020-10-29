@@ -40,7 +40,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( is_admin() ) {
 
-            UnusedCSS_Autoptimize_Onboard::activate();
 			$this->deactivate();
 
 			$this->validate_domain();

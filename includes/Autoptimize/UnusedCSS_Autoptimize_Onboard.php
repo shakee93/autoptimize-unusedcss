@@ -200,10 +200,6 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
-		self::$activating = true;
-
-		die();
-
 		self::add_admin_notice( 'UnusedCSS : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
 
