@@ -231,7 +231,7 @@ trait UnusedCSS_Utils {
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
 	}
 
-    public static function activation_url($action){
+    public static function activation_url( $action, $to = 'options-general.php?page=uucss' ) {
 
 	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
 		    define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
@@ -241,7 +241,7 @@ trait UnusedCSS_Utils {
 			    'action' => $action,
 			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
 			    'site'   => get_site_url(),
-			    'back'   => admin_url( 'options-general.php?page=uucss' ),
+			    'back'   => admin_url( $to ),
 			    'goto'   => UUCSS_ACTIVATION_URL
 		    ] );
     }

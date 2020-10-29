@@ -101,7 +101,7 @@ abstract class UnusedCSS_Admin {
 
 	}
 
-	public function suggest_whitelist_packs() {
+	public static function suggest_whitelist_packs() {
 
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';

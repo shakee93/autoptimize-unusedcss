@@ -276,7 +276,7 @@
                         }
                         if(response.data.uucss_connected ){
                             closePopWindow();
-                            gotoRunFirstJob();
+                            gotoConfigure()
                         }
                     }
                 }
@@ -353,14 +353,7 @@
 
         $('.js-uucss-connect').click(function(e){
             e.preventDefault();
-            if(!$('.uucss-on-board .install.actions').hasClass('done')){
-                alert('Install and Activate Autoptimize before configure');
-                return;
-            }
-            if(!$('.uucss-on-board .enable.actions').hasClass('done')){
-                alert('Configure Autoptimize before connect');
-                return;
-            }
+
             child_open($(this).attr('href'));
             clearInterval(progress_check);
             progress_check = setInterval(checkUnusedCssConnected,1000);
