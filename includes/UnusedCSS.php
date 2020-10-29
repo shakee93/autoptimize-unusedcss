@@ -68,7 +68,6 @@ abstract class UnusedCSS {
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
-	        wp_enqueue_script( 'uucss_progress_bar_script', UUCSS_PLUGIN_URL . 'assets/js/circle-progress.js' );
 	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css?v=1.18' );
         });
     }
