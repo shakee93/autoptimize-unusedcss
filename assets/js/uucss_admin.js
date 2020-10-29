@@ -300,7 +300,8 @@
                                 url: wp.ajax.settings.url + '?action=uucss_purge_url',
                                 data : {
                                     url: cellData,
-                                    clear: true
+                                    clear: true,
+                                    nonce: uucss.nonce
                                 },
                                 success : function(response){
                                     if(response.success){

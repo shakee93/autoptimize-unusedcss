@@ -166,43 +166,53 @@ abstract class UnusedCSS_Admin {
 		}
 
 		$uucss_api         = new UnusedCSS_Api();
-		$uucss_api->apiKey = $_POST['api_key'];
+		$uucss_api->apiKey = sanitize_text_field( $_POST['api_key'] );
 
 		$results = $uucss_api->get( 'verify' );
 
 		if ( isset( $results->data ) ) {
-			wp_send_json_success(true);
+			wp_send_json_success( true );
 		}
 
 		wp_send_json_error();
 
 	}
 
-    public function ajax_purge_url()
-    {
-        // TODO : add nonce
-        $args = [];
+    public function ajax_purge_url() {
 
-        if (!isset($_POST['url'])){
-            wp_send_json_error();
-            return;
-        }
+	    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'uucss_nonce' ) ) {
+		    wp_send_json_error( 'authentication failed' );
 
-        if (isset($_POST['args'])){
-            $args = $_POST['args'];
-        }
+		    return;
+	    }
 
-        if (isset($_POST['clear'])) {
-            wp_send_json_success($this->uucss->clear_cache($_POST['url'], $args));
-            return;
-        }
+	    $args = [];
 
-        if (isset($args["post_id"])) {
-            $args['options'] = $this->uucss->api_options($args["post_id"]);
-        }
+	    if ( ! isset( $_POST['url'] ) ) {
+		    wp_send_json_error();
 
-        wp_send_json_success($this->uucss->cache($_POST['url'], $args));
+		    return;
+	    }
 
+	    if ( isset( $_POST['args'] ) ) {
+		    $_args = $_POST['args'];
+
+		    $args['post_id'] = ( isset( $_args['post_id'] ) ) ? intval( $_args['post_id'] ) : null;
+	    }
+
+	    $url = esc_url_raw( $_POST['url'] );
+
+	    if ( isset( $_POST['clear'] ) ) {
+		    wp_send_json_success( $this->uucss->clear_cache( $url, $args ) );
+
+		    return;
+	    }
+
+	    if ( isset( $args["post_id"] ) ) {
+		    $args['options'] = $this->uucss->api_options( $args["post_id"] );
+	    }
+
+	    wp_send_json_success( $this->uucss->cache( $url, $args ) );
     }
 
     /**

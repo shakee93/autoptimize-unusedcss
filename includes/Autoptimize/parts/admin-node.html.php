@@ -53,6 +53,11 @@ global $post;
 
 </style>
 <div class="uucss-stats">
+    <script>
+        window.uucss = {
+            nonce: '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>'
+        }
+    </script>
     <span>UnusedCSS</span>
     <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Total Size : <?php echo $this->uucss->size(); ?></span>
@@ -87,6 +92,7 @@ global $post;
 
             var data = {
                 url: '<?php echo get_permalink($post) ?>',
+                nonce: window.uucss.nonce,
                 args: {
                     post_id: <?php echo $post->ID ?>
                 }
@@ -96,7 +102,9 @@ global $post;
                 $this.text('generate')
                 $this.hide();
                 $('#button-uucss-clear').css('display', 'inline-block')
-            })
+            }).fail(function () {
+                $this.text('failed!')
+            });
         });
 
         $('#button-uucss-clear').click(function (e) {
@@ -108,6 +116,7 @@ global $post;
             wp.ajax.post('uucss_purge_url', {
                 clear: true,
                 url: '<?php echo get_permalink($post) ?>',
+                nonce: window.uucss.nonce,
                 args: {
                     post_id: <?php echo $post->ID ?>
                 }
@@ -129,6 +138,7 @@ global $post;
             $this.text('loading...');
             wp.ajax.post('uucss_purge_url', {
                 clear: true,
+                nonce: window.uucss.nonce,
                 url: null,
             }).done(function (d) {
                 $this.text('cleared all')
