@@ -3,9 +3,10 @@
 
     $(document).ready(function(){
 
+        console.log('2.0')
+
         var popupWindow = null;
         var origin = null;
-        var $flexViewPort = $('.slide-contents-wrap');
         var $contentWrap = $('.slide-contents-wrap .slide-contents');
         var content = '.slide-content';
 
@@ -13,13 +14,17 @@
             $contentWrap.find(content).css('max-width',$('.slide-contents-wrap').width());
         });
 
+        function moveSlide(left){
+            $contentWrap.css('transform', 'translate3d(' + left +'px,0px,0px)');
+            $contentWrap.css('transition-duration', '0.5s');
+        }
+
         function moveAction(){
             origin = $contentWrap.position().left;
             var width = $contentWrap.find(content).outerWidth();
             var left = origin - width;
 
-            $contentWrap.css('transform','translate3d('+ left +'px,0px,0px)');
-            $contentWrap.css('transition-duration','0.5s');
+            moveSlide(left);
         }
 
         function child_open(url, width = 600, height = 510){
@@ -46,11 +51,12 @@
 
         var progress_check = null;
         var ajax_pending = false;
+        var $progressBar = $('.uucss-on-board #progress-bar');
+        var $stepWrapper = $('.uucss-on-board .plugin-steps .steps-wrap');
 
         function markCompletion(){
             if($('.uucss-on-board .card .actions.done').length == 4){
-                $contentWrap.css('transform','translate3d(-892px,0px,0px)');
-                $contentWrap.css('transition-duration','0.5s');
+                moveSlide(-892);
                 if(!$('.uucss-on-board').hasClass('complete')){
                     $('.uucss-on-board').addClass('complete')
                 }
@@ -65,28 +71,75 @@
         }
 
         function gotoConfigure() {
-            $('.uucss-on-board #progress-bar').css('width', '75%');
-            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(3);
-            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Connect');
-            $contentWrap.css('transform', 'translate3d(-446px,0px,0px)');
-            $contentWrap.css('transition-duration', '0.5s');
+            $progressBar.css('width', '100%');
+            $stepWrapper.css('opacity', 1);
+            $stepWrapper.find('.current').text(3);
+            $stepWrapper.find('.current-text').text('Connect');
+            moveSlide(-446);
         }
 
         function gotoRunFirstJob() {
-            $('.uucss-on-board #progress-bar').css('width', '100%');
-            $('.uucss-on-board .steps-wrap').css('opacity', 0);
-            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(4);
-            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Run First Job');
-            $contentWrap.css('transform', 'translate3d(-669px,0px,0px)');
-            $contentWrap.css('transition-duration', '0.5s');
+            $progressBar.css('width', '100%');
+            $stepWrapper.css('opacity', 0);
+            $stepWrapper.find('.current').text(4);
+            $stepWrapper.find('.current-text').text('Run First Job');
+            moveSlide(-669);
+        }
+
+        function gotoInstall() {
+            $progressBar.css('width', '66%');
+            $stepWrapper.css('opacity', 1);
+            $stepWrapper.find('.current').text(2);
+            $stepWrapper.find('.current-text').text('Configure');
+            moveSlide(-223)
         }
 
         function gotoConnect() {
-            $('.uucss-on-board #progress-bar').css('width', '50%');
-            $('.uucss-on-board .plugin-steps .steps-wrap .current').text(2);
-            $('.uucss-on-board .plugin-steps .steps-wrap .current-text').text('Configure');
-            $contentWrap.css('transform', 'translate3d(-223px,0px,0px)');
-            $contentWrap.css('transition-duration', '0.5s');
+            $progressBar.css('width', '33%');
+            $stepWrapper.css('opacity', 1);
+            $stepWrapper.find('.current').text(1);
+            $stepWrapper.find('.current-text').text('Configure');
+            moveSlide(0);
+        }
+
+        function gotoPendingStep(response){
+            if(response.data.installed &&
+                response.data.active &&
+                response.data.css_enabled &&
+                response.data.uucss_connected &&
+                response.data.uucss_first_job_done
+            ){
+                markCompletion();
+            }
+            else if(response.data.installed &&
+                response.data.active &&
+                response.data.css_enabled &&
+                response.data.uucss_connected
+            ){
+                gotoRunFirstJob();
+            }
+            else if(response.data.installed &&
+                response.data.active &&
+                response.data.uucss_connected
+            ){
+                gotoConfigure();
+            }
+            else if(response.data.installed &&
+                response.data.active
+            ){
+                gotoConnect();
+            }
+            else if(response.data.installed &&
+                response.data.active &&
+                response.data.css_enabled
+            ){
+                gotoConnect();
+            }
+            else if(
+                response.data.uucss_connected
+            ){
+                gotoInstall();
+            }
         }
 
         function markCompleteActions(response){
@@ -135,16 +188,18 @@
                         delay: 0,
                     })
                     innerTippy2.show();
-                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').text((100 - Number(response.data.uucss_first_job.meta.stats.reduction)) + '%');
-                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').css('width', (100 - Number(response.data.uucss_first_job.meta.stats.reduction)) + '%');
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').text((100 - Number(response.data.uucss_first_job.meta.stats.reduction)).toFixed(0) + '%');
+                    $('.uucss-on-board .card-complete .content .first-result .result-stat .progress-bar span').css('width', (100 - Number(response.data.uucss_first_job.meta.stats.reduction)).toFixed(0) + '%');
                 }
                 $('.uucss-on-board').addClass('complete')
             }
         }
 
         function closePopWindow() {
-            popupWindow.close();
-            popupWindow = null;
+            if(popupWindow){
+                popupWindow.close();
+                popupWindow = null;
+            }
             clearInterval(progress_check);
         }
 
@@ -167,39 +222,16 @@
                 success : function (response) {
                     if(response.data){
                         markCompleteActions(response);
-                        if(response.data.installed &&
-                            response.data.active &&
-                            response.data.css_enabled &&
-                            response.data.uucss_connected &&
-                            response.data.uucss_first_job_done
-                        ){
-                            closePopWindow();
-                            markCompletion();
-                        }
-                        else if(response.data.installed &&
-                            response.data.active &&
-                            response.data.css_enabled &&
-                            response.data.uucss_connected
-                        ){
-                            closePopWindow();
-                            gotoRunFirstJob();
-                        }
-                        else if(response.data.installed &&
-                            response.data.active &&
-                            response.data.css_enabled
-                        ){
-                            closePopWindow();
-                            gotoConnect();
-                        }
-                        else if(response.data.installed && response.data.active){
-                            closePopWindow();
-                            gotoConfigure();
-                        }else if(response.data.installed){
+                        gotoPendingStep(response);
+                        if(response.data.installed){
                             $('.js-activate-ao ').data('installed', true);
                             $('.js-activate-ao ').html('Activate <span class="dashicons dashicons-yes-alt"></span>');
                             if(popupWindow.closed){
                                 clearInterval(progress_check);
                             }
+                        }
+                        if(response.data.installed && response.data.active){
+                            closePopWindow();
                         }
                     }
                 }
@@ -229,17 +261,9 @@
                 success : function (response) {
                     if(response.data){
                         markCompleteActions(response);
-                        if(response.data.installed &&
-                            response.data.active &&
-                            response.data.css_enabled &&
-                            response.data.uucss_connected
-                        ){
+                        gotoPendingStep(response);
+                        if(response.data.css_enabled){
                             closePopWindow();
-                            gotoRunFirstJob();
-                        }
-                        else if(response.data.css_enabled){
-                            closePopWindow();
-                            gotoConnect();
                         }
                     }
 
@@ -270,13 +294,9 @@
                 success : function (response) {
                     if(response.data){
                         markCompleteActions(response);
-                        if(response.data.uucss_connected && response.data.uucss_first_job_done){
+                        gotoPendingStep(response);
+                        if(response.data.uucss_connected){
                             closePopWindow();
-                            markCompletion();
-                        }
-                        if(response.data.uucss_connected ){
-                            closePopWindow();
-                            gotoRunFirstJob();
                         }
                     }
                 }
@@ -344,6 +364,7 @@
             e.preventDefault();
             if(!$('.uucss-on-board .install.actions').hasClass('done')){
                 alert('Install and Activate Autoptimize before configure');
+                gotoInstall();
                 return;
             }
             child_open($(this).attr('href'));
@@ -363,6 +384,7 @@
             e.preventDefault();
             if(!$('.uucss-on-board .connect.actions').hasClass('done')){
                 alert('Connect UnusedCSS before run first job');
+                gotoConnect();
                 return;
             }
             clearInterval(progress_check);
@@ -380,51 +402,38 @@
         markCompletion();
 
         $('.uucss-on-board .actions .nav').click(function(){
-            var left = 0;
             var plus = false;
             if($(this).hasClass('next')){
                 plus = true;
-                origin = $contentWrap.position().left;
-                left = origin - $contentWrap.find(content).outerWidth();
-            }else{
-                origin = $contentWrap.position().left;
-                left = origin + $contentWrap.find(content).outerWidth();
             }
-            $('.uucss-on-board .steps-wrap').css('opacity',1);
             switch ($('.uucss-on-board .steps-wrap .step-text .current').text()) {
                 case '1':{
                     if(plus){
-                        $('.uucss-on-board .steps-wrap .step-text .current').text('2');
-                        $('.uucss-on-board #progress-bar').css('width','66.66%');
+                        gotoInstall();
                     }
                     break;
                 }
                 case '2':{
                     if(plus){
-                        $('.uucss-on-board .steps-wrap .step-text .current').text('3');
-                        $('.uucss-on-board #progress-bar').css('width','100%');
+                        gotoConfigure()
                     }else{
-                        $('.uucss-on-board .steps-wrap .step-text .current').text('1');
-                        $('.uucss-on-board #progress-bar').css('width','33.33%');
+                        gotoConnect();
                     }
                     break;
                 }
                 case '3':{
                     if(plus){
-                        $('.uucss-on-board .steps-wrap').css('opacity',0);
-                        $('.uucss-on-board .steps-wrap .step-text .current').text('4');
-                        $('.uucss-on-board #progress-bar').css('width','100%');
+                        gotoRunFirstJob();
                     }else{
-                        $('.uucss-on-board .steps-wrap .step-text .current').text('2');
-                        $('.uucss-on-board #progress-bar').css('width','66.66%');
+                        gotoInstall();
                     }
                     break;
                 }
+                case '4':{
+                    gotoConfigure();
+                    break;
+                }
             }
-
-
-            $contentWrap.css('transform', 'translate3d(' + left + 'px,0px,0px)');
-            $contentWrap.css('transition-duration', '0.5s');
         })
 
         if (window.location.href.includes('#configure_autoptimize_css')) {
