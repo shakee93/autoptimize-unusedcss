@@ -33,6 +33,7 @@
                 data: function (params) {
                     return {
                         s: params.term,
+                        url: window.location.origin
                     };
                 },
                 headers: {

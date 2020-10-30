@@ -54,9 +54,7 @@ global $post;
 </style>
 <div class="uucss-stats">
     <script>
-        window.uucss = {
-            nonce: '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>'
-        }
+        window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>'
     </script>
     <span>UnusedCSS</span>
     <div class="uucss-stats__stats">
