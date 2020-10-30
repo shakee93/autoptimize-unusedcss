@@ -17,12 +17,16 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		$this->uucss = $ao_uucss;
 
+		self::activate();
+
+//		delete_option( 'autoptimize_uucss_settings' );
+
 		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
 		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
 		add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
-        add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
-        add_action('admin_head', [ $this, 'remove_notices' ]);
-    }
+		add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
+		add_action( 'admin_head', [ $this, 'remove_notices' ] );
+	}
 
 
 	function run_first_job(){
@@ -104,27 +108,26 @@ class UnusedCSS_Autoptimize_Onboard {
     }
 
     function uucss_redirect() {
-	    if(strpos(home_url($_SERVER['REQUEST_URI']),'/options-general.php?page=uucss-onboarding') &&
-        self::on_board_completed()){
-	        wp_redirect(admin_url('options-general.php?page=uucss'));
-        }
-        else if (get_option('uucss_do_activation_redirect', false)) {
-            delete_option('uucss_do_activation_redirect');
-            wp_redirect('/wp-admin/options-general.php?page=uucss-onboarding');
-        }
+	    if ( strpos( home_url( $_SERVER['REQUEST_URI'] ), '/options-general.php?page=uucss-onboarding' ) &&
+	         self::on_board_completed() ) {
+		    wp_redirect( admin_url( 'options-general.php?page=uucss' ) );
+	    } else if ( get_option( 'uucss_do_activation_redirect', false ) ) {
+		    delete_option( 'uucss_do_activation_redirect' );
+		    wp_redirect( '/wp-admin/options-general.php?page=uucss-onboarding' );
+	    }
     }
 
-	public static function activate() {
+	public static function uucss_activate() {
 		add_option( 'uucss_do_activation_redirect', true );
 	}
 
-    function uucss_register_on_board_page() {
-        global $submenu;
-        add_options_page(
-            'UnusedCSS',
-            'UnusedCSS',
-            'manage_options',
-            'uucss-onboarding',
+	function uucss_register_on_board_page() {
+		global $submenu;
+		add_options_page(
+			'UnusedCSS',
+			'UnusedCSS',
+			'manage_options',
+			'uucss-onboarding',
             [$this, 'uucss_on_boarding_page']
         );
         $key = null;
@@ -148,12 +151,56 @@ class UnusedCSS_Autoptimize_Onboard {
         return 1;
     }
 
-    public static function  display_get_start_link(){
-        add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ($links){
-            $_links = array(
-	            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
-            );
-            return array_merge( $_links, $links );
-        } );
-    }
+	public static function display_get_start_link() {
+		add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
+			$_links = array(
+				'<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
+			);
+
+			return array_merge( $_links, $links );
+		} );
+	}
+
+
+	public static function activate() {
+
+		if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
+			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
+			return;
+		}
+
+		$token = sanitize_text_field( $_REQUEST['token'] );
+
+		if ( strlen( $token ) !== 32 ) {
+			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
+
+			return;
+		}
+
+		$options = get_option( 'autoptimize_uucss_settings' );
+
+		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
+		$options['uucss_api_key_verified'] = 1;
+		$options['uucss_api_key']          = $token;
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		$data        = UnusedCSS_Autoptimize_Admin::suggest_whitelist_packs();
+		$white_packs = $data->data;
+
+		$options['whitelist_packs'] = array();
+		foreach ( $white_packs as $white_pack ) {
+			$options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+		}
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		self::add_admin_notice( 'UnusedCSS : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+	}
+
 }

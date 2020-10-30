@@ -40,7 +40,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( is_admin() ) {
 
-            $this->activate();
 			$this->deactivate();
 
 			$this->validate_domain();
@@ -308,48 +307,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		include( 'parts/options-page.html.php' );
 	}
 
-	public function activate() {
-
-		if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
-			return;
-		}
-
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
-			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
-
-			return;
-		}
-
-		$token = sanitize_text_field( $_REQUEST['token'] );
-
-		if ( strlen( $token ) !== 32 ) {
-			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
-
-			return;
-		}
-
-		$options = get_option( 'autoptimize_uucss_settings' );
-
-		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
-		$options['uucss_api_key_verified']    = 1;
-		$options['uucss_api_key']             = $token;
-
-        update_option( 'autoptimize_uucss_settings', $options );
-
-        $data = self::suggest_whitelist_packs();
-        $white_packs = $data->data;
-
-        $options['whitelist_packs'] = array();
-        foreach ($white_packs as $white_pack){
-            $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
-        }
-
-		update_option( 'autoptimize_uucss_settings', $options );
-
-		self::$activating = true;
-
-		self::add_admin_notice( 'UnusedCSS : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
-	}
 
 
 	public function deactivate() {

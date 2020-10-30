@@ -28,7 +28,7 @@
                 }
                 ?>">
                     <div class="connect actions slide-content <?php if (UnusedCSS_Autoptimize_Admin::is_api_key_verified()) {
-                        echo 'done';
+	                    echo 'done';
                     } ?>">
                         <h2>Connect & Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
@@ -38,7 +38,7 @@
                             watch your page speed and speed scores spike up.</p>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-connect "
-                               href="<?php echo UnusedCSS_Utils::activation_url("authorize") ?>"
+                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
                                target="_blank">
                                 Connect <span class="dashicons dashicons-yes-alt"></span>
                             </a>

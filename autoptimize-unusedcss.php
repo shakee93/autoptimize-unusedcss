@@ -17,7 +17,7 @@ define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 require( 'vendor/autoload.php' );
 
-register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::activate' );
+register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::uucss_activate' );
 
 add_action( 'plugins_loaded', function () {
 
