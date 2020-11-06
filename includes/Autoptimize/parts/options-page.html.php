@@ -203,9 +203,10 @@
                                                    name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
 	                                            echo 'checked="checked"';
                                             } ?> value='1'>
-                                            Analyze javascript <em>-- analyze javascript and remove unused css which are
+                                            Analyze javascript <strong>(highly experimental)</strong> <em>-- analyze
+                                                javascript and remove unused css which are
                                                 not
-                                                used in JS (experimental)</em>
+                                                used in JS</em>
                                         </label>
                                     </p>
                                 </td>
