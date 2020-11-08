@@ -560,16 +560,34 @@ div.uucss-on-board{
     info box
  */
 
+#uucss-wrapper li.notification .content {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+#uucss-wrapper li.notification .content .uucss-info-wrapper {
+    border-left: solid #007cba;
+    border-radius: 0 !important;
+    background: white;
+}
+
+
 .uucss-info-wrapper {
     position: relative;
     display: inline-block;
     padding: 10px 20px 10px 10px;
     background: #f5f5f5;
-    border-radius: 4px;
+    border-left: solid 3px #007cba;
+    width: 100%;
+}
+
+.uucss-info-wrapper h4 {
+    margin: 4px 0;
 }
 
 .uucss-info-wrapper .info-icon .dashicons {
-    color: #6eb9f7;
+    color: #007cba;
     font-size: 25px !important;
 }
 

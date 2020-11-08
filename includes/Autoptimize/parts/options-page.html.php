@@ -65,6 +65,7 @@
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
                                         <div class="info-details">
+                                            <h4>Tip</h4>
                                             <p>You can add rules to specify which css classes or id's are safe to left
                                                 in the final UnusedCSS output.</p>
                                             <p class="divider"></p>
