@@ -158,7 +158,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
                 <div>
                     <p> Our team can help. Get in touch with support <a target="_blank"
-                                                                        href="mailto:support@unusedcss.io">here</a></p>
+                                                                        href="https://unusedcss.zendesk.com/hc/en-us/requests/new">here</a>
+                    </p>
                     <blockquote class="error notice">
                         <strong>Link :</strong> <?php echo $job['url'] ?> <br>
                         <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>

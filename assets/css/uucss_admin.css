@@ -314,7 +314,7 @@ table.dataTable thead th, table.dataTable thead td {
 #uucss-history .action button span.dashicons.dashicons-no-alt {
     position: absolute;
     left: 1px;
-    top: 2px;
+    top: 3px;
 }
 
 #uucss-history tr.loading {
