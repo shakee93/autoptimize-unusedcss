@@ -307,17 +307,25 @@
                             <div>
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-									       echo $options['uucss_api_key_verified'] ?>">
+			                               echo $options['uucss_api_key_verified'] ?>">
                                 <input id='uucss_api_key' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_api_key]'
                                        value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                        size="40">
                                 <em id="verification_status"></em>
-                                <a href="<?php echo ( $options['valid_domain'] ) ? UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) :
-									UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
-                                   class="uucss-activate">
-									<?php echo ( $options['valid_domain'] ) ? 'Deactivate License' : 'Reactivate License' ?>
-                                </a>
+		                        <?php if ( $options['valid_domain'] ) : ?>
+                                    <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
+                                       class="uucss-activate"> Deactivate License
+                                    </a>
+		                        <?php else : ?>
+                                    <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
+                                       class="uucss-activate"> Reactivate License
+                                    </a>
+                                    <a style="margin-left: 5px"
+                                       href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
+                                       class="uucss-activate"> Deactivate License
+                                    </a>
+		                        <?php endif; ?>
                             </div>
 
                         </div>
