@@ -561,14 +561,15 @@ div.uucss-on-board{
  */
 
 #uucss-wrapper li#uucss-notification .content {
-    padding: 0;
     overflow: hidden;
     border-radius: 0;
+    padding: 10px 20px 10px 10px;
+    border-left: solid #007cba;
 }
 
 #uucss-wrapper li#uucss-notification .content .uucss-info-wrapper {
-    border-left: solid #007cba;
-    border-radius: 0 !important;
+    border: none;
+    padding: 0;
     background: white;
 }
 
@@ -576,7 +577,7 @@ div.uucss-on-board{
 .uucss-info-wrapper {
     position: relative;
     display: inline-block;
-    padding: 10px 20px 10px 10px;
+    padding: 10px;
     background: #f5f5f5;
     border-left: solid 3px #007cba;
     width: 100%;

@@ -10,7 +10,7 @@
 	?>
     <div>
         <ul id="uucss-wrapper">
-            <li id="uucss-notification">
+            <li id="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
 			<?php if ( ! $api_key_verified ) : ?>

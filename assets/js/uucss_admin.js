@@ -8,7 +8,7 @@
         content.find('p').remove()
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>')
 
-        container.append(content).show()
+        container.append(content).parent().show()
     }
 
     function hideNotification() {
@@ -153,7 +153,7 @@
 
                     if (results.length < 2) {
                         showNotification(
-                            'When will i see the results ?',
+                            'Tip : When will i see the results ?',
                             'The plugin will trigger UnusedCSS removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
                         );
                     }
