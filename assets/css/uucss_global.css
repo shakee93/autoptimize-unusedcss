@@ -560,13 +560,13 @@ div.uucss-on-board{
     info box
  */
 
-#uucss-wrapper li.notification .content {
+#uucss-wrapper li#uucss-notification .content {
     padding: 0;
     overflow: hidden;
     border-radius: 0;
 }
 
-#uucss-wrapper li.notification .content .uucss-info-wrapper {
+#uucss-wrapper li#uucss-notification .content .uucss-info-wrapper {
     border-left: solid #007cba;
     border-radius: 0 !important;
     background: white;

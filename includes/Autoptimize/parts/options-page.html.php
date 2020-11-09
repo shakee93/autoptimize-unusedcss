@@ -10,6 +10,9 @@
 	?>
     <div>
         <ul id="uucss-wrapper">
+            <li id="uucss-notification">
+                <div class="content"></div>
+            </li>
 			<?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
 					<?php include_once 'intro.html.php' ?>

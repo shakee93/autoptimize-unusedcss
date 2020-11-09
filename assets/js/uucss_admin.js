@@ -1,5 +1,21 @@
 (function ($) {
 
+    function showNotification(heading, message) {
+        var container = $('#uucss-notification .content')
+
+        var content = $('.uucss-info-wrapper').clone().css('max-width', '100%')
+        content.find('h4').text(heading)
+        content.find('p').remove()
+        content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>')
+
+        container.append(content).show()
+    }
+
+    function hideNotification() {
+        var container = $('#uucss-notification')
+        container.hide()
+    }
+
     $(document).ready(function () {
 
 
@@ -127,13 +143,22 @@
                 dataSrc: function (d) {
 
                     if (!d.success) {
-                        alert(d.data)
+                        alert("failed to fetch data")
                         return [];
                     }
 
-                    return Object.values(d.data).sort(function (a, b) {
+                    var results = Object.values(d.data).sort(function (a, b) {
                         return b.time - a.time
                     });
+
+                    if (results.length < 2) {
+                        showNotification(
+                            'When will i see the results ?',
+                            'The plugin will trigger UnusedCSS removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                        );
+                    }
+
+                    return results;
                 }
             },
             searching: false,
