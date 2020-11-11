@@ -1,3 +1,5 @@
 vendor/simplehtmldom/simplehtmldom/tests/*
 vendor/simplehtmldom/simplehtmldom/manual/*
 vendor/simplehtmldom/simplehtmldom/example/*
+
+release.sh
