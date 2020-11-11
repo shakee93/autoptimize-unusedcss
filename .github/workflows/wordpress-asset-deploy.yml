@@ -2,8 +2,8 @@ name: Plugin asset/readme update
 on:
   push:
     paths:
-    - 'readme.txt'
-    - '.wordpress-org/*' 
+      - '**/readme.txt'
+      - '**/.wordpress-org/*'
 jobs:
   trunk:
     name: Push to trunk
