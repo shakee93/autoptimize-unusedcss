@@ -15,15 +15,13 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 **Automated UnusedCSS removal for WordPress**
 
-Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. Why make your visitor wait for code to load when they don’t even need it?
+Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
-UnusedCSS extends Autoptimize to automatically find CSS that’s not being used and prevents it from unnecessarily loading on the page. By reducing the total CSS file size and total page weight, UnusedCSS can significantly reduce load times. It even improves the performance of other optimizing plugins and extensions, like CriticalCSS.  For this purpose, this plugin integrates with (UnusedCSS.io)[https://unusedcss.io], a 3rd party service, to have it generate UnusedCSS for your website. (See [FAQ section for pricing and terms](#faq)
+**UnusedCSS can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
 
-Simply install and activate the plugin and follow the onboarding steps. This will connect you to the [UnusedCSS.io](https://unusedcss.io) service, so you can start your first job and see the results for yourself.
+UnusedCSS extends Autoptimize to automatically find CSS that’s not being used, then prevents it from loading on the page. By reducing the total CSS file size and page weight, UnusedCSS can significantly reduce load times. It even improves the performance of other optimizing plugins and extensions, like CriticalCSS. UnusedCSS for Autoptimize plugin integrates with the 3rd party service (UnusedCSS.io API)[https://unusedcss.io] to remove unused CSS. (See [FAQ section for pricing and terms](#faq)
 
-**UnusedCSS can reduce CSS file sizes up to 95%**. It will continue removing UnusedCSS when users view your pages.
-
-[UnusedCSS.io](https://unusedcss.io)
+Simply install, activate the plugin, and follow the onboarding steps. This will quickly connect you to the [UnusedCSS.io](https://unusedcss.io) service, and you can see the results for yourself.
 
 == Installation ==
 
@@ -40,7 +38,7 @@ e.g.
 
 = How much does it cost to purchase a license of UnusedCSS and where can I buy one? =
 
-You can purchase the license for $9.99/m. Just sign up directly via [UnusedCSS.io](https://unusedcss.io) website.
+You can purchase the license for as little as $9/m. Just sign up directly via [UnusedCSS.io](https://unusedcss.io) website.
 
 = What are the Terms and Conditions of UnusedCSS.io usage =
 
