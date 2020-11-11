@@ -72,7 +72,7 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif).
+1. This screen shot description.
 2. This is the second screen shot
 
 == Changelog ==
