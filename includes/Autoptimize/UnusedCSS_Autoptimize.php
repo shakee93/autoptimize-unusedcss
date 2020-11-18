@@ -190,6 +190,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    $dom->find( 'html' )[0]->uucss = true;
 
+
 		    $sheets = $dom->find( 'link' );
 
 		    foreach ( $sheets as $sheet ) {
@@ -229,6 +230,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    }
 
 //			self::log( $inject );
+
+			header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
 
 			return $dom;
 
