@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: UnusedCSS Power-Up for Autoptimize
-Plugin URI:  https://unusedcss.io/
+Plugin Name: RapidLoad Power-Up for Autoptimize
+Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
 Version:     0.0.4
-Author:      Shakeeb Sadikeen
-Author URI:  https://shakeeb.dev/
+Author:      RapidLoad
+Author URI:  https://rapidload.io/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
