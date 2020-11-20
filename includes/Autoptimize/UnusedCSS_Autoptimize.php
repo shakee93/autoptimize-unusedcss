@@ -88,14 +88,15 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$this->deps_available = true;
 		}else {
             $notice = [
-                'action'      => 'on-board',
-                'title'       => 'UnusedCSS Power Up',
-                'message'     => 'Please Complete UnusedCSS Onboarding',
-                'main_action' => [
-	                'key'   => 'Get Started',
-	                'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
-                ],
-                'type'        => 'warning'
+	            'action'  => 'on-board',
+	            'title'   => 'RapidLoad Power Up',
+	            'message' => 'Complete on-boarding steps, it only takes 2 minutes.',
+
+	            'main_action' => [
+		            'key'   => 'Get Started',
+		            'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
+	            ],
+	            'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
             UnusedCSS_Autoptimize_Onboard::display_get_start_link();

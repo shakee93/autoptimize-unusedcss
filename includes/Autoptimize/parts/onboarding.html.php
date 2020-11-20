@@ -33,7 +33,7 @@
                         <h2>Connect & Activate</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                              alt="">
-                        <p>Connect with <strong><em>UnusedCSS.io</em></strong> engine to start automatic optimization of
+                        <p>Connect with <strong><em>RapidLoad.io</em></strong> engine to start automatic optimization of
                             your website and
                             watch your page speed and speed scores spike up.</p>
                         <div class="action-wrap">
@@ -50,7 +50,7 @@
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/install-autoptimize.svg' ?>"
                              alt="">
                         <p>
-                            Autoptimize (AO) is free to use and must be installed and active before running UnusedCSS.
+                            Autoptimize (AO) is free to use and must be installed and active before running RapidLoad.
                         </p>
                         <div class="action-wrap">
                             <a class="act-button js-activate-ao"
@@ -100,7 +100,7 @@
                         <h2>Run First Job</h2>
                         <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
                              alt="">
-                        <p>Run your first UnusedCSS removal job and see how much weight it could remove from your
+                        <p>Run your first RapidLoad removal job and see how much weight it could remove from your
                             website. <strong>it could reduce css file size upto 98% on larger websites. </strong></p>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-first-job" href="#" target="_blank">

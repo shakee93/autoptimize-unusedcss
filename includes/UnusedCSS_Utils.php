@@ -99,7 +99,7 @@ trait UnusedCSS_Utils {
             }
 
             if(!isset($notice['title'])){
-                $notice['title'] = 'UnusedCSS Power Up';
+                $notice['title'] = 'RapidLoad Power Up';
             }
 
             if(!isset($notice['message'])){

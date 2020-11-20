@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) or die(); ?>
 
-<script>document.title = "Autoptimize: UnusedCSS " + document.title;</script>
+<script>document.title = "Autoptimize: RapidLoad " + document.title;</script>
 
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
 	<?php settings_fields( 'autoptimize_uucss_settings' );
@@ -337,10 +337,10 @@
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
                                              value="<?php _e( 'Save & Clear Cache', 'uucss' ); ?>"/>
 
-                        <a target="_blank" href="https://unusedcss.io/">
+                        <a target="_blank" href="https://rapidload.io/">
                             <img
                                     src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" width="130"
-                                    alt="UnusedCSS.io logo">
+                                    alt="RapidLoad.io logo">
                         </a>
                     </p>
                 </li>

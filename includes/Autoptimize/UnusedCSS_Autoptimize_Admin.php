@@ -204,14 +204,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             ! self::is_api_key_verified() && ! self::$deactivating
         ){
             $notice = [
-                'action'      => 'on-board',
-                'title'       => 'UnusedCSS Power Up',
-                'message'     => 'Please Complete UnusedCSS Onboarding',
-                'main_action' => [
-	                'key'   => 'Get Started',
-	                'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
-                ],
-                'type'        => 'warning'
+	            'action'      => 'on-board',
+	            'title'       => 'RapidLoad Power Up',
+	            'message'     => 'Complete on-boarding steps, it only takes 2 minutes.',
+	            'main_action' => [
+		            'key'   => 'Get Started',
+		            'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
+	            ],
+	            'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
             UnusedCSS_Autoptimize_Onboard::display_get_start_link();
@@ -273,30 +273,29 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function add_ao_tab( $in ) {
 
 		$in = array_merge( $in, array(
-			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="UnusedCSS.io logo"><span>UnusedCSS</span></span>', 'autoptimize' ),
+			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>RapidLoad</span></span>', 'autoptimize' ),
 		) );
 
 		return $in;
 	}
 
 
-    public function add_ao_page()
-    {
+    public function add_ao_page() {
 
-        add_submenu_page(null, 'UnusedCSS', 'UnusedCSS', 'manage_options', 'uucss', function () {
-            wp_enqueue_script('post');
+	    add_submenu_page( null, 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+		    wp_enqueue_script( 'post' );
 
-            ?>
+		    ?>
             <div class="wrap">
-                <h1><?php _e('Autoptimize Settings', 'autoptimize'); ?></h1>
-                <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
+                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+			    <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
                 <div>
-                    <?php $this->render_form() ?>
+				    <?php $this->render_form() ?>
                 </div>
             </div>
 
-            <?php
-        });
+		    <?php
+	    });
 
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
