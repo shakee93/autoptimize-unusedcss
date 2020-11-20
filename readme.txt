@@ -75,4 +75,8 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.5.1 =
+    * Rebranding with name RapidLoad
+    * Animated logo added
+
 == Upgrade Notice ==
