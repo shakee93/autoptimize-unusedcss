@@ -1,7 +1,7 @@
-=== UnusedCSS Power-Up for Autoptimize ===
+=== RapidLoad Power-Up for Autoptimize ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, unused css, autoptimize
+Tags: unusedcss, unused css, autoptimize, rapidload
 Requires at least: 4.0
 Tested up to: 5.5
 Stable tag: trunk
@@ -17,11 +17,11 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
-**UnusedCSS can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
+**RapidLoad can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
 
-UnusedCSS extends Autoptimize to automatically find CSS that’s not being used, then prevents it from loading on the page. By reducing the total CSS file size and page weight, UnusedCSS can significantly reduce load times. It even improves the performance of other optimizing plugins and extensions, like CriticalCSS. UnusedCSS for Autoptimize plugin integrates with the 3rd party service (UnusedCSS.io API)[https://unusedcss.io] to remove unused CSS. (See [FAQ section for pricing and terms](#faq)
+RapidLoad extends Autoptimize to automatically find CSS that’s not being used, then prevents it from loading on the page. By reducing the total CSS file size and page weight, RapidLoad can significantly reduce load times. It even improves the performance of other optimizing plugins and extensions, like CriticalCSS. RapidLoad for Autoptimize plugin integrates with the 3rd party service (rapidload.io API)[https://rapidload.io] to remove unused CSS. (See [FAQ section for pricing and terms](#faq)
 
-Simply install, activate the plugin, and follow the onboarding steps. This will quickly connect you to the [UnusedCSS.io](https://unusedcss.io) service, and you can see the results for yourself.
+Simply install, activate the plugin, and follow the onboarding steps. This will quickly connect you to the [rapidload.io](https://rapidload.io) service, and you can see the results for yourself.
 
 == Installation ==
 
@@ -38,11 +38,11 @@ e.g.
 
 = How much does it cost to purchase a license of UnusedCSS and where can I buy one? =
 
-You can purchase the license for as little as $9/m. Just sign up directly via [UnusedCSS.io](https://unusedcss.io) website.
+You can purchase the license for as little as $9/m. Just sign up directly via [rapidload.io](https://rapidload.io) website.
 
-= What are the Terms and Conditions of UnusedCSS.io usage =
+= What are the Terms and Conditions of rapidload.io usage =
 
-Read it here : [https://unusedcss.io/terms-conditions/](https://unusedcss.io/terms-conditions/)
+Read it here : [https://rapidload.io/terms-conditions/](https://rapidload.io/terms-conditions/)
 
 = How does this plugin speed up my site? =
 
