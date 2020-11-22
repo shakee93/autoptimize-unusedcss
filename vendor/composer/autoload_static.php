@@ -5,11 +5,8 @@
 namespace Composer\Autoload;
 
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89 {
-	public static $files = array(
-		'691395991fe1099c3e8332668bd4347c' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/simple_html_dom.php',
-	);
-
 	public static $classMap = array(
+		'Composer\\InstalledVersions'   => __DIR__ . '/..' . '/composer/InstalledVersions.php',
 		'UnusedCSS'                     => __DIR__ . '/../..' . '/includes/UnusedCSS.php',
 		'UnusedCSS_Admin'               => __DIR__ . '/../..' . '/includes/UnusedCSS_Admin.php',
 		'UnusedCSS_Api'                 => __DIR__ . '/../..' . '/includes/UnusedCSS_Api.php',

@@ -165,8 +165,15 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-		$dom = new simple_html_dom();
+		if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
+			self::log( 'Dom parser not loaded' );
+
+			return $html;
+		}
+
+		$dom = new \simplehtmldom\HtmlDocument();
 		$dom->load( $html );
+
 
 		$inject = (object) [
 			"parsed_html"           => false,
