@@ -5,9 +5,6 @@
   "autoload": {
     "classmap": [
       "includes/"
-    ],
-    "files": [
-      "vendor/simplehtmldom/simplehtmldom/simple_html_dom.php"
     ]
   }
 }
