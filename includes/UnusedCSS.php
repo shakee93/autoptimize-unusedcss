@@ -267,7 +267,7 @@ abstract class UnusedCSS {
 
 		// merge post and global safelists
 		if ( ! empty( $post_options['safelist'] ) ) {
-			$safelist = array_merge( json_decode( $this->options['uucss_safelist'] ), json_decode( $post_options['safelist'] ) );
+			$safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
 		}
 
 		return [
