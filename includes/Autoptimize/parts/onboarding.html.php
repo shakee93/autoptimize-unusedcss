@@ -151,7 +151,7 @@
                 <a class="act-button uucss-settings js-goto-settings"
                    href="<?php echo admin_url('options-general.php?page=uucss') ?>">View Jobs</a>
                 <a class="act-button uucss-support js-goto-support"
-                   href="https://unusedcss.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
+                   href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
             </div>
         </div>
     </div>

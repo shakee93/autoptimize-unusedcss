@@ -153,12 +153,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    if ( $job && $job['status'] == 'failed' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="error notice uucss-notice notice-error is-dismissible">
-                <h4><span class="dashicons dashicons-no-alt"></span> UnusedCSS : We were unable to remove unusedcss from
+                <h4><span class="dashicons dashicons-no-alt"></span> RapidLoad : We were unable to remove unused css
+                    from
                     your site 🤕</h4>
 
                 <div>
                     <p> Our team can help. Get in touch with support <a target="_blank"
-                                                                        href="https://unusedcss.zendesk.com/hc/en-us/requests/new">here</a>
+                                                                        href="https://rapidload.zendesk.com/hc/en-us/requests/new">here</a>
                     </p>
                     <blockquote class="error notice">
                         <strong>Link :</strong> <?php echo $job['url'] ?> <br>
@@ -317,7 +318,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		}
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
-			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+			self::add_admin_notice( 'RapidLoad : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
 			return;
 		}
 
@@ -338,13 +340,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		$notice = [
 			'action'      => 'activate',
-			'message'     => 'UnusedCSS : Deactivated your license for this site.',
+			'message'     => 'RapidLoad : Deactivated your license for this site.',
 			'main_action' => [
 				'key'   => 'Reactivate',
 				'value' => self::activation_url( 'authorize' )
 			],
-            'type' => 'success'
-        ];
+			'type'        => 'success'
+		];
         self::add_advanced_admin_notice($notice);
         return;
 	}

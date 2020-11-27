@@ -169,7 +169,7 @@ class UnusedCSS_Autoptimize_Onboard {
 		}
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
-			self::add_admin_notice( 'UnusedCSS : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+			self::add_admin_notice( 'RapidLoad : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
 
 			return;
 		}
@@ -177,7 +177,7 @@ class UnusedCSS_Autoptimize_Onboard {
 		$token = sanitize_text_field( $_REQUEST['token'] );
 
 		if ( strlen( $token ) !== 32 ) {
-			self::add_admin_notice( 'UnusedCSS : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
+			self::add_admin_notice( 'RapidLoad : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
 
 			return;
 		}
@@ -200,7 +200,7 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		update_option( 'autoptimize_uucss_settings', $options );
 
-		self::add_admin_notice( 'UnusedCSS : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+		self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}
 
 }

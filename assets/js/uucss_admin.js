@@ -154,7 +154,7 @@
                     if (results.length < 2) {
                         showNotification(
                             'Tip : When will i see the results ?',
-                            'The plugin will trigger UnusedCSS removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                            'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
                         );
                     }
 
