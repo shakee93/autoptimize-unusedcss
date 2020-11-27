@@ -75,8 +75,18 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.8 =
+ * feat: update support links in plugin
+
+= 1.0.7 =
+ * fix: php warning in safelist option
+ * feat: improve user agent detection
+
+= 1.0.6 =
+ * fix: simplehtmldom conflicts with other plugin
+
 = 1.0.5.1 =
-    * Rebranding with name RapidLoad
-    * Animated logo added
+ * Rebranding with name RapidLoad
+ * Animated logo added
 
 == Upgrade Notice ==
