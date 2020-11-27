@@ -282,7 +282,20 @@ abstract class UnusedCSS {
     }
 
     protected function is_doing_api_fetch(){
-        return strpos($_SERVER['HTTP_USER_AGENT'] , 'UnusedCSS_bot') !== false;
+
+	    $user_agent = '';
+	    $headers    = getallheaders();
+
+	    if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+		    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+	    }
+
+	    if ( isset( $headers['User-Agent'] ) ) {
+		    $user_agent = $headers['User-Agent'];
+	    }
+
+	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false;
+
     }
 
 
