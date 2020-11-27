@@ -27,16 +27,15 @@
             moveSlide(left);
         }
 
-        function child_open(url, width = 600, height = 510){
-            if(popupWindow && !popupWindow.closed){
+        function child_open(url, width = 600, height = 590) {
+            if (popupWindow && !popupWindow.closed) {
                 popupWindow.focus();
-            }
-            else{
-                var left  = ($(window).width()/2)-(width/2);
-                var top   = ($(window).height()/2)-(height/2);
-                popupWindow = window.open(url,"_blank","directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, width=" + width + ", height=" + height + ",  top=" + top + ", left=" + left);
+            } else {
+                var left = ($(window).width() / 2) - (width / 2);
+                var top = ($(window).height() / 2) - (height / 2);
+                popupWindow = window.open(url, "_blank", "directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, width=" + width + ", height=" + height + ",  top=" + top + ", left=" + left);
 
-                $(window).bind("beforeunload", function() {
+                $(window).bind("beforeunload", function () {
                     popupWindow = null;
                 });
                 popupWindow.focus();

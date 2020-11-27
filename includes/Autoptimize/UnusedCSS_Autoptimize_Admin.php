@@ -273,8 +273,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function add_ao_tab( $in ) {
 
+		$tab = 'Unused CSS';
+
 		$in = array_merge( $in, array(
-			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>RapidLoad</span></span>', 'autoptimize' ),
+			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>' . $tab . '</span></span>', 'autoptimize' ),
 		) );
 
 		return $in;
@@ -283,7 +285,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function add_ao_page() {
 
-	    add_submenu_page( null, 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+	    add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
 		    wp_enqueue_script( 'post' );
 
 		    ?>
