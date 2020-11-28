@@ -75,6 +75,9 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.9 =
+ * fix: plugin fails to access the wp filesystem breaks the activation
+
 = 1.0.8 =
  * feat: update support links in plugin
 
