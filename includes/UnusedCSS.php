@@ -38,6 +38,8 @@ abstract class UnusedCSS {
     public function __construct()
     {
 	    if ( ! $this->initFileSystem() ) {
+		    self::add_admin_notice( 'RapidLoad : We couldn\'t access wordpress file system. please contact support' );
+
 		    return;
 	    }
 
@@ -75,17 +77,23 @@ abstract class UnusedCSS {
 	public function initFileSystem() {
 
 		// load wp filesystem related files;
-		if (!class_exists('WP_Filesystem_Base')) {
-			require_once(ABSPATH . 'wp-admin/includes/file.php');
+		if ( ! class_exists( 'WP_Filesystem_Base' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			WP_Filesystem();
 		}
 
-		WP_Filesystem();
 		global $wp_filesystem;
+
+		if ( ! $wp_filesystem ) {
+			return false;
+		}
+
 		$this->file_system = $wp_filesystem;
 
 
-		if (!$this->file_system->is_writable( WP_CONTENT_DIR ) || !$this->file_system->is_readable( WP_CONTENT_DIR )) {
-			self::add_admin_notice("Autoptimize UnusedCSS don't have permission to write or read");
+		if ( ! $this->file_system->is_writable( WP_CONTENT_DIR ) || ! $this->file_system->is_readable( WP_CONTENT_DIR ) ) {
+			self::add_admin_notice( "Autoptimize UnusedCSS don't have permission to write or read" );
+
 			return false;
 		}
 
@@ -346,10 +354,9 @@ abstract class UnusedCSS {
     }
 
 
-    public function size()
-    {
+    public function size() {
 
-	    if ( ! $this->file_system->exists( $this->base_dir ) ) {
+	    if ( ! $this->file_system || ! $this->file_system->exists( $this->base_dir ) ) {
 		    return "0 KB";
 	    }
 
