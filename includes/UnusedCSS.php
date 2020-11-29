@@ -292,7 +292,11 @@ abstract class UnusedCSS {
     protected function is_doing_api_fetch(){
 
 	    $user_agent = '';
-	    $headers    = getallheaders();
+	    $headers    = [];
+
+	    if ( function_exists( 'getallheaders' ) ) {
+		    $headers = getallheaders();
+	    }
 
 	    if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 		    $user_agent = $_SERVER['HTTP_USER_AGENT'];
