@@ -75,7 +75,7 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.0.11 =
+= 1.0.12 =
  * feat: improve inaccessible file system handling
  * feat: refresh styles and scripts with plugin version
  * fix: minor plugin option ui improvements
