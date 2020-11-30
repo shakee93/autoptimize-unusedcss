@@ -33,7 +33,7 @@
 
         </p>
 
-        <div class="uucss-info-wrapper" style="margin-bottom: 10px">
+        <div class="uucss-info-wrapper" style="	width: calc(100% - 25px)">
             <div class="info-icon">
                 <span class="dashicons dashicons-info"></span>
             </div>

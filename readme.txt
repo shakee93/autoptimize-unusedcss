@@ -75,6 +75,11 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.11 =
+ * feat: improve inaccessible file system handling
+ * feat: refresh styles and scripts with plugin version
+ * fix: minor plugin option ui improvements
+
 = 1.0.10 =
  * fix: `getallheaders` undefined on some servers
 

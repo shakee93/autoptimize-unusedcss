@@ -375,7 +375,11 @@
             appendTo: 'parent',
             animation: 'shift-toward',
             placement: 'top-end',
-            content: document.getElementById('uucss-support-tooltip'),
+            content: function () {
+                var el = document.getElementById('uucss-support-tooltip');
+                el.style.display = 'inline-block';
+                return el
+            }
         });
 
     }

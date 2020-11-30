@@ -351,7 +351,7 @@
     </div>
 
     <div class="uucss-support">
-        <div id="uucss-support-tooltip">
+        <div id="uucss-support-tooltip" style="display: none">
             <h3>Support</h3>
             <br>
             We are here to help, take a look at our knowledge base or feel free to open a ticket.

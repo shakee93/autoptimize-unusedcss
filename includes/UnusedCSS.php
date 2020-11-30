@@ -58,11 +58,11 @@ abstract class UnusedCSS {
 
     public static function enqueueGlobalScript(){
         add_action('admin_enqueue_scripts',function (){
-            wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-            wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-            wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
+	        wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+	        wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
+	        wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
 
-	        wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js?v=1.27' );
+	        wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
 	        $data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
@@ -70,7 +70,8 @@ abstract class UnusedCSS {
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
-	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css?v=1.18' );
+	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
+
         });
     }
 

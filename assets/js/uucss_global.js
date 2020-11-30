@@ -3,8 +3,6 @@
 
     $(document).ready(function(){
 
-        console.log('2.0')
-
         var popupWindow = null;
         var origin = null;
         var $contentWrap = $('.slide-contents-wrap .slide-contents');
