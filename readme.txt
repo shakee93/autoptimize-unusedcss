@@ -75,6 +75,10 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.13 =
+ * feat: improve getting current url in request
+ * fix: homepage with latest posts not running the jobs
+
 = 1.0.12 =
  * feat: improve inaccessible file system handling
  * feat: refresh styles and scripts with plugin version
