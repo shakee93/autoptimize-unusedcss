@@ -24,12 +24,19 @@ trait UnusedCSS_Utils {
 		    return get_permalink( get_post( $post_id ) );
 	    }
 
-	    $query = ( isset( $_SERVER['QUERY_STRING'] ) && ! empty( $_SERVER['QUERY_STRING'] ) ) ? '?' . $_SERVER['QUERY_STRING'] : '';
-	    $url   = get_the_permalink();
+	    global $wp;
 
-	    if ( ! empty( $url ) ) {
-		    return $url . $query;
+	    if ( $wp ) {
+
+		    $query = ( isset( $_SERVER['QUERY_STRING'] ) && ! empty( $_SERVER['QUERY_STRING'] ) ) ? '?' . $_SERVER['QUERY_STRING'] : '';
+		    $url   = home_url( $wp->request ) . $query;
+
+		    if ( ! empty( $url ) ) {
+			    return $url;
+		    }
+
 	    }
+
 
 	    return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
     }
