@@ -184,27 +184,28 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		];
 
 		if ( $dom ) {
-		    $inject->parsed_html = true;
+			$inject->parsed_html = true;
 
 
-		    if ( $head = $dom->find( 'head', 0 ) ) {
+			// TODO : creates unnecessary jobs.
+//		    if ( $head = $dom->find( 'head', 0 ) ) {
+//
+//			    // dont inject if we found content is being updated
+//			    if ( UnusedCSS_Settings::content_hash( $this->url, md5( $head->innertext ) ) ) {
+//				    return $dom;
+//			    }
+//
+//		    }
 
-			    // dont inject if we found content is being updated
-			    if ( UnusedCSS_Settings::content_hash( $this->url, md5( $head->innertext ) ) ) {
-				    return $dom;
-			    }
-
-		    }
-
-		    $dom->find( 'html' )[0]->uucss = true;
+			$dom->find( 'html' )[0]->uucss = true;
 
 
-		    $sheets = $dom->find( 'link' );
+			$sheets = $dom->find( 'link' );
 
-		    foreach ( $sheets as $sheet ) {
-			    $link = $sheet->href;
+			foreach ( $sheets as $sheet ) {
+				$link = $sheet->href;
 
-			    $inject->found_sheets = true;
+				$inject->found_sheets = true;
 
 			    if ( self::is_css( $sheet ) ) {
 
