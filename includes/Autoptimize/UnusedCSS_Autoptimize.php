@@ -20,6 +20,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->provider = 'autoptimize';
 
+	    UnusedCSS_DB::check_db_updates();
+
 	    register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
 
 	    /**
