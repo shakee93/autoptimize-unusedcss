@@ -117,9 +117,17 @@ class UnusedCSS_Store {
 		    return;
 	    }
 
+	    $stats = $this->result->meta->stats;
+
+	    if ( isset( $stats->beforeBytes ) ) {
+		    unset( $stats->beforeBytes );
+	    }
+	    if ( isset( $stats->afterBytes ) ) {
+		    unset( $stats->afterBytes );
+	    }
+
 	    UnusedCSS_Settings::add_link( $this->url, $files, "success", [
-		    "stats"   => $this->result->meta->stats,
-		    "options" => $this->result->meta->options,
+		    "stats" => $stats
 	    ] );
 
 	    $this->args['url'] = $this->url;
