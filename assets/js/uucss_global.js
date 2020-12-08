@@ -526,7 +526,22 @@
             updateInput();
         }
 
+        $('.notice-action-rapidload-db-update .notice-main-action a.button').click(function (e) {
+            e.preventDefault();
 
+            $.ajax({
+                url : uucss.ajax_url,
+                method : 'POST',
+                data : {
+                    action : 'rapidload_db_update'
+                },
+                success : function(response){
+                    if(response.success){
+                        $('.uucss-notice-action.notice-action-rapidload-db-update').hide();
+                    }
+                }
+            })
+        })
     });
 
 }(jQuery))
