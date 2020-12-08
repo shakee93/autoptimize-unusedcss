@@ -325,8 +325,6 @@ abstract class UnusedCSS {
 
 	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) ) {
 
-		    UnusedCSS_Settings::delete_link( $url );
-
 		    if ( UnusedCSS_Settings::link_exists( $url ) ) {
 
 			    // get unused files
@@ -340,6 +338,7 @@ abstract class UnusedCSS {
 			    do_action( 'uucss/cache_cleared', $args );
 		    }
 
+            UnusedCSS_Settings::delete_link( $url );
 
 		    return true;
 	    }
