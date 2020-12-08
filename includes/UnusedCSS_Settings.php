@@ -9,24 +9,50 @@ class UnusedCSS_Settings {
 	static $map_key = 'uucss_map';
 
 	public static function get_links() {
-		return get_option( self::$map_key );
+        if(UnusedCSS_DB::migrated()){
 
+            return UnusedCSS_DB::get_links();
+
+        }
+
+		return get_option( self::$map_key );
 	}
 
 	public static function add_link( $link, $files = null, $status = 'success', $meta = null ) {
 
-		$map = get_option( self::$map_key );
+	    if(UnusedCSS_DB::migrated()){
 
-		$map[ md5( $link ) ] = [
-			"url"    => $link,
-			"hash"   => null,
-			"files"  => $files,
-			"status" => $status,
-			"meta"   => $meta,
-			"time"   => current_time( 'timestamp' )
-		];
+	        $data = array();
 
-		update_option( self::$map_key, $map );
+            if(isset($meta['id'])) $data['job_id'] = $meta['id'];
+            $data['url'] = $link;
+            if(isset($meta['stats'])) $data['stats'] = serialize($meta['stats']);
+            if(isset($files)) $data['files'] = serialize($files);
+            if(isset($meta['warnings'])) $data['warnings'] = serialize($meta['warnings']);
+            if(isset($meta['review'])) $data['review'] = serialize($meta['review']);
+            if(isset($meta['error'])) $data['error'] = serialize($meta['error']);
+            $data['status'] = $status;
+            $data['created_time'] = current_time('mysql');
+
+	        UnusedCSS_DB::add_link($data);
+
+        }else{
+
+            $map = get_option( self::$map_key );
+
+            $map[ md5( $link ) ] = [
+                "url"    => $link,
+                "hash"   => null,
+                "files"  => $files,
+                "status" => $status,
+                "meta"   => $meta,
+                "time"   => current_time( 'timestamp' )
+            ];
+
+            update_option( self::$map_key, $map );
+
+        }
+
 	}
 
 
@@ -69,6 +95,12 @@ class UnusedCSS_Settings {
 
 	public static function get_link( $link ) {
 
+        if(UnusedCSS_DB::migrated()){
+
+            return UnusedCSS_DB::get_link($link);
+
+        }
+
 		$map = get_option( self::$map_key );
 
 		if ( $map && isset( $map[ md5( $link ) ] ) && $map[ md5( $link ) ]['status'] == 'success' ) {
@@ -82,6 +114,13 @@ class UnusedCSS_Settings {
 	}
 
 	public static function get_first_link() {
+
+	    if(UnusedCSS_DB::migrated()){
+
+	        return UnusedCSS_DB::get_first_link();
+
+        }
+
 		if ( $map = (array) get_option( self::$map_key ) ) {
 
 			if ( isset( $map[0] ) && $map[0] === false ) {
@@ -100,6 +139,11 @@ class UnusedCSS_Settings {
 
 	public static function link_exists( $link ) {
 
+        if(UnusedCSS_DB::migrated()){
+
+            return UnusedCSS_DB::link_exists($link);
+
+        }
 
 		$map = get_option( self::$map_key );
 
@@ -116,6 +160,11 @@ class UnusedCSS_Settings {
 
 	public static function link_exists_with_error( $link ) {
 
+        if(UnusedCSS_DB::migrated()){
+
+            return UnusedCSS_DB::link_exists_with_error($link);
+
+        }
 
 		$map = get_option( self::$map_key );
 
@@ -131,16 +180,33 @@ class UnusedCSS_Settings {
 
 	public static function delete_link( $link ) {
 
-		$map = get_option( self::$map_key );
+	    if(UnusedCSS_DB::migrated()){
 
-		unset( $map[ md5( $link ) ] );
+	        UnusedCSS_DB::delete_link($link);
 
-		update_option( self::$map_key, $map );
+        }else{
+
+            $map = get_option( self::$map_key );
+
+            unset( $map[ md5( $link ) ] );
+
+            update_option( self::$map_key, $map );
+        }
+
+
 	}
 
 	public static function clear_links() {
 
-		delete_option( self::$map_key );
+	    if(UnusedCSS_DB::migrated()){
+
+	        UnusedCSS_DB::clear_links();
+
+        }else{
+
+            delete_option( self::$map_key );
+
+        }
 
 	}
 
