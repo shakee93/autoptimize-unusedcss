@@ -171,7 +171,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			return $html;
 		}
 
-		$dom = new \simplehtmldom\HtmlDocument();
+		$dom = new \simplehtmldom\HtmlDocument(
+			null,
+			false,
+			false,
+			\simplehtmldom\DEFAULT_TARGET_CHARSET,
+			false
+		);
+
 		$dom->load( $html );
 
 
