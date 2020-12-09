@@ -75,9 +75,13 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.16 =
+ * feat: add compatibility to wordpress 5.6
+ * fix: don't strip lines in html
+ * fix: broken remove rule icon in options fixed
 
 = 1.0.15 =
- * fix: don't force auto close html tags
+ * fix: slash omitted in uucss job urls
 
 = 1.0.14 =
  * fix: don't force auto close html tags
