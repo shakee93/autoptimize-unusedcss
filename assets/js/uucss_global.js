@@ -528,7 +528,8 @@
 
         $('.notice-action-rapidload-db-update .notice-main-action a.button').click(function (e) {
             e.preventDefault();
-
+            var $target = $(this);
+            $target.text('Updating...');
             $.ajax({
                 url : uucss.ajax_url,
                 method : 'POST',
@@ -537,7 +538,7 @@
                 },
                 success : function(response){
                     if(response.success){
-                        $('.uucss-notice-action.notice-action-rapidload-db-update').hide();
+                        window.location.reload();
                     }
                 }
             })
