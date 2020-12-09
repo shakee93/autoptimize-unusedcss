@@ -184,6 +184,7 @@ class UnusedCSS_DB
     static function initialize(){
         self::create_tables();
         update_option( self::$db_option, self::$db_version );
+        delete_option(UnusedCSS_Settings::$map_key);
     }
 
     static function link_files_used_elsewhere( $link ){
