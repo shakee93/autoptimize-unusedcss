@@ -7,7 +7,7 @@ class UnusedCSS_DB
     use UnusedCSS_Utils;
 
     static $db_version = "1.0";
-    static $db_option = "rapidload_uucss_db_version";
+    static $db_option = "rapidload_migration";
 
     function __construct()
     {
