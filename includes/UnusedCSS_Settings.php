@@ -212,47 +212,55 @@ class UnusedCSS_Settings {
 
 	public static function link_files_used_elsewhere( $link ) {
 
-		$map = get_option( self::$map_key );
+		if(UnusedCSS_DB::migrated()){
 
-		$files = self::get_link( $link );
+			return UnusedCSS_DB::link_files_used_elsewhere($link);
 
-		$used   = [];
-		$unused = [];
+		}else{
 
-		if ( $files ) {
+			$map = get_option( self::$map_key );
 
-			$files = $files['files'];
+			$files = self::get_link( $link );
 
-			foreach ( $files as $file ) {
+			$used   = [];
+			$unused = [];
 
-				foreach ( $map as $key => $value ) {
+			if ( $files ) {
 
-					if ( md5( $link ) !== $key ) {
+				$files = $files['files'];
 
-						if ( in_array( $file['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
-							$used[] = $file['uucss'];
-							break;
+				foreach ( $files as $file ) {
+
+					foreach ( $map as $key => $value ) {
+
+						if ( md5( $link ) !== $key ) {
+
+							if ( in_array( $file['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+								$used[] = $file['uucss'];
+								break;
+							}
+
 						}
-
 					}
+
+				}
+
+				$unused = array_column( $files, 'uucss' );
+
+				foreach ( $used as $item ) {
+
+					if ( ( $key = array_search( $item, $unused ) ) !== true ) {
+						unset( $unused[ $key ] );
+					}
+
 				}
 
 			}
 
-			$unused = array_column( $files, 'uucss' );
 
-			foreach ( $used as $item ) {
-
-				if ( ( $key = array_search( $item, $unused ) ) !== true ) {
-					unset( $unused[ $key ] );
-				}
-
-			}
+			return $unused;
 
 		}
-
-
-		return $unused;
 
 	}
 

@@ -94,7 +94,11 @@ class UnusedCSS_DB
     static function get_link($url){
         global $wpdb;
         $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
-        return self::transform_link($link);
+        if(!empty($link)){
+	        return self::transform_link($link[0]);
+        }else{
+        	return null;
+        }
     }
 
     static function migrated(){
@@ -186,21 +190,21 @@ class UnusedCSS_DB
 
         $links = self::get_links_exclude($link);
 
-        $link = self::get_link($link);
+        $file = (array) self::get_link($link);
 
         $used   = [];
         $unused = [];
 
-        if($link){
+        if($file){
 
-            $files = $link['files'];
+	        $files = $file['files'];
 
-            foreach ( $files as $file ) {
+            foreach ( $files as $item ) {
 
                 foreach ( $links as $key => $value ) {
 
-                    if ( in_array( $file['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
-                        $used[] = $file['uucss'];
+                    if ( in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                        $used[] = $item['uucss'];
                         break;
                     }
                 }
