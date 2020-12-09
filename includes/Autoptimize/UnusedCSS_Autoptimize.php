@@ -167,20 +167,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
 			self::log( 'Dom parser not loaded' );
-
 			return $html;
 		}
 
 		$dom = new \simplehtmldom\HtmlDocument(
-			null,
+			$html,
 			false,
 			false,
 			\simplehtmldom\DEFAULT_TARGET_CHARSET,
 			false
 		);
-
-		$dom->load( $html );
-
 
 		$inject = (object) [
 			"parsed_html"           => false,
