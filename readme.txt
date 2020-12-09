@@ -75,6 +75,10 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+
+= 1.0.15 =
+ * fix: don't force auto close html tags
+
 = 1.0.14 =
  * fix: don't force auto close html tags
 
