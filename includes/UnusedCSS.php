@@ -344,6 +344,9 @@ abstract class UnusedCSS {
 		    return true;
 	    }
 
+	    if ( $url ) {
+		    return false;
+	    }
 
 	    $results = $this->file_system->delete( $this->base_dir, true );
 	    UnusedCSS_Settings::clear_links();
