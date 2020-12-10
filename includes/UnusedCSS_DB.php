@@ -34,19 +34,31 @@ class UnusedCSS_DB
 	static function update_db(){
         if ( get_site_option( self::$db_option ) != self::$db_version ) {
 
-            self::create_tables();
+            try{
+	            $status = self::create_tables();
 
-            if(!get_site_option(self::$db_option)){
-                self::seed();
+	            if(!empty($status)){
+		            wp_send_json_error(array(
+		            	'error' => $status
+		            ));
+	            }
+
+	            if(!get_site_option(self::$db_option)){
+		            self::seed();
+	            }
+
+	            update_option( self::$db_option, self::$db_version );
+
+	            wp_send_json_success([
+		            'db_updated' => true
+	            ]);
+
+            }catch(Exception $e){
+	            wp_send_json_error(null);
             }
 
-            update_option( self::$db_option, self::$db_version );
-
-            wp_send_json_success([
-                'db_updated' => true
-            ]);
         }
-        wp_send_json_error(null);
+
     }
 
 
@@ -99,14 +111,20 @@ class UnusedCSS_DB
 
 			self::update( $data, array(
 				'url' => $data['url']
-			) );
+			));
 
         }else{
 
-            $wpdb->insert(
-                $wpdb->prefix . 'rapidload_uucss_job',
-                $data
-            );
+			$wpdb->insert(
+				$wpdb->prefix . 'rapidload_uucss_job',
+				$data
+			);
+
+			$error = $wpdb->last_error;
+
+			if(!empty($error)){
+				self::log($error);
+			}
 
 		}
 
@@ -116,12 +134,23 @@ class UnusedCSS_DB
 
     static function get_link($url){
         global $wpdb;
-        $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
-        if(!empty($link)){
-	        return self::transform_link($link[0]);
-        }else{
-        	return null;
-        }
+
+	    $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    if(!empty($link)){
+
+		    return self::transform_link($link[0]);
+
+	    }else{
+
+		    return null;
+	    }
     }
 
 
@@ -135,22 +164,40 @@ class UnusedCSS_DB
 
     static function get_links(){
         global $wpdb;
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job", OBJECT);
-        $links = array_map(function ($link){
-            return self::transform_link($link);
-        }, $links);
-        return $links;
+
+	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job", OBJECT);
+
+	    $links = array_map(function ($link){
+		    return self::transform_link($link);
+	    }, $links);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    return $links;
     }
 
 
 
     static function get_links_exclude($url){
         global $wpdb;
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url != '" . $url . "'", OBJECT);
-        $links = array_map(function ($link){
-            return self::transform_link($link);
-        }, $links);
-        return $links;
+
+	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url != '" . $url . "'", OBJECT);
+
+	    $links = array_map(function ($link){
+		    return self::transform_link($link);
+	    }, $links);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    return $links;
     }
 
 
@@ -179,55 +226,105 @@ class UnusedCSS_DB
 
     static function get_first_link(){
         global $wpdb;
-        $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . 1, OBJECT);
-        return self::transform_link($link );
+
+	    $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . 1, OBJECT);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    return self::transform_link($link );
     }
 
 
 
     static function link_exists($url){
         global $wpdb;
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status='success'", OBJECT);
-        return isset($result) && !empty($result );
+
+	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status='success'", OBJECT);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    return isset($result) && !empty($result );
     }
 
 
 
     static function link_exists_with_error($url){
         global $wpdb;
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
-        return isset($result) && !empty($result );
+
+	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
+
+	    return isset($result) && !empty($result);
     }
 
 
 
     static function delete_link($url){
         global $wpdb;
-        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'" );
+
+	    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'" );
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
     }
 
 
 
     static function clear_links(){
         global $wpdb;
-        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > " . 0 );
+
+	    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > " . 0 );
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+		    self::log($error);
+	    }
     }
 
 
 
     static function update($data, $where){
         global $wpdb;
-        return $wpdb->update(
-            $wpdb->prefix . 'rapidload_uucss_job',
-            $data,
-            $where
-        );
+
+	    $wpdb->update(
+		    $wpdb->prefix . 'rapidload_uucss_job',
+		    $data,
+		    $where
+	    );
+
+	    $error = $wpdb->last_error;
+
+	    if(!empty($error)){
+	    	self::log($error);
+	    }
     }
 
 
 
     static function initialize(){
-        self::create_tables();
+        $status = self::create_tables();
+
+        if(!empty($status)){
+        	self::log($status);
+        }
+
         update_option( self::$db_option, self::$db_version );
         delete_option(UnusedCSS_Settings::$map_key );
     }
@@ -300,6 +397,7 @@ class UnusedCSS_DB
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
+	    return $wpdb->last_error;
     }
 
 
@@ -315,6 +413,11 @@ class UnusedCSS_DB
             $wpdb->query("DROP TABLE IF EXISTS $tablename");
         }
 
-        delete_option(self::$db_option);
+        if(empty($wpdb->last_error)){
+
+           delete_option(self::$db_option);
+
+		}
+
     }
 }
