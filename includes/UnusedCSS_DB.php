@@ -293,7 +293,7 @@ class UnusedCSS_DB
 		error longtext NULL,
 		attempts mediumint(2) NULL,
 		status varchar(15) NOT NULL,
-		created_at TIMxESTAMP NOT NULL DEFAULT NOW(),
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id),
 		KEY url (url(500))
 	) $charset_collate;";
