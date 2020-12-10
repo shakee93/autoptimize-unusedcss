@@ -9,31 +9,29 @@ class UnusedCSS_DB
     static $db_version = "1.0";
     static $db_option = "rapidload_migration";
 
-    function __construct()
-    {
 
-    }
 
     static function check_db_updates(){
 
         if ( get_site_option( self::$db_option ) != self::$db_version ) {
             $notice = [
-                'action'  => 'rapidload-db-update',
-                'title'   => 'RapidLoad Power Up',
-                'message' => 'Please update database',
+	            'action'  => 'rapidload-db-update',
+	            'title'   => 'RapidLoad Power Up',
+	            'message' => 'Migrate your database to the latest version. to enjoy optimized data handling.',
 
-                'main_action' => [
-                    'key'   => 'Update Database',
-                    'value' => '#'
-                ],
-                'type'        => 'warning'
+	            'main_action' => [
+		            'key'   => 'Update Database',
+		            'value' => '#'
+	            ],
+	            'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
             add_action( "wp_ajax_rapidload_db_update", 'UnusedCSS_DB::update_db' );
         }
     }
 
-    static function update_db(){
+
+	static function update_db(){
         if ( get_site_option( self::$db_option ) != self::$db_version ) {
 
             self::create_tables();
@@ -51,34 +49,57 @@ class UnusedCSS_DB
         wp_send_json_error(null);
     }
 
-    static function seed(){
-        $maps = get_option('uucss_map');
-        foreach ($maps as $map){
-            $data = array();
-            if(isset($map['meta']['id'])) $data['job_id'] = $map['meta']['id'];
-            $data['url'] = $map['url'];
-            if(isset($map['meta']['stats'])) $data['stats'] = serialize($map['meta']['stats']);
-            if(isset($map['files'])) $data['files'] = serialize($map['files']);
-            if(isset($map['meta']['warnings'])) $data['warnings'] = serialize($map['meta']['warnings']);
-            if(isset($map['meta']['review'])) $data['review'] = serialize($map['meta']['review']);
-            if(isset($map['meta']['error'])) $data['error'] = serialize($map['meta']['error']);
-            $data['status'] = $map['status'];
-            $data['created_time'] = current_time('mysql');
 
-            self::add_link($data);
-        }
-    }
+	static function seed() {
 
-    static function add_link($data){
-        global $wpdb;
+		$maps = get_option( UnusedCSS_Settings::$map_key );
 
-        $exist = self::get_link($data['url']);
+		if ( empty( $maps ) ) {
+			return;
+		}
 
-        if($exist){
+		foreach ( $maps as $map ) {
+			$data = array();
+			if ( isset( $map['meta']['id'] ) ) {
+				$data['job_id'] = $map['meta']['id'];
+			}
+			$data['url'] = $map['url'];
+			if ( isset( $map['meta']['stats'] ) ) {
+				$data['stats'] = serialize( $map['meta']['stats'] );
+			}
+			if ( isset( $map['files'] ) ) {
+				$data['files'] = serialize( $map['files'] );
+			}
+			if ( isset( $map['meta']['warnings'] ) ) {
+				$data['warnings'] = serialize( $map['meta']['warnings'] );
+			}
+			if ( isset( $map['meta']['review'] ) ) {
+				$data['review'] = serialize( $map['meta']['review'] );
+			}
+			if ( isset( $map['meta']['error'] ) ) {
+				$data['error'] = serialize( $map['meta']['error'] );
+			}
+			$data['status']     = $map['status'];
+			$data['created_at'] = date( "Y-m-d H:m:s", $map['time'] );
 
-            self::update($data, array(
-               'url' => $data['url']
-            ));
+			self::add_link( $data );
+		}
+
+		// remove old option after seeding completed
+		delete_option( UnusedCSS_Settings::$map_key );
+	}
+
+
+	static function add_link( $data ) {
+		global $wpdb;
+
+		$exist = self::get_link( $data['url'] );
+
+		if ( $exist ) {
+
+			self::update( $data, array(
+				'url' => $data['url']
+			) );
 
         }else{
 
@@ -87,9 +108,11 @@ class UnusedCSS_DB
                 $data
             );
 
-        }
+		}
 
-    }
+	}
+
+
 
     static function get_link($url){
         global $wpdb;
@@ -101,10 +124,14 @@ class UnusedCSS_DB
         }
     }
 
+
+
     static function migrated(){
         $option = get_option(self::$db_option);
-        return isset($option) && !empty($option);
+        return isset($option) && !empty($option );
     }
+
+
 
     static function get_links(){
         global $wpdb;
@@ -115,6 +142,8 @@ class UnusedCSS_DB
         return $links;
     }
 
+
+
     static function get_links_exclude($url){
         global $wpdb;
         $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url != '" . $url . "'", OBJECT);
@@ -123,6 +152,8 @@ class UnusedCSS_DB
         }, $links);
         return $links;
     }
+
+
 
     static function transform_link($link){
 
@@ -137,40 +168,52 @@ class UnusedCSS_DB
         $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
         $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : null;
         $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
-        $data['status'] = isset($link->status) ? $link->status : null;
-        $data['time'] = isset($link->created_time) ? $link->created_time : null;
-        $data['url'] = isset($link->url) ? $link->url : null;
+	    $data['status'] = isset( $link->status ) ? $link->status : null;
+	    $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
+	    $data['url'] = isset( $link->url ) ? $link->url : null;
         $data['id'] = isset($link->id) ? $link->id : null;
         return $data;
     }
 
+
+
     static function get_first_link(){
         global $wpdb;
         $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . 1, OBJECT);
-        return self::transform_link($link);
+        return self::transform_link($link );
     }
+
+
 
     static function link_exists($url){
         global $wpdb;
         $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status='success'", OBJECT);
-        return isset($result) && !empty($result);
+        return isset($result) && !empty($result );
     }
+
+
 
     static function link_exists_with_error($url){
         global $wpdb;
         $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
-        return isset($result) && !empty($result);
+        return isset($result) && !empty($result );
     }
+
+
 
     static function delete_link($url){
         global $wpdb;
-        $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'");
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'" );
     }
+
+
 
     static function clear_links(){
         global $wpdb;
-        $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > " . 0);
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > " . 0 );
     }
+
+
 
     static function update($data, $where){
         global $wpdb;
@@ -181,11 +224,15 @@ class UnusedCSS_DB
         );
     }
 
+
+
     static function initialize(){
         self::create_tables();
         update_option( self::$db_option, self::$db_version );
-        delete_option(UnusedCSS_Settings::$map_key);
+        delete_option(UnusedCSS_Settings::$map_key );
     }
+
+
 
     static function link_files_used_elsewhere( $link ){
 
@@ -226,6 +273,8 @@ class UnusedCSS_DB
         return $unused;
     }
 
+
+
     static function create_tables(){
         global $wpdb;
 
@@ -244,7 +293,7 @@ class UnusedCSS_DB
 		error longtext NULL,
 		attempts mediumint(2) NULL,
 		status varchar(15) NOT NULL,
-		created_time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		created_at TIMxESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id),
 		KEY url (url(500))
 	) $charset_collate;";
@@ -252,6 +301,8 @@ class UnusedCSS_DB
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
     }
+
+
 
     static function drop(){
         global $wpdb;

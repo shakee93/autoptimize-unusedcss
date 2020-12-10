@@ -32,7 +32,6 @@ class UnusedCSS_Settings {
             if(isset($meta['review'])) $data['review'] = serialize($meta['review']);
             if(isset($meta['error'])) $data['error'] = serialize($meta['error']);
             $data['status'] = $status;
-            $data['created_time'] = current_time('mysql');
 
 	        UnusedCSS_DB::add_link($data);
 
