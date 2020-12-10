@@ -111,6 +111,65 @@ div.uucss-on-board{
     transition: width .5s ease;
     border-radius: 3px;
 }
+.uucss-on-board .card.analyze{
+    position: absolute;
+    left: 300px;
+    top: 0;
+    height: 100%;
+    margin-top: 0 !important;
+    opacity: 0;
+    transition-duration: 0.5s;
+    transition-property: opacity;
+}
+.uucss-on-board .card.analyze.show{
+    opacity: 1;
+}
+.uucss-on-board .card.analyze .analyze-form,
+.uucss-on-board .card.analyze .analyze-result{
+    width: 100%;
+}
+.uucss-on-board .card.analyze .analyze-form.hidden{
+    display: none;
+}
+.uucss-on-board .card.analyze .analyze-result{
+    display: none;
+}
+.uucss-on-board .card.analyze .analyze-result.show{
+    display: block;
+}
+.uucss-on-board .card.analyze .analyze-result .reduction{
+    font-weight: 700;
+    font-size: 50px;
+    color: #674399;
+    line-height: 1.15em;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .content{
+    display: flex;
+    justify-content: center;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .content span.title{
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .content span.value{
+    font-size: 34px;
+    line-height: 40px;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .heading{
+    margin-top: 15px;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .heading h2{
+    line-height: 32px;
+    font-weight: 600 !important;
+    margin-bottom: 0 !important;
+    font-size: 18px !important;
+}
+.uucss-on-board .card.analyze .analyze-result .stats .stat{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
 .uucss-on-board .card {
     max-width: 230px;
     margin: 15px auto 25px;
@@ -409,32 +468,32 @@ div.uucss-on-board{
     display: none;
 }
 
-.uucss-on-board.complete .card-complete .tippy-content .error-tooltip span {
+.on-board .tippy-content .error-tooltip span {
     font-size: 11px;
     line-height: 1.4 !important;
     display: inline-block;
 }
 
-.uucss-on-board.complete .card-complete .tippy-content .error-tooltip {
+.on-board .tippy-content .error-tooltip {
     margin: 5px 0;
     max-width: 230px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-content .error-tooltip h5 {
+.on-board .tippy-content .error-tooltip h5 {
     margin: 0;
     font-size: 12px;
     text-transform: uppercase;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip {
+.on-board .card-complete .stat-tooltip {
     min-width: 220px;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip p {
+.on-board .stat-tooltip p {
     margin: 0;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar {
+.on-board .stat-tooltip .progress-bar {
     height: 13px;
     position: relative;
     background: #f34337;
@@ -442,11 +501,11 @@ div.uucss-on-board{
     box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar.w-100 > span {
+.on-board .stat-tooltip .progress-bar.w-100 > span {
     width: 100% !important;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar > span {
+.on-board .stat-tooltip .progress-bar > span {
     display: block;
     height: 100%;
     border-radius: 10px;
@@ -460,13 +519,13 @@ div.uucss-on-board{
     animation-delay: 1s;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper {
+.on-board .stat-tooltip .progress-bar-wrapper {
     text-align: right;
     margin: 38px 0 34px;
     position: relative;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper em {
+.on-board .stat-tooltip .progress-bar-wrapper em {
     font-size: 10px;
     border: 1px solid #b9a8d7;
     padding: 3px 5px;
@@ -477,45 +536,45 @@ div.uucss-on-board{
     margin-right: 4px;
 }
 
-.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar em {
+.on-board .stat-tooltip .progress-bar em {
     position: absolute;
     right: -5px;
     top: 12px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] {
+.on-board .tippy-box[data-theme~='tomato'] {
     background-color: #fde4e2;
     color: #f24237;
     font-size: 10px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] .perc {
+.on-board .tippy-box[data-theme~='tomato'] .perc {
     background: #f34337;
     color: white;
     padding: 2px 5px;
     border-radius: 4px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='tomato'] .tippy-arrow {
+.on-board .tippy-box[data-theme~='tomato'] .tippy-arrow {
     color: #ebe4f6;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~=light] > .tippy-content {
+.on-board .tippy-box[data-theme~=light] > .tippy-content {
     padding: 5px 10px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] {
+.on-board .tippy-box[data-theme~='ketchup'] {
     background-color: #d4f7f3;
     color: #009687;
     font-size: 10px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] .tippy-arrow {
+.on-board .tippy-box[data-theme~='ketchup'] .tippy-arrow {
     color: #d5f7f3;
     transform: translate3d(15px, 0px, 0px) !important;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-theme~='ketchup'] .perc {
+.on-board .tippy-box[data-theme~='ketchup'] .perc {
     background: #009687;
     color: white;
     padding: 2px 5px;
@@ -524,11 +583,11 @@ div.uucss-on-board{
     margin-right: -2px;
 }
 
-.uucss-on-board.complete .card-complete .tippy-box[data-placement^=bottom]>.tippy-arrow:before{
+.on-board .tippy-box[data-placement^=bottom]>.tippy-arrow:before{
     left: 90px !important;
 }
 
-.uucss-on-board.complete .card-complete .tippy-content{
+.on-board .tippy-content{
     padding: 5px 5px;
 }
 

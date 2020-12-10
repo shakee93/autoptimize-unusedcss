@@ -66,7 +66,9 @@ abstract class UnusedCSS {
 	        $data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed()
+		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+		        'home_url' => home_url(),
+		        'api_url' => UnusedCSS_Api::get_key()
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
