@@ -16,7 +16,7 @@ define( 'UUCSS_VERSION', '1.0.16' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
-require( 'vendor/autoload.php' );
+require( __DIR__ . '/vendor/autoload.php' );
 
 register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::uucss_activate' );
 
