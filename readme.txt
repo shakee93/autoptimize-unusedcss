@@ -75,6 +75,11 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.17 =
+ * fix: clearing all caches on new page/post creation
+ * fix: composer autoload file not being loaded on some servers
+ * fix: autoptimize optimized files are not being injected with CDN usage
+
 = 1.0.16 =
  * feat: add compatibility to wordpress 5.6
  * fix: don't strip lines in html
