@@ -225,7 +225,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    array_push( $inject->injected_css_files, $newLink );
 
-					    if ( in_array( $link, $this->css ) || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
+					    // check the file is processed via AO
+					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link ) {
+						    return $this->str_contains( $item, $link );
+					    } );
+
+					    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
 						    $sheet->uucss = true;
 						    $sheet->href  = $newLink;
