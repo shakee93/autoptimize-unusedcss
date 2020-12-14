@@ -302,8 +302,8 @@ abstract class UnusedCSS {
 		    $user_agent = $headers['User-Agent'];
 	    }
 
-	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false;
-
+	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
+	           strpos( $user_agent, 'RapidLoad' ) !== false;
     }
 
 
