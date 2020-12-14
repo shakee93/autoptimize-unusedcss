@@ -32,11 +32,12 @@
                     } ?>">
                         <div class="analyze card show">
                             <div class="analyze-form actions">
-                                <h2>Why Choose Us</h2>
+                                <h2>Analyze & Connect</h2>
                                 <div class="action-content">
                                     <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                                          alt="">
-                                    <p>Connect with <strong><em>RapidLoad.io</em></strong> engine to start automatic optimization of
+                                    <p>Analyze & Connect with <strong><em>RapidLoad.io</em></strong> engine to start
+                                        automatic optimization of
                                         your website and
                                         watch your page speed and speed scores spike up.</p>
                                 </div>
@@ -58,7 +59,7 @@
                                             Before
                                         </span>
                                             <span class="value">
-                                            95 <span>KB</span>
+                                            0 <span>KB</span>
                                         </span>
                                         </div>
                                         <div class="stats-figure after stat green">
@@ -66,7 +67,7 @@
                                             After
                                         </span>
                                             <span class="value">
-                                            35 <span>KB</span>
+                                            0 <span>KB</span>
                                         </span>
                                         </div>
                                     </div>
@@ -83,7 +84,7 @@
                                             Before
                                         </span>
                                             <span class="value">
-                                            10
+                                            0
                                         </span>
                                         </div>
                                         <div class="stats-file after stat green">
@@ -91,7 +92,7 @@
                                             After
                                         </span>
                                             <span class="value">
-                                            5
+                                            0
                                         </span>
                                         </div>
                                     </div>
@@ -103,7 +104,8 @@
                                data-activation_url="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
                                href="#"
                                target="_blank">
-	                            <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'Connect' : 'Test My Site' ?> <span class="dashicons dashicons-yes-alt"></span>
+			                    <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'Connect' : 'Analyze' ?>
+                                <span class="dashicons dashicons-yes-alt"></span>
                             </a>
                             <!--<a class="act-button js-uucss-analyze-site "
                                href="#">

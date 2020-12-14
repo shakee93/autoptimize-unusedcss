@@ -24,7 +24,7 @@
             moveSlide(left);
         }
 
-        function child_open(url, width = 600, height = 590) {
+        function child_open(url, width = 770, height = 590) {
             if (popupWindow && !popupWindow.closed) {
                 popupWindow.focus();
             } else {
