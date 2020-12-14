@@ -327,12 +327,10 @@ abstract class UnusedCSS {
 
 	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) ) {
 
-		    UnusedCSS_Settings::delete_link( $url );
-
 		    if ( UnusedCSS_Settings::link_exists( $url ) ) {
 
 			    // get unused files
-			    $unused_files = UnusedCSS_Settings::link_files_used_elsewhere( $url );
+			    $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
 
 			    // remove unused files from filesystem
 			    foreach ( $unused_files as $unused_file ) {
@@ -342,6 +340,7 @@ abstract class UnusedCSS {
 			    do_action( 'uucss/cache_cleared', $args );
 		    }
 
+            UnusedCSS_Settings::delete_link( $url );
 
 		    return true;
 	    }

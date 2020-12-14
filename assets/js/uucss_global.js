@@ -585,7 +585,37 @@
             updateInput();
         }
 
+        $('.notice-action-rapidload-db-update .notice-main-action a.button').click(function (e) {
+            var $target = $(this);
 
+            if($target.text() === 'Contact Support'){
+                return;
+            }
+            e.preventDefault();
+
+            $target.text('Updating...');
+            $target.removeAttr('href');
+            $.ajax({
+                url : uucss.ajax_url,
+                method : 'POST',
+                data : {
+                    action : 'rapidload_db_update'
+                },
+                success : function(response){
+                    if(response.success){
+                        window.location.reload();
+                    }else{
+                        var $error = $('.notice-action-rapidload-db-update .notice-icon-content');
+                        $error.find('h2').text('RapidLoad - Data update failed !');
+                        $error.find('p').text('Database update failed');
+                        $('.notice-action-rapidload-db-update').css('border-left-color','#dc3232');
+                        $target.text('Failed : Contact Support');
+                        $target.attr('href', 'https://rapidload.zendesk.com/hc/en-us/requests/new');
+                        $target.attr('target', '_blank');
+                    }
+                }
+            })
+        })
     });
 
 }(jQuery))

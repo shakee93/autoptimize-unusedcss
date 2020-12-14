@@ -127,6 +127,7 @@ class UnusedCSS_Store {
 	    }
 
 	    UnusedCSS_Settings::add_link( $this->url, $files, "success", [
+	        "id" => $this->result->meta->id,
 		    "stats" => $stats
 	    ] );
 
