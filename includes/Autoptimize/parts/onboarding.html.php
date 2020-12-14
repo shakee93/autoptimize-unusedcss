@@ -21,68 +21,6 @@
             </div>
         </div>
         <div class="card">
-            <div class="analyze card">
-                <div class="analyze-form actions">
-                    <h2>Why Choose Us</h2>
-                    <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
-                         alt="">
-
-                    <a class="act-button js-uucss-analyze-site "
-                       href="#">
-                        Test My Site <span class="dashicons dashicons-yes-alt"></span>
-                    </a>
-                </div>
-                <div class="analyze-result actions">
-                    <h2>Removed CSS By</h2>
-                    <span class="reduction"></span>
-                    <div class="stats stats-figures">
-                        <div class="heading">
-                            <h2>Size</h2>
-                        </div>
-                        <div class="content">
-                            <div class="stats-figure before stat">
-                                <span class="title">
-                                    Before
-                                </span>
-                                <span class="value">
-                                    95 KB
-                                </span>
-                            </div>
-                            <div class="stats-figure after stat">
-                                <span class="title">
-                                    After
-                                </span>
-                                <span class="value">
-                                    35 KB
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stats stats-files">
-                        <div class="heading">
-                            <h2>Request Count</h2>
-                        </div>
-                        <div class="content">
-                            <div class="stats-file before stat">
-                                <span class="title">
-                                    Before
-                                </span>
-                                <span class="value">
-                                    10
-                                </span>
-                                </div>
-                            <div class="stats-file after stat">
-                                <span class="title">
-                                    After
-                                </span>
-                                <span class="value">
-                                    5
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="slide-contents-wrap">
                 <div class="slide-contents" style="<?php
                 if (($step - 1) !== 0) {
@@ -92,28 +30,97 @@
                     <div class="connect actions slide-content <?php if (UnusedCSS_Autoptimize_Admin::is_api_key_verified()) {
 	                    echo 'done';
                     } ?>">
-                        <h2>Connect & Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
-                             alt="">
-                        <p>Connect with <strong><em>RapidLoad.io</em></strong> engine to start automatic optimization of
-                            your website and
-                            watch your page speed and speed scores spike up.</p>
+                        <div class="analyze card show">
+                            <div class="analyze-form actions">
+                                <h2>Why Choose Us</h2>
+                                <div class="action-content">
+                                    <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
+                                         alt="">
+                                    <p>Connect with <strong><em>RapidLoad.io</em></strong> engine to start automatic optimization of
+                                        your website and
+                                        watch your page speed and speed scores spike up.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analyze-result">
+                            <h2>Connect & Activate</h2>
+                            <div class="action-content">
+                                <span class="reduction"></span>
+                                <div class="stats stats-figures">
+                                    <div class="heading">
+                                        <h2>Size</h2>
+                                    </div>
+                                    <div class="content">
+                                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
+                                             alt="">
+                                        <div class="stats-figure before stat red">
+                                        <span class="title">
+                                            Before
+                                        </span>
+                                            <span class="value">
+                                            95 <span>KB</span>
+                                        </span>
+                                        </div>
+                                        <div class="stats-figure after stat green">
+                                        <span class="title">
+                                            After
+                                        </span>
+                                            <span class="value">
+                                            35 <span>KB</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stats stats-files">
+                                    <div class="heading">
+                                        <h2>Request Count</h2>
+                                    </div>
+                                    <div class="content">
+                                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
+                                             alt="">
+                                        <div class="stats-file before stat red">
+                                        <span class="title">
+                                            Before
+                                        </span>
+                                            <span class="value">
+                                            10
+                                        </span>
+                                        </div>
+                                        <div class="stats-file after stat green">
+                                        <span class="title">
+                                            After
+                                        </span>
+                                            <span class="value">
+                                            5
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="action-wrap">
-                            <a class="act-button js-uucss-connect "
-                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
+                            <a class="act-button <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'js-uucss-connect' : 'js-uucss-analyze-site' ?> "
+                               data-activation_url="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
+                               href="#"
                                target="_blank">
-                                Connect <span class="dashicons dashicons-yes-alt"></span>
+	                            <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'Connect' : 'Test My Site' ?> <span class="dashicons dashicons-yes-alt"></span>
                             </a>
+                            <!--<a class="act-button js-uucss-analyze-site "
+                               href="#">
+                                Test My Site <span class="dashicons dashicons-yes-alt"></span>
+                            </a>-->
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
                         <h2>Autoptimize install and Activate</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/install-autoptimize.svg' ?>"
-                             alt="">
-                        <p>
-                            Autoptimize (AO) is free to use and must be installed and active before running RapidLoad.
-                        </p>
+                        <div class="action-content">
+                            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/install-autoptimize.svg' ?>"
+                                 alt="">
+                            <p>
+                                Autoptimize (AO) is free to use and must be installed and active before running RapidLoad.
+                            </p>
+                        </div>
                         <div class="action-wrap">
                             <a class="act-button js-activate-ao"
                                href="<?php
@@ -142,10 +149,12 @@
                         echo 'done';
                     } ?>">
                         <h2>Configure Autoptimize</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/configure.svg' ?>" alt="">
-                        <p>
-                            Enable the <strong><em>Optimize CSS</em></strong> option of Autoptimize in the settings.
-                        </p>
+                        <div class="action-content">
+                            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/configure.svg' ?>" alt="">
+                            <p>
+                                Enable the <strong><em>Optimize CSS</em></strong> option of Autoptimize in the settings.
+                            </p>
+                        </div>
                         <div class="action-wrap">
                             <a class="act-button js-enable-css-ao "
                                href="<?php echo admin_url('/options-general.php?page=autoptimize#configure_autoptimize_css') ?>"
@@ -160,10 +169,12 @@
                         echo 'done';
                     } ?>">
                         <h2>Run First Job</h2>
-                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
-                             alt="">
-                        <p>Run your first RapidLoad removal job and see how much weight it could remove from your
-                            website. <strong>it could reduce css file size upto 98% on larger websites. </strong></p>
+                        <div class="action-content">
+                            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
+                                 alt="">
+                            <p>Run your first RapidLoad removal job and see how much weight it could remove from your
+                                website. <strong>it could reduce css file size upto 98% on larger websites. </strong></p>
+                        </div>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-first-job" href="#" target="_blank">
                                 Run First Job <span class="dashicons dashicons-yes-alt"></span>

@@ -113,16 +113,19 @@ div.uucss-on-board{
 }
 .uucss-on-board .card.analyze{
     position: absolute;
-    left: 300px;
-    top: 0;
-    height: 100%;
+    left: -15px;
+    top: -20px;
+    height: 85%;
     margin-top: 0 !important;
     opacity: 0;
-    transition-duration: 0.5s;
-    transition-property: opacity;
+    /*transition-duration: 0.5s;*/
+    transition-property: all;
+    z-index: -1;
+    box-shadow: none;
 }
 .uucss-on-board .card.analyze.show{
     opacity: 1;
+    z-index: 100;
 }
 .uucss-on-board .card.analyze .analyze-form,
 .uucss-on-board .card.analyze .analyze-result{
@@ -131,44 +134,70 @@ div.uucss-on-board{
 .uucss-on-board .card.analyze .analyze-form.hidden{
     display: none;
 }
-.uucss-on-board .card.analyze .analyze-result{
-    display: none;
+.analyze-result h2 {
+    min-height: 26px !important;
 }
-.uucss-on-board .card.analyze .analyze-result.show{
-    display: block;
+.uucss-on-board .connect.actions .action-wrap{
+    bottom: 7px;
 }
-.uucss-on-board .card.analyze .analyze-result .reduction{
-    font-weight: 700;
+.uucss-on-board .connect.actions .analyze-result .reduction{
+    font-weight: bold;
+    font-family: Roboto;
     font-size: 50px;
     color: #674399;
     line-height: 1.15em;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .content{
+.uucss-on-board .connect.actions .analyze-result .stats .content{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    position: relative;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .content span.title{
+.uucss-on-board .connect.actions .analyze-result .stats .content img{
+    position: absolute;
+    width: 20px;
+    top: 38px;
+    left: 102px;
+}
+.uucss-on-board .connect.actions .analyze-result .stats .content span.title{
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
+    text-align: left;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .content span.value{
-    font-size: 34px;
+.uucss-on-board .connect.actions .analyze-result .stats .content span.value{
+    font-size: 22px;
     line-height: 40px;
+    background-color: #f2f2f2;
+    font-weight: 600;
+    border-radius: 5px;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .heading{
+.uucss-on-board .connect.actions .analyze-result .stats .content span.value span {
+    font-size: 14px;
+}
+.uucss-on-board .connect.actions .analyze-result .stats.stats-figures{
+    margin-bottom: 25px;
+}
+.uucss-on-board .connect.actions .analyze-result .stats .heading{
     margin-top: 15px;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .heading h2{
-    line-height: 32px;
+.uucss-on-board .connect.actions .analyze-result .stats .heading h2{
+    line-height: 20px;
     font-weight: 600 !important;
-    margin-bottom: 0 !important;
-    font-size: 18px !important;
+    margin-bottom: 10px !important;
+    font-size: 14px !important;
+    text-transform: none;
+    min-height: 20px !important;
 }
-.uucss-on-board .card.analyze .analyze-result .stats .stat{
+.uucss-on-board .connect.actions .analyze-result .stats .stat{
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: 40%;
+}
+.uucss-on-board .connect.actions .analyze-result .stats .stat.green .value{
+    color: #37b72c;
+}
+.uucss-on-board .connect.actions .analyze-result .stats .stat.red .value{
+    color: #e23030;
 }
 .uucss-on-board .card {
     max-width: 230px;
@@ -178,6 +207,9 @@ div.uucss-on-board{
     border-radius: 5px;
     display: flex;
     border: none;
+}
+.uucss-on-board .card.analyze .analyze-form.actions p{
+    height: auto;
 }
 .uucss-on-board .steps-wrap {
     max-width: 230px;
@@ -205,8 +237,14 @@ div.uucss-on-board{
     color: #585858;
     padding: 0 10px;
     margin: 0 0 20px;
-    min-height: 70px;
+    /*min-height: 70px;*/
     height: 100%;
+}
+.uucss-on-board .actions .action-content{
+    min-height: 270px;
+}
+.uucss-on-board .analyze-form.actions .action-content{
+    min-height: 230px;
 }
 .uucss-on-board .act-button {
     font-size: 14px;

@@ -71,12 +71,9 @@
             if (value) {
                 $analyze.addClass('show')
             } else {
+                $analyze.css('transition-duration', '0.5s');
                 $analyze.removeClass('show');
             }
-        }
-
-        if ($('.slide-contents').length && !$('.slide-contents').position().left) {
-            showAnalyze(true);
         }
 
         function gotoConfigure() {
@@ -86,7 +83,6 @@
             $stepWrapper.find('.current').text(3);
             $stepWrapper.find('.current-text').text('Connect');
             moveSlide(-446);
-            showAnalyze(false);
         }
 
         function gotoRunFirstJob() {
@@ -95,7 +91,6 @@
             $stepWrapper.find('.current').text(4);
             $stepWrapper.find('.current-text').text('Run First Job');
             moveSlide(-669);
-            showAnalyze(false);
         }
 
         function gotoInstall() {
@@ -104,7 +99,6 @@
             $stepWrapper.find('.current').text(2);
             $stepWrapper.find('.current-text').text('Configure');
             moveSlide(-223)
-            showAnalyze(false);
         }
 
         function gotoConnect() {
@@ -113,7 +107,6 @@
             $stepWrapper.find('.current').text(1);
             $stepWrapper.find('.current-text').text('Configure');
             moveSlide(0);
-            showAnalyze(true);
         }
 
         function gotoPendingStep(response) {
@@ -514,10 +507,11 @@
         $('.js-uucss-analyze-site').click(function (e) {
             e.preventDefault();
 
-            $(this).text('Analyzing...');
-            $(this).prop('disabled',true);
+            var $target = $(this);
+            $target.text('Analyzing...');
+            $target.removeAttr('href');
 
-            var $parent = $('.uucss-on-board .card.analyze');
+            var $parent = $('.uucss-on-board .card .connect.actions');
             $.ajax({
                 url: uucss.api_url + '/preview',
                 method: 'POST',
@@ -525,15 +519,41 @@
                     url: uucss.home_url
                 },
                 success(response) {
-                    $(this).prop('disabled',false);
-                    console.log(response);
                     if(response.data){
-                        $parent.find('.analyze-form.actions').addClass('hidden');
 
                         $parent.find('.analyze-result.actions').find('.reduction').text(response.data.stats.reduction + '%');
 
-                        $parent.find('.analyze-result.actions').addClass('show');
+                        var $sizeContent = $parent.find('.stats-figures .content');
+                        var beforeSize = response.data.stats.before.split(' ');
+                        if(beforeSize.length === 2){
+                            $sizeContent.find('.before span.value').html(beforeSize[0] + " " + '<span>' + beforeSize[1] + '</span>');
+                        }
+                        var afterSize = response.data.stats.after.split(' ');
+                        if(afterSize.length === 2){
+                            $sizeContent.find('.after span.value').html(afterSize[0] + " " + '<span>' + afterSize[1] + '</span>');
+                        }
+
+                        if(response.data.stats.afterFileCount === 0){
+                            $parent.find('.stats-files').hide();
+                        }else{
+                            var $fileCountContent = $parent.find('.stats-files .content');
+                            $fileCountContent.find('.before span.value').text(response.data.stats.beforeFileCount);
+                            $fileCountContent.find('.after span.value').text(response.data.stats.afterFileCount);
+                        }
+                        $target.removeClass('js-uucss-analyze-site');
+                        $target.addClass('js-uucss-connect');
+                        $target.off();
+                        $('.js-uucss-connect').click(function (e) {
+                            e.preventDefault();
+
+                            child_open($(this).data('activation_url'));
+                            clearInterval(progress_check);
+                            progress_check = setInterval(checkUnusedCssConnected, 1000);
+                        });
+                        $target.html('Connect <span class="dashicons dashicons-yes-alt"></span>');
                     }
+                    $target.attr('href','#');
+                    showAnalyze(false);
                 }
             });
 
