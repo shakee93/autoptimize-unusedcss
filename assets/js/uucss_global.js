@@ -566,7 +566,7 @@
 
             window.safelist.forEach(function (item) {
 
-                var li = $(`<li><span data-rule="` + item.rule + `" data-type="` + item.type + `" class="dashicons dashicons-remove"></span> <span class="safelist-list-type"> ` + item.type + `</span> <span>` + item.rule + `</span></li>`)
+                var li = $(`<li><span data-rule="` + item.rule + `" data-type="` + item.type + `" title="remove rule" class="dashicons dashicons-remove dashicons-no-alt"></span> <span class="safelist-list-type"> ` + item.type + `</span> <span>` + item.rule + `</span></li>`)
 
                 li.find('.dashicons-remove').click(function () {
                     var _item = $(this).data()

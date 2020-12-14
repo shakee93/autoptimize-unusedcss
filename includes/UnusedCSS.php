@@ -304,8 +304,8 @@ abstract class UnusedCSS {
 		    $user_agent = $headers['User-Agent'];
 	    }
 
-	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false;
-
+	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
+	           strpos( $user_agent, 'RapidLoad' ) !== false;
     }
 
 
@@ -346,6 +346,9 @@ abstract class UnusedCSS {
 		    return true;
 	    }
 
+	    if ( $url ) {
+		    return false;
+	    }
 
 	    $results = $this->file_system->delete( $this->base_dir, true );
 	    UnusedCSS_Settings::clear_links();

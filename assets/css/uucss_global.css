@@ -642,6 +642,8 @@ div.uucss-on-board{
     line-height: 1.25;
     color: #F44336;
     cursor: pointer;
+    background: #eeeeee;
+    border-radius: 100%;
 }
 
 .safelist-list .safelist-list-type {
