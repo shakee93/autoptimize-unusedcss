@@ -283,10 +283,23 @@ table.dataTable thead th, table.dataTable thead td {
     table-layout: fixed;
 }
 
+#uucss-history span.status{
+    min-width: 40px;
+    display: inline-block;
+}
+
 #uucss-history .success {
     background: #f2edf7;
     color: #7f54b3;
-    padding: 3px 6px 5px;
+    padding: 3px 6px 3px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+#uucss-history .queued {
+    background: #eaeffa;
+    color: #3362cc;
+    padding: 3px 6px 3px;
     font-size: 11px;
     border-radius: 4px;
 }
@@ -294,7 +307,7 @@ table.dataTable thead th, table.dataTable thead td {
 #uucss-history .failed {
     background: #ffd8d5;
     color: #f44337;
-    padding: 3px 6px 5px;
+    padding: 3px 6px 3px;
     font-size: 11px;
     border-radius: 4px;
 }

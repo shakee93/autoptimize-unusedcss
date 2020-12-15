@@ -151,7 +151,7 @@
                         return b.time - a.time
                     });
 
-                    if (results.length < 2) {
+                    if (results.length < 3) {
                         showNotification(
                             'Tip : When will i see the results ?',
                             'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
@@ -173,7 +173,7 @@
                     width: '40px',
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).wrapInner($('<span></span>').addClass(cellData))
+                        $(td).wrapInner($('<span class="status"></span>').addClass(cellData))
                     }
                 },
                 {
@@ -196,6 +196,8 @@
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
+                        }else if(row.status === 'queued'){
+                            return '-';
                         }
 
                         return '0 KB'
@@ -349,6 +351,10 @@
 
 
     function updateLicense() {
+
+        if(uucss.api_key_verified === ""){
+            return;
+        }
 
         var container = $('.license-info')
 
