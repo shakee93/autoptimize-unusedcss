@@ -296,6 +296,10 @@ table.dataTable thead th, table.dataTable thead td {
     border-radius: 4px;
 }
 
+.uucss-notification.uucss-info-wrapper{
+    padding: 0;
+}
+
 #uucss-history .queued {
     background: #eaeffa;
     color: #3362cc;

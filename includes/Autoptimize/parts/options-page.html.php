@@ -10,7 +10,7 @@
 	?>
     <div>
         <ul id="uucss-wrapper">
-            <li id="uucss-notification" style="display: none">
+            <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
 			<?php if ( ! $api_key_verified ) : ?>
@@ -63,7 +63,7 @@
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper" style="max-width: 350px;">
+                                    <div class="uucss-info-wrapper advance-settings" style="max-width: 350px;">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>

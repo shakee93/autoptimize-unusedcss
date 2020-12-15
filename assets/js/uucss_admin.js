@@ -1,18 +1,18 @@
 (function ($) {
 
     function showNotification(heading, message) {
-        var container = $('#uucss-notification .content')
+        var container = $('#uucss-wrapper')
+        var content = $($('.uucss-info-wrapper.advance-settings')[0]).clone().css('max-width', '100%');
 
-        var content = $('.uucss-info-wrapper').clone().css('max-width', '100%')
-        content.find('h4').text(heading)
-        content.find('p').remove()
-        content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>')
+        content.find('h4').text(heading);
+        content.find('p').remove();
+        content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
 
-        container.append(content).parent().show()
+        container.prepend('<li class="uucss-notification uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
 
     function hideNotification() {
-        var container = $('#uucss-notification')
+        var container = $('.uucss-notification');
         container.hide()
     }
 
@@ -154,6 +154,19 @@
                     if (results.length < 3) {
                         showNotification(
                             'Tip : When will i see the results ?',
+                            'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                        );
+                    }
+
+                    var queued_jobs = results.filter(function (file) {
+                        return file.status === 'queued';
+                    });
+
+                    console.log(queued_jobs.length);
+
+                    if (queued_jobs.length === 1) {
+                        showNotification(
+                            'Tip : Please verify crons are workkiign ?',
                             'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
                         );
                     }
