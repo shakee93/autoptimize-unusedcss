@@ -225,17 +225,21 @@ class UnusedCSS_DB
 
 
     static function get_first_link(){
-        global $wpdb;
+	    global $wpdb;
 
-	    $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . 1, OBJECT);
+	    $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT 1", OBJECT );
 
 	    $error = $wpdb->last_error;
 
-	    if(!empty($error)){
-		    self::log($error);
+	    if ( ! empty( $error ) ) {
+		    self::log( $error );
 	    }
 
-	    return self::transform_link($link );
+	    if ( count( $link ) > 0 ) {
+		    return self::transform_link( $link[0] );
+	    }
+
+	    return false;
     }
 
 
