@@ -162,8 +162,6 @@
                         return file.status === 'queued';
                     });
 
-                    console.log(queued_jobs.length);
-
                     if (queued_jobs.length === 1) {
                         showNotification(
                             'Tip : Please verify crons are workkiign ?',
@@ -360,6 +358,17 @@
         });
 
         updateLicense();
+
+        $('#uucss-deactivate').click(function (e) {
+            e.preventDefault()
+            let $this = $(this)
+            $this.text('deactivating...');
+
+            wp.ajax.post('uucss_deactivate').done(function (r) {
+                $this.text('deactivated');
+                window.location.reload()
+            })
+        });
     });
 
 

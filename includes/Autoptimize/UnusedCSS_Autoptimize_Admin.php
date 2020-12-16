@@ -51,6 +51,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 			add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 			add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
@@ -358,8 +359,35 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			],
 			'type'        => 'success'
 		];
-        self::add_advanced_admin_notice($notice);
-        return;
+		self::add_advanced_admin_notice( $notice );
+
+		return;
+	}
+
+
+	public function ajax_deactivate() {
+
+		$options = get_option( 'autoptimize_uucss_settings' );
+
+		unset( $options['uucss_api_key_verified'] );
+		unset( $options['uucss_api_key'] );
+		unset( $options['whitelist_packs'] );
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		$cache_key = 'pand-' . md5( 'first-uucss-job' );
+		delete_site_option( $cache_key );
+
+		$this->uucss->vanish();
+
+		$api = new UnusedCSS_Api();
+
+		// remove domain from authorized list
+		$api->post( 'deactivate', [
+			'url' => site_url()
+		] );
+
+		wp_send_json_success( true );
 	}
 
 
@@ -371,7 +399,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	}
 
-    public static function ao_installed(){
+	public static function ao_installed() {
 	    return file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php') ||
             file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php');
     }

@@ -77,14 +77,17 @@ class UnusedCSS_Api
 			$this->log( $response['body'] );
 
 			return json_decode( $response['body'] );
-		}
-		else {
-		    $this->log($data);
+		} else {
+			$this->log( $data );
 			$this->log( $response->get_error_message() );
 
 			return $response->get_error_message();
 		}
 
+	}
+
+	public function is_error( $response ) {
+		return ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false );
 	}
 
 
