@@ -135,11 +135,11 @@ trait UnusedCSS_Utils {
                         <div class="logo-wrapper">
                             <img
                                     src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/logo-icon.svg' ?>" width="40"
-                                    alt="UnusedCSS.io logo">
+                                    alt="RapidLoad logo">
                         </div>
                     </div>
                     <div class="notice-icon-content">
-				        <?php if ( isset( $notice['title'] ) ) : ?>
+		                <?php if ( isset( $notice['title'] ) ) : ?>
                             <h2 class="uucss-notice-title"><?php echo $notice['title'] ?></h2>
 				        <?php endif; ?>
                         <p>
@@ -248,7 +248,7 @@ trait UnusedCSS_Utils {
     public static function activation_url( $action, $to = 'options-general.php?page=uucss' ) {
 
 	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-		    define( 'UUCSS_ACTIVATION_URL', 'https://app.unusedcss.io/activate' );
+		    define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
 	    }
 
 	    return UUCSS_ACTIVATION_URL . '?' . build_query( [

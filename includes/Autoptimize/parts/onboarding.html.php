@@ -1,17 +1,17 @@
-<?php defined('ABSPATH') or die(); ?>
+<?php defined( 'ABSPATH' ) or die(); ?>
 
 <div class="main-section on-board">
     <div class="plugin-steps">
         <div class="logo-section">
-            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/ao+logo.svg' ?>" alt="UnusedCSS.io logo">
+            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/ao+logo.svg' ?>" alt="RapidLoad logo">
         </div>
         <div class="steps-wrap">
             <div class="step-text">
-                <?php
-                $step = 1;
-                $steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
-                $step = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
-                ?>
+				<?php
+				$step  = 1;
+				$steps = UnusedCSS_Autoptimize_Onboard::get_on_board_steps();
+				$step  = UnusedCSS_Autoptimize_Onboard::get_on_board_step();
+				?>
                 <ul>
                     <li><span class="current"><?php echo $step ?></span>/3</li>
                 </ul>

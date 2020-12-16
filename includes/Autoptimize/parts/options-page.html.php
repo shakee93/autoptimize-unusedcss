@@ -315,7 +315,7 @@
                                 <em id="verification_status"></em>
 		                        <?php if ( $options['valid_domain'] ) : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
-                                       class="uucss-activate"> Deactivate License
+                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 		                        <?php else : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
@@ -323,7 +323,7 @@
                                     </a>
                                     <a style="margin-left: 5px"
                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
-                                       class="uucss-activate"> Deactivate License
+                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 		                        <?php endif; ?>
                             </div>
