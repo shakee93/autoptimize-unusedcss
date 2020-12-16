@@ -306,6 +306,11 @@
         }
 
         function getStatus() {
+
+            if(!window.location.href.toString().includes('page=uucss-onboarding')){
+                return;
+            }
+
             $.ajax({
                 url: uucss.ajax_url,
                 type: 'GET',
@@ -521,7 +526,7 @@
                 success(response) {
                     if(response.data){
 
-                        $parent.find('.analyze-result.actions').find('.reduction').text(response.data.stats.reduction + '%');
+                        $parent.find('.analyze-result').find('.reduction').text(response.data.stats.reduction + '%');
 
                         var $sizeContent = $parent.find('.stats-figures .content');
                         var beforeSize = response.data.stats.before.split(' ');

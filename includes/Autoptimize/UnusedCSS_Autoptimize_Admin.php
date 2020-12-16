@@ -107,7 +107,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'url' => site_url(),
 			'ajax_url'          => admin_url( 'admin-ajax.php' ),
 			'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed()
+			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
@@ -242,8 +243,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function validate_domain() {
 
-		$uucss_api = new UnusedCSS_Api();
 		$options   = get_option( 'autoptimize_uucss_settings' );
+
+	    if(!isset( $options['uucss_api_key_verified'] ) || $options['uucss_api_key_verified'] != '1'){
+	        return;
+        }
+
+		$uucss_api = new UnusedCSS_Api();
 
 		if ( ! isset( $options['uucss_api_key'] ) ) {
             $options['valid_domain'] = false;

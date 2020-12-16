@@ -109,11 +109,37 @@ class UnusedCSS_DB
 
 		if ( $exist ) {
 
+			if($data['status'] == 'failed'){
+
+				if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
+
+					$exist['attempts'] = 0;
+
+				}
+
+				$data['attempts'] = $exist['attempts'] + 1;
+
+			}else{
+
+				if($data['status'] != 'queued'){
+
+					$data['attempts'] = 0;
+
+				}
+
+			}
+
 			self::update( $data, array(
 				'url' => $data['url']
 			));
 
         }else{
+
+			if($data['status'] == 'failed'){
+
+				$data['attempts'] = 1;
+
+			}
 
 			$wpdb->insert(
 				$wpdb->prefix . 'rapidload_uucss_job',
@@ -217,6 +243,7 @@ class UnusedCSS_DB
         $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
 	    $data['status'] = isset( $link->status ) ? $link->status : null;
 	    $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
+	    $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
 	    $data['url'] = isset( $link->url ) ? $link->url : null;
         $data['id'] = isset($link->id) ? $link->id : null;
         return $data;

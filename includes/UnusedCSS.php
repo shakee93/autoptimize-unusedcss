@@ -226,6 +226,8 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
+	    UnusedCSS_Settings::add_link( $this->url, null, "queued", [] );
+
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
 			    'provider' => $this->provider,
