@@ -55,6 +55,7 @@ div.uucss-on-board{
     z-index: 99999;
     width: 100%;
     height: 100vh;
+    overflow: scroll;
 }
 
 .uucss-on-board-popup {
@@ -731,4 +732,8 @@ div.uucss-on-board{
 #uucss-settings .safelist-add button.button {
     width: 100%;
     margin-top: 8px;
+}
+
+body.settings_page_uucss-onboarding{
+    overflow: hidden;
 }
