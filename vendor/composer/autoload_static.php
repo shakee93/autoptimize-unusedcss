@@ -14,6 +14,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Autoptimize_Admin' => __DIR__ . '/../..' . '/includes/Autoptimize/UnusedCSS_Autoptimize_Admin.php',
         'UnusedCSS_Autoptimize_Onboard' => __DIR__ . '/../..' . '/includes/Autoptimize/UnusedCSS_Autoptimize_Onboard.php',
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/UnusedCSS_DB.php',
+        'UnusedCSS_Feedback' => __DIR__ . '/../..' . '/includes/Utils/Feedback/UnusedCSS_Feedback.php',
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
         'UnusedCSS_Store' => __DIR__ . '/../..' . '/includes/UnusedCSS_Store.php',
         'UnusedCSS_Utils' => __DIR__ . '/../..' . '/includes/UnusedCSS_Utils.php',
