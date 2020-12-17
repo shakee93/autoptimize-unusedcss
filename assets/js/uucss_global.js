@@ -556,6 +556,7 @@
 
                     }else{
 
+
                         $errorContent.find('.step-1-hd').text('Something Went Wrong!');
                         var $button = $errorContent.parent().find('.action-wrap a.act-button');
                         $button.attr('href','https://rapidload.zendesk.com/hc/en-us/requests/new');
@@ -563,7 +564,8 @@
                         $button.text('Contact Support')
 
                     }
-
+                    $('.skip-analyze.js-uucss-connect').text('Connect');
+                    $('.skip-analyze.js-uucss-connect').css('left','calc(50% - 24px)');
                     $target.removeClass('js-uucss-analyze-site');
 
                     showAnalyze(false, true);
@@ -602,6 +604,7 @@
                         });
                         $target.html('Connect <span class="dashicons dashicons-yes-alt"></span>');
                     }
+                    $('.skip-analyze.js-uucss-connect').hide();
                     $target.attr('href','#');
                     showAnalyze(false);
                 }
