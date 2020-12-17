@@ -260,6 +260,9 @@ h2.card-heading {
     font-weight: 600;
     margin: 0px 0 12px;
 }
+p.analyze-text {
+    margin-bottom: 17px !important;
+}
 .uucss-on-board .actions p {
     font-size: 12px;
     line-height: 1.2;
@@ -297,7 +300,15 @@ h2.card-heading {
 .uucss-on-board .actions.done .act-button span.dashicons{
     display: inline-block;
 }
-
+.skip-analyze {
+    color: #c3c3c3;
+    font-size: 12px;
+    text-decoration: none;
+}
+.skip-analyze:hover {
+    color: #c3c3c3;
+    text-decoration: underline;
+}
 .uucss-on-board .act-button:hover {
     background-color: hsl(267 38% 52% / 0.9);
     color: #fff;

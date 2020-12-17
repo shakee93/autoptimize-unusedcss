@@ -36,10 +36,11 @@
                                 <div class="action-content">
                                     <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                                          alt="">
-                                    <p>Analyze & Connect with <strong><em>RapidLoad.io</em></strong> engine to start
+                                    <p class="analyze-text">Analyze & Connect with <strong><em>RapidLoad.io</em></strong> engine to start
                                         automatic optimization of
                                         your website and
                                         watch your page speed and speed scores spike up.</p>
+                                    <a class="skip-analyze" href="#">Skip & Connect</a>
                                 </div>
                             </div>
                         </div>
