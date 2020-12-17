@@ -150,6 +150,8 @@ abstract class UnusedCSS_Admin {
 				wp_send_json_error( $data );
 			}
 
+			do_action( 'uucss/license-verified' );
+
 			wp_send_json_success( $data->data );
 		}
 

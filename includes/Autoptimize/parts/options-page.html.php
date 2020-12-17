@@ -303,7 +303,7 @@
                 <li>
                     <h2>
                         License Information
-                        <span<?php echo ( $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                        <span<?php echo ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -323,17 +323,17 @@
                             <div>
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-			                               echo $options['uucss_api_key_verified'] ?>">
+									       echo $options['uucss_api_key_verified'] ?>">
                                 <input id='uucss_api_key' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_api_key]'
                                        value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                        size="40">
                                 <em id="verification_status"></em>
-		                        <?php if ( $options['valid_domain'] ) : ?>
+								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-		                        <?php else : ?>
+								<?php else : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
