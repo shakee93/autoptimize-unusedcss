@@ -164,8 +164,8 @@
 
                     if (queued_jobs.length > 3) {
                         showNotification(
-                            'Tip : Please verify crons are working ?',
-                            'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                            'Caution : Please verify cron your job is working!',
+                            'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
                         );
                     }
 
