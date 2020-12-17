@@ -218,20 +218,42 @@
                         var innerTippy
                         var innerTippy2
 
-                        var stat = $(td).wrapInner($('<span></span>'))
+                        var stat = $(td).wrapInner($('<span></span>'));
+
+                        var $warnings_html = $('<div class="uucss-warnings"></div>');
+
+                        if(rowData.meta.warnings && rowData.meta.warnings.length){
+                            $warnings_html.append('<h5 class="warnings-title">Warnings</h5>');
+                            $warnings_html.append('<ul class="warning-list"></ul>');
+                            $.each(rowData.meta.warnings, function(index, value){
+                                var $warning_html = $('<li class="warning"></li>')
+                                $warning_html.append('<div class="warning-info"></div>');
+                                $warning_html.find('.warning-info').append('<p class="warning-header">' +  value.message + '</p>');
+                                $warning_html.find('.warning-info').append('<p class="warning-content"><a href="' + value.file +'" target="_blank">' +  value.file + '</a></p>');
+                                $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
+                            })
+                        }else{
+                            $warnings_html.removeClass('uucss-warnings');
+                        }
 
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: td,
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
-                                    '<div class="progress-bar-wrapper">' +
-                                    '    <div class="progress-bar w-100">' +
-                                    '      <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
-                                    '      </span>' +
-                                    '    </div>' +
-                                    '  </div>' +
-                                    '</div>')
+                                        '       <div class="progress-bar-wrapper">' +
+                                        '           <div class="progress-bar w-100">' +
+                                        '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                        '               </span>' +
+                                        '           </div>' +
+                                        '       </div>' +
+                                        $warnings_html.wrap('<div></div>').parent().html() +
+                                        '<div class="time">' +
+                                        '   <p class="val">Created at ' +
+                                                new Date(rowData.time*1000).toLocaleDateString() + ' ' + new Date(rowData.time*1000).toLocaleTimeString() +
+                                        '   </p>' +
+                                        '</div>' +
+                                        '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -262,7 +284,8 @@
                                 return c[0]
                             },
                             placement: 'left',
-                            // trigger: 'click',
+                            //trigger: 'click',
+                            interactive: true,
                             allowHTML: true,
                             animation: "shift-toward-extreme",
                             appendTo: "parent",
@@ -297,9 +320,12 @@
                             return
                         }
 
-                        if (rowData.status === 'success') {
+                        if (rowData.status === 'success' && !rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
                             // tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy(stat.find('span')[0], tippyOptions);
+                        }else if(rowData.status === 'success' && rowData.meta.warnings.length){
+                            stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
 

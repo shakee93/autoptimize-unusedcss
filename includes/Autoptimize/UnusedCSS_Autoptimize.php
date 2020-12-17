@@ -16,6 +16,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
      */
     public function __construct()
     {
+
+	    new UnusedCSS_Feedback();
+
 	    parent::enqueueGlobalScript();
 
 	    $this->provider = 'autoptimize';
