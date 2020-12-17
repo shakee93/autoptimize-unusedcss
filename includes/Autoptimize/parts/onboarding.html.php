@@ -36,64 +36,64 @@
                                 <div class="action-content">
                                     <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/connect.svg' ?>"
                                          alt="">
-                                    <p>Analyze & Connect with <strong><em>RapidLoad.io</em></strong> engine to start
+                                    <p class="analyze-text">Analyze & Connect with <strong><em>RapidLoad.io</em></strong> engine to start
                                         automatic optimization of
                                         your website and
                                         watch your page speed and speed scores spike up.</p>
+                                    <a class="skip-analyze" href="#">Skip & Connect</a>
                                 </div>
                             </div>
                         </div>
                         <div class="analyze-result">
-                            <h2>Connect & Activate</h2>
+                            <h2 class ="step-1-hd">Connect & Activate</h2>
                             <div class="action-content">
-                                <span class="reduction"></span>
-                                <div class="stats stats-figures">
-                                    <div class="heading">
-                                        <h2>Size</h2>
-                                    </div>
-                                    <div class="content">
-                                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
-                                             alt="">
-                                        <div class="stats-figure before stat red">
-                                        <span class="title">
-                                            Before
-                                        </span>
-                                            <span class="value">
-                                            0 <span>KB</span>
-                                        </span>
-                                        </div>
-                                        <div class="stats-figure after stat green">
-                                        <span class="title">
-                                            After
-                                        </span>
-                                            <span class="value">
-                                            0 <span>KB</span>
-                                        </span>
-                                        </div>
-                                    </div>
+                                <div class="action-content-header">
+                                    <span class="reduction"></span>
+                                    <span class="reduction-text">CSS reduction by RapidLoad</span>
                                 </div>
-                                <div class="stats stats-files">
-                                    <div class="heading">
-                                        <h2>Request Count</h2>
-                                    </div>
-                                    <div class="content">
-                                        <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
-                                             alt="">
-                                        <div class="stats-file before stat red">
+                                <div class="action-content-body">
+                                    <div class="stats stats-figures">
+                                        <div class="content">
+                                            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
+                                                 alt="">
+                                            <div class="stats-figure before stat red">
                                         <span class="title">
-                                            Before
+                                            CSS Before
                                         </span>
-                                            <span class="value">
-                                            0
-                                        </span>
+                                        <div class="value-num">
+                                            <span class="value">0</span>
                                         </div>
-                                        <div class="stats-file after stat green">
+                                            </div>
+                                            <div class="stats-figure after stat green">
                                         <span class="title">
-                                            After
+                                           CSS After
                                         </span>
-                                            <span class="value">
-                                            0
+                                        <div class="value-num">
+                                             <span class="value">0</span>
+                                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="stats stats-files">
+                                        <div class="content">
+                                            <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/arrow.svg' ?>"
+                                                 alt="">
+                                            <div class="stats-file before stat red">
+                                        <span class="title">
+                                            Requests Before
                                         </span>
+                                        <div class="value-num">
+                                            <span class="value">0</span>
+                                        </div>
+                                            </div>
+                                            <div class="stats-file after stat green">
+                                        <span class="title">
+                                            Requests After
+                                        </span>
+                                        <div class="value-num">
+                                            <span class="value">0</span>
+                                        </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="install actions slide-content <?php echo UnusedCSS_Autoptimize_Admin::ao_active() ? 'done' : null ?>">
-                        <h2>Autoptimize install and Activate</h2>
+                        <h2 class="step-2-hd">Autoptimize install and Activate</h2>
                         <div class="action-content">
                             <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/install-autoptimize.svg' ?>"
                                  alt="">
