@@ -153,6 +153,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php _e( 'Load Original CSS files', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_load_original' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_load_original]' <?php if ( ! empty( $options['uucss_load_original'] ) && '1' === $options['uucss_load_original'] ) {
+					                        echo 'checked="checked"';
+				                        } ?> value='1'>
+                                        <i>
+                                            Inject original CSS files on user interaction. this helps to fix javascript
+                                            DOM selector related issues.
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <th scope="row"><?php _e( 'Other Options', 'uucss' ); ?></th>
                                 <td>
 
@@ -228,6 +243,7 @@
                                     </label>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row"><?php _e( 'Inline small CSS files', 'uucss' ); ?></th>
                                 <td>

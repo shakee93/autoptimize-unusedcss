@@ -59,6 +59,10 @@ abstract class UnusedCSS {
 
 	public function frontend_scripts( $data ) {
 
+		if ( ! isset( $this->options['uucss_load_original'] ) ) {
+			return;
+		}
+
 		wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ] );
 		wp_localize_script( 'rapidload', 'rapidload', $data['files'] );
 		wp_enqueue_script( 'rapidload' );
