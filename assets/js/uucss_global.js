@@ -534,7 +534,7 @@
                 url: uucss.api_url + '/preview',
                 method: 'POST',
                 data: {
-                    url: '--' + uucss.home_url
+                    url: uucss.home_url
                 },
                 error(response){
                     console.log(response.status)
