@@ -42,6 +42,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 			$this->deactivate();
 
+			$this->validate_domain();
+
 			add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
 			add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
@@ -391,10 +393,45 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	}
 
 
-	public function clear_cache_on_option_update( $option ) {
+	public function clear_cache_on_option_update( $option, $old_value, $value ) {
 
 		if ( $option == 'autoptimize_uucss_settings' && $this->uucss ) {
-			$this->uucss->clear_cache();
+
+			$needs_to_cleared = false;
+
+			$diffs        = array_diff_key( $old_value, $value );
+			$diffs_invert = array_diff_key( $value, $old_value );
+
+			if ( isset( $diffs_invert['valid_domain'] ) ) {
+				unset( $diffs_invert['valid_domain'] );
+			}
+			if ( isset( $diffs['valid_domain'] ) ) {
+				unset( $diffs['valid_domain'] );
+			}
+
+			$diffs = array_merge( $diffs, $diffs_invert );
+
+			// if these settings are changed cache will be cleared
+			if ( isset( $diffs['uucss_minify'] ) ||
+			     isset( $diffs['uucss_keyframes'] ) ||
+			     isset( $diffs['uucss_fontface'] ) ||
+			     isset( $diffs['uucss_analyze_javascript'] ) ||
+			     isset( $diffs['uucss_safelist'] ) ||
+			     isset( $diffs['whitelist_packs'] ) ||
+			     isset( $diffs['uucss_variables'] ) ) {
+				$needs_to_cleared = true;
+			}
+
+			foreach ( [ 'whitelist_packs', 'uucss_safelist' ] as $compare_value ) {
+				if ( isset( $value[ $compare_value ] ) && isset( $old_value[ $compare_value ] ) && $old_value[ $compare_value ] !== $value[ $compare_value ] ) {
+					$needs_to_cleared = true;
+					break;
+				}
+			}
+
+			if ( $needs_to_cleared ) {
+				$this->uucss->clear_cache();
+			}
 		}
 
 	}

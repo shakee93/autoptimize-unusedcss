@@ -341,7 +341,7 @@
                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-		                        <?php endif; ?>
+								<?php endif; ?>
                             </div>
 
                         </div>
@@ -351,7 +351,7 @@
                 <li class="submit">
 
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
-                                             value="<?php _e( 'Save & Clear Cache', 'uucss' ); ?>"/>
+                                             value="<?php _e( 'Save Changes', 'uucss' ); ?>"/>
 
                         <a target="_blank" href="https://rapidload.io/">
                             <img
