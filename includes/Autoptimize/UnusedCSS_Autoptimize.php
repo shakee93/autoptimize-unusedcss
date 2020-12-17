@@ -151,6 +151,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
+	    // inject frontend scripts
+	    // TODO : only inject when enabled
+	    // $this->frontend_scripts($data);
+
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
 		    $html = $this->inject_css( $html, $data );

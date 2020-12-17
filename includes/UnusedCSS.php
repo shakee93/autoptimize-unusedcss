@@ -45,25 +45,35 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
-        add_action('wp_enqueue_scripts', function () {
+	    add_action( 'wp_enqueue_scripts', function () {
 
-	        $this->url = $this->get_current_url();
+		    $this->url = $this->get_current_url();
 
-	        if ( $this->enabled() ) {
-		        $this->purge_css();
-	        }
+		    if ( $this->enabled() ) {
+			    $this->purge_css();
+		    }
 
-        });
+	    } );
     }
 
-    public static function enqueueGlobalScript(){
-        add_action('admin_enqueue_scripts',function (){
-	        wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-	        wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-	        wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
 
-	        wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
-	        $data = array(
+	public function frontend_scripts( $data ) {
+
+		wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ] );
+		wp_localize_script( 'rapidload', 'rapidload', $data['files'] );
+		wp_enqueue_script( 'rapidload' );
+
+	}
+
+
+	public static function enqueueGlobalScript() {
+		add_action( 'admin_enqueue_scripts', function () {
+			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
+			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
+
+			wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
+			$data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
@@ -76,6 +86,7 @@ abstract class UnusedCSS {
 
         });
     }
+
 
 	public function initFileSystem() {
 
