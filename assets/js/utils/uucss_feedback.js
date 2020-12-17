@@ -5,7 +5,7 @@
         if ($('.uucss-feedback-overlay').length === 0) {
             $('body').prepend('<div class="uucss-feedback-overlay"></div>');
         }
-        $('#uucss_uninstall_feedback_popup ').appendTo($(targetElement).parent());
+        $('#uucss_uninstall_feedback_popup').appendTo($(targetElement).parent());
 
         $(targetElement).on('click', function (e) {
             e.preventDefault();
