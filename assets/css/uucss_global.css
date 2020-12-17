@@ -161,15 +161,17 @@ div.uucss-on-board{
     font-size: 12px;
     text-align: center;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content{
+.uucss-on-board .connect.actions .analyze-result .stats .content {
     display: flex;
     justify-content: space-between;
     position: relative;
 }
-.stats.stats-figures .content {
+
+.uucss-on-board .stats.stats-figures .content {
     margin-top: 25px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content img{
+
+.uucss-on-board .connect.actions .analyze-result .stats .content img {
     position: absolute;
     width: 20px;
     top: 30px;
@@ -220,11 +222,11 @@ div.uucss-on-board{
     flex-direction: column;
     width: 40%;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .stat.green .value{
-    color: #37b72c;
+.uucss-on-board .connect.actions .analyze-result .stats .stat.green .value {
+    color: #4CAF50;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .stat.red .value{
-    color: #e23030;
+.uucss-on-board .connect.actions .analyze-result .stats .stat.red .value {
+    color: #F44336;
 }
 .uucss-on-board .card {
     max-width: 230px;
