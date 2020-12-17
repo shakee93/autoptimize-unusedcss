@@ -40,7 +40,6 @@
                                         automatic optimization of
                                         your website and
                                         watch your page speed and speed scores spike up.</p>
-                                    <a class="skip-analyze js-uucss-connect" href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>">Skip & Connect</a>
                                 </div>
                             </div>
                         </div>
@@ -60,17 +59,17 @@
                                         <span class="title">
                                             CSS Before
                                         </span>
-                                        <div class="value-num">
-                                            <span class="value">0</span>
-                                        </div>
+                                                <div class="details">
+                                                    <span class="value">0</span>
+                                                </div>
                                             </div>
                                             <div class="stats-figure after stat green">
                                         <span class="title">
                                            CSS After
                                         </span>
-                                        <div class="value-num">
-                                             <span class="value">0</span>
-                                        </div>
+                                                <div class="details">
+                                                    <span class="value">0</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -82,17 +81,17 @@
                                         <span class="title">
                                             Requests Before
                                         </span>
-                                        <div class="value-num">
-                                            <span class="value">0</span>
-                                        </div>
+                                                <div class="details">
+                                                    <span class="value">0</span>
+                                                </div>
                                             </div>
                                             <div class="stats-file after stat green">
                                         <span class="title">
                                             Requests After
                                         </span>
-                                        <div class="value-num">
-                                            <span class="value">0</span>
-                                        </div>
+                                                <div class="details">
+                                                    <span class="value">0</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +101,8 @@
                                 <div class="error-result">
                                     <div>
                                         <img class="sad intro" style=""
-                                             src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/result_error.svg' ?>" alt="">
+                                             src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/result_error.svg' ?>"
+                                             alt="">
                                     </div>
                                     <div>
                                         <p class="error"></p>
@@ -111,6 +111,9 @@
                             </div>
                         </div>
                         <div class="action-wrap">
+                            <a class="skip-analyze js-uucss-connect"
+                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>">Skip
+                                & Connect</a>
                             <a class="act-button <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'js-uucss-connect' : 'js-uucss-analyze-site' ?> "
                                data-activation_url="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
                                href="#"

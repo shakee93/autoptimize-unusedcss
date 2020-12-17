@@ -151,7 +151,6 @@ div.uucss-on-board{
 }
 .uucss-on-board .connect.actions .analyze-result .reduction{
     font-weight: bold;
-    font-family: Roboto;
     font-size: 50px;
     color: #674399;
     line-height: 1.15em;
@@ -173,28 +172,31 @@ div.uucss-on-board{
 .uucss-on-board .connect.actions .analyze-result .stats .content img{
     position: absolute;
     width: 20px;
-    top: 35px;
-    left: 101px;
+    top: 30px;
+    left: 100px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content span.title{
-    font-size: 12px;
+.uucss-on-board .connect.actions .analyze-result .stats .content span.title {
+    font-size: 11px;
     line-height: 24px;
     font-weight: 500;
     text-align: center;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content span.value{
+
+.uucss-on-board .connect.actions .analyze-result .stats .content span.value {
     font-size: 14px;
     line-height: 1;
     font-weight: 600;
 }
-.value-num {
-    max-width: 83px;
-    padding: 3px 10px;
+
+.uucss-on-board .connect.actions .analyze-result .stats .content .details {
+    max-width: 84px;
+    padding: 4px 8px;
     background-color: #f2f2f2;
     border-radius: 3px;
     margin: 5px 0;
     text-align: center;
 }
+
 .uucss-on-board .connect.actions .analyze-result .stats .content span.value span {
     font-size: 14px;
 }
@@ -307,20 +309,26 @@ p.analyze-text {
     display: none;
 }
 
-.uucss-on-board .actions.done .act-button span.dashicons{
+.uucss-on-board .actions.done .act-button span.dashicons {
     display: inline-block;
 }
-.skip-analyze {
+
+.uucss-on-board .skip-analyze {
     color: #c3c3c3;
     font-size: 12px;
     text-decoration: none;
+    position: absolute;
+    left: calc(50% - 44px);
+    top: -22px;
 }
-.skip-analyze:hover {
+
+.uucss-on-board .skip-analyze:hover {
     color: #c3c3c3;
     text-decoration: underline;
 }
+
 .uucss-on-board .act-button:hover {
-    background-color: hsl(267 38% 52% / 0.9);
+    background-color: #8056b3;
     color: #fff;
 }
 .uucss-on-board .act-button:focus {
