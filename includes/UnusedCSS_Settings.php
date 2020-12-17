@@ -185,23 +185,29 @@ class UnusedCSS_Settings {
 
         }else{
 
-            $map = get_option( self::$map_key );
+		    $map = get_option( self::$map_key );
 
-            unset( $map[ md5( $link ) ] );
+		    unset( $map[ md5( $link ) ] );
 
-            update_option( self::$map_key, $map );
-        }
+		    update_option( self::$map_key, $map );
+	    }
 
 
 	}
 
-	public static function clear_links() {
+	public static function clear_links( $soft = false ) {
 
-	    if(UnusedCSS_DB::migrated()){
+		if ( UnusedCSS_DB::migrated() ) {
 
-	        UnusedCSS_DB::clear_links();
+			if ( ! $soft ) {
+				UnusedCSS_DB::clear_links();
 
-        }else{
+				return;
+			}
+
+			UnusedCSS_DB::update_status();
+
+		}else{
 
             delete_option( self::$map_key );
 

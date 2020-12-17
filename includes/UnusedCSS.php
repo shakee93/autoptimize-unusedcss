@@ -241,7 +241,7 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
-	    UnusedCSS_Settings::add_link( $this->url, null, "queued", [] );
+	    UnusedCSS_Settings::add_link( $url, null, "queued", [] );
 
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
@@ -357,7 +357,7 @@ abstract class UnusedCSS {
 			    do_action( 'uucss/cache_cleared', $args );
 		    }
 
-            UnusedCSS_Settings::delete_link( $url );
+		    UnusedCSS_Settings::delete_link( $url );
 
 		    return true;
 	    }
@@ -367,7 +367,10 @@ abstract class UnusedCSS {
 	    }
 
 	    $results = $this->file_system->delete( $this->base_dir, true );
-	    UnusedCSS_Settings::clear_links();
+
+	    // if soft sets the status to queued
+	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+
 
 	    do_action( 'uucss/cache_cleared', $args );
 

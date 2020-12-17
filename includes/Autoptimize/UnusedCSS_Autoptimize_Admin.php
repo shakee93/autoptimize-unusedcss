@@ -432,7 +432,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			}
 
 			if ( $needs_to_cleared ) {
-				$this->uucss->clear_cache();
+				$this->uucss->clear_cache( null, [
+					'soft' => true
+				] );
 			}
 		}
 
