@@ -3,7 +3,7 @@
 
 <div class="uucss-plugin-uninstall-feedback-popup uucss-feedback" id="uucss_uninstall_feedback_popup">
     <div class="popup--header">
-        <h5>What's wrong? </h5>
+        <h5> Help us make the plugin better! </h5>
     </div><!--/.popup--header-->
     <div class="popup--body">
         <ul class="popup--form">
@@ -23,7 +23,7 @@
             <li uucss-option-id="3">
                 <input type="radio" name="uucss-deactivate-option" id="uucss_feedback3">
                 <label for="uucss_feedback3">
-                    I found a better plugin </label>
+                    I am not willing to pay for this plugin </label>
             <li uucss-option-id="999">
                 <input type="radio" name="uucss-deactivate-option" id="uucss_feedback999">
                 <label for="uucss_feedback999">
@@ -34,13 +34,13 @@
     <div class="popup--footer">
         <div class="actions">
             <a href="#" class="info-disclosure-link">What info do we collect?</a>
-            <div class="info-disclosure-content"><p>Below is a detailed view of all data that ThemeIsle will receive if
-                    you fill in this survey. No domain name, email address or IP addresses are transmited after you
-                    submit the survey.</p>
+            <div class="info-disclosure-content"><p>Below is a detailed view of all data that RapidLoad will receive if
+                    you fill in this survey. Email address or IP addresses will not be sent.</p>
                 <ul>
-                    <li><strong> Plugin version </strong> <code id="uucss_plugin_version"> <?php echo UUCSS_VERSION ?> </code></li>
+                    <li><strong>Plugin version </strong> <code
+                                id="uucss_plugin_version"> <?php echo UUCSS_VERSION ?> </code></li>
                     <li><strong>Current website:</strong> <code> <?php echo get_site_url() ?> </code></li>
-                    <li><strong> Uninstall reason </strong> <i> Selected reason from the above survey </i></li>
+                    <li><strong>Uninstall reason </strong> <i> Selected reason from the above survey </i></li>
                 </ul>
             </div>
             <div class="buttons">
@@ -56,8 +56,6 @@
                        value="Submit &amp; Deactivate"
                        data-after-text="Submit &amp; Deactivate"
                        disabled="1"></div>
-<!--                <a href="--><?php //echo UnusedCSS_Autoptimize_Admin::activate_plugin('autoptimize-unusedcss', 'deactivate') ?><!--" class="info-disclosure-link">Skip & Deactivate</a>-->
-
 
         </div><!--/.actions-->
     </div><!--/.popup--footer-->
