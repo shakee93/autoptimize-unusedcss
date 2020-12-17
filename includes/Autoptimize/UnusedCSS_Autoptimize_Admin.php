@@ -52,7 +52,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
-			add_action( 'uucss/license-verified', [ $this, 'validate_domain' ] );
+			//add_action( 'uucss/license-verified', [ $this, 'validate_domain' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -369,12 +369,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		$options = get_option( 'autoptimize_uucss_settings' );
 
-		unset( $options['uucss_api_key_verified'] );
-		unset( $options['uucss_api_key'] );
-		unset( $options['whitelist_packs'] );
-
-		update_option( 'autoptimize_uucss_settings', $options );
-
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
 		delete_site_option( $cache_key );
 
@@ -386,6 +380,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$api->post( 'deactivate', [
 			'url' => site_url()
 		] );
+
+		unset( $options['uucss_api_key_verified'] );
+		unset( $options['uucss_api_key'] );
+		unset( $options['whitelist_packs'] );
+
+		update_option( 'autoptimize_uucss_settings', $options );
 
 		wp_send_json_success( true );
 	}

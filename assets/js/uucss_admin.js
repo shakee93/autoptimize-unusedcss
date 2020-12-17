@@ -162,9 +162,9 @@
                         return file.status === 'queued';
                     });
 
-                    if (queued_jobs.length === 1) {
+                    if (queued_jobs.length > 3) {
                         showNotification(
-                            'Tip : Please verify crons are workkiign ?',
+                            'Tip : Please verify crons are working ?',
                             'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
                         );
                     }
