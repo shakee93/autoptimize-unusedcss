@@ -42,17 +42,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 			$this->deactivate();
 
-			$this->validate_domain();
-
 			add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
-			add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+			add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
 
 			add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 			add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 			add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
 			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
+
+			add_action( 'uucss/license-verified', [ $this, 'validate_domain' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
