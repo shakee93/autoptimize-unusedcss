@@ -105,7 +105,11 @@
                                              alt="">
                                     </div>
                                     <div>
-                                        <p class="error"></p>
+                                        <p class="error">
+                                            <strong>Apologies!</strong> we were unable to process your url for some
+                                            reason. it would immensely help us, if you could report this to our support
+                                            team.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
