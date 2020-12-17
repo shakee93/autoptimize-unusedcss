@@ -315,7 +315,25 @@ class UnusedCSS_DB
 	    }
     }
 
+	static function update_status($status = 'queued', $link = false){
+		global $wpdb;
 
+		if(!$link){
+
+			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' WHERE id > 1");
+
+		}else{
+
+			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' WHERE url = '" . $link . "'" );
+
+		}
+
+		$error = $wpdb->last_error;
+
+		if(!empty($error)){
+			self::log($error);
+		}
+	}
 
     static function clear_links(){
         global $wpdb;

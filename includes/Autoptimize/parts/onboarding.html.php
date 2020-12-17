@@ -40,7 +40,7 @@
                                         automatic optimization of
                                         your website and
                                         watch your page speed and speed scores spike up.</p>
-                                    <a class="skip-analyze" href="#">Skip & Connect</a>
+                                    <a class="skip-analyze js-uucss-connect" href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>">Skip & Connect</a>
                                 </div>
                             </div>
                         </div>
@@ -95,6 +95,17 @@
                                         </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="action-content uucss-error">
+                                <div class="error-result">
+                                    <div>
+                                        <img class="sad intro" style=""
+                                             src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/result_error.svg' ?>" alt="">
+                                    </div>
+                                    <div>
+                                        <p class="error"></p>
                                     </div>
                                 </div>
                             </div>

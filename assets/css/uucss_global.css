@@ -276,6 +276,15 @@ p.analyze-text {
 .uucss-on-board .actions .action-content{
     min-height: 270px;
 }
+.uucss-on-board .actions .action-content.uucss-error{
+    display: none;
+}
+.uucss-on-board .actions .analyze-result.uucss-error .action-content{
+    display: none;
+}
+.uucss-on-board .actions .analyze-result.uucss-error .action-content.uucss-error{
+    display: block;
+}
 .uucss-on-board .analyze-form.actions .action-content{
     min-height: 230px;
 }

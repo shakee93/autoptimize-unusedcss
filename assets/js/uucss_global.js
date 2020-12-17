@@ -66,14 +66,25 @@
             markCompletion();
         }
 
-        function showAnalyze(value) {
+        function showAnalyze(value, error = false) {
             var $analyze = $('.uucss-on-board .card.analyze');
-            if (value) {
-                $analyze.addClass('show')
-            } else {
-                $analyze.css('transition-duration', '0.5s');
-                $analyze.removeClass('show');
+            if(!error){
+                if (value) {
+                    $analyze.addClass('show')
+                } else {
+                    $analyze.css('transition-duration', '0.5s');
+                    $analyze.removeClass('show');
+                }
+            }else{
+                if (value) {
+                    $analyze.addClass('show')
+                } else {
+                    $('.uucss-on-board .analyze-result').addClass('uucss-error');
+                    $analyze.css('transition-duration', '0.5s');
+                    $analyze.removeClass('show');
+                }
             }
+
         }
 
         function gotoConfigure() {
@@ -153,7 +164,8 @@
                 markActionDone($('.js-enable-css-ao '));
             }
             if (response.data.uucss_connected) {
-                markActionDone($('.js-uucss-connect'));
+                $('.skip-analyze.js-uucss-connect').hide();
+                markActionDone($('.connect.actions .action-wrap a'));
             }
             if (response.data.uucss_first_job_done) {
                 markActionDone($('.js-uucss-first-job'));
@@ -299,6 +311,7 @@
                         gotoPendingStep(response);
                         if (response.data.uucss_connected) {
                             closePopWindow();
+                            $('.js-uucss-analyze-site').html('Connect <span class="dashicons dashicons-yes-alt"></span>');
                         }
                     }
                 }
@@ -521,7 +534,39 @@
                 url: uucss.api_url + '/preview',
                 method: 'POST',
                 data: {
-                    url: uucss.home_url
+                    url: '--' + uucss.home_url
+                },
+                error(response){
+                    console.log(response.status)
+                    var $errorContent = $('.uucss-on-board .analyze-result');
+
+                    if(response.status === 403){
+                        $errorContent.find('.step-1-hd').text('We are Being Blocked!');
+
+                        $target.off();
+                        $target.addClass('js-uucss-connect');
+                        $('.js-uucss-connect').click(function (e) {
+                            e.preventDefault();
+                            child_open($(this).data('activation_url'));
+                            clearInterval(progress_check);
+                            progress_check = setInterval(checkUnusedCssConnected, 1000);
+                        });
+                        $target.html('Connect <span class="dashicons dashicons-yes-alt"></span>');
+                        $target.attr('href','#');
+
+                    }else{
+
+                        $errorContent.find('.step-1-hd').text('Something Went Wrong!');
+                        var $button = $errorContent.parent().find('.action-wrap a.act-button');
+                        $button.attr('href','https://rapidload.zendesk.com/hc/en-us/requests/new');
+                        $button.unbind('click');
+                        $button.text('Contact Support')
+
+                    }
+
+                    $target.removeClass('js-uucss-analyze-site');
+
+                    showAnalyze(false, true);
                 },
                 success(response) {
                     if(response.data){
