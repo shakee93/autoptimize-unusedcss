@@ -103,6 +103,11 @@ class UnusedCSS_DB
 
 
 	static function add_link( $data ) {
+
+    	if(!$data['url']){
+    		return;
+	    }
+
 		global $wpdb;
 
 		$exist = self::get_link( $data['url'] );
