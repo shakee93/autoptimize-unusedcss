@@ -257,26 +257,21 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$uucss_api = new UnusedCSS_Api();
 
 		if ( ! isset( $options['uucss_api_key'] ) ) {
-            $options['valid_domain'] = false;
-            update_option('autoptimize_uucss_settings', $options);
 			return;
 		}
 
 		$results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
 
-        $data = json_decode(json_encode($results),true);
-        if(isset($data['errors'])){
-            $options['valid_domain'] = false;
-            update_option('autoptimize_uucss_settings', $options);
-            return;
-        }
+		if($uucss_api->is_error($results)){
+			$options['valid_domain'] = false;
+			update_option('autoptimize_uucss_settings', $options);
+			return;
+		}
 
-        if(isset($data['data']) && isset($data['data']['success']) && $data['data']['success']){
-            $options['valid_domain'] = true;
-        }else{
-            $options['valid_domain'] = false;
-        }
-        update_option('autoptimize_uucss_settings', $options);
+		if(!$options['valid_domain']){
+			$options['valid_domain'] = true;
+			update_option('autoptimize_uucss_settings', $options);
+		}
     }
 
 	public static function is_domain_verified(){

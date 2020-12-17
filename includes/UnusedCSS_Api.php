@@ -86,7 +86,7 @@ class UnusedCSS_Api
 
 	}
 
-	public function is_error( $response ) {
+	public function is_error( $result ) {
 		return ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false );
 	}
 

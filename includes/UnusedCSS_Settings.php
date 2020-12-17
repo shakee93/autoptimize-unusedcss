@@ -22,6 +22,10 @@ class UnusedCSS_Settings {
 
 	    if(UnusedCSS_DB::migrated()){
 
+	    	if(!$link){
+	    		return;
+		    }
+
 	        $data = array();
 
             if(isset($meta['id'])) $data['job_id'] = $meta['id'];
