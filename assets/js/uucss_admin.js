@@ -320,11 +320,10 @@
                             return
                         }
 
-                        if (rowData.status === 'success' && !rowData.meta.warnings.length) {
+                        if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
-                            // tippyOptions.triggerTarget = $(td).closest('tr')[0]
                             tippy(stat.find('span')[0], tippyOptions);
-                        }else if(rowData.status === 'success' && rowData.meta.warnings.length){
+                        } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
