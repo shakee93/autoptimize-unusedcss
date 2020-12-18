@@ -43,7 +43,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
-                                          data-message="Whitelisted Selectors (regex supported)">
+                                          data-message="Safelist selectors (regex supported)">
                                     </span>
                                 </th>
                                 <td class="safelist-wrapper">
@@ -86,7 +86,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Blocklist', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
-                                          data-message="Whitelisted Selectors (regex supported)">
+                                          data-message="Blocklist Selectors (regex supported)">
                                     </span>
                                 </th>
                                 <td class="blocklist-wrapper">
@@ -107,10 +107,10 @@
                                         </div>
                                         <div class="info-details">
                                             <h4>Tip</h4>
-                                            <p>You can add rules to specify which css classes or id's are safe to left
-                                                in the final UnusedCSS output.</p>
+                                            <p>You can add rules to specify which css rules should be left in the final
+                                                css output.</p>
                                             <p class="divider"></p>
-                                            <p> use * expressions and add one rule at a time, <br>
+                                            <p> use * glob expressions and add one rule at a time <br>
                                             </p>
                                             <p class="divider"></p>
                                             <p>
