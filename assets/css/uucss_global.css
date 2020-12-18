@@ -693,10 +693,12 @@ p.analyze-text {
     Safelist
  */
 
+.blocklist-list ul,
 .safelist-list ul {
     margin: 1em;
 }
 
+.blocklist-list span.dashicons.dashicons-remove,
 .safelist-list span.dashicons.dashicons-remove {
     vertical-align: middle;
     line-height: 1.25;

@@ -2,7 +2,7 @@
 
     function showNotification(heading, message) {
         var container = $('#uucss-wrapper')
-        var content = $($('.uucss-info-wrapper.advance-settings')[0]).clone().css('max-width', '100%');
+        var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
         content.find('h4').text(heading);
         content.find('p').remove();

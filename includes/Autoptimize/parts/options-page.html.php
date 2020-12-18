@@ -63,7 +63,45 @@
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper advance-settings" style="max-width: 350px;">
+                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px;">
+                                        <div class="info-icon">
+                                            <span class="dashicons dashicons-info"></span>
+                                        </div>
+                                        <div class="info-details">
+                                            <h4>Tip</h4>
+                                            <p>You can add rules to specify which css classes or id's are safe to left
+                                                in the final UnusedCSS output.</p>
+                                            <p class="divider"></p>
+                                            <p> use * expressions and add one rule at a time, <br>
+                                            </p>
+                                            <p class="divider"></p>
+                                            <p>
+
+                                                examples : <em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Sitewide Blocklist', 'uucss' ); ?>
+                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
+                                          data-message="Whitelisted Selectors (regex supported)">
+                                    </span>
+                                </th>
+                                <td class="blocklist-wrapper">
+                                    <textarea hidden id="uucss_blocklist"
+                                              name="autoptimize_uucss_settings[uucss_blocklist]"><?php echo empty( $options['uucss_blocklist'] ) ? '' : $options['uucss_blocklist'] ?></textarea>
+                                    <div class="blocklist-add uucss-tag">
+                                        <input id="blocklist-add" type="text" size="27" class="newtag"
+                                               autocomplete="off">
+                                        <button class="button">Add Rule</button>
+                                    </div>
+                                    <div class="blocklist-list">
+                                        <ul></ul>
+                                    </div>
+
+                                    <div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>

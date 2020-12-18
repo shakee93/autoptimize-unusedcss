@@ -288,6 +288,8 @@ abstract class UnusedCSS {
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
+		$blocklist = isset( $this->options['uucss_blocklist'] ) ? json_decode( $this->options['uucss_blocklist'] ) : [];
+
 		// merge post and global safelists
 		if ( ! empty( $post_options['safelist'] ) ) {
 			$safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
@@ -301,6 +303,7 @@ abstract class UnusedCSS {
 			"analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
+			"blocklist"          => $blocklist,
 		];
     }
 

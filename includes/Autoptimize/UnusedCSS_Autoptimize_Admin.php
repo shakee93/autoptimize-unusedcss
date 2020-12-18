@@ -268,7 +268,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		if(!$options['valid_domain']){
+		if(!isset($options['valid_domain']) || !$options['valid_domain']){
 			$options['valid_domain'] = true;
 			update_option('autoptimize_uucss_settings', $options);
 		}

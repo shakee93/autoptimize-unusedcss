@@ -473,7 +473,9 @@
          */
 
         window.safelist = JSON.parse($('#uucss_safelist').val() || '[]');
+        window.blocklist = JSON.parse($('#uucss_blocklist').val() || '[]');
         drawSafeList();
+        drawBlockList();
 
         $('#uucss-options .safelist-add button, #uucss-wrapper .safelist-add button').on('click', function (e) {
             e.preventDefault();
@@ -486,6 +488,42 @@
                 addRule();
             }
         });
+
+        $('#uucss-options .safelist-add button, #uucss-wrapper .blocklist-add button').on('click', function (e) {
+            e.preventDefault();
+            addBlockList();
+        });
+
+        $('#uucss-options .safelist-add #safelist-add, #uucss-wrapper .blocklist-add button').on('keydown', function (e) {
+            if (e.key && e.key === 'Enter') {
+                e.preventDefault();
+                addBlockList();
+            }
+        });
+
+        function addBlockList() {
+            var item = $('#blocklist-add');
+
+            var value = item.val().trim();
+
+            if(value === ''){
+                return;
+            }
+
+            var exists = window.blocklist.findIndex(function (p) {
+                return p === value
+            });
+
+            if (exists >= 0) {
+                return;
+            }
+
+            blocklist.push(value);
+
+            item.val('')
+
+            drawBlockList();
+        }
 
         function addRule() {
 
@@ -520,6 +558,10 @@
 
         function updateInput() {
             $('#uucss_safelist').val(JSON.stringify(window.safelist))
+        }
+
+        function updateBlockListInput() {
+            $('#uucss_blocklist').val(JSON.stringify(window.blocklist))
         }
 
         $('.js-uucss-analyze-site').click(function (e) {
@@ -612,6 +654,30 @@
 
         });
 
+        function drawBlockList() {
+
+            $('.blocklist-list ul').empty();
+
+            window.blocklist.forEach(function (item) {
+
+                var li = $(`<li><span data-rule="` + item + `" title="remove rule" class="dashicons dashicons-remove dashicons-no-alt"></span> <span class="blocklist-list-value"> ` + item + `</span></li>`)
+
+                li.find('.dashicons-remove').click(function () {
+                    var _item = $(this).data('rule')
+
+                    window.blocklist = window.blocklist.filter(function (i) {
+                        return !(i === _item)
+                    });
+
+                    drawBlockList();
+                });
+
+                $('.blocklist-list ul').append(li)
+
+            });
+
+            updateBlockListInput();
+        }
 
         function drawSafeList() {
 
