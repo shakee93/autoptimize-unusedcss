@@ -639,6 +639,11 @@ table#uucss-history{
     margin-left: -10px;
 }
 
+.uucss-warnings .warning-list.scrollable{
+    height: 130px;
+    overflow-y: scroll;
+}
+
 .uucss-warnings .warnings-title{
     margin: 0 0 5px;
     font-size: 13px;

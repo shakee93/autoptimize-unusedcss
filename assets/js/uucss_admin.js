@@ -223,8 +223,9 @@
                         var $warnings_html = $('<div class="uucss-warnings"></div>');
 
                         if(rowData.meta.warnings && rowData.meta.warnings.length){
-                            $warnings_html.append('<h5 class="warnings-title">Warnings</h5>');
-                            $warnings_html.append('<ul class="warning-list"></ul>');
+                            var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
+                            $warnings_html.append('<h5 class="warnings-title ">Warnings - ' + rowData.meta.warnings.length  + '</h5>');
+                            $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
                             $.each(rowData.meta.warnings, function(index, value){
                                 var $warning_html = $('<li class="warning"></li>')
                                 $warning_html.append('<div class="warning-info"></div>');
