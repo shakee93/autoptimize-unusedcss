@@ -53,8 +53,7 @@
                 <span class="dashicons dashicons-info"></span>
             </div>
             <div class="info-details">
-                <p>You can add rules to specify which css classes or id's are safe to left
-                    in the final UnusedCSS output.</p>
+                <p>You can add rules to specify which css rules to be kept in the final css or should be removed</p>
                 <p class="divider"></p>
                 <p>
                     use * expressions and add one rule at a time,
