@@ -602,3 +602,61 @@ table#uucss-history{
 .tippy-box[data-animation=shift-toward][data-state=hidden][data-placement^=right] {
     transform: translateX(10px)
 }
+
+/**
+   Safelist pack styles
+ */
+
+#uucss-options span.select2.select2-container.select2-container--default {
+    max-width: 470px;
+    height: auto;
+    margin-right: 5px;
+    display: block;
+}
+
+.form-table input#uucss-pack-suggest {
+    vertical-align: middle;
+}
+
+#uucss-options ul.select2-selection__rendered {
+    padding: 1px 3px !important;
+    max-height: fit-content;
+    margin-top: 0px;
+    display: block;
+}
+
+input#uucss-pack-suggest {
+    margin-top: 10px;
+    display: block !important;
+}
+
+#uucss-options .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    margin-right: 4px;
+}
+
+#uucss-options .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid #aaa 1px;
+    outline: 0;
+}
+
+#uucss-options .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #674499;
+    border: 1px solid #674499;
+    color: #fff;
+}
+
+#uucss-options li.select2-selection__choice {
+    margin: 5px 3px 1px 3px !important;
+    font-size: 12px;
+    padding: 4px 8px 4px 6px;
+}
+
+#uucss-options li.select2-search.select2-search--inline {
+    margin-left: 5px;
+    margin-bottom: 0;
+}
+
+#uucss-options .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #fff;
+    margin-right: 4px;
+}
