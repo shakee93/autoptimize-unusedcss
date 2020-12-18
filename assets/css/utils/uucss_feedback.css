@@ -164,10 +164,6 @@ tr[data-slug="unusedcss"] span.deactivate{
     display: block;
 }
 
-tr[data-plugin^="otter-blocks"] .deactivate {
-    position: relative;
-}
-
 body.uucss-feedback-open .uucss-feedback-overlay {
     content: "";
     display: block;
