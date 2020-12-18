@@ -489,12 +489,12 @@
             }
         });
 
-        $('#uucss-options .safelist-add button, #uucss-wrapper .blocklist-add button').on('click', function (e) {
+        $('#uucss-options .blocklist-add button, #uucss-wrapper .blocklist-add button').on('click', function (e) {
             e.preventDefault();
             addBlockList();
         });
 
-        $('#uucss-options .safelist-add #safelist-add, #uucss-wrapper .blocklist-add button').on('keydown', function (e) {
+        $('#uucss-options .blocklist-add #blocklist-add, #uucss-wrapper .blocklist-add button').on('keydown', function (e) {
             if (e.key && e.key === 'Enter') {
                 e.preventDefault();
                 addBlockList();

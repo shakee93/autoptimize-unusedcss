@@ -790,6 +790,25 @@ p.analyze-text {
     padding: 3px 8px;
 }
 
+#uucss-settings .safelist-add .input-wrap-flex{
+    display: flex;
+}
+
+#uucss-settings .safelist-add input,
+#uucss-settings .blocklist-add input{
+   width: 100%;
+}
+
+
+#uucss-settings .safelist-add label,
+#uucss-settings .blocklist-add label{
+    display: inline-block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+#uucss-settings .blocklist-add button.button,
 #uucss-settings .safelist-add button.button {
     width: 100%;
     margin-top: 8px;

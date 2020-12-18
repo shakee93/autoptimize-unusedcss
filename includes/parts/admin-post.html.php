@@ -18,13 +18,16 @@
             <textarea hidden id="uucss_safelist"
                       name="uucss_safelist"><?php echo empty( $options['safelist'] ) ? '' : $options['safelist'] ?></textarea>
         <div class="safelist-add">
-            <select name="" id="safelist-type">
-                <option value="single">Single</option>
-                <option value="deep">Deep</option>
-                <option selected value="greedy">Greedy</option>
-            </select>
-            <input id="safelist-add" type="text" size="20"
-                   autocomplete="off">
+            <label class="" for="Safelist">Safelist</label>
+            <div class="input-wrap-flex">
+                <select name="" id="safelist-type">
+                    <option value="single">Single</option>
+                    <option value="deep">Deep</option>
+                    <option selected value="greedy">Greedy</option>
+                </select>
+                <input id="safelist-add" type="text" size="20"
+                       autocomplete="off">
+            </div>
             <button class="button">Add Rule</button>
         </div>
         <div class="safelist-list">
@@ -32,7 +35,19 @@
         </div>
 
         </p>
-
+        <p>
+            <textarea hidden id="uucss_blocklist"
+                      name="autoptimize_uucss_settings[uucss_blocklist]"><?php echo empty( $options['uucss_blocklist'] ) ? '' : $options['uucss_blocklist'] ?></textarea>
+        <div class="blocklist-add uucss-tag">
+            <label class="" for="Blocklist">Blocklist</label>
+            <input id="blocklist-add" type="text" size="27" class="newtag"
+                   autocomplete="off">
+            <button class="button">Add Rule</button>
+        </div>
+        <div class="blocklist-list">
+            <ul></ul>
+        </div>
+        </p>
         <div class="uucss-info-wrapper" style="	width: calc(100% - 25px)">
             <div class="info-icon">
                 <span class="dashicons dashicons-info"></span>
