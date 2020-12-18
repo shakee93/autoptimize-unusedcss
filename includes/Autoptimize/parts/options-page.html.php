@@ -10,7 +10,7 @@
 	?>
     <div>
         <ul id="uucss-wrapper">
-            <li id="uucss-notification" style="display: none">
+            <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
 			<?php if ( ! $api_key_verified ) : ?>
@@ -43,7 +43,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
-                                          data-message="Whitelisted Selectors (regex supported)">
+                                          data-message="Safelist selectors (regex supported)">
                                     </span>
                                 </th>
                                 <td class="safelist-wrapper">
@@ -63,7 +63,7 @@
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper" style="max-width: 350px;">
+                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px;">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
@@ -73,6 +73,44 @@
                                                 in the final UnusedCSS output.</p>
                                             <p class="divider"></p>
                                             <p> use * expressions and add one rule at a time, <br>
+                                            </p>
+                                            <p class="divider"></p>
+                                            <p>
+
+                                                examples : <em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Sitewide Blocklist', 'uucss' ); ?>
+                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
+                                          data-message="Blocklist Selectors (regex supported)">
+                                    </span>
+                                </th>
+                                <td class="blocklist-wrapper">
+                                    <textarea hidden id="uucss_blocklist"
+                                              name="autoptimize_uucss_settings[uucss_blocklist]"><?php echo empty( $options['uucss_blocklist'] ) ? '' : $options['uucss_blocklist'] ?></textarea>
+                                    <div class="blocklist-add uucss-tag">
+                                        <input id="blocklist-add" type="text" size="27" class="newtag"
+                                               autocomplete="off">
+                                        <button class="button">Add Rule</button>
+                                    </div>
+                                    <div class="blocklist-list">
+                                        <ul></ul>
+                                    </div>
+
+                                    <div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
+                                        <div class="info-icon">
+                                            <span class="dashicons dashicons-info"></span>
+                                        </div>
+                                        <div class="info-details">
+                                            <h4>Tip</h4>
+                                            <p>You can add rules to specify which css rules should be left in the final
+                                                css output.</p>
+                                            <p class="divider"></p>
+                                            <p> use * glob expressions and add one rule at a time <br>
                                             </p>
                                             <p class="divider"></p>
                                             <p>
@@ -153,6 +191,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php _e( 'Load Original CSS files', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_load_original' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_load_original]' <?php if ( ! empty( $options['uucss_load_original'] ) && '1' === $options['uucss_load_original'] ) {
+					                        echo 'checked="checked"';
+				                        } ?> value='1'>
+                                        <i>
+                                            Inject original CSS files on user interaction. this helps to fix javascript
+                                            DOM selector related issues.
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <th scope="row"><?php _e( 'Other Options', 'uucss' ); ?></th>
                                 <td>
 
@@ -228,6 +281,7 @@
                                     </label>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row"><?php _e( 'Inline small CSS files', 'uucss' ); ?></th>
                                 <td>
@@ -287,7 +341,7 @@
                 <li>
                     <h2>
                         License Information
-                        <span<?php echo ( $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                        <span<?php echo ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -307,25 +361,25 @@
                             <div>
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-			                               echo $options['uucss_api_key_verified'] ?>">
+									       echo $options['uucss_api_key_verified'] ?>">
                                 <input id='uucss_api_key' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_api_key]'
                                        value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                        size="40">
                                 <em id="verification_status"></em>
-		                        <?php if ( $options['valid_domain'] ) : ?>
+								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
-                                       class="uucss-activate"> Deactivate License
+                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-		                        <?php else : ?>
+								<?php else : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
                                     <a style="margin-left: 5px"
                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
-                                       class="uucss-activate"> Deactivate License
+                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-		                        <?php endif; ?>
+								<?php endif; ?>
                             </div>
 
                         </div>
@@ -335,7 +389,7 @@
                 <li class="submit">
 
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
-                                             value="<?php _e( 'Save & Clear Cache', 'uucss' ); ?>"/>
+                                             value="<?php _e( 'Save Changes', 'uucss' ); ?>"/>
 
                         <a target="_blank" href="https://rapidload.io/">
                             <img

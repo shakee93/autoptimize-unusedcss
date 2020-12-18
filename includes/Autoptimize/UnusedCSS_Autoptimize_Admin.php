@@ -42,15 +42,16 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 			$this->deactivate();
 
-			$this->validate_domain();
+			add_action('current_screen', [$this, 'validate_domain']);
 
 			add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
 			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
-			add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ] );
+			add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
 
 			add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
 			add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
 			add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
@@ -105,6 +106,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'api' => UnusedCSS_Api::get_key(),
 			'nonce' => wp_create_nonce( 'uucss_nonce' ),
 			'url' => site_url(),
+			'ajax_url'          => admin_url( 'admin-ajax.php' ),
+			'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
@@ -239,30 +244,34 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function validate_domain() {
 
-		$uucss_api = new UnusedCSS_Api();
+		if ( get_current_screen() && get_current_screen()->base != 'settings_page_uucss' ) {
+			return;
+		}
+
 		$options   = get_option( 'autoptimize_uucss_settings' );
 
+	    if(!isset( $options['uucss_api_key_verified'] ) || $options['uucss_api_key_verified'] != '1'){
+	        return;
+        }
+
+		$uucss_api = new UnusedCSS_Api();
+
 		if ( ! isset( $options['uucss_api_key'] ) ) {
-            $options['valid_domain'] = false;
-            update_option('autoptimize_uucss_settings', $options);
 			return;
 		}
 
 		$results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
 
-        $data = json_decode(json_encode($results),true);
-        if(isset($data['errors'])){
-            $options['valid_domain'] = false;
-            update_option('autoptimize_uucss_settings', $options);
-            return;
-        }
+		if($uucss_api->is_error($results)){
+			$options['valid_domain'] = false;
+			update_option('autoptimize_uucss_settings', $options);
+			return;
+		}
 
-        if(isset($data['data']) && isset($data['data']['success']) && $data['data']['success']){
-            $options['valid_domain'] = true;
-        }else{
-            $options['valid_domain'] = false;
-        }
-        update_option('autoptimize_uucss_settings', $options);
+		if(!isset($options['valid_domain']) || !$options['valid_domain']){
+			$options['valid_domain'] = true;
+			update_option('autoptimize_uucss_settings', $options);
+		}
     }
 
 	public static function is_domain_verified(){
@@ -349,20 +358,85 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			],
 			'type'        => 'success'
 		];
-        self::add_advanced_admin_notice($notice);
-        return;
+		self::add_advanced_admin_notice( $notice );
+
+		return;
 	}
 
 
-	public function clear_cache_on_option_update( $option ) {
+	public function ajax_deactivate() {
+
+		$options = get_option( 'autoptimize_uucss_settings' );
+
+		$cache_key = 'pand-' . md5( 'first-uucss-job' );
+		delete_site_option( $cache_key );
+
+		$this->uucss->vanish();
+
+		$api = new UnusedCSS_Api();
+
+		// remove domain from authorized list
+		$api->post( 'deactivate', [
+			'url' => site_url()
+		] );
+
+		unset( $options['uucss_api_key_verified'] );
+		unset( $options['uucss_api_key'] );
+		unset( $options['whitelist_packs'] );
+
+		update_option( 'autoptimize_uucss_settings', $options );
+
+		wp_send_json_success( true );
+	}
+
+
+	public function clear_cache_on_option_update( $option, $old_value, $value ) {
 
 		if ( $option == 'autoptimize_uucss_settings' && $this->uucss ) {
-			$this->uucss->clear_cache();
+
+			$needs_to_cleared = false;
+
+			$diffs        = array_diff_key( $old_value, $value );
+			$diffs_invert = array_diff_key( $value, $old_value );
+
+			if ( isset( $diffs_invert['valid_domain'] ) ) {
+				unset( $diffs_invert['valid_domain'] );
+			}
+			if ( isset( $diffs['valid_domain'] ) ) {
+				unset( $diffs['valid_domain'] );
+			}
+
+			$diffs = array_merge( $diffs, $diffs_invert );
+
+			// if these settings are changed cache will be cleared
+			if ( isset( $diffs['uucss_minify'] ) ||
+			     isset( $diffs['uucss_keyframes'] ) ||
+			     isset( $diffs['uucss_fontface'] ) ||
+			     isset( $diffs['uucss_analyze_javascript'] ) ||
+			     isset( $diffs['uucss_safelist'] ) ||
+			     isset( $diffs['whitelist_packs'] ) ||
+			     isset( $diffs['uucss_blocklist'] ) ||
+			     isset( $diffs['uucss_variables'] ) ) {
+				$needs_to_cleared = true;
+			}
+
+			foreach ( [ 'whitelist_packs', 'uucss_safelist', 'uucss_blocklist' ] as $compare_value ) {
+				if ( isset( $value[ $compare_value ] ) && isset( $old_value[ $compare_value ] ) && $old_value[ $compare_value ] !== $value[ $compare_value ] ) {
+					$needs_to_cleared = true;
+					break;
+				}
+			}
+
+			if ( $needs_to_cleared ) {
+				$this->uucss->clear_cache( null, [
+					'soft' => true
+				] );
+			}
 		}
 
 	}
 
-    public static function ao_installed(){
+	public static function ao_installed() {
 	    return file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php') ||
             file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php');
     }

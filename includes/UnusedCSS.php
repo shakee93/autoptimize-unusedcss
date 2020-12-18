@@ -45,35 +45,66 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
-        add_action('wp_enqueue_scripts', function () {
+	    add_action( 'wp_enqueue_scripts', function () {
 
-	        $this->url = $this->get_current_url();
+		    $this->url = $this->get_current_url();
 
-	        if ( $this->enabled() ) {
-		        $this->purge_css();
-	        }
+		    if ( $this->enabled() ) {
+			    $this->purge_css();
+		    }
 
-        });
+	    } );
     }
 
-    public static function enqueueGlobalScript(){
-        add_action('admin_enqueue_scripts',function (){
-	        wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-	        wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-	        wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
 
-	        wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
-	        $data = array(
+	public function frontend_scripts( $data ) {
+
+		if ( ! isset( $this->options['uucss_load_original'] ) ) {
+			return;
+		}
+
+		wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ] );
+		wp_localize_script( 'rapidload', 'rapidload', $data['files'] );
+		wp_enqueue_script( 'rapidload' );
+
+	}
+
+
+	public static function enqueueGlobalScript() {
+		add_action( 'admin_enqueue_scripts', function () {
+			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
+			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
+
+			wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
+			$data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed()
+		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+		        'home_url' => home_url(),
+		        'api_url' => UnusedCSS_Api::get_key()
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
 	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
 
         });
+
+		add_action('admin_bar_menu', function (){
+
+			global $post;
+
+			$data = array(
+				'post_id'         => ($post) ? $post->ID : null,
+				'post_link'       => ($post) ? get_permalink($post) : null,
+			);
+
+			wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
+			wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
+			wp_enqueue_script( 'uucss_admin_bar_script' );
+		});
     }
+
 
 	public function initFileSystem() {
 
@@ -224,6 +255,8 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
+	    UnusedCSS_Settings::add_link( $url, null, "queued", [] );
+
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
 			    'provider' => $this->provider,
@@ -269,6 +302,8 @@ abstract class UnusedCSS {
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
+		$blocklist = isset( $this->options['uucss_blocklist'] ) ? json_decode( $this->options['uucss_blocklist'] ) : [];
+
 		// merge post and global safelists
 		if ( ! empty( $post_options['safelist'] ) ) {
 			$safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
@@ -282,6 +317,7 @@ abstract class UnusedCSS {
 			"analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
+			"blocklist"          => $blocklist,
 		];
     }
 
@@ -325,12 +361,10 @@ abstract class UnusedCSS {
 
 	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) ) {
 
-		    UnusedCSS_Settings::delete_link( $url );
-
 		    if ( UnusedCSS_Settings::link_exists( $url ) ) {
 
 			    // get unused files
-			    $unused_files = UnusedCSS_Settings::link_files_used_elsewhere( $url );
+			    $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
 
 			    // remove unused files from filesystem
 			    foreach ( $unused_files as $unused_file ) {
@@ -340,6 +374,7 @@ abstract class UnusedCSS {
 			    do_action( 'uucss/cache_cleared', $args );
 		    }
 
+		    UnusedCSS_Settings::delete_link( $url );
 
 		    return true;
 	    }
@@ -349,7 +384,10 @@ abstract class UnusedCSS {
 	    }
 
 	    $results = $this->file_system->delete( $this->base_dir, true );
-	    UnusedCSS_Settings::clear_links();
+
+	    // if soft sets the status to queued
+	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+
 
 	    do_action( 'uucss/cache_cleared', $args );
 

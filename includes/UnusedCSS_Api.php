@@ -6,7 +6,7 @@ class UnusedCSS_Api
 {
     use UnusedCSS_Utils;
 
-    public static $apiUrl = 'https://app.unusedcss.io/api/v1';
+    public static $apiUrl = 'https://app.rapidload.io/api/v1';
 
     public $apiKey = null;
 
@@ -77,14 +77,17 @@ class UnusedCSS_Api
 			$this->log( $response['body'] );
 
 			return json_decode( $response['body'] );
-		}
-		else {
-		    $this->log($data);
+		} else {
+			$this->log( $data );
 			$this->log( $response->get_error_message() );
 
 			return $response->get_error_message();
 		}
 
+	}
+
+	public function is_error( $result ) {
+		return ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false );
 	}
 
 

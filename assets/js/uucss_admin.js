@@ -1,18 +1,18 @@
 (function ($) {
 
     function showNotification(heading, message) {
-        var container = $('#uucss-notification .content')
+        var container = $('#uucss-wrapper')
+        var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
-        var content = $('.uucss-info-wrapper').clone().css('max-width', '100%')
-        content.find('h4').text(heading)
-        content.find('p').remove()
-        content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>')
+        content.find('h4').text(heading);
+        content.find('p').remove();
+        content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
 
-        container.append(content).parent().show()
+        container.prepend('<li class="uucss-notification uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
 
     function hideNotification() {
-        var container = $('#uucss-notification')
+        var container = $('.uucss-notification');
         container.hide()
     }
 
@@ -151,10 +151,21 @@
                         return b.time - a.time
                     });
 
-                    if (results.length < 2) {
+                    if (results.length < 3) {
                         showNotification(
                             'Tip : When will i see the results ?',
                             'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                        );
+                    }
+
+                    var queued_jobs = results.filter(function (file) {
+                        return file.status === 'queued';
+                    });
+
+                    if (queued_jobs.length > 3) {
+                        showNotification(
+                            'Caution : Please verify cron your job is working!',
+                            'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
                         );
                     }
 
@@ -173,7 +184,7 @@
                     width: '40px',
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).wrapInner($('<span></span>').addClass(cellData))
+                        $(td).wrapInner($('<span class="status"></span>').addClass(cellData))
                     }
                 },
                 {
@@ -196,6 +207,8 @@
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
+                        }else if(row.status === 'queued'){
+                            return '-';
                         }
 
                         return '0 KB'
@@ -205,20 +218,43 @@
                         var innerTippy
                         var innerTippy2
 
-                        var stat = $(td).wrapInner($('<span></span>'))
+                        var stat = $(td).wrapInner($('<span></span>'));
+
+                        var $warnings_html = $('<div class="uucss-warnings"></div>');
+
+                        if(rowData.meta.warnings && rowData.meta.warnings.length){
+                            var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
+                            $warnings_html.append('<h5 class="warnings-title ">Warnings - ' + rowData.meta.warnings.length  + '</h5>');
+                            $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
+                            $.each(rowData.meta.warnings, function(index, value){
+                                var $warning_html = $('<li class="warning"></li>')
+                                $warning_html.append('<div class="warning-info"></div>');
+                                $warning_html.find('.warning-info').append('<p class="warning-header">' +  value.message + '</p>');
+                                $warning_html.find('.warning-info').append('<p class="warning-content"><a href="' + value.file +'" target="_blank">' +  value.file + '</a></p>');
+                                $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
+                            })
+                        }else{
+                            $warnings_html.removeClass('uucss-warnings');
+                        }
 
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: td,
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
-                                    '<div class="progress-bar-wrapper">' +
-                                    '    <div class="progress-bar w-100">' +
-                                    '      <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
-                                    '      </span>' +
-                                    '    </div>' +
-                                    '  </div>' +
-                                    '</div>')
+                                        '       <div class="progress-bar-wrapper">' +
+                                        '           <div class="progress-bar w-100">' +
+                                        '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                        '               </span>' +
+                                        '           </div>' +
+                                        '       </div>' +
+                                        $warnings_html.wrap('<div></div>').parent().html() +
+                                        '<div class="time">' +
+                                        '   <p class="val">Created at ' +
+                                                new Date(rowData.time*1000).toLocaleDateString() + ' ' + new Date(rowData.time*1000).toLocaleTimeString() +
+                                        '   </p>' +
+                                        '</div>' +
+                                        '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -249,7 +285,8 @@
                                 return c[0]
                             },
                             placement: 'left',
-                            // trigger: 'click',
+                            //trigger: 'click',
+                            interactive: true,
                             allowHTML: true,
                             animation: "shift-toward-extreme",
                             appendTo: "parent",
@@ -284,9 +321,11 @@
                             return
                         }
 
-                        if (rowData.status === 'success') {
+                        if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
-                            // tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy(stat.find('span')[0], tippyOptions);
+                        } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
+                            stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
 
@@ -345,10 +384,25 @@
         });
 
         updateLicense();
+
+        $('#uucss-deactivate').click(function (e) {
+            e.preventDefault()
+            let $this = $(this)
+            $this.text('deactivating...');
+
+            wp.ajax.post('uucss_deactivate').done(function (r) {
+                $this.text('deactivated');
+                window.location.reload()
+            })
+        });
     });
 
 
     function updateLicense() {
+
+        if(uucss.api_key_verified === ""){
+            return;
+        }
 
         var container = $('.license-info')
 

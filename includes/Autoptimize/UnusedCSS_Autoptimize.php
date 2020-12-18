@@ -16,9 +16,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
      */
     public function __construct()
     {
+
+	    new UnusedCSS_Feedback();
+
 	    parent::enqueueGlobalScript();
 
 	    $this->provider = 'autoptimize';
+
+	    UnusedCSS_DB::check_db_updates();
 
 	    register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
 
@@ -148,6 +153,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    if ( $data['status'] !== 'success' && ! $data['files'] ) {
 		    return;
 	    }
+
+	    // inject frontend scripts
+	    $this->frontend_scripts( $data );
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
