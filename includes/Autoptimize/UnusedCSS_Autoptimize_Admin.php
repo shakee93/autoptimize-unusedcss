@@ -415,11 +415,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			     isset( $diffs['uucss_analyze_javascript'] ) ||
 			     isset( $diffs['uucss_safelist'] ) ||
 			     isset( $diffs['whitelist_packs'] ) ||
+			     isset( $diffs['uucss_blocklist'] ) ||
 			     isset( $diffs['uucss_variables'] ) ) {
 				$needs_to_cleared = true;
 			}
 
-			foreach ( [ 'whitelist_packs', 'uucss_safelist' ] as $compare_value ) {
+			foreach ( [ 'whitelist_packs', 'uucss_safelist', 'uucss_blocklist' ] as $compare_value ) {
 				if ( isset( $value[ $compare_value ] ) && isset( $old_value[ $compare_value ] ) && $old_value[ $compare_value ] !== $value[ $compare_value ] ) {
 					$needs_to_cleared = true;
 					break;
