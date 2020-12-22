@@ -383,7 +383,7 @@
         $('.js-enable-css-ao').click(function (e) {
             e.preventDefault();
             if (!$('.uucss-on-board .install.actions').hasClass('done')) {
-                alert('Install and Activate Autoptimize before configure');
+                alert('Install and Activate Autoptimize Before Configuring RapidLoad');
                 gotoInstall();
                 return;
             }
@@ -725,7 +725,7 @@
                         window.location.reload();
                     }else{
                         var $error = $('.notice-action-rapidload-db-update .notice-icon-content');
-                        $error.find('h2').text('RapidLoad - Data update failed !');
+                        $error.find('h2').text('RapidLoad - Data update failed!');
                         $error.find('p').text('Database update failed');
                         $('.notice-action-rapidload-db-update').css('border-left-color','#dc3232');
                         $target.text('Failed : Contact Support');
