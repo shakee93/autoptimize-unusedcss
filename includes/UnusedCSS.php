@@ -347,6 +347,12 @@ abstract class UnusedCSS {
 	public function init_base_dir() {
 
 		$this->base_dir = $this->file_system->wp_content_dir() . $this->base;
+
+		if ( $this->file_system->exists( $this->base_dir ) ) {
+			return true;
+		}
+
+		// make dir if not exists
 		$this->file_system->mkdir( $this->base_dir );
 
 		if ( ! $this->file_system->is_writable( $this->base_dir ) || ! $this->file_system->is_readable( $this->base_dir ) ) {
