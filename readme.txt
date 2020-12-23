@@ -75,6 +75,10 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.0.18 =
+ * fix: check for file permissions in plugin cache dir instead of the whole wp-content
+ * feat : allow users to connect to the app with the license key as well
+
 = 1.0.17 =
  * fix: clearing all caches on new page/post creation
  * fix: composer autoload file not being loaded on some servers
