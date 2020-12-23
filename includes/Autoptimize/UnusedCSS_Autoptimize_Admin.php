@@ -53,6 +53,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
 			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
+			add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -185,6 +186,29 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		wp_send_json_success( UnusedCSS_Settings::get_links() );
 	}
+
+	function uucss_connect(){
+
+	    if(!isset($_REQUEST['license_key'])){
+            wp_send_json_error('License Key required');
+        }
+
+	    $license_key = $_REQUEST['license_key'];
+
+        $uucss_api = new UnusedCSS_Api();
+        $uucss_api->apiKey = $license_key;
+        $results = $uucss_api->post( 'connect', [ 'url' => get_site_url(), 'type' => 'wordpress' ] );
+
+        if($uucss_api->is_error($results)){
+            wp_send_json_error('License Key verification fail');
+        }
+
+        wp_send_json_success([
+            'success' => true,
+            'message' => 'License Key verification success',
+            'activation_nonce' => wp_create_nonce( 'uucss_activation' ),
+        ]);
+    }
 
 	public function get_node_text() {
 		ob_start();
