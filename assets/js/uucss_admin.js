@@ -242,19 +242,19 @@
                             triggerTarget: td,
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
-                                        '       <div class="progress-bar-wrapper">' +
-                                        '           <div class="progress-bar w-100">' +
-                                        '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
-                                        '               </span>' +
-                                        '           </div>' +
-                                        '       </div>' +
-                                        $warnings_html.wrap('<div></div>').parent().html() +
-                                        '<div class="time">' +
-                                        '   <p class="val">Created at ' +
-                                                new Date(rowData.time*1000).toLocaleDateString() + ' ' + new Date(rowData.time*1000).toLocaleTimeString() +
-                                        '   </p>' +
-                                        '</div>' +
-                                        '</div>')
+                                    '       <div class="progress-bar-wrapper">' +
+                                    '           <div class="progress-bar w-100">' +
+                                    '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                    '               </span>' +
+                                    '           </div>' +
+                                    '       </div>' +
+                                    $warnings_html.wrap('<div></div>').parent().html() +
+                                    '<div class="time">' +
+                                    '   <p class="val">Created at ' +
+                                    new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '</div>' +
+                                    '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -410,21 +410,23 @@
             trigger: 'click',
             hideOnClick: false,
             theme: 'light',
+            maxWidth: 500,
             onClickOutside(instance, event) {
-                instance.hide()            },
+                instance.hide()
+            },
             content: function () {
                 var content;
                 content = '<div class="tippy-connect-with-license">' +
-                '               <div class="tippy-connect-with-license-content">' +
-                '                   <div class="header-text">' +
-                '                       <p>Enter your License Key below</p>' +
-                '                   </div>' +
-                '                   <div class="input-wrap">' +
-                '                       <input type="text" class="key">' +
-                '                       <a href="#" class="connect">Connect</a>' +
-                '                   </div>'+
-                '               </div>' +
-                '          </div>';
+                    '               <div class="tippy-connect-with-license-content">' +
+                    '                   <div class="header-text">' +
+                    '                       <p>Enter your License Key below</p>' +
+                    '                   </div>' +
+                    '                   <div class="input-wrap">' +
+                    '                       <input type="text"  placeholder="License Key" class="uucss-key">' +
+                    '                       <a href="#" class="connect">Connect</a>' +
+                    '                   </div>' +
+                    '               </div>' +
+                    '          </div>';
                 return content;
             },
             onMount(instance){
