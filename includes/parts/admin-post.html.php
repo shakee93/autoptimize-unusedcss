@@ -37,7 +37,7 @@
         </p>
         <p>
             <textarea hidden id="uucss_blocklist"
-                      name="autoptimize_uucss_settings[uucss_blocklist]"><?php echo empty( $options['uucss_blocklist'] ) ? '' : $options['uucss_blocklist'] ?></textarea>
+                      name="uucss_blocklist"><?php echo empty( $options['uucss_blocklist'] ) ? '' : $options['uucss_blocklist'] ?></textarea>
         <div class="blocklist-add uucss-tag">
             <label class="" for="Blocklist">Blocklist</label>
             <input id="blocklist-add" type="text" size="27" class="newtag"
