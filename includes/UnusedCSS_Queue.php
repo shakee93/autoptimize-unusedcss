@@ -26,13 +26,14 @@ class UnusedCSS_Queue
 
         global $uucss;
 
-        $link = UnusedCSS_DB::get_links_by_status('queued');
+        $links = UnusedCSS_DB::get_links_by_status(["'queued'", "'failed'"]);
 
-        if(!empty($link)){
+        if(!empty($links)){
 
-            $uucss->init_async_store( $uucss->provider, $link[0]->url, $uucss->api_options() );
-
-            self::log('queued link ' . $link[0]->url . ' processed');
+            foreach ($links as $link){
+                $uucss->init_async_store( $uucss->provider, $link->url, $uucss->api_options() );
+                self::log('queued link ' . $link->url . ' processed');
+            }
 
         }
 
@@ -40,7 +41,7 @@ class UnusedCSS_Queue
 
     function uucss_process_queue_schedule($schedules){
         $schedules['every_one_minute'] = array(
-            'interval' => 60,
+            'interval' => 30,
             'display'  => __( 'Every 1 minit' ),
         );
         return $schedules;

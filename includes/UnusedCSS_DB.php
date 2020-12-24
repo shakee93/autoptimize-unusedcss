@@ -187,7 +187,11 @@ class UnusedCSS_DB
     static function get_links_by_status($status, $limit = 1){
         global $wpdb;
 
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status='" . $status . "' ORDER BY created_at DESC LIMIT " . $limit, OBJECT);
+        $status = implode(",", $status);
+
+        $status = str_replace('"', '', $status);
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY created_at DESC LIMIT " . $limit, OBJECT);
 
         $error = $wpdb->last_error;
 

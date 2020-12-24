@@ -132,6 +132,27 @@
 
         var table = $('#uucss-history')
 
+        table.on('init.dt', function () {
+            setInterval(refreshTable, 1000 * 30)
+        })
+
+        table.on('draw.dt', function () {
+
+            var element = '<div id="uucss-auto-refresh">' +
+                '<input type="checkbox" id="uucss_auto_refresh_frontend" name="autoptimize_uucss_settings[uucss_auto_refresh_frontend]" value="1">' +
+                '<label for="uucss_auto_refresh_frontend"> Auto Refresh</label><br>' +
+                '<div>';
+
+            $('#uucss-history_info').append(element);
+            $('#uucss_auto_refresh_frontend').change(function () {
+                $('#uucss_auto_refresh_frontend-hidden').val($(this).is(':checked') ? 1 : 0);
+                auto_refresh = $(this).is(':checked');
+            });
+            $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
+        })
+
+        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').prop('checked')
+
         table = table.DataTable({
             ajax: {
                 url: wp.ajax.settings.url + '?action=uucss_data',
@@ -184,7 +205,11 @@
                     width: '40px',
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).wrapInner($('<span class="status"></span>').addClass(cellData))
+                        var $element = $('<span class="status"></span>')
+                        if(cellData === 'failed' || cellData === 'queued'){
+                            $element.addClass('refresh');
+                        }
+                        $(td).wrapInner($element.addClass(cellData))
                     }
                 },
                 {
@@ -382,6 +407,35 @@
                 },
             ]
         });
+
+        function refreshTable(){
+            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
+
+            if(!$queuedJobs.length || !auto_refresh){
+                return;
+            }
+
+            $.ajax({
+                url: wp.ajax.settings.url + '?action=uucss_data',
+                data: {
+                    nonce : uucss.nonce
+                },
+                success: function (response) {
+
+                    if (!response.success) {
+                        return;
+                    }
+
+                    var results = Object.values(response.data).sort(function (a, b) {
+                        return b.time - a.time
+                    });
+
+                    table.clear();
+                    table.rows.add(results);
+                    table.draw();
+                }
+            })
+        }
 
         updateLicense();
 
