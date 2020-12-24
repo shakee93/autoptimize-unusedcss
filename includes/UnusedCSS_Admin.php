@@ -25,7 +25,8 @@ abstract class UnusedCSS_Admin {
      */
     public static $page_options = [
 	    'safelist',
-	    'exclude'
+	    'exclude',
+	    'blocklist'
     ];
 
     /**
