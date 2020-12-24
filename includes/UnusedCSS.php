@@ -309,6 +309,10 @@ abstract class UnusedCSS {
 			$safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
 		}
 
+        if ( ! empty( $post_options['blocklist'] ) ) {
+            $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
+        }
+
 		return [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),
 			"fontFace"          => isset( $this->options['uucss_fontface'] ),
