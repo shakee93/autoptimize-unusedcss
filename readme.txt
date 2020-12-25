@@ -75,6 +75,9 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.1.1 =
+ * fix: check for file permissions in plugin cache dir instead of the whole wp-content
+ * feat : allow users to connect to the app with the license key as well
 
 = 1.1.0 =
  * feat: migrate from wp options api to wp table api to manage options - faster
