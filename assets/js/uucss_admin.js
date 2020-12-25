@@ -242,19 +242,19 @@
                             triggerTarget: td,
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
-                                        '       <div class="progress-bar-wrapper">' +
-                                        '           <div class="progress-bar w-100">' +
-                                        '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
-                                        '               </span>' +
-                                        '           </div>' +
-                                        '       </div>' +
-                                        $warnings_html.wrap('<div></div>').parent().html() +
-                                        '<div class="time">' +
-                                        '   <p class="val">Created at ' +
-                                                new Date(rowData.time*1000).toLocaleDateString() + ' ' + new Date(rowData.time*1000).toLocaleTimeString() +
-                                        '   </p>' +
-                                        '</div>' +
-                                        '</div>')
+                                    '       <div class="progress-bar-wrapper">' +
+                                    '           <div class="progress-bar w-100">' +
+                                    '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                    '               </span>' +
+                                    '           </div>' +
+                                    '       </div>' +
+                                    $warnings_html.wrap('<div></div>').parent().html() +
+                                    '<div class="time">' +
+                                    '   <p class="val">Created at ' +
+                                    new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '</div>' +
+                                    '</div>')
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -394,6 +394,73 @@
                 $this.text('deactivated');
                 window.location.reload()
             })
+        });
+
+        $('a.connect-with-license').click(function (e) {
+            e.preventDefault();
+        });
+
+        tippy('a.connect-with-license', {
+            allowHTML: true,
+            arrow: false,
+            appendTo: $('a.connect-with-license')[0],
+            interactive: true,
+            animation: 'shift-toward',
+            placement: 'top-start',
+            trigger: 'click',
+            hideOnClick: false,
+            theme: 'light',
+            maxWidth: 500,
+            onClickOutside(instance, event) {
+                instance.hide()
+            },
+            content: function () {
+                var content;
+                content = '<div class="tippy-connect-with-license">' +
+                    '               <div class="tippy-connect-with-license-content">' +
+                    '                   <div class="header-text">' +
+                    '                       <p>Enter your License Key below</p>' +
+                    '                   </div>' +
+                    '                   <div class="input-wrap">' +
+                    '                       <input type="text"  placeholder="License Key" class="uucss-key">' +
+                    '                       <a href="#" class="connect">Connect</a>' +
+                    '                   </div>' +
+                    '               </div>' +
+                    '          </div>';
+                return content;
+            },
+            onMount(instance){
+                $('a.connect-with-license .tippy-connect-with-license-content .input-wrap .connect').click(function (e) {
+                    e.preventDefault();
+
+                    var license_key = $('a.connect-with-license .tippy-connect-with-license-content .input-wrap input').val();
+
+                    if(license_key === ''){
+                        alert('Please enter license key');
+                        return;
+                    }
+
+                    var $target = $(this);
+
+                    $target.text('Connecting...');
+                    $target.removeAttr('href');
+
+                    wp.ajax.post('uucss_connect',{ license_key : license_key }).then(function (i) {
+
+                        if(i.success){
+                            window.location.href = window.location.href + '&token=' + license_key + '&nonce=' + i.activation_nonce
+                        }
+
+                    }).fail(function (i) {
+
+                        $target.text('Connect');
+                        $target.attr('href','#');
+                        alert(i)
+
+                    })
+
+                })
+            }
         });
     });
 
