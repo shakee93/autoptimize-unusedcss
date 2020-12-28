@@ -75,9 +75,14 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.1.2 =
+ * fix: blank option value doesn't clear the cache
+ * fix: activating from blank api-key breaks the option values
+
 = 1.1.1 =
  * fix: check for file permissions in plugin cache dir instead of the whole wp-content
  * feat : allow users to connect to the app with the license key as well
+ * version : 1.0.18 === 1.1.1
 
 = 1.1.0 =
  * feat: migrate from wp options api to wp table api to manage options - faster
