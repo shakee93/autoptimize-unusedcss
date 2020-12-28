@@ -420,8 +420,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 			$needs_to_cleared = false;
 
-			$diffs        = array_diff_key( $old_value, $value );
-			$diffs_invert = array_diff_key( $value, $old_value );
+			$diffs = [];
+			$diffs_invert = [];
+
+			if ( $old_value && $value ) {
+				$diffs        = array_diff_key( $old_value, $value );
+				$diffs_invert = array_diff_key( $value, $old_value );
+			}
 
 			if ( isset( $diffs_invert['valid_domain'] ) ) {
 				unset( $diffs_invert['valid_domain'] );
