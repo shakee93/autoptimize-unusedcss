@@ -184,6 +184,10 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		$options = get_option( 'autoptimize_uucss_settings' );
 
+		if ( ! isset( $options ) || empty( $options ) || ! $options ) {
+			$options = [];
+		}
+
 		// Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
 		$options['uucss_api_key_verified'] = 1;
 		$options['uucss_api_key']          = $token;
