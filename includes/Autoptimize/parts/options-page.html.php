@@ -333,7 +333,57 @@
 
                                 </td>
                             </tr>
-
+                            <tr>
+                                <th>
+                                    <h2><?php _e( 'Job Queue', 'uucss' ); ?></h2>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Queue Interval', 'uucss' ); ?>
+                                </th>
+                                <td>
+                                    <?php
+                                        $intervals = [
+                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 1],
+                                                ['value' => 300, 'name' => '5 Miniute', 'max' => 4],
+                                                ['value' => 600, 'name' => '10 Miniute', 'max' => 8],
+                                                ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],
+                                                ['value' => 1800, 'name' => '30 Miniute', 'max' => 8],
+                                                ['value' => 3600, 'name' => '1 Hour', 'max' => 8],
+                                        ]
+                                    ?>
+                                    <select name="autoptimize_uucss_settings[uucss_queue_interval]" id="uucss_queue_interval">
+                                        <?php
+                                            foreach ($intervals as $interval){
+                                                echo sprintf('<option value="%s" data-max="%s" %s>%s</option>',$interval['value'],$interval['max'],$interval['value'] == $options['uucss_queue_interval'] ? 'selected' : '', $interval['name']);
+                                            }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Jobs per Queue', 'uucss' ); ?>
+                                </th>
+                                <td>
+                                    <?php
+                                    $job_counts = [
+                                        ['value' => 1],
+                                        ['value' => 2],
+                                        ['value' => 4],
+                                        ['value' => 8],
+                                    ]
+                                    ?>
+                                    <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
+                                        <?php
+                                        foreach ($job_counts as $job_count){
+                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count['value'],$job_count['value'] == $options['uucss_jobs_per_queue'] ? 'selected' : '', $job_count['value']);
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </li>
@@ -359,10 +409,10 @@
                             </ul>
 
                             <div>
-                                <input id='uucss_auto_refresh_frontend-hidden' type='checkbox'
-                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]' <?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
-                                    echo 'checked="checked"';
-                                } ?> value='1'>
+                                <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
+                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
+                                    echo '1';
+                                } ?>">
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
 									       echo $options['uucss_api_key_verified'] ?>">

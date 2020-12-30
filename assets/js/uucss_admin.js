@@ -151,7 +151,7 @@
             $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
         })
 
-        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').prop('checked')
+        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
 
         table = table.DataTable({
             ajax: {
@@ -409,7 +409,7 @@
         });
 
         function refreshTable(){
-            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
+            var $queuedJobs = $('#uucss-history tr td span.status.queued');
 
             if(!$queuedJobs.length || !auto_refresh){
                 return;
@@ -436,6 +436,26 @@
                 }
             })
         }
+
+        function validateJobPerQue(value, reset) {
+
+            var max = $('#uucss_queue_interval option[value="'+ value +'"]').data('max');
+
+            var options = $('#uucss_jobs_per_queue option');
+
+            $.each(options, function (element) {
+                $(options[element]).attr('disabled', $(options[element]).val() > max)
+            });
+           if(reset){
+               $('#uucss_jobs_per_queue').val($(options[0]).val());
+           }
+        }
+
+        $('#uucss_queue_interval').change(function () {
+             validateJobPerQue($(this).val(), true)
+        });
+
+        validateJobPerQue($('#uucss_queue_interval').val(), false);
 
         updateLicense();
 
