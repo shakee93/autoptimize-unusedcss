@@ -339,12 +339,12 @@
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-                        return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Clear</button>';
+                        return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Remove</button>';
                     },
                     createdCell: function (td, cellData, rowData, row, col) {
 
                         tippy($(td).find('button')[0], {
-                            content: 'Clear UnusedCSS files',
+                            content: 'Remove Optimized files',
                             placement: 'top',
                             appendTo: "parent"
                         })
