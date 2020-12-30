@@ -201,7 +201,6 @@
                 {
                     data: "url",
                     className: 'dt-body-center dt-head-center stats th-reduction',
-                    //title: "Removed unused CSS 🔥",
                     title: "File Size Reduction",
                     width: '145px',
                     render: function (data, type, row, meta) {
@@ -224,7 +223,7 @@
 
                         if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
-                            $warnings_html.append('<h5 class="warnings-title ">Warnings - ' + rowData.meta.warnings.length  + '</h5>');
+                            $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
                             $.each(rowData.meta.warnings, function(index, value){
                                 var $warning_html = $('<li class="warning"></li>')
