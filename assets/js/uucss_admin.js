@@ -206,7 +206,7 @@
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
                         var $element = $('<span class="status"></span>')
-                        if(cellData === 'queued'){
+                        if(cellData === 'queued' || cellData === 'processing'){
                             $element.addClass('refresh');
                         }
                         $(td).wrapInner($element.addClass(cellData))
@@ -409,7 +409,7 @@
         });
 
         function refreshTable(){
-            var $queuedJobs = $('#uucss-history tr td span.status.queued');
+            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
             if(!$queuedJobs.length || !auto_refresh){
                 return;
