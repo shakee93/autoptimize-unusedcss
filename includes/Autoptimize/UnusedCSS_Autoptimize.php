@@ -215,10 +215,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+					    $uucss_file = $data['files'][ $key ]['uucss'];
 
 					    array_push( $inject->found_css_cache_files, $link );
 
-					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'], autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
+					    $newLink = $this->get_cached_file( $uucss_file, autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
 
 					    array_push( $inject->injected_css_files, $newLink );
 
@@ -233,7 +234,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    $sheet->href  = $newLink;
 
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
-							    $this->inline_sheet( $sheet, $data['files'][ $key ]['uucss'] );
+							    $this->inline_sheet( $sheet, $uucss_file );
 						    }
 
 					    }
@@ -242,7 +243,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    else {
 
 					    $data['meta']['warnings'][] = [
-						    "file" => $data['files'][ $key ]['original'],
+						    "file" => $link,
 						    "message" => "Could not find file"
 					    ];
 
