@@ -5,8 +5,10 @@ class UnusedCSS_Queue
 {
 
     use UnusedCSS_Utils;
-    public $interval = 30;
+    public $interval = 60;
     public $job_count = 1;
+    public $async = false;
+    public static $post_types = [];
 
     function __construct()
     {
@@ -35,7 +37,65 @@ class UnusedCSS_Queue
 
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
 
+        add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
 
+        $this->async = apply_filters('uucss/queue/async',false);
+
+        self::$post_types = apply_filters('uucss/queue/post_types',array(
+            'post',
+            'page',
+            'product',
+        ));
+    }
+
+    function queue_posts(){
+
+        $post_type = $_REQUEST['post_type'];
+
+        if(!isset($post_type)){
+            wp_send_json_error('post type not found');
+        }
+
+        $posts = null;
+
+        if($post_type == 'all'){
+
+            $posts = new WP_Query(array(
+                'post_type'=> self::$post_types,
+            ));
+
+        }else{
+
+            $posts = new WP_Query(array(
+                'post_type'=> $post_type,
+            ));
+
+        }
+
+        if($posts->have_posts()){
+            while ($posts->have_posts()){
+                $posts->the_post();
+
+                $url = get_the_permalink(get_the_ID());
+
+                if(!UnusedCSS_DB::link_exists($url)){
+                    UnusedCSS_DB::add_link(array(
+                        'url' => $url,
+                        'status' => 'queued',
+                    ));
+                }
+
+            }
+        }
+
+        wp_reset_query();
+
+        wp_send_json_success('posts added to queue');
+
+    }
+
+    static function get_post_types(){
+        return self::$post_types;
     }
 
     function uucss_process_queue(){
@@ -47,11 +107,21 @@ class UnusedCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
-                UnusedCSS_Settings::add_link( $link->url, null, "processing", [] );
-                wp_schedule_single_event( time(), 'uucss_cron_run_cache', [
-                    'url'      => $link->url,
-                ] );
-                spawn_cron();
+
+                UnusedCSS_DB::update_status('processing', $link->url);
+
+                if($this->async){
+
+                    wp_schedule_single_event( time(), 'uucss_cron_run_cache', [
+                        'url'      => $link->url,
+                    ] );
+
+                }else{
+
+                    $this->cache($link->url);
+
+                }
+
             }
 
         }

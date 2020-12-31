@@ -384,6 +384,33 @@
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
+                                </th>
+                                <td>
+                                    <?php
+                                        $post_types = get_post_types();
+                                        $include = UnusedCSS_Queue::get_post_types();
+                                    ?>
+                                    <select name="queue_action_type" id="requeue_post_type">
+                                        <option value="all">All</option>
+                                        <?php
+                                            foreach ($include as $value){
+                                                $post_object = get_post_type_object( $value );
+
+                                                if($post_object){
+
+                                                    echo sprintf('<option value="%s">%s</option>', $value, $post_object->label);
+
+                                                }
+
+                                            }
+                                        ?>
+                                    </select>
+                                    <input type="button" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </li>

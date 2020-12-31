@@ -133,7 +133,7 @@
         var table = $('#uucss-history')
 
         table.on('init.dt', function () {
-            setInterval(refreshTable, 1000 * 30)
+            setInterval(refreshTable, 1000 * 15)
         })
 
         table.on('draw.dt', function () {
@@ -206,7 +206,7 @@
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
                         var $element = $('<span class="status"></span>')
-                        if(cellData === 'failed' || cellData === 'queued'){
+                        if(cellData === 'queued'){
                             $element.addClass('refresh');
                         }
                         $(td).wrapInner($element.addClass(cellData))
@@ -232,7 +232,7 @@
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
-                        }else if(row.status === 'queued'){
+                        }else if(row.status === 'queued' || row.status === 'processing'){
                             return '-';
                         }
 
@@ -536,6 +536,15 @@
                 })
             }
         });
+
+        $('#queue-posts-type').click(function () {
+            wp.ajax.post('uucss_queue',{ post_type : $('#requeue_post_type').val() }).then(function (i) {
+
+                alert(i);
+
+            })
+        });
+
     });
 
 

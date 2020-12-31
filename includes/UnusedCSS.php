@@ -270,12 +270,12 @@ abstract class UnusedCSS {
 	    //UnusedCSS_Settings::add_link( $url, null, "queued", [] );
 
 	    if ( $this->async ) {
-		    wp_schedule_single_event( time(), 'uucss_async_queue', [
+		    /*wp_schedule_single_event( time(), 'uucss_async_queue', [
 			    'provider' => $this->provider,
 			    'url'      => $url,
 			    'args'     => $args
 		    ] );
-		    spawn_cron();
+		    spawn_cron();*/
 	    } else {
 		    $this->init_async_store( $this->provider, $url, $args );
 	    }
