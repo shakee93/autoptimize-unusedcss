@@ -367,18 +367,10 @@
                                     <?php _e( 'Jobs per Queue', 'uucss' ); ?>
                                 </th>
                                 <td>
-                                    <?php
-                                    $job_counts = [
-                                        ['value' => 1],
-                                        ['value' => 2],
-                                        ['value' => 4],
-                                        ['value' => 8],
-                                    ]
-                                    ?>
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
                                         <?php
-                                        foreach ($job_counts as $job_count){
-                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count['value'],isset($options['uucss_jobs_per_queue']) && $job_count['value'] == $options['uucss_jobs_per_queue'] ? 'selected' : '', $job_count['value']);
+                                        foreach ([1,2,4,8] as $job_count){
+                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count,isset($options['uucss_jobs_per_queue']) && $job_count == $options['uucss_jobs_per_queue'] ? 'selected' : '', $job_count);
                                         }
                                         ?>
                                     </select>
