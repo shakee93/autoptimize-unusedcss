@@ -155,16 +155,18 @@ span.uucss-toggle-section.rotate {
     margin: 12px 12px 10px;
     transition: ease background .3s;
     max-width: 272px;
+    text-align: center;
 }
 
 #uucss-wrapper a.uucss-activate:hover {
     background: #674399;
 }
 
-#uucss-wrapper a.connect-with-license{
-    margin-left: 12px;
+#uucss-wrapper a.connect-with-license {
+    margin-left: 100px;
     text-decoration: none;
-    position: relative;
+    margin-bottom: 10px;
+    width: 150px;
 }
 
 #uucss-wrapper a.connect-with-license .tippy-content{
@@ -194,7 +196,7 @@ span.uucss-toggle-section.rotate {
     margin-right: 5px;
 }
 
-#uucss-wrapper a.connect-with-license .tippy-content .input-wrap a.connect{
+#uucss-wrapper a.connect-with-license .tippy-content .input-wrap a.connect {
     padding: 5px 25px;
     background-color: #674499;
     text-decoration: none;
@@ -204,6 +206,7 @@ span.uucss-toggle-section.rotate {
     height: 30px;
     line-height: 30px;
     display: inline-block;
+    font-weight: bold;
 }
 
 #uucss-wrapper a.connect-with-license:focus{

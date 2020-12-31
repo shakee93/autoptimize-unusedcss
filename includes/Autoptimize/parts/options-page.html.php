@@ -21,7 +21,7 @@
 			<?php if ( $api_key_verified) : ?>
                 <li class="uucss-history">
                     <h2>
-                        Job Queue
+                        Optimizations
                         <span class="uucss-toggle-section">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>

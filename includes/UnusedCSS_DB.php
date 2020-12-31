@@ -262,28 +262,51 @@ class UnusedCSS_DB
 
 
 
-    static function transform_link($link){
+    static function transform_link($link, $get = true){
 
         if(empty($link)){
             return null;
         }
 
         $data = array();
-        $data['files'] = isset($link->files) ? unserialize($link->files) : $data['files'] = null;
-        $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
-        $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
-        $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
-        $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : null;
-        $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
-	    $data['status'] = isset( $link->status ) ? $link->status : null;
-	    $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
-	    $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
-	    $data['url'] = isset( $link->url ) ? $link->url : null;
-        $data['id'] = isset($link->id) ? $link->id : null;
+
+        if($get){
+
+            $data['files'] = self::unserialize($link->files);
+            $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
+            $data['meta']['stats'] = self::unserialize($link->stats);
+            $data['meta']['review'] = self::unserialize($link->review);
+            $data['meta']['warnings'] = self::unserialize($link->warnings);
+            $data['meta']['error'] = self::unserialize($link->error);
+            $data['status'] = isset( $link->status ) ? $link->status : null;
+            $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
+            $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
+            $data['url'] = isset( $link->url ) ? $link->url : null;
+            $data['id'] = isset($link->id) ? $link->id : null;
+
+        }else{
+
+            if(isset($link['id'])) $data['job_id'] = $link['id'];
+
+            $data['url'] = $link['url'];
+
+            if(isset($link['meta'])){
+
+                $data['stats'] = self::serialize($link['meta']['stats']);
+                $data['warnings'] = self::serialize($link['meta']['warnings']);
+                $data['review'] = self::serialize($link['meta']['review']);
+                $data['error'] = self::serialize($link['meta']['error']);
+
+            }
+
+            $data['files'] = self::serialize($link['files']);
+            $data['status'] = $link['status'];
+
+        }
+
         return $data;
+
     }
-
-
 
     static function get_first_link(){
 	    global $wpdb;

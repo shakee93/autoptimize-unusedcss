@@ -64,9 +64,23 @@ class UnusedCSS_Store {
 		    ) );
 
 	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
-		    UnusedCSS_Settings::add_link( $this->url, null, "failed", [
+
+	        $link_data = array(
+	            'url' => $this->url,
+                'files' => null,
+                'status' => 'failed',
+                'meta' => [
+                    "error" => $this->extract_error( $result )
+                ]
+            );
+
+            $link_data = UnusedCSS_DB::transform_link($link_data, false);
+
+            UnusedCSS_DB::add_link($link_data);
+
+	        /*UnusedCSS_Settings::add_link( $this->url, null, "failed", [
 			    "error" => $this->extract_error( $result )
-		    ] );
+		    ] );*/
 
 		    return;
 	    }
@@ -127,11 +141,26 @@ class UnusedCSS_Store {
 		    unset( $stats->afterBytes );
 	    }
 
-	    UnusedCSS_Settings::add_link( $this->url, $files, "success", [
+        $link_data = array(
+            'url' => $this->url,
+            'files' => $files,
+            'status' => 'success',
+            'meta' => [
+                "id" => $this->result->meta->id,
+                "stats" => $stats,
+                "warnings" => $warnings
+            ]
+        );
+
+        $link_data = UnusedCSS_DB::transform_link($link_data, false);
+
+        UnusedCSS_DB::add_link($link_data);
+
+	    /*UnusedCSS_Settings::add_link( $this->url, $files, "success", [
 	        "id" => $this->result->meta->id,
 		    "stats" => $stats,
 		    "warnings" => $warnings
-	    ] );
+	    ] );*/
 
 	    $this->args['url'] = $this->url;
 	    do_action( 'uucss/cached', $this->args );

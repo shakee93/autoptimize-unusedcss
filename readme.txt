@@ -75,6 +75,30 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.1.2 =
+ * fix: blank option value doesn't clear the cache
+ * fix: activating from blank api-key breaks the option values
+
+= 1.1.1 =
+ * fix: check for file permissions in plugin cache dir instead of the whole wp-content
+ * feat : allow users to connect to the app with the license key as well
+ * version : 1.0.18 === 1.1.1
+
+= 1.1.0 =
+ * feat: migrate from wp options api to wp table api to manage options - faster
+ * feat: load original css on user interaction
+ * feat: show job warnings
+ * feat: only clear cache if required
+ * feat: don’t clear cache on options update, requeue instead
+ * feat: show queue status of jobs
+ * feat: limit failed job retries to 5
+ * feat: deactivate without redirecting to the app
+ * feat: request for feedback on plugin deactivation
+ * feat: analyze site before connecting to the api
+ * fix: scrolling the body div in onboard
+ * fix: do domain verification call only to options page
+ * fix: load admin bar script with jQuery dependency
+
 = 1.0.17 =
  * fix: clearing all caches on new page/post creation
  * fix: composer autoload file not being loaded on some servers

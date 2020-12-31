@@ -60,22 +60,22 @@ global $post;
 
         window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
     </script>
-    <span>UnusedCSS</span>
+    <span>RapidLoad</span>
     <div class="uucss-stats__stats">
-        <span class="uucss-stats__size">Total Size : <?php echo $this->uucss->size(); ?></span>
+        <span class="uucss-stats__size">Size: <?php echo $this->uucss->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
 
 		<?php if ( $post ) {
 			$exists = UnusedCSS_Settings::link_exists( get_permalink( $post ) ); ?>
             <div id="button-uucss-clear" <?php if ( ! $exists )
-				echo 'class="hidden"' ?> title="clear page cache">clear
+				echo 'class="hidden"' ?> title="clear page cache">remove
             </div>
             <div id="button-uucss-purge" <?php if ( $exists )
-				echo 'class="hidden"' ?> title="generate page cache">generate
+				echo 'class="hidden"' ?> title="generate page cache">optimize
             </div>
 		<?php } ?>
-        <div id="button-uucss-clear-all" title="clear all unusedcss cache">clear all</div>
+        <div id="button-uucss-clear-all" title="remove all RapidLoad optimizations">remove all</div>
     </div>
 
 </div>

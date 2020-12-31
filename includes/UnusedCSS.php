@@ -119,14 +119,15 @@ abstract class UnusedCSS {
 
 		$this->file_system = $wp_filesystem;
 
-		if ( ! $this->file_system || ! $this->file_system->is_writable( WP_CONTENT_DIR ) || ! $this->file_system->is_readable( WP_CONTENT_DIR ) ) {
+		if ( ! $this->file_system ) {
 			return false;
 		}
 
-		$this->set_base_dir();
+		if ( ! $this->init_base_dir() ) {
+			return false;
+		}
 
 		return true;
-
 	}
 
 
@@ -255,7 +256,18 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
-	    UnusedCSS_Settings::add_link( $url, null, "queued", [] );
+        $link_data = array(
+            'url' => $this->url,
+            'files' => null,
+            'status' => 'queued',
+            'meta' => null
+        );
+
+        $link_data = UnusedCSS_DB::transform_link($link_data, false);
+
+        UnusedCSS_DB::add_link($link_data);
+
+	    //UnusedCSS_Settings::add_link( $url, null, "queued", [] );
 
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
@@ -347,9 +359,23 @@ abstract class UnusedCSS {
     }
 
 
-    public function set_base_dir(){
-        $this->base_dir = $this->file_system->wp_content_dir()  . $this->base;
-    }
+	public function init_base_dir() {
+
+		$this->base_dir = $this->file_system->wp_content_dir() . $this->base;
+
+		if ( $this->file_system->exists( $this->base_dir ) ) {
+			return true;
+		}
+
+		// make dir if not exists
+		$this->file_system->mkdir( $this->base_dir );
+
+		if ( ! $this->file_system->is_writable( $this->base_dir ) || ! $this->file_system->is_readable( $this->base_dir ) ) {
+			return false;
+		}
+
+		return true;
+	}
 
 
     protected function cache_file_exists($file){

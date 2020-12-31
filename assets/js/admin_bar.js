@@ -12,11 +12,10 @@
                 nonce: window.uucss.nonce,
                 url: null,
             }).done(function (d) {
-                $this.text('cleared all')
+                $this.text('removed all')
                 $('#button-uucss-purge').css('display', 'inline-block')
                 $('#button-uucss-clear').hide()
-                $('.uucss-stats__size').text('Total Size : 0.00KB')
-
+                $('.uucss-stats__size').text('Size : 0.00KB')
             })
 
         });
@@ -35,7 +34,7 @@
                     post_id: uucss_admin_bar.uucss_post_id
                 }
             }).done(function (d) {
-                $this.text('clear')
+                $this.text('remove')
                 $this.hide();
                 $('#button-uucss-purge').css('display', 'inline-block')
             })
@@ -57,7 +56,7 @@
             }
 
             wp.ajax.post('uucss_purge_url', data).done(function (d) {
-                $this.text('generate')
+                $this.text('optimize')
                 $this.hide();
                 $('#button-uucss-clear').css('display', 'inline-block')
             }).fail(function () {

@@ -97,11 +97,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		) );
 		wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js?v=1.7', array(
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js', array(
 			'jquery',
 			'wp-util'
-		) );
-		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css?v=1.3' );
+		), UUCSS_VERSION );
+		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
 		$data = array(
 			'api' => UnusedCSS_Api::get_key(),
@@ -189,17 +189,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	function uucss_connect(){
 
-	    if(!isset($_REQUEST['license_key'])){
-            wp_send_json_error('License Key required');
-        }
+		if ( ! isset( $_REQUEST['license_key'] ) || empty( $_REQUEST['license_key'] ) ) {
+			wp_send_json_error( 'License Key required' );
+		}
 
-	    $license_key = $_REQUEST['license_key'];
+		$license_key = $_REQUEST['license_key'];
 
-        $uucss_api = new UnusedCSS_Api();
-        $uucss_api->apiKey = $license_key;
-        $results = $uucss_api->post( 'connect', [ 'url' => get_site_url(), 'type' => 'wordpress' ] );
+		$uucss_api         = new UnusedCSS_Api();
+		$uucss_api->apiKey = $license_key;
+		$results           = $uucss_api->post( 'connect', [ 'url' => get_site_url(), 'type' => 'wordpress' ] );
 
-        if($uucss_api->is_error($results)){
+		if ( $uucss_api->is_error( $results ) ) {
             wp_send_json_error('License Key verification fail');
         }
 
@@ -420,8 +420,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 			$needs_to_cleared = false;
 
-			$diffs        = array_diff_key( $old_value, $value );
-			$diffs_invert = array_diff_key( $value, $old_value );
+			$diffs = [];
+			$diffs_invert = [];
+
+			if ( $old_value && $value ) {
+				$diffs        = array_diff_key( $old_value, $value );
+				$diffs_invert = array_diff_key( $value, $old_value );
+			}
 
 			if ( isset( $diffs_invert['valid_domain'] ) ) {
 				unset( $diffs_invert['valid_domain'] );
