@@ -335,11 +335,6 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <h2><?php _e( 'Job Queue', 'uucss' ); ?></h2>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
                                     <?php _e( 'Queue', 'uucss' ); ?>
                                 </th>
                                 <td>
