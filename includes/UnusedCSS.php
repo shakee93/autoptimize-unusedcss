@@ -256,7 +256,18 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
-	    UnusedCSS_Settings::add_link( $url, null, "queued", [] );
+        $link_data = array(
+            'url' => $this->url,
+            'files' => null,
+            'status' => 'queued',
+            'meta' => null
+        );
+
+        $link_data = UnusedCSS_DB::transform_link($link_data, false);
+
+        UnusedCSS_DB::add_link($link_data);
+
+	    //UnusedCSS_Settings::add_link( $url, null, "queued", [] );
 
 	    if ( $this->async ) {
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [

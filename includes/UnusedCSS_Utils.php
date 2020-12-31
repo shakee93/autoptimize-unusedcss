@@ -259,4 +259,20 @@ trait UnusedCSS_Utils {
 			    'goto'   => UUCSS_ACTIVATION_URL
 		    ] );
     }
+
+    public static function serialize($data){
+        if(isset($data)){
+            return serialize($data);
+        }else{
+            return null;
+        }
+    }
+
+    public static function unserialize($data){
+        if(isset($data)){
+            return unserialize($data);
+        }else{
+            return null;
+        }
+    }
 }

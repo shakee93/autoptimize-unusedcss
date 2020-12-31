@@ -97,11 +97,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		) );
 		wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
 
-		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js?v=1.7', array(
+		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js', array(
 			'jquery',
 			'wp-util'
-		) );
-		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css?v=1.3' );
+		), UUCSS_VERSION );
+		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
 		$data = array(
 			'api' => UnusedCSS_Api::get_key(),
