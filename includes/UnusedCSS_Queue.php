@@ -72,11 +72,13 @@ class UnusedCSS_Queue
 
         }
 
+        global $uucss;
+
         if($posts->have_posts()){
             while ($posts->have_posts()){
                 $posts->the_post();
 
-                $url = get_the_permalink(get_the_ID());
+                $url = $uucss->transform_url(get_the_permalink(get_the_ID()));
 
                 if(!UnusedCSS_DB::link_exists($url)){
                     UnusedCSS_DB::add_link(array(
