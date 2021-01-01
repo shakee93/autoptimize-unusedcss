@@ -265,7 +265,7 @@ abstract class UnusedCSS {
 
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
-        $exist_link = UnusedCSS_DB::get_link($this->url); if(is_user_logged_in())
+        $exist_link = UnusedCSS_DB::get_link($this->url);
 
         if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3){
             return false;
