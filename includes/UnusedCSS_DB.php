@@ -450,7 +450,7 @@ class UnusedCSS_DB
 
                 foreach ( $links as $key => $value ) {
 
-                    if ( in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                    if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
                         $used[] = $item['uucss'];
                         break;
                     }
