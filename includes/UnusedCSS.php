@@ -257,7 +257,7 @@ abstract class UnusedCSS {
 	    }
 
         $link_data = array(
-            'url' => $this->url,
+            'url' => $url,
             'files' => null,
             'status' => 'queued',
             'meta' => null
@@ -273,16 +273,7 @@ abstract class UnusedCSS {
 
         UnusedCSS_DB::add_link($link_data);
 
-	    //UnusedCSS_Settings::add_link( $url, null, "queued", [] );
-
-	    if ( $this->async ) {
-		    /*wp_schedule_single_event( time(), 'uucss_async_queue', [
-			    'provider' => $this->provider,
-			    'url'      => $url,
-			    'args'     => $args
-		    ] );
-		    spawn_cron();*/
-	    } else {
+	    if (! $this->async ) {
 		    $this->init_async_store( $this->provider, $url, $args );
 	    }
 

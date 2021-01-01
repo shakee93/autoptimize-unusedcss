@@ -340,7 +340,7 @@
                                 <td>
                                     <?php
                                         $intervals = [
-                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 1],
+                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 4],
                                                 ['value' => 300, 'name' => '5 Miniute', 'max' => 4],
                                                 ['value' => 600, 'name' => '10 Miniute', 'max' => 8],
                                                 ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],

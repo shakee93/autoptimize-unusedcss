@@ -133,7 +133,7 @@
         var table = $('#uucss-history')
 
         table.on('init.dt', function () {
-            setInterval(refreshTable, 1000 * 15)
+            setInterval(refreshTable, 1000 * 5)
         })
 
         table.on('draw.dt', function () {
@@ -364,23 +364,33 @@
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-                        return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Remove</button>';
+
+                        return '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button><button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
                     },
                     createdCell: function (td, cellData, rowData, row, col) {
 
-                        tippy($(td).find('button')[0], {
+                        tippy($(td).find('button[data-uucss-clear]')[0], {
                             content: 'Remove Optimized files',
                             placement: 'top',
                             appendTo: "parent"
                         })
+
+                        tippy($(td).find('button[data-uucss-optimize]')[0], {
+                            content: 'Refresh files',
+                            placement: 'top',
+                            appendTo: "parent"
+                        })
+
                         $(td).find('button').data('index',row);
                         $(td).find('button').click(function (e) {
                             e.preventDefault()
+                            
+                            var is_clear = (typeof $(this).data().uucssClear === 'string')
+                            
+                            console.log(typeof $(this).data().uucssClear === 'string');
+
                             var _row = table.row($(this).parents('tr'));
-                            var data = {
-                                url: cellData,
-                                clear: true
-                            }
+
                             var parent = $(td).parent();
 
                             parent.addClass('loading')
@@ -390,15 +400,21 @@
                                 url: wp.ajax.settings.url + '?action=uucss_purge_url',
                                 data : {
                                     url: cellData,
-                                    clear: true,
+                                    clear: is_clear,
                                     nonce: uucss.nonce
                                 },
                                 success : function(response){
                                     if(response.success){
-                                        (_row.length>0) && _row.remove().draw()
+
+                                        if (is_clear) {
+                                            (_row.length>0) && _row.remove().draw();
+                                        }
+
                                     }else{
-                                        parent.removeClass('loading')
+
                                     }
+
+                                    parent.removeClass('loading')
                                 }
                             });
 

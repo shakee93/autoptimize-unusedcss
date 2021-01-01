@@ -382,20 +382,25 @@ table.dataTable thead th, table.dataTable thead td {
 
 #uucss-history .action button {
     position: relative;
-    font-size: 11px;
     border: none;
-    padding: 5px 5px 5px 22px;
     background: #F44336;
     color: white;
     border-radius: 4px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     cursor: pointer;
+    width: 25px;
+    height: 25px;
+    margin-right: 4px;
 }
 
-#uucss-history .action button span.dashicons.dashicons-no-alt {
+#uucss-history .action button[data-uucss-optimize] {
+    background: #8055b2;
+}
+
+#uucss-history .action button span.dashicons {
     position: absolute;
-    left: 1px;
-    top: 3px;
+    left: 2px;
+    top: 4px;
 }
 
 #uucss-history tr.loading {
