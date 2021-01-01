@@ -126,11 +126,7 @@ class UnusedCSS_DB
 
 			}else{
 
-				if($data['status'] != 'queued'){
-
-					$data['attempts'] = 0;
-
-				}
+                $data['attempts'] = 0;
 
 			}
 
