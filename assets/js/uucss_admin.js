@@ -389,7 +389,9 @@
                             
                             console.log(typeof $(this).data().uucssClear === 'string');
 
-                            var _row = table.row($(this).parents('tr'));
+                            var $row  = $(this).parents('tr');
+
+                            var _row = table.row($row);
 
                             var parent = $(td).parent();
 
@@ -408,6 +410,11 @@
 
                                         if (is_clear) {
                                             (_row.length>0) && _row.remove().draw();
+                                        }else{
+                                            var $status =  $row.find('span.status');
+                                            $status.removeClass('failed success processing');
+                                            $status.addClass('queued');
+                                            $status.text('queued');
                                         }
 
                                     }else{
