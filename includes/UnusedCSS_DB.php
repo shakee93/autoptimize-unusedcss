@@ -47,7 +47,7 @@ class UnusedCSS_DB
 		            self::seed();
 	            }
 
-	            update_option( self::$db_option, self::$db_version );
+                update_site_option( self::$db_option, self::$db_version );
 
 	            wp_send_json_success([
 		            'db_updated' => true
@@ -64,7 +64,7 @@ class UnusedCSS_DB
 
 	static function seed() {
 
-		$maps = get_option( UnusedCSS_Settings::$map_key );
+		$maps = get_site_option( UnusedCSS_Settings::$map_key );
 
 		if ( empty( $maps ) ) {
 			return;
@@ -187,7 +187,7 @@ class UnusedCSS_DB
 
 
     static function migrated(){
-        $option = get_option(self::$db_option);
+        $option = get_site_option(self::$db_option);
         return isset($option) && !empty($option );
     }
 
@@ -402,7 +402,7 @@ class UnusedCSS_DB
         	self::log($status);
         }
 
-        update_option( self::$db_option, self::$db_version );
+        update_site_option( self::$db_option, self::$db_version );
         delete_option(UnusedCSS_Settings::$map_key );
     }
 

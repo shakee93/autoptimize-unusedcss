@@ -272,7 +272,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		$options   = get_option( 'autoptimize_uucss_settings' );
+		$options   = get_site_option( 'autoptimize_uucss_settings' );
 
 	    if(!isset( $options['uucss_api_key_verified'] ) || $options['uucss_api_key_verified'] != '1'){
 	        return;
@@ -288,18 +288,18 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if($uucss_api->is_error($results)){
 			$options['valid_domain'] = false;
-			update_option('autoptimize_uucss_settings', $options);
+            update_site_option('autoptimize_uucss_settings', $options);
 			return;
 		}
 
 		if(!isset($options['valid_domain']) || !$options['valid_domain']){
 			$options['valid_domain'] = true;
-			update_option('autoptimize_uucss_settings', $options);
+            update_site_option('autoptimize_uucss_settings', $options);
 		}
     }
 
 	public static function is_domain_verified(){
-        $options = get_option( 'autoptimize_uucss_settings' );
+        $options = get_site_option( 'autoptimize_uucss_settings' );
         return  $options['valid_domain'];
     }
 
@@ -358,13 +358,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		$options = get_option( 'autoptimize_uucss_settings' );
+		$options = get_site_option( 'autoptimize_uucss_settings' );
 
 		unset( $options['uucss_api_key_verified'] );
 		unset( $options['uucss_api_key'] );
 		unset( $options['whitelist_packs'] );
 
-		update_option( 'autoptimize_uucss_settings', $options );
+        update_site_option( 'autoptimize_uucss_settings', $options );
 
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
 		delete_site_option( $cache_key );
@@ -390,7 +390,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function ajax_deactivate() {
 
-		$options = get_option( 'autoptimize_uucss_settings' );
+		$options = get_site_option( 'autoptimize_uucss_settings' );
 
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
 		delete_site_option( $cache_key );
@@ -408,7 +408,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		unset( $options['uucss_api_key'] );
 		unset( $options['whitelist_packs'] );
 
-		update_option( 'autoptimize_uucss_settings', $options );
+        update_site_option( 'autoptimize_uucss_settings', $options );
 
 		wp_send_json_success( true );
 	}
