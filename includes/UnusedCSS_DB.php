@@ -9,9 +9,31 @@ class UnusedCSS_DB
     static $db_version = "1.0";
     static $db_option = "rapidload_migration";
 
+    static function uninitialize_site($old_site){
 
+        if(!isset($old_site)){
+            return;
+        }
+
+        self::drop();
+    }
+
+    static function initialize_site($new_site, $args){
+
+        if(!isset($new_site)){
+           return;
+        }
+
+        self::create_tables($new_site->blog_id . '_');
+
+        update_site_option( self::$db_option, self::$db_version );
+    }
 
     static function check_db_updates(){
+
+        add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
+
+        add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
 
         if ( get_site_option( self::$db_option ) != self::$db_version ) {
             $notice = [
@@ -98,7 +120,7 @@ class UnusedCSS_DB
 		}
 
 		// remove old option after seeding completed
-		delete_option( UnusedCSS_Settings::$map_key );
+		delete_site_option( UnusedCSS_Settings::$map_key );
 	}
 
 
@@ -403,7 +425,7 @@ class UnusedCSS_DB
         }
 
         update_site_option( self::$db_option, self::$db_version );
-        delete_option(UnusedCSS_Settings::$map_key );
+        delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
 
@@ -449,10 +471,10 @@ class UnusedCSS_DB
 
 
 
-    static function create_tables(){
+    static function create_tables($blog_id = ''){
         global $wpdb;
 
-        $table_name = $wpdb->prefix . 'rapidload_uucss_job';
+        $table_name = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
 
         $charset_collate = $wpdb->get_charset_collate();
 
@@ -492,7 +514,7 @@ class UnusedCSS_DB
 
         if(empty($wpdb->last_error)){
 
-           delete_option(self::$db_option);
+           delete_site_option(self::$db_option);
 
 		}
 

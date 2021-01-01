@@ -213,7 +213,7 @@ class UnusedCSS_Settings {
 
 		}else{
 
-            delete_option( self::$map_key );
+            delete_site_option( self::$map_key );
 
         }
 

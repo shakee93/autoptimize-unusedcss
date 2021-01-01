@@ -19,7 +19,7 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		self::activate();
 
-//		delete_option( 'autoptimize_uucss_settings' );
+//		delete_site_option( 'autoptimize_uucss_settings' );
 
 		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
 		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
@@ -112,7 +112,7 @@ class UnusedCSS_Autoptimize_Onboard {
 	         self::on_board_completed() ) {
 		    wp_redirect( admin_url( 'options-general.php?page=uucss' ) );
 	    } else if ( get_site_option( 'uucss_do_activation_redirect', false ) ) {
-		    delete_option( 'uucss_do_activation_redirect' );
+		    delete_site_option( 'uucss_do_activation_redirect' );
 		    wp_redirect( '/wp-admin/options-general.php?page=uucss-onboarding' );
 	    }
     }
