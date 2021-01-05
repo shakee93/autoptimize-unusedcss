@@ -746,6 +746,7 @@ input#uucss-pack-suggest {
 }
 
 .uucss-warnings .warning-list{
+    word-break: break-all;
     border-top: 1px solid #ededed;
     padding: 5px 10px 0;
     margin-right: -10px;

@@ -197,17 +197,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if ( $dom ) {
 			$inject->parsed_html = true;
 
-
-			// TODO : creates unnecessary jobs.
-//		    if ( $head = $dom->find( 'head', 0 ) ) {
-//
-//			    // dont inject if we found content is being updated
-//			    if ( UnusedCSS_Settings::content_hash( $this->url, md5( $head->innertext ) ) ) {
-//				    return $dom;
-//			    }
-//
-//		    }
-
 			$dom->find( 'html' )[0]->uucss = true;
 
 
@@ -226,10 +215,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
+					    $uucss_file = $data['files'][ $key ]['uucss'];
 
 					    array_push( $inject->found_css_cache_files, $link );
 
-					    $newLink = $this->get_cached_file( $data['files'][ $key ]['uucss'], autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
+					    $newLink = $this->get_cached_file( $uucss_file, autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
 
 					    array_push( $inject->injected_css_files, $newLink );
 
@@ -244,10 +234,34 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    $sheet->href  = $newLink;
 
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
-							    $this->inline_sheet( $sheet, $data['files'][ $key ]['uucss'] );
+							    $this->inline_sheet( $sheet, $uucss_file );
 						    }
 
 					    }
+
+				    }
+				    else {
+
+					    $data['meta']['warnings'][] = [
+						    "file" => $link,
+						    "message" => "Could not find file"
+					    ];
+
+					    $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
+
+						    $hash = md5( json_encode( $i ) );
+
+						    if ( !in_array( $hash, array_column( $carry, 'hash' ) ) ) {
+							    $carry[] = [
+								    'hash' => md5( json_encode( $i ) ),
+								    'value' => (object) $i
+							    ];
+						    }
+
+						    return $carry;
+					    }, []), 'value');
+
+					    UnusedCSS_Settings::add_link($data['url'], $data['files'], 'success', $data['meta']);
 
 				    }
 			    }
