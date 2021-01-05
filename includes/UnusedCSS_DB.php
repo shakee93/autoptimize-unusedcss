@@ -243,12 +243,12 @@ class UnusedCSS_DB
 
         if($get){
 
-            $data['files'] = self::unserialize($link->files);
+            $data['files'] = isset($link->files) ? unserialize($link->files) : null;
             $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
-            $data['meta']['stats'] = self::unserialize($link->stats);
-            $data['meta']['review'] = self::unserialize($link->review);
-            $data['meta']['warnings'] = self::unserialize($link->warnings);
-            $data['meta']['error'] = self::unserialize($link->error);
+            $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
+            $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
+            $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : null;
+            $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
             $data['status'] = isset( $link->status ) ? $link->status : null;
             $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
             $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
