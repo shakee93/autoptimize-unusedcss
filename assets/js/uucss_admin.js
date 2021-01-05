@@ -412,7 +412,7 @@
                                         }else{
                                             var $status =  $row.find('span.status');
                                             $status.removeClass('failed success processing');
-                                            $status.addClass('queued');
+                                            $status.addClass('queued refresh');
                                             $status.text('queued');
                                         }
 
