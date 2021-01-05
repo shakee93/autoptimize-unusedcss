@@ -263,14 +263,14 @@ class UnusedCSS_DB
 
             if(isset($link['meta'])){
 
-                $data['stats'] = self::serialize($link['meta']['stats']);
-                $data['warnings'] = self::serialize($link['meta']['warnings']);
-                $data['review'] = self::serialize($link['meta']['review']);
-                $data['error'] = self::serialize($link['meta']['error']);
+                $data['stats'] = isset($link['meta']['stats']) ? serialize($link['meta']['stats']) : null;
+                $data['warnings'] = isset($link['meta']['warnings']) ? serialize($link['meta']['warnings']) : null;
+                $data['review'] = isset($link['meta']['review']) ? serialize($link['meta']['review']) : null;
+                $data['error'] = isset($link['meta']['error']) ? serialize($link['meta']['error']) : null;
 
             }
 
-            $data['files'] = self::serialize($link['files']);
+            $data['files'] = isset($link['files']) ? serialize($link['files']) : null;
             $data['status'] = $link['status'];
 
         }
