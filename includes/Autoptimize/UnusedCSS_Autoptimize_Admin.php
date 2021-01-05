@@ -248,11 +248,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	        return false;
         }
 
-	    if ( is_multisite() ) {
+	    /*if ( is_multisite() ) {
 		    self::add_admin_notice( "UnusedCSS not supported for multisite" );
 
 		    return false;
-	    }
+	    }*/
 
 	    return true;
     }

@@ -361,8 +361,9 @@
 
                             $.ajax({
                                 method : 'POST',
-                                url: wp.ajax.settings.url + '?action=uucss_purge_url',
+                                url: uucss.ajax_url,
                                 data : {
+                                    action: 'uucss_purge_url',
                                     url: cellData,
                                     clear: true,
                                     nonce: uucss.nonce
