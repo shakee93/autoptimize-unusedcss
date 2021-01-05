@@ -35,7 +35,7 @@ class UnusedCSS_DB
 
         add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
 
-        if ( get_site_option( self::$db_option ) != self::$db_version ) {
+        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
             $notice = [
 	            'action'  => 'rapidload-db-update',
 	            'title'   => 'RapidLoad Power Up',
@@ -54,7 +54,7 @@ class UnusedCSS_DB
 
 
 	static function update_db(){
-        if ( get_site_option( self::$db_option ) != self::$db_version ) {
+        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
 
             try{
 	            $status = self::create_tables();
@@ -65,7 +65,7 @@ class UnusedCSS_DB
 		            ));
 	            }
 
-	            if(!get_site_option(self::$db_option)){
+	            if(!UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option)){
 		            self::seed();
 	            }
 
@@ -86,7 +86,7 @@ class UnusedCSS_DB
 
 	static function seed() {
 
-		$maps = get_site_option( UnusedCSS_Settings::$map_key );
+		$maps = UnusedCSS_Autoptimize_Admin::get_site_option( UnusedCSS_Settings::$map_key );
 
 		if ( empty( $maps ) ) {
 			return;
@@ -209,7 +209,7 @@ class UnusedCSS_DB
 
 
     static function migrated(){
-        $option = get_site_option(self::$db_option);
+        $option = UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option);
         return isset($option) && !empty($option );
     }
 
