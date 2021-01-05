@@ -26,7 +26,7 @@ class UnusedCSS_DB
 
         self::create_tables($new_site->blog_id . '_');
 
-        update_site_option( self::$db_option, self::$db_version );
+        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
     }
 
     static function check_db_updates(){
@@ -69,7 +69,7 @@ class UnusedCSS_DB
 		            self::seed();
 	            }
 
-                update_site_option( self::$db_option, self::$db_version );
+                UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
 
 	            wp_send_json_success([
 		            'db_updated' => true
@@ -120,7 +120,7 @@ class UnusedCSS_DB
 		}
 
 		// remove old option after seeding completed
-		delete_site_option( UnusedCSS_Settings::$map_key );
+        UnusedCSS_Autoptimize_Admin::delete_site_option( UnusedCSS_Settings::$map_key );
 	}
 
 
@@ -424,8 +424,8 @@ class UnusedCSS_DB
         	self::log($status);
         }
 
-        update_site_option( self::$db_option, self::$db_version );
-        delete_site_option(UnusedCSS_Settings::$map_key );
+        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+        UnusedCSS_Autoptimize_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
 
@@ -514,7 +514,7 @@ class UnusedCSS_DB
 
         if(empty($wpdb->last_error)){
 
-           delete_site_option(self::$db_option);
+            UnusedCSS_Autoptimize_Admin::delete_site_option(self::$db_option);
 
 		}
 

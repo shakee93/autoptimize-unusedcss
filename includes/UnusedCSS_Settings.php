@@ -15,7 +15,7 @@ class UnusedCSS_Settings {
 
         }
 
-		return get_site_option( self::$map_key );
+		return UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 	}
 
 	public static function add_link( $link, $files = null, $status = 'success', $meta = null ) {
@@ -41,7 +41,7 @@ class UnusedCSS_Settings {
 
         }else{
 
-            $map = get_site_option( self::$map_key );
+            $map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
             $map[ md5( $link ) ] = [
                 "url"    => $link,
@@ -52,7 +52,7 @@ class UnusedCSS_Settings {
                 "time"   => current_time( 'timestamp' )
             ];
 
-            update_site_option( self::$map_key, $map );
+            UnusedCSS_Autoptimize_Admin::update_site_option( self::$map_key, $map );
 
         }
 
@@ -61,7 +61,7 @@ class UnusedCSS_Settings {
 
 	public static function content_hash_changed( $link, $hash ) {
 
-		$map = get_site_option( self::$map_key );
+		$map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 		if ( isset( $map[ md5( $link ) ]['hash'] ) ) {
 
@@ -75,7 +75,7 @@ class UnusedCSS_Settings {
 
 
 	public static function content_hash( $link, $hash ) {
-		$map     = get_site_option( self::$map_key );
+		$map     = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 		$changed = false;
 
 		if ( isset( $map[ md5( $link ) ] ) ) {
@@ -89,7 +89,7 @@ class UnusedCSS_Settings {
 
 			// content hash
 			$map[ md5( $link ) ]["hash"] = $hash;
-            update_site_option( self::$map_key, $map );
+            UnusedCSS_Autoptimize_Admin::update_site_option( self::$map_key, $map );
 
 		}
 
@@ -104,7 +104,7 @@ class UnusedCSS_Settings {
 
         }
 
-		$map = get_site_option( self::$map_key );
+		$map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 		if ( $map && isset( $map[ md5( $link ) ] ) && $map[ md5( $link ) ]['status'] == 'success' ) {
 
@@ -124,7 +124,7 @@ class UnusedCSS_Settings {
 
         }
 
-		if ( $map = (array) get_site_option( self::$map_key ) ) {
+		if ( $map = (array) UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key ) ) {
 
 			if ( isset( $map[0] ) && $map[0] === false ) {
 				return false;
@@ -148,7 +148,7 @@ class UnusedCSS_Settings {
 
         }
 
-		$map = get_site_option( self::$map_key );
+		$map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 		if ( $map && isset( $map[ md5( $link ) ] ) && $map[ md5( $link ) ]['status'] == 'success' ) {
 
@@ -169,7 +169,7 @@ class UnusedCSS_Settings {
 
         }
 
-		$map = get_site_option( self::$map_key );
+		$map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 		if ( $map && isset( $map[ md5( $link ) ] ) ) {
 
@@ -189,11 +189,11 @@ class UnusedCSS_Settings {
 
         }else{
 
-		    $map = get_site_option( self::$map_key );
+		    $map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 		    unset( $map[ md5( $link ) ] );
 
-            update_site_option( self::$map_key, $map );
+            UnusedCSS_Autoptimize_Admin::update_site_option( self::$map_key, $map );
 	    }
 
 
@@ -213,7 +213,7 @@ class UnusedCSS_Settings {
 
 		}else{
 
-            delete_site_option( self::$map_key );
+            UnusedCSS_Autoptimize_Admin::delete_site_option( self::$map_key );
 
         }
 
@@ -227,7 +227,7 @@ class UnusedCSS_Settings {
 
 		}else{
 
-			$map = get_site_option( self::$map_key );
+			$map = UnusedCSS_Autoptimize_Admin::get_site_option( self::$map_key );
 
 			$files = self::get_link( $link );
 

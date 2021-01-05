@@ -19,7 +19,7 @@ class UnusedCSS_Autoptimize_Onboard {
 
 		self::activate();
 
-//		delete_site_option( 'autoptimize_uucss_settings' );
+//		UnusedCSS_Autoptimize_Admin::delete_site_option( 'autoptimize_uucss_settings' );
 
 		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
 		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
@@ -112,7 +112,7 @@ class UnusedCSS_Autoptimize_Onboard {
 	         self::on_board_completed() ) {
 		    wp_redirect( admin_url( 'options-general.php?page=uucss' ) );
 	    } else if ( get_site_option( 'uucss_do_activation_redirect', false ) ) {
-		    delete_site_option( 'uucss_do_activation_redirect' );
+		    UnusedCSS_Autoptimize_Admin::delete_site_option( 'uucss_do_activation_redirect' );
 		    wp_redirect( '/wp-admin/options-general.php?page=uucss-onboarding' );
 	    }
     }
@@ -192,7 +192,7 @@ class UnusedCSS_Autoptimize_Onboard {
 		$options['uucss_api_key_verified'] = 1;
 		$options['uucss_api_key']          = $token;
 
-        update_site_option( 'autoptimize_uucss_settings', $options );
+        UnusedCSS_Autoptimize_Admin::update_site_option( 'autoptimize_uucss_settings', $options );
 
 		$data        = UnusedCSS_Autoptimize_Admin::suggest_whitelist_packs();
 		$white_packs = $data->data;
@@ -202,7 +202,7 @@ class UnusedCSS_Autoptimize_Onboard {
 			$options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
 		}
 
-        update_site_option( 'autoptimize_uucss_settings', $options );
+        UnusedCSS_Autoptimize_Admin::update_site_option( 'autoptimize_uucss_settings', $options );
 
 		self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
 	}

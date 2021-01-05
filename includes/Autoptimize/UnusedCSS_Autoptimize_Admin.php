@@ -223,7 +223,42 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public static function fetch_options()
     {
+        if(is_multisite()){
+
+            return get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
+
+        }
 	    return get_site_option( 'autoptimize_uucss_settings', false );
+    }
+
+    public static function get_site_option($name)
+    {
+        if(is_multisite()){
+
+            return get_blog_option(get_current_blog_id(), $name, false);
+
+        }
+        return get_site_option( $name, false );
+    }
+
+    public static function update_site_option($name, $value){
+
+        if(is_multisite()){
+
+            return update_blog_option(get_current_blog_id(), $name, $value);
+
+        }
+        return update_site_option($name, $value);
+    }
+
+    public static function delete_site_option($name){
+
+        if(is_multisite()){
+
+            return delete_blog_option(get_current_blog_id(), $name);
+
+        }
+        return delete_site_option($name);
     }
 
 
@@ -288,13 +323,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if($uucss_api->is_error($results)){
 			$options['valid_domain'] = false;
-            update_site_option('autoptimize_uucss_settings', $options);
+            UnusedCSS_Autoptimize_Admin::update_site_option('autoptimize_uucss_settings', $options);
 			return;
 		}
 
 		if(!isset($options['valid_domain']) || !$options['valid_domain']){
 			$options['valid_domain'] = true;
-            update_site_option('autoptimize_uucss_settings', $options);
+            UnusedCSS_Autoptimize_Admin::update_site_option('autoptimize_uucss_settings', $options);
 		}
     }
 
@@ -364,10 +399,10 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		unset( $options['uucss_api_key'] );
 		unset( $options['whitelist_packs'] );
 
-        update_site_option( 'autoptimize_uucss_settings', $options );
+        UnusedCSS_Autoptimize_Admin::update_site_option( 'autoptimize_uucss_settings', $options );
 
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
-		delete_site_option( $cache_key );
+        UnusedCSS_Autoptimize_Admin::delete_site_option( $cache_key );
 
 		$this->uucss->vanish();
 
@@ -393,7 +428,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$options = get_site_option( 'autoptimize_uucss_settings' );
 
 		$cache_key = 'pand-' . md5( 'first-uucss-job' );
-		delete_site_option( $cache_key );
+        UnusedCSS_Autoptimize_Admin::delete_site_option( $cache_key );
 
 		$this->uucss->vanish();
 
@@ -408,7 +443,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		unset( $options['uucss_api_key'] );
 		unset( $options['whitelist_packs'] );
 
-        update_site_option( 'autoptimize_uucss_settings', $options );
+        UnusedCSS_Autoptimize_Admin::update_site_option( 'autoptimize_uucss_settings', $options );
 
 		wp_send_json_success( true );
 	}
