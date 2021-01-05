@@ -257,7 +257,7 @@ abstract class UnusedCSS {
 	    }
 
         $link_data = array(
-            'url' => $this->url,
+            'url' => $url,
             'files' => null,
             'status' => 'queued',
             'meta' => null
@@ -265,18 +265,15 @@ abstract class UnusedCSS {
 
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
+        $exist_link = UnusedCSS_DB::get_link($this->url);
+
+        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3){
+            return false;
+        }
+
         UnusedCSS_DB::add_link($link_data);
 
-	    //UnusedCSS_Settings::add_link( $url, null, "queued", [] );
-
-	    if ( $this->async ) {
-		    wp_schedule_single_event( time(), 'uucss_async_queue', [
-			    'provider' => $this->provider,
-			    'url'      => $url,
-			    'args'     => $args
-		    ] );
-		    spawn_cron();
-	    } else {
+	    if (! $this->async ) {
 		    $this->init_async_store( $this->provider, $url, $args );
 	    }
 
@@ -320,6 +317,10 @@ abstract class UnusedCSS {
 		if ( ! empty( $post_options['safelist'] ) ) {
 			$safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
 		}
+
+        if ( ! empty( $post_options['blocklist'] ) ) {
+            $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
+        }
 
 		return [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),

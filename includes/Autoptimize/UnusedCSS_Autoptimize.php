@@ -53,6 +53,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	     */
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
+	    new UnusedCSS_Queue();
     }
 
 

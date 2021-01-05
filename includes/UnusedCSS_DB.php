@@ -126,11 +126,7 @@ class UnusedCSS_DB
 
 			}else{
 
-				if($data['status'] != 'queued'){
-
-					$data['attempts'] = 0;
-
-				}
+                $data['attempts'] = 0;
 
 			}
 
@@ -184,6 +180,35 @@ class UnusedCSS_DB
 	    }
     }
 
+    static function get_links_by_status($status, $limit = 1){
+        global $wpdb;
+
+        $status = implode(",", $status);
+
+        $status = str_replace('"', '', $status);
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY created_at DESC LIMIT " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::log($error);
+        }
+
+        $transformed_links = array();
+
+        if(!empty($links)){
+
+            foreach ($links as $link){
+
+                array_push($transformed_links, $link);
+
+            }
+
+        }
+
+        return $transformed_links;
+    }
 
 
     static function migrated(){
@@ -425,7 +450,7 @@ class UnusedCSS_DB
 
                 foreach ( $links as $key => $value ) {
 
-                    if ( in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                    if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
                         $used[] = $item['uucss'];
                         break;
                     }

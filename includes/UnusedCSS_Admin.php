@@ -25,7 +25,8 @@ abstract class UnusedCSS_Admin {
      */
     public static $page_options = [
 	    'safelist',
-	    'exclude'
+	    'exclude',
+	    'blocklist'
     ];
 
     /**
@@ -202,9 +203,8 @@ abstract class UnusedCSS_Admin {
 
 	    $url = esc_url_raw( $_POST['url'] );
 
-	    if ( isset( $_POST['clear'] ) ) {
+	    if ( isset( $_POST['clear'] ) && boolval($_POST['clear'] == 'true') ) {
 		    wp_send_json_success( $this->uucss->clear_cache( $url, $args ) );
-
 		    return;
 	    }
 

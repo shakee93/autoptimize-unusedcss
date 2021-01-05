@@ -132,6 +132,27 @@
 
         var table = $('#uucss-history')
 
+        table.on('init.dt', function () {
+            setInterval(refreshTable, 1000 * 5)
+        })
+
+        table.on('draw.dt', function () {
+
+            var element = '<div id="uucss-auto-refresh">' +
+                '<input type="checkbox" id="uucss_auto_refresh_frontend" name="autoptimize_uucss_settings[uucss_auto_refresh_frontend]" value="1">' +
+                '<label for="uucss_auto_refresh_frontend"> Auto Refresh</label><br>' +
+                '<div>';
+
+            $('#uucss-history_info').append(element);
+            $('#uucss_auto_refresh_frontend').change(function () {
+                $('#uucss_auto_refresh_frontend-hidden').val($(this).is(':checked') ? 1 : 0);
+                auto_refresh = $(this).is(':checked');
+            });
+            $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
+        })
+
+        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
+
         table = table.DataTable({
             ajax: {
                 url: wp.ajax.settings.url + '?action=uucss_data',
@@ -184,7 +205,11 @@
                     width: '40px',
                     className: 'dt-body-center dt-head-center',
                     createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).wrapInner($('<span class="status"></span>').addClass(cellData))
+                        var $element = $('<span class="status"></span>')
+                        if(cellData === 'queued' || cellData === 'processing'){
+                            $element.addClass('refresh');
+                        }
+                        $(td).wrapInner($element.addClass(cellData))
                     }
                 },
                 {
@@ -206,7 +231,7 @@
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
-                        }else if(row.status === 'queued'){
+                        }else if(row.status === 'queued' || row.status === 'processing'){
                             return '-';
                         }
 
@@ -338,23 +363,35 @@
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-                        return '<button data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span>Remove</button>';
+
+                        return '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button><button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
                     },
                     createdCell: function (td, cellData, rowData, row, col) {
 
-                        tippy($(td).find('button')[0], {
+                        tippy($(td).find('button[data-uucss-clear]')[0], {
                             content: 'Remove Optimized files',
                             placement: 'top',
                             appendTo: "parent"
                         })
+
+                        tippy($(td).find('button[data-uucss-optimize]')[0], {
+                            content: 'Refresh files',
+                            placement: 'top',
+                            appendTo: "parent"
+                        })
+
                         $(td).find('button').data('index',row);
                         $(td).find('button').click(function (e) {
                             e.preventDefault()
-                            var _row = table.row($(this).parents('tr'));
-                            var data = {
-                                url: cellData,
-                                clear: true
-                            }
+                            
+                            var is_clear = (typeof $(this).data().uucssClear === 'string')
+                            
+                            console.log(typeof $(this).data().uucssClear === 'string');
+
+                            var $row  = $(this).parents('tr');
+
+                            var _row = table.row($row);
+
                             var parent = $(td).parent();
 
                             parent.addClass('loading')
@@ -364,15 +401,26 @@
                                 url: wp.ajax.settings.url + '?action=uucss_purge_url',
                                 data : {
                                     url: cellData,
-                                    clear: true,
+                                    clear: is_clear,
                                     nonce: uucss.nonce
                                 },
                                 success : function(response){
                                     if(response.success){
-                                        (_row.length>0) && _row.remove().draw()
+
+                                        if (is_clear) {
+                                            (_row.length>0) && _row.remove().draw();
+                                        }else{
+                                            var $status =  $row.find('span.status');
+                                            $status.removeClass('failed success processing');
+                                            $status.addClass('queued');
+                                            $status.text('queued');
+                                        }
+
                                     }else{
-                                        parent.removeClass('loading')
+
                                     }
+
+                                    parent.removeClass('loading')
                                 }
                             });
 
@@ -381,6 +429,55 @@
                 },
             ]
         });
+
+        function refreshTable(){
+            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
+
+            if(!$queuedJobs.length || !auto_refresh){
+                return;
+            }
+
+            $.ajax({
+                url: wp.ajax.settings.url + '?action=uucss_data',
+                data: {
+                    nonce : uucss.nonce
+                },
+                success: function (response) {
+
+                    if (!response.success) {
+                        return;
+                    }
+
+                    var results = Object.values(response.data).sort(function (a, b) {
+                        return b.time - a.time
+                    });
+
+                    table.clear();
+                    table.rows.add(results);
+                    table.draw();
+                }
+            })
+        }
+
+        function validateJobPerQue(value, reset) {
+
+            var max = $('#uucss_queue_interval option[value="'+ value +'"]').data('max');
+
+            var options = $('#uucss_jobs_per_queue option');
+
+            $.each(options, function (element) {
+                $(options[element]).attr('disabled', $(options[element]).val() > max)
+            });
+           if(reset){
+               $('#uucss_jobs_per_queue').val($(options[0]).val());
+           }
+        }
+
+        $('#uucss_queue_interval').change(function () {
+             validateJobPerQue($(this).val(), true)
+        });
+
+        validateJobPerQue($('#uucss_queue_interval').val(), false);
 
         updateLicense();
 
@@ -461,6 +558,15 @@
                 })
             }
         });
+
+        $('#queue-posts-type').click(function () {
+            wp.ajax.post('uucss_queue',{ post_type : $('#requeue_post_type').val() }).then(function (i) {
+
+                alert(i);
+
+            })
+        });
+
     });
 
 

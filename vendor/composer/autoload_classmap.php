@@ -14,6 +14,7 @@ return array(
     'UnusedCSS_Autoptimize_Onboard' => $baseDir . '/includes/Autoptimize/UnusedCSS_Autoptimize_Onboard.php',
     'UnusedCSS_DB' => $baseDir . '/includes/UnusedCSS_DB.php',
     'UnusedCSS_Feedback' => $baseDir . '/includes/Utils/Feedback/UnusedCSS_Feedback.php',
+    'UnusedCSS_Queue' => $baseDir . '/includes/UnusedCSS_Queue.php',
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',

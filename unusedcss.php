@@ -24,9 +24,13 @@ register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_DB::initialize' );
 
 register_uninstall_hook(UUCSS_PLUGIN_FILE, 'UnusedCSS_DB::drop');
 
+global $uucss;
+
 add_action( 'plugins_loaded', function () {
 
-	new UnusedCSS_Autoptimize();
+    global $uucss;
+
+    $uucss = new UnusedCSS_Autoptimize();
 
 } );
 
