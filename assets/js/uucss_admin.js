@@ -416,10 +416,10 @@
                                             $status.text('queued');
                                         }
 
-                                    }else{
-
                                     }
 
+                                },
+                                complete:function () {
                                     parent.removeClass('loading')
                                 }
                             });
