@@ -9,11 +9,33 @@ class UnusedCSS_DB
     static $db_version = "1.0";
     static $db_option = "rapidload_migration";
 
+    static function uninitialize_site($old_site){
 
+        if(!isset($old_site)){
+            return;
+        }
+
+        self::drop();
+    }
+
+    static function initialize_site($new_site, $args){
+
+        if(!isset($new_site)){
+           return;
+        }
+
+        self::create_tables($new_site->blog_id . '_');
+
+        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+    }
 
     static function check_db_updates(){
 
-        if ( get_site_option( self::$db_option ) != self::$db_version ) {
+        add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
+
+        add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
+
+        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
             $notice = [
 	            'action'  => 'rapidload-db-update',
 	            'title'   => 'RapidLoad Power Up',
@@ -32,7 +54,7 @@ class UnusedCSS_DB
 
 
 	static function update_db(){
-        if ( get_site_option( self::$db_option ) != self::$db_version ) {
+        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
 
             try{
 	            $status = self::create_tables();
@@ -43,11 +65,11 @@ class UnusedCSS_DB
 		            ));
 	            }
 
-	            if(!get_site_option(self::$db_option)){
+	            if(!UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option)){
 		            self::seed();
 	            }
 
-	            update_option( self::$db_option, self::$db_version );
+                UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
 
 	            wp_send_json_success([
 		            'db_updated' => true
@@ -64,7 +86,7 @@ class UnusedCSS_DB
 
 	static function seed() {
 
-		$maps = get_option( UnusedCSS_Settings::$map_key );
+		$maps = UnusedCSS_Autoptimize_Admin::get_site_option( UnusedCSS_Settings::$map_key );
 
 		if ( empty( $maps ) ) {
 			return;
@@ -98,7 +120,7 @@ class UnusedCSS_DB
 		}
 
 		// remove old option after seeding completed
-		delete_option( UnusedCSS_Settings::$map_key );
+        UnusedCSS_Autoptimize_Admin::delete_site_option( UnusedCSS_Settings::$map_key );
 	}
 
 
@@ -212,7 +234,7 @@ class UnusedCSS_DB
 
 
     static function migrated(){
-        $option = get_option(self::$db_option);
+        $option = UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option);
         return isset($option) && !empty($option );
     }
 
@@ -427,8 +449,8 @@ class UnusedCSS_DB
         	self::log($status);
         }
 
-        update_option( self::$db_option, self::$db_version );
-        delete_option(UnusedCSS_Settings::$map_key );
+        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+        UnusedCSS_Autoptimize_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
 
@@ -474,10 +496,10 @@ class UnusedCSS_DB
 
 
 
-    static function create_tables(){
+    static function create_tables($blog_id = ''){
         global $wpdb;
 
-        $table_name = $wpdb->prefix . 'rapidload_uucss_job';
+        $table_name = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
 
         $charset_collate = $wpdb->get_charset_collate();
 
@@ -517,7 +539,7 @@ class UnusedCSS_DB
 
         if(empty($wpdb->last_error)){
 
-           delete_option(self::$db_option);
+            UnusedCSS_Autoptimize_Admin::delete_site_option(self::$db_option);
 
 		}
 
