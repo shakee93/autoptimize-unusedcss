@@ -370,9 +370,11 @@
                                 success : function(response){
                                     if(response.success){
                                         (_row.length>0) && _row.remove().draw()
-                                    }else{
-                                        parent.removeClass('loading')
                                     }
+                                },
+                                complete:function () {
+                                    if(parent.length)
+                                    parent.removeClass('loading')
                                 }
                             });
 
