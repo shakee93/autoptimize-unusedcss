@@ -196,7 +196,7 @@
             searching: true,
             pagingType: "simple",
             bLengthChange: false,
-            tfoot: false,
+            tfoot: true,
             bSort: false,
             columns: [
                 {
@@ -427,7 +427,19 @@
                         });
                     }
                 },
-            ]
+            ],
+            initComplete: function (x,y) {
+                var select = $('<label class="status-filter">Status:<select class="status"><option value="">All</option><option value="success">Success</option><option value="failed">Failed</option><option value="queued">Queued</option><option value="processing">Processing</option></select></label>')
+
+                var tableColumns = this.api().columns();
+
+                $(select).appendTo($('#uucss-history_filter'));
+
+                $('#uucss-history_filter select.status').on('change', function(){
+                    tableColumns.column(0).search( $(this).val() ? '^'+$(this).val()+'$' : '', true, false )
+                        .draw();
+                })
+            }
         });
 
         function refreshTable(){

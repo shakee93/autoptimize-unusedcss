@@ -46,6 +46,10 @@ light
     width: 250px;
 }
 
+#uucss-history_filter label.status-filter, #uucss-history_filter select{
+    margin-left: 0.5em;
+}
+
 #uucss-options .example span {
     display: inline-block;
     margin-bottom: 4px;
