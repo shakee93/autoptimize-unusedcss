@@ -27,7 +27,7 @@ class UnusedCSS_Queue
             self::$job_count = (int) $options['uucss_jobs_per_queue'];
         }
 
-        add_action('uucss_cron_run_cache', [$this, 'cache'], 2 , 1);
+        add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);
 
         add_filter( 'cron_schedules', [$this, 'uucss_process_queue_schedule'] );
 
@@ -50,11 +50,11 @@ class UnusedCSS_Queue
 
     function queue_posts(){
 
-        $post_type = $_REQUEST['post_type'];
+    	if(!isset($_REQUEST['post_type'])) {
+		    wp_send_json_error('post type not found');
+	    }
 
-        if(!isset($post_type)){
-            wp_send_json_error('post type not found');
-        }
+        $post_type = sanitize_text_field($_REQUEST['post_type']);
 
         $posts = null;
 
@@ -102,8 +102,6 @@ class UnusedCSS_Queue
 
     function uucss_process_queue(){
 
-        global $uucss;
-
         $links = UnusedCSS_DB::get_links_by_status(["'queued'"], self::$job_count);
 
         if(!empty($links)){
@@ -114,7 +112,7 @@ class UnusedCSS_Queue
 
                 if($this->async){
 
-                    wp_schedule_single_event( time(), 'uucss_cron_run_cache', [
+                    wp_schedule_single_event( time(), 'uucss_cron_queue', [
                         'url'      => $link->url,
                     ] );
 
