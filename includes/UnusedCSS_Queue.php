@@ -5,8 +5,8 @@ class UnusedCSS_Queue
 {
 
     use UnusedCSS_Utils;
-    public $interval = 60;
-    public $job_count = 1;
+    public $interval = 600;
+    public $job_count = 4;
     public $async = false;
     public static $post_types = [];
 
