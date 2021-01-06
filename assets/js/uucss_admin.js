@@ -183,7 +183,11 @@
                         return file.status === 'queued';
                     });
 
-                    if (queued_jobs.length > 3) {
+                    var success_jobs = results.filter(function (file) {
+                        return file.status === 'success';
+                    });
+
+                    if (queued_jobs.length > 3 && success_jobs.length === 0) {
                         showNotification(
                             'Caution : Please verify cron your job is working!',
                             'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
