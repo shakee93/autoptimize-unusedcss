@@ -134,9 +134,11 @@
 
         table.on('init.dt', function () {
             setInterval(refreshTable, 1000 * 5)
-        })
+        });
 
-        table.on('draw.dt', function () {
+        var x = 0;
+
+        table.on('draw.dt', function (x,y) {
 
             var element = '<div id="uucss-auto-refresh">' +
                 '<input type="checkbox" id="uucss_auto_refresh_frontend" name="autoptimize_uucss_settings[uucss_auto_refresh_frontend]" value="1">' +
@@ -149,9 +151,32 @@
                 auto_refresh = $(this).is(':checked');
             });
             $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
-        })
+
+            var select = $('<select class="status">' +
+                    '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
+                    '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
+                    '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
+                    '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
+                    '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
+                '</select>');
+
+
+
+            $(select).prependTo($('#uucss-history_info'));
+
+            //$('#uucss-history_filter').prependTo($('#uucss-history_info'));
+
+            $('#uucss-history_info select.status').on('change', function(){
+                status_filter = $(this).val();
+                table.column(0).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                    .draw();
+            });
+
+        });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
+
+        var status_filter = '';
 
         table = table.DataTable({
             ajax: {
@@ -200,7 +225,7 @@
             searching: true,
             pagingType: "simple",
             bLengthChange: false,
-            tfoot: true,
+            tfoot: false,
             bSort: false,
             columns: [
                 {
@@ -431,19 +456,7 @@
                         });
                     }
                 },
-            ],
-            initComplete: function (x,y) {
-                var select = $('<label class="status-filter">Status:<select class="status"><option value="">All</option><option value="success">Success</option><option value="failed">Failed</option><option value="queued">Queued</option><option value="processing">Processing</option></select></label>')
-
-                var tableColumns = this.api().columns();
-
-                $(select).appendTo($('#uucss-history_filter'));
-
-                $('#uucss-history_filter select.status').on('change', function(){
-                    tableColumns.column(0).search( $(this).val() ? '^'+$(this).val()+'$' : '', true, false )
-                        .draw();
-                })
-            }
+            ]
         });
 
         function refreshTable(){

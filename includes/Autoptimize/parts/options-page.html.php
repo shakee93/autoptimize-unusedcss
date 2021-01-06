@@ -346,21 +346,23 @@
                                                 ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],
                                                 ['value' => 1800, 'name' => '30 Miniute', 'max' => 8],
                                                 ['value' => 3600, 'name' => '1 Hour', 'max' => 8],
-                                        ]
+                                        ];
+                                        $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : UnusedCSS_Queue::$job_count;
+                                        $default_interval = isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : UnusedCSS_Queue::$interval;
                                     ?>
                                     Run
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
                                         <?php
                                         foreach ([1,2,4,8] as $job_count){
-                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count,isset($options['uucss_jobs_per_queue']) && $job_count == $options['uucss_jobs_per_queue'] ? 'selected' : '', $job_count);
+                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count);
                                         }
                                         ?>
                                     </select>
                                     Jobs Per
                                     <select name="autoptimize_uucss_settings[uucss_queue_interval]" id="uucss_queue_interval">
                                         <?php
-                                            foreach ($intervals as $interval){
-                                                echo sprintf('<option value="%s" data-max="%s" %s>%s</option>',$interval['value'],$interval['max'], isset($options['uucss_queue_interval']) && $interval['value'] == $options['uucss_queue_interval'] ? 'selected' : '', $interval['name']);
+                                        foreach ($intervals as $interval){
+                                                echo sprintf('<option value="%s" data-max="%s" %s>%s</option>',$interval['value'],$interval['max'], $interval['value'] == $default_interval ? 'selected' : '', $interval['name']);
                                             }
                                         ?>
                                     </select>

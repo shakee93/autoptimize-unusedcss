@@ -46,8 +46,11 @@ light
     width: 250px;
 }
 
-#uucss-history_filter label.status-filter, #uucss-history_filter select{
+#uucss-history_info select{
     margin-left: 0.5em;
+    margin-right: 0.5em;
+    min-height: 26px;
+    font-size: 12px;
 }
 
 #uucss-options .example span {

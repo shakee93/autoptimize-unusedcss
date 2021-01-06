@@ -5,8 +5,8 @@ class UnusedCSS_Queue
 {
 
     use UnusedCSS_Utils;
-    public $interval = 600;
-    public $job_count = 4;
+    public static $interval = 600;
+    public static $job_count = 4;
     public $async = false;
     public static $post_types = [];
 
@@ -20,11 +20,11 @@ class UnusedCSS_Queue
         $options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
         if(isset($options['uucss_queue_interval'])){
-            $this->interval = (int) $options['uucss_queue_interval'];
+            self::$interval = (int) $options['uucss_queue_interval'];
         }
 
         if(isset($options['uucss_jobs_per_queue'])){
-            $this->job_count = (int) $options['uucss_jobs_per_queue'];
+            self::$job_count = (int) $options['uucss_jobs_per_queue'];
         }
 
         add_action('uucss_cron_run_cache', [$this, 'cache'], 2 , 1);
@@ -104,7 +104,7 @@ class UnusedCSS_Queue
 
         global $uucss;
 
-        $links = UnusedCSS_DB::get_links_by_status(["'queued'"], $this->job_count);
+        $links = UnusedCSS_DB::get_links_by_status(["'queued'"], self::$job_count);
 
         if(!empty($links)){
 
@@ -138,7 +138,7 @@ class UnusedCSS_Queue
 
     function uucss_process_queue_schedule($schedules){
         $schedules['uucss_cron_interval'] = array(
-            'interval' => $this->interval,
+            'interval' => self::$interval,
             'display'  => __( 'uucss cron interval' ),
         );
         return $schedules;
