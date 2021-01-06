@@ -193,7 +193,7 @@
                     return results;
                 }
             },
-            searching: false,
+            searching: true,
             pagingType: "simple",
             bLengthChange: false,
             tfoot: false,

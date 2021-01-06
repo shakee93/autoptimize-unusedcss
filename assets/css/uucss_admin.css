@@ -37,6 +37,15 @@ light
     color: #9E9E9E;
 }
 
+#uucss-history_filter{
+    float:left;
+    padding: 5px 15px;
+}
+
+#uucss-history_filter input{
+    width: 250px;
+}
+
 #uucss-options .example span {
     display: inline-block;
     margin-bottom: 4px;
