@@ -322,7 +322,7 @@ abstract class UnusedCSS {
             $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
         }
 
-		return [
+		return apply_filters('uucss/api/options', [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),
 			"fontFace"          => isset( $this->options['uucss_fontface'] ),
 			"variables"         => isset( $this->options['uucss_variables'] ),
@@ -331,7 +331,7 @@ abstract class UnusedCSS {
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
 			"blocklist"          => $blocklist,
-		];
+		]);
     }
 
     protected function is_doing_api_fetch(){
