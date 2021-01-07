@@ -851,3 +851,13 @@ input#uucss-pack-suggest {
 #uucss-wrapper select#uucss_jobs_per_queue {
     margin-top: -3px;
 }
+
+.uucss-history .spinner-history {
+    position: absolute;
+    top: 4px;
+    left: 115px;
+}
+
+.uucss-history .spinner-history.loading {
+    visibility: visible;
+}

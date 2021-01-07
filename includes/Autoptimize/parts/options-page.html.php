@@ -27,6 +27,7 @@
                 </span>
                     </h2>
                     <div class="content">
+                        <div class="spinner spinner-history"></div>
                         <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>

@@ -23,6 +23,7 @@
         window.tagBox.init();
 
         var $input = $('#uucss_api_key')
+        var $uucss_spinner = $('.spinner-history')
 
         try {
             var _url = new URL(window.location.href);
@@ -190,6 +191,7 @@
         var status_filter = '';
         var url_filter = '';
 
+        $uucss_spinner.addClass('loading')
         table = table.DataTable({
             ajax: {
                 url: wp.ajax.settings.url + '?action=uucss_data',
@@ -199,6 +201,8 @@
                     return d;
                 },
                 dataSrc: function (d) {
+
+                    $uucss_spinner.removeClass('loading')
 
                     if (!d.success) {
                         alert("failed to fetch data")
@@ -432,6 +436,7 @@
 
                     $row.addClass('loading');
 
+                    $uucss_spinner.addClass('loading')
                     $.ajax({
                         method : 'POST',
                         url: wp.ajax.settings.url + '?action=uucss_purge_url',
@@ -441,6 +446,9 @@
                             nonce: uucss.nonce
                         },
                         success : function(response){
+
+                            $uucss_spinner.removeClass('loading')
+
                             if(response.success){
 
                                 if (is_clear) {
@@ -464,16 +472,19 @@
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!$queuedJobs.length || !auto_refresh){
+            if(!auto_refresh){
                 return;
             }
 
+            $uucss_spinner.addClass('loading')
             $.ajax({
                 url: wp.ajax.settings.url + '?action=uucss_data',
                 data: {
                     nonce : uucss.nonce
                 },
                 success: function (response) {
+
+                    $uucss_spinner.removeClass('loading')
 
                     if (!response.success) {
                         return;
