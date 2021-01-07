@@ -65,8 +65,6 @@ class UnusedCSS_Queue
 	            'posts_per_page' => -1
             ));
 
-	        self::log( $posts );
-
         }else{
 
             $posts = new WP_Query(array(
