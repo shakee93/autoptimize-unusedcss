@@ -835,7 +835,19 @@ input#uucss-pack-suggest {
     border-bottom-left-radius: 4px;
 }
 
-div#uucss-auto-refresh {
+#uucss-wrapper div#uucss-auto-refresh {
     display: inline-block;
     margin-left: 10px;
+}
+
+#uucss-wrapper select#requeue_post_type {
+    width: 160px;
+}
+
+#uucss-wrapper select#uucss_queue_interval {
+    margin-left: 5px;
+}
+
+#uucss-wrapper select#uucss_jobs_per_queue {
+    margin-top: -3px;
 }

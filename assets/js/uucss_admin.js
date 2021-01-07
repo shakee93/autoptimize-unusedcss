@@ -407,8 +407,6 @@
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
 
-                console.log(row, data, displayNum, displayIndex, dataIndex)
-
                 tippy($(row).find('button[data-uucss-clear]')[0], {
                     content: 'Remove Optimized files',
                     placement: 'top',
