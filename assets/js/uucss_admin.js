@@ -411,6 +411,7 @@
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
 
+
                 tippy($(row).find('button[data-uucss-clear]')[0], {
                     content: 'Remove Optimized files',
                     placement: 'top',
@@ -425,7 +426,7 @@
 
                 $(row).find('button').data('index',dataIndex);
 
-                $(row).find('button').click(function (e) {
+                $(row).find('button').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
