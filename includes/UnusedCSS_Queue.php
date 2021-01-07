@@ -62,12 +62,16 @@ class UnusedCSS_Queue
 
             $posts = new WP_Query(array(
                 'post_type'=> self::$post_types,
+	            'posts_per_page' => -1
             ));
+
+	        self::log( $posts );
 
         }else{
 
             $posts = new WP_Query(array(
                 'post_type'=> $post_type,
+                'posts_per_page' => -1
             ));
 
         }
