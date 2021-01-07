@@ -161,10 +161,9 @@
                 '</select>');
 
 
-
+            var input = '<input type="search" placeholder="Search" value="'+ url_filter +'">';
+            $(input).prependTo($('#uucss-history_info'));
             $(select).prependTo($('#uucss-history_info'));
-
-            //$('#uucss-history_filter').prependTo($('#uucss-history_info'));
 
             $('#uucss-history_info select.status').on('change', function(){
                 status_filter = $(this).val();
@@ -172,11 +171,24 @@
                     .draw();
             });
 
+            var $input = $('#uucss-history_info input[type="search"]')
+
+            $input.on('input',function () {
+                url_filter = $(this).val();
+                table.column(1).search( url_filter ? url_filter : '', true, false )
+                    .draw();
+            })
+
+            if(url_filter !== ''){
+                $input.focus().val('').val(url_filter);
+            }
+
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
 
         var status_filter = '';
+        var url_filter = '';
 
         table = table.DataTable({
             ajax: {
@@ -233,23 +245,21 @@
                     title: "Status",
                     width: '40px',
                     className: 'dt-body-center dt-head-center',
-                    createdCell: function (td, cellData, rowData, row, col) {
-                        var $element = $('<span class="status"></span>')
-                        if(cellData === 'queued' || cellData === 'processing'){
-                            $element.addClass('refresh');
+                    render: function (data, type, row, meta) {
+                        var classNames = 'status ';
+                        if(data === 'queued' || data === 'processing'){
+                            classNames += 'refresh ';
                         }
-                        $(td).wrapInner($element.addClass(cellData))
-                    }
+                        classNames += data + ' ';
+                        return '<span class="' + classNames +'">'+ data +'</span>'
+                    },
                 },
                 {
                     "data": "url",
                     title: "URL",
                     className: "url",
-                    createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).wrapInner($('<a></a>').attr('href', cellData).attr('target', '_blank'))
-                    },
                     render(data) {
-                        return decodeURI(data)
+                        return '<a href="'+ decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>';
                     }
                 },
                 {
@@ -384,7 +394,6 @@
 
                     }
                 },
-
                 {
                     "data": "url",
                     className: 'dt-body-center dt-head-center action th-actions',
@@ -392,71 +401,66 @@
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-
                         return '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button><button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
                     },
-                    createdCell: function (td, cellData, rowData, row, col) {
-
-                        tippy($(td).find('button[data-uucss-clear]')[0], {
-                            content: 'Remove Optimized files',
-                            placement: 'top',
-                            appendTo: "parent"
-                        })
-
-                        tippy($(td).find('button[data-uucss-optimize]')[0], {
-                            content: 'Refresh files',
-                            placement: 'top',
-                            appendTo: "parent"
-                        })
-
-                        $(td).find('button').data('index',row);
-                        $(td).find('button').click(function (e) {
-                            e.preventDefault()
-                            
-                            var is_clear = (typeof $(this).data().uucssClear === 'string')
-                            
-                            console.log(typeof $(this).data().uucssClear === 'string');
-
-                            var $row  = $(this).parents('tr');
-
-                            var _row = table.row($row);
-
-                            var parent = $(td).parent();
-
-                            parent.addClass('loading')
-
-                            $.ajax({
-                                method : 'POST',
-                                url: wp.ajax.settings.url + '?action=uucss_purge_url',
-                                data : {
-                                    url: cellData,
-                                    clear: is_clear,
-                                    nonce: uucss.nonce
-                                },
-                                success : function(response){
-                                    if(response.success){
-
-                                        if (is_clear) {
-                                            (_row.length>0) && _row.remove().draw();
-                                        }else{
-                                            var $status =  $row.find('span.status');
-                                            $status.removeClass('failed success processing');
-                                            $status.addClass('queued refresh');
-                                            $status.text('queued');
-                                        }
-
-                                    }
-
-                                },
-                                complete:function () {
-                                    parent.removeClass('loading')
-                                }
-                            });
-
-                        });
-                    }
                 },
-            ]
+            ],
+            rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
+
+                console.log(row, data, displayNum, displayIndex, dataIndex)
+
+                tippy($(row).find('button[data-uucss-clear]')[0], {
+                    content: 'Remove Optimized files',
+                    placement: 'top',
+                    appendTo: "parent"
+                })
+
+                tippy($(row).find('button[data-uucss-optimize]')[0], {
+                    content: 'Refresh files',
+                    placement: 'top',
+                    appendTo: "parent"
+                })
+
+                $(row).find('button').data('index',dataIndex);
+
+                $(row).find('button').click(function (e) {
+                    e.preventDefault()
+
+                    var is_clear = (typeof $(this).data().uucssClear === 'string')
+
+                    var $row  = $(row);
+
+                    var _row = table.row(dataIndex);
+
+                    $row.addClass('loading');
+
+                    $.ajax({
+                        method : 'POST',
+                        url: wp.ajax.settings.url + '?action=uucss_purge_url',
+                        data : {
+                            url: data.url,
+                            clear: is_clear,
+                            nonce: uucss.nonce
+                        },
+                        success : function(response){
+                            if(response.success){
+
+                                if (is_clear) {
+                                    (_row.length>0) && _row.remove().draw();
+                                }else{
+                                    data.status = 'queued';
+                                    _row.data(data).draw();
+                                }
+                            }
+
+                        },
+                        complete:function () {
+                            $row.removeClass('loading')
+                        }
+                    });
+
+                });
+            }
         });
 
         function refreshTable(){

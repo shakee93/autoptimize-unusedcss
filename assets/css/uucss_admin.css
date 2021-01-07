@@ -38,19 +38,17 @@ light
 }
 
 #uucss-history_filter{
-    float:left;
-    padding: 5px 15px;
-}
-
-#uucss-history_filter input{
-    width: 250px;
+    display: none;
 }
 
 #uucss-history_info select{
     margin-left: 0.5em;
     margin-right: 0.5em;
-    min-height: 26px;
     font-size: 12px;
+}
+
+#uucss-history_info input[type="search"]{
+    margin-right: 0.5em;
 }
 
 #uucss-options .example span {
