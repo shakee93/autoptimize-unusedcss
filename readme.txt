@@ -13,7 +13,7 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated UnusedCSS removal for WordPress**
+**Automated unused CSS removal for WordPress**
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
@@ -36,7 +36,7 @@ e.g.
 
 == Frequently Asked Questions ==
 
-= How much does it cost to purchase a license of UnusedCSS and where can I buy one? =
+= How much does it cost to purchase a license of RapidLoad and where can I buy one? =
 
 You can purchase the license for as little as $5/m. Just sign up directly via [rapidload.io](https://rapidload.io) website.
 
@@ -46,23 +46,23 @@ Read it here : [https://rapidload.io/terms-conditions/](https://rapidload.io/ter
 
 = How does this plugin speed up my site? =
 
-UnusedCSS analyzes the content of your Wordpress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!
+RapidLoad analyzes the content of your Wordpress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!
 
 = Do I need to run this every time I make a change? =
 
-No! UnusedCSS works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!
+No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!
 
 = Will this plugin work with Woocommerce? =
 
-Absolutely. UnusedCSS works with Woocommerce, Woocommerce themes, and Woocommerce plugins.
+Absolutely. RapidLoad works with Woocommerce, Woocommerce themes, and Woocommerce plugins.
 
 = Will this plugin work with other caching plugins? =
 
-UnusedCSS works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with UnusedCSS, please submit your issue and caching plugin name to our support team and we will review.
+RapidLoad works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with RapidLoad, please submit your issue and caching plugin name to our support team and we will review.
 
 = How is this plugin different from CriticalCSS? =
 
-UnusedCSS looks for CSS that is not being applied at all and stops it from being loaded. CriticalCSS looks for CSS that needs to be applied when the page begins loading and reorders it based on priority.
+RapidLoad looks for CSS that is not being applied at all and stops it from being loaded. CriticalCSS looks for CSS that needs to be applied when the page begins loading and reorders it based on priority.
 
 = How do exclusions work? =
 
@@ -74,6 +74,21 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.2.0 =
+ * feat: multisite support added
+ * feat: run jobs in queue
+ * feat: specify the queue job interval and jobs per interval
+ * feat: filter jobs with its status
+ * feat: search job urls in optimizations
+ * feat: add warnings when optimized file is missing
+ * feat: wordpress filter hook to api request options
+ * feat: button texts makes more sense now
+ * feat: allow users to refresh optimizations within optimizations table
+ * feat: show proper errors when activating with license key
+ * fix: post blocklists not being sent to api
+ * fix: license key verification fails for some users
+ * fix: cron not working notification shown even with successful jobs
 
 = 1.1.2 =
  * fix: blank option value doesn't clear the cache
