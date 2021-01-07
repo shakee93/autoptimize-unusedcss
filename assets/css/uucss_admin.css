@@ -210,6 +210,11 @@ span.uucss-toggle-section.rotate {
     margin-right: 5px;
 }
 
+#uucss-wrapper a.connect-with-license .tippy-content p.uucss-key-error{
+    margin: 5px 5px 0 5px;
+    color: #f44336;
+}
+
 #uucss-wrapper a.connect-with-license .tippy-content .input-wrap a.connect {
     padding: 5px 25px;
     background-color: #674499;

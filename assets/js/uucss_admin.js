@@ -554,11 +554,13 @@
                     '                       <input type="text"  placeholder="License Key" class="uucss-key">' +
                     '                       <a href="#" class="connect">Connect</a>' +
                     '                   </div>' +
+                    '                   <div><p class="uucss-key-error"></p></div>' +
                     '               </div>' +
                     '          </div>';
                 return content;
             },
             onMount(instance){
+                $('a.connect-with-license .tippy-connect-with-license-content input.uucss-key').focus();
                 $('a.connect-with-license .tippy-connect-with-license-content .input-wrap .connect').click(function (e) {
                     e.preventDefault();
 
@@ -584,7 +586,7 @@
 
                         $target.text('Connect');
                         $target.attr('href','#');
-                        alert(i)
+                        $('a.connect-with-license p.uucss-key-error').text(i);
 
                     })
 
