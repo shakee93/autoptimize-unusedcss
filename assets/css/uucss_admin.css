@@ -44,7 +44,13 @@ light
 #uucss-history_info select{
     margin-left: 0.5em;
     margin-right: 0.5em;
+    margin-top: -4px;
     font-size: 12px;
+}
+
+#uucss-history_wrapper #uucss-history_paginate {
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 #uucss-history_info input[type="search"]{
