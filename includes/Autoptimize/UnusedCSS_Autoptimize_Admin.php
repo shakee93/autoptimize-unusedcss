@@ -200,7 +200,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		$results           = $uucss_api->post( 'connect', [ 'url' => get_site_url(), 'type' => 'wordpress' ] );
 
 		if ( $uucss_api->is_error( $results ) ) {
-            wp_send_json_error('License Key verification fail');
+		    if(isset($results->errors) && isset($results->errors[0])){
+                wp_send_json_error($results->errors[0]->detail);
+            }else{
+		        wp_send_json_error('License Key verification fail');
+            }
         }
 
         wp_send_json_success([
