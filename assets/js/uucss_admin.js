@@ -379,7 +379,7 @@
                             var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
                             tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <br><span>' + rowData.meta.error.message + '</span></div>';
 
-                            tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            //tippyOptions.triggerTarget = $(td).closest('tr')[0]
                             tippy(stat.find('span')[0], tippyOptions);
                             return
                         }
