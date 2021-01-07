@@ -400,12 +400,20 @@
                 },
                 {
                     "data": "url",
-                    className: 'dt-body-center dt-head-center action th-actions',
+                    className: 'dt-body-right dt-head-right action th-actions',
                     "targets": 0,
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-                        return '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button><button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
+                        var _render = ''
+
+                        if (row.status !== 'queued') {
+                            _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
+                        }
+
+                        _render += '<button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
+
+                        return _render;
                     },
                 },
             ],

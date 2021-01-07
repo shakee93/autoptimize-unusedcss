@@ -854,10 +854,16 @@ input#uucss-pack-suggest {
 
 .uucss-history .spinner-history {
     position: absolute;
-    top: 4px;
+    top: 6px;
     left: 115px;
+    transition: ease opacity .15s;
+    opacity: 0;
+    visibility: visible;
+    width: 15px;
+    height: 15px;
+    background-size: 15px 15px;
 }
 
 .uucss-history .spinner-history.loading {
-    visibility: visible;
+    opacity: 1;
 }
