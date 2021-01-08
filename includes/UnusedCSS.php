@@ -273,6 +273,8 @@ abstract class UnusedCSS {
 
         UnusedCSS_DB::add_link($link_data);
 
+        $this->async = apply_filters('uucss/purge/async',true);
+
 	    if (! $this->async ) {
 		    $this->init_async_store( $this->provider, $url, $args );
 	    }
