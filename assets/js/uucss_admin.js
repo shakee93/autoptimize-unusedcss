@@ -450,7 +450,13 @@
 
                     $row.addClass('loading');
 
-                    $uucss_spinner.addClass('loading')
+                    $uucss_spinner.addClass('loading');
+
+
+                    if (!is_clear) {
+                        $(this).hide();
+                    }
+
                     $.ajax({
                         method : 'POST',
                         url: wp.ajax.settings.url + '?action=uucss_purge_url',
@@ -468,9 +474,8 @@
                                 if (is_clear) {
                                     (_row.length>0) && _row.remove().draw();
                                 }else{
-                                    /*data.status = 'queued';
-                                    _row.data(data).draw();*/
-                                    table.ajax.reload(null, false);
+                                    data.status = 'queued';
+                                    _row.data(data).draw(false);
                                 }
                             }
 
