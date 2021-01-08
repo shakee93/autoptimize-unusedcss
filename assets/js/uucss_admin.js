@@ -307,7 +307,7 @@
 
                         var tippyOptions = {
                             theme: 'light',
-                            triggerTarget: td,
+                            triggerTarget: stat.find('span')[0],
                             content: function () {
                                 var c = $('<div class="stat-tooltip">' +
                                     '       <div class="progress-bar-wrapper">' +
