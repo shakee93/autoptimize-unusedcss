@@ -438,10 +438,6 @@
                 $(row).find('button').off('click').click(function (e) {
                     e.preventDefault()
 
-                    var $target = $(this);
-
-                    $target.prop("disabled",true);
-
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
                     var $row  = $(row);
@@ -482,9 +478,6 @@
                         },
                         complete:function () {
                             $row.removeClass('loading')
-                            if (!is_clear) {
-                                $target.prop("disabled",false);
-                            }
                         }
                     });
 

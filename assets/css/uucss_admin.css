@@ -776,6 +776,7 @@ input#uucss-pack-suggest {
     margin-right: 4px;
 }
 .uucss-warnings{
+    text-align: left;
     display: inline-block;
     border-top: 1px solid #ededed;
     padding: 5px 10px 0;
