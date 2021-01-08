@@ -212,10 +212,6 @@ abstract class UnusedCSS_Admin {
 		    $args['options'] = $this->uucss->api_options( $args["post_id"] );
 	    }
 
-        add_filter('uucss/purge/async', function ($async){
-            return false;
-        },10,1);
-
 	    wp_send_json_success( $this->uucss->cache( $url, $args ) );
     }
 
