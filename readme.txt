@@ -66,7 +66,7 @@ RapidLoad looks for CSS that is not being applied at all and stops it from being
 
 = How do exclusions work? =
 
-UnusedCSS accepts both broad and star(*) expressions and regular expression exclusions of CSS selectors. You can add your exclusions in the UnusedCSS tab of the Autoptimize plugin settings.
+RapidLoad accepts both broad and star(*) expressions and regular expression exclusions of CSS selectors. You can add your exclusions in the unused CSS tab of the Autoptimize plugin settings.
 
 == Screenshots ==
 
@@ -75,13 +75,18 @@ UnusedCSS accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.1 =
+ * feat: improve the optimizations table ui
+ * fix: redirected urls are marked as 'processing'
+ * fix: missing vertical scroll of the info tooltip
+
 = 1.2.0 =
  * feat: multisite support added
  * feat: run jobs in queue
  * feat: specify the queue job interval and jobs per interval
  * feat: filter jobs with its status
  * feat: search job urls in optimizations
- * feat: add warnings when optimized file is missing
+ * feat: add warnings when optimized files are missing
  * feat: wordpress filter hook to api request options
  * feat: button texts makes more sense now
  * feat: allow users to refresh optimizations within optimizations table
