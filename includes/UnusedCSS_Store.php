@@ -125,12 +125,6 @@ class UnusedCSS_Store {
 
 	    }
 
-	    if ( $found_uucssed_file ) {
-		    self::log( 'uucssed file found : ' . $this->url );
-
-		    return;
-	    }
-
 	    $stats = $this->result->meta->stats;
 	    $warnings = $this->result->meta->warnings;
 
