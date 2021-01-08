@@ -790,7 +790,7 @@ input#uucss-pack-suggest {
     margin-right: -10px;
     margin-left: -10px;
     overflow-y: scroll;
-    height: 110px;
+    max-height: 110px;
 }
 
 .uucss-warnings .warning-list.scrollable{
