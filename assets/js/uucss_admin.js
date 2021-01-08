@@ -187,6 +187,7 @@
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
+        var firstReload = true;
 
         var status_filter = '';
         var url_filter = '';
@@ -213,7 +214,7 @@
                         return b.time - a.time
                     });
 
-                    if (results.length < 3) {
+                    if (results.length < 3 && firstReload) {
                         showNotification(
                             'Tip : When will i see the results ?',
                             'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
@@ -228,13 +229,13 @@
                         return file.status === 'success';
                     });
 
-                    if (queued_jobs.length > 3 && success_jobs.length === 0) {
+                    if (queued_jobs.length > 3 && success_jobs.length === 0 && firstReload) {
                         showNotification(
                             'Caution : Please verify cron your job is working!',
                             'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
                         );
                     }
-
+                    firstReload = false;
                     return results;
                 }
             },
@@ -455,8 +456,9 @@
                                 if (is_clear) {
                                     (_row.length>0) && _row.remove().draw();
                                 }else{
-                                    data.status = 'queued';
-                                    _row.data(data).draw();
+                                    /*data.status = 'queued';
+                                    _row.data(data).draw();*/
+                                    table.ajax.reload(null, false);
                                 }
                             }
 
@@ -478,28 +480,7 @@
             }
 
             $uucss_spinner.addClass('loading')
-            $.ajax({
-                url: wp.ajax.settings.url + '?action=uucss_data',
-                data: {
-                    nonce : uucss.nonce
-                },
-                success: function (response) {
-
-                    $uucss_spinner.removeClass('loading')
-
-                    if (!response.success) {
-                        return;
-                    }
-
-                    var results = Object.values(response.data).sort(function (a, b) {
-                        return b.time - a.time
-                    });
-
-                    table.clear();
-                    table.rows.add(results);
-                    table.draw();
-                }
-            })
+            table.ajax.reload(null, false);
         }
 
         function validateJobPerQue(value, reset) {
