@@ -212,6 +212,8 @@ abstract class UnusedCSS_Admin {
 		    $args['options'] = $this->uucss->api_options( $args["post_id"] );
 	    }
 
+	    $args['immediate'] = true;
+
 	    wp_send_json_success( $this->uucss->cache( $url, $args ) );
     }
 

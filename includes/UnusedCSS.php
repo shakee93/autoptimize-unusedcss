@@ -265,7 +265,7 @@ abstract class UnusedCSS {
 
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
-        $exist_link = UnusedCSS_DB::get_link($this->url);
+        $exist_link = UnusedCSS_DB::get_link($url);
 
         if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3){
             return false;
@@ -277,6 +277,18 @@ abstract class UnusedCSS {
 
 	    if (! $this->async ) {
 		    $this->init_async_store( $this->provider, $url, $args );
+	    }
+
+	    if ( isset( $args['immediate'] ) ) {
+
+	    	UnusedCSS_DB::update_status('processing', $url);
+		    wp_schedule_single_event( time(), 'uucss_async_queue', [
+			    'provider' => $this->provider,
+			    'url'      => $url,
+			    'args'     => $args
+		    ] );
+		    spawn_cron();
+
 	    }
 
 	    return true;
