@@ -193,7 +193,13 @@ trait UnusedCSS_Utils {
     protected function file_name($file, $hash_suffix = null){
     	$file_hash = $this->encode($file . json_encode($hash_suffix));
 
-	    return 'uucss-' . $file_hash . '-' . explode( "?", basename( $file ) )[0];
+	    $file_name = explode( "?", basename( $file ) )[0];
+
+	    if ( !$this->str_contains( $file_name, '.' ) ) {
+		    $file_name .= '.css';
+	    }
+
+	    return 'uucss-' . $file_hash . '-' . $file_name;
     }
 
 	function str_contains( $string, $find ) {
