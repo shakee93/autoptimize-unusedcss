@@ -202,7 +202,7 @@ abstract class UnusedCSS {
     {
 
 	    // remove .css .js files from being analyzed
-	    if ( preg_match( '/(.js|.css)$/', $url ) ) {
+	    if ( preg_match( '/cache\/autoptimize/', $url ) ) {
 		    return false;
 	    }
 
