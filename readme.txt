@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.2 =
+ * fix: exclude missing ao cache files from being optimized
+ * fix: optimized google fonts are not being saved as css
+ * feat: refresh jobs immediately on user request
+
 = 1.2.1 =
  * feat: improve the optimizations table ui
  * fix: redirected urls are marked as 'processing'
