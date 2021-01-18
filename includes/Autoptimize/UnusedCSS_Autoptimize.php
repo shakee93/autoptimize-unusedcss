@@ -243,24 +243,28 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    }
 				    else {
 
-					    $data['meta']['warnings'][] = [
-						    "file" => $link,
-						    "message" => "Could not find file"
-					    ];
+					    if(!$this->is_file_excluded($this->options, $link)){
 
-					    $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
+                            $data['meta']['warnings'][] = [
+                                "file" => $link,
+                                "message" => "Could not find file"
+                            ];
 
-						    $hash = md5( json_encode( $i ) );
+                            $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
 
-						    if ( !in_array( $hash, array_column( $carry, 'hash' ) ) ) {
-							    $carry[] = [
-								    'hash' => md5( json_encode( $i ) ),
-								    'value' => (object) $i
-							    ];
-						    }
+                                $hash = md5( json_encode( $i ) );
 
-						    return $carry;
-					    }, []), 'value');
+                                if ( !in_array( $hash, array_column( $carry, 'hash' ) ) ) {
+                                    $carry[] = [
+                                        'hash' => md5( json_encode( $i ) ),
+                                        'value' => (object) $i
+                                    ];
+                                }
+
+                                return $carry;
+                            }, []), 'value');
+
+                        }
 
 					    UnusedCSS_Settings::add_link($data['url'], $data['files'], 'success', $data['meta']);
 

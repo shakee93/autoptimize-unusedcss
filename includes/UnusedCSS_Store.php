@@ -161,25 +161,6 @@ class UnusedCSS_Store {
 
     }
 
-
-	public function is_file_excluded( $options, $file ) {
-
-		if ( isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ) {
-			$files = explode( ',', $options['uucss_excluded_files'] );
-
-			foreach ( $files as $excluded_file ) {
-
-				if ( $this->str_contains( $file, trim($excluded_file) ) ) {
-					return true;
-				}
-
-			}
-		}
-
-		return false;
-    }
-
-
     public function get_base_dir(){
 
         $root = $this->file_system->wp_content_dir()  . $this->base;
