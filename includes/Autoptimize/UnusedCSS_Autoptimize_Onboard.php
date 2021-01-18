@@ -42,8 +42,9 @@ class UnusedCSS_Autoptimize_Onboard {
         }
 
         $this->uucss->async = false;
-        $this->uucss->url = $this->uucss->get_current_url();
-        $this->uucss->purge_css();
+        $this->uucss->cache(get_site_url(), [
+            'immediate' => true,
+        ]);
 
         $this->ao_installed();
 
