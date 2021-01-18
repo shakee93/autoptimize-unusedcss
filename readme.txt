@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.3 =
+ * fix: reduce varchar length to fix "The maximum column size is 767 bytes" error
+ * fix: adds a wrong warning about excluded files as not found.
+ * fix: run first job immediately without adding to the queue.
+
 = 1.2.2 =
  * fix: exclude missing ao cache files from being optimized
  * fix: optimized google fonts are not being saved as css
