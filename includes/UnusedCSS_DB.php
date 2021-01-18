@@ -506,7 +506,7 @@ class UnusedCSS_DB
         $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
-		url varchar(500) NOT NULL,
+		url varchar(191) NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
 		warnings longtext NULL,
@@ -516,7 +516,7 @@ class UnusedCSS_DB
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id),
-		KEY url (url(500))
+		KEY url (url(191))
 	) $charset_collate;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

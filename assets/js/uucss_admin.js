@@ -264,6 +264,11 @@
                     title: "URL",
                     className: "url",
                     render(data) {
+
+                        if (!data) {
+                            return '';
+                        }
+
                         return '<a href="'+ decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>';
                     }
                 },
