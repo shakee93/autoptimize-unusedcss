@@ -38,7 +38,7 @@ abstract class UnusedCSS {
     public function __construct()
     {
 	    if ( ! $this->initFileSystem() ) {
-		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress file system. check for file permission issues in your site.' );
+		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . $this->base_dir . ')</b>. check for file permission issues in your site.' );
 
 		    return;
 	    }
@@ -379,9 +379,9 @@ abstract class UnusedCSS {
 		}
 
 		// make dir if not exists
-		$this->file_system->mkdir( $this->base_dir );
+		$created = $this->file_system->mkdir( $this->base_dir );
 
-		if ( ! $this->file_system->is_writable( $this->base_dir ) || ! $this->file_system->is_readable( $this->base_dir ) ) {
+		if (!$created || ! $this->file_system->is_writable( $this->base_dir ) || ! $this->file_system->is_readable( $this->base_dir ) ) {
 			return false;
 		}
 
