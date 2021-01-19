@@ -45,6 +45,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
+	    add_filter('uucss/cache/bust', [ $this, 'add_cache_busting_params' ], 10, 1);
 
 	    parent::__construct();
 
@@ -371,5 +372,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	}
 
+	public function add_cache_busting_params($cacheBusting){
+
+        if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
+
+            array_push($cacheBusting, [
+               'type' => 'query',
+               'rule' => 'nowprocket'
+            ]);
+
+        }
+
+        return $cacheBusting;
+    }
 
 }
