@@ -58,7 +58,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Queue();
     }
 
-    public function requeue(){
+    public function requeue($upgrader, $hook_extra){
         if(UUCSS_REQUEUE_REQUIRED){
             UnusedCSS_Settings::clear_links(true);
         }
