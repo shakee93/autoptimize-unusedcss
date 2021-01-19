@@ -59,7 +59,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
     public function requeue($upgrader, $hook_extra){
-        if(UUCSS_REQUEUE_REQUIRED){
+        $is_uucss_plugin = false;
+        if(isset($hook_extra['plugins'])){
+            $is_uucss_plugin = in_array('unusedcss/unusedcss.php', $hook_extra['plugins']);
+        }
+        if(UUCSS_REQUEUE_REQUIRED && $is_uucss_plugin){
             UnusedCSS_Settings::clear_links(true);
         }
     }
