@@ -298,7 +298,9 @@
                                 var $warning_html = $('<li class="warning"></li>')
                                 $warning_html.append('<div class="warning-info"></div>');
                                 $warning_html.find('.warning-info').append('<p class="warning-header">' +  value.message + '</p>');
-                                $warning_html.find('.warning-info').append('<p class="warning-content"><a href="' + value.file +'" target="_blank">' +  value.file + '</a></p>');
+                                if(value.file){
+                                    $warning_html.find('.warning-info').append('<p class="warning-content"><a href="' + value.file +'" target="_blank">' +  value.file + '</a></p>');
+                                }
                                 $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
                             })
                         }else{
