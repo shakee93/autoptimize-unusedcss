@@ -517,7 +517,8 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .tippy-box[data-theme~=light] > .tippy-content {
-    padding: 5px 10px 0;
+    padding: 5px 10px;
+    text-align: left;
 }
 
 
@@ -567,7 +568,7 @@ table#uucss-history{
 }
 
 #uucss-history .tippy-content .error-tooltip {
-    margin: 5px 0;
+    /*margin: 5px 0;*/
     max-width: 230px;
 }
 
@@ -832,6 +833,7 @@ input#uucss-pack-suggest {
 .tippy-content .stat-tooltip .time{
     margin-right: -10px;
     margin-left: -10px;
+    margin-bottom: -5px;
     padding: 5px 10px;
     background-color: #f2f2f2;
     border-bottom-right-radius: 4px;
