@@ -336,6 +336,13 @@ abstract class UnusedCSS {
             $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
         }
 
+        $cacheBusting = apply_filters('uucss/cache/bust',[
+            [
+                'type' => 'query',
+                'rule' => 'no_uucss=true'
+            ]
+        ]);
+
 		return apply_filters('uucss/api/options', [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),
 			"fontFace"          => isset( $this->options['uucss_fontface'] ),
@@ -345,6 +352,7 @@ abstract class UnusedCSS {
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
 			"blocklist"          => $blocklist,
+            "cacheBusting"          => $cacheBusting,
 		]);
     }
 
