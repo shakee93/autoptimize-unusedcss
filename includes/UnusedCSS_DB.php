@@ -507,7 +507,7 @@ class UnusedCSS_DB
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
-		id mediumint(9) NOT NULL AUTO_INCREMENTx,
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
 		url varchar(191) NOT NULL,
 		stats longtext NULL,
@@ -549,6 +549,7 @@ class UnusedCSS_DB
     }
 
     static function show_db_error($message){
-        self::add_admin_notice($message, 'error');
+        self::log($message);
+        //self::add_admin_notice($message, 'error');
     }
 }
