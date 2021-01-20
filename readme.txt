@@ -75,6 +75,14 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.4 =
+ * fix: console warnings in admin panel
+ * fix: 0 files returned jobs marked as processing forever
+ * fix: detect failed uucss cache directory creation
+ * feat: add wp-rocket cache busting support to the api
+ * feat [API]: supports url cache busting with headers/queries
+ * feat [API]: api busts page caches by itself
+
 = 1.2.3 =
  * fix: reduce varchar length to fix "The maximum column size is 767 bytes" error
  * fix: adds a wrong warning about excluded files as not found.
