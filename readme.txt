@@ -75,6 +75,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.5 =
+ * fix: bug in : 0 files returned jobs marked as processing forever
+ * fix: use WP_CONTENT_DIR constant to get the wp content dir
+
 = 1.2.4 =
  * fix: console warnings in admin panel
  * fix: 0 files returned jobs marked as processing forever
