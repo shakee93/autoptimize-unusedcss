@@ -127,20 +127,14 @@ class UnusedCSS_Store {
 
 	    }
 
-	    $this->store($files);
-
-	    /*UnusedCSS_Settings::add_link( $this->url, $files, "success", [
-	        "id" => $this->result->meta->id,
-		    "stats" => $stats,
-		    "warnings" => $warnings
-	    ] );*/
+	    $this->add_link($files);
 
 	    $this->args['url'] = $this->url;
 	    do_action( 'uucss/cached', $this->args );
 
     }
 
-    public function store($files){
+    public function add_link($files){
         $stats = $this->result->meta->stats;
         $warnings = $this->result->meta->warnings;
 
