@@ -90,7 +90,9 @@ class UnusedCSS_Store {
 
 	    if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
 		    $this->cache_files();
-	    }
+	    }else{
+            $this->store(null);
+        }
 
     }
 
@@ -125,15 +127,29 @@ class UnusedCSS_Store {
 
 	    }
 
-	    $stats = $this->result->meta->stats;
-	    $warnings = $this->result->meta->warnings;
+	    $this->store($files);
 
-	    if ( isset( $stats->beforeBytes ) ) {
-		    unset( $stats->beforeBytes );
-	    }
-	    if ( isset( $stats->afterBytes ) ) {
-		    unset( $stats->afterBytes );
-	    }
+	    /*UnusedCSS_Settings::add_link( $this->url, $files, "success", [
+	        "id" => $this->result->meta->id,
+		    "stats" => $stats,
+		    "warnings" => $warnings
+	    ] );*/
+
+	    $this->args['url'] = $this->url;
+	    do_action( 'uucss/cached', $this->args );
+
+    }
+
+    public function store($files){
+        $stats = $this->result->meta->stats;
+        $warnings = $this->result->meta->warnings;
+
+        if ( isset( $stats->beforeBytes ) ) {
+            unset( $stats->beforeBytes );
+        }
+        if ( isset( $stats->afterBytes ) ) {
+            unset( $stats->afterBytes );
+        }
 
         $link_data = array(
             'url' => $this->url,
@@ -149,16 +165,6 @@ class UnusedCSS_Store {
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
         UnusedCSS_DB::add_link($link_data);
-
-	    /*UnusedCSS_Settings::add_link( $this->url, $files, "success", [
-	        "id" => $this->result->meta->id,
-		    "stats" => $stats,
-		    "warnings" => $warnings
-	    ] );*/
-
-	    $this->args['url'] = $this->url;
-	    do_action( 'uucss/cached', $this->args );
-
     }
 
     public function get_base_dir(){
