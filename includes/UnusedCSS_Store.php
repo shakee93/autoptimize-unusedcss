@@ -9,7 +9,6 @@ class UnusedCSS_Store {
 
 	use UnusedCSS_Utils;
 
-	public $base = 'cache/autoptimize/uucss';
 	public $provider;
 
     public $url;
@@ -91,7 +90,7 @@ class UnusedCSS_Store {
 	    if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
 		    $this->cache_files();
 	    }else{
-            $this->store(null);
+            $this->add_link(null);
         }
 
     }
@@ -161,23 +160,12 @@ class UnusedCSS_Store {
         UnusedCSS_DB::add_link($link_data);
     }
 
-    public function get_base_dir(){
-
-        $root = $this->file_system->wp_content_dir()  . $this->base;
-
-        if(!$this->file_system->exists($root)) {
-            $this->file_system->mkdir($root);
-        }
-
-        return $root;
-    }
-
 
     protected function get_cache_page_dir()
     {
         $hash = $this->encode($this->url);
 
-	    $source_dir = $this->get_base_dir() . '/' . $hash;
+	    $source_dir = UnusedCSS::$base_dir . '/' . $hash;
 
 	    if ( ! $this->file_system->exists( $source_dir ) ) {
 		    $this->file_system->mkdir( $source_dir );
@@ -188,7 +176,7 @@ class UnusedCSS_Store {
 
 
 	protected function append_cache_file_dir( $file, $content ) {
-		return $this->get_base_dir() . '/' . $this->hashed_file_name( $file, $content );
+		return UnusedCSS::$base_dir . '/' . $this->hashed_file_name( $file, $content );
 	}
 
 	protected function hashed_file_name( $file, $content ) {

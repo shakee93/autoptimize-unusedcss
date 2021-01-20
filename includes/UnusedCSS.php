@@ -9,7 +9,7 @@ abstract class UnusedCSS {
 
 	use UnusedCSS_Utils;
 
-	public $base = 'cache/autoptimize/uucss';
+	public $base = '/cache/autoptimize/uucss';
 	public $provider = null;
 
 	public $url = null;
@@ -23,7 +23,7 @@ abstract class UnusedCSS {
 	 */
 	public $file_system;
 
-	public $base_dir;
+	public static $base_dir;
 
 
 	abstract public function get_css();
@@ -38,7 +38,7 @@ abstract class UnusedCSS {
     public function __construct()
     {
 	    if ( ! $this->initFileSystem() ) {
-		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . $this->base_dir . ')</b>. check for file permission issues in your site.' );
+		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
 
 		    return;
 	    }
@@ -380,16 +380,16 @@ abstract class UnusedCSS {
 
 	public function init_base_dir() {
 
-		$this->base_dir = $this->file_system->wp_content_dir() . $this->base;
+		self::$base_dir = WP_CONTENT_DIR . $this->base;
 
-		if ( $this->file_system->exists( $this->base_dir ) ) {
+		if ( $this->file_system->exists( self::$base_dir ) ) {
 			return true;
 		}
 
 		// make dir if not exists
-		$created = $this->file_system->mkdir( $this->base_dir );
+		$created = $this->file_system->mkdir( self::$base_dir );
 
-		if (!$created || ! $this->file_system->is_writable( $this->base_dir ) || ! $this->file_system->is_readable( $this->base_dir ) ) {
+		if (!$created || ! $this->file_system->is_writable( self::$base_dir ) || ! $this->file_system->is_readable( self::$base_dir ) ) {
 			return false;
 		}
 
@@ -398,7 +398,7 @@ abstract class UnusedCSS {
 
 
     protected function cache_file_exists($file){
-        return $this->file_system->exists( $this->base_dir . '/' . $file );
+        return $this->file_system->exists( self::$base_dir . '/' . $file );
     }
 
 
@@ -417,7 +417,7 @@ abstract class UnusedCSS {
 
 			    // remove unused files from filesystem
 			    foreach ( $unused_files as $unused_file ) {
-				    $this->file_system->delete( $this->base_dir . '/' . $unused_file );
+				    $this->file_system->delete( self::$base_dir . '/' . $unused_file );
 			    }
 
 			    do_action( 'uucss/cache_cleared', $args );
@@ -432,7 +432,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    $results = $this->file_system->delete( $this->base_dir, true );
+	    $results = $this->file_system->delete( self::$base_dir, true );
 
 	    // if soft sets the status to queued
 	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
@@ -446,11 +446,11 @@ abstract class UnusedCSS {
 
     public function size() {
 
-	    if ( ! $this->file_system || ! $this->file_system->exists( $this->base_dir ) ) {
+	    if ( ! $this->file_system || ! $this->file_system->exists( self::$base_dir ) ) {
 		    return "0 KB";
 	    }
 
-	    $size = $this->dirSize( $this->base_dir );
+	    $size = $this->dirSize( self::$base_dir );
 
 	    return $this->human_file_size( $size );
     }
@@ -477,7 +477,7 @@ abstract class UnusedCSS {
 	protected function get_inline_content( $file_url ) {
 
 		$file = implode( '/', [
-			$this->base_dir,
+			self::$base_dir,
 			$file_url
 		] );
 
@@ -493,7 +493,7 @@ abstract class UnusedCSS {
 		    return;
 	    }
 
-	    $delete = $this->file_system->wp_content_dir() . $this->base;
+	    $delete = WP_CONTENT_DIR . $this->base;
 
 	    if ( ! $this->file_system->exists( $delete ) ) {
 		    return;
