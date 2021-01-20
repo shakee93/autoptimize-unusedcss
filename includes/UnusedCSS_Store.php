@@ -120,7 +120,15 @@ class UnusedCSS_Store {
 			    'uucss'    => $this->hashed_file_name( $file->file, $file->css ),
 		    ];
 
-		    $this->file_system->put_contents( $file_location, $file->css, FS_CHMOD_FILE );
+		    $css = '';
+
+		    if ( $this->str_contains( '.php', $file->file ) ) {
+		    	$css = '<?php header("Content-type: text/css; charset=utf-8"); ?>';
+		    }
+
+		    $css .=  $file->css;
+
+		    $this->file_system->put_contents( $file_location, $css, FS_CHMOD_FILE );
 
 		    do_action( 'uucss/cache_file_created', $file_location, $file->css );
 
