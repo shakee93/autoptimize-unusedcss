@@ -193,6 +193,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"found_css_files"       => [],
 			"found_css_cache_files" => [],
 			"injected_css_files"    => [],
+			"successfully_injected"    => true,
 		];
 
 		if ( $dom ) {
@@ -243,6 +244,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    }
 				    else {
 
+                        $inject->successfully_injected = false;
+
+				        if($data['attempts'] < 4){
+
+                            UnusedCSS_DB::update_status('queued', $data['url']);
+                            return;
+                        }
+
 					    if(!$this->is_file_excluded($this->options, $link)){
 
                             $data['meta']['warnings'][] = [
@@ -266,7 +275,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                         }
 
-					    UnusedCSS_Settings::add_link($data['url'], $data['files'], 'success', $data['meta']);
+                        UnusedCSS_DB::update_warnings($data['meta']['warnings'], $data['url']);
 
 				    }
 			    }
@@ -274,6 +283,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    }
 
 //			self::log( $inject );
+
+            if($inject->successfully_injected && $data['attempts'] > 0){
+
+                UnusedCSS_DB::reset_attempts($data['url']);
+
+            }
 
 			header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
 

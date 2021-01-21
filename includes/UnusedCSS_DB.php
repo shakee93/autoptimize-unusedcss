@@ -136,21 +136,13 @@ class UnusedCSS_DB
 
 		if ( $exist ) {
 
-			if($data['status'] == 'failed' || $data['status'] == 'processing'){
+			if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
 
-				if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
+                $exist['attempts'] = 0;
 
-					$exist['attempts'] = 0;
+            }
 
-				}
-
-				$data['attempts'] = $exist['attempts'] + 1;
-
-			}else{
-
-                $data['attempts'] = 0;
-
-			}
+            $data['attempts'] = $exist['attempts'] + 1;
 
 			self::update( $data, array(
 				'url' => $data['url']
@@ -409,6 +401,38 @@ class UnusedCSS_DB
 			self::log($error);
 		}
 	}
+
+    static function reset_attempts($link){
+        global $wpdb;
+
+        if(!$link){
+
+            return;
+
+        }
+
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET attempts = 0 WHERE url = '" . $link . "'" );
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::log($error);
+        }
+    }
+
+    static function update_warnings($warnings, $link){
+
+        if(isset($warnings)){
+
+            $data['warnings'] = serialize($warnings);
+
+            self::update($data, [
+                'url' => $link
+            ]);
+
+        }
+    }
 
     static function clear_links(){
         global $wpdb;
