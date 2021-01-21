@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.2.6 =
+ * feat: retry jobs in attempts when cache files are obsolete
+ * feat: basic support to autoptimize non-static files
+ * fix: handle database migration fails on plugin activation
+
 = 1.2.5 =
  * fix: bug in : 0 files returned jobs marked as processing forever
  * fix: use WP_CONTENT_DIR constant to get the wp content dir
