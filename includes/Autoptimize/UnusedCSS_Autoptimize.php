@@ -248,24 +248,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				        if(!$this->is_file_excluded($this->options, $link)){
 
-                            $data['meta']['warnings'][] = [
-                                "file" => $link,
-                                "message" => "RapidLoad cache missing for the file. Refresh Recommended."
-                            ];
+                            if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
 
-                            $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
+                                $data['meta']['warnings'][] = [
+                                    "file" => $link,
+                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                ];
 
-                                $hash = md5( json_encode( $i ) );
-
-                                if ( !in_array( $hash, array_column( $carry, 'hash' ) ) ) {
-                                    $carry[] = [
-                                        'hash' => md5( json_encode( $i ) ),
-                                        'value' => (object) $i
-                                    ];
-                                }
-
-                                return $carry;
-                            }, []), 'value');
+                            }
 
                         }
 
@@ -280,7 +270,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
-            }else if(!$inject->successfully_injected && $data['attempts'] < 4){
+            }else if(!$inject->successfully_injected && $data['attempts'] < 3){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',
