@@ -247,7 +247,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                             $data['meta']['warnings'][] = [
                                 "file" => $link,
-                                "message" => "Could not find file"
+                                "message" => "RapidLoad cache missing for the file. Refresh Recommended."
                             ];
 
                             $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
