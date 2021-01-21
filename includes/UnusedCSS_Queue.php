@@ -65,6 +65,11 @@ class UnusedCSS_Queue
 	            'posts_per_page' => -1
             ));
 
+        }else if($post_type == 'current'){
+
+            UnusedCSS_Settings::clear_links(true);
+            wp_send_json_success('posts added to queue');
+
         }else{
 
             $posts = new WP_Query(array(

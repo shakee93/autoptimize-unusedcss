@@ -136,7 +136,7 @@ class UnusedCSS_DB
 
 		if ( $exist ) {
 
-			if($data['status'] == 'failed'){
+			if($data['status'] == 'failed' || $data['status'] == 'processing'){
 
 				if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
 
@@ -158,7 +158,7 @@ class UnusedCSS_DB
 
         }else{
 
-			if($data['status'] == 'failed'){
+			if($data['status'] == 'failed' || $data['status'] == 'queued'){
 
 				$data['attempts'] = 1;
 
