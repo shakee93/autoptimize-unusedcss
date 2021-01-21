@@ -393,6 +393,7 @@
 
                                             }
                                         ?>
+                                        <option value="current">Current</option>
                                     </select>
                                     <input type="button" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
                                 </td>

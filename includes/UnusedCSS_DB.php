@@ -126,7 +126,7 @@ class UnusedCSS_DB
 	}
 
 
-	static function add_link( $data ) {
+	static function add_link( $data , $count_attempts = false) {
 
     	if(!$data['url']){
     		return;
@@ -138,21 +138,17 @@ class UnusedCSS_DB
 
 		if ( $exist ) {
 
-			if($data['status'] == 'failed'){
+			if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
 
-				if(!isset($exist['attempts']) || !is_numeric($exist['attempts'])){
+                $exist['attempts'] = 0;
 
-					$exist['attempts'] = 0;
+            }
 
-				}
+            if($count_attempts){
 
-				$data['attempts'] = $exist['attempts'] + 1;
+                $data['attempts'] = $exist['attempts'] + 1;
 
-			}else{
-
-                $data['attempts'] = 0;
-
-			}
+            }
 
 			self::update( $data, array(
 				'url' => $data['url']
@@ -160,9 +156,9 @@ class UnusedCSS_DB
 
         }else{
 
-			if($data['status'] == 'failed'){
+			if($data['status'] == 'failed' || $data['status'] == 'queued'){
 
-				$data['attempts'] = 1;
+				$data['attempts'] = 0;
 
 			}
 
@@ -296,7 +292,7 @@ class UnusedCSS_DB
             $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
             $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
             $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
-            $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : null;
+            $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
             $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
             $data['status'] = isset( $link->status ) ? $link->status : null;
             $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
@@ -411,6 +407,38 @@ class UnusedCSS_DB
 			self::show_db_error($error);
 		}
 	}
+
+    static function reset_attempts($link){
+        global $wpdb;
+
+        if(!$link){
+
+            return;
+
+        }
+
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET attempts = 0 WHERE url = '" . $link . "'" );
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::log($error);
+        }
+    }
+
+    static function update_meta($data, $link){
+
+        if(isset($data['warnings'])){
+
+            $data['warnings'] = serialize($data['warnings']);
+
+        }
+
+        self::update($data, [
+            'url' => $link
+        ]);
+    }
 
     static function clear_links(){
         global $wpdb;

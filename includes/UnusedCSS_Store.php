@@ -75,7 +75,7 @@ class UnusedCSS_Store {
 
             $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
-            UnusedCSS_DB::add_link($link_data);
+            UnusedCSS_DB::add_link($link_data, true);
 
 	        /*UnusedCSS_Settings::add_link( $this->url, null, "failed", [
 			    "error" => $this->extract_error( $result )

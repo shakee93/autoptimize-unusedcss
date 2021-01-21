@@ -193,6 +193,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"found_css_files"       => [],
 			"found_css_cache_files" => [],
 			"injected_css_files"    => [],
+			"successfully_injected"    => true,
 		];
 
 		if ( $dom ) {
@@ -243,30 +244,20 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    }
 				    else {
 
-					    if(!$this->is_file_excluded($this->options, $link)){
+                        $inject->successfully_injected = false;
 
-                            $data['meta']['warnings'][] = [
-                                "file" => $link,
-                                "message" => "RapidLoad cache missing for the file. Refresh Recommended."
-                            ];
+				        if(!$this->is_file_excluded($this->options, $link)){
 
-                            $data['meta']['warnings'] = array_column(array_reduce($data['meta']['warnings'], function ( $carry, $i ) {
+                            if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
 
-                                $hash = md5( json_encode( $i ) );
+                                $data['meta']['warnings'][] = [
+                                    "file" => $link,
+                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                ];
 
-                                if ( !in_array( $hash, array_column( $carry, 'hash' ) ) ) {
-                                    $carry[] = [
-                                        'hash' => md5( json_encode( $i ) ),
-                                        'value' => (object) $i
-                                    ];
-                                }
-
-                                return $carry;
-                            }, []), 'value');
+                            }
 
                         }
-
-					    UnusedCSS_Settings::add_link($data['url'], $data['files'], 'success', $data['meta']);
 
 				    }
 			    }
@@ -274,6 +265,25 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    }
 
 //			self::log( $inject );
+
+            if($inject->successfully_injected && $data['attempts'] > 0){
+
+                UnusedCSS_DB::reset_attempts($data['url']);
+
+            }else if(!$inject->successfully_injected && $data['attempts'] < 3){
+
+                UnusedCSS_DB::update_meta([
+                    'status' => 'queued',
+                    'attempts' => $data['attempts'] + 1
+                ], $data['url']);
+
+            }else{
+
+                UnusedCSS_DB::update_meta([
+                    'warnings' => $data['meta']['warnings']
+                ], $data['url']);
+
+            }
 
 			header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
 
