@@ -122,7 +122,7 @@ class UnusedCSS_Store {
 
 		    $css = '';
 
-		    if ( $this->str_contains( '.php', $file->file ) ) {
+		    if ( $this->endsWith($file->file, '.php')) {
 		    	$css = '<?php header("Content-type: text/css; charset=utf-8"); ?>';
 		    }
 
