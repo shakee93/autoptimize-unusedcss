@@ -341,8 +341,8 @@
                                     theme: 'tomato',
                                     interactive: true,
                                     delay: 0,
-                                    arrow: false,
-                                    offset: [0, 7]
+                                    offset: [0, 7],
+                                    inlinePositioning: true,
                                 })
 
                                 innerTippy2 = tippy(c.find('.progress-bar')[0], {
@@ -355,6 +355,7 @@
                                     theme: 'ketchup',
                                     interactive: true,
                                     delay: 0,
+                                    inlinePositioning: true,
                                 })
 
                                 return c[0]

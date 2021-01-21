@@ -24,9 +24,11 @@ class UnusedCSS_DB
            return;
         }
 
-        self::create_tables($new_site->blog_id . '_');
+        $error = self::create_tables($new_site->blog_id . '_');
 
-        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+        if(empty($error)){
+            UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+        }
     }
 
     static function check_db_updates(){
@@ -168,7 +170,7 @@ class UnusedCSS_DB
 			$error = $wpdb->last_error;
 
 			if(!empty($error)){
-				self::log($error);
+				self::show_db_error($error);
 			}
 
 		}
@@ -185,7 +187,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
 
 	    if(!empty($link)){
@@ -210,7 +212,7 @@ class UnusedCSS_DB
         $error = $wpdb->last_error;
 
         if(!empty($error)){
-            self::log($error);
+            self::show_db_error($error);
         }
 
         $transformed_links = array();
@@ -248,7 +250,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
 
 	    return $links;
@@ -268,7 +270,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
 
 	    return $links;
@@ -330,7 +332,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if ( ! empty( $error ) ) {
-		    self::log( $error );
+		    self::show_db_error( $error );
 	    }
 
 	    if ( count( $link ) > 0 ) {
@@ -350,7 +352,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
 
 	    return isset($result) && !empty($result );
@@ -366,7 +368,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
 
 	    return isset($result) && !empty($result);
@@ -382,7 +384,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
     }
 
@@ -402,7 +404,7 @@ class UnusedCSS_DB
 		$error = $wpdb->last_error;
 
 		if(!empty($error)){
-			self::log($error);
+			self::show_db_error($error);
 		}
 	}
 
@@ -446,7 +448,7 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-		    self::log($error);
+		    self::show_db_error($error);
 	    }
     }
 
@@ -464,17 +466,18 @@ class UnusedCSS_DB
 	    $error = $wpdb->last_error;
 
 	    if(!empty($error)){
-	    	self::log($error);
+	    	self::show_db_error($error);
 	    }
     }
 
 
 
     static function initialize(){
-        $status = self::create_tables();
+        $error = self::create_tables();
 
-        if(!empty($status)){
-        	self::log($status);
+        if(!empty($error)){
+        	self::show_db_error($error);
+        	return;
         }
 
         UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
@@ -571,5 +574,10 @@ class UnusedCSS_DB
 
 		}
 
+    }
+
+    static function show_db_error($message){
+        self::log($message);
+        //self::add_admin_notice($message, 'error');
     }
 }

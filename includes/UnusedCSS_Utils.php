@@ -210,6 +210,14 @@ trait UnusedCSS_Utils {
 		return false;
 	}
 
+	function endsWith( $haystack, $needle ) {
+		$length = strlen( $needle );
+		if( !$length ) {
+			return true;
+		}
+		return substr( $haystack, -$length ) === $needle;
+	}
+
 	function transform_url( $url ) {
 
 		$url_parts = parse_url( $url );
