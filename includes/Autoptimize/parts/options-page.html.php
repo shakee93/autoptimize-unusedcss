@@ -419,6 +419,7 @@
                                 <li><strong>Email : </strong> <span id="license-email"></span></li>
                                 <li><strong>Plan : </strong><span id="license-plan"></span></li>
                                 <li><strong>Next Billing : </strong><span id="license-next_billing"></span></li>
+                                <li><strong>Domain : </strong><span id="license-domain"></span></li>
                             </ul>
 
                             <div>
@@ -437,6 +438,9 @@
 								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
+                                    </a>
+                                    <a href="#"
+                                       class="uucss-activate" id="uucss-change-site-url"> Change Site URL
                                     </a>
 								<?php else : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"

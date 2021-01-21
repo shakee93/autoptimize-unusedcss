@@ -614,6 +614,71 @@
             })
         });
 
+        tippy('#uucss-change-site-url', {
+            allowHTML: true,
+            arrow: false,
+            appendTo: $('#uucss-change-site-url')[0],
+            interactive: true,
+            animation: 'shift-toward',
+            placement: 'top-start',
+            trigger: 'click',
+            hideOnClick: false,
+            theme: 'light',
+            maxWidth: 500,
+            onClickOutside(instance, event) {
+                instance.hide()
+            },
+            content: function () {
+                var content;
+                content = '<div class="tippy-connect-with-license">' +
+                    '               <div class="tippy-connect-with-license-content">' +
+                    '                   <div class="header-text">' +
+                    '                       <p>Enter your License Key below</p>' +
+                    '                   </div>' +
+                    '                   <div class="input-wrap">' +
+                    '                       <input type="text"  placeholder="License Key" class="uucss-key">' +
+                    '                       <a href="#" class="connect">Connect</a>' +
+                    '                   </div>' +
+                    '                   <div><p class="uucss-key-error"></p></div>' +
+                    '               </div>' +
+                    '          </div>';
+                return content;
+            },
+            onMount(instance){
+                /*$('a.connect-with-license .tippy-connect-with-license-content input.uucss-key').focus();
+                $('a.connect-with-license .tippy-connect-with-license-content .input-wrap .connect').click(function (e) {
+                    e.preventDefault();
+
+                    var license_key = $('a.connect-with-license .tippy-connect-with-license-content .input-wrap input').val();
+
+                    if(license_key === ''){
+                        alert('Please enter license key');
+                        return;
+                    }
+
+                    var $target = $(this);
+
+                    $target.text('Connecting...');
+                    $target.removeAttr('href');
+
+                    wp.ajax.post('uucss_connect',{ license_key : license_key }).then(function (i) {
+
+                        if(i.success){
+                            window.location.href = window.location.href + '&token=' + license_key + '&nonce=' + i.activation_nonce
+                        }
+
+                    }).fail(function (i) {
+
+                        $target.text('Connect');
+                        $target.attr('href','#');
+                        $('a.connect-with-license p.uucss-key-error').text(i);
+
+                    })
+
+                })*/
+            }
+        });
+
     });
 
 
@@ -634,6 +699,7 @@
             $('#license-email').text(i.email)
             $('#license-next_billing').text(new Date(i.next_billing * 1000).toLocaleDateString())
             $('#license-plan').text(i.plan)
+            $('#license-domain').text(i.siteUrl)
 
             container.removeClass('loading');
         }).fail(function (i) {
