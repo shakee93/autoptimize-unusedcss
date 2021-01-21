@@ -152,7 +152,7 @@ class UnusedCSS_DB
 
 			if($data['status'] == 'failed' || $data['status'] == 'queued'){
 
-				$data['attempts'] = 1;
+				$data['attempts'] = 0;
 
 			}
 

@@ -249,10 +249,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				        if($data['attempts'] < 4){
 
                             UnusedCSS_DB::update_status('queued', $data['url']);
-                            return;
-                        }
 
-					    if(!$this->is_file_excluded($this->options, $link)){
+                        }else if(!$this->is_file_excluded($this->options, $link)){
 
                             $data['meta']['warnings'][] = [
                                 "file" => $link,
@@ -273,9 +271,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                                 return $carry;
                             }, []), 'value');
 
-                        }
+                            UnusedCSS_DB::update_warnings($data['meta']['warnings'], $data['url']);
 
-                        UnusedCSS_DB::update_warnings($data['meta']['warnings'], $data['url']);
+                        }
 
 				    }
 			    }
