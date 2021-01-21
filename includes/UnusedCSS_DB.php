@@ -124,7 +124,7 @@ class UnusedCSS_DB
 	}
 
 
-	static function add_link( $data ) {
+	static function add_link( $data , $count_attempts = false) {
 
     	if(!$data['url']){
     		return;
@@ -142,7 +142,11 @@ class UnusedCSS_DB
 
             }
 
-            $data['attempts'] = $exist['attempts'] + 1;
+            if($count_attempts){
+
+                $data['attempts'] = $exist['attempts'] + 1;
+
+            }
 
 			self::update( $data, array(
 				'url' => $data['url']
@@ -421,17 +425,17 @@ class UnusedCSS_DB
         }
     }
 
-    static function update_warnings($warnings, $link){
+    static function update_meta($data, $link){
 
-        if(isset($warnings)){
+        if(isset($data['warnings'])){
 
-            $data['warnings'] = serialize($warnings);
-
-            self::update($data, [
-                'url' => $link
-            ]);
+            $data['warnings'] = serialize($data['warnings']);
 
         }
+
+        self::update($data, [
+            'url' => $link
+        ]);
     }
 
     static function clear_links(){
