@@ -614,6 +614,84 @@
             })
         });
 
+        $('#uucss-change-site-url').click(function (e) {
+            e.preventDefault();
+        });
+
+        tippy('#uucss-change-site-url', {
+            allowHTML: true,
+            arrow: false,
+            appendTo: $('#uucss-change-site-url')[0],
+            interactive: true,
+            animation: 'shift-toward',
+            placement: 'top-start',
+            trigger: 'click',
+            hideOnClick: false,
+            theme: 'light',
+            maxWidth: 500,
+            onClickOutside(instance, event) {
+                instance.hide()
+            },
+            content: function () {
+                var content;
+                content = '<div class="tippy-connect-with-license">' +
+                    '               <div class="tippy-connect-with-license-content">' +
+                    '                   <div class="header-text">' +
+                    '                       <p>Enter Site URL</p>' +
+                    '                   </div>' +
+                    '                   <div class="input-wrap">' +
+                    '                       <select>' +
+                    '                           <option value="https://" selected>https://</option>' +
+                    '                           <option value="http://">http://</option>' +
+                    '                       </select>' +
+                    '                       <input type="text"  placeholder="example.com" class="site-url">' +
+                    '                       <a href="#" class="update-site-url">Update</a>' +
+                    '                   </div>' +
+                    '                   <div><p class="uucss-url-error"></p></div>' +
+                    '               </div>' +
+                    '          </div>';
+                return content;
+            },
+            onMount(instance){
+                $('#uucss-change-site-url input.site-url').focus();
+                $('#uucss-change-site-url .input-wrap a.update-site-url').click(function (e) {
+                    e.preventDefault();
+
+                    var url = $('#uucss-change-site-url input.site-url').val();
+
+                    if(url === ''){
+                        alert('Please enter license key');
+                        return;
+                    }
+
+                    var $target = $(this);
+
+                    $target.text('Connecting...');
+                    $target.removeAttr('href');
+
+                    wp.ajax.post('uucss_update_site_url',{ url : url }).then(function (i) {
+
+                        if(i.success){
+                            console.log(i)
+                        }
+
+                    }).fail(function (i) {
+
+                        $target.text('Connect');
+                        $target.attr('href','#');
+                        if(typeof i === 'object'){
+                            $('#uucss-change-site-url p.uucss-url-error').text(i.statusText);
+                        }else{
+                            $('#uucss-change-site-url p.uucss-url-error').text(i);
+                        }
+
+
+                    })
+
+                })
+            }
+        });
+
     });
 
 

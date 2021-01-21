@@ -200,7 +200,8 @@ span.uucss-toggle-section.rotate {
     max-width: 500px!important;
 }
 
-#uucss-wrapper a.connect-with-license .tippy-content .header-text p{
+#uucss-wrapper a.connect-with-license .tippy-content .header-text p,
+#uucss-change-site-url .tippy-content .header-text p{
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 10px;
@@ -208,7 +209,9 @@ span.uucss-toggle-section.rotate {
     margin-top: 5px;
 }
 
-#uucss-wrapper a.connect-with-license .tippy-content .input-wrap input{
+#uucss-wrapper a.connect-with-license .tippy-content .input-wrap input,
+#uucss-change-site-url .tippy-content .input-wrap input,
+#uucss-change-site-url .tippy-content .input-wrap select{
     width: 280px;
     height: 40px;
     line-height: 40px;
@@ -216,12 +219,24 @@ span.uucss-toggle-section.rotate {
     margin-right: 5px;
 }
 
-#uucss-wrapper a.connect-with-license .tippy-content p.uucss-key-error{
+#uucss-change-site-url .tippy-content .input-wrap input,
+#uucss-change-site-url .tippy-content .input-wrap select{
+    width: unset;
+}
+
+#uucss-change-site-url .tippy-content .input-wrap select{
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+#uucss-wrapper a.connect-with-license .tippy-content p.uucss-key-error,
+#uucss-change-site-url .tippy-content p.uucss-url-error{
     margin: 5px 5px 0 5px;
     color: #f44336;
 }
 
-#uucss-wrapper a.connect-with-license .tippy-content .input-wrap a.connect {
+#uucss-wrapper a.connect-with-license .tippy-content .input-wrap a.connect,
+#uucss-change-site-url .tippy-content .input-wrap a.update-site-url{
     padding: 5px 25px;
     background-color: #674499;
     text-decoration: none;

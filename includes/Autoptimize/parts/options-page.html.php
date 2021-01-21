@@ -440,6 +440,9 @@
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
+                                    <a href="#"
+                                       class="uucss-activate" id="uucss-change-site-url"> Change Site URL
+                                    </a>
 								<?php else : ?>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
