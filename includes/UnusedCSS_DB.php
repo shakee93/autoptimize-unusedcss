@@ -148,6 +148,10 @@ class UnusedCSS_DB
 
                 $data['attempts'] = $exist['attempts'] + 1;
 
+                if($data['status'] == 'failed' && $data['attempts'] <= 3){
+
+                    $data['status'] = 'queued';
+                }
             }
 
 			self::update( $data, array(
