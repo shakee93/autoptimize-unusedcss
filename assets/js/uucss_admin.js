@@ -573,6 +573,7 @@
             },
             onMount(instance){
                 $('a.connect-with-license .tippy-connect-with-license-content input.uucss-key').focus();
+                $('a.connect-with-license .tippy-connect-with-license-content .input-wrap .connect').off('click');
                 $('a.connect-with-license .tippy-connect-with-license-content .input-wrap .connect').click(function (e) {
                     e.preventDefault();
 
@@ -654,6 +655,7 @@
             },
             onMount(instance){
                 $('#uucss-change-site-url input.site-url').focus();
+                $('#uucss-change-site-url .input-wrap a.update-site-url').off('click');
                 $('#uucss-change-site-url .input-wrap a.update-site-url').click(function (e) {
                     e.preventDefault();
 

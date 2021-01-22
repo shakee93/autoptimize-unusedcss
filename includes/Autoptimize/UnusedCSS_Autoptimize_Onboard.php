@@ -42,7 +42,7 @@ class UnusedCSS_Autoptimize_Onboard {
         }
 
         $this->uucss->async = false;
-        $this->uucss->cache(get_site_url(), [
+        $this->uucss->cache(UnusedCSS_Autoptimize_Admin::site_url(), [
             'immediate' => true,
         ]);
 
