@@ -38,14 +38,7 @@ class UnusedCSS_Store {
         $this->args = $args;
         $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
-        // load wp filesystem related files;
-        if (!class_exists('WP_Filesystem_Base')) {
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            WP_Filesystem();
-        }
-
-        global $wp_filesystem;
-        $this->file_system = $wp_filesystem;
+        $this->file_system = new UnusedCSS_FileSystem();
 
         $this->purge_css();
 
