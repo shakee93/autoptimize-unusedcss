@@ -32,6 +32,7 @@ class UnusedCSS_FileSystem
 
     public function delete($path, $recursive = true){
         if(is_dir($path)){
+            array_map('unlink', glob("$path/*.*"));
             rmdir($path);
         }else{
             unlink($path);
