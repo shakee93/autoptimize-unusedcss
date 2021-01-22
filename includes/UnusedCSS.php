@@ -108,16 +108,12 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
-        // load wp filesystem related files;
-        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		// load wp filesystem related files;
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
-        if ( !function_exists( 'WP_Filesystem' ) ) {
-            return false;
-        }
-
-        if(!$this->is_credentials()){
-            return false;
-        }
+		if ( function_exists( 'WP_Filesystem' ) ) {
+			WP_Filesystem();
+		}
 
 		global $wp_filesystem;
 
@@ -133,23 +129,6 @@ abstract class UnusedCSS {
 
 		return true;
 	}
-
-    public function is_credentials()
-    {
-
-        if( false === ($credentials = request_filesystem_credentials('')) )
-        {
-            return false;
-        }
-
-        if(!WP_Filesystem($credentials))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
 
     public function enabled() {
 
