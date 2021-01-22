@@ -54,6 +54,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 			add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+			add_action( "wp_ajax_uucss_site_url", [ $this, 'uucss_site_url' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -84,6 +85,41 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    }, 1 );
 
 	    parent::__construct( $ao_uucss );
+
+    }
+
+    public function uucss_site_url(){
+
+	    $url = $_REQUEST['url'];
+	    $id = $_REQUEST['id'];
+
+	    if(!isset($url) || empty($url)){
+
+	        wp_send_json_error('url required');
+        }
+
+        if(!isset($id) || empty($id)){
+
+            wp_send_json_error('id required');
+        }
+
+        $uucss_api         = new UnusedCSS_Api();
+        $results           = $uucss_api->post( 'domain', [ 'url' => $url, 'id' => $id ] );
+
+        if ( $uucss_api->is_error( $results ) ) {
+            if(isset($results->errors) && isset($results->errors[0])){
+                wp_send_json_error($results->errors[0]->detail);
+            }else{
+                wp_send_json_error('URL update failed');
+            }
+        }
+
+        $success = self::site_url($url);
+
+        wp_send_json_success([
+            'success' => $success,
+            'domain' => $results->data,
+        ]);
 
     }
 
@@ -243,6 +279,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         }
         return get_site_option( $name, false );
+    }
+
+    public static function site_url($url = false){
+
+        $options = self::fetch_options();
+
+	    if($url){
+
+            $options['uucss_site_url'] = $url;
+            UnusedCSS_Autoptimize_Admin::update_site_option( 'autoptimize_uucss_settings', $options );
+            return true;
+	    }
+
+        if(isset($options['uucss_site_url'])){
+
+            return $options['uucss_site_url'];
+        }
+
+        return get_site_url();
     }
 
     public static function update_site_option($name, $value){

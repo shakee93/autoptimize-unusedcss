@@ -640,7 +640,7 @@
                     '                       <p>Enter Site URL</p>' +
                     '                   </div>' +
                     '                   <div class="input-wrap">' +
-                    '                       <select>' +
+                    '                       <select id="site-protocol">' +
                     '                           <option value="https://" selected>https://</option>' +
                     '                           <option value="http://">http://</option>' +
                     '                       </select>' +
@@ -666,18 +666,22 @@
 
                     var $target = $(this);
 
-                    $target.text('Connecting...');
+                    $target.text('Updating...');
                     $target.removeAttr('href');
 
-                    wp.ajax.post('uucss_update_site_url',{ url : url }).then(function (i) {
+                    wp.ajax.post('uucss_site_url',{ url : $('#site-protocol').val() + url, id : $('#license-domain').data('domain_id') }).then(function (i) {
 
-                        if(i.success){
-                            console.log(i)
+                        if(i.success && i.domain){
+                            $('#license-domain').text(i.domain.domain)
+                            $target.text('Update');
+                            $target.attr('href','#');
+                            instance.hide();
+                            alert('url update success');
                         }
 
                     }).fail(function (i) {
 
-                        $target.text('Connect');
+                        $target.text('Update');
                         $target.attr('href','#');
                         if(typeof i === 'object'){
                             $('#uucss-change-site-url p.uucss-url-error').text(i.statusText);
@@ -689,7 +693,10 @@
                     })
 
                 })
-            }
+            },
+            onHidden(instance) {
+
+            },
         });
 
     });
@@ -713,6 +720,10 @@
             $('#license-next_billing').text(new Date(i.next_billing * 1000).toLocaleDateString())
             $('#license-plan').text(i.plan)
             $('#license-domain').text(i.siteUrl)
+
+            if(i.site){
+                $('#license-domain').data('domain_id',i.site.id);
+            }
 
             container.removeClass('loading');
         }).fail(function (i) {
