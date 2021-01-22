@@ -108,12 +108,16 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
-		// load wp filesystem related files;
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+        // load wp filesystem related files;
+        require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
-		if ( function_exists( 'WP_Filesystem' ) ) {
-			WP_Filesystem();
-		}
+        if ( !function_exists( 'WP_Filesystem' ) ) {
+            return false;
+        }
+
+        if(!$this->is_credentials()){
+            return false;
+        }
 
 		global $wp_filesystem;
 
@@ -129,6 +133,22 @@ abstract class UnusedCSS {
 
 		return true;
 	}
+
+    public function is_credentials()
+    {
+
+        if( false === ($credentials = request_filesystem_credentials('')) )
+        {
+            return false;
+        }
+
+        if(!WP_Filesystem($credentials))
+        {
+            return false;
+        }
+
+        return true;
+    }
 
 
     public function enabled() {
@@ -256,6 +276,12 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options();
 	    }
 
+        $exist_link = UnusedCSS_DB::get_link($url);
+
+        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3 && !isset($args['immediate'])){
+            return false;
+        }
+
         $link_data = array(
             'url' => $url,
             'files' => null,
@@ -264,12 +290,6 @@ abstract class UnusedCSS {
         );
 
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
-
-        $exist_link = UnusedCSS_DB::get_link($url);
-
-        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3){
-            return false;
-        }
 
         UnusedCSS_DB::add_link($link_data);
 
