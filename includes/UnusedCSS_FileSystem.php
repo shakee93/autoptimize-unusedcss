@@ -10,16 +10,16 @@ class UnusedCSS_FileSystem
 
     use UnusedCSS_Utils;
 
-    public function put_contents( $file_location, $css, $mode ){
-        return file_put_contents($file_location, $css, $mode);
+    public function put_contents( $file_location, $css ){
+        return file_put_contents($file_location, $css);
     }
 
     public function exists( $dir ){
         return file_exists($dir);
     }
 
-    public function mkdir( $dir ){
-        mkdir($dir);
+    public function mkdir( $dir , $mode = 0755){
+        return mkdir($dir, $mode, true);
     }
 
     public function is_writable( $dir ){

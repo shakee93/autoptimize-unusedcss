@@ -121,7 +121,7 @@ class UnusedCSS_Store {
 
 		    $css .=  $file->css;
 
-		    $this->file_system->put_contents( $file_location, $css, FS_CHMOD_FILE );
+		    $this->file_system->put_contents( $file_location, $css );
 
 		    do_action( 'uucss/cache_file_created', $file_location, $file->css );
 
