@@ -293,7 +293,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }*/
 
-	    return true;
+        return apply_filters('uucss/enabled', true);
     }
 
 
