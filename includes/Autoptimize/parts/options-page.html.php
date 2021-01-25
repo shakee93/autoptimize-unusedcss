@@ -125,7 +125,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Exclude URLs', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline exclude-links has-tooltip"
-                                          data-message="Whitelisted links example example.com/some-url, /another-url/some-url">
+                                          data-message="Exclude from RapidLoad hello-url/some-url">
 
                                     </span></th>
                                 <td>

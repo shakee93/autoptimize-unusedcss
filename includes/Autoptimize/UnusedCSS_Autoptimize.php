@@ -213,7 +213,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    $key = array_search( $link, array_column( $data['files'], 'original' ) );
+				    $key = isset($data['files']) ? array_search( $link, array_column( $data['files'], 'original' ) ) : null;
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
