@@ -420,7 +420,7 @@
                                 <li><strong>Email : </strong> <span id="license-email"></span></li>
                                 <li><strong>Plan : </strong><span id="license-plan"></span></li>
                                 <li><strong>Next Billing : </strong><span id="license-next_billing"></span></li>
-                                <li><strong>Domain : </strong><span id="license-domain"></span></li>
+                                <li><strong>Domain : </strong><span id="license-domain"></span><span style="display: none"><?php echo UnusedCSS_Autoptimize_Admin::site_url() ?></span></li>
                             </ul>
 
                             <div>
