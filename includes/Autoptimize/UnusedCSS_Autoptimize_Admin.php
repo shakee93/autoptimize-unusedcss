@@ -151,7 +151,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
-                <h4><span class="dashicons dashicons-yes-alt"></span> UnusedCSS successfully ran your first job!</h4>
+                <h4><span class="dashicons dashicons-yes-alt"></span> RapidLoad successfully ran your first job!</h4>
                 <p><?php _e( 'You slashed <strong>' . $job['meta']['stats']->reductionSize . ' </strong> of unused CSS - that\'s <strong>' . $job['meta']['stats']->reduction . '% </strong> of your total CSS file size. Way to go 👏', 'sample-text-domain' ); ?></p>
             </div>
 	    <?php endif;
@@ -293,7 +293,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }*/
 
-	    return true;
+        return apply_filters('uucss/enabled', true);
     }
 
 

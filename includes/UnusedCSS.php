@@ -9,7 +9,7 @@ abstract class UnusedCSS {
 
 	use UnusedCSS_Utils;
 
-	public $base = '/cache/autoptimize/uucss';
+	public $base = 'cache/autoptimize/uucss';
 	public $provider = null;
 
 	public $url = null;
@@ -179,7 +179,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    return true;
+	    return apply_filters('uucss/enabled_frontend', true);
     }
 
 
@@ -370,7 +370,7 @@ abstract class UnusedCSS {
 
 	public function init_base_dir() {
 
-		self::$base_dir = WP_CONTENT_DIR . $this->base;
+		self::$base_dir = trailingslashit(WP_CONTENT_DIR) . $this->base;
 
 		if ( $this->file_system->exists( self::$base_dir ) ) {
 			return true;
@@ -483,7 +483,7 @@ abstract class UnusedCSS {
 		    return;
 	    }
 
-	    $delete = WP_CONTENT_DIR . $this->base;
+	    $delete = trailingslashit(WP_CONTENT_DIR) . $this->base;
 
 	    if ( ! $this->file_system->exists( $delete ) ) {
 		    return;
