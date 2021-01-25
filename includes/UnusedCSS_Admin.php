@@ -121,7 +121,7 @@ abstract class UnusedCSS_Admin {
 		$data = $api->post( 'whitelist-packs/wp-suggest', [
 			'plugins' => $active_plugins,
 			'theme'   => get_template(),
-			'url'     => site_url()
+			'url'     => UnusedCSS_Autoptimize_Admin::site_url()
 		] );
 
 		if ( wp_doing_ajax() ) {
