@@ -179,7 +179,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    return apply_filters('uucss/enabled_frontend', true);
+	    return apply_filters('uucss/frontend/enabled', true);
     }
 
 

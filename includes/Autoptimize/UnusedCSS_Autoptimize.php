@@ -270,7 +270,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
-            }else if(!$inject->successfully_injected && $data['attempts'] < 3){
+            }else if(!$inject->successfully_injected && $data['attempts'] < 1){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',
