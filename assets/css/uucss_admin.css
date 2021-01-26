@@ -830,6 +830,26 @@ input#uucss-pack-suggest {
     font-size: 11px;
 }
 
+.tippy-content .uucss-tippy-actions{
+    margin-right: -10px;
+    margin-left: -10px;
+    padding: 5px 10px;
+}
+
+.tippy-content .uucss-tippy-actions button{
+    line-height: 20px;
+    min-height: 20px;
+    color: #fff;
+    border: none;
+    background-color: #8055b2;
+    width: 60px;
+}
+
+.tippy-content .uucss-tippy-actions button:hover{
+    color: #fff;
+    background-color: #9672c0;
+}
+
 .tippy-content .stat-tooltip .time{
     margin-right: -10px;
     margin-left: -10px;

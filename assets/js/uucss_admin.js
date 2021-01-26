@@ -312,6 +312,9 @@
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
+                        var $tippy_actions_html = $('<div class="uucss-tippy-actions"></div>');
+                        $tippy_actions_html.append('<button class="test button primary"><span>Test</span></button>');
+
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
@@ -324,12 +327,18 @@
                                     '           </div>' +
                                     '       </div>' +
                                     $warnings_html.wrap('<div></div>').parent().html() +
+                                    $tippy_actions_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
                                     '   <p class="val">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
                                     '   </p>' +
                                     '</div>' +
                                     '</div>')
+
+                                c.find('button.test').off().click(function (e) {
+                                    e.preventDefault();
+                                    console.log('hi');
+                                });
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -380,6 +389,8 @@
                             }
 
                         }
+
+
 
                         if (rowData.status === 'failed') {
                             stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
