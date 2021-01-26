@@ -902,3 +902,19 @@ input#uucss-pack-suggest {
 .uucss-history .spinner-history.loading {
     opacity: 1;
 }
+
+.featherlight .spinner.loading.featherlight-inner {
+    opacity: 1;
+    visibility: visible;
+    float: unset;
+    position: absolute;
+    top: 140px;
+    left: 140px;
+    margin: 0 auto;
+}
+
+.featherlight .featherlight-content{
+    margin: 0 auto;
+    min-width: 300px;
+    min-height: 300px;
+}

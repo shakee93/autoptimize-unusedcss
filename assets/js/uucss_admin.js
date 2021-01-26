@@ -451,8 +451,33 @@
                         instance.hide()
                     },
                     onMount(instance) {
-                        $('.uucss-option-list ul.option-list li a').click(function (e) {
-                            e.preventDefault();
+                        tippy($('.uucss-option-list ul.option-list li a[data-action_name="remove"]')[0], {
+                            content: 'Remove RapidLoad cache files',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        })
+
+                        tippy($('.uucss-option-list ul.option-list li a[data-action_name="test"]')[0], {
+                            content: 'Test Url',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        });
+
+                        $('.uucss-option-list ul.option-list li a').off().click(function (e) {
 
                             var $this = $(this);
 
@@ -465,17 +490,51 @@
                                 }
                                 case 'test':{
 
+                                    if($this.data('fetching')){
+                                        return;
+                                    }
+
                                     $.ajax({
                                         method : 'POST',
                                         url: wp.ajax.settings.url + '?action=uucss_test_url',
                                         data : {
                                             url: data.url,
                                         },
-                                        success: function (response) {
-                                            if(response.success && response.data && response.data.injected){
-                                                alert('successfully injected')
-                                            }
+                                        beforeSend(){
+                                            $this.data('fetching', true);
                                         },
+                                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+                                            $content.append('<span>Something went wrong</span>');
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+                                        },
+                                        success: function (response) {
+                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+
+                                            if(response.success && response.data){
+
+                                                $content.append('<ul></ul>');
+                                                $content.find('ul').append('<li>Injected : '+ (response.data.injected ? 'success' : 'failed') +'</li>')
+                                                $content.find('ul').append('<li>Total CSS Found : '+ response.data.totalCSS +'</li>')
+                                                $content.find('ul').append('<li>Total Injected CSS : '+ response.data.injectedCSS +'</li>')
+                                                $content.find('ul').append('<li>Total JS Found : '+ response.data.totalJS +'</li>')
+
+                                            }else{
+
+                                                $content.append('<span>Something went wrong</span>');
+
+                                            }
+
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+
+                                        },
+                                        complete:function () {
+                                            $this.data('fetching', false);
+                                        }
                                     })
 
                                     break;
@@ -484,6 +543,11 @@
                                     break;
                                 }
                             }
+                        })
+
+                        $('.uucss-option-list ul.option-list li a[data-action_name="test"]')
+                            .featherlight('<div class="spinner loading"></div>',{
+
                         })
                     },
                     placement: 'bottom-end',
