@@ -87,6 +87,20 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     }
 
+	public function getNotifications() {
+		$notifications = [];
+
+		if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
+		    $notifications[] = [
+			    "title" => "Incompatible Autoptimize option enabled",
+			    "message" => "It is recommended to enable 'Save aggregated script/css as static files?' in Autoptimize to RapidLoad to work properly.",
+			    "type" => "warning"
+		    ];
+		}
+
+		return $notifications;
+    }
+
 	public function enqueueScripts() {
 
 		wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
@@ -103,6 +117,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		), UUCSS_VERSION );
 		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
+
+
 		$data = array(
 			'api' => UnusedCSS_Api::get_key(),
 			'nonce' => wp_create_nonce( 'uucss_nonce' ),
@@ -110,7 +126,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'ajax_url'          => admin_url( 'admin-ajax.php' ),
 			'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
-			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified()
+			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified(),
+            'notifications' => $this->getNotifications()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );

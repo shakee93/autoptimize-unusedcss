@@ -1,6 +1,6 @@
 (function ($) {
 
-    function showNotification(heading, message) {
+    function showNotification(heading, message, type = 'info') {
         var container = $('#uucss-wrapper')
         var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
@@ -8,8 +8,9 @@
         content.find('p').remove();
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
 
-        container.prepend('<li class="uucss-notification uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
+        container.prepend('<li class="uucss-notification uucss-notification-'+ type +' uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
+
 
     function hideNotification() {
         var container = $('.uucss-notification');
@@ -18,6 +19,15 @@
 
     $(document).ready(function () {
 
+
+
+        if (window.uucss && window.uucss.notifications.length) {
+            window.uucss.notifications.forEach(function (i) {
+
+                showNotification(i.title, i.message, i.type);
+
+            })
+        }
 
         // options page
         window.tagBox.init();
