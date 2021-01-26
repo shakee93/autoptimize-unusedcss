@@ -54,6 +54,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 			add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+			add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -138,6 +139,30 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		return array_merge( $_links, $links );
 	}
+
+	function uucss_test_url(){
+
+	    if(!isset($_REQUEST['url'])){
+	        wp_send_json_error('url required');
+        }
+
+	    $url = $_REQUEST['url'];
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->post( 'test/wordpress',
+            [ 'url' => $url ] );
+
+        if ( $uucss_api->is_error( $result ) ) {
+            if(isset($result->errors) && isset($result->errors[0])){
+                wp_send_json_error($result->errors[0]->detail);
+            }else{
+                wp_send_json_error('Test fail');
+            }
+        }
+
+        wp_send_json_success($result);
+    }
 
 
 	function first_uucss_job() {

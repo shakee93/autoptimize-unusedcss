@@ -408,7 +408,7 @@ table.dataTable thead th, table.dataTable thead td {
 #uucss-history .action button {
     position: relative;
     border: none;
-    background: #F44336;
+    background: #455a64;
     color: white;
     border-radius: 4px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -416,6 +416,10 @@ table.dataTable thead th, table.dataTable thead td {
     width: 25px;
     height: 25px;
     margin-right: 4px;
+}
+
+#uucss-history .tippy-content .uucss-option-list{
+    width: 60px;
 }
 
 #uucss-history .action button[data-uucss-optimize] {
@@ -426,6 +430,12 @@ table.dataTable thead th, table.dataTable thead td {
     position: absolute;
     left: 2px;
     top: 4px;
+}
+
+#uucss-history .action button span.dashicons.dashicons-ellipsis{
+    transform: rotate(90deg) translateX(-1px);
+    line-height: 20px;
+    font-size: 14px;
 }
 
 #uucss-history tr.loading {
