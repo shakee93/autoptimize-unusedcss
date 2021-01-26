@@ -442,16 +442,17 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
-                        $content.find('ul').append('<li><a data-action_name="test" href="#">Test</a></li>')
-                        $content.find('ul').append('<li><a data-action_name="remove" href="#">Remove</a></li>');
+                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">Test</a></li>')
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
                     },
                     onClickOutside(instance, event) {
                         instance.hide()
                     },
-                    onMount(instance) {
-                        tippy($('.uucss-option-list ul.option-list li a[data-action_name="remove"]')[0], {
+                    onCreate(){
+
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="remove"]')[0], {
                             content: 'Remove RapidLoad cache files',
                             allowHTML: true,
                             placement: 'left',
@@ -464,7 +465,7 @@
                             appendTo: 'parent'
                         })
 
-                        tippy($('.uucss-option-list ul.option-list li a[data-action_name="test"]')[0], {
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="test"]')[0], {
                             content: 'Test Url',
                             allowHTML: true,
                             placement: 'left',
@@ -476,6 +477,9 @@
                             maxWidth: 500,
                             appendTo: 'parent'
                         });
+
+                    },
+                    onMount(instance) {
 
                         $('.uucss-option-list ul.option-list li a').off().click(function (e) {
 

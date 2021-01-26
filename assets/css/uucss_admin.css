@@ -419,7 +419,27 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 #uucss-history .tippy-content .uucss-option-list{
-    width: 60px;
+    width: 90px;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li{
+    padding: 5px 10px;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li:hover{
+    background-color: #e0e0e0;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li a{
+    font-size: 12px;
+    text-decoration: none;
+    display: block;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li:last-child{
+    margin-bottom: 0;
 }
 
 #uucss-history .action button[data-uucss-optimize] {
