@@ -535,7 +535,7 @@
                                         complete:function () {
                                             $this.data('fetching', false);
                                         }
-                                    })
+                                    });
 
                                     break;
                                 }
