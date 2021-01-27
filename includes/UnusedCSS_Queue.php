@@ -138,8 +138,10 @@ class UnusedCSS_Queue
     function cache($url){
         global $uucss;
 
+        $post_id = url_to_postid($url);
+
         $uucss->init_async_store( $uucss->provider, $url, [
-            'options' => $uucss->api_options()
+            'options' => $uucss->api_options($post_id)
         ] );
     }
 
