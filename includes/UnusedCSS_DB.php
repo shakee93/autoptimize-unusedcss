@@ -298,6 +298,7 @@ class UnusedCSS_DB
             $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
             $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
             $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
+            $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
             $data['status'] = isset( $link->status ) ? $link->status : null;
             $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
             $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
