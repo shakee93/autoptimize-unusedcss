@@ -6,7 +6,7 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.0";
+    static $db_version = "1.1";
     static $db_option = "rapidload_migration";
 
     static function uninitialize_site($old_site){
@@ -166,6 +166,14 @@ class UnusedCSS_DB
 
 			}
 
+            global $post;
+
+            if(!isset($data['post_id']) && $post){
+
+                $data['post_id'] = $post->ID;
+
+            }
+
 			$wpdb->insert(
 				$wpdb->prefix . 'rapidload_uucss_job',
 				$data
@@ -303,6 +311,7 @@ class UnusedCSS_DB
             $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
             $data['url'] = isset( $link->url ) ? $link->url : null;
             $data['id'] = isset($link->id) ? $link->id : null;
+            $data['post_id'] = isset($link->post_id) ? $link->post_id : null;
 
         }else{
 
@@ -541,6 +550,7 @@ class UnusedCSS_DB
         $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
+		post_id bigint(20) NULL,
 		url varchar(191) NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,

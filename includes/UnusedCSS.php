@@ -245,20 +245,16 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    global $post;
-
-	    if ( ! isset( $args['post_id'] ) && $post ) {
-		    $args['post_id'] = $post->ID;
-	    }
-
-	    if ( ! isset( $args['options'] ) ) {
-		    $args['options'] = $this->api_options();
-	    }
-
         $exist_link = UnusedCSS_DB::get_link($url);
 
         if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3 && !isset($args['immediate'])){
             return false;
+        }
+
+        $post_id = (isset($exist_link) && $exist_link['post_id']) ? $exist_link['post_id'] : false;
+
+        if ( ! isset( $args['options'] ) ) {
+            $args['options'] = $this->api_options($post_id);
         }
 
         $link_data = array(
@@ -300,12 +296,7 @@ abstract class UnusedCSS {
 	}
 
 
-	public function api_options( $post_id = null ) {
-		global $post;
-
-		if ( $post ) {
-			$post_id = $post->ID;
-		}
+	public function api_options( $post_id = false ) {
 
 	    $whitelist_packs = [ 'wp' ];
 	    if ( isset( $this->options['whitelist_packs'] ) ) {
@@ -320,7 +311,7 @@ abstract class UnusedCSS {
 
 	    }
 
-		$post_options = UnusedCSS_Admin::get_page_options( $post_id );
+		$post_options = ($post_id) ? UnusedCSS_Admin::get_page_options( $post_id ) : [];
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
