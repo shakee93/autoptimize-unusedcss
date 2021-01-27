@@ -72,13 +72,8 @@ abstract class UnusedCSS_Admin {
     public static function get_page_options($post_id)
     {
         $options = [];
-
-        if($post_id){
-
-            foreach (self::$page_options as $option) {
-                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
-            }
-
+        foreach (self::$page_options as $option) {
+            $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
         }
 
         return $options;
