@@ -138,7 +138,9 @@ class UnusedCSS_Queue
     function cache($url){
         global $uucss;
 
-        $uucss->init_async_store( $uucss->provider, $url, $uucss->api_options() );
+        $uucss->init_async_store( $uucss->provider, $url, [
+            'options' => $uucss->api_options()
+        ] );
     }
 
     function uucss_process_queue_schedule($schedules){
