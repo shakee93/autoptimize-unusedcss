@@ -108,16 +108,7 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
-		// load wp filesystem related files;
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-
-		if ( function_exists( 'WP_Filesystem' ) ) {
-			WP_Filesystem();
-		}
-
-		global $wp_filesystem;
-
-		$this->file_system = $wp_filesystem;
+		$this->file_system = new UnusedCSS_FileSystem();
 
 		if ( ! $this->file_system ) {
 			return false;
@@ -188,7 +179,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    return apply_filters('uucss/enabled_frontend', true);
+	    return apply_filters('uucss/frontend/enabled', true);
     }
 
 

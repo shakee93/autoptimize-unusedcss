@@ -341,12 +341,12 @@
                                 <td>
                                     <?php
                                         $intervals = [
-                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 4],
-                                                ['value' => 300, 'name' => '5 Miniute', 'max' => 4],
+                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 8],
+                                                ['value' => 300, 'name' => '5 Miniute', 'max' => 8],
                                                 ['value' => 600, 'name' => '10 Miniute', 'max' => 8],
                                                 ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],
-                                                ['value' => 1800, 'name' => '30 Miniute', 'max' => 8],
-                                                ['value' => 3600, 'name' => '1 Hour', 'max' => 8],
+                                                ['value' => 1800, 'name' => '30 Miniute', 'max' => 16],
+                                                ['value' => 3600, 'name' => '1 Hour', 'max' => 16],
                                         ];
                                         $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : UnusedCSS_Queue::$job_count;
                                         $default_interval = isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : UnusedCSS_Queue::$interval;
@@ -354,7 +354,7 @@
                                     Run
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
                                         <?php
-                                        foreach ([1,2,4,8] as $job_count){
+                                        foreach ([1,2,4,8,16] as $job_count){
                                             echo sprintf('<option value="%s" %s>%s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count);
                                         }
                                         ?>
