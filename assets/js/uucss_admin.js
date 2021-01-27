@@ -442,7 +442,7 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
-                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">Test</a></li>')
+                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">Frontend Test</a></li>')
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -524,6 +524,10 @@
                                                 $content.find('ul').append('<li>Injected : '+ (response.data.injected ? 'success' : 'failed') +'</li>')
                                                 $content.find('ul').append('<li>Total CSS Found : '+ response.data.totalCSS +'</li>')
                                                 $content.find('ul').append('<li>Total Injected CSS : '+ response.data.injectedCSS +'</li>')
+                                                $content.find('ul').append('<li>Total Inline CSS Found : '+ response.data.totalInlineCSS +'</li>')
+                                                $content.find('ul').append('<li>Total Injected Inline CSS : '+ response.data.injectedInlineCSS +'</li>')
+                                                $content.find('ul').append('<li>Cached Files Count : '+ response.data.cachedFileCount +'</li>')
+                                                $content.find('ul').append('<li>File Not Found Count : '+ response.data.filesNotFoundCount +'</li>')
                                                 $content.find('ul').append('<li>Total JS Found : '+ response.data.totalJS +'</li>')
 
                                             }else{
