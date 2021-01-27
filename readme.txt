@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.1 =
+ * NOTE: refresh optimization jobs
+ * fix: api options not being passed when job ran via the interval queue.
+ * fix: page safelist options not being passed to the api via the interval queue.
+
 = 1.3.0 =
  * feat: migrate to native php filesystem from wp filesystem
  * feat: increase the max limit of jobs per minute
