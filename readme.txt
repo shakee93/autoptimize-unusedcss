@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.2 =
+ * fix: noscript link tags being marked as warnings
+ * fix: show queue attempts when there are any
+ * refactor: minor text updates
+
 = 1.3.1 =
  * NOTE: refresh optimization jobs
  * fix: api options not being passed when job ran via the interval queue.
