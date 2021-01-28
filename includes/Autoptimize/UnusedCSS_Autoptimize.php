@@ -251,16 +251,22 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    }
 				    else {
 
-                        $inject->successfully_injected = false;
+				        $uucss_injected = $sheet->getAttribute('uucss');
 
-				        if(!$this->is_file_excluded($this->options, $link)){
+				        if(!$uucss_injected){
 
-                            if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
+                            $inject->successfully_injected = false;
 
-                                $data['meta']['warnings'][] = [
-                                    "file" => $link,
-                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
-                                ];
+                            if(!$this->is_file_excluded($this->options, $link)){
+
+                                if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
+
+                                    $data['meta']['warnings'][] = [
+                                        "file" => $link,
+                                        "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                    ];
+
+                                }
 
                             }
 
