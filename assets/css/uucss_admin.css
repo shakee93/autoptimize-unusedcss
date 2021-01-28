@@ -882,13 +882,20 @@ input#uucss-pack-suggest {
 
 #uucss-history_info .uucss_search_exact{
     position: absolute;
-    left: 270px;
-    bottom: 18px;
-    display: none !important;
+    right: 10px;
+    bottom: 8px;
+    opacity: 0;
 }
 
 #uucss-history_info input[type="search"]:focus + input.uucss_search_exact,
 #uucss-history_info input[type="search"]:hover + input.uucss_search_exact,
+#uucss-history_info .uucss-url-search-wrap:hover,
+#uucss-history_info .uucss_search_exact:hover,
 .uucss_search_exact:hover{
-    display: inline !important;
+    opacity: 1;
+}
+
+#uucss-history_info .uucss-url-search-wrap{
+    display: inline-block;
+    position: relative;
 }
