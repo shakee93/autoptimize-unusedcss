@@ -168,7 +168,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 	public static function is_css( $el ) {
-		return $el->rel === 'stylesheet' || $el->rel === 'preload' && $el->as === 'style';
+		return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
 	}
 
 
