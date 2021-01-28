@@ -467,7 +467,7 @@
                     "data": "meta",
                     visible : false,
                     render: function (data, type, row, meta) {
-                        if (data.warnings.length > 0) return 'warning';
+                        if (data.warnings && data.warnings.length > 0) return 'warning';
                         return data.status;
                     }
                 }
