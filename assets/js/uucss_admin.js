@@ -323,6 +323,12 @@
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
+                        var attemptsString = '';
+
+                        if(Number(rowData.attempts) !== 0){
+                            attemptsString = 'Attempts : ' + rowData.attempts
+                        }
+
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
@@ -338,6 +344,9 @@
                                     '<div class="time">' +
                                     '   <p class="val">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '   <p class="attempts">' +
+                                    attemptsString +
                                     '   </p>' +
                                     '</div>' +
                                     '</div>')

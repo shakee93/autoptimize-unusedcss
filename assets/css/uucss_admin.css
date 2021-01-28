@@ -826,8 +826,15 @@ input#uucss-pack-suggest {
     font-size: 11px;
 }
 
-.tippy-content .stat-tooltip .time .val{
+.tippy-content .stat-tooltip .time .val,
+.tippy-content .stat-tooltip .time .attempts{
     font-size: 11px;
+    display: inline;
+}
+
+.tippy-content .stat-tooltip .time .attempts{
+    float: right;
+    line-height: 20px;
 }
 
 .tippy-content .stat-tooltip .time{
