@@ -93,10 +93,26 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
 		    $notifications[] = [
 			    "title" => "Incompatible Autoptimize option enabled",
-			    "message" => "It is recommended to enable 'Save aggregated script/css as static files?' in Autoptimize to RapidLoad to work properly.",
-			    "type" => "warning"
+			    "message" => "It is recommended to enable <strong>'Save aggregated script/css as static files?'</strong> in Autoptimize to RapidLoad to work properly.",
+			    "type" => "error"
 		    ];
 		}
+
+        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css_inline' ) == 'on'){
+            $notifications[] = [
+                "title" => "Incompatible Autoptimize option enabled",
+                "message" => "It is recommended to disable <strong>'inline all css?'</strong> in Autoptimize to RapidLoad to work properly.",
+                "type" => "warning"
+            ];
+        }
+
+        if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
+            $notifications[] = [
+                "title" => "Incompatible Autoptimize option enabled",
+                "message" => "It is recommended to enable <strong>'Save aggregated script/css as static files?'</strong> in Autoptimize to RapidLoad to work properly.",
+                "type" => "error"
+            ];
+        }
 
 		return $notifications;
     }
