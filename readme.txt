@@ -78,6 +78,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 = 1.3.2 =
  * fix: noscript link tags being marked as warnings
  * fix: show queue attempts when there are any
+ * feat: add warning filter in optimizations filter
  * refactor: minor text updates
 
 = 1.3.1 =
