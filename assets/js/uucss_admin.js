@@ -172,9 +172,12 @@
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
                 '</select>');
 
+            var exact_match = '<input class="uucss_search_exact" type="checkbox" id="uucss_search_exact">';
+            $(exact_match).prependTo($('#uucss-history_info'));
 
             var input = '<input type="search" placeholder="Search" value="'+ url_filter +'">';
             $(input).prependTo($('#uucss-history_info'));
+
             $(select).prependTo($('#uucss-history_info'));
 
             $('#uucss-history_info select.status').on('change', function(){
@@ -184,12 +187,26 @@
             });
 
             var $input = $('#uucss-history_info input[type="search"]')
+            var $exact_search = $('#uucss-history_info input.uucss_search_exact')
 
             $input.on('input',function () {
                 url_filter = $(this).val();
-                table.column(1).search( url_filter ? url_filter : '', true, false )
+
+                var regex = url_filter;
+
+                if(exact_search_val){
+                    regex = '^' + url_filter + '$';
+                }
+
+                table.column(1).search( url_filter ? regex : '', true, false )
                     .draw();
-            })
+            });
+
+            $exact_search.on('input',function () {
+                exact_search_val = $(this).val();
+            });
+
+            $exact_search.prop('checked', exact_search_val);
 
             if(url_filter !== ''){
                 $input.focus().val('').val(url_filter);
@@ -202,6 +219,7 @@
 
         var status_filter = '';
         var url_filter = '';
+        var exact_search_val = false;
 
         $uucss_spinner.addClass('loading')
         table = table.DataTable({

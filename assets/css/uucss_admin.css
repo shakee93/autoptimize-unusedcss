@@ -879,3 +879,16 @@ input#uucss-pack-suggest {
 .uucss-history .spinner-history.loading {
     opacity: 1;
 }
+
+#uucss-history_info .uucss_search_exact{
+    position: absolute;
+    left: 270px;
+    bottom: 18px;
+    display: none !important;
+}
+
+#uucss-history_info input[type="search"]:focus + input.uucss_search_exact,
+#uucss-history_info input[type="search"]:hover + input.uucss_search_exact,
+.uucss_search_exact:hover{
+    display: inline !important;
+}
