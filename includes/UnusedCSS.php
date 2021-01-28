@@ -329,6 +329,12 @@ abstract class UnusedCSS {
             ]
         ]);
 
+        if(isset($this->options['uucss_cache_busting'])){
+
+            $cacheBusting = false;
+
+        }
+
 		return apply_filters('uucss/api/options', [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),
 			"fontFace"          => isset( $this->options['uucss_fontface'] ),

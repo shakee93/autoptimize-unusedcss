@@ -255,6 +255,17 @@
                                     </p>
 
                                     <p>
+                                        <label for="uucss_cache_busting">
+                                            <input id='uucss_cache_busting' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_cache_busting]'
+                                                <?php if ( isset( $options['uucss_cache_busting'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            Disable Cache Busting <em>-- disable rapidload crawler to view pages without a random query string</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
                                         <label for="uucss_analyze_javascript">
                                             <input id='uucss_analyze_javascript' type='checkbox'
                                                    name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
@@ -276,7 +287,7 @@
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Parse css files which are excluded by autoptimize as well (experimental)
+                                            Parse css files which are excluded by autoptimize as well
                                         </i>
                                     </label>
                                 </td>
