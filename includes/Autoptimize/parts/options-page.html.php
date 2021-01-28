@@ -149,8 +149,7 @@
                                                 <input type="button" class="button tagadd" value="Add Link">
                                             </div>
                                             <p class="howto">
-                                                Whitelisted links example <em> example.com/some-url,
-                                                    /another-url/some-url </em>
+                                                Exclude URL's from RapidLoad <em> hello-url/some-url, product/ </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -160,7 +159,7 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Exclude Css files', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip"
-                                          data-message="Whitelisted files example my-styles.css, /my-theme/style.css">
+                                          data-message="Exclude Specific CSS files from RapidLoad my-styles.css, /my-theme/style.css">
 
                                     </span></th>
                                 <td>
@@ -184,7 +183,7 @@
                                                 <input type="button" class="button tagadd" value="Add File">
                                             </div>
                                             <p class="howto">
-                                                Whitelisted files example <em> my-styles.css, /my-theme/style.css </em>
+                                                Exclude Specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
