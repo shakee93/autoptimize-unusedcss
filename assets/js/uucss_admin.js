@@ -172,10 +172,7 @@
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
                 '</select>');
 
-            var exact_match = '<input class="uucss_search_exact" type="checkbox" id="uucss_search_exact">';
-            $(exact_match).prependTo($('#uucss-history_info'));
-
-            var input = '<input type="search" placeholder="Search" value="'+ url_filter +'">';
+            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact"></div>';
             $(input).prependTo($('#uucss-history_info'));
 
             $(select).prependTo($('#uucss-history_info'));
