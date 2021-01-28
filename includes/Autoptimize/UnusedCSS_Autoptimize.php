@@ -205,7 +205,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$sheets = $dom->find( 'link' );
 
 			foreach ( $sheets as $sheet ) {
-				$link = $sheet->href;
+
+			    $parent = $sheet->parent();
+
+                if(isset($parent) && $parent->tag == 'noscript'){
+                    continue;
+                }
+
+                $link = $sheet->href;
 
 				$inject->found_sheets = true;
 

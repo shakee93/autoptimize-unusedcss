@@ -166,6 +166,7 @@
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
+                    '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
                     '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
                     '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
@@ -178,7 +179,7 @@
 
             $('#uucss-history_info select.status').on('change', function(){
                 status_filter = $(this).val();
-                table.column(0).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                table.column(4).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                     .draw();
             });
 
@@ -322,6 +323,12 @@
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
+                        var attemptsString = '';
+
+                        if(Number(rowData.attempts) !== 0){
+                            attemptsString = 'Attempts : ' + rowData.attempts
+                        }
+
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
@@ -337,6 +344,9 @@
                                     '<div class="time">' +
                                     '   <p class="val">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '   <p class="attempts">' +
+                                    attemptsString +
                                     '   </p>' +
                                     '</div>' +
                                     '</div>')
@@ -435,6 +445,14 @@
                         return _render;
                     },
                 },
+                {
+                    "data": "meta",
+                    visible : false,
+                    render: function (data, type, row, meta) {
+                        if (data.warnings.length > 0) return 'warning';
+                        return data.status;
+                    }
+                }
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
 
