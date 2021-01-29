@@ -744,8 +744,24 @@ p.analyze-text {
     width: 100%;
 }
 
+.uucss-info-wrapper.uucss-notification-error {
+    border-color: #F44336;
+}
+
 .uucss-info-wrapper h4 {
     margin: 4px 0;
+}
+
+.uucss-info-wrapper.uucss-notification-error .info-icon .dashicons {
+    color: #F44336;
+}
+
+.uucss-info-wrapper.uucss-notification-warning {
+    border-color: #FFC107;
+}
+
+.uucss-info-wrapper.uucss-notification-warning .info-icon .dashicons {
+    color: #FFC107;
 }
 
 .uucss-info-wrapper .info-icon .dashicons {

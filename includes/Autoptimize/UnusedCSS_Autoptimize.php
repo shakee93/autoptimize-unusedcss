@@ -168,7 +168,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
 	public static function is_css( $el ) {
-		return $el->rel === 'stylesheet' || $el->rel === 'preload' && $el->as === 'style';
+		return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
 	}
 
 
@@ -205,7 +205,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$sheets = $dom->find( 'link' );
 
 			foreach ( $sheets as $sheet ) {
-				$link = $sheet->href;
+
+			    $parent = $sheet->parent();
+
+                if(isset($parent) && $parent->tag == 'noscript'){
+                    continue;
+                }
+
+                $link = $sheet->href;
 
 				$inject->found_sheets = true;
 
@@ -244,16 +251,22 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 				    }
 				    else {
 
-                        $inject->successfully_injected = false;
+				        $uucss_injected = $sheet->getAttribute('uucss');
 
-				        if(!$this->is_file_excluded($this->options, $link)){
+				        if(!$uucss_injected){
 
-                            if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
+                            $inject->successfully_injected = false;
 
-                                $data['meta']['warnings'][] = [
-                                    "file" => $link,
-                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
-                                ];
+                            if(!$this->is_file_excluded($this->options, $link)){
+
+                                if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
+
+                                    $data['meta']['warnings'][] = [
+                                        "file" => $link,
+                                        "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                    ];
+
+                                }
 
                             }
 
@@ -270,7 +283,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
-            }else if(!$inject->successfully_injected && $data['attempts'] < 3){
+            }else if(!$inject->successfully_injected && $data['attempts'] < 1){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',

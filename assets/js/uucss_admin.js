@@ -1,6 +1,6 @@
 (function ($) {
 
-    function showNotification(heading, message) {
+    function showNotification(heading, message, type = 'info') {
         var container = $('#uucss-wrapper')
         var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
@@ -8,8 +8,9 @@
         content.find('p').remove();
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
 
-        container.prepend('<li class="uucss-notification uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
+        container.prepend('<li class="uucss-notification uucss-notification-'+ type +' uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
+
 
     function hideNotification() {
         var container = $('.uucss-notification');
@@ -18,6 +19,15 @@
 
     $(document).ready(function () {
 
+
+
+        if (window.uucss && window.uucss.notifications.length) {
+            window.uucss.notifications.forEach(function (i) {
+
+                showNotification(i.title, i.message, i.type);
+
+            })
+        }
 
         // options page
         window.tagBox.init();
@@ -156,29 +166,44 @@
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
+                    '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
                     '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
                     '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
                 '</select>');
 
-
-            var input = '<input type="search" placeholder="Search" value="'+ url_filter +'">';
+            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact"></div>';
             $(input).prependTo($('#uucss-history_info'));
+
             $(select).prependTo($('#uucss-history_info'));
 
             $('#uucss-history_info select.status').on('change', function(){
                 status_filter = $(this).val();
-                table.column(0).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                table.column(4).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                     .draw();
             });
 
             var $input = $('#uucss-history_info input[type="search"]')
+            var $exact_search = $('#uucss-history_info input.uucss_search_exact')
 
             $input.on('input',function () {
                 url_filter = $(this).val();
-                table.column(1).search( url_filter ? url_filter : '', true, false )
+
+                var regex = url_filter;
+
+                if(exact_search_val){
+                    regex = '^' + url_filter + '$';
+                }
+
+                table.column(1).search( url_filter ? regex : '', true, false )
                     .draw();
-            })
+            });
+
+            $exact_search.on('input',function () {
+                exact_search_val = $(this).val();
+            });
+
+            $exact_search.prop('checked', exact_search_val);
 
             if(url_filter !== ''){
                 $input.focus().val('').val(url_filter);
@@ -191,6 +216,7 @@
 
         var status_filter = '';
         var url_filter = '';
+        var exact_search_val = false;
 
         $uucss_spinner.addClass('loading')
         table = table.DataTable({
@@ -312,6 +338,12 @@
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
+                        var attemptsString = '';
+
+                        if(Number(rowData.attempts) !== 0){
+                            attemptsString = 'Attempts : ' + rowData.attempts
+                        }
+
                         var tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
@@ -327,6 +359,9 @@
                                     '<div class="time">' +
                                     '   <p class="val">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '   <p class="attempts">' +
+                                    attemptsString +
                                     '   </p>' +
                                     '</div>' +
                                     '</div>');
@@ -427,6 +462,14 @@
                         return _render;
                     },
                 },
+                {
+                    "data": "meta",
+                    visible : false,
+                    render: function (data, type, row, meta) {
+                        if (data.warnings && data.warnings.length > 0) return 'warning';
+                        return data.status;
+                    }
+                }
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
 

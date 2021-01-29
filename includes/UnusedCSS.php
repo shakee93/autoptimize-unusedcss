@@ -110,16 +110,7 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
-		// load wp filesystem related files;
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-
-		if ( function_exists( 'WP_Filesystem' ) ) {
-			WP_Filesystem();
-		}
-
-		global $wp_filesystem;
-
-		$this->file_system = $wp_filesystem;
+		$this->file_system = new UnusedCSS_FileSystem();
 
 		if ( ! $this->file_system ) {
 			return false;
@@ -190,7 +181,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    return apply_filters('uucss/enabled_frontend', true);
+	    return apply_filters('uucss/frontend/enabled', true);
     }
 
 
@@ -247,14 +238,15 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    global $post;
-
-	    if ( ! isset( $args['post_id'] ) && $post ) {
-		    $args['post_id'] = $post->ID;
+	    if ( ! isset( $args['post_id'] )) {
+		    $args['post_id'] = url_to_postid($url);
 	    }
 
 	    if ( ! isset( $args['options'] ) ) {
-		    $args['options'] = $this->api_options();
+
+	        $post_id = $args['post_id'] ? $args['post_id'] : false;
+
+		    $args['options'] = $this->api_options($post_id);
 	    }
 
         $exist_link = UnusedCSS_DB::get_link($url);
@@ -302,12 +294,7 @@ abstract class UnusedCSS {
 	}
 
 
-	public function api_options( $post_id = null ) {
-		global $post;
-
-		if ( $post ) {
-			$post_id = $post->ID;
-		}
+	public function api_options( $post_id = false ) {
 
 	    $whitelist_packs = [ 'wp' ];
 	    if ( isset( $this->options['whitelist_packs'] ) ) {
@@ -322,7 +309,7 @@ abstract class UnusedCSS {
 
 	    }
 
-		$post_options = UnusedCSS_Admin::get_page_options( $post_id );
+		$post_options = $post_id ? UnusedCSS_Admin::get_page_options( $post_id ) : [];
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
@@ -343,6 +330,12 @@ abstract class UnusedCSS {
                 'rule' => 'no_uucss=true'
             ]
         ]);
+
+        if(isset($this->options['uucss_cache_busting'])){
+
+            $cacheBusting = false;
+
+        }
 
 		return apply_filters('uucss/api/options', [
 			"keyframes"         => isset( $this->options['uucss_keyframes'] ),

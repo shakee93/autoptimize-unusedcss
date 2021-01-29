@@ -856,8 +856,15 @@ input#uucss-pack-suggest {
     font-size: 11px;
 }
 
-.tippy-content .stat-tooltip .time .val{
+.tippy-content .stat-tooltip .time .val,
+.tippy-content .stat-tooltip .time .attempts{
     font-size: 11px;
+    display: inline;
+}
+
+.tippy-content .stat-tooltip .time .attempts{
+    float: right;
+    line-height: 20px;
 }
 
 .tippy-content .uucss-tippy-actions{
@@ -921,6 +928,26 @@ input#uucss-pack-suggest {
 
 .uucss-history .spinner-history.loading {
     opacity: 1;
+}
+
+#uucss-history_info .uucss_search_exact{
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    opacity: 0;
+}
+
+#uucss-history_info input[type="search"]:focus + input.uucss_search_exact,
+#uucss-history_info input[type="search"]:hover + input.uucss_search_exact,
+#uucss-history_info .uucss-url-search-wrap:hover,
+#uucss-history_info .uucss_search_exact:hover,
+.uucss_search_exact:hover{
+    opacity: 1;
+}
+
+#uucss-history_info .uucss-url-search-wrap{
+    display: inline-block;
+    position: relative;
 }
 
 .featherlight .spinner.loading.featherlight-inner {

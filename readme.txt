@@ -75,6 +75,25 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.2 =
+ * fix: noscript link tags being marked as warnings
+ * fix: show queue attempts when there are any
+ * feat: add warning filter in optimizations filter
+ * refactor: minor text updates
+
+= 1.3.1 =
+ * NOTE: refresh optimization jobs
+ * fix: api options not being passed when job ran via the interval queue.
+ * fix: page safelist options not being passed to the api via the interval queue.
+
+= 1.3.0 =
+ * feat: migrate to native php filesystem from wp filesystem
+ * feat: increase the max limit of jobs per minute
+ * feat: add warning when ao non-static option is enabled
+ * fix: reduce queue retry attempts to 1
+ * fix: extra trailing slash added on the content
+ * refactor: minor text updates
+
 = 1.2.6 =
  * feat: retry jobs in attempts when cache files are obsolete
  * feat: basic support to autoptimize non-static files
