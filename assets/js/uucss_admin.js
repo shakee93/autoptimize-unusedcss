@@ -485,7 +485,9 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
-                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
+                        if(data.status === 'success'){
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
+                        }
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -564,14 +566,14 @@
                                             $content.append('<div class="devider"></div>');
                                             $content.append('<div class="description"></div>');
 
-                                            if(response.success && response.data && response.data.injected){
+                                            if(response.success && response.data && response.data.injected && !response.data.filesNotFoundCount){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
 
                                             }else{
 
-                                                $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
                                                 $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
 
                                             }

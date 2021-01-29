@@ -973,13 +973,21 @@ input#uucss-pack-suggest {
     text-align: center;
     margin: 0;
     padding: 10px 0 15px;
+    font-weight: 700;
 }
 
-.featherlight .featherlight-content .header h2 .dashicons{
+.featherlight .featherlight-content .header h2 .dashicons{color: #009688;
     font-size: 22px;
-    color: #009688;
     display: inline-block;
     margin-right: 5px;
+}
+
+.featherlight .featherlight-content .header h2 .dashicons.dashicons-yes-alt{
+    color: #009688;
+}
+
+.featherlight .featherlight-content .header h2 .dashicons.dashicons-warning{
+    color: #FFC107;
 }
 
 .featherlight .featherlight-content .description p{
