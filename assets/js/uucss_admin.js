@@ -442,7 +442,7 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
-                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">Frontend Test</a></li>')
+                        $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -517,22 +517,19 @@
                                         success: function (response) {
                                             var $feather_content = $('.featherlight .featherlight-content');
                                             var $content = $('<div class="content"></div>');
+                                            $content.append('<div class="header"></div>');
+                                            $content.append('<div class="devider"></div>');
+                                            $content.append('<div class="description"></div>');
 
-                                            if(response.success && response.data){
+                                            if(response.success && response.data && response.data.injected){
 
-                                                $content.append('<ul></ul>');
-                                                $content.find('ul').append('<li>Injected : '+ (response.data.injected ? 'success' : 'failed') +'</li>')
-                                                $content.find('ul').append('<li>Total CSS Found : '+ response.data.totalCSS +'</li>')
-                                                $content.find('ul').append('<li>Total Injected CSS : '+ response.data.injectedCSS +'</li>')
-                                                $content.find('ul').append('<li>Total Inline CSS Found : '+ response.data.totalInlineCSS +'</li>')
-                                                $content.find('ul').append('<li>Total Injected Inline CSS : '+ response.data.injectedInlineCSS +'</li>')
-                                                $content.find('ul').append('<li>Cached Files Count : '+ response.data.cachedFileCount +'</li>')
-                                                $content.find('ul').append('<li>File Not Found Count : '+ response.data.filesNotFoundCount +'</li>')
-                                                $content.find('ul').append('<li>Total JS Found : '+ response.data.totalJS +'</li>')
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
 
                                             }else{
 
-                                                $content.append('<span>Something went wrong</span>');
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
 
                                             }
 
