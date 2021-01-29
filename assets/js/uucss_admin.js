@@ -172,7 +172,7 @@
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
                 '</select>');
 
-            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact"></div>';
+            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
             $(input).prependTo($('#uucss-history_info'));
 
             $(select).prependTo($('#uucss-history_info'));
@@ -181,6 +181,12 @@
                 status_filter = $(this).val();
                 table.column(4).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                     .draw();
+            });
+
+            tippy($('.uucss_search_exact')[0], {
+                content: 'Exact Match',
+                placement: 'top',
+                appendTo: 'parent',
             });
 
             var $input = $('#uucss-history_info input[type="search"]')
@@ -199,15 +205,15 @@
                     .draw();
             });
 
-            $exact_search.on('input',function () {
-                exact_search_val = $(this).val();
+            $exact_search.on('change',function () {
+                exact_search_val = $(this).prop('checked');
             });
-
-            $exact_search.prop('checked', exact_search_val);
 
             if(url_filter !== ''){
                 $input.focus().val('').val(url_filter);
             }
+
+            $exact_search.prop('checked', exact_search_val);
 
         });
 

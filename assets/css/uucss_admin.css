@@ -899,3 +899,7 @@ input#uucss-pack-suggest {
     display: inline-block;
     position: relative;
 }
+
+.uucss-url-search-wrap .tippy-content{
+    font-size: 12px;
+}
