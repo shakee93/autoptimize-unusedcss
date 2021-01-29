@@ -1003,3 +1003,8 @@ input#uucss-pack-suggest {
     margin-right: -15px;
     margin-left: -15px;
 }
+
+
+.uucss-url-search-wrap .tippy-content{
+    font-size: 12px;
+}
