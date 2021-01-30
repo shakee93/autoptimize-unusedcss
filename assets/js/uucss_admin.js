@@ -575,12 +575,12 @@
                                             if(response.success && response.data && response.data.injected && !response.data.filesNotFoundCount){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
-                                                $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
+                                                $content.find('.description').append('<p>Your optimization are now reflected in google page speed insight, gtmetrix and all other page speed testing tools</p>')
 
                                             }else{
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
-                                                $content.find('.description').append('<p>Successfully update now you can see in google page speed</p>')
+                                                $content.find('.description').append('<p>Your optimization are yet to be reflected on google page insight, gtmetrix and all other page speed testing tools. <a href="#">Learn more</a></p>')
 
                                             }
 
