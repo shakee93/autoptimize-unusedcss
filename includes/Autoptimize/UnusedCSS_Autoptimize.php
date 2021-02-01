@@ -416,39 +416,43 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 }
 
-require_once WP_CONTENT_DIR . '/plugins/autoptimize/classes/autoptimizeBase.php';
+if(function_exists('autoptimize')){
 
-class UnusedCSS_Autoptimize_Base extends autoptimizeBase{
+    class UnusedCSS_Autoptimize_Base extends autoptimizeBase{
 
-    /**
-     * @inheritDoc
-     */
-    public function read($options)
-    {
-        // TODO: Implement read() method.
+        /**
+         * @inheritDoc
+         */
+        public function read($options)
+        {
+            // TODO: Implement read() method.
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public function minify()
+        {
+            // TODO: Implement minify() method.
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public function cache()
+        {
+            // TODO: Implement cache() method.
+        }
+
+        /**
+         * @inheritDoc
+         */
+        public function getcontent()
+        {
+            // TODO: Implement getcontent() method.
+        }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function minify()
-    {
-        // TODO: Implement minify() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function cache()
-    {
-        // TODO: Implement cache() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getcontent()
-    {
-        // TODO: Implement getcontent() method.
-    }
 }
+
+
