@@ -41,10 +41,8 @@ class UnusedCSS_Autoptimize_Onboard {
             wp_send_json_error(false);
         }
 
-        $this->uucss->async = false;
-        $this->uucss->cache(get_site_url(), [
-            'immediate' => true,
-        ]);
+        add_filter('uucss/purge/async', function ($async){ return false;}, 10, 1);
+        $this->uucss->cache(get_site_url(), []);
 
         $this->ao_installed();
 
