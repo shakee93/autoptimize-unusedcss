@@ -332,7 +332,7 @@ class UnusedCSS_DB
     static function get_first_link(){
 	    global $wpdb;
 
-	    $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT 1", OBJECT );
+	    $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT 1 WHERE status='success'", OBJECT );
 
 	    $error = $wpdb->last_error;
 
