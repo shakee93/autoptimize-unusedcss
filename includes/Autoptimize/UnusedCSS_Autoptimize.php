@@ -38,6 +38,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
+	    require_once WP_CONTENT_DIR . '/plugins/autoptimize/classes/autoptimizeBase.php';
+
         $uucss_ao_base = new UnusedCSS_Autoptimize_Base(null);
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
