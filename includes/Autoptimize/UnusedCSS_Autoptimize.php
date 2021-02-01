@@ -38,9 +38,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
-	    require_once WP_CONTENT_DIR . '/plugins/autoptimize/classes/autoptimizeBase.php';
-
-        $uucss_ao_base = new UnusedCSS_Autoptimize_Base(null);
+        $this->uucss_ao_base = new UnusedCSS_Autoptimize_Base(null);
+        $this->uucss_ao_base->cdn_url = autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
@@ -234,13 +233,15 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    array_push( $inject->found_css_cache_files, $link );
 
-					    $newLink = $this->get_cached_file( $uucss_file, autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url', '' ) );
+					    $newLink = $this->get_cached_file( $uucss_file, $this->uucss_ao_base->cdn_url );
 
 					    array_push( $inject->injected_css_files, $newLink );
 
+					    $ao_base = $this->uucss_ao_base;
+
 					    // check the file is processed via AO
-					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link ) {
-						    return $this->str_contains( $this->uucss_ao_base->url_replace_cdn($item), $link );
+					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
+					        return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
 					    } );
 
 					    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
