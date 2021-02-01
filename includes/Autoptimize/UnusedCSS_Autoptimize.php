@@ -416,6 +416,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 }
 
+require_once WP_CONTENT_DIR . '/plugins/autoptimize/classes/autoptimizeBase.php';
+
 class UnusedCSS_Autoptimize_Base extends autoptimizeBase{
 
     /**
