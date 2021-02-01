@@ -38,7 +38,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return;
 	    }
 
-        $this->uucss_ao_base = new UnusedCSS_Autoptimize_Base(null);
+        $this->uucss_ao_base = new autoptimizeStyles(null);
         $this->uucss_ao_base->cdn_url = autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
@@ -413,45 +413,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         }
 
         return $cacheBusting;
-    }
-
-}
-
-if(function_exists('autoptimize')){
-
-    class UnusedCSS_Autoptimize_Base extends autoptimizeBase{
-
-        /**
-         * @inheritDoc
-         */
-        public function read($options)
-        {
-            // TODO: Implement read() method.
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public function minify()
-        {
-            // TODO: Implement minify() method.
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public function cache()
-        {
-            // TODO: Implement cache() method.
-        }
-
-        /**
-         * @inheritDoc
-         */
-        public function getcontent()
-        {
-            // TODO: Implement getcontent() method.
-        }
     }
 
 }
