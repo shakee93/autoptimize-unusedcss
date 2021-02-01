@@ -11,6 +11,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public $deps_available = false;
 
+	private $uucss_ao_base;
+
     /**
      * UnusedCSS constructor.
      */
@@ -35,6 +37,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    if ( ! $this->check_dependencies() ) {
 		    return;
 	    }
+
+        $uucss_ao_base = new UnusedCSS_Autoptimize_Base(null);
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
@@ -234,7 +238,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    // check the file is processed via AO
 					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link ) {
-						    return $this->str_contains( $item, $link );
+						    return $this->str_contains( $this->uucss_ao_base->url_replace_cdn($item), $link );
 					    } );
 
 					    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
@@ -408,4 +412,39 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return $cacheBusting;
     }
 
+}
+
+class UnusedCSS_Autoptimize_Base extends autoptimizeBase{
+
+    /**
+     * @inheritDoc
+     */
+    public function read($options)
+    {
+        // TODO: Implement read() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function minify()
+    {
+        // TODO: Implement minify() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function cache()
+    {
+        // TODO: Implement cache() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getcontent()
+    {
+        // TODO: Implement getcontent() method.
+    }
 }
