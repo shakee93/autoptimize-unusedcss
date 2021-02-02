@@ -75,6 +75,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.4 =
+ * refactor: temporarily remove GPSI article link
+
 = 1.3.3 =
  * feat: allow user to disable cache busting
  * feat: view optimization status with google page speed insight and gtmetrix
