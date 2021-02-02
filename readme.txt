@@ -75,6 +75,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.3 =
+ * feat: allow user to disable cache busting
+ * feat: view optimization status with google page speed insight and gtmetrix
+ * feat: search exact url's in optimizations table
+ * fix: first job is shows a blank result in onboarding
+ * fix: optimized files not being injected when using CDN
+
 = 1.3.2 =
  * fix: noscript link tags being marked as warnings
  * fix: show queue attempts when there are any
