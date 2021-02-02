@@ -408,7 +408,7 @@ table.dataTable thead th, table.dataTable thead td {
 #uucss-history .action button {
     position: relative;
     border: none;
-    background: #F44336;
+    background: #455a64;
     color: white;
     border-radius: 4px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -416,6 +416,32 @@ table.dataTable thead th, table.dataTable thead td {
     width: 25px;
     height: 25px;
     margin-right: 4px;
+}
+
+#uucss-history .tippy-content .uucss-option-list{
+    width: 110px;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li{
+    margin: 0;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li:hover{
+    background-color: #ededed;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li a{
+    font-size: 12px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #455964;
+    display: block;
+}
+
+#uucss-history .tippy-content .uucss-option-list ul li:last-child{
+    margin-bottom: 0;
 }
 
 #uucss-history .action button[data-uucss-optimize] {
@@ -426,6 +452,12 @@ table.dataTable thead th, table.dataTable thead td {
     position: absolute;
     left: 2px;
     top: 4px;
+}
+
+#uucss-history .action button span.dashicons.dashicons-ellipsis{
+    transform: rotate(90deg) translateX(-1px);
+    line-height: 20px;
+    font-size: 14px;
 }
 
 #uucss-history tr.loading {
@@ -837,6 +869,26 @@ input#uucss-pack-suggest {
     line-height: 20px;
 }
 
+.tippy-content .uucss-tippy-actions{
+    margin-right: -10px;
+    margin-left: -10px;
+    padding: 5px 10px;
+}
+
+.tippy-content .uucss-tippy-actions button{
+    line-height: 20px;
+    min-height: 20px;
+    color: #fff;
+    border: none;
+    background-color: #8055b2;
+    width: 60px;
+}
+
+.tippy-content .uucss-tippy-actions button:hover{
+    color: #fff;
+    background-color: #9672c0;
+}
+
 .tippy-content .stat-tooltip .time{
     margin-right: -10px;
     margin-left: -10px;
@@ -899,6 +951,67 @@ input#uucss-pack-suggest {
     display: inline-block;
     position: relative;
 }
+
+.featherlight .spinner.loading.featherlight-inner {
+    opacity: 1;
+    visibility: visible;
+    float: unset;
+    position: absolute;
+    top: calc(50% - 4px);
+    left: calc(50% - 4px);
+    margin: 0 auto;
+}
+
+.featherlight .featherlight-content{
+    margin: 0 auto;
+    width: 325px;
+    min-height: 115px;
+    padding: 10px 15px 0;
+    border-radius: 5px;
+    border: 0;
+}
+
+.featherlight .featherlight-content .header h2{
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: left;
+    margin: 0;
+    padding: 0 0 5px;
+    font-weight: 700;
+}
+
+.featherlight .featherlight-content .header h2 .dashicons{color: #009688;
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.featherlight .featherlight-content .header h2 .dashicons.dashicons-yes-alt{
+    color: #009688;
+}
+
+.featherlight .featherlight-content .header h2 .dashicons.dashicons-warning{
+    color: #FFC107;
+}
+
+.featherlight .featherlight-content .description p{
+    margin: 10px 0 10px;
+    text-align: left;
+}
+
+.featherlight .featherlight-content .devider{
+    display: block;
+    height: 1px;
+    background-color: #e3e3e3;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.featherlight .featherlight-close-icon {
+    line-height: 35px;
+    width: 35px;
+}
+
 
 .uucss-url-search-wrap .tippy-content{
     font-size: 12px;

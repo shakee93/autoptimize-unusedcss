@@ -370,7 +370,7 @@
                                     attemptsString +
                                     '   </p>' +
                                     '</div>' +
-                                    '</div>')
+                                    '</div>');
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
                                     content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
@@ -422,6 +422,8 @@
 
                         }
 
+
+
                         if (rowData.status === 'failed') {
                             stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
 
@@ -455,13 +457,13 @@
                     title: "Actions",
                     width: '60px',
                     render: function (data, type, row, meta) {
-                        var _render = ''
+                        var _render = '';
 
                         if (row.status !== 'queued') {
                             _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
                         }
 
-                        _render += '<button data-uucss-clear data-url="' + data + '"><span class="dashicons dashicons-no-alt"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -477,11 +479,135 @@
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
 
+                tippy($(row).find('button[data-uucss-options]')[0], {
+                    allowHTML: true,
+                    trigger: 'click',
+                    arrow: true,
+                    appendTo: $(row).find('button[data-uucss-options]')[0],
+                    interactive: true,
+                    animation: 'shift-toward',
+                    hideOnClick: false,
+                    theme: 'light',
+                    content: ()=>{
 
-                tippy($(row).find('button[data-uucss-clear]')[0], {
-                    content: 'Remove Optimized files',
-                    placement: 'top',
-                    appendTo: "parent"
+                        var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
+
+                        if(data.status === 'success'){
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
+                        }
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
+
+                        return $content.wrap('<div></div>').parent().html();
+                    },
+                    onClickOutside(instance, event) {
+                        instance.hide()
+                    },
+                    onCreate(){
+
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="remove"]')[0], {
+                            content: 'Remove RapidLoad cache files',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        })
+
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="test"]')[0], {
+                            content: 'Test Url',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        });
+
+                    },
+                    onMount(instance) {
+
+                        $('.uucss-option-list ul.option-list li a').off().click(function (e) {
+
+                            var $this = $(this);
+
+                            var action = $this.data('action_name');
+
+                            switch (action) {
+                                case 'remove':{
+                                    uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    break;
+                                }
+                                case 'test':{
+
+                                    if($this.data('fetching')){
+                                        return;
+                                    }
+
+                                    $.ajax({
+                                        method : 'POST',
+                                        url: wp.ajax.settings.url + '?action=uucss_test_url',
+                                        data : {
+                                            url: data.url,
+                                        },
+                                        beforeSend(){
+                                            $this.data('fetching', true);
+                                        },
+                                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+                                            $content.append('<span>Something went wrong</span>');
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+                                        },
+                                        success: function (response) {
+                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+                                            $content.append('<div class="header"></div>');
+                                            $content.append('<div class="devider"></div>');
+                                            $content.append('<div class="description"></div>');
+
+                                            if(response.success && response.data && response.data.injected && response.data.injectedCSS > 0){
+
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.description').append('<p>Optimization is now reflected in google page speed insight, gtmetrix and all other page speed testing tools.</p>')
+
+                                            }else{
+
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
+                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools. <a href="#">Learn more</a></p>')
+
+                                            }
+
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+
+                                        },
+                                        complete:function () {
+                                            $this.data('fetching', false);
+                                        }
+                                    });
+
+                                    break;
+                                }
+                                default:{
+                                    break;
+                                }
+                            }
+                        })
+
+                        $('.uucss-option-list ul.option-list li a[data-action_name="test"]')
+                            .featherlight('<div class="spinner loading"></div>',{
+
+                        })
+                    },
+                    placement: 'bottom-end',
                 })
 
                 tippy($(row).find('button[data-uucss-optimize]')[0], {
@@ -492,55 +618,72 @@
 
                 $(row).find('button').data('index',dataIndex);
 
-                $(row).find('button').off('click').click(function (e) {
+                $(row).find('button[data-uucss-options]').off('click').click(function (e) {
+                    e.preventDefault();
+                });
+
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-                    var $row  = $(row);
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
 
-                    var _row = table.row(dataIndex);
+                });
 
-                    $row.addClass('loading');
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                    e.preventDefault()
 
-                    $uucss_spinner.addClass('loading');
+                    var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-
-                    if (!is_clear) {
-                        $(this).hide();
-                    }
-
-                    $.ajax({
-                        method : 'POST',
-                        url: wp.ajax.settings.url + '?action=uucss_purge_url',
-                        data : {
-                            url: data.url,
-                            clear: is_clear,
-                            nonce: uucss.nonce
-                        },
-                        success : function(response){
-
-                            $uucss_spinner.removeClass('loading')
-
-                            if(response.success){
-
-                                if (is_clear) {
-                                    (_row.length>0) && _row.remove().draw();
-                                }else{
-                                    data.status = 'queued';
-                                    _row.data(data).draw(false);
-                                }
-                            }
-
-                        },
-                        complete:function () {
-                            $row.removeClass('loading')
-                        }
-                    });
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
 
                 });
             }
         });
+
+        function uucss_purge_url(url , isClear, row, index, data) {
+
+            var _row = table.row(index);
+
+            var $row  = $(row);
+
+            $row.addClass('loading');
+
+            $uucss_spinner.addClass('loading');
+
+            if (!isClear) {
+                $(this).hide();
+            }
+
+            $.ajax({
+                method : 'POST',
+                url: wp.ajax.settings.url + '?action=uucss_purge_url',
+                data : {
+                    url: data.url,
+                    clear: isClear,
+                    nonce: uucss.nonce
+                },
+                success : function(response){
+
+                    $uucss_spinner.removeClass('loading')
+
+                    if(response.success){
+
+                        if (isClear) {
+                            (_row.length>0) && _row.remove().draw();
+                        }else{
+                            data.status = 'queued';
+                            _row.data(data).draw(false);
+                        }
+                    }
+
+                },
+                complete:function () {
+                    $row.removeClass('loading')
+                }
+            });
+        }
 
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
