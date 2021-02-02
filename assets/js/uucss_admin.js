@@ -481,6 +481,7 @@
 
                 tippy($(row).find('button[data-uucss-options]')[0], {
                     allowHTML: true,
+                    trigger: 'click',
                     arrow: true,
                     appendTo: $(row).find('button[data-uucss-options]')[0],
                     interactive: true,
@@ -572,15 +573,15 @@
                                             $content.append('<div class="devider"></div>');
                                             $content.append('<div class="description"></div>');
 
-                                            if(response.success && response.data && response.data.injected && !response.data.filesNotFoundCount){
+                                            if(response.success && response.data && response.data.injected && response.data.injectedCSS > 0){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
-                                                $content.find('.description').append('<p>Your optimization are now reflected in google page speed insight, gtmetrix and all other page speed testing tools</p>')
+                                                $content.find('.description').append('<p>Optimization is now reflected in google page speed insight, gtmetrix and all other page speed testing tools.</p>')
 
                                             }else{
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
-                                                $content.find('.description').append('<p>Your optimization are yet to be reflected on google page insight, gtmetrix and all other page speed testing tools. <a href="#">Learn more</a></p>')
+                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools. <a href="#">Learn more</a></p>')
 
                                             }
 

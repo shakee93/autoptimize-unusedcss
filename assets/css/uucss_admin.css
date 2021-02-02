@@ -425,16 +425,18 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 #uucss-history .tippy-content .uucss-option-list ul li{
-    padding: 5px 10px;
+    margin: 0;
 }
 
 #uucss-history .tippy-content .uucss-option-list ul li:hover{
-    background-color: #e0e0e0;
+    background-color: #ededed;
 }
 
 #uucss-history .tippy-content .uucss-option-list ul li a{
     font-size: 12px;
+    padding: 5px 10px;
     text-decoration: none;
+    color: #455964;
     display: block;
 }
 
@@ -955,29 +957,31 @@ input#uucss-pack-suggest {
     visibility: visible;
     float: unset;
     position: absolute;
-    top: 65px;
-    left: 115px;
+    top: calc(50% - 4px);
+    left: calc(50% - 4px);
     margin: 0 auto;
 }
 
 .featherlight .featherlight-content{
     margin: 0 auto;
-    width: 250px;
-    min-height: 140px;
+    width: 325px;
+    min-height: 115px;
     padding: 10px 15px 0;
+    border-radius: 5px;
+    border: 0;
 }
 
 .featherlight .featherlight-content .header h2{
-    font-size: 26px;
+    font-size: 14px;
     text-transform: uppercase;
-    text-align: center;
+    text-align: left;
     margin: 0;
-    padding: 10px 0 15px;
+    padding: 0 0 5px;
     font-weight: 700;
 }
 
 .featherlight .featherlight-content .header h2 .dashicons{color: #009688;
-    font-size: 22px;
+    font-size: 18px;
     display: inline-block;
     margin-right: 5px;
 }
@@ -991,17 +995,21 @@ input#uucss-pack-suggest {
 }
 
 .featherlight .featherlight-content .description p{
-    margin: 10px 0 0;
-    font-size: 16px;
-    text-align: center;
+    margin: 10px 0 10px;
+    text-align: left;
 }
 
 .featherlight .featherlight-content .devider{
     display: block;
     height: 1px;
-    background-color: #c5b1e7;
+    background-color: #e3e3e3;
     margin-right: -15px;
     margin-left: -15px;
+}
+
+.featherlight .featherlight-close-icon {
+    line-height: 35px;
+    width: 35px;
 }
 
 
