@@ -581,7 +581,7 @@
                                             }else{
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
-                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools. <a href="#">Learn more</a></p>')
+                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools.</p>')
 
                                             }
 
