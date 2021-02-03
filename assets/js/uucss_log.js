@@ -4,11 +4,17 @@
 
         var $table = null;
         var status_filter = '';
+        var log_interval = null;
 
         $('#view-uucss-log').click(function () {
             $.featherlight('<div class="spinner loading"></div><div class="uucss-logs-content"><table id="uucss-logs-table" width="100%" class="hover"></table>' +
                 '<input type="button" class="button button-primary clear-uucss-log" id="clear-uucss-log" value="Clear Logs"></div>', {
-                variant : 'uucss-log'
+                variant : 'uucss-log',
+                afterClose: function(_super, event) {
+                    if(log_interval){
+                        clearInterval(log_interval);
+                    }
+                }
             });
             $('#clear-uucss-log').click(function () {
                 wp.ajax.post('clear_uucss_logs',{  }).then(function (i) {
@@ -27,7 +33,7 @@
             $table = $('#uucss-logs-table');
 
             $table.on('init.dt', function () {
-                setInterval(function () {
+                log_interval = setInterval(function () {
                     $table.ajax.reload(null, false);
                 }, 1000 * 5)
             });
@@ -50,7 +56,8 @@
 
                 $('#uucss-logs-table_info select.uucss-log-type').on('change', function(){
                     status_filter = $(this).val();
-                    $table.column(3).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                    console.log(status_filter)
+                    $table.column(1).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                         .draw();
                 });
 
@@ -76,7 +83,7 @@
                         return data;
                     }
                 },
-                searching: false,
+                searching: true,
                 pagingType: "simple",
                 bLengthChange: false,
                 tfoot: false,

@@ -1049,3 +1049,7 @@ input#uucss-pack-suggest {
 #uucss-logs-table_info select.uucss-log-type{
     margin-right: 10px;
 }
+
+#uucss-logs-table_filter{
+    display: none;
+}
