@@ -180,7 +180,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         $result = $uucss_api->post( 'test/wordpress',
             [
                 'url' => $url ,
-                'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : false
+                'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : []
             ]);
 
         if ( $uucss_api->is_error( $result ) ) {
