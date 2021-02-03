@@ -964,14 +964,19 @@ input#uucss-pack-suggest {
 
 .featherlight .featherlight-content{
     margin: 0 auto;
-    width: 325px;
-    min-height: 115px;
     padding: 10px 15px 0;
     border-radius: 5px;
     border: 0;
+    width: 75%;
+    height: 75%;
 }
 
-.featherlight .featherlight-content .header h2{
+.featherlight.uucss-gpsi-test .featherlight-content{
+    width: 325px;
+    height: 115px;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content .header h2{
     font-size: 14px;
     text-transform: uppercase;
     text-align: left;
@@ -980,26 +985,26 @@ input#uucss-pack-suggest {
     font-weight: 700;
 }
 
-.featherlight .featherlight-content .header h2 .dashicons{color: #009688;
+.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons{color: #009688;
     font-size: 18px;
     display: inline-block;
     margin-right: 5px;
 }
 
-.featherlight .featherlight-content .header h2 .dashicons.dashicons-yes-alt{
+.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons.dashicons-yes-alt{
     color: #009688;
 }
 
-.featherlight .featherlight-content .header h2 .dashicons.dashicons-warning{
+.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons.dashicons-warning{
     color: #FFC107;
 }
 
-.featherlight .featherlight-content .description p{
+.featherlight.uucss-gpsi-test .featherlight-content .description p{
     margin: 10px 0 10px;
     text-align: left;
 }
 
-.featherlight .featherlight-content .devider{
+.featherlight.uucss-gpsi-test .featherlight-content .devider{
     display: block;
     height: 1px;
     background-color: #e3e3e3;
@@ -1007,7 +1012,7 @@ input#uucss-pack-suggest {
     margin-left: -15px;
 }
 
-.featherlight .featherlight-close-icon {
+.featherlight.uucss-gpsi-test .featherlight-close-icon {
     line-height: 35px;
     width: 35px;
 }
@@ -1015,4 +1020,8 @@ input#uucss-pack-suggest {
 
 .uucss-url-search-wrap .tippy-content{
     font-size: 12px;
+}
+
+#uucss-options label[for="debug-log"]{
+    line-height: 30px;
 }

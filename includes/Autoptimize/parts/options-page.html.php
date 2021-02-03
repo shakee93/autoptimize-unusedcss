@@ -261,7 +261,7 @@
                                                 <?php if ( isset( $options['uucss_cache_busting'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            Enable Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
+                                            Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
                                         </label>
                                     </p>
 
@@ -411,13 +411,14 @@
                             <tr>
                                 <th scope="row"><?php _e( 'Enable RapidLoad Debug', 'uucss' ); ?></th>
                                 <td>
-                                    <label><input id='uucss_enable_debug' type='checkbox'
+                                    <label for="debug-log"><input id='uucss_enable_debug' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_enable_debug]' <?php if ( ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'] ) {
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
                                             Enable error logs for RapidLoad.
                                         </i>
+                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs">
                                     </label>
                                 </td>
                             </tr>

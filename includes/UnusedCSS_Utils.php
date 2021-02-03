@@ -90,7 +90,11 @@ trait UnusedCSS_Utils {
         $data = is_string( $object ) ? [ 'log' => $object] : $object;
 
         if(!isset($data['time'])){
-            $data['time'] = date("Y-m-d h:i:sa");
+            $data['time'] = time();
+        }
+
+        if(!isset($data['type'])){
+            $data['type'] = 'general';
         }
 
         $data = json_encode($data);

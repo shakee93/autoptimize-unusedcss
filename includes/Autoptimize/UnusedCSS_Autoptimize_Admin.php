@@ -55,6 +55,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
 			add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
 			add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
+            add_action('wp_ajax_uucss_logs', [$this, 'uucss_logs']);
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -86,6 +87,15 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    parent::__construct( $ao_uucss );
 
+    }
+
+    function uucss_logs(){
+
+	    $file_system = new UnusedCSS_FileSystem();
+	    $data = $file_system->get_contents(UUCSS_LOG_DIR . 'log.txt');
+        $data = '[' . $data . ']';
+
+        wp_send_json_success(json_decode($data));
     }
 
 	public function getNotifications() {
@@ -121,9 +131,15 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
 
 		wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js', array(
-			'jquery',
-			'wp-util'
-		), UUCSS_VERSION );
+            'jquery',
+            'wp-util'
+        ), UUCSS_VERSION );
+
+        wp_register_script( 'uucss_log', UUCSS_PLUGIN_URL . 'assets/js/uucss_log.js', array(
+            'jquery',
+            'wp-util'
+        ), UUCSS_VERSION );
+
 		wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
 
@@ -142,6 +158,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		wp_localize_script( 'uucss_admin', 'uucss', $data );
 
 		wp_enqueue_script( 'uucss_admin' );
+		wp_enqueue_script( 'uucss_log' );
 
 		wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.css' );
 

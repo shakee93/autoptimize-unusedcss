@@ -560,7 +560,7 @@
                                             $this.data('fetching', true);
                                         },
                                         error: function(XMLHttpRequest, textStatus, errorThrown) {
-                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $feather_content = $('.featherlight.uucss-gpsi-test .featherlight-content');
                                             var $content = $('<div class="content"></div>');
                                             $content.append('<span>Something went wrong</span>');
                                             $feather_content.find('.spinner').remove();
@@ -604,8 +604,8 @@
 
                         $('.uucss-option-list ul.option-list li a[data-action_name="test"]')
                             .featherlight('<div class="spinner loading"></div>',{
-
-                        })
+                                variant : 'uucss-gpsi-test'
+                            })
                     },
                     placement: 'bottom-end',
                 })
