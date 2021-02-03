@@ -16,6 +16,14 @@ define( 'UUCSS_VERSION', '1.3.4' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
+if ( is_multisite() ) {
+    $blog_id = get_current_blog_id();
+    define('UUCSS_LOG_DIR', WP_CONTENT_DIR . '/uploads/uucss_log/' . $blog_id . '/');
+} else {
+    define('UUCSS_LOG_DIR', WP_CONTENT_DIR . '/uploads/uucss_log/');
+}
+
+
 require __DIR__ . '/vendor/autoload.php';
 
 register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::uucss_activate' );

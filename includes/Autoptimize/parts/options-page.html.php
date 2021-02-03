@@ -261,7 +261,7 @@
                                                 <?php if ( isset( $options['uucss_cache_busting'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            Disable Cache Busting <em>-- disable rapidload crawler to view pages without a random query string</em>
+                                            Enable Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
                                         </label>
                                     </p>
 
@@ -406,6 +406,19 @@
                                         <option value="current">Current</option>
                                     </select>
                                     <input type="button" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Enable RapidLoad Debug', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_enable_debug' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_enable_debug]' <?php if ( ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable error logs for RapidLoad.
+                                        </i>
+                                    </label>
                                 </td>
                             </tr>
                         </table>

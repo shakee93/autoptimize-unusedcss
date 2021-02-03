@@ -7,6 +7,8 @@ defined( 'ABSPATH' ) or die();
  */
 trait UnusedCSS_Utils {
 
+    private static $log_file_system = null;
+
 	public function url_origin( $s, $use_forwarded_host = false ) {
 		$ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
 		$sp       = strtolower( $s['SERVER_PROTOCOL'] );
@@ -58,14 +60,48 @@ trait UnusedCSS_Utils {
         
     }
 
+    private static function get_log_instance(){
+	    if(!self::$log_file_system){
+	        return new UnusedCSS_FileSystem();
+        }
+	    return self::$log_file_system;
+    }
+
+    private static function get_log_option(){
+        if(is_multisite()){
+
+            $option = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
+            return isset($option['uucss_enable_debug']);
+        }
+
+        $option = get_site_option( 'autoptimize_uucss_settings', false );
+        return  isset($option['uucss_enable_debug']);
+    }
+
     public static function log( $object, $callee = false ) {
 
-	    if ( ! defined( 'UUCSS_DEBUG' ) || UUCSS_DEBUG == false ) {
+	    if ( ! self::get_log_option() ) {
 		    return false;
 	    }
 
 	    $data = is_string( $object ) ? $object : json_encode( $object, JSON_PRETTY_PRINT );
 	    error_log( "[UUCSS_LOG] " . $data );
+
+        $data = is_string( $object ) ? [ 'log' => $object] : $object;
+
+        if(!isset($data['time'])){
+            $data['time'] = date("Y-m-d h:i:sa");
+        }
+
+        $data = json_encode($data);
+
+        $log_instance = self::get_log_instance();
+
+        if($log_instance->exists(UUCSS_LOG_DIR .'log.txt') && !empty($log_instance->get_contents(UUCSS_LOG_DIR .'log.txt'))){
+            $data = ",\n" . $data;
+        }
+
+        $log_instance->put_contents(UUCSS_LOG_DIR .'log.txt', $data, FILE_APPEND);
 
 	    if ( $callee ) {
 
@@ -79,6 +115,15 @@ trait UnusedCSS_Utils {
 	    }
 
 	    return $object;
+    }
+
+    public static function uucss_log($args = []){
+
+        if(file_exists(UUCSS_LOG_DIR)){
+
+            file_put_contents(UUCSS_LOG_DIR . 'log.json', json_encode($args), LOCK_EX);
+
+        }
     }
 
     public static function add_admin_notice($message, $type='error') {

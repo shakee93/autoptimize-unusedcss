@@ -7,11 +7,8 @@ defined( 'ABSPATH' ) or die();
 
 class UnusedCSS_FileSystem
 {
-
-    use UnusedCSS_Utils;
-
-    public function put_contents( $file_location, $css ){
-        return file_put_contents($file_location, $css);
+    public function put_contents( $file_location, $css , $mode = null){
+        return file_put_contents($file_location, $css, $mode);
     }
 
     public function exists( $dir ){

@@ -120,6 +120,8 @@ abstract class UnusedCSS {
 			return false;
 		}
 
+        $this->init_log_dir();
+
 		return true;
 	}
 
@@ -324,16 +326,16 @@ abstract class UnusedCSS {
             $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
         }
 
-        $cacheBusting = apply_filters('uucss/cache/bust',[
-            [
-                'type' => 'query',
-                'rule' => 'no_uucss=true'
-            ]
-        ]);
+        $cacheBusting = false;
 
         if(isset($this->options['uucss_cache_busting'])){
 
-            $cacheBusting = false;
+            $cacheBusting = apply_filters('uucss/cache/bust',[
+                [
+                    'type' => 'query',
+                    'rule' => 'no_uucss=true'
+                ]
+            ]);
 
         }
 
@@ -389,6 +391,21 @@ abstract class UnusedCSS {
 
 		return true;
 	}
+
+	public function init_log_dir(){
+
+        if ( $this->file_system->exists( UUCSS_LOG_DIR ) ) {
+            return true;
+        }
+
+        $created = $this->file_system->mkdir( UUCSS_LOG_DIR );
+
+        if (!$created || ! $this->file_system->is_writable( UUCSS_LOG_DIR ) || ! $this->file_system->is_readable( UUCSS_LOG_DIR ) ) {
+            return false;
+        }
+
+        return true;
+    }
 
 
     protected function cache_file_exists($file){
