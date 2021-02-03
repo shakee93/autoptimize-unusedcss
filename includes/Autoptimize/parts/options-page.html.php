@@ -418,7 +418,7 @@
                                         <i>
                                             Enable error logs for RapidLoad.
                                         </i>
-                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs">
+                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs" style="display: none">
                                     </label>
                                 </td>
                             </tr>

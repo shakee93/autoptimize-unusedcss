@@ -669,6 +669,10 @@ table#uucss-history{
     left: 85px;
 }
 
+.featherlight.uucss-log .featherlight-content .spinner.loading + div.uucss-logs-content input{
+    display: none;
+}
+
 .uucss-support a {
     padding: 14px 20px 12px 13px;
     position: fixed;
@@ -977,8 +981,9 @@ input#uucss-pack-suggest {
 }
 
 .featherlight.uucss-log .featherlight-content{
-    width: 760px;
-    height: 435px;
+    width: 90%;
+    height: 475px;
+    padding-bottom: 10px;
 }
 
 .featherlight.uucss-gpsi-test .featherlight-content .header h2{

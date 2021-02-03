@@ -220,6 +220,12 @@ abstract class UnusedCSS {
 
 	public function purge_css() {
 
+        self::log([
+            'log' => 'purging enabled',
+            'url' => $this->url,
+            'type' => 'purging'
+        ]);
+
 		$this->url = $this->transform_url( $this->url );
 
 		// disabled exceptions only for frontend
@@ -230,6 +236,12 @@ abstract class UnusedCSS {
 
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 			$this->cache( $this->url );
+
+            self::log([
+                'log' => 'link added to queue',
+                'url' => $this->url,
+                'type' => 'queued'
+            ]);
 		}
 
 	}
@@ -237,6 +249,11 @@ abstract class UnusedCSS {
     public function cache($url = null, $args = []) {
 
 	    if ( ! $this->is_url_allowed( $url, $args ) ) {
+            self::log([
+                'log' => 'url not allowed to purge',
+                'url' => $url,
+                'type' => 'purging'
+            ]);
 		    return false;
 	    }
 
@@ -254,6 +271,11 @@ abstract class UnusedCSS {
         $exist_link = UnusedCSS_DB::get_link($url);
 
         if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3 && !isset($args['immediate'])){
+            self::log([
+                'log' => 'url not purged due to failed attempts exceeded',
+                'url' => $url,
+                'type' => 'purging'
+            ]);
             return false;
         }
 
@@ -285,7 +307,11 @@ abstract class UnusedCSS {
 		    spawn_cron();
 
 	    }
-
+        self::log([
+            'log' => 'url successfully purged',
+            'url' => $url,
+            'type' => 'purging'
+        ]);
 	    return true;
     }
 
@@ -417,7 +443,11 @@ abstract class UnusedCSS {
 
 	    $args['url'] = $url;
 
-	    self::log( 'cleared : ' . $url );
+	    self::log( [
+	        'log' => 'cleared',
+	        'url' => $url,
+            'type' => 'store'
+        ] );
 
 	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) ) {
 

@@ -32,6 +32,10 @@ class UnusedCSS_Queue
         add_filter( 'cron_schedules', [$this, 'uucss_process_queue_schedule'] );
 
         if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) ) {
+            self::log([
+                'log' => 'cron scheduled',
+                'type' => 'uucss-cron'
+            ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
         }
 
@@ -68,7 +72,7 @@ class UnusedCSS_Queue
         }else if($post_type == 'current'){
 
             UnusedCSS_Settings::clear_links(true);
-            wp_send_json_success('posts added to queue');
+            wp_send_json_success('successfully links added to the queue');
 
         }else{
 
@@ -99,7 +103,7 @@ class UnusedCSS_Queue
 
         wp_reset_query();
 
-        wp_send_json_success('posts added to queue');
+        wp_send_json_success('successfully links added to the queue');
 
     }
 
@@ -139,6 +143,12 @@ class UnusedCSS_Queue
         global $uucss;
 
         $post_id = url_to_postid($url);
+
+        self::log([
+            'log' => 'caching',
+            'url' => $url,
+            'type' => 'uucss-cron'
+        ]);
 
         $uucss->init_async_store( $uucss->provider, $url, [
             'options' => $uucss->api_options($post_id)

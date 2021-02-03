@@ -56,6 +56,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
 			add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
             add_action('wp_ajax_uucss_logs', [$this, 'uucss_logs']);
+            add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -92,6 +93,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     function uucss_logs(){
 
 	    $file_system = new UnusedCSS_FileSystem();
+
+	    if(!$file_system->exists(UUCSS_LOG_DIR . 'log.txt')){
+            wp_send_json_success([]);
+        }
+
 	    $data = $file_system->get_contents(UUCSS_LOG_DIR . 'log.txt');
 
 	    if(empty($data)){
@@ -101,6 +107,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    $data = '[' . $data . ']';
 
         wp_send_json_success(json_decode($data));
+    }
+
+    function clear_uucss_logs(){
+        $file_system = new UnusedCSS_FileSystem();
+
+        if(!$file_system->exists(UUCSS_LOG_DIR . 'log.txt')){
+            wp_send_json_success(true);
+        }
+
+        $file_system->delete(UUCSS_LOG_DIR . 'log.txt');
+        wp_send_json_success(true);
     }
 
 	public function getNotifications() {

@@ -352,7 +352,7 @@ class UnusedCSS_DB
     static function link_exists($url){
         global $wpdb;
 
-	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status='success'", OBJECT);
+	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing')", OBJECT);
 
 	    $error = $wpdb->last_error;
 

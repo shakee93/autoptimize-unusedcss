@@ -47,7 +47,11 @@ class UnusedCSS_Store {
 
     protected function purge_css() {
 
-	    $this->log( 'is caching now : ' . $this->url );
+	    $this->log( [
+	        'log' => 'fetching data',
+            'url' => $this->url,
+            'type' => 'store'
+        ] );
 	    $uucss_api = new UnusedCSS_Api();
 
 	    $result = $uucss_api->post( 'purger',
@@ -73,6 +77,12 @@ class UnusedCSS_Store {
 	        /*UnusedCSS_Settings::add_link( $this->url, null, "failed", [
 			    "error" => $this->extract_error( $result )
 		    ] );*/
+
+            $this->log( [
+                'log' => 'fetched data stored',
+                'url' => $this->url,
+                'type' => 'store'
+            ] );
 
 		    return;
 	    }
@@ -159,6 +169,12 @@ class UnusedCSS_Store {
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 
         UnusedCSS_DB::add_link($link_data);
+
+        $this->log( [
+            'log' => 'fetched data stored',
+            'url' => $this->url,
+            'type' => 'store'
+        ] );
     }
 
 

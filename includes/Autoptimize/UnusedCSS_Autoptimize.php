@@ -170,6 +170,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    return $html;
 	    }, 99 );
 
+        self::log([
+            'log' => 'injection initialized',
+            'url' => $this->url,
+            'type' => 'injection'
+        ]);
     }
 
 	public static function is_css( $el ) {
@@ -205,6 +210,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$inject->parsed_html = true;
 
 			$dom->find( 'html' )[0]->uucss = true;
+
+            self::log([
+                'log' => 'header injection done',
+                'url' => $data['url'],
+                'type' => 'injection'
+            ]);
 
 
 			$sheets = $dom->find( 'link' );
@@ -260,20 +271,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				        $uucss_injected = $sheet->getAttribute('uucss');
 
-				        if(!$uucss_injected){
+				        if(!$uucss_injected && !$this->is_file_excluded($this->options, $link)){
 
                             $inject->successfully_injected = false;
 
-                            if(!$this->is_file_excluded($this->options, $link)){
+                            if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
 
-                                if(!in_array($link, array_column($data['meta']['warnings'], 'file'))){
-
-                                    $data['meta']['warnings'][] = [
-                                        "file" => $link,
-                                        "message" => "RapidLoad cache missing for the file. Refresh Recommended."
-                                    ];
-
-                                }
+                                $data['meta']['warnings'][] = [
+                                    "file" => $link,
+                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                ];
 
                             }
 
@@ -290,6 +297,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
+                self::log([
+                    'log' => 'injection success',
+                    'url' => $data['url'],
+                    'type' => 'injection'
+                ]);
+
             }else if(!$inject->successfully_injected && $data['attempts'] < 1){
 
                 UnusedCSS_DB::update_meta([
@@ -297,11 +310,31 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'attempts' => $data['attempts'] + 1
                 ], $data['url']);
 
-            }else{
+                self::log([
+                    'log' => 're-queued',
+                    'url' => $data['url'],
+                    'type' => 'injection'
+                ]);
+
+            }else if(!$inject->successfully_injected){
 
                 UnusedCSS_DB::update_meta([
                     'warnings' => $data['meta']['warnings']
                 ], $data['url']);
+
+                self::log([
+                    'log' => 'warnings added',
+                    'url' => $data['url'],
+                    'type' => 'injection'
+                ]);
+
+            }else{
+
+                self::log([
+                    'log' => 'injection success',
+                    'url' => $data['url'],
+                    'type' => 'injection'
+                ]);
 
             }
 
