@@ -976,6 +976,11 @@ input#uucss-pack-suggest {
     height: 115px;
 }
 
+.featherlight.uucss-log .featherlight-content{
+    width: 760px;
+    height: 460px;
+}
+
 .featherlight.uucss-gpsi-test .featherlight-content .header h2{
     font-size: 14px;
     text-transform: uppercase;
@@ -1024,4 +1029,10 @@ input#uucss-pack-suggest {
 
 #uucss-options label[for="debug-log"]{
     line-height: 30px;
+}
+
+#uucss-logs-table_wrapper .dataTables_filter {
+    float: unset;
+    text-align: left;
+    padding: 0 10px;
 }

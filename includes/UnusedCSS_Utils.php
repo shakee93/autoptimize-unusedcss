@@ -80,7 +80,7 @@ trait UnusedCSS_Utils {
 
     public static function log( $object, $callee = false ) {
 
-	    if ( ! self::get_log_option() ) {
+	    if ( ! self::get_log_option() || (defined( 'UUCSS_DEBUG' ) && UUCSS_DEBUG == false)) {
 		    return false;
 	    }
 

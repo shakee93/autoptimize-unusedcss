@@ -93,7 +93,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    $file_system = new UnusedCSS_FileSystem();
 	    $data = $file_system->get_contents(UUCSS_LOG_DIR . 'log.txt');
-        $data = '[' . $data . ']';
+
+	    if(empty($data)){
+	        wp_send_json_success([]);
+        }
+
+	    $data = '[' . $data . ']';
 
         wp_send_json_success(json_decode($data));
     }
