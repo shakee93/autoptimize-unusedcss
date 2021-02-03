@@ -255,10 +255,10 @@
                                     </p>
 
                                     <p>
-                                        <label for="uucss_cache_busting">
-                                            <input id='uucss_cache_busting' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_cache_busting]'
-                                                <?php if ( isset( $options['uucss_cache_busting'] ) )
+                                        <label for="uucss_cache_busting_v2">
+                                            <input id='uucss_cache_busting_v2' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_cache_busting_v2]'
+                                                <?php if ( isset( $options['uucss_cache_busting_v2'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
                                             Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
