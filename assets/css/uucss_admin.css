@@ -978,7 +978,7 @@ input#uucss-pack-suggest {
 
 .featherlight.uucss-log .featherlight-content{
     width: 760px;
-    height: 460px;
+    height: 435px;
 }
 
 .featherlight.uucss-gpsi-test .featherlight-content .header h2{
@@ -1035,4 +1035,12 @@ input#uucss-pack-suggest {
     float: unset;
     text-align: left;
     padding: 0 10px;
+}
+
+#uucss-logs-table_info{
+    padding-bottom: 0.755em;
+}
+
+#uucss-logs-table_info select.uucss-log-type{
+    margin-right: 10px;
 }
