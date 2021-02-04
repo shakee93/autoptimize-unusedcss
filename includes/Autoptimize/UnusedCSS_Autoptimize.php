@@ -23,6 +23,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
+        $this->add_update_message();
+
 	    parent::enqueueGlobalScript();
 
 	    $this->provider = 'autoptimize';
@@ -62,6 +64,24 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
 	    new UnusedCSS_Queue();
+    }
+
+    function add_update_message(){
+
+        global $pagenow;
+
+        if ( 'plugins.php' === $pagenow )
+        {
+            $file   = basename( UUCSS_PLUGIN_FILE );
+            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
+            $hook = "in_plugin_update_message-{$folder}/{$file}";
+            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
+        }
+
+    }
+
+    function render_update_message($plugin_data, $r ){
+        echo  '</p><p class="dummy">here';
     }
 
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
