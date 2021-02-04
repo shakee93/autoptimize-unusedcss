@@ -418,7 +418,10 @@
                                         <i>
                                             Enable error logs for RapidLoad.
                                         </i>
-                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs" style="display: none">
+                                        <?php
+                                            $hide_view_log = apply_filters('uucss/view_debug/frontend', true);
+                                        ?>
+                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs" <?php if($hide_view_log) echo 'style="display:none"' ?>>
                                     </label>
                                 </td>
                             </tr>
