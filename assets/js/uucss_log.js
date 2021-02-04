@@ -23,7 +23,6 @@
             $('#clear-uucss-log').click(function () {
                 wp.ajax.post('clear_uucss_logs',{  }).then(function (i) {
                     if(i){
-                        alert('uucss log cleared');
                         $table.ajax.reload(null, false);
                     }
                 });

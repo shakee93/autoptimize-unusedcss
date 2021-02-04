@@ -75,6 +75,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.5 =
+ * feat: add debug mode to the plugin with logs.
+ * refactor: move advanced settings option positions
+ * feat: change option "Disable Cache busting" to "Cache busting" (enable)
+
 = 1.3.4 =
  * refactor: temporarily remove GPSI article link
 
