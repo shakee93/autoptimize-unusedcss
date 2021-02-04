@@ -1074,3 +1074,7 @@ input#uucss-pack-suggest {
 #uucss-logs-table_filter{
     display: none;
 }
+
+#whitelist_packs + span.select2{
+    max-width: 377px !important;
+}

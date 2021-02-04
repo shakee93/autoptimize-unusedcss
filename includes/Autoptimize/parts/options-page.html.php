@@ -122,6 +122,107 @@
                                     </div>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <th scope="row"><?php _e( 'Safelist Packs', 'uucss' ); ?>
+
+                                </th>
+                                <td>
+                                    <label>
+                                        <select id="whitelist_packs" multiple class="js-example-basic-single"
+                                                name="autoptimize_uucss_settings[whitelist_packs][]">
+                                            <?php if ( isset( $options['whitelist_packs'] ) ) {
+
+                                                foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
+                                                    <option selected
+                                                            value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
+                                                        echo end( $name ) ?></option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+                                        <input id="uucss-pack-suggest" type="button" class="button"
+                                               value="Load Recommended Packs">
+                                    </label>
+                                    <p style="color: red" id="uucss-pack-suggest-error"></p>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row"><?php _e( 'Other Options', 'uucss' ); ?></th>
+                                <td>
+
+                                    <p>
+                                        <label for="uucss_minify">
+                                            <input id='uucss_minify'
+                                                   type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_minify]'
+                                                <?php if ( isset( $options['uucss_minify'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            Minify <em>-- minify and remove css comments via the api</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
+                                        <label for="uucss_variables">
+                                            <input id='uucss_variables' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_variables]'
+                                                <?php if ( isset( $options['uucss_variables'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Variables <em>-- remove unused css variables</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
+                                        <label for="uucss_keyframes">
+                                            <input id='uucss_keyframes' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_keyframes]'
+                                                <?php if ( isset( $options['uucss_keyframes'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Animation keyframes <em>-- remove unused keyframe animations</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
+                                        <label for="uucss_fontface">
+                                            <input id='uucss_fontface' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_fontface]'
+                                                <?php if ( isset( $options['uucss_fontface'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            CSS Font-face rules <em>-- remove unused @font-face rules</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
+                                        <label for="uucss_cache_busting_v2">
+                                            <input id='uucss_cache_busting_v2' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_cache_busting_v2]'
+                                                <?php if ( isset( $options['uucss_cache_busting_v2'] ) )
+                                                    echo 'checked="checked"' ?>
+                                                   value='1'>
+                                            Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
+                                        </label>
+                                    </p>
+
+                                    <p>
+                                        <label for="uucss_analyze_javascript">
+                                            <input id='uucss_analyze_javascript' type='checkbox'
+                                                   name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
+                                                echo 'checked="checked"';
+                                            } ?> value='1'>
+                                            Analyze javascript <strong>(highly experimental)</strong> <em>-- analyze
+                                                javascript and remove unused css which are
+                                                not
+                                                used in JS</em>
+                                        </label>
+                                    </p>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <th scope="row"><?php _e( 'Exclude URLs', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline exclude-links has-tooltip"
@@ -157,7 +258,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude Css files', 'uucss' ); ?>
+                                <th scope="row"><?php _e( 'Exclude CSS files', 'uucss' ); ?>
                                     <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip"
                                           data-message="Exclude Specific CSS files from RapidLoad my-styles.css, /my-theme/style.css">
 
@@ -205,80 +306,7 @@
                                 </td>
                             </tr>
 
-                            <tr>
-                                <th scope="row"><?php _e( 'Other Options', 'uucss' ); ?></th>
-                                <td>
 
-                                    <p>
-                                        <label for="uucss_minify">
-                                            <input id='uucss_minify'
-                                                   type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_minify]'
-												<?php if ( isset( $options['uucss_minify'] ) )
-													echo 'checked="checked"' ?>
-                                                   value='1'>
-                                            Minify <em>-- minify and remove css comments via the api</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_variables">
-                                            <input id='uucss_variables' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_variables]'
-						                        <?php if ( isset( $options['uucss_variables'] ) )
-							                        echo 'checked="checked"' ?>
-                                                   value='1'>
-                                            CSS Variables <em>-- remove unused css variables</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_keyframes">
-                                            <input id='uucss_keyframes' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_keyframes]'
-						                        <?php if ( isset( $options['uucss_keyframes'] ) )
-							                        echo 'checked="checked"' ?>
-                                                   value='1'>
-                                            CSS Animation keyframes <em>-- remove unused keyframe animations</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_fontface">
-                                            <input id='uucss_fontface' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_fontface]'
-						                        <?php if ( isset( $options['uucss_fontface'] ) )
-							                        echo 'checked="checked"' ?>
-                                                   value='1'>
-                                            CSS Font-face rules <em>-- remove unused @font-face rules</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_cache_busting_v2">
-                                            <input id='uucss_cache_busting_v2' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_cache_busting_v2]'
-                                                <?php if ( isset( $options['uucss_cache_busting_v2'] ) )
-                                                    echo 'checked="checked"' ?>
-                                                   value='1'>
-                                            Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_analyze_javascript">
-                                            <input id='uucss_analyze_javascript' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
-	                                            echo 'checked="checked"';
-                                            } ?> value='1'>
-                                            Analyze javascript <strong>(highly experimental)</strong> <em>-- analyze
-                                                javascript and remove unused css which are
-                                                not
-                                                used in JS</em>
-                                        </label>
-                                    </p>
-                                </td>
-                            </tr>
                             <tr>
                                 <th scope="row"><?php _e( 'Parse all CSS files', 'uucss' ); ?></th>
                                 <td>
@@ -320,30 +348,7 @@
                                 </td>
                             </tr>
 
-                            <tr>
-                                <th scope="row"><?php _e( 'Safelist Packs', 'uucss' ); ?>
 
-                                </th>
-                                <td>
-                                    <label>
-                                        <select id="whitelist_packs" multiple class="js-example-basic-single"
-                                                name="autoptimize_uucss_settings[whitelist_packs][]">
-											<?php if ( isset( $options['whitelist_packs'] ) ) {
-
-												foreach ( $options['whitelist_packs'] as $whitelist_pack ) { ?>
-                                                    <option selected
-                                                            value="<?php echo $whitelist_pack ?>"><?php $name = explode( ':', $whitelist_pack );
-														echo end( $name ) ?></option>
-												<?php }
-											} ?>
-                                        </select>
-                                        <input id="uucss-pack-suggest" type="button" class="button"
-                                               value="Load Recommended Packs">
-                                    </label>
-                                    <p style="color: red" id="uucss-pack-suggest-error"></p>
-
-                                </td>
-                            </tr>
                             <tr>
                                 <th>
                                     <?php _e( 'Queue', 'uucss' ); ?>
