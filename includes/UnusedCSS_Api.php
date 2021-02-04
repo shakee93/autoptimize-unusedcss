@@ -73,13 +73,23 @@ class UnusedCSS_Api
 
 				return json_decode( $body );
 			}
-            $this->log($data);
-			$this->log( $response['body'] );
+
+			$this->log([
+			    'log' => 'api request failed',
+                'type' => 'store',
+                'request_body' => $data,
+                'response_body' => $response['body']
+            ]);
 
 			return json_decode( $response['body'] );
 		} else {
-			$this->log( $data );
-			$this->log( $response->get_error_message() );
+
+            $this->log([
+                'log' => 'api request failed',
+                'type' => 'store',
+                'request_body' => $data,
+                'response_body' => $response->get_error_message()
+            ]);
 
 			return $response->get_error_message();
 		}
