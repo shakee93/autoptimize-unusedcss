@@ -144,6 +144,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
+        self::log([
+            'log' => 'replacing css initiated',
+            'url' => $this->url,
+            'type' => 'injection'
+        ]);
+
 	    $this->url = $this->transform_url( $this->url );
 
 	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
@@ -165,7 +171,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
 
-		    $html = $this->inject_css( $html, $data );
+            self::log([
+                'log' => 'injecting css initiated after autoptimize minify',
+                'url' => $data['url'],
+                'type' => 'injection'
+            ]);
+
+            $html = $this->inject_css( $html, $data );
 
 		    return $html;
 	    }, 99 );
@@ -184,7 +196,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-		if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
+        self::log([
+            'log' => 'injection started',
+            'url' => $data['url'],
+            'type' => 'injection'
+        ]);
+
+        if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
 			self::log( 'Dom parser not loaded' );
 			return $html;
 		}
@@ -298,7 +316,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 UnusedCSS_DB::reset_attempts($data['url']);
 
                 self::log([
-                    'log' => 'injection success',
+                    'log' => 'injection success and attempts reset to 0',
                     'url' => $data['url'],
                     'type' => 'injection'
                 ]);
@@ -311,7 +329,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 ], $data['url']);
 
                 self::log([
-                    'log' => 're-queued',
+                    'log' => 're-queued due to warnings',
                     'url' => $data['url'],
                     'type' => 'injection'
                 ]);
@@ -323,7 +341,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 ], $data['url']);
 
                 self::log([
-                    'log' => 'warnings added',
+                    'log' => 'file not found warnings added',
                     'url' => $data['url'],
                     'type' => 'injection'
                 ]);
