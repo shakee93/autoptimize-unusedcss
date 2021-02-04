@@ -77,6 +77,7 @@ class UnusedCSS_Api
 			$this->log([
 			    'log' => 'api request failed',
                 'type' => 'store',
+                'url' => isset($data) && isset($data['url']) ? $data['url'] : '',
                 'request_body' => $data,
                 'response_body' => $response['body']
             ]);
@@ -87,6 +88,7 @@ class UnusedCSS_Api
             $this->log([
                 'log' => 'api request failed',
                 'type' => 'store',
+                'url' => isset($data) && isset($data['url']) ? $data['url'] : '',
                 'request_body' => $data,
                 'response_body' => $response->get_error_message()
             ]);
