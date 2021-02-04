@@ -83,6 +83,7 @@
                         return data;
                     }
                 },
+                scrollY: '340px',
                 searching: true,
                 pagingType: "simple",
                 bLengthChange: false,
