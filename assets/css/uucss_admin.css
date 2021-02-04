@@ -1078,3 +1078,7 @@ input#uucss-pack-suggest {
 #whitelist_packs + span.select2{
     max-width: 377px !important;
 }
+
+#uucss-logs-table .log-content p, .log-content ul {
+    margin: 0;
+}

@@ -310,7 +310,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    }
 
             self::log([
-                'log' => 'injection insights : ' . json_encode((array) $inject),
+                'log' => json_encode((array) $inject),
                 'url' => $data['url'],
                 'type' => 'injection'
             ]);
