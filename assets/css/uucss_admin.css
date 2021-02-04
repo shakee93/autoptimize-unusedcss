@@ -41,11 +41,16 @@ light
     display: none;
 }
 
-#uucss-history_info select{
+#uucss-history_info select,
+#uucss-logs-table_info select{
     margin-left: 0.5em;
     margin-right: 0.5em;
     margin-top: -4px;
     font-size: 12px;
+}
+
+#uucss-logs-table_info select{
+    margin-left: 0;
 }
 
 #uucss-history_wrapper #uucss-history_paginate {
@@ -53,7 +58,8 @@ light
     margin-right: 10px;
 }
 
-#uucss-history_info input[type="search"]{
+#uucss-history_info input[type="search"],
+#uucss-logs-table_info input[type="search"]{
     margin-right: 0.5em;
 }
 
@@ -324,10 +330,16 @@ table.dataTable thead th {
     border-radius: 10px;
 }
 
-#uucss-history_wrapper div#uucss-history_info {
+#uucss-history_wrapper div#uucss-history_info,
+#uucss-logs-table_wrapper div#uucss-logs-table_info
+{
     font-size: 11px !important;
     margin: 2px 8px;
     padding-bottom: 8px;
+}
+
+#uucss-logs-table_wrapper div#uucss-logs-table_info{
+    margin-left: 0;
 }
 
 table.dataTable tbody th, table.dataTable tbody td {
@@ -903,7 +915,8 @@ input#uucss-pack-suggest {
     border-bottom-left-radius: 4px;
 }
 
-#uucss-wrapper div#uucss-auto-refresh {
+#uucss-wrapper div#uucss-auto-refresh,
+#uucss-logs-table_wrapper div#uucss-auto-refresh-logs {
     display: inline-block;
     margin-left: 10px;
 }
@@ -936,7 +949,8 @@ input#uucss-pack-suggest {
     opacity: 1;
 }
 
-#uucss-history_info .uucss_search_exact{
+#uucss-history_info .uucss_search_exact,
+#uucss-logs-table_info .uucss_log_search_exact{
     position: absolute;
     right: 10px;
     bottom: 8px;
@@ -944,14 +958,20 @@ input#uucss-pack-suggest {
 }
 
 #uucss-history_info input[type="search"]:focus + input.uucss_search_exact,
+#uucss-logs-table_info input[type="search"]:focus + input.uucss_log_search_exact,
 #uucss-history_info input[type="search"]:hover + input.uucss_search_exact,
+#uucss-logs-table_info input[type="search"]:hover + input.uucss_log_search_exact,
 #uucss-history_info .uucss-url-search-wrap:hover,
+#uucss-logs-table_info .uucss-log-search-wrap:hover,
 #uucss-history_info .uucss_search_exact:hover,
-.uucss_search_exact:hover{
+#uucss-logs-table_info .uucss_log_search_exact:hover,
+.uucss_search_exact:hover,
+.uucss_log_search_exact:hover{
     opacity: 1;
 }
 
-#uucss-history_info .uucss-url-search-wrap{
+#uucss-history_info .uucss-url-search-wrap,
+#uucss-logs-table_info .uucss-log-search-wrap{
     display: inline-block;
     position: relative;
 }
@@ -1028,7 +1048,8 @@ input#uucss-pack-suggest {
 }
 
 
-.uucss-url-search-wrap .tippy-content{
+.uucss-url-search-wrap .tippy-content,
+.uucss-log-search-wrap .tippy-content{
     font-size: 12px;
 }
 

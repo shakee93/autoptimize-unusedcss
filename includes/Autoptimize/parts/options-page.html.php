@@ -409,7 +409,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Enable RapidLoad Debug', 'uucss' ); ?></th>
+                                <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="debug-log"><input id='uucss_enable_debug' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_enable_debug]' <?php if ( ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'] ) {
@@ -419,9 +419,10 @@
                                             Enable error logs for RapidLoad.
                                         </i>
                                         <?php
-                                            $hide_view_log = apply_filters('uucss/view_debug/frontend', true);
+                                            $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
+                                            $hide_view_log = apply_filters('uucss/view_debug/frontend', $default_debug_mode);
                                         ?>
-                                        <input type="button" class="button button-primary view-uucss-log" id="view-uucss-log" value="View Logs" <?php if($hide_view_log) echo 'style="display:none"' ?>>
+                                        <a id="view-uucss-log" href="#" <?php if(!$hide_view_log) echo 'style="display:none"' ?>>View Logs</a>
                                     </label>
                                 </td>
                             </tr>

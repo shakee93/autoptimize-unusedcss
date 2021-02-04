@@ -5,8 +5,12 @@
         var $table = null;
         var status_filter = '';
         var log_interval = null;
+        var url_filter = '';
+        var exact_search_val = false;
+        var auto_refresh = false;
 
-        $('#view-uucss-log').click(function () {
+        $('#view-uucss-log').click(function (e) {
+            e.preventDefault();
             $.featherlight('<div class="spinner loading"></div><div class="uucss-logs-content"><table id="uucss-logs-table" width="100%" class="hover"></table>' +
                 '<input type="button" class="button button-primary clear-uucss-log" id="clear-uucss-log" value="Clear Logs"></div>', {
                 variant : 'uucss-log',
@@ -34,13 +38,31 @@
 
             $table.on('init.dt', function () {
                 log_interval = setInterval(function () {
-                    $table.ajax.reload(null, false);
+                    if(auto_refresh){
+                        $table.ajax.reload(null, false);
+                    }
                 }, 1000 * 5)
             });
 
             $table.on('draw.dt', function (x,y) {
 
                 $('.featherlight.uucss-log .spinner.loading').remove();
+
+                var input = '<div class="uucss-log-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_log_search_exact" type="checkbox" id="uucss_log_search_exact" value="1"></div>';
+                $(input).prependTo($('#uucss-logs-table_info'));
+
+                var element = '<div id="uucss-auto-refresh-logs">' +
+                    '<input type="checkbox" id="uucss_auto_refresh_logs" name="uucss_auto_refresh_logs" value="1">' +
+                    '<label for="uucss_auto_refresh_logs"> Auto Refresh</label><br>' +
+                    '<div>';
+
+                $('#uucss-logs-table_info').append(element);
+
+                $('#uucss_auto_refresh_logs').change(function () {
+                    auto_refresh = $(this).is(':checked');
+                });
+
+                $('#uucss_auto_refresh_logs').prop('checked', auto_refresh);
 
                 var select = $('<select class="uucss-log-type">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
@@ -60,6 +82,32 @@
                     $table.column(1).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                         .draw();
                 });
+
+                var $input = $('#uucss-logs-table_info input[type="search"]')
+                var $exact_search = $('#uucss-logs-table_info input.uucss_log_search_exact')
+
+                $input.on('input',function () {
+                    url_filter = $(this).val();
+
+                    var regex = url_filter;
+
+                    if(exact_search_val){
+                        regex = '^' + url_filter + '$';
+                    }
+
+                    $table.column(2).search( url_filter ? regex : '', true, false )
+                        .draw();
+                });
+
+                $exact_search.on('change',function () {
+                    exact_search_val = $(this).prop('checked');
+                });
+
+                if(url_filter !== ''){
+                    $input.focus().val('').val(url_filter);
+                }
+
+                $exact_search.prop('checked', exact_search_val);
 
             });
 
