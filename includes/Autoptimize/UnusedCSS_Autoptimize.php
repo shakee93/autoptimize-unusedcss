@@ -350,7 +350,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'type' => 'injection'
                 ]);
 
-            }else if(!$inject->successfully_injected && ($data['attempts'] < 1 || $time_diff > 86400)){
+            }else if(!$inject->successfully_injected && ($data['attempts'] < 1 || ($time_diff > 86400 && $data['attempts'] < 4))){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',
