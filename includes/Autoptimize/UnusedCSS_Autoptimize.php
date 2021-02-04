@@ -21,6 +21,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    new UnusedCSS_Feedback();
 
+        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
 	    parent::enqueueGlobalScript();
 
 	    $this->provider = 'autoptimize';
@@ -60,6 +62,15 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
 	    new UnusedCSS_Queue();
+    }
+
+    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
+        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
+        }
+        return $plugin_meta;
     }
 
     public function is_url_allowed($url = null, $args = null)

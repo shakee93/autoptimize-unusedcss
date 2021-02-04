@@ -207,7 +207,7 @@
         </div>
 
         <div class="skip-wrap">
-            <a href="<?php echo admin_url() ?>">Skip</a>
+            <a href="<?php echo admin_url('options-general.php?page=uucss') ?>">Skip</a>
         </div>
     </div>
     <div class="card-complete loading">
