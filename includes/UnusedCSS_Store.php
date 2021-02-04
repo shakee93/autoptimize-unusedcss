@@ -79,7 +79,7 @@ class UnusedCSS_Store {
 		    ] );*/
 
             $this->log( [
-                'log' => 'fetched data stored',
+                'log' => 'fetched data stored status failed',
                 'url' => $this->url,
                 'type' => 'store'
             ] );
@@ -171,7 +171,7 @@ class UnusedCSS_Store {
         UnusedCSS_DB::add_link($link_data);
 
         $this->log( [
-            'log' => 'fetched data stored',
+            'log' => 'fetched data stored status success',
             'url' => $this->url,
             'type' => 'store'
         ] );

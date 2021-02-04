@@ -145,7 +145,7 @@ class UnusedCSS_Queue
         $post_id = url_to_postid($url);
 
         self::log([
-            'log' => 'caching',
+            'log' => 'caching initiated by cron',
             'url' => $url,
             'type' => 'uucss-cron'
         ]);
