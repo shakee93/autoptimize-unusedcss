@@ -265,8 +265,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    $newLink = $this->get_cached_file( $uucss_file, $this->uucss_ao_base->cdn_url );
 
-					    array_push( $inject->injected_css_files, $newLink );
-
 					    $ao_base = $this->uucss_ao_base;
 
 					    // check the file is processed via AO
@@ -288,6 +286,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
 							    $this->inline_sheet( $sheet, $uucss_file );
 						    }
+
+                            array_push( $inject->injected_css_files, $newLink );
 
 					    }
 
