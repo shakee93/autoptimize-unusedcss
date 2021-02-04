@@ -171,7 +171,7 @@
 
                                 var $found_css_files = $('<ul class="log-found-css-files"></ul>');
                                 $.each(parsedLog.found_css_files, function (index, value) {
-                                    $found_css_files.append('<li><a href="'+ value+'">'+ value +'</a></li>')
+                                    $found_css_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
                                 });
                                 $content.append($found_css_files.wrap('<div></div>').parent().html());
 
@@ -179,7 +179,7 @@
 
                                 var $found_css_cache_files = $('<ul class="log-found-css-cache-files"></ul>');
                                 $.each(parsedLog.found_css_cache_files, function (index, value) {
-                                    $found_css_cache_files.append('<li><a href="'+ value+'">'+ value +'</a></li>')
+                                    $found_css_cache_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
                                 });
                                 $content.append($found_css_cache_files.wrap('<div></div>').parent().html());
 
@@ -187,7 +187,7 @@
 
                                 var $injected_css_files = $('<ul class="log-injected-css-cache-files"></ul>');
                                 $.each(parsedLog.injected_css_files, function (index, value) {
-                                    $injected_css_files.append('<li><a href="'+ value+'">'+ value +'</a></li>')
+                                    $injected_css_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
                                 });
                                 $content.append($injected_css_files.wrap('<div></div>').parent().html());
 

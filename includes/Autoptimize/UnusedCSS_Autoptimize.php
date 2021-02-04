@@ -220,6 +220,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"found_sheets"          => false,
 			"found_css_files"       => [],
 			"found_css_cache_files" => [],
+			"ao_optimized_css" => [],
 			"injected_css_files"    => [],
 			"successfully_injected"    => true,
 		];
@@ -272,6 +273,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
 					        return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
 					    } );
+
+					    if($is_ao_css){
+
+					        array_push($inject->ao_optimized_css, $link);
+
+                        }
 
 					    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
