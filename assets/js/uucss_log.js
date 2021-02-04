@@ -92,7 +92,7 @@
                     {
                         data: 'time',
                         title: "Time",
-                        width: '110px',
+                        width: '120px',
                         render: function (data, type, row, meta) {
                             return new Date(data * 1000).toLocaleDateString() + ' ' + new Date(data * 1000).toLocaleTimeString()
                         }
