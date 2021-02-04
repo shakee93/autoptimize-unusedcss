@@ -316,6 +316,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
+			$time_diff = 0;
+
+			if(isset($data['time'])){
+                $time_diff = time() - $data['time'];
+            }
+
             self::log([
                 'log' => json_encode((array) $inject),
                 'url' => $data['url'],
@@ -333,7 +339,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'type' => 'injection'
                 ]);
 
-            }else if(!$inject->successfully_injected && $data['attempts'] < 1){
+            }else if(!$inject->successfully_injected && ($data['attempts'] < 1 || $time_diff > 86400)){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',

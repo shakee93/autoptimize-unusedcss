@@ -154,6 +154,8 @@ class UnusedCSS_DB
                 }
             }
 
+            $data['created_at'] =  date( "Y-m-d H:m:s", time() );
+
 			self::update( $data, array(
 				'url' => $data['url']
 			));

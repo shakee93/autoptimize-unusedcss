@@ -91,7 +91,7 @@ class UnusedCSS_Queue
 
                 $url = $uucss->transform_url(get_the_permalink(get_the_ID()));
 
-                if(!UnusedCSS_DB::link_exists($url)){
+                if(!UnusedCSS_DB::link_exists($url) && $uucss->is_url_allowed($url)){
                     UnusedCSS_DB::add_link(array(
                         'url' => $url,
                         'status' => 'queued',
