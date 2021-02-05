@@ -121,6 +121,12 @@ class UnusedCSS_Queue
 
                 UnusedCSS_DB::update_status('processing', $link->url);
 
+                self::log([
+                    'log' => 'status updated to processing',
+                    'url' => $link->url,
+                    'type' => 'uucss-cron'
+                ]);
+
                 if($this->async){
 
                     wp_schedule_single_event( time(), 'uucss_cron_queue', [
