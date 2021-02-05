@@ -154,7 +154,7 @@
                         data: 'url',
                         title: "URL",
                         render: function (data, type, row, meta) {
-                            return '<a href="' + data +'" target="_blank">'+ data +'</a>'
+                            return '<a href="' + decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>'
                         }
                     },
                     {

@@ -218,7 +218,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $result = $uucss_api->post( 'test/wordpress',
             [
-                'url' => $url ,
+                'url' => urldecode($url),
                 'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : []
             ]);
 

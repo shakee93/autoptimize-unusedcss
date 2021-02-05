@@ -506,14 +506,18 @@ class UnusedCSS_DB
 
 	        $files = $file['files'];
 
-            foreach ( $files as $item ) {
+            if(isset($files) && !empty($files)){
 
-                foreach ( $links as $key => $value ) {
+                foreach ( $files as $item ) {
 
-                    if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
-                        $used[] = $item['uucss'];
-                        break;
+                    foreach ( $links as $key => $value ) {
+
+                        if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                            $used[] = $item['uucss'];
+                            break;
+                        }
                     }
+
                 }
 
             }
