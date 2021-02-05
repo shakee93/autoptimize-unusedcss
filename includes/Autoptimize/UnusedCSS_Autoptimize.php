@@ -96,13 +96,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
             array_shift($changelog);
 
-            echo '<div><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 40px">';
+            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
 
             foreach ($changelog as $index => $log){
                 if($index == 3){
                     break;
                 }
-                echo '<li>' . preg_replace("/\r|\n/","",$log) . '</li>';
+                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
             }
 
             echo '</ol></div><p style="display: none" class="empty">';
