@@ -518,12 +518,16 @@ class UnusedCSS_DB
 
             }
 
-            $unused = array_column( $files, 'uucss' );
+            if(isset($files) && !empty($files)){
 
-            foreach ( $used as $item ) {
+                $unused = array_column( $files, 'uucss' );
 
-                if ( ( $key = array_search( $item, $unused ) ) !== true ) {
-                    unset( $unused[ $key ] );
+                foreach ( $used as $item ) {
+
+                    if ( ( $key = array_search( $item, $unused ) ) !== true ) {
+                        unset( $unused[ $key ] );
+                    }
+
                 }
 
             }
