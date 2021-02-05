@@ -81,7 +81,33 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     }
 
     function render_update_message($plugin_data, $r ){
-        echo  '</p><p class="dummy">here';
+
+        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+
+        $changelog  = stristr( $data, '== Changelog ==' );
+
+        $changelog  = stristr( $changelog, '== Upgrade Notice ==', true );
+
+        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
+
+        if(isset($changelog[1])){
+
+            $changelog = explode('*', $changelog[1]);
+
+            array_shift($changelog);
+
+            echo '<div><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 40px">';
+
+            foreach ($changelog as $index => $log){
+                if($index == 3){
+                    break;
+                }
+                echo '<li>' . preg_replace("/\r|\n/","",$log) . '</li>';
+            }
+
+            echo '</ol></div><p style="display: none" class="empty">';
+
+        }
     }
 
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
