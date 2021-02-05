@@ -15,8 +15,13 @@ global $post;
         cursor: ;
     }
 
-    .uucss-stats span {
+    .uucss-stats a.rapidload {
         line-height: 0 !important;
+        display: inline-block !important;
+        margin-top: 2px !important;
+        margin-left: -10px !important;
+        cursor: pointer !important;
+        height: 0 !important;
     }
 
     .uucss-stats .hidden {
@@ -60,7 +65,7 @@ global $post;
 
         window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
     </script>
-    <span>RapidLoad</span>
+    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Size: <?php echo $this->uucss->size(); ?></span>
     </div>
