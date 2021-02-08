@@ -193,7 +193,7 @@
                                                 <?php if ( isset( $options['uucss_fontface'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            CSS Font-face rules <em>-- Remove unused @font-face rules</em>
+                                            CSS @font-face rules <em>-- Remove unused @font-face rules</em>
                                         </label>
                                     </p>
 
@@ -283,7 +283,7 @@
                                                 <input type="button" class="button tagadd" value="Add File">
                                             </div>
                                             <p class="howto">
-                                                Exclude Specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
+                                                Exclude specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
