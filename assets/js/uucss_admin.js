@@ -122,7 +122,7 @@
 
         });
 
-        $.each($('span.dashicons.has-tooltip'),function(index, value){
+        /*$.each($('span.dashicons.has-tooltip'),function(index, value){
             tippy($(value)[0], {
                 content: $($(value)[0]).data('message'),
                 allowHTML: true,
@@ -134,7 +134,7 @@
                 arrow: false,
                 offset: [0, 7]
             });
-        });
+        });*/
 
         $('#uucss-wrapper li h2').click(function () {
             $(this).parent().find('.content').slideToggle('fast');
