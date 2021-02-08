@@ -469,18 +469,27 @@
                                        size="40">
                                 <em id="verification_status"></em>
 								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
+                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                       class="uucss-activate" id="my-account"> My Account
+                                    </a>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php else : ?>
-                                    <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
+                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                       class="uucss-activate" id="my-account"> My Account
+                                    </a>
+                                    <a style="margin-left: 5px"
+                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
+
                                     <a style="margin-left: 5px"
                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php endif; ?>
+
                             </div>
 
                         </div>
