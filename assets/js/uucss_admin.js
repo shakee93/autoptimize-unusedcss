@@ -248,8 +248,8 @@
 
                     if (results.length < 3 && firstReload) {
                         showNotification(
-                            'Tip : When will i see the results ?',
-                            'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                            'Tip : When will I see the results ?',
+                            'The plugin will trigger the removal of unused css whenever a page is loaded for the first time. Completed jobs are listed below.'
                         );
                     }
 

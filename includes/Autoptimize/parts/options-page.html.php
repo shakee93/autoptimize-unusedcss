@@ -356,11 +356,11 @@
                                 <td>
                                     <?php
                                         $intervals = [
-                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 8],
-                                                ['value' => 300, 'name' => '5 Miniute', 'max' => 8],
-                                                ['value' => 600, 'name' => '10 Miniute', 'max' => 8],
-                                                ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],
-                                                ['value' => 1800, 'name' => '30 Miniute', 'max' => 16],
+                                                ['value' => 60, 'name' => '1 Minute', 'max' => 8],
+                                                ['value' => 300, 'name' => '5 Minutes', 'max' => 8],
+                                                ['value' => 600, 'name' => '10 Minutes', 'max' => 8],
+                                                ['value' => 1200, 'name' => '20 Minutes', 'max' => 8],
+                                                ['value' => 1800, 'name' => '30 Minutes', 'max' => 16],
                                                 ['value' => 3600, 'name' => '1 Hour', 'max' => 16],
                                         ];
                                         $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : UnusedCSS_Queue::$job_count;
