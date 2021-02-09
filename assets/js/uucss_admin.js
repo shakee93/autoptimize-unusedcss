@@ -609,7 +609,7 @@
                 })
 
                 tippy($(row).find('button[data-uucss-optimize]')[0], {
-                    content: 'Refresh files',
+                    content: 'Refresh files Immediately',
                     placement: 'top',
                     appendTo: "parent"
                 })
