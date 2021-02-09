@@ -357,7 +357,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                                 $data['meta']['warnings'][] = [
                                     "file" => $link,
-                                    "message" => "RapidLoad cache missing for the file. Refresh Recommended."
+                                    "message" => "RapidLoad optimized version for the file missing."
                                 ];
 
                             }

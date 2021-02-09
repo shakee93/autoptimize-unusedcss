@@ -38,7 +38,7 @@ e.g.
 
 = How much does it cost to purchase a license of RapidLoad and where can I buy one? =
 
-You can purchase the license for as little as $5/m. Just sign up directly via [rapidload.io](https://rapidload.io) website.
+You can purchase the license for as little as $10/m. Just sign up directly via [rapidload.io](https://rapidload.io) website.
 
 = What are the Terms and Conditions of rapidload.io usage =
 
@@ -74,6 +74,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.3.6 =
+ * feat: retry jobs with warnings couple of more times
+ * feat: allow queued jobs to run immediately with "refresh button"
+ * refactor: update text copies in the plugin
+ * fix: run wp_enqueue_script callback at last as possible
 
 = 1.3.5 =
  * feat: add debug mode to the plugin with logs.
@@ -226,3 +232,4 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
  * Animated logo added
 
 == Upgrade Notice ==
+ Refresh all your queued jobs.
