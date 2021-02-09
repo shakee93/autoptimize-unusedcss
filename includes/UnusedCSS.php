@@ -53,7 +53,7 @@ abstract class UnusedCSS {
 			    $this->purge_css();
 		    }
 
-	    } );
+	    }, 99);
     }
 
 
