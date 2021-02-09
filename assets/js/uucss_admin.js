@@ -459,9 +459,7 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        if (row.status !== 'queued') {
-                            _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
-                        }
+                        _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
 
                         _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
