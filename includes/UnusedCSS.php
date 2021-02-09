@@ -53,7 +53,7 @@ abstract class UnusedCSS {
 			    $this->purge_css();
 		    }
 
-	    } );
+	    }, 99);
     }
 
 
@@ -243,12 +243,6 @@ abstract class UnusedCSS {
 
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 			$this->cache( $this->url );
-
-            self::log([
-                'log' => 'link added to queue',
-                'url' => $this->url,
-                'type' => 'queued'
-            ]);
 		}
 
 	}
@@ -314,11 +308,11 @@ abstract class UnusedCSS {
 		    spawn_cron();
 
 	    }
-        self::log([
-            'log' => 'url successfully purged',
-            'url' => $url,
-            'type' => 'purging'
-        ]);
+	    self::log([
+		    'log' => 'link added to queue',
+		    'url' => $this->url,
+		    'type' => 'queued'
+	    ]);
 	    return true;
     }
 

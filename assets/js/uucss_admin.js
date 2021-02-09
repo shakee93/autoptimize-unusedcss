@@ -122,7 +122,7 @@
 
         });
 
-        $.each($('span.dashicons.has-tooltip'),function(index, value){
+        /*$.each($('span.dashicons.has-tooltip'),function(index, value){
             tippy($(value)[0], {
                 content: $($(value)[0]).data('message'),
                 allowHTML: true,
@@ -134,7 +134,7 @@
                 arrow: false,
                 offset: [0, 7]
             });
-        });
+        });*/
 
         $('#uucss-wrapper li h2').click(function () {
             $(this).parent().find('.content').slideToggle('fast');
@@ -248,8 +248,8 @@
 
                     if (results.length < 3 && firstReload) {
                         showNotification(
-                            'Tip : When will i see the results ?',
-                            'The plugin will trigger unused css removal job when a user visits a page of yours. you will see the processed jobs soon in here.'
+                            'Tip : When will I see the results ?',
+                            'The plugin will trigger the removal of unused css whenever a page is loaded for the first time. Completed jobs are listed below.'
                         );
                     }
 
@@ -459,9 +459,7 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        if (row.status !== 'queued') {
-                            _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
-                        }
+                        _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
 
                         _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 

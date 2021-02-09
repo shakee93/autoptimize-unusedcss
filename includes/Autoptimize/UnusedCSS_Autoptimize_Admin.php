@@ -218,7 +218,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $result = $uucss_api->post( 'test/wordpress',
             [
-                'url' => $url ,
+                'url' => urldecode($url),
                 'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : []
             ]);
 
@@ -439,7 +439,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	public function add_ao_tab( $in ) {
 
-		$tab = 'Unused CSS';
+		$tab = 'RapidLoad';
 
 		$in = array_merge( $in, array(
 			'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>' . $tab . '</span></span>', 'autoptimize' ),

@@ -153,14 +153,61 @@
                     {
                         data: 'url',
                         title: "URL",
+                        render: function (data, type, row, meta) {
+                            return '<a href="' + decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>'
+                        }
                     },
                     {
                         data: 'log',
                         title: "Log",
+                        render: function (data, type, row, meta) { //found_css_cache_files , found_css_files , injected_css_files
+                            if(isJSON(data)){
+                                var parsedLog = JSON.parse(data);
+                                var $content = $('<div class="log-content"></div>');
+                                $content.append('<p>Successfully Injected : <span>'+ parsedLog.successfully_injected +'</span></p>');
+                                $content.append('<p>Parsed Html : <span>'+ parsedLog.parsed_html +'</span></p>');
+                                $content.append('<p>Found Sheets : <span>'+ parsedLog.found_sheets +'</span></p>');
+                                $content.append('<p>Found CSS Files :</p>');
+
+                                var $found_css_files = $('<ul class="log-found-css-files"></ul>');
+                                $.each(parsedLog.found_css_files, function (index, value) {
+                                    $found_css_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
+                                });
+                                $content.append($found_css_files.wrap('<div></div>').parent().html());
+
+                                $content.append('<p>Found CSS Cache Files :</p>');
+
+                                var $found_css_cache_files = $('<ul class="log-found-css-cache-files"></ul>');
+                                $.each(parsedLog.found_css_cache_files, function (index, value) {
+                                    $found_css_cache_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
+                                });
+                                $content.append($found_css_cache_files.wrap('<div></div>').parent().html());
+
+                                $content.append('<p>Injected CSS Files :</p>');
+
+                                var $injected_css_files = $('<ul class="log-injected-css-cache-files"></ul>');
+                                $.each(parsedLog.injected_css_files, function (index, value) {
+                                    $injected_css_files.append('<li><a href="'+ value+'" target="_blank">'+ value +'</a></li>')
+                                });
+                                $content.append($injected_css_files.wrap('<div></div>').parent().html());
+
+                                return $content.wrap('<div></div>').parent().html();
+                            }else{
+                                return  data;
+                            }
+                        }
                     },
 
                 ],
             })
+        }
+
+        function isJSON(str) {
+            try {
+                return (JSON.parse(str) && !!str);
+            } catch (e) {
+                return false;
+            }
         }
 
     })

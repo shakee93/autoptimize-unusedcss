@@ -16,12 +16,12 @@
                     code!</strong>
             </p>
             <p>
-                By analyzing each page and excluding unnecessary CSS, UnusedCSS instantly reduces
+                By analyzing each page and excluding unnecessary CSS, RapidLoad instantly reduces
                 load
                 times by <strong> up to 50%, boosts Boosts Google PageSpeed scores,</strong> and
                 <strong>improves user
                     experience.</strong> Best of all, it’s totally automated. No combing through
-                countless files, no matching up styles to elements - just enable UnusedCSS and see
+                countless files, no matching up styles to elements - just enable RapidLoad and see
                 the
                 benefits immediately!
             </p>

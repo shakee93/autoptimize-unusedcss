@@ -931,6 +931,7 @@ input#uucss-pack-suggest {
 
 #uucss-wrapper select#uucss_jobs_per_queue {
     margin-top: -3px;
+    margin-right: 5px;
 }
 
 .uucss-history .spinner-history {
@@ -1077,4 +1078,8 @@ input#uucss-pack-suggest {
 
 #whitelist_packs + span.select2{
     max-width: 377px !important;
+}
+
+#uucss-logs-table .log-content p, .log-content ul {
+    margin: 0;
 }

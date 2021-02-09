@@ -154,6 +154,8 @@ class UnusedCSS_DB
                 }
             }
 
+            $data['created_at'] =  date( "Y-m-d H:m:s", time() );
+
 			self::update( $data, array(
 				'url' => $data['url']
 			));
@@ -504,24 +506,32 @@ class UnusedCSS_DB
 
 	        $files = $file['files'];
 
-            foreach ( $files as $item ) {
+            if(isset($files) && !empty($files)){
 
-                foreach ( $links as $key => $value ) {
+                foreach ( $files as $item ) {
 
-                    if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
-                        $used[] = $item['uucss'];
-                        break;
+                    foreach ( $links as $key => $value ) {
+
+                        if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                            $used[] = $item['uucss'];
+                            break;
+                        }
                     }
+
                 }
 
             }
 
-            $unused = array_column( $files, 'uucss' );
+            if(isset($files) && !empty($files)){
 
-            foreach ( $used as $item ) {
+                $unused = array_column( $files, 'uucss' );
 
-                if ( ( $key = array_search( $item, $unused ) ) !== true ) {
-                    unset( $unused[ $key ] );
+                foreach ( $used as $item ) {
+
+                    if ( ( $key = array_search( $item, $unused ) ) !== true ) {
+                        unset( $unused[ $key ] );
+                    }
+
                 }
 
             }

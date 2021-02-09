@@ -21,6 +21,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    new UnusedCSS_Feedback();
 
+        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+        $this->add_update_message();
+
 	    parent::enqueueGlobalScript();
 
 	    $this->provider = 'autoptimize';
@@ -60,6 +64,59 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
 	    new UnusedCSS_Queue();
+    }
+
+    function add_update_message(){
+
+        global $pagenow;
+
+        if ( 'plugins.php' === $pagenow )
+        {
+            $file   = basename( UUCSS_PLUGIN_FILE );
+            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
+            $hook = "in_plugin_update_message-{$folder}/{$file}";
+            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
+        }
+
+    }
+
+    function render_update_message($plugin_data, $r ){
+
+        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+
+        $changelog  = stristr( $data, '== Changelog ==' );
+
+        $changelog  = stristr( $changelog, '== Upgrade Notice ==', true );
+
+        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
+
+        if(isset($changelog[1])){
+
+            $changelog = explode('*', $changelog[1]);
+
+            array_shift($changelog);
+
+            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+
+            foreach ($changelog as $index => $log){
+                if($index == 3){
+                    break;
+                }
+                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
+            }
+
+            echo '</ol></div><p style="display: none" class="empty">';
+
+        }
+    }
+
+    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
+        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
+        }
+        return $plugin_meta;
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -220,6 +277,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			"found_sheets"          => false,
 			"found_css_files"       => [],
 			"found_css_cache_files" => [],
+			"ao_optimized_css" => [],
 			"injected_css_files"    => [],
 			"successfully_injected"    => true,
 		];
@@ -264,14 +322,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    $newLink = $this->get_cached_file( $uucss_file, $this->uucss_ao_base->cdn_url );
 
-					    array_push( $inject->injected_css_files, $newLink );
-
 					    $ao_base = $this->uucss_ao_base;
 
 					    // check the file is processed via AO
 					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
 					        return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
 					    } );
+
+					    if($is_ao_css){
+
+					        array_push($inject->ao_optimized_css, $link);
+
+                        }
 
 					    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
@@ -281,6 +343,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 						    if ( isset( $this->options['uucss_inline_css'] ) ) {
 							    $this->inline_sheet( $sheet, $uucss_file );
 						    }
+
+                            array_push( $inject->injected_css_files, $newLink );
 
 					    }
 
@@ -309,8 +373,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		    }
 
+			$time_diff = 0;
+
+			if(isset($data['time'])){
+                $time_diff = time() - $data['time'];
+            }
+
             self::log([
-                'log' => 'injection insights : ' . json_encode((array) $inject),
+                'log' => json_encode((array) $inject),
                 'url' => $data['url'],
                 'type' => 'injection'
             ]);
@@ -326,7 +396,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'type' => 'injection'
                 ]);
 
-            }else if(!$inject->successfully_injected && $data['attempts'] < 1){
+            }else if(!$inject->successfully_injected && ($data['attempts'] < 1 || ($time_diff > 86400 && $data['attempts'] < 4))){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',

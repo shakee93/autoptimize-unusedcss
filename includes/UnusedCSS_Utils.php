@@ -85,7 +85,7 @@ trait UnusedCSS_Utils {
 	    }
 
 	    $data = is_string( $object ) ? $object : json_encode( $object, JSON_PRETTY_PRINT );
-	    error_log( "[UUCSS_LOG] " . $data );
+	    //error_log( "[UUCSS_LOG] " . $data );
 
         $data = is_string( $object ) ? [ 'log' => $object] : $object;
 

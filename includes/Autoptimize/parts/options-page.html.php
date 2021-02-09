@@ -43,8 +43,8 @@
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
-                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
-                                          data-message="Safelist selectors (regex supported)">
+                                    <span class="css-whitelist has-tooltip"
+                                          data-message="Safelist Selectors (regex supported)">
                                     </span>
                                 </th>
                                 <td class="safelist-wrapper">
@@ -53,8 +53,8 @@
                                     <div class="safelist-add">
                                         <select name="" id="safelist-type">
                                             <option value="single">Single</option>
-                                            <option value="deep">Deep</option>
                                             <option selected value="greedy">Greedy</option>
+                                            <option value="deep">Deep</option>
                                         </select>
                                         <input id="safelist-add" type="text" size="27"
                                                autocomplete="off">
@@ -70,8 +70,8 @@
                                         </div>
                                         <div class="info-details">
                                             <h4>Tip</h4>
-                                            <p>You can add rules to specify which css classes or id's are safe to left
-                                                in the final UnusedCSS output.</p>
+                                            <p>You can add rules to specify which CSS classes or IDs are safe to left
+                                                in the final RapidLoad output.</p>
                                             <p class="divider"></p>
                                             <p> use * expressions and add one rule at a time, <br>
                                             </p>
@@ -86,7 +86,7 @@
                             </tr>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Blocklist', 'uucss' ); ?>
-                                    <span class="dashicons dashicons-info-outline css-whitelist has-tooltip"
+                                    <span class="css-whitelist has-tooltip"
                                           data-message="Blocklist Selectors (regex supported)">
                                     </span>
                                 </th>
@@ -108,8 +108,8 @@
                                         </div>
                                         <div class="info-details">
                                             <h4>Tip</h4>
-                                            <p>You can add rules to specify which css rules should be left in the final
-                                                css output.</p>
+                                            <p>You can add rules to specify which CSS rules should be removed forcibly from the final
+                                                CSS output.</p>
                                             <p class="divider"></p>
                                             <p> use * glob expressions and add one rule at a time <br>
                                             </p>
@@ -160,7 +160,7 @@
                                                 <?php if ( isset( $options['uucss_minify'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            Minify <em>-- minify and remove css comments via the api</em>
+                                            Minify <em>-- Minify and Remove CSS comments via the API</em>
                                         </label>
                                     </p>
 
@@ -171,7 +171,7 @@
                                                 <?php if ( isset( $options['uucss_variables'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            CSS Variables <em>-- remove unused css variables</em>
+                                            CSS Variables <em>-- Remove unused CSS variables</em>
                                         </label>
                                     </p>
 
@@ -182,7 +182,7 @@
                                                 <?php if ( isset( $options['uucss_keyframes'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            CSS Animation keyframes <em>-- remove unused keyframe animations</em>
+                                            CSS Animation keyframes <em>-- Remove unused keyframe animations</em>
                                         </label>
                                     </p>
 
@@ -193,7 +193,7 @@
                                                 <?php if ( isset( $options['uucss_fontface'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            CSS Font-face rules <em>-- remove unused @font-face rules</em>
+                                            CSS @font-face rules <em>-- Remove unused @font-face rules</em>
                                         </label>
                                     </p>
 
@@ -204,7 +204,7 @@
                                                 <?php if ( isset( $options['uucss_cache_busting_v2'] ) )
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
-                                            Cache Busting <em>-- enable rapidload crawler to view pages without a random query string</em>
+                                            Cache Busting <em>-- Enable RapidLoad crawler to view pages with a random query string</em>
                                         </label>
                                     </p>
 
@@ -214,10 +214,9 @@
                                                    name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
                                                 echo 'checked="checked"';
                                             } ?> value='1'>
-                                            Analyze javascript <strong>(highly experimental)</strong> <em>-- analyze
-                                                javascript and remove unused css which are
-                                                not
-                                                used in JS</em>
+                                            Analyze JavaScript <strong>(highly experimental)</strong> <em>-- Analyze
+                                                JavaScript and Remove unused CSS which are
+                                                not used in JS</em>
                                         </label>
                                     </p>
                                 </td>
@@ -225,7 +224,7 @@
 
                             <tr>
                                 <th scope="row"><?php _e( 'Exclude URLs', 'uucss' ); ?>
-                                    <span class="dashicons dashicons-info-outline exclude-links has-tooltip"
+                                    <span class="exclude-links has-tooltip"
                                           data-message="Exclude from RapidLoad hello-url/some-url">
 
                                     </span></th>
@@ -247,10 +246,10 @@
                                                        autocomplete="off" aria-describedby="new-tag-post_tag-desc" value=""
                                                        role="combobox"
                                                        aria-autocomplete="list" aria-expanded="false" aria-owns="ui-id-1">
-                                                <input type="button" class="button tagadd" value="Add Link">
+                                                <input type="button" class="button tagadd" value="Add URL">
                                             </div>
                                             <p class="howto">
-                                                Exclude URL's from RapidLoad <em> hello-url/some-url, product/ </em>
+                                                Exclude URLs from RapidLoad <em> hello-url/some-url, product/ </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -258,9 +257,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Exclude CSS files', 'uucss' ); ?>
-                                    <span class="dashicons dashicons-info-outline exclude-css-files has-tooltip"
-                                          data-message="Exclude Specific CSS files from RapidLoad my-styles.css, /my-theme/style.css">
+                                <th scope="row"><?php _e( 'Exclude CSS Files', 'uucss' ); ?>
+                                    <span class="exclude-css-files has-tooltip"
+                                          data-message="Exclude specific CSS files from RapidLoad my-styles.css, /my-theme/style.css">
 
                                     </span></th>
                                 <td>
@@ -284,7 +283,7 @@
                                                 <input type="button" class="button tagadd" value="Add File">
                                             </div>
                                             <p class="howto">
-                                                Exclude Specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
+                                                Exclude specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -292,14 +291,14 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Load Original CSS files', 'uucss' ); ?></th>
+                                <th scope="row"><?php _e( 'Load Original CSS Files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='uucss_load_original' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_load_original]' <?php if ( ! empty( $options['uucss_load_original'] ) && '1' === $options['uucss_load_original'] ) {
 					                        echo 'checked="checked"';
 				                        } ?> value='1'>
                                         <i>
-                                            Inject original CSS files on user interaction. this helps to fix javascript
+                                            Inject original CSS files on user interaction. this can help resolve Javascript
                                             DOM selector related issues.
                                         </i>
                                     </label>
@@ -308,28 +307,28 @@
 
 
                             <tr>
-                                <th scope="row"><?php _e( 'Parse all CSS files', 'uucss' ); ?></th>
+                                <th scope="row"><?php _e( 'Parse All CSS Files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='autoptimize_uucss_include_all_files' type='checkbox'
                                                   name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) {
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Parse css files which are excluded by autoptimize as well
+                                            Parse CSS files which are excluded by Autoptimize.
                                         </i>
                                     </label>
                                 </td>
                             </tr>
 
                             <tr>
-                                <th scope="row"><?php _e( 'Inline small CSS files', 'uucss' ); ?></th>
+                                <th scope="row"><?php _e( 'Inline Small CSS Files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='uucss_inline_css' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            inline CSS files which are smaller than 5kb after unusedcss are removed
+                                            Inline CSS files which are smaller than 5kb after unused CSS is removed.
                                         </i>
                                     </label>
                                 </td>
@@ -356,11 +355,11 @@
                                 <td>
                                     <?php
                                         $intervals = [
-                                                ['value' => 60, 'name' => '1 Miniute', 'max' => 8],
-                                                ['value' => 300, 'name' => '5 Miniute', 'max' => 8],
-                                                ['value' => 600, 'name' => '10 Miniute', 'max' => 8],
-                                                ['value' => 1200, 'name' => '20 Miniute', 'max' => 8],
-                                                ['value' => 1800, 'name' => '30 Miniute', 'max' => 16],
+                                                ['value' => 60, 'name' => '1 Minute', 'max' => 8],
+                                                ['value' => 300, 'name' => '5 Minutes', 'max' => 8],
+                                                ['value' => 600, 'name' => '10 Minutes', 'max' => 8],
+                                                ['value' => 1200, 'name' => '20 Minutes', 'max' => 8],
+                                                ['value' => 1800, 'name' => '30 Minutes', 'max' => 16],
                                                 ['value' => 3600, 'name' => '1 Hour', 'max' => 16],
                                         ];
                                         $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : UnusedCSS_Queue::$job_count;
@@ -370,11 +369,15 @@
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
                                         <?php
                                         foreach ([1,2,4,8,16] as $job_count){
-                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count);
+                                            $label_jobs_per = 'Jobs';
+                                            if($job_count == 1){
+                                                $label_jobs_per = 'Job';
+                                            }
+                                            echo sprintf('<option value="%s" %s>%s %s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count, $label_jobs_per);
                                         }
                                         ?>
                                     </select>
-                                    Jobs Per
+                                     Per
                                     <select name="autoptimize_uucss_settings[uucss_queue_interval]" id="uucss_queue_interval">
                                         <?php
                                         foreach ($intervals as $interval){
@@ -470,18 +473,27 @@
                                        size="40">
                                 <em id="verification_status"></em>
 								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
+                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                       class="uucss-activate" id="my-account"> My Account
+                                    </a>
                                     <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php else : ?>
-                                    <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
+                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                       class="uucss-activate" id="my-account"> My Account
+                                    </a>
+                                    <a style="margin-left: 5px"
+                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
+
                                     <a style="margin-left: 5px"
                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php endif; ?>
+
                             </div>
 
                         </div>

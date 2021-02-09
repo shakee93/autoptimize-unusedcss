@@ -193,7 +193,7 @@
                             <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/run-first-job.svg' ?>"
                                  alt="">
                             <p>Run your first RapidLoad removal job and see how much weight it could remove from your
-                                website. <strong>it could reduce css file size upto 98% on larger websites. </strong></p>
+                                website. <strong>it could reduce css file size up to 98% on larger websites. </strong></p>
                         </div>
                         <div class="action-wrap">
                             <a class="act-button js-uucss-first-job" href="#" target="_blank">
@@ -207,7 +207,7 @@
         </div>
 
         <div class="skip-wrap">
-            <a href="<?php echo admin_url() ?>">Skip</a>
+            <a href="<?php echo admin_url('options-general.php?page=uucss') ?>">Skip</a>
         </div>
     </div>
     <div class="card-complete loading">
@@ -219,7 +219,7 @@
             <h2 class="title success">Congratulations</h2>
             <img class="success" style=""
                  src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/on-boarding/congrats.svg' ?>" alt="">
-            <p class="success">You have reduced css size successfully</p>
+            <p class="success">You have reduced CSS size successfully</p>
             <p class="error">An error occurred</p>
             <div class="first-result">
                 <div class="result-stat">
