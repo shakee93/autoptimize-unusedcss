@@ -369,11 +369,15 @@
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
                                         <?php
                                         foreach ([1,2,4,8,16] as $job_count){
-                                            echo sprintf('<option value="%s" %s>%s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count);
+                                            $label_jobs_per = 'Jobs';
+                                            if($job_count == 1){
+                                                $label_jobs_per = 'Job';
+                                            }
+                                            echo sprintf('<option value="%s" %s>%s %s</option>',$job_count,$job_count == $default_job_count ? 'selected' : '', $job_count, $label_jobs_per);
                                         }
                                         ?>
                                     </select>
-                                    Jobs Per
+                                     Per
                                     <select name="autoptimize_uucss_settings[uucss_queue_interval]" id="uucss_queue_interval">
                                         <?php
                                         foreach ($intervals as $interval){
