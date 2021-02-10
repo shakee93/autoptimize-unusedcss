@@ -478,11 +478,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		}
 
 		if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
-			if ( $url ) {
-				rocket_clean_post( url_to_postid( $url ) );
-			} else {
-				rocket_clean_domain();
-			}
+
+            $post_id = url_to_postid( $url );
+
+            if(stripslashes($url) == stripslashes(home_url())){
+                rocket_clean_home();
+            } else if ( $post_id ) {
+                rocket_clean_post( $post_id );
+            } else {
+                rocket_clean_domain();
+            }
 		}
 
 		$this->flush_lw_varnish( $url );
