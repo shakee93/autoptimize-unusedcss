@@ -310,7 +310,7 @@ abstract class UnusedCSS {
 	    }
 	    self::log([
 		    'log' => 'link added to queue',
-		    'url' => $this->url,
+		    'url' => $url,
 		    'type' => 'queued'
 	    ]);
 	    return true;
