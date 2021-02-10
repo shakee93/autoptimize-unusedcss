@@ -75,6 +75,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.7 - 10/02/2021 =
+ * improve: wp-rocket cache clearing
+ * fix: some CDN URLs not being optimized
+ * feat: allow URL column to add lengthier URLs
+ * refactor: update text copies
+
 = 1.3.6 =
  * feat: retry jobs with warnings couple of more times
  * feat: allow queued jobs to run immediately with "refresh button"
