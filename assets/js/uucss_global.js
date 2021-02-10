@@ -403,7 +403,7 @@
         $('.js-uucss-first-job').click(function (e) {
             e.preventDefault();
             if (!$('.uucss-on-board .connect.actions').hasClass('done')) {
-                alert('Connect UnusedCSS before run first job');
+                alert('Connect RapidLoad before run first job');
                 gotoConnect();
                 return;
             }
