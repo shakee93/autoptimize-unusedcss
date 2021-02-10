@@ -482,10 +482,25 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             $post_id = url_to_postid( $url );
 
             if(stripslashes($url) == stripslashes(home_url())){
+                self::log([
+                   'url' => $url,
+                   'log' => 'wprocket home url page cache cleared',
+                   'type' => 'injection'
+                ]);
                 rocket_clean_home();
             } else if ( $post_id ) {
+                self::log([
+                    'url' => $url,
+                    'log' => 'wprocket post url page cache cleared',
+                    'type' => 'injection'
+                ]);
                 rocket_clean_post( $post_id );
             } else {
+                self::log([
+                    'url' => $url,
+                    'log' => 'wprocket domain cache cleared',
+                    'type' => 'injection'
+                ]);
                 rocket_clean_domain();
             }
 		}
