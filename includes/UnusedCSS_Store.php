@@ -155,6 +155,12 @@ class UnusedCSS_Store {
             unset( $stats->afterBytes );
         }
 
+        if(isset($stats) && isset($stats->using) && in_array('rapidload', $stats->using)){
+            /*$warnings[] = [
+                "message" => "Clear your page cache"
+            ];*/
+        }
+
         $link_data = array(
             'url' => $this->url,
             'files' => $files,

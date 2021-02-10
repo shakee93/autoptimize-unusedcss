@@ -6,8 +6,9 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.0";
+    static $db_version = "1.1";
     static $db_option = "rapidload_migration";
+    static $current_version = "";
 
     static function uninitialize_site($old_site){
 
@@ -33,11 +34,13 @@ class UnusedCSS_DB
 
     static function check_db_updates(){
 
+        self::$current_version = UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option );
+
         add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
 
         add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
 
-        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
+        if (self::$current_version  != self::$db_version ) {
             $notice = [
 	            'action'  => 'rapidload-db-update',
 	            'title'   => 'RapidLoad Power Up',
@@ -56,7 +59,8 @@ class UnusedCSS_DB
 
 
 	static function update_db(){
-        if ( UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option ) != self::$db_version ) {
+
+        if ( self::$current_version != self::$db_version ) {
 
             try{
 	            $status = self::create_tables();
@@ -546,13 +550,19 @@ class UnusedCSS_DB
         global $wpdb;
 
         $table_name = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+        if(self::$current_version < 1.1){
+            $index = 'url';
+            $wpdb->query( "ALTER TABLE `$table_name` DROP INDEX `$index`" );
+        }
 
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
-		url varchar(191) NOT NULL,
+		url longtext NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
 		warnings longtext NULL,
@@ -561,11 +571,9 @@ class UnusedCSS_DB
 		attempts mediumint(2) NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id),
-		KEY url (url(191))
+		PRIMARY KEY  (id)
 	) $charset_collate;";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 	    return $wpdb->last_error;
     }

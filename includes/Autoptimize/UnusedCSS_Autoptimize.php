@@ -312,7 +312,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    $key = isset($data['files']) ? array_search( $link, array_column( $data['files'], 'original' ) ) : null;
+				    $key = isset($data['files']) ? array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) ) : null;
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
@@ -322,12 +322,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    $newLink = $this->get_cached_file( $uucss_file, $this->uucss_ao_base->cdn_url );
 
-					    $ao_base = $this->uucss_ao_base;
-
 					    // check the file is processed via AO
-					    $is_ao_css = array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
-					        return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
-					    } );
+					    $is_ao_css = $this->ao_handled($link);
 
 					    if($is_ao_css){
 
@@ -442,6 +438,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		return $html;
 	}
 
+	public function ao_handled($link){
+        $ao_base = $this->uucss_ao_base;
+        return array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
+            return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
+        } );
+    }
 
 	protected function inline_sheet( $sheet, $link ) {
 
@@ -476,11 +478,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		}
 
 		if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
-			if ( $url ) {
-				rocket_clean_post( url_to_postid( $url ) );
-			} else {
-				rocket_clean_domain();
-			}
+
+            $post_id = url_to_postid( $url );
+
+            if(stripslashes($url) == stripslashes(home_url())){
+                rocket_clean_home();
+            } else if ( $post_id ) {
+                rocket_clean_post( $post_id );
+            } else {
+                rocket_clean_domain();
+            }
 		}
 
 		$this->flush_lw_varnish( $url );
