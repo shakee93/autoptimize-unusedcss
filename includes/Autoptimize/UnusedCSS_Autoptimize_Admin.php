@@ -94,11 +94,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    $file_system = new UnusedCSS_FileSystem();
 
-	    if(!$file_system->exists(UUCSS_LOG_DIR . 'log.txt')){
+	    if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
             wp_send_json_success([]);
         }
 
-	    $data = $file_system->get_contents(UUCSS_LOG_DIR . 'log.txt');
+	    $data = $file_system->get_contents(UUCSS_LOG_DIR . 'debug.log');
 
 	    if(empty($data)){
 	        wp_send_json_success([]);
@@ -112,11 +112,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     function clear_uucss_logs(){
         $file_system = new UnusedCSS_FileSystem();
 
-        if(!$file_system->exists(UUCSS_LOG_DIR . 'log.txt')){
+        if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
             wp_send_json_success(true);
         }
 
-        $file_system->delete(UUCSS_LOG_DIR . 'log.txt');
+        $file_system->delete(UUCSS_LOG_DIR . 'debug.log');
         wp_send_json_success(true);
     }
 

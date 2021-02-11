@@ -156,9 +156,10 @@ class UnusedCSS_Store {
         }
 
         if(isset($stats) && isset($stats->using) && in_array('rapidload', $stats->using)){
-            /*$warnings[] = [
+
+            $warnings[] = [
                 "message" => "Clear your page cache"
-            ];*/
+            ];
         }
 
         $link_data = array(

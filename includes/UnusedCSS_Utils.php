@@ -101,11 +101,11 @@ trait UnusedCSS_Utils {
 
         $log_instance = self::get_log_instance();
 
-        if($log_instance->exists(UUCSS_LOG_DIR .'log.txt') && !empty($log_instance->get_contents(UUCSS_LOG_DIR .'log.txt'))){
+        if($log_instance->exists(UUCSS_LOG_DIR .'debug.log') && !empty($log_instance->get_contents(UUCSS_LOG_DIR .'debug.log'))){
             $data = ",\n" . $data;
         }
 
-        $log_instance->put_contents(UUCSS_LOG_DIR .'log.txt', $data, FILE_APPEND);
+        $log_instance->put_contents(UUCSS_LOG_DIR .'debug.log', $data, FILE_APPEND);
 
 	    if ( $callee ) {
 

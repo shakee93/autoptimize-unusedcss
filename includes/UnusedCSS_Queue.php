@@ -31,12 +31,22 @@ class UnusedCSS_Queue
 
         add_filter( 'cron_schedules', [$this, 'uucss_process_queue_schedule'] );
 
-        if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) ) {
+        $uucss_cron = $this->cron_exist();
+
+        if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) && !$uucss_cron) {
             self::log([
                 'log' => 'cron scheduled',
                 'type' => 'uucss-cron'
             ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
+        }else{
+
+            $interval = isset($uucss_cron['interval']) ? $uucss_cron['interval'] : '';
+            self::log([
+                'log' => 'scheduled cron exist, running at ' . $interval . ' interval',
+                'type' => 'uucss-cron'
+            ]);
+
         }
 
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
@@ -50,6 +60,35 @@ class UnusedCSS_Queue
             'page',
             'product',
         ));
+    }
+
+    function cron_exist(){
+
+        $cron_array = _get_cron_array();
+
+        if(!isset($cron_array) || empty($cron_array)){
+            return false;
+        }
+
+        $uucss_cron = array_column($cron_array, 'cron_uucss_process_queue');
+
+        if(!isset($uucss_cron) || empty($uucss_cron)){
+            return false;
+        }
+
+        $uucss_cron = array_shift($uucss_cron);
+
+        if(!isset($uucss_cron) || empty($uucss_cron)){
+            return false;
+        }
+
+        $uucss_cron = array_shift($uucss_cron);
+
+        if(!isset($uucss_cron) || empty($uucss_cron)){
+            return false;
+        }
+
+        return $uucss_cron;
     }
 
     function queue_posts(){
