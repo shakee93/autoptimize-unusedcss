@@ -386,7 +386,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
-                $dom->find( 'html' )[0]->setAttribute('uucss',1);
+                $dom->find( 'body' )[0]->uucss_success = true;
 
                 self::log([
                     'log' => 'injection success and attempts reset to 0',
@@ -421,7 +421,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
             }else{
 
-                $dom->find( 'html' )[0]->setAttribute('uucss',1);
+                $dom->find( 'body' )[0]->uucss_success = true;
 
                 self::log([
                     'log' => 'injection success',
