@@ -471,11 +471,30 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 		if ( class_exists( 'Cache_Enabler' ) ) {
 
-			if ( $url ) {
-				Cache_Enabler::clear_page_cache_by_url( $url );
-			} else {
-				Cache_Enabler::clear_total_cache();
-			}
+            $post_id = url_to_postid( $url );
+
+            if(stripslashes($url) == stripslashes(home_url())){
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler home url page cache cleared',
+                    'type' => 'injection'
+                ]);
+                Cache_Enabler::clear_page_cache_by_url( $url );
+            } else if ( $post_id ) {
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler post url page cache cleared',
+                    'type' => 'injection'
+                ]);
+                Cache_Enabler::clear_page_cache_by_post_id( $post_id );
+            } else {
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler domain cache cleared',
+                    'type' => 'injection'
+                ]);
+                Cache_Enabler::clear_site_cache();
+            }
 
 		}
 
