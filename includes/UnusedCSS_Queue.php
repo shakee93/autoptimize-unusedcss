@@ -70,7 +70,7 @@ class UnusedCSS_Queue
             return false;
         }
 
-        $uucss_cron = array_column($cron_array, 'cron_uucss_process_queue');
+        $uucss_cron = array_column($cron_array, 'uucss_cron_interval');
 
         if(!isset($uucss_cron) || empty($uucss_cron)){
             return false;
