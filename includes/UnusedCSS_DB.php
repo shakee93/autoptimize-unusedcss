@@ -419,6 +419,19 @@ class UnusedCSS_DB
 		}
 	}
 
+	static function requeue_pending_jobs(){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE status IN('processing', 'failed')");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
     static function reset_attempts($link){
         global $wpdb;
 
