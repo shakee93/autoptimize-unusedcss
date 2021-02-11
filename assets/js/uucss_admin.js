@@ -373,7 +373,7 @@
                                     '</div>');
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
-                                    content: 'Before UnusedCSS <span class="perc">' + rowData.meta.stats.before + '</span>',
+                                    content: 'Before RapidLoad <span class="perc">' + rowData.meta.stats.before + '</span>',
                                     allowHTML: true,
                                     placement: 'bottom-end',
                                     trigger: 'manual',
@@ -387,7 +387,7 @@
                                 })
 
                                 innerTippy2 = tippy(c.find('.progress-bar')[0], {
-                                    content: 'After UnusedCSS <span class="perc"> ' + rowData.meta.stats.after + '</span>',
+                                    content: 'After RapidLoad <span class="perc"> ' + rowData.meta.stats.after + '</span>',
                                     allowHTML: true,
                                     placement: 'top-start',
                                     trigger: 'manual',
