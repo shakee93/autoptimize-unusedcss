@@ -411,7 +411,7 @@
 
                                             }
                                         ?>
-                                        <option value="current">Current</option>
+                                        <option value="current">Current Jobs</option>
                                         <option value="pending">Pending Jobs</option>
                                     </select>
                                     <input type="button" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
