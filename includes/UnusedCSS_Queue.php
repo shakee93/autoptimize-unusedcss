@@ -33,7 +33,7 @@ class UnusedCSS_Queue
 
         $uucss_cron = $this->cron_exist();
 
-        if ( ! wp_next_scheduled( 'cron_uucss_process_queue' )) {
+        if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) && !$uucss_cron) {
             self::log([
                 'log' => 'cron scheduled',
                 'type' => 'uucss-cron'
