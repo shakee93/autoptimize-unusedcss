@@ -481,21 +481,21 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 self::log([
                     'url' => $url,
                     'log' => 'cache enabler home url page cache cleared',
-                    'type' => 'injection'
+                    'type' => 'purging'
                 ]);
                 Cache_Enabler::clear_page_cache_by_url( $url );
             } else if ( $post_id ) {
                 self::log([
                     'url' => $url,
                     'log' => 'cache enabler post url page cache cleared',
-                    'type' => 'injection'
+                    'type' => 'purging'
                 ]);
                 Cache_Enabler::clear_page_cache_by_post_id( $post_id );
             } else {
                 self::log([
                     'url' => $url,
                     'log' => 'cache enabler domain cache cleared',
-                    'type' => 'injection'
+                    'type' => 'purging'
                 ]);
                 Cache_Enabler::clear_site_cache();
             }
@@ -510,21 +510,21 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                 self::log([
                    'url' => $url,
                    'log' => 'wprocket home url page cache cleared',
-                   'type' => 'injection'
+                   'type' => 'purging'
                 ]);
                 rocket_clean_home();
             } else if ( $post_id ) {
                 self::log([
                     'url' => $url,
                     'log' => 'wprocket post url page cache cleared',
-                    'type' => 'injection'
+                    'type' => 'purging'
                 ]);
                 rocket_clean_post( $post_id );
             } else {
                 self::log([
                     'url' => $url,
                     'log' => 'wprocket domain cache cleared',
-                    'type' => 'injection'
+                    'type' => 'purging'
                 ]);
                 rocket_clean_domain();
             }
