@@ -386,7 +386,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                 UnusedCSS_DB::reset_attempts($data['url']);
 
-                $dom->find( 'body' )[0]->uucss_success = true;
+                $dom->find( 'body' )[0]->uucss = true;
 
                 UnusedCSS_DB::update_success_count($data['url']);
 
@@ -423,7 +423,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
             }else{
 
-                $dom->find( 'body' )[0]->uucss_success = true;
+                $dom->find( 'body' )[0]->uucss = true;
 
                 UnusedCSS_DB::update_success_count($data['url']);
 
