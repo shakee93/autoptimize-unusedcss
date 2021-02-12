@@ -19,6 +19,8 @@
 
     $(document).ready(function () {
 
+        $.fn.dataTable.ext.errMode = 'none';
+
         if (window.uucss && window.uucss.notifications.length) {
             window.uucss.notifications.forEach(function (i) {
 
@@ -146,6 +148,12 @@
         });
 
         var x = 0;
+
+        table.on('error.dt', function(e, settings, techNote, message){
+            $.uucss_log({
+                log : message,
+            })
+        });
 
         table.on('draw.dt', function (x,y) {
 

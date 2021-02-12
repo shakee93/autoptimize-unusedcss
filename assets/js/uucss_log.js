@@ -2,6 +2,8 @@
 
     $(document).ready(function () {
 
+        $.fn.dataTable.ext.errMode = 'none';
+
         var $table = null;
         var status_filter = '';
         var log_interval = null;
@@ -43,6 +45,12 @@
                 }, 1000 * 5)
             });
 
+            $table.on('error.dt', function(e, settings, techNote, message){
+                $.uucss_log({
+                    log : message,
+                })
+            });
+
             $table.on('draw.dt', function (x,y) {
 
                 $('.featherlight.uucss-log .spinner.loading').remove();
@@ -78,7 +86,6 @@
 
                 $('#uucss-logs-table_info select.uucss-log-type').on('change', function(){
                     status_filter = $(this).val();
-                    console.log(status_filter)
                     $table.column(1).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
                         .draw();
                 });
