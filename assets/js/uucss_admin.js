@@ -19,8 +19,6 @@
 
     $(document).ready(function () {
 
-
-
         if (window.uucss && window.uucss.notifications.length) {
             window.uucss.notifications.forEach(function (i) {
 

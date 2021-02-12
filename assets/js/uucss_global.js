@@ -1,5 +1,26 @@
 (function ($) {
 
+    $.uucss_log = function (log) {
+
+        if(!log){
+            return;
+        }
+
+        $.ajax({
+            url : uucss.ajax_url,
+            method : 'POST',
+            data : {
+                action : 'frontend_logs',
+                type : log.type,
+                url : log.url,
+                log : log.log,
+            },
+            success : function(response){
+
+            }
+        })
+    };
+
     $(document).ready(function () {
 
         var popupWindow = null;
