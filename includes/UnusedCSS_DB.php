@@ -451,6 +451,40 @@ class UnusedCSS_DB
         }
     }
 
+    static function update_success_count($url){
+
+        $data = self::get_link($url);
+
+        if(!isset($data)){
+            return false;
+        }
+
+        $stats = false;
+
+        if(isset($data['meta']) && isset($data['meta']['stats'])){
+
+            $stats = $data['meta']['stats'];
+
+            if(!isset($stats->success_count)){
+                $stats->success_count = 0;
+            }
+
+        }
+
+        if($stats && isset($stats->success_count)){
+
+            $stats->success_count = $stats->success_count + 1;
+
+        }
+
+        UnusedCSS_DB::update_meta([
+            'stats' => isset($stats) ? serialize($stats) : null,
+        ], $url);
+
+        return true;
+
+    }
+
     static function update_meta($data, $link){
 
         if(isset($data['warnings'])){
