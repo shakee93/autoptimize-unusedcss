@@ -599,7 +599,7 @@ class UnusedCSS_DB
         $table_name = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-        if(self::$current_version < 1.1){
+        if(self::$current_version < 1.1 && in_array($blog_id . 'rapidload_uucss_job', $wpdb->tables)){
             $index = 'url';
             $wpdb->query( "ALTER TABLE `$table_name` DROP INDEX `$index`" );
         }
