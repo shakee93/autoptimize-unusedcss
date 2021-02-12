@@ -48,6 +48,10 @@ Read it here : [https://rapidload.io/terms-conditions/](https://rapidload.io/ter
 
 RapidLoad analyzes the content of your Wordpress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!
 
+= My Site is broken after using RapidLoad. What can i do ? =
+
+There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on "Load Original CSS files" and add safelist rules. if you are not sure how to add safelist rules create a support ticket in [https://rapidload.zendesk.com/hc/en-us](https://rapidload.zendesk.com/hc/en-us) one of our support member will help you out .
+
 = Do I need to run this every time I make a change? =
 
 No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!
@@ -74,6 +78,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.3.8 - 12/02/2021 =
+ * feat: log optimizations table errors
+ * feat: allow pending jobs to be re-queued
+ * improve: cache enabler plugin support
+ * improve: wp-rocket plugin support
+ * fix: index drop query throwing a warning
 
 = 1.3.7 - 10/02/2021 =
  * improve: wp-rocket cache clearing
@@ -236,6 +247,3 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 = 1.0.5.1 =
  * Rebranding with name RapidLoad
  * Animated logo added
-
-== Upgrade Notice ==
- Refresh all your queued jobs.
