@@ -54,7 +54,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
-	    add_filter('uucss/cache/bust', [ $this, 'add_cache_busting_params' ], 10, 1);
 
 	    parent::__construct();
 
@@ -473,63 +472,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			$url = $this->transform_url( $args['url'] );
 		}
 
-		if ( class_exists( 'Cache_Enabler' ) ) {
-
-            $post_id = url_to_postid( $url );
-
-            if(stripslashes($url) == stripslashes(home_url())){
-                self::log([
-                    'url' => $url,
-                    'log' => 'cache enabler home url page cache cleared',
-                    'type' => 'purging'
-                ]);
-                Cache_Enabler::clear_page_cache_by_url( $url );
-            } else if ( $post_id ) {
-                self::log([
-                    'url' => $url,
-                    'log' => 'cache enabler post url page cache cleared',
-                    'type' => 'purging'
-                ]);
-                Cache_Enabler::clear_page_cache_by_post_id( $post_id );
-            } else {
-                self::log([
-                    'url' => $url,
-                    'log' => 'cache enabler domain cache cleared',
-                    'type' => 'purging'
-                ]);
-                Cache_Enabler::clear_site_cache();
-            }
-
-		}
-
-		if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
-
-            $post_id = url_to_postid( $url );
-
-            if(stripslashes($url) == stripslashes(home_url())){
-                self::log([
-                   'url' => $url,
-                   'log' => 'wprocket home url page cache cleared',
-                   'type' => 'purging'
-                ]);
-                rocket_clean_home();
-            } else if ( $post_id ) {
-                self::log([
-                    'url' => $url,
-                    'log' => 'wprocket post url page cache cleared',
-                    'type' => 'purging'
-                ]);
-                rocket_clean_post( $post_id );
-            } else {
-                self::log([
-                    'url' => $url,
-                    'log' => 'wprocket domain cache cleared',
-                    'type' => 'purging'
-                ]);
-                rocket_clean_domain();
-            }
-		}
-
 		$this->flush_lw_varnish( $url );
 
 	}
@@ -573,20 +515,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		}
 
 	}
-
-	public function add_cache_busting_params($cacheBusting){
-
-        if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) ) {
-
-            array_push($cacheBusting, [
-               'type' => 'query',
-               'rule' => 'nowprocket'
-            ]);
-
-        }
-
-        return $cacheBusting;
-    }
 
 }
 
