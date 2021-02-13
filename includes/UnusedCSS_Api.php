@@ -31,6 +31,8 @@ class UnusedCSS_Api
 
 	function get( $endpoint, $data = [] ) {
 
+        $data = apply_filters('uucss/requests', $data, 'get');
+
 		$url = self::$apiUrl . '/' . $endpoint . '?' . http_build_query( $data );
 
 		$response = wp_remote_get( $url, [
@@ -44,6 +46,8 @@ class UnusedCSS_Api
 	}
 
 	function post( $endpoint, $data = [] ) {
+
+        $data = apply_filters('uucss/requests', $data, 'post');
 
 		$url = self::$apiUrl . '/' . $endpoint;
 
