@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/cache-enabler.php',
     'UnusedCSS' => $baseDir . '/includes/UnusedCSS.php',
     'UnusedCSS_Admin' => $baseDir . '/includes/UnusedCSS_Admin.php',
     'UnusedCSS_Api' => $baseDir . '/includes/UnusedCSS_Api.php',
@@ -19,6 +20,7 @@ return array(
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
+    'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/wp-rocket.php',
     'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
     'simplehtmldom\\HtmlDocument' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
     'simplehtmldom\\HtmlNode' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlNode.php',

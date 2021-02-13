@@ -8,44 +8,47 @@ class Cache_Enabler_Compatible{
 
     function __construct()
     {
-        if ( class_exists( 'Cache_Enabler' ) ) {
 
-            add_action( 'uucss/cached', [$this, 'flush_page_cache'], 10, 2 );
-            add_action( 'uucss/cache_cleared', [$this, 'flush_page_cache'], 10, 2 );
-        }
+        add_action( 'uucss/cached', [$this, 'flush_page_cache'], 10, 2 );
+        add_action( 'uucss/cache_cleared', [$this, 'flush_page_cache'], 10, 2 );
+
     }
 
     function flush_page_cache($args){
 
-        $url = null;
+        if ( class_exists( 'Cache_Enabler' ) ) {
 
-        if ( isset( $args['url'] ) ) {
-            $url = $this->transform_url( $args['url'] );
-        }
+            $url = null;
 
-        $post_id = url_to_postid( $url );
+            if ( isset( $args['url'] ) ) {
+                $url = $this->transform_url( $args['url'] );
+            }
 
-        if(stripslashes($url) == stripslashes(home_url())){
-            self::log([
-                'url' => $url,
-                'log' => 'cache enabler home url page cache cleared',
-                'type' => 'purging'
-            ]);
-            Cache_Enabler::clear_page_cache_by_url( $url );
-        } else if ( $post_id ) {
-            self::log([
-                'url' => $url,
-                'log' => 'cache enabler post url page cache cleared',
-                'type' => 'purging'
-            ]);
-            Cache_Enabler::clear_page_cache_by_post_id( $post_id );
-        } else {
-            self::log([
-                'url' => $url,
-                'log' => 'cache enabler domain cache cleared',
-                'type' => 'purging'
-            ]);
-            Cache_Enabler::clear_site_cache();
+            $post_id = url_to_postid( $url );
+
+            if(stripslashes($url) == stripslashes(home_url())){
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler home url page cache cleared',
+                    'type' => 'purging'
+                ]);
+                Cache_Enabler::clear_page_cache_by_url( $url );
+            } else if ( $post_id ) {
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler post url page cache cleared',
+                    'type' => 'purging'
+                ]);
+                Cache_Enabler::clear_page_cache_by_post_id( $post_id );
+            } else {
+                self::log([
+                    'url' => $url,
+                    'log' => 'cache enabler domain cache cleared',
+                    'type' => 'purging'
+                ]);
+                Cache_Enabler::clear_site_cache();
+            }
+
         }
 
     }
