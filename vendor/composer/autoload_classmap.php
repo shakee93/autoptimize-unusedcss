@@ -23,6 +23,7 @@ return array(
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
     'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
+    'Yoast_SEO_Compatible' => $baseDir . '/includes/third-party/plugins/yoast-seo/Yoast_SEO_Compatible.php',
     'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
     'simplehtmldom\\HtmlDocument' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
     'simplehtmldom\\HtmlNode' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlNode.php',
