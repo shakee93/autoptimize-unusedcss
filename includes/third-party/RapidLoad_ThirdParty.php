@@ -1,5 +1,6 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
 
 class RapidLoad_ThirdParty
 {
