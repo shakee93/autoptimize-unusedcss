@@ -42,7 +42,7 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
             if(stripslashes($url) == stripslashes(home_url())){
                 self::log([
                     'url' => $url,
-                    'log' => 'wprocket home url page cache cleared',
+                    'log' => 'Wp Rocket home url page cache cleared',
                     'type' => 'purging'
                 ]);
                 rocket_clean_home();
