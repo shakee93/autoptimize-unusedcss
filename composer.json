@@ -1,6 +1,7 @@
 {
   "require": {
-    "simplehtmldom/simplehtmldom": "@dev"
+    "simplehtmldom/simplehtmldom": "@dev",
+    "vipnytt/sitemapparser": "^1.0"
   },
   "autoload": {
     "classmap": [

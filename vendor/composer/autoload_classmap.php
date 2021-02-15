@@ -20,6 +20,7 @@ return array(
     'UnusedCSS_FileSystem' => $baseDir . '/includes/UnusedCSS_FileSystem.php',
     'UnusedCSS_Queue' => $baseDir . '/includes/UnusedCSS_Queue.php',
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',
+    'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
     'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',

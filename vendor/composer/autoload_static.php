@@ -6,6 +6,58 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
+    public static $files = array (
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+    );
+
+    public static $prefixLengthsPsr4 = array (
+        'v' => 
+        array (
+            'vipnytt\\' => 8,
+        ),
+        'P' => 
+        array (
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'vipnytt\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vipnytt/sitemapparser/src',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+    );
+
     public static $classMap = array (
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
         'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
@@ -21,6 +73,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_FileSystem' => __DIR__ . '/../..' . '/includes/UnusedCSS_FileSystem.php',
         'UnusedCSS_Queue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Queue.php',
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
+        'UnusedCSS_Sitemap' => __DIR__ . '/../..' . '/includes/UnusedCSS_Sitemap.php',
         'UnusedCSS_Store' => __DIR__ . '/../..' . '/includes/UnusedCSS_Store.php',
         'UnusedCSS_Utils' => __DIR__ . '/../..' . '/includes/UnusedCSS_Utils.php',
         'WP_Rocket_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
@@ -33,6 +86,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
 
         }, null, ClassLoader::class);

@@ -53,6 +53,8 @@ class UnusedCSS_Queue
 
         add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
 
+        add_action('uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
+
         $this->async = apply_filters('uucss/queue/async',false);
 
         self::$post_types = apply_filters('uucss/queue/post_types',array(
@@ -118,6 +120,16 @@ class UnusedCSS_Queue
             UnusedCSS_DB::requeue_pending_jobs();
             wp_send_json_success('successfully links added to the queue');
 
+        }else if($post_type == 'site_map'){
+
+            $sitemap = isset($_REQUEST['sitemap_url']) ? $_REQUEST['sitemap_url'] : false;
+
+            wp_schedule_single_event( time(), 'uucss_sitemap_queue', [
+                'url' => $sitemap
+            ] );
+            spawn_cron();
+            wp_send_json_success('sitemap links schedule to add queue');
+
         }else{
 
             $posts = new WP_Query(array(
@@ -149,6 +161,28 @@ class UnusedCSS_Queue
 
         wp_send_json_success('successfully links added to the queue');
 
+    }
+
+    static function queue_sitemap($url = false){
+
+        if(!$url){
+
+            $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
+        }
+
+        $site_map = new UnusedCSS_Sitemap();
+        $urls = $site_map->process_site_map($url);
+
+        if(isset($urls) && !empty($urls)){
+
+            foreach ($urls as $url){
+
+                UnusedCSS_DB::add_link(array(
+                    'url' => $url,
+                    'status' => 'queued',
+                ));
+            }
+        }
     }
 
     static function get_post_types(){
