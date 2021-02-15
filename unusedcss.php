@@ -37,12 +37,11 @@ register_uninstall_hook(UUCSS_PLUGIN_FILE, 'UnusedCSS_DB::drop');
  */
 global $uucss;
 
-RapidLoad_ThirdParty::initialize();
-
 add_action( 'plugins_loaded', function () {
 
     global $uucss;
     $uucss = new UnusedCSS_Autoptimize();
 
+    RapidLoad_ThirdParty::initialize();
 } );
 
