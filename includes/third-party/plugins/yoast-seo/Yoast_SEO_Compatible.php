@@ -19,7 +19,7 @@ class Yoast_SEO_Compatible extends RapidLoad_ThirdParty {
             }
         }
 
-        if ( true === $this->yoast_seo_xml['enablexmlsitemap'] ) {
+        if ( isset($this->yoast_seo_xml['enablexmlsitemap']) && true === $this->yoast_seo_xml['enablexmlsitemap'] ) {
 
             $this->init_hooks();
         }
