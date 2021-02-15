@@ -55,13 +55,6 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
-	    $this->include_third_party_support();
-    }
-
-    public function include_third_party_support(){
-
-        new WP_Rocket_Compatible();
-        new Cache_Enabler_Compatible();
     }
 
 

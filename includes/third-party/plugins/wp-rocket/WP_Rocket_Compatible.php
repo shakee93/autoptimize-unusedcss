@@ -2,20 +2,22 @@
 
 defined( 'ABSPATH' ) or die();
 
-class WP_Rocket_Compatible{
+class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
 
-    use UnusedCSS_Utils;
+    function __construct(){
 
-    function __construct()
-    {
+        $this->init_hooks();
+    }
+
+    public function init_hooks(){
 
         add_filter('uucss/cache/bust', [$this, 'add_cache_busting_params'], 10, 1);
-        add_action( 'uucss/cached', [$this, 'flush_page_cache'], 10, 2 );
-        add_action( 'uucss/cache_cleared', [$this, 'flush_page_cache'], 10, 2 );
+        add_action( 'uucss/cached', [$this, 'purge_cache'], 10, 2 );
+        add_action( 'uucss/cache_cleared', [$this, 'purge_cache'], 10, 2 );
 
     }
 
-    function add_cache_busting_params($cacheBusting){
+    public function add_cache_busting_params($cacheBusting){
 
         array_push($cacheBusting, [
             'type' => 'query',
@@ -25,7 +27,7 @@ class WP_Rocket_Compatible{
         return $cacheBusting;
     }
 
-    function flush_page_cache($args){
+    public function purge_cache($args){
 
         if ( function_exists( 'rocket_clean_post' ) && function_exists( 'rocket_clean_domain' ) && function_exists( 'rocket_clean_home' ) ) {
 
@@ -51,13 +53,6 @@ class WP_Rocket_Compatible{
                     'type' => 'purging'
                 ]);
                 rocket_clean_post( $post_id );
-            } else {
-                self::log([
-                    'url' => $url,
-                    'log' => 'wprocket domain cache cleared',
-                    'type' => 'purging'
-                ]);
-                rocket_clean_domain();
             }
 
         }

@@ -7,7 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
     public static $classMap = array (
-        'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/cache-enabler.php',
+        'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
+        'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
+        'RapidLoad_ThirdParty' => __DIR__ . '/../..' . '/includes/third-party/RapidLoad_ThirdParty.php',
         'UnusedCSS' => __DIR__ . '/../..' . '/includes/UnusedCSS.php',
         'UnusedCSS_Admin' => __DIR__ . '/../..' . '/includes/UnusedCSS_Admin.php',
         'UnusedCSS_Api' => __DIR__ . '/../..' . '/includes/UnusedCSS_Api.php',
@@ -21,7 +23,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
         'UnusedCSS_Store' => __DIR__ . '/../..' . '/includes/UnusedCSS_Store.php',
         'UnusedCSS_Utils' => __DIR__ . '/../..' . '/includes/UnusedCSS_Utils.php',
-        'WP_Rocket_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-rocket/wp-rocket.php',
+        'WP_Rocket_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
         'simplehtmldom\\Debug' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/Debug.php',
         'simplehtmldom\\HtmlDocument' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
         'simplehtmldom\\HtmlNode' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlNode.php',
