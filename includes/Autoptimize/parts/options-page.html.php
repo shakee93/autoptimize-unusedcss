@@ -23,7 +23,7 @@
                     <h2>
                         Optimizations
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url">
-                    <span class="dashicons dashicons-plus-alt"></span>Add
+                    <span class="dashicons dashicons-plus"></span>Add
                 </span>
                     </h2>
                     <div class="content">

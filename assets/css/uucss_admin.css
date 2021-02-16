@@ -130,18 +130,23 @@ light
 .uucss-add-site-urls{
     cursor: pointer;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 8px;
     display: inline-block;
-    width: 55px;
-    height: 35px;
-    line-height: 35px;
-    padding-left: 5px;
-    padding-right: 5px;
+    width: 54px;
+    height: 26px;
+    line-height: 27px;
+    padding-left: 1px;
+    padding-right: 1px;
+    background: #8156b2;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: white;
+    border-radius: 3px;
 }
 
-.uucss-add-site-urls .dashicons.dashicons-plus-alt{
-    line-height: 35px;
+.uucss-add-site-urls .dashicons.dashicons-plus{
+    line-height: 28px;
 }
 
 span.uucss-toggle-section.rotate {
@@ -304,7 +309,7 @@ span.uucss-toggle-section.rotate {
 }
 
 #uucss-wrapper li.uucss-history h2{
-    padding-left: 15px;
+    padding: 12px 15px;
 }
 
 #uucss-wrapper span.valid {
@@ -953,7 +958,7 @@ input#uucss-pack-suggest {
 
 .uucss-history .spinner-history {
     position: absolute;
-    top: 6px;
+    top: 8px;
     left: 115px;
     transition: ease opacity .15s;
     opacity: 0;
