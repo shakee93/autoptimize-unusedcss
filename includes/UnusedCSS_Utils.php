@@ -121,13 +121,14 @@ trait UnusedCSS_Utils {
 	    return $object;
     }
 
-    public static function uucss_log($args = []){
+    public static function uucss_log($object){
 
-        if(file_exists(UUCSS_LOG_DIR)){
+	    if ( ! self::get_log_option() || (defined( 'UUCSS_DEBUG' ) && UUCSS_DEBUG == false)) {
+		    return false;
+	    }
 
-            file_put_contents(UUCSS_LOG_DIR . 'log.json', json_encode($args), LOCK_EX);
-
-        }
+	    $data = is_string( $object ) ? $object : json_encode( $object, JSON_PRETTY_PRINT );
+	    error_log( "[UUCSS_LOG] " . $data );
     }
 
     public static function add_admin_notice($message, $type='error') {

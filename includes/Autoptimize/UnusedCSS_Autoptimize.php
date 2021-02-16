@@ -311,7 +311,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    $key = isset($data['files']) ? array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) ) : null;
+				    $file = array_search( $link, array_column( $data['files'], 'original' ) );
+
+				    if ( ! $file ) {
+				    	// Retry to see if file can be found with CDN url
+					    $file = array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) );
+				    }
+
+				    $key = isset($data['files']) ? $file : null;
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
