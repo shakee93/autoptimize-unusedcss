@@ -30,6 +30,7 @@ class UnusedCSS_Sitemap
 
             self::log([
                 'type' => 'purging',
+                'url' => $sitemap_url,
                 'log' => $sitemap->get_error_message()
             ]);
 
