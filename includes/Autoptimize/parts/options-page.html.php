@@ -389,6 +389,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>
+                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
+                                </th>
+                                <td>
+                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_enable_debug"><input id='uucss_enable_debug' type='checkbox'
@@ -535,7 +543,6 @@
                 <option value="current">Current Jobs</option>
                 <option value="pending">Pending Jobs</option>
                 <option value="site_map">Site Map</option>
-                <option value="all">All</option>
             </select>
         </div>
         <div>
