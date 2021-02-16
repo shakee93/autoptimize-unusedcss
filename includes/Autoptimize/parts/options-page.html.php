@@ -543,7 +543,6 @@
                 <option value="current">Current Jobs</option>
                 <option value="pending">Pending Jobs</option>
                 <option value="site_map">Site Map</option>
-                <option value="all">All</option>
             </select>
         </div>
         <div>
