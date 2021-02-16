@@ -6,19 +6,23 @@ class Cache_Enabler_Compatible  extends RapidLoad_ThirdParty {
 
     function __construct(){
 
-        $this->init_hooks();
+        $this->plugin = 'cache-enabler/cache-enabler.php';
+        $this->catgeory = 'cache';
+        $this->name = 'cache-enabler';
+
+        parent::__construct();
     }
 
     public function init_hooks(){
 
-        add_action( 'uucss/cached', [$this, 'purge_cache'], 10, 2 );
-        add_action( 'uucss/cache_cleared', [$this, 'purge_cache'], 10, 2 );
+        add_action( 'uucss/cached', [$this, 'handle'], 10, 2 );
+        add_action( 'uucss/cache_cleared', [$this, 'handle'], 10, 2 );
 
     }
 
-    public function purge_cache($args){
+    public function handle($args){
 
-        if ( class_exists( 'Cache_Enabler' ) ) {
+        if(class_exists('Cache_Enabler')){
 
             $url = null;
 

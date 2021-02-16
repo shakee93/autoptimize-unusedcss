@@ -432,6 +432,16 @@
                             </ul>
 
                             <div>
+                                <?php
+                                    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
+                                    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
+                                        return isset($plugin['category']) && $plugin['category'] == 'cache';
+                                    });
+                                ?>
+                                <input id='thirtd_part_cache_plugins' type='hidden'
+                                       value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
+                                    echo '1';
+                                } ?>">
                                 <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
                                     echo '1';
@@ -501,6 +511,7 @@
     </div>
 
 </form>
+
 <div id="add_url_featherlight_content" class="main-content">
     <div class="action-content">
         <div>

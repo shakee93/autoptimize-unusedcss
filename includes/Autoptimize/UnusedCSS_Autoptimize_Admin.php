@@ -58,6 +58,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             add_action('wp_ajax_uucss_logs', [$this, 'uucss_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
+            add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -89,6 +90,21 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    parent::__construct( $ao_uucss );
 
+    }
+
+    function clear_page_cache(){
+
+	    $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+	    if(!$url){
+	        wp_send_json_error('url required');
+        }
+
+        do_action( 'uucss/cached', [
+            'url' => $url
+        ] );
+
+	    wp_send_json_success('page cache cleared');
     }
 
     function frontend_logs(){

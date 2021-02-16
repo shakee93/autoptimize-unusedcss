@@ -2,9 +2,44 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class RapidLoad_ThirdParty
+abstract class RapidLoad_ThirdParty
 {
     use UnusedCSS_Utils;
+
+    public $plugin = null;
+    public $catgeory = null;
+    public $name = null;
+
+    public function __construct(){
+
+        if($this->is_exists()){
+            $this->register_plugin();
+            $this->init_hooks();
+        }
+    }
+
+    abstract public function init_hooks();
+
+    public function is_exists(){
+        if(is_plugin_active($this->plugin)){
+            return true;
+        }
+        return false;
+    }
+
+    abstract public function handle($args);
+
+    public function register_plugin(){
+
+        add_filter('uucss/third-party/plugins', function ($plugins){
+            $plugins[] = [
+                'category' => $this->catgeory,
+                'plugin' => $this->name
+            ];
+            return $plugins;
+        }, 10, 1 );
+
+    }
 
     public static function initialize(){
 

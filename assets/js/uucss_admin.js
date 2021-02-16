@@ -503,6 +503,10 @@
                         }
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
+                        if($('#thirtd_part_cache_plugins').val() === "1"){
+                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
+                        }
+
                         return $content.wrap('<div></div>').parent().html();
                     },
                     onClickOutside(instance, event) {
@@ -548,6 +552,19 @@
                             switch (action) {
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    break;
+                                }
+                                case 'purge-url':{
+
+                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+
+                                        alert(i)
+
+                                    }).fail(function (i) {
+
+                                        alert(i)
+                                    });
+
                                     break;
                                 }
                                 case 'test':{
