@@ -1017,6 +1017,7 @@ input#uucss-pack-suggest {
     border: 0;
     width: 75%;
     height: 75%;
+    overflow: hidden;
 }
 
 .featherlight.uucss-gpsi-test .featherlight-content{
@@ -1142,7 +1143,7 @@ input#uucss-pack-suggest {
 }
 
 .featherlight.add-site-url-model .featherlight-content{
-    width: 300px;
+    width: 310px;
     height: 120px;
     padding: 25px 20px;
 }
