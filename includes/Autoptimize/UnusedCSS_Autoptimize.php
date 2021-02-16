@@ -134,7 +134,14 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		    foreach ( $exploded as $pattern ) {
 
 			    if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
-				    $pattern = parse_url( $pattern )['path'];
+
+                    $pattern = parse_url( $pattern );
+
+				    $path = $pattern['path'];
+				    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+				    $pattern = $path . $query;
+
 			    }
 
 			    // check using string contains instead of regex
