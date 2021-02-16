@@ -530,7 +530,7 @@
         <div>
             <input type="text" class="site-map-url show" placeholder="https://example.com/">
         </div>
-        <div>
+        <div class="add-action-wrap">
             <input id="model-queue-posts-type" type="button" class="button button-primary" value="Add">
         </div>
     </div>

@@ -838,6 +838,11 @@
                 return;
             }
 
+            var $target = $(this);
+
+            $target.attr('disabled', true);
+            $target.val('Please wait....');
+
             wp.ajax.post('uucss_queue',{
                 post_type : $model_content.find('#model-requeue-post-type').val(),
                 url : $model_content.find('input.site-map-url').val()
@@ -845,9 +850,12 @@
                 alert(i);
                 var currentFeather = $.featherlight.current();
                 if(currentFeather) currentFeather.close();
-
+                $target.attr('disabled', false);
+                $target.val('Add');
             }).fail(function (i) {
                 alert(i);
+                $target.attr('disabled', false);
+                $target.val('Add');
             })
         });
 
