@@ -83,6 +83,14 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.9 - 16/02/2021 =
+ * feat: allow users to pass custom headers and query params to API request (Authentication)
+ * feat: add support to LS Cache plugin
+ * feat: allow users to add custom URLs
+ * feat: allow users to add optimizations through sitemap
+ * feat: add "Clear page cache" action to supported plugins in the optimization table
+ * fix: some CDN URLs are firing warnings
+
 = 1.3.8 - 12/02/2021 =
  * feat: log optimizations table errors
  * feat: allow pending jobs to be re-queued
