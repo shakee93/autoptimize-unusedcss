@@ -22,8 +22,8 @@
                 <li class="uucss-history">
                     <h2>
                         Optimizations
-                        <span class="uucss-toggle-section">
-                    <span class="dashicons dashicons-arrow-up-alt2"></span>
+                        <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url">
+                    <span class="dashicons dashicons-plus-alt"></span>Add
                 </span>
                     </h2>
                     <div class="content">
@@ -389,36 +389,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>
-                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
-                                </th>
-                                <td>
-                                    <?php
-                                        $post_types = get_post_types();
-                                        $include = UnusedCSS_Queue::get_post_types();
-                                    ?>
-                                    <select name="queue_action_type" id="requeue_post_type">
-                                        <option value="all">All</option>
-                                        <?php
-                                            foreach ($include as $value){
-                                                $post_object = get_post_type_object( $value );
-
-                                                if($post_object){
-
-                                                    echo sprintf('<option value="%s">%s</option>', $value, $post_object->label);
-
-                                                }
-
-                                            }
-                                        ?>
-                                        <option value="current">Current Jobs</option>
-                                        <option value="pending">Pending Jobs</option>
-                                        <option value="site_map">Sitemap</option>
-                                    </select>
-                                    <input type="button" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
-                                </td>
-                            </tr>
-                            <tr>
                                 <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_enable_debug"><input id='uucss_enable_debug' type='checkbox'
@@ -531,5 +501,38 @@
     </div>
 
 </form>
+<div id="add_url_featherlight_content" class="main-content">
+    <div class="action-content">
+        <div>
+            <select id="model-requeue-post-type">
+                <option value="url">URL</option>
+                <?php
+                $include = UnusedCSS_Queue::get_post_types();
+                if(isset($include)){
+                    foreach ($include as $value){
+                        $post_object = get_post_type_object( $value );
 
+                        if($post_object){
+
+                            echo sprintf('<option value="%s">%s</option>', $value, $post_object->label);
+
+                        }
+
+                    }
+                }
+                ?>
+                <option value="current">Current Jobs</option>
+                <option value="pending">Pending Jobs</option>
+                <option value="site_map">Site Map</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" class="site-map-url show" placeholder="https://example.com/">
+        </div>
+        <div>
+            <input id="model-queue-posts-type" type="button" class="button button-primary" value="Add">
+        </div>
+    </div>
+</div>
 

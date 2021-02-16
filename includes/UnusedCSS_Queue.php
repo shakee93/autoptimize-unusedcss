@@ -103,6 +103,8 @@ class UnusedCSS_Queue
 
         $posts = null;
 
+        global $uucss;
+
         if($post_type == 'all'){
 
             $posts = new WP_Query(array(
@@ -115,6 +117,22 @@ class UnusedCSS_Queue
             UnusedCSS_Settings::clear_links(true);
             wp_send_json_success('successfully links added to the queue');
 
+        }else if($post_type == 'url'){
+
+            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+            $url = $uucss->transform_url($url);
+
+            if($url && !$uucss->is_url_allowed($url)){
+                wp_send_json_error('url is excluded');
+            }
+
+            UnusedCSS_DB::add_link(array(
+                'url' => trailingslashit($url),
+                'status' => 'queued',
+            ));
+            wp_send_json_success('successfully link added to the queue');
+
         }else if($post_type == 'pending'){
 
             UnusedCSS_DB::requeue_pending_jobs();
@@ -122,7 +140,7 @@ class UnusedCSS_Queue
 
         }else if($post_type == 'site_map'){
 
-            $sitemap = isset($_REQUEST['sitemap_url']) ? $_REQUEST['sitemap_url'] : false;
+            $sitemap = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
             wp_schedule_single_event( time(), 'uucss_sitemap_queue', [
                 'url' => $sitemap
@@ -138,8 +156,6 @@ class UnusedCSS_Queue
             ));
 
         }
-
-        global $uucss;
 
         if($posts->have_posts()){
             while ($posts->have_posts()){

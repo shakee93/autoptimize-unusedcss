@@ -20,7 +20,7 @@ class UnusedCSS_Sitemap
             [
                 'timeout'    => 40,
                 'user-agent' => 'RapidLoad/Sitemaps',
-                'sslverify'  => apply_filters( 'https_local_ssl_verify', false ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+                'sslverify'  => apply_filters( 'https_local_ssl_verify', false ),
             ]
         );
 
@@ -89,6 +89,12 @@ class UnusedCSS_Sitemap
                 if ( ! $url ) {
                     continue;
                 }
+
+                self::log([
+                    'url' => $url,
+                    'type' => 'purging',
+                    'log' => 'fetched from site map'
+                ]);
 
                 array_push($urls, $url);
             }

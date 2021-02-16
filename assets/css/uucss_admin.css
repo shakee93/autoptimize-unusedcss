@@ -127,6 +127,23 @@ light
     transition: cubic-bezier(0.46, 0.03, 0.52, 0.96) transform .5s;
 }
 
+.uucss-add-site-urls{
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-block;
+    width: 55px;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.uucss-add-site-urls .dashicons.dashicons-plus-alt{
+    line-height: 35px;
+}
+
 span.uucss-toggle-section.rotate {
     transform: rotate(180deg);
 }
@@ -1082,4 +1099,42 @@ input#uucss-pack-suggest {
 
 #uucss-logs-table .log-content p, .log-content ul {
     margin: 0;
+}
+
+#add_url_featherlight_content .action-content #model-queue-posts-type{
+    margin-top: 10px;
+}
+
+#add_url_featherlight_content .action-content input, #add_url_featherlight_content .action-content select{
+    width: 100%;
+}
+
+#add_url_featherlight_content .action-content input{
+    margin-top: 10px;
+}
+
+#add_url_featherlight_content .action-content input.site-map-url {
+    display: none;
+}
+
+#add_url_featherlight_content .action-content input.site-map-url.show{
+    display: inline-block;
+}
+
+#add_url_featherlight_content{
+    display: none;
+}
+
+.featherlight .featherlight-content #add_url_featherlight_content{
+    display: block;
+}
+
+.featherlight.add-site-url-model .featherlight-content{
+    width: 300px;
+    height: 120px;
+    padding: 25px 20px;
+}
+
+.featherlight.add-site-url-model.show-url .featherlight-content{
+    height: 160px;
 }

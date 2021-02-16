@@ -136,7 +136,7 @@
             });
         });*/
 
-        $('#uucss-wrapper li h2').click(function () {
+        $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
             $(this).parent().find('.content').slideToggle('fast');
             $(this).find('.uucss-toggle-section').toggleClass('rotate')
         });
@@ -804,11 +804,50 @@
             }
         });
 
-        $('#queue-posts-type').click(function () {
-            wp.ajax.post('uucss_queue',{ post_type : $('#requeue_post_type').val() }).then(function (i) {
+        function isUrl(s) {
+            var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+            return regexp.test(s);
+        }
 
+        $('#model-requeue-post-type').change(function () {
+            $model_content = $('.featherlight.add-site-url-model');
+
+            if($(this).val() === 'site_map' || $(this).val() === 'url'){
+                $(this).val() === 'site_map' && $model_content.find('input.site-map-url').attr('placeholder', 'https://example.com/sitemap_index.xml');
+                $(this).val() === 'url' && $model_content.find('input.site-map-url').attr('placeholder', 'https://example.com/');
+                !$model_content.find('input.site-map-url').hasClass('show') && $model_content.find('input.site-map-url').addClass('show')
+                !$model_content.hasClass('show-url') && $model_content.addClass('show-url')
+            }else{
+                $model_content.find('input.site-map-url').hasClass('show') && $model_content.find('input.site-map-url').removeClass('show')
+                $model_content.hasClass('show-url') && $model_content.removeClass('show-url')
+            }
+        });
+
+        $('#model-queue-posts-type').click(function () {
+            $model_content = $('.featherlight #add_url_featherlight_content');
+
+            if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
+                && ($model_content.find('input.site-map-url').val() === "" || $model_content.find('input.site-map-url').val() === undefined)){
+                alert('Please enter url');
+                return;
+            }
+
+            if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
+                && !isUrl($model_content.find('input.site-map-url').val())){
+                alert('Please enter valid url');
+                return;
+            }
+
+            wp.ajax.post('uucss_queue',{
+                post_type : $model_content.find('#model-requeue-post-type').val(),
+                url : $model_content.find('input.site-map-url').val()
+            }).then(function (i) {
                 alert(i);
+                var currentFeather = $.featherlight.current();
+                if(currentFeather) currentFeather.close();
 
+            }).fail(function (i) {
+                alert(i);
             })
         });
 
