@@ -130,10 +130,10 @@ light
 .uucss-add-site-urls{
     cursor: pointer;
     position: absolute;
-    right: 10px;
+    right: 14px;
     top: 8px;
     display: inline-block;
-    width: 54px;
+    width: 52px;
     height: 26px;
     line-height: 27px;
     padding-left: 1px;
@@ -143,6 +143,7 @@ light
     font-size: 11px;
     color: white;
     border-radius: 3px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
 }
 
 .uucss-add-site-urls .dashicons.dashicons-plus{
@@ -1108,6 +1109,12 @@ input#uucss-pack-suggest {
 
 #add_url_featherlight_content .action-content #model-queue-posts-type{
     margin-top: 10px;
+    background: #674399;
+    font-size: 13px;
+    padding: 5px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    outline: none;
+    border: none;
 }
 
 #add_url_featherlight_content .action-content input, #add_url_featherlight_content .action-content select{

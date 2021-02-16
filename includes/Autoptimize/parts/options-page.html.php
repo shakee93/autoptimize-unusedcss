@@ -22,7 +22,7 @@
                 <li class="uucss-history">
                     <h2>
                         Optimizations
-                        <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url">
+                        <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                     <span class="dashicons dashicons-plus"></span>Add
                 </span>
                     </h2>
@@ -393,7 +393,7 @@
                                     <?php _e( 'Queue Actions', 'uucss' ); ?>
                                 </th>
                                 <td>
-                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
+                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
                                 </td>
                             </tr>
                             <tr>
@@ -549,7 +549,7 @@
             <input type="text" class="site-map-url show" placeholder="https://example.com/">
         </div>
         <div class="add-action-wrap">
-            <input id="model-queue-posts-type" type="button" class="button button-primary" value="Add">
+            <input id="model-queue-posts-type" type="button" class="button button-primary" value="Add to Optimization">
         </div>
     </div>
 </div>
