@@ -959,8 +959,8 @@ input#uucss-pack-suggest {
 
 .uucss-history .spinner-history {
     position: absolute;
-    top: 8px;
-    left: 115px;
+    top: 7px;
+    left: 107px;
     transition: ease opacity .15s;
     opacity: 0;
     visibility: visible;
