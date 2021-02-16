@@ -48,6 +48,10 @@ Read it here : [https://rapidload.io/terms-conditions/](https://rapidload.io/ter
 
 RapidLoad analyzes the content of your Wordpress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!
 
+= Still seeing remove unused css flag in Google page speed insights ? =
+
+Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.
+
 = My Site is broken after using RapidLoad. What can i do ? =
 
 There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on "Load Original CSS files" and add safelist rules. if you are not sure how to add safelist rules create a support ticket in [https://rapidload.zendesk.com/hc/en-us](https://rapidload.zendesk.com/hc/en-us) one of our support member will help you out .
