@@ -21,6 +21,7 @@ abstract class RapidLoad_ThirdParty
     abstract public function init_hooks();
 
     public function is_exists(){
+        include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         if(is_plugin_active($this->plugin)){
             return true;
         }
