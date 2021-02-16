@@ -389,6 +389,18 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>
+                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
+                                </th>
+                                <td>
+                                    <?php
+                                        $post_types = get_post_types();
+                                        $include = UnusedCSS_Queue::get_post_types();
+                                    ?>
+                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_enable_debug"><input id='uucss_enable_debug' type='checkbox'
