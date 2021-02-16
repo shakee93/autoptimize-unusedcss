@@ -47,7 +47,7 @@ class UnusedCSS_Api
 
 	function post( $endpoint, $data = [] ) {
 
-        $data = apply_filters('uucss/requests', $data, 'post');
+        $data = apply_filters('uucss/request', $data, 'post');
 
 		$url = self::$apiUrl . '/' . $endpoint;
 
