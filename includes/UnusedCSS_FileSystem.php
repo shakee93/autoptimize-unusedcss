@@ -16,6 +16,9 @@ class UnusedCSS_FileSystem
     }
 
     public function mkdir( $dir , $mode = 0755){
+        if($this->exists($dir)) {
+            return true;
+        }
         return mkdir($dir, $mode, true);
     }
 

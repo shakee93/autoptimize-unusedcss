@@ -232,15 +232,20 @@
 
         $uucss_spinner.addClass('loading')
         table = table.DataTable({
+            processing: true,
+            serverSide: true,
             ajax: {
                 url: wp.ajax.settings.url + '?action=uucss_data',
                 data: function (d) {
+                    console.log(d)
+                    console.log('data')
                     d.nonce = uucss.nonce
 
                     return d;
                 },
                 dataSrc: function (d) {
-
+                    console.log(d)
+                    console.log('dataSrc')
                     $uucss_spinner.removeClass('loading')
 
                     if (!d.success) {
@@ -325,6 +330,8 @@
                         return '0 KB'
                     },
                     createdCell: function (td, cellData, rowData) {
+
+                        console.log(rowData);
 
                         var innerTippy
                         var innerTippy2

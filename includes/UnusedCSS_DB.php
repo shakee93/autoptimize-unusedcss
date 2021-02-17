@@ -248,10 +248,10 @@ class UnusedCSS_DB
 
 
 
-    static function get_links(){
+    static function get_links($start_from = 0, $limit = 10){
         global $wpdb;
 
-	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job", OBJECT);
+	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT {$start_from},{$limit}", OBJECT);
 
 	    $links = array_map(function ($link){
 		    return self::transform_link($link);

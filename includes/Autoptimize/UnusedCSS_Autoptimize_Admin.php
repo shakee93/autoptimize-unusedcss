@@ -308,7 +308,21 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
 		}
 
-		wp_send_json_success( UnusedCSS_Settings::get_links() );
+		error_log(json_encode($_REQUEST, JSON_PRETTY_PRINT));
+
+		$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+		$length = isset($_REQUEST['length']) ? $_REQUEST['length'] : 0;
+		$draw = isset($_REQUEST['draw']) ? $_REQUEST['draw'] : 0;
+
+
+
+		wp_send_json([
+            'data' => UnusedCSS_Settings::get_links($start, $length),
+            "draw" => $draw,
+            "recordsTotal" => 13,
+            "recordsFiltered" => 13,
+            "success" => true
+        ]);
 	}
 
 	function uucss_connect(){
