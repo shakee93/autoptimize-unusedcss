@@ -624,6 +624,23 @@
 
                                             }
 
+                                            if(response.success && response.data && response.data.success){
+
+                                                const with_uucss = new URL(response.data.url);
+                                                const without_uucss = new URL(response.data.url);
+                                                without_uucss.searchParams.append('no_uucss','');
+
+                                                $content.find('.description').append('<p class="test-site-links-heading"><strong>Without RapidLoad</strong></p>');
+                                                $content.find('.description').append('<ul class="test-site-links test-site-links-without"></ul>');
+                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">GT Matrix</a></li>')
+                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">Google Insights</a></li>')
+
+                                                $content.find('.description').append('<p class="test-site-links-heading"><strong>With RapidLoad</strong></p>');
+                                                $content.find('.description').append('<ul class="test-site-links test-site-links-with"></ul>');
+                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ with_uucss.toString() +'" target="_blank">GT Matrix</a></li>')
+                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ with_uucss.toString() +'" target="_blank">Google Insights</a></li>')
+                                            }
+
                                             $feather_content.find('.spinner').remove();
                                             $feather_content.append($content.wrap('<div></div>').parent().html());
 

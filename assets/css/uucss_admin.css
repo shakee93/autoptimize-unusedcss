@@ -1045,7 +1045,7 @@ input#uucss-pack-suggest {
 
 .featherlight .featherlight-content{
     margin: 0 auto;
-    padding: 10px 15px 0;
+    padding: 10px 15px 10px;
     border-radius: 5px;
     border: 0;
     width: 75%;
@@ -1055,7 +1055,8 @@ input#uucss-pack-suggest {
 
 .featherlight.uucss-gpsi-test .featherlight-content{
     width: 325px;
-    height: 115px;
+    min-height: 115px;
+    height: auto;
 }
 
 .featherlight.uucss-log .featherlight-content{
@@ -1090,6 +1091,22 @@ input#uucss-pack-suggest {
 .featherlight.uucss-gpsi-test .featherlight-content .description p{
     margin: 10px 0 10px;
     text-align: left;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content .test-site-links-heading{
+    margin: 0;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content ul.test-site-links{
+    margin: 0;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content ul.test-site-links li.test-site-link:first-child {
+    margin-right: 20px;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content ul.test-site-links li.test-site-link {
+    display: inline-block;
 }
 
 .featherlight.uucss-gpsi-test .featherlight-content .devider{
