@@ -437,7 +437,7 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE warnings NOT NULL");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE warnings IS NOT NULL");
 
         }else{
 
