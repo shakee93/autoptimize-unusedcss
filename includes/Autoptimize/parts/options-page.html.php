@@ -23,8 +23,11 @@
                     <h2>
                         Optimizations
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
-                    <span class="dashicons dashicons-plus"></span>Add
-                </span>
+                            <span class="dashicons dashicons-plus"></span>Add
+                        </span>
+                        <button class="uucss-add-site-urls-submenu" aria-expanded="false">
+                            <span class="dashicons dashicons-ellipsis"></span>
+                        </button>
                     </h2>
                     <div class="content">
                         <div class="spinner spinner-history"></div>
@@ -540,8 +543,6 @@
                     }
                 }
                 ?>
-                <option value="current">Current Jobs</option>
-                <option value="pending">Pending Jobs</option>
                 <option value="site_map">Site Map</option>
             </select>
         </div>

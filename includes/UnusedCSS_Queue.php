@@ -117,6 +117,21 @@ class UnusedCSS_Queue
             UnusedCSS_Settings::clear_links(true);
             wp_send_json_success('successfully links added to the queue');
 
+        }else if($post_type == 'processing'){
+
+            UnusedCSS_DB::requeue_jobs('processing');
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'warnings'){
+
+            UnusedCSS_DB::requeue_jobs('warnings');
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'failed'){
+
+            UnusedCSS_DB::requeue_jobs();
+            wp_send_json_success('successfully links added to the queue');
+
         }else if($post_type == 'url'){
 
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
@@ -132,11 +147,6 @@ class UnusedCSS_Queue
                 'status' => 'queued',
             ));
             wp_send_json_success('successfully link added to the queue');
-
-        }else if($post_type == 'pending'){
-
-            UnusedCSS_DB::requeue_pending_jobs();
-            wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'site_map'){
 

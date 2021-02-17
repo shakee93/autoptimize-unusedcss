@@ -332,7 +332,7 @@ class UnusedCSS_DB
             if(isset($link['meta'])){
 
                 $data['stats'] = isset($link['meta']['stats']) ? serialize($link['meta']['stats']) : null;
-                $data['warnings'] = isset($link['meta']['warnings']) ? serialize($link['meta']['warnings']) : null;
+                $data['warnings'] = isset($link['meta']['warnings']) && !empty($link['meta']['warnings']) ? serialize($link['meta']['warnings']) : null;
                 $data['review'] = isset($link['meta']['review']) ? serialize($link['meta']['review']) : null;
                 $data['error'] = isset($link['meta']['error']) ? serialize($link['meta']['error']) : null;
 
@@ -431,11 +431,18 @@ class UnusedCSS_DB
 		}
 	}
 
-	static function requeue_pending_jobs(){
+	static function requeue_jobs($status = 'failed'){
 
         global $wpdb;
 
-        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE status IN('processing', 'failed')");
+        if($status == 'warnings'){
+
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE warnings NOT NULL");
+
+        }else{
+
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE status ='{$status}'");
+        }
 
         $error = $wpdb->last_error;
 

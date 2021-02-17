@@ -130,7 +130,7 @@ light
 .uucss-add-site-urls{
     cursor: pointer;
     position: absolute;
-    right: 14px;
+    right: 44px;
     top: 8px;
     display: inline-block;
     width: 52px;
@@ -144,6 +144,27 @@ light
     color: white;
     border-radius: 3px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+}
+
+.uucss-add-site-urls-submenu{
+    position: absolute;
+    right: 11px;
+    top: 8px;
+    border: none;
+    background: #455a64;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    cursor: pointer;
+    width: 25px;
+    height: 26px;
+    margin-right: 4px;
+}
+
+.uucss-add-site-urls-submenu .dashicons.dashicons-ellipsis{
+    transform: rotate(90deg) translateY(4px);
+    line-height: 20px;
+    font-size: 14px;
 }
 
 .uucss-add-site-urls .dashicons.dashicons-plus{
@@ -453,20 +474,27 @@ table.dataTable thead th, table.dataTable thead td {
     margin-right: 4px;
 }
 
-#uucss-history .tippy-content .uucss-option-list{
+#uucss-history .tippy-content .uucss-option-list, .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list{
     width: 125px;
     margin-right: -10px;
     margin-left: -10px;
 }
 
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list{
+    width: 135px;
+}
+
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li,
 #uucss-history .tippy-content .uucss-option-list ul li{
     margin: 0;
 }
 
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li:hover,
 #uucss-history .tippy-content .uucss-option-list ul li:hover{
     background-color: #ededed;
 }
 
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li a,
 #uucss-history .tippy-content .uucss-option-list ul li a{
     font-size: 12px;
     padding: 5px 10px;
@@ -475,6 +503,11 @@ table.dataTable thead th, table.dataTable thead td {
     display: block;
 }
 
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li a{
+    font-weight: normal;
+}
+
+.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li:last-child,
 #uucss-history .tippy-content .uucss-option-list ul li:last-child{
     margin-bottom: 0;
 }

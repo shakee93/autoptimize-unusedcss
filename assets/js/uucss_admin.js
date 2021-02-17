@@ -681,6 +681,90 @@
             }
         });
 
+        $('button.uucss-add-site-urls-submenu').off('click').click(function (e) {
+            e.preventDefault();
+        });
+
+        function requeue(post_type){
+            wp.ajax.post('uucss_queue',{
+                url : '',
+                post_type : post_type,
+            }).then(function (i) {
+                if(table){
+                    table.ajax.reload(null, false);
+                }
+            });
+        }
+
+        tippy($('button.uucss-add-site-urls-submenu')[0], {
+            allowHTML: true,
+            trigger: 'click',
+            arrow: true,
+            appendTo: $('button.uucss-add-site-urls-submenu')[0],
+            interactive: true,
+            animation: 'shift-toward',
+            hideOnClick: false,
+            theme: 'light',
+            content: ()=>{
+
+                var $content = $('<div class="uucss-submenu-option-list"><ul class="option-list"></ul></div>')
+
+                $content.find('ul').append('<li data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
+                $content.find('ul').append('<li data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
+                $content.find('ul').append('<li data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
+                $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
+                $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+
+                return $content.wrap('<div></div>').parent().html();
+            },
+            onClickOutside(instance, event) {
+                instance.hide()
+            },
+            onCreate(){
+
+            },
+            onMount(instance) {
+
+                $('.uucss-submenu-option-list ul.option-list li a').off().click(function (e) {
+
+                    var $this = $(this);
+
+                    var action = $this.data('action_name');
+
+                    switch (action) {
+                        case 'requeue_all':{
+                            requeue('current');
+                            break;
+                        }case 'requeue_warnings':{
+                            requeue('warnings');
+                            break;
+                        }case 'requeue_processing':{
+                            requeue('processing');
+                            break;
+                        }case 'requeue_failed':{
+                            requeue('failed');
+                            break;
+                        }case 'remove_all':{
+                            wp.ajax.post('uucss_purge_url',{
+                                url : '',
+                                clear : true,
+                                nonce: uucss.nonce
+                            }).then(function (i) {
+                                if(table){
+                                    table.ajax.reload(null, false);
+                                }
+                            });
+                            break;
+                        }
+                        default:{
+                            break;
+                        }
+                    }
+                })
+            },
+            placement: 'bottom-end',
+        })
+
         function uucss_purge_url(url , isClear, row, index, data) {
 
             var _row = table.row(index);
