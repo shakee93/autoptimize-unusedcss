@@ -263,7 +263,7 @@ class UnusedCSS_DB
     static function get_links($start_from = 0, $limit = 10, $where = ''){
         global $wpdb;
 
-	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} LIMIT {$start_from},{$limit}", OBJECT);
+	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} ORDER BY id DESC LIMIT {$start_from},{$limit}", OBJECT);
 
 	    $links = array_map(function ($link){
 		    return self::transform_link($link);
