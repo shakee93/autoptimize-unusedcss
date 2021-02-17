@@ -232,9 +232,11 @@
 
         $uucss_spinner.addClass('loading')
         table = table.DataTable({
-            processing: true,
             serverSide: true,
             ajax: {
+                beforeSend() {
+                    !$uucss_spinner.hasClass('loading') && $uucss_spinner.addClass('loading');
+                },
                 url: wp.ajax.settings.url + '?action=uucss_data',
                 data: function (d) {
 
@@ -263,9 +265,7 @@
                         return [];
                     }
 
-                    var results = Object.values(d.data).sort(function (a, b) {
-                        return b.time - a.time
-                    });
+                    var results = d.data;
 
                     if (results.length < 3 && firstReload) {
                         showNotification(
