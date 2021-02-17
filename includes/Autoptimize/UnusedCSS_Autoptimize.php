@@ -85,8 +85,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $changelog  = stristr( $data, '== Changelog ==' );
 
-        $changelog  = stristr( $changelog, '== Upgrade Notice ==', true );
-
         $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
 
         if(isset($changelog[1])){
