@@ -142,11 +142,11 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     function clear_uucss_logs(){
         $file_system = new UnusedCSS_FileSystem();
 
-        if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
+        if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
             wp_send_json_success(true);
         }
 
-        $file_system->delete(UUCSS_LOG_DIR . 'debug.log');
+        $file_system->delete_folder(WP_CONTENT_DIR . '/uploads/rapidload/');
         wp_send_json_success(true);
     }
 
