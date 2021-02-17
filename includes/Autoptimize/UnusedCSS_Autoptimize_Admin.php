@@ -308,19 +308,71 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
 		}
 
-		error_log(json_encode($_REQUEST, JSON_PRETTY_PRINT));
-
 		$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
-		$length = isset($_REQUEST['length']) ? $_REQUEST['length'] : 0;
-		$draw = isset($_REQUEST['draw']) ? $_REQUEST['draw'] : 0;
+		$length = isset($_REQUEST['length']) ? $_REQUEST['length'] : 10;
+		$draw = isset($_REQUEST['draw']) ? $_REQUEST['draw'] : 1;
 
+		$status_filter = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][0]) &&
+        isset($_REQUEST['columns'][0]['search']) &&
+        isset($_REQUEST['columns'][0]['search']['value']) ?
+            $_REQUEST['columns'][0]['search']['value'] : false;
 
+		$filters = [];
+
+		if($status_filter){
+
+		    $filters[] = " status = '". $status_filter . "' ";
+
+        }
+
+        $url_filter = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][1]) &&
+        isset($_REQUEST['columns'][1]['search']) &&
+        isset($_REQUEST['columns'][1]['search']['value']) ?
+            $_REQUEST['columns'][1]['search']['value'] : false;
+
+        $url_regex = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][1]) &&
+        isset($_REQUEST['columns'][1]['search']) &&
+        isset($_REQUEST['columns'][1]['search']['regex']) ?
+            $_REQUEST['columns'][1]['search']['regex'] : false;
+
+        if($url_regex == 'true' && $url_filter){
+
+            $filters[] = " url = '". $url_filter . "' ";
+
+        }
+
+        if($url_regex == 'false' && $url_filter){
+
+            $filters[] = " url LIKE '%". $url_filter . "%' ";
+
+        }
+
+        $where_clause = '';
+
+        foreach ($filters as $key => $filter){
+
+            if($key == 0){
+
+                $where_clause = ' WHERE ';
+                $where_clause .= $filter;
+            }else{
+
+                $where_clause .= ' AND ';
+                $where_clause .= $filter;
+            }
+
+        }
+
+		$data  = UnusedCSS_Settings::get_links($start, $length, $where_clause);
 
 		wp_send_json([
-            'data' => UnusedCSS_Settings::get_links($start, $length),
-            "draw" => $draw,
-            "recordsTotal" => 13,
-            "recordsFiltered" => 13,
+            'data' => $data,
+            "draw" => (int)$draw,
+            "recordsTotal" => UnusedCSS_DB::get_total_job_count(),
+            "recordsFiltered" => UnusedCSS_DB::get_total_job_count($where_clause),
             "success" => true
         ]);
 	}

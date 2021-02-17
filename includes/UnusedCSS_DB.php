@@ -246,12 +246,24 @@ class UnusedCSS_DB
         return isset($option) && !empty($option );
     }
 
-
-
-    static function get_links($start_from = 0, $limit = 10){
+    static function get_total_job_count($where = ''){
         global $wpdb;
 
-	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT {$start_from},{$limit}", OBJECT);
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_uucss_job {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
+
+    static function get_links($start_from = 0, $limit = 10, $where = ''){
+        global $wpdb;
+
+	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} LIMIT {$start_from},{$limit}", OBJECT);
 
 	    $links = array_map(function ($link){
 		    return self::transform_link($link);

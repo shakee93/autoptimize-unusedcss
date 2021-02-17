@@ -237,15 +237,25 @@
             ajax: {
                 url: wp.ajax.settings.url + '?action=uucss_data',
                 data: function (d) {
-                    console.log(d)
-                    console.log('data')
+
+                    if(status_filter !== "" && status_filter !== undefined){
+                        if(d.columns[0] && d.columns[0].search){
+                            d.columns[0].search.value = status_filter
+                        }
+                    }
+
+                    if(url_filter !== "" && url_filter !== undefined){
+                        if(d.columns[1] && d.columns[1].search){
+                            d.columns[1].search.value = url_filter;
+                            d.columns[1].search.regex = exact_search_val
+                        }
+                    }
+
                     d.nonce = uucss.nonce
 
                     return d;
                 },
                 dataSrc: function (d) {
-                    console.log(d)
-                    console.log('dataSrc')
                     $uucss_spinner.removeClass('loading')
 
                     if (!d.success) {
@@ -330,8 +340,6 @@
                         return '0 KB'
                     },
                     createdCell: function (td, cellData, rowData) {
-
-                        console.log(rowData);
 
                         var innerTippy
                         var innerTippy2
