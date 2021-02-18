@@ -621,11 +621,15 @@
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in google page speed insight, gtmetrix and all other page speed testing tools.</p>')
 
-                                            }else{
+                                            }else if(response.success && response.data && !response.data.injected){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
                                                 $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools.</p>')
 
+                                            }else{
+
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-no"></span>Error</h2>')
+                                                $content.find('.description').append('<p>' + response.data + '</p>');
                                             }
 
                                             if(response.success && response.data && response.data.success){

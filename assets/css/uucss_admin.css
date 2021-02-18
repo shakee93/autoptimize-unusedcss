@@ -1074,7 +1074,8 @@ input#uucss-pack-suggest {
     font-weight: 700;
 }
 
-.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons{color: #009688;
+.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons{
+    color: #009688;
     font-size: 18px;
     display: inline-block;
     margin-right: 5px;
@@ -1086,6 +1087,10 @@ input#uucss-pack-suggest {
 
 .featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons.dashicons-warning{
     color: #FFC107;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content .header h2 .dashicons.dashicons-no{
+    color: #ff6666;
 }
 
 .featherlight.uucss-gpsi-test .featherlight-content .description p{

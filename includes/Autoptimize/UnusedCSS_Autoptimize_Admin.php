@@ -256,7 +256,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             if(isset($result->errors) && isset($result->errors[0])){
                 wp_send_json_error($result->errors[0]->detail);
             }else{
-                wp_send_json_error('Test fail');
+                wp_send_json_error($result);
             }
         }
 
