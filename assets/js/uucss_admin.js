@@ -619,12 +619,12 @@
                                             if(response.success && response.data && response.data.injected && response.data.injectedCSS > 0){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
-                                                $content.find('.description').append('<p>Optimization is now reflected in google page speed insight, gtmetrix and all other page speed testing tools.</p>')
+                                                $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
 
                                             }else if(response.success && response.data && !response.data.injected){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
-                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on google page insight, gtmetrix and all other page speed testing tools.</p>')
+                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
 
                                             }else{
 
@@ -638,14 +638,16 @@
                                                 const without_uucss = new URL(response.data.url);
                                                 without_uucss.searchParams.append('no_uucss','');
 
-                                                $content.find('.description').append('<p class="test-site-links-heading"><strong>Without RapidLoad</strong></p>');
+                                                $content.find('.description').html('<p>' + $content.find('.description').text() + ' Compare page speed scores:' + '</p>')
+                                                $content.find('.description').append('<p class="test-site-links-heading without-rapidload"><strong>Without RapidLoad</strong></p>');
                                                 $content.find('.description').append('<ul class="test-site-links test-site-links-without"></ul>');
-                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">GT Matrix</a></li>')
+                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">GT Metrix</a></li>')
                                                 $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">Google Insights</a></li>')
 
-                                                $content.find('.description').append('<p class="test-site-links-heading"><strong>With RapidLoad</strong></p>');
+
+                                                $content.find('.description').append('<p class="test-site-links-heading with-rapidload"><strong>RapidLoad</strong></p>');
                                                 $content.find('.description').append('<ul class="test-site-links test-site-links-with"></ul>');
-                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ with_uucss.toString() +'" target="_blank">GT Matrix</a></li>')
+                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ with_uucss.toString() +'" target="_blank">GT Metrix</a></li>')
                                                 $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ with_uucss.toString() +'" target="_blank">Google Insights</a></li>')
                                             }
 

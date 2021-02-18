@@ -1102,6 +1102,20 @@ input#uucss-pack-suggest {
     margin: 0;
 }
 
+.featherlight.uucss-gpsi-test .featherlight-content .test-site-links-heading strong {
+    background: #ffc107;
+    padding: 2px 5px;
+    color: white;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content .test-site-links-heading.without-rapidload strong {
+    background: #ffc107;
+}
+
+.featherlight.uucss-gpsi-test .featherlight-content .test-site-links-heading.with-rapidload strong {
+    background: #7f54b3;
+}
+
 .featherlight.uucss-gpsi-test .featherlight-content ul.test-site-links{
     margin: 0;
 }
