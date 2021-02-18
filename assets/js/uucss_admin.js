@@ -511,7 +511,7 @@
                     appendTo: $(row).find('button[data-uucss-options]')[0],
                     interactive: true,
                     animation: 'shift-toward',
-                    hideOnClick: false,
+                    hideOnClick: true,
                     theme: 'light',
                     content: ()=>{
 
@@ -728,7 +728,7 @@
             appendTo: $('button.uucss-add-site-urls-submenu')[0],
             interactive: true,
             animation: 'shift-toward',
-            hideOnClick: false,
+            hideOnClick: true,
             theme: 'light',
             content: ()=>{
 
