@@ -761,15 +761,19 @@
                     switch (action) {
                         case 'requeue_all':{
                             requeue('current');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_warnings':{
                             requeue('warnings');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_processing':{
                             requeue('processing');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_failed':{
                             requeue('failed');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'remove_all':{
                             wp.ajax.post('uucss_purge_url',{
@@ -779,6 +783,7 @@
                             }).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
+                                    $.uucssAlert('links removed from list', 'info');
                                 }
                             });
                             break;
