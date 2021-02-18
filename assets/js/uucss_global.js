@@ -1,13 +1,7 @@
 (function ($) {
 
     $.uucssAlert = function(message, type = 'success', duration = 5000) {
-        var toasted = new Toasted({
-            position : 'top-center',
-            duration : duration,
-            className : 'uucss-notification',
-            type : type,
-        });
-        toasted.show(message)
+        alert(message)
     }
 
     $.uucss_log = function (log) {
