@@ -18,9 +18,9 @@ define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
 if ( is_multisite() ) {
     $blog_id = get_current_blog_id();
-    define('UUCSS_LOG_DIR', WP_CONTENT_DIR . '/uploads/rapidload/' . date('Ymd') . '/' . $blog_id . '/');
+    define('UUCSS_LOG_DIR', wp_get_upload_dir()['basedir'] . '/rapidload/' . date('Ymd') . '/' . $blog_id . '/');
 } else {
-    define('UUCSS_LOG_DIR', WP_CONTENT_DIR .  '/uploads/rapidload/' . date('Ymd') . '/');
+    define('UUCSS_LOG_DIR', wp_get_upload_dir()['basedir'] .  '/rapidload/' . date('Ymd') . '/');
 }
 
 
