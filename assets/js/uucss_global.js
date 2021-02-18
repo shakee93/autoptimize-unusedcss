@@ -1,5 +1,15 @@
 (function ($) {
 
+    $.uucssAlert = function(message, type = 'success', duration = 5000) {
+        var toasted = new Toasted({
+            position : 'top-center',
+            duration : duration,
+            className : 'uucss-notification',
+            type : type,
+        });
+        toasted.show(message)
+    }
+
     $.uucss_log = function (log) {
 
         if(!log){
@@ -404,7 +414,7 @@
         $('.js-enable-css-ao').click(function (e) {
             e.preventDefault();
             if (!$('.uucss-on-board .install.actions').hasClass('done')) {
-                alert('Install and Activate Autoptimize before configure');
+                $.uucssAlert('Install and Activate Autoptimize before configure', 'info');
                 gotoInstall();
                 return;
             }
@@ -424,7 +434,7 @@
         $('.js-uucss-first-job').click(function (e) {
             e.preventDefault();
             if (!$('.uucss-on-board .connect.actions').hasClass('done')) {
-                alert('Connect RapidLoad before run first job');
+                $.uucssAlert('Connect RapidLoad before run first job', 'info');
                 gotoConnect();
                 return;
             }

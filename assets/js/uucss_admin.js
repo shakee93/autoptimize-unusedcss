@@ -265,7 +265,7 @@
                     $uucss_spinner.removeClass('loading')
 
                     if (!d.success) {
-                        alert("failed to fetch data")
+                        $.uucssAlert("failed to fetch data", 'error')
                         return [];
                     }
 
@@ -578,11 +578,11 @@
 
                                     wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
 
-                                        alert(i)
+                                        $.uucssAlert(i, 'success')
 
                                     }).fail(function (i) {
 
-                                        alert(i)
+                                        $.uucssAlert(i, 'error')
                                     });
 
                                     break;
@@ -919,7 +919,7 @@
                     var license_key = $('a.connect-with-license .tippy-connect-with-license-content .input-wrap input').val();
 
                     if(license_key === ''){
-                        alert('Please enter license key');
+                        $.uucssAlert('Please enter license key', 'error');
                         return;
                     }
 
@@ -970,13 +970,13 @@
 
             if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
                 && ($model_content.find('input.site-map-url').val() === "" || $model_content.find('input.site-map-url').val() === undefined)){
-                alert('Please enter url');
+                $.uucssAlert('Please enter url', 'error');
                 return;
             }
 
             if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
                 && !isUrl($model_content.find('input.site-map-url').val())){
-                alert('Please enter valid url');
+                $.uucssAlert('Please enter valid url', 'error');
                 return;
             }
 
@@ -989,13 +989,13 @@
                 post_type : $model_content.find('#model-requeue-post-type').val(),
                 url : $model_content.find('input.site-map-url').val()
             }).then(function (i) {
-                alert(i);
+                $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();
                 if(currentFeather) currentFeather.close();
                 $target.attr('disabled', false);
                 $target.val('Add');
             }).fail(function (i) {
-                alert(i);
+                $.uucssAlert(i, 'error');
                 $target.attr('disabled', false);
                 $target.val('Add');
             })

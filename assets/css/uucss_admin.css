@@ -1212,3 +1212,23 @@ input#uucss-pack-suggest {
     left: calc(50% - 10px);
     visibility: visible;
 }
+
+.toasted.uucss-notification.material{
+    font-weight: 600;
+    min-width: 300px;
+}
+
+.toasted.uucss-notification.material.success{
+    background-color: #ccffcc;
+    color: #006600;
+}
+
+.toasted.uucss-notification.material.info{
+    background-color: #f1edf7;
+    color: #674399;
+}
+
+.toasted.uucss-notification.material.error{
+    background-color: #ffe5e5;
+    color: #990000;
+}

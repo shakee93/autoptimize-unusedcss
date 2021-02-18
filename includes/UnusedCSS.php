@@ -74,8 +74,10 @@ abstract class UnusedCSS {
 	public static function enqueueGlobalScript() {
 		add_action( 'admin_enqueue_scripts', function () {
 			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'toasted', UUCSS_PLUGIN_URL . 'assets/libs/toasted/toasted.min.js', array( 'jquery' ) );
 			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
+			wp_enqueue_style( 'toasted', UUCSS_PLUGIN_URL . 'assets/libs/toasted/toasted.min.css' );
 			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
             wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
 
