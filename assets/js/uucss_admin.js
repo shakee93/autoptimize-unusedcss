@@ -638,7 +638,7 @@
                                                 const without_uucss = new URL(response.data.url);
                                                 without_uucss.searchParams.append('no_uucss','');
 
-                                                $content.find('.description').html('<p>' + $content.find('.description').text() + ' Compare page speed scores:' + '</p>')
+                                                $content.find('.description').html('<p>' + $content.find('.description').text() + ' Compare your page speed scores:' + '</p>')
                                                 $content.find('.description').append('<p class="test-site-links-heading without-rapidload"><strong>Without RapidLoad</strong></p>');
                                                 $content.find('.description').append('<ul class="test-site-links test-site-links-without"></ul>');
                                                 $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">GT Metrix</a></li>')
