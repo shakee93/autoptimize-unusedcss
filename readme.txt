@@ -83,13 +83,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.3.9 - 16/02/2021 =
- * feat: allow users to pass custom headers and query params to API request (Authentication)
- * feat: add support to LS Cache plugin
- * feat: allow users to add custom URLs
- * feat: allow users to add optimizations through sitemap
- * feat: add "Clear page cache" action to supported plugins in the optimization table
- * fix: some CDN URLs are firing warnings
+= 1.3.11 - 18/02/2021 =
+ * feat: server side paginate optimizations to improve performance
+ * feat: allow users to view page speed insight tool withing GPSI success result
+ * feat: allow users to remove, requeue jobs through extra actions in the optimizations table
+ * fix: exclude URL option breaks when there is a query param
+ * fix: logs are not being created on some servers
 
 = 1.3.10 - 16/02/2021 =
  * fix: `is_plugin_active` is not defined
