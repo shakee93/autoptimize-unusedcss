@@ -233,6 +233,10 @@
         $uucss_spinner.addClass('loading')
         table = table.DataTable({
             serverSide: true,
+            processing: false,
+            language: {
+                processing: '<span class="spinner loading"></span>'
+            },
             ajax: {
                 beforeSend() {
                     !$uucss_spinner.hasClass('loading') && $uucss_spinner.addClass('loading');

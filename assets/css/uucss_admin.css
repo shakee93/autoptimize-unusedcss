@@ -1201,3 +1201,9 @@ input#uucss-pack-suggest {
 .featherlight.add-site-url-model.show-url .featherlight-content{
     height: 160px;
 }
+
+#uucss-history_processing .spinner.loading{
+    float: unset;
+    left: calc(50% - 10px);
+    visibility: visible;
+}

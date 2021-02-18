@@ -199,14 +199,20 @@ class UnusedCSS_Queue
         $site_map = new UnusedCSS_Sitemap();
         $urls = $site_map->process_site_map($url);
 
+        global $uucss;
+
         if(isset($urls) && !empty($urls)){
 
             foreach ($urls as $url){
 
-                UnusedCSS_DB::add_link(array(
-                    'url' => $url,
-                    'status' => 'queued',
-                ));
+                if($uucss->is_url_allowed($url)){
+
+                    UnusedCSS_DB::add_link(array(
+                        'url' => $url,
+                        'status' => 'queued',
+                    ));
+                }
+
             }
         }
     }
