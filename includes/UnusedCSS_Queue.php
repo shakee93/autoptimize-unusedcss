@@ -39,14 +39,6 @@ class UnusedCSS_Queue
                 'type' => 'uucss-cron'
             ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
-        }else{
-
-            $interval = isset($uucss_cron['interval']) ? $uucss_cron['interval'] : '';
-            self::log([
-                'log' => 'scheduled cron exist, running at ' . $interval . ' interval',
-                'type' => 'uucss-cron'
-            ]);
-
         }
 
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
