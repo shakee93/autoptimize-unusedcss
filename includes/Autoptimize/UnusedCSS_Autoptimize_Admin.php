@@ -322,7 +322,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if($status_filter){
 
-		    $filters[] = " status = '". $status_filter . "' ";
+		    if($status_filter == 'warning'){
+
+                $filters[] = " warnings IS NOT NULL ";
+            }else{
+
+                $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
+            }
 
         }
 
