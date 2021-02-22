@@ -55,7 +55,7 @@
                             $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
-                            Total : <?php echo $total ?>
+                            Total URLs : <?php echo $total ?>
                         </p>
                         <p>
                             Success : <?php echo $success ?> - <?php echo number_format($success/$total*100, 2) ?>%
