@@ -52,16 +52,16 @@
                             Total : <?php echo $total ?>
                         </p>
                         <p>
-                            Success : <?php echo $success ?> - <?php echo $success/$total*100 ?>%
+                            Success : <?php echo $success ?> - <?php echo number_format($success/$total*100, 2) ?>%
                         </p>
                         <p>
-                            Queued : <?php echo $queued ?> - <?php echo $queued/$total*100 ?>%
+                            Queued : <?php echo $queued ?> - <?php echo number_format($queued/$total*100, 2) ?>%
                         </p>
                         <p>
-                            Warnings : <?php echo $warnings ?> - <?php echo $warnings/$total*100 ?>%
+                            Warnings : <?php echo $warnings ?> - <?php echo number_format($warnings/$total*100, 2) ?>%
                         </p>
                         <p>
-                            Failed Jobs : <?php echo $failed ?> - <?php echo $failed/$total*100 ?>%
+                            Failed Jobs : <?php echo $failed ?> - <?php echo number_format($failed/$total*100, 2) ?>%
                         </p>
 
                     </div>
