@@ -278,7 +278,23 @@ class UnusedCSS_DB
 	    return $links;
     }
 
+    static function get_links_where($where = ''){
+        global $wpdb;
 
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} ORDER BY id DESC ", OBJECT);
+
+        $links = array_map(function ($link){
+            return self::transform_link($link);
+        }, $links);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $links;
+    }
 
     static function get_links_exclude($url){
         global $wpdb;

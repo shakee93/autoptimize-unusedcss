@@ -96,13 +96,35 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
-	    if(!$url){
-	        wp_send_json_error('url required');
+	    $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
+
+        if($url){
+
+            do_action( 'uucss/cached', [
+                'url' => $url
+            ] );
         }
 
-        do_action( 'uucss/cached', [
-            'url' => $url
-        ] );
+        $links = false;
+
+        if($status && $status == 'warnings'){
+
+            $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+
+        }
+
+        if($links && !empty($links)){
+
+            foreach ($links as $link){
+
+                if(isset($link['url'])){
+
+                    do_action( 'uucss/cached', [
+                        'url' => $link['url']
+                    ] );
+                }
+            }
+        }
 
 	    wp_send_json_success('page cache cleared');
     }

@@ -1009,6 +1009,17 @@
             })
         });
 
+        $('.rapidload-status .clear-warnings-page-cache').click(function(){
+            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
+
+                $.uucssAlert(i, 'success')
+
+            }).fail(function (i) {
+
+                $.uucssAlert(i, 'error')
+            });
+        })
+
     });
 
 

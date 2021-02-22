@@ -34,8 +34,8 @@
                         <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>
-                <li>
-                    <h2>Dashboard
+                <li class="rapidload-status">
+                    <h2>RapidLoad Status
                         <span class="uucss-toggle-section rotate">
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
@@ -63,7 +63,9 @@
                         <p>
                             Failed Jobs : <?php echo $failed ?> - <?php echo number_format($failed/$total*100, 2) ?>%
                         </p>
-
+                        <div>
+                            <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
+                        </div>
                     </div>
                 </li>
                 <li>
