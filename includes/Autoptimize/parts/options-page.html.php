@@ -34,7 +34,38 @@
                         <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>
+                <li>
+                    <h2>Dashboard
+                        <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
+                </span>
+                    </h2>
+                    <div class="content">
+                        <?php
+                            $total = UnusedCSS_DB::get_total_job_count();
+                            $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
+                            $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
+                            $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
+                            $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
+                        ?>
+                        <p>
+                            Total : <?php echo $total ?>
+                        </p>
+                        <p>
+                            Success : <?php echo $success ?> - <?php echo $success/$total*100 ?>%
+                        </p>
+                        <p>
+                            Queued : <?php echo $queued ?> - <?php echo $queued/$total*100 ?>%
+                        </p>
+                        <p>
+                            Warnings : <?php echo $warnings ?> - <?php echo $warnings/$total*100 ?>%
+                        </p>
+                        <p>
+                            Failed Jobs : <?php echo $failed ?> - <?php echo $failed/$total*100 ?>%
+                        </p>
 
+                    </div>
+                </li>
                 <li>
                     <h2>
                         Advanced Settings
