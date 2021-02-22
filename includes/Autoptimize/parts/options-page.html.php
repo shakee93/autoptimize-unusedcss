@@ -69,15 +69,9 @@
                         <p>
                             Failed Jobs : <?php echo $failed; ?> - <?php echo number_format($failed/$total*100, 2); ?>%
                         </p>
-                        <?php
-                            if(!empty($third_party_cache_plugins)) :
-                        ?>
-                                <div class="status-action-wrap">
-                                    <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
-                                </div>
-                        <?
-                            endif;
-                        ?>
+                        <div class="status-action-wrap">
+                            <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
+                        </div>
                     </div>
                 </li>
                 <li>
