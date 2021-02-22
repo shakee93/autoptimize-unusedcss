@@ -8,7 +8,6 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
     public static $classMap = array (
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
         'RapidLoad_ThirdParty' => __DIR__ . '/../..' . '/includes/third-party/RapidLoad_ThirdParty.php',
         'UnusedCSS' => __DIR__ . '/../..' . '/includes/UnusedCSS.php',
@@ -25,6 +24,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Sitemap' => __DIR__ . '/../..' . '/includes/UnusedCSS_Sitemap.php',
         'UnusedCSS_Store' => __DIR__ . '/../..' . '/includes/UnusedCSS_Store.php',
         'UnusedCSS_Utils' => __DIR__ . '/../..' . '/includes/UnusedCSS_Utils.php',
+        'WP_Optimize_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-optimize/WP_Optimize_Compatible.php',
         'WP_Rocket_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
         'simplehtmldom\\Debug' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/Debug.php',
         'simplehtmldom\\HtmlDocument' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
