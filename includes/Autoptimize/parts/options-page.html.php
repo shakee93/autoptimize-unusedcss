@@ -34,6 +34,12 @@
                         <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>
+                <?php
+                    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
+                    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
+                        return isset($plugin['category']) && $plugin['category'] == 'cache';
+                    });
+                ?>
                 <li class="rapidload-status">
                     <h2>RapidLoad Status
                         <span class="uucss-toggle-section rotate">
@@ -63,9 +69,15 @@
                         <p>
                             Failed Jobs : <?php echo $failed ?> - <?php echo number_format($failed/$total*100, 2) ?>%
                         </p>
-                        <div class="status-action-wrap">
-                            <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
-                        </div>
+                        <?php
+                            if(!empty($third_party_cache_plugins)) :
+                        ?>
+                                <div class="status-action-wrap">
+                                    <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
+                                </div>
+                        <?
+                            endif;
+                        ?>
                     </div>
                 </li>
                 <li>
@@ -476,12 +488,6 @@
                             </ul>
 
                             <div>
-                                <?php
-                                    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
-                                    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
-                                        return isset($plugin['category']) && $plugin['category'] == 'cache';
-                                    });
-                                ?>
                                 <input id='thirtd_part_cache_plugins' type='hidden'
                                        value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
                                     echo '1';
