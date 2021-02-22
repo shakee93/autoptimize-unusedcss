@@ -78,9 +78,9 @@
                                 <div class="status-action-wrap">
                                     <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
                                 </div>
-                        <?php
-                            endif;
-                        ?>
+                            <?php
+                                endif;
+                            ?>
                     </div>
                 </li>
                 <li>
