@@ -55,19 +55,19 @@
                             $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
-                            Total URLs : <?php echo $total ?>
+                            Total URLs : <?php echo $total; ?>
                         </p>
                         <p>
-                            Success : <?php echo $success ?> - <?php echo number_format($success/$total*100, 2) ?>%
+                            Success : <?php echo $success; ?> - <?php echo number_format($success/$total*100, 2); ?>%
                         </p>
                         <p>
-                            Queued : <?php echo $queued ?> - <?php echo number_format($queued/$total*100, 2) ?>%
+                            Queued : <?php echo $queued; ?> - <?php echo number_format($queued/$total*100, 2); ?>%
                         </p>
                         <p>
-                            Warnings : <?php echo $warnings ?> - <?php echo number_format($warnings/$total*100, 2) ?>%
+                            Warnings : <?php echo $warnings; ?> - <?php echo number_format($warnings/$total*100, 2); ?>%
                         </p>
                         <p>
-                            Failed Jobs : <?php echo $failed ?> - <?php echo number_format($failed/$total*100, 2) ?>%
+                            Failed Jobs : <?php echo $failed; ?> - <?php echo number_format($failed/$total*100, 2); ?>%
                         </p>
                         <?php
                             if(!empty($third_party_cache_plugins)) :
