@@ -61,26 +61,17 @@
                             Total URLs : <?php echo $total; ?>
                         </p>
                         <p>
-                            Success : <?php echo $success; ?> - <?php echo number_format($success/$total*100, 0); ?>%
+                            Success : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
                         </p>
                         <p>
-                            Queued : <?php echo $queued; ?> - <?php echo number_format($queued/$total*100, 0); ?>%
+                            Queued : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
                         </p>
                         <p>
-                            Warnings : <?php echo $warnings; ?> - <?php echo number_format($warnings/$total*100, 0); ?>%
+                            Warnings : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
                         </p>
                         <p>
-                            Failed Jobs : <?php echo $failed; ?> - <?php echo number_format($failed/$total*100, 0); ?>%
+                            Failed Jobs : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
                         </p>
-                        <?php
-                            if(!empty($third_party_cache_plugins)) :
-                            ?>
-                                <div class="status-action-wrap">
-                                    <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
-                                </div>
-                            <?php
-                                endif;
-                            ?>
                     </div>
                 </li>
                 <li>

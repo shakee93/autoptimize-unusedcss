@@ -742,6 +742,7 @@
                 $content.find('ul').append('<li data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
                 $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
 
                 return $content.wrap('<div></div>').parent().html();
             },
@@ -786,6 +787,17 @@
                                     table.ajax.reload(null, false);
                                     $.uucssAlert('links removed from list', 'info');
                                 }
+                            });
+                            break;
+                        }
+                        case 'clear_warnings_cache':{
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
+
+                                $.uucssAlert(i, 'success')
+
+                            }).fail(function (i) {
+
+                                $.uucssAlert(i, 'error')
                             });
                             break;
                         }
@@ -1008,17 +1020,6 @@
                 $target.val('Add');
             })
         });
-
-        $('.rapidload-status .clear-warnings-page-cache').click(function(){
-            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
-
-                $.uucssAlert(i, 'success')
-
-            }).fail(function (i) {
-
-                $.uucssAlert(i, 'error')
-            });
-        })
 
     });
 
