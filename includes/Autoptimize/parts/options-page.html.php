@@ -2,6 +2,13 @@
 
 <script>document.title = "Autoptimize: RapidLoad " + document.title;</script>
 
+<?php
+    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
+    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
+        return isset($plugin['category']) && $plugin['category'] == 'cache';
+    });
+?>
+
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
 	<?php settings_fields( 'autoptimize_uucss_settings' );
 
@@ -13,6 +20,7 @@
             <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
+
 			<?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
 					<?php include_once 'intro.html.php' ?>
@@ -34,12 +42,7 @@
                         <table id="uucss-history" width="100%" class="hover"></table>
                     </div>
                 </li>
-                <?php
-                    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
-                    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
-                        return isset($plugin['category']) && $plugin['category'] == 'cache';
-                    });
-                ?>
+
                 <li class="rapidload-status">
                     <h2>RapidLoad Status
                         <span class="uucss-toggle-section rotate">
@@ -69,9 +72,15 @@
                         <p>
                             Failed Jobs : <?php echo $failed; ?> - <?php echo number_format($failed/$total*100, 2); ?>%
                         </p>
-                        <div class="status-action-wrap">
-                            <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
-                        </div>
+                        <?php
+                            if(!empty($third_party_cache_plugins)) :
+                            ?>
+                                <div class="status-action-wrap">
+                                    <input class="clear-warnings-page-cache button button-primary" type="button" value="Clear Page Cache for Warnings">
+                                </div>
+                        <?php
+                            endif;
+                        ?>
                     </div>
                 </li>
                 <li>
