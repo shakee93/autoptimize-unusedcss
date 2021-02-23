@@ -29,7 +29,9 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
                 $url = $this->transform_url( $args['url'] );
             }
 
-            if($url){
+            $post_id = url_to_postid( $url );
+
+            if($post_id){
 
                 self::log([
                     'url' => $url,
@@ -38,7 +40,7 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
                 ]);
                 $hooks = '\CF\WordPress\Hooks';
                 $cfHooks = new $hooks();
-                $cfHooks->purgeCacheEverything();
+                $cfHooks->purgeCacheByRelevantURLs($post_id);
 
             }
 
