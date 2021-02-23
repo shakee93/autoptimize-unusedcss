@@ -8,6 +8,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
     public static $classMap = array (
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
+        'Cloudflare_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
         'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
         'RapidLoad_ThirdParty' => __DIR__ . '/../..' . '/includes/third-party/RapidLoad_ThirdParty.php',
         'UnusedCSS' => __DIR__ . '/../..' . '/includes/UnusedCSS.php',
