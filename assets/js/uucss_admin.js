@@ -1025,7 +1025,7 @@
             })
         });
 
-        $('#more-info-uucss-status').click(function (e) {
+        $('p.more-info-uucss-status').click(function (e) {
             e.preventDefault();
             var $info = $('.rapidload-status .uucss-status-more-info');
             if($info.css('display') === "block"){

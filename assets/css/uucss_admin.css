@@ -1257,6 +1257,6 @@ li.rapidload-status .content .status-action-wrap{
 
 li.rapidload-status .content #more-info-uucss-status{
     text-decoration: none;
-    margin-left: 50px;
     display: inline-block;
+    color: black;
 }

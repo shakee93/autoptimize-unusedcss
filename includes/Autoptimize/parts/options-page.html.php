@@ -452,8 +452,8 @@
                         <p>
                             <strong>Can We Write</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                         </p>
-                        <p>
-                            <strong>Total URLs</strong> : <?php echo $total; ?> <span><a href="#" id="more-info-uucss-status">More Info</a></span>
+                        <p class="more-info-uucss-status">
+                            <strong>Total URLs</strong> :  <span><a href="#" id="more-info-uucss-status"><?php echo $total; ?></a></span>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <p>
