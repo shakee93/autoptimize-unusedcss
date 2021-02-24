@@ -742,7 +742,11 @@
                 $content.find('ul').append('<li data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
                 $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
-                $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
+
+                if($('#thirtd_part_cache_plugins').val() === "1"){
+                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
+                }
+
 
                 return $content.wrap('<div></div>').parent().html();
             },
@@ -1020,6 +1024,17 @@
                 $target.val('Add');
             })
         });
+
+        $('#more-info-uucss-status').click(function (e) {
+            e.preventDefault();
+            var $info = $('.rapidload-status .uucss-status-more-info');
+            if($info.css('display') === "block"){
+                $info.slideUp();
+            }else{
+                $info.slideDown();
+            }
+
+        })
 
     });
 

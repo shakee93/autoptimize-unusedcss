@@ -58,20 +58,22 @@
                             $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
-                            Total URLs : <?php echo $total; ?>
+                            Total URLs : <?php echo $total; ?> <span><a href="#" id="more-info-uucss-status">More Info</a></span>
                         </p>
-                        <p>
-                            Success : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
-                        </p>
-                        <p>
-                            Queued : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
-                        </p>
-                        <p>
-                            Warnings : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
-                        </p>
-                        <p>
-                            Failed Jobs : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
-                        </p>
+                        <div class="uucss-status-more-info" style="display: none">
+                            <p>
+                                Success : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
+                            </p>
+                            <p>
+                                Queued : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                Warnings : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                Failed Jobs : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
+                            </p>
+                        </div>
                     </div>
                 </li>
                 <li>
