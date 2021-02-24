@@ -246,10 +246,19 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $link = UnusedCSS_DB::get_link($url);
 
+        $files = [];
+
+        if(isset($link['files']) && !empty($link['files'])){
+
+            $files = array_filter($link['files'], function ($file){
+               return !$this->str_contains($file['original'], '//inline-style@');
+            });
+        }
+
         $result = $uucss_api->post( 'test/wordpress',
             [
                 'url' => urldecode($url),
-                'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : []
+                'files' => !empty($files) ? array_column($files, 'uucss') : []
             ]);
 
         if ( $uucss_api->is_error( $result ) ) {
