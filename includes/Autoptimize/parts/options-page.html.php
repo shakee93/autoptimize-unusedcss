@@ -43,39 +43,6 @@
                     </div>
                 </li>
 
-                <li class="rapidload-status">
-                    <h2>RapidLoad Status
-                        <span class="uucss-toggle-section rotate">
-                    <span class="dashicons dashicons-arrow-up-alt2"></span>
-                </span>
-                    </h2>
-                    <div class="content">
-                        <?php
-                            $total = UnusedCSS_DB::get_total_job_count();
-                            $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
-                            $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
-                            $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
-                            $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
-                        ?>
-                        <p>
-                            Total URLs : <?php echo $total; ?> <span><a href="#" id="more-info-uucss-status">More Info</a></span>
-                        </p>
-                        <div class="uucss-status-more-info" style="display: none">
-                            <p>
-                                Success : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
-                            </p>
-                            <p>
-                                Queued : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
-                            </p>
-                            <p>
-                                Warnings : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
-                            </p>
-                            <p>
-                                Failed Jobs : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
-                            </p>
-                        </div>
-                    </div>
-                </li>
                 <li>
                     <h2>
                         Advanced Settings
@@ -459,6 +426,49 @@
                                 </td>
                             </tr>
                         </table>
+                    </div>
+                </li>
+
+                <li class="rapidload-status">
+                    <h2>RapidLoad Status
+                        <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
+                </span>
+                    </h2>
+                    <div class="content" style="display:none;">
+                        <?php
+                        $total = UnusedCSS_DB::get_total_job_count();
+                        $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
+                        $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
+                        $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
+                        $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
+                        ?>
+                        <p>
+                            <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                        </p>
+                        <p>
+                            <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
+                        </p>
+                        <p>
+                            <strong>Can We Write</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                        </p>
+                        <p>
+                            <strong>Total URLs</strong> : <?php echo $total; ?> <span><a href="#" id="more-info-uucss-status">More Info</a></span>
+                        </p>
+                        <div class="uucss-status-more-info" style="display: none">
+                            <p>
+                                <strong>Success</strong> : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
+                            </p>
+                            <p>
+                                <strong>Queued</strong> : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                <strong>Warnings</strong> : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                <strong>Failed Jobs</strong> : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
+                            </p>
+                        </div>
                     </div>
                 </li>
 
