@@ -20,6 +20,13 @@ class Optimole_WP_Compatible extends RapidLoad_ThirdParty {
 
     public function handle($args)
     {
+        $optml_option = get_option('optml_settings');
+
+        if(!isset($optml_option) || !isset($optml_option['cdn']) || $optml_option['cdn'] != 'enabled'){
+
+            return $args;
+        }
+
         $converted_url = apply_filters( 'optml_content_url', $args );
 
         $url = explode('?', $args);
