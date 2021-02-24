@@ -1246,3 +1246,17 @@ input#uucss-pack-suggest {
     background-color: #ffe5e5;
     color: #990000;
 }
+
+li.rapidload-status .content p {
+    margin: 0;
+}
+
+li.rapidload-status .content .status-action-wrap{
+    margin-top: 10px;
+}
+
+li.rapidload-status .content #more-info-uucss-status{
+    text-decoration: none;
+    display: inline-block;
+    color: black;
+}

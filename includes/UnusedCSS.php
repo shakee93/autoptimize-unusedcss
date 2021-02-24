@@ -550,5 +550,11 @@ abstract class UnusedCSS {
 	    $this->file_system->delete( $delete, true );
     }
 
-
+    public function cache_file_count(){
+        $files = scandir(UnusedCSS::$base_dir);
+        $files = array_filter($files, function ($file){
+           return false !== strpos($file, '.css');
+        });
+        return count($files);
+    }
 }
