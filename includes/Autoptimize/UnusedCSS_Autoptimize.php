@@ -316,6 +316,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
+				    $link = apply_filters('uucss/cdn_url', $link);
+
 				    $file = array_search( $link, array_column( $data['files'], 'original' ) );
 
 				    if ( ! $file ) {
