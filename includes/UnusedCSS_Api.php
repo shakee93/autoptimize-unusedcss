@@ -49,10 +49,12 @@ class UnusedCSS_Api
 
         $data = apply_filters('uucss/request', $data, 'post');
 
+        //$data['service'] = true;
+
 		$url = self::$apiUrl . '/' . $endpoint;
 
 		$response = wp_remote_post( $url, [
-			'timeout' => 40,
+			'timeout' => 120,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			],

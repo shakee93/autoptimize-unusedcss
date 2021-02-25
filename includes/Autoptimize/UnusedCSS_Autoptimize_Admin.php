@@ -96,13 +96,35 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
-	    if(!$url){
-	        wp_send_json_error('url required');
+	    $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
+
+        if($url){
+
+            do_action( 'uucss/cached', [
+                'url' => $url
+            ] );
         }
 
-        do_action( 'uucss/cached', [
-            'url' => $url
-        ] );
+        $links = false;
+
+        if($status && $status == 'warnings'){
+
+            $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+
+        }
+
+        if($links && !empty($links)){
+
+            foreach ($links as $link){
+
+                if(isset($link['url'])){
+
+                    do_action( 'uucss/cached', [
+                        'url' => $link['url']
+                    ] );
+                }
+            }
+        }
 
 	    wp_send_json_success('page cache cleared');
     }
@@ -246,10 +268,25 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $link = UnusedCSS_DB::get_link($url);
 
+        $cached_files = [];
+        $original_files = [];
+
+        if(isset($link['files']) && !empty($link['files'])){
+
+            $cached_files = array_filter($link['files'], function ($file){
+               return !$this->str_contains($file['original'], '//inline-style@');
+            });
+
+            $original_files = array_filter($link['files'], function ($file){
+                return !$this->str_contains($file['original'], '//inline-style@');
+            });
+        }
+
         $result = $uucss_api->post( 'test/wordpress',
             [
                 'url' => urldecode($url),
-                'files' => isset($link['files']) && !empty($link['files']) ? array_column($link['files'], 'uucss') : []
+                'files' => !empty($cached_files) ? array_column($cached_files, 'uucss') : [],
+                'aoFiles' => !empty($original_files) ? array_column($original_files, 'original') : []
             ]);
 
         if ( $uucss_api->is_error( $result ) ) {
@@ -322,7 +359,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if($status_filter){
 
-		    $filters[] = " status = '". $status_filter . "' ";
+		    if($status_filter == 'warning'){
+
+                $filters[] = " warnings IS NOT NULL ";
+            }else{
+
+                $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
+            }
 
         }
 

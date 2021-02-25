@@ -35,7 +35,9 @@ class UnusedCSS_FileSystem
             array_map('unlink', glob("$path/*.*"));
             rmdir($path);
         }else{
-            unlink($path);
+            if($this->exists($path)){
+                unlink($path);
+            }
         }
     }
 

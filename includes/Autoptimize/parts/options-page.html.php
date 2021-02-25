@@ -2,6 +2,13 @@
 
 <script>document.title = "Autoptimize: RapidLoad " + document.title;</script>
 
+<?php
+    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
+    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
+        return isset($plugin['category']) && $plugin['category'] == 'cache';
+    });
+?>
+
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
 	<?php settings_fields( 'autoptimize_uucss_settings' );
 
@@ -13,6 +20,7 @@
             <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
+
 			<?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
 					<?php include_once 'intro.html.php' ?>
@@ -400,6 +408,19 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
+                                <td>
+                                    <label for="uucss_disable_add_to_queue"><input id='uucss_disable_add_to_queue' type='checkbox'
+                                                                           name='autoptimize_uucss_settings[uucss_disable_add_to_queue]' <?php if ( ! empty( $options['uucss_disable_add_to_queue'] ) && '1' === $options['uucss_disable_add_to_queue'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Disable jobs adding to queue on user visits.
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_enable_debug"><input id='uucss_enable_debug' type='checkbox'
@@ -418,6 +439,49 @@
                                 </td>
                             </tr>
                         </table>
+                    </div>
+                </li>
+
+                <li class="rapidload-status">
+                    <h2>RapidLoad Status
+                        <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
+                </span>
+                    </h2>
+                    <div class="content" style="display:none;">
+                        <?php
+                        $total = UnusedCSS_DB::get_total_job_count();
+                        $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
+                        $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
+                        $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
+                        $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
+                        ?>
+                        <p>
+                            <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                        </p>
+                        <p>
+                            <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
+                        </p>
+                        <p>
+                            <strong>Can We Write</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                        </p>
+                        <p class="more-info-uucss-status">
+                            <strong>Total URLs</strong> :  <?php echo $total; ?>
+                        </p>
+                        <div class="uucss-status-more-info" style="display: none">
+                            <p>
+                                <strong>Success</strong> : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
+                            </p>
+                            <p>
+                                <strong>Queued</strong> : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                <strong>Warnings</strong> : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                <strong>Failed Jobs</strong> : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
+                            </p>
+                        </div>
                     </div>
                 </li>
 
@@ -443,12 +507,6 @@
                             </ul>
 
                             <div>
-                                <?php
-                                    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
-                                    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
-                                        return isset($plugin['category']) && $plugin['category'] == 'cache';
-                                    });
-                                ?>
                                 <input id='thirtd_part_cache_plugins' type='hidden'
                                        value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
                                     echo '1';

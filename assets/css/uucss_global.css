@@ -833,3 +833,11 @@ p.analyze-text {
 body.settings_page_uucss-onboarding{
     overflow: hidden;
 }
+
+#noty_layout__topCenter{
+    z-index: 2147483650;
+}
+
+.featherlight{
+    background: rgba(0, 0, 0, 0.8);
+}

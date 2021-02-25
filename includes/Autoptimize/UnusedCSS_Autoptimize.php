@@ -143,7 +143,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			    }
 
 			    // check using string contains instead of regex
-			    if ( self::str_contains( $url, $pattern ) ) {
+			    if ( self::str_contains( urldecode($url), $pattern ) ) {
 				    $this->log( 'skipped : ' . $url );
                     return false;
                 }
@@ -316,14 +316,33 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    $file = array_search( $link, array_column( $data['files'], 'original' ) );
+				    $key = false;
 
-				    if ( ! $file ) {
-				    	// Retry to see if file can be found with CDN url
-					    $file = array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) );
-				    }
+				    if(apply_filters('uucss/path-based-search', true)){
 
-				    $key = isset($data['files']) ? $file : null;
+                        $url_parts = parse_url( $link );
+
+                        if(isset($url_parts['path'])){
+
+                            $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $data['files'], 'original' ));
+
+                            $key = isset($result) && !empty($result) ? key($result) : null;
+                        }
+
+                    }else{
+
+                        $link = apply_filters('uucss/cdn-url', $link);
+
+                        $file = array_search( $link, array_column( $data['files'], 'original' ) );
+
+                        if ( ! $file ) {
+                            // Retry to see if file can be found with CDN url
+                            $file = array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) );
+                        }
+
+                        $key = isset($data['files']) ? $file : null;
+
+                    }
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
@@ -407,7 +426,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'type' => 'injection'
                 ]);
 
-            }else if(!$inject->successfully_injected && ($data['attempts'] < 1 || ($time_diff > 86400 && $data['attempts'] < 4))){
+            }else if(!$inject->successfully_injected && ($data['attempts'] <= 2 || ($time_diff > 86400 && $data['attempts'] <= 4))){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',

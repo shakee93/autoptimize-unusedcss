@@ -74,10 +74,11 @@ abstract class UnusedCSS {
 	public static function enqueueGlobalScript() {
 		add_action( 'admin_enqueue_scripts', function () {
 			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-			wp_enqueue_script( 'toasted', UUCSS_PLUGIN_URL . 'assets/libs/toasted/toasted.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
 			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
-			wp_enqueue_style( 'toasted', UUCSS_PLUGIN_URL . 'assets/libs/toasted/toasted.min.css' );
+			wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
+			wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
 			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
             wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
 
@@ -243,6 +244,10 @@ abstract class UnusedCSS {
 			$this->get_css();
 			$this->replace_css();
 		}
+
+        if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {
+            return;
+        }
 
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 			$this->cache( $this->url );
@@ -549,5 +554,11 @@ abstract class UnusedCSS {
 	    $this->file_system->delete( $delete, true );
     }
 
-
+    public function cache_file_count(){
+        $files = scandir(UnusedCSS::$base_dir);
+        $files = array_filter($files, function ($file){
+           return false !== strpos($file, '.css');
+        });
+        return count($files);
+    }
 }

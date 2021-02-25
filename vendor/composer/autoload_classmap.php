@@ -7,8 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
-    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
+    'Optimole_WP_Compatible' => $baseDir . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
     'RapidLoad_ThirdParty' => $baseDir . '/includes/third-party/RapidLoad_ThirdParty.php',
     'UnusedCSS' => $baseDir . '/includes/UnusedCSS.php',
     'UnusedCSS_Admin' => $baseDir . '/includes/UnusedCSS_Admin.php',
@@ -24,6 +25,7 @@ return array(
     'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
+    'WP_Optimize_Compatible' => $baseDir . '/includes/third-party/plugins/wp-optimize/WP_Optimize_Compatible.php',
     'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
     'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
     'simplehtmldom\\HtmlDocument' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlDocument.php',

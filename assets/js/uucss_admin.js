@@ -621,15 +621,16 @@
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
 
-                                            }else if(response.success && response.data && !response.data.injected){
+                                            }else if(response.success && response.data && response.data.injected){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
                                                 $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
 
                                             }else{
 
-                                                $content.find('.header').append('<h2><span class="dashicons dashicons-no"></span>Error</h2>')
-                                                $content.find('.description').append('<p>' + response.data + '</p>');
+                                                $content.find('.header').append('<h2><span class="dashicons dashicons-no"></span>Error</h2>');
+                                                var error_message = typeof response.data === 'string' ? response.data : 'Something went wrong';
+                                                $content.find('.description').append('<p>' + error_message + '</p>');
                                             }
 
                                             if(response.success && response.data && response.data.success){
@@ -742,6 +743,11 @@
                 $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
 
+                if($('#thirtd_part_cache_plugins').val() === "1"){
+                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
+                }
+
+
                 return $content.wrap('<div></div>').parent().html();
             },
             onClickOutside(instance, event) {
@@ -761,15 +767,19 @@
                     switch (action) {
                         case 'requeue_all':{
                             requeue('current');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_warnings':{
                             requeue('warnings');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_processing':{
                             requeue('processing');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_failed':{
                             requeue('failed');
+                            $.uucssAlert('links added to queue');
                             break;
                         }case 'remove_all':{
                             wp.ajax.post('uucss_purge_url',{
@@ -779,7 +789,19 @@
                             }).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
+                                    $.uucssAlert('links removed from list', 'info');
                                 }
+                            });
+                            break;
+                        }
+                        case 'clear_warnings_cache':{
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
+
+                                $.uucssAlert(i, 'success')
+
+                            }).fail(function (i) {
+
+                                $.uucssAlert(i, 'error')
                             });
                             break;
                         }
@@ -1002,6 +1024,17 @@
                 $target.val('Add');
             })
         });
+
+        $('p.more-info-uucss-status').click(function (e) {
+            e.preventDefault();
+            var $info = $('.rapidload-status .uucss-status-more-info');
+            if($info.css('display') === "block"){
+                $info.slideUp();
+            }else{
+                $info.slideDown();
+            }
+
+        })
 
     });
 
