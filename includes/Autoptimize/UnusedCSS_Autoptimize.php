@@ -316,16 +316,30 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    array_push( $inject->found_css_files, $link );
 
-				    $link = apply_filters('uucss/cdn_url', $link);
+				    $key = false;
 
-				    $file = array_search( $link, array_column( $data['files'], 'original' ) );
+				    if(apply_filters('uucss/path-based-search', true)){
 
-				    if ( ! $file ) {
-				    	// Retry to see if file can be found with CDN url
-					    $file = array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) );
-				    }
+                        $url_parts = parse_url( $link );
 
-				    $key = isset($data['files']) ? $file : null;
+                        $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $data['files'], 'original' ));
+
+                        $key = isset($result) && !empty($result) ? key($result) : null;
+
+                    }else{
+
+                        $link = apply_filters('uucss/cdn_url', $link);
+
+                        $file = array_search( $link, array_column( $data['files'], 'original' ) );
+
+                        if ( ! $file ) {
+                            // Retry to see if file can be found with CDN url
+                            $file = array_search( $this->uucss_ao_base->url_replace_cdn($link), array_column( $data['files'], 'original' ) );
+                        }
+
+                        $key = isset($data['files']) ? $file : null;
+
+                    }
 
 				    // check if we found a script index and the file exists
 				    if ( is_numeric( $key ) && $this->cache_file_exists( $data['files'][ $key ]['uucss'] ) ) {
