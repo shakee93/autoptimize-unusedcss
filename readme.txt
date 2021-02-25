@@ -87,12 +87,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
  * feat: allow users to disable adding jobs to queue on user visits
  * feat: add support to WP Optimize plugin
  * feat: add support to Cloudflare plugin
- * improve: support to Autoptimize Critical CSS
  * feat: add support to Optimole plugin
- * feat: add inline css optimization support
  * improve: add cdn url filter
  * improve: file path filtering on frontend
  * fix: pending jobs status not reflecting properly
+ * fix: allow non unicode url exclusion
 
 = 1.3.11 - 18/02/2021 =
  * feat: server side paginate optimizations to improve performance
