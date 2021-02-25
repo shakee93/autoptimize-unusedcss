@@ -143,7 +143,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 			    }
 
 			    // check using string contains instead of regex
-			    if ( self::str_contains( urlencode($url), $pattern ) ) {
+			    if ( self::str_contains( urldecode($url), $pattern ) ) {
 				    $this->log( 'skipped : ' . $url );
                     return false;
                 }
