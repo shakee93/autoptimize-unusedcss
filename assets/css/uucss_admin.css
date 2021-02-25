@@ -1254,9 +1254,3 @@ li.rapidload-status .content p {
 li.rapidload-status .content .status-action-wrap{
     margin-top: 10px;
 }
-
-li.rapidload-status .content #more-info-uucss-status{
-    text-decoration: none;
-    display: inline-block;
-    color: black;
-}
