@@ -408,14 +408,14 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php _e( 'Disable Add to Queue', 'uucss' ); ?></th>
+                                <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_disable_add_to_queue"><input id='uucss_disable_add_to_queue' type='checkbox'
                                                                            name='autoptimize_uucss_settings[uucss_disable_add_to_queue]' <?php if ( ! empty( $options['uucss_disable_add_to_queue'] ) && '1' === $options['uucss_disable_add_to_queue'] ) {
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
-                                            Disable add to queue on user visit to a specific url.
+                                            Disable jobs adding to queue on user visits.
                                         </i>
                                     </label>
                                 </td>
