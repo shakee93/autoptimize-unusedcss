@@ -245,6 +245,10 @@ abstract class UnusedCSS {
 			$this->replace_css();
 		}
 
+        if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {
+            return;
+        }
+
 		if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
 			$this->cache( $this->url );
 		}
