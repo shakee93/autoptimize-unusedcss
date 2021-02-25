@@ -322,9 +322,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
                         $url_parts = parse_url( $link );
 
-                        $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $data['files'], 'original' ));
+                        if(isset($url_parts['path'])){
 
-                        $key = isset($result) && !empty($result) ? key($result) : null;
+                            $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $data['files'], 'original' ));
+
+                            $key = isset($result) && !empty($result) ? key($result) : null;
+                        }
 
                     }else{
 
