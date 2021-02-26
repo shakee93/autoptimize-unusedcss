@@ -318,7 +318,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 				    $key = false;
 
-				    if(apply_filters('uucss/path-based-search', true)){
+				    if(apply_filters('uucss/path-based-search', true) && $this->endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
 
                         $url_parts = parse_url( $link );
 
