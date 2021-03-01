@@ -40,18 +40,16 @@ class UnusedCSS_Store {
 
         $this->file_system = new UnusedCSS_FileSystem();
 
-        $this->purge_css();
-
     }
 
-
-    protected function purge_css() {
+    public function purge_css() {
 
 	    $this->log( [
 	        'log' => 'fetching data',
             'url' => $this->url,
             'type' => 'store'
         ] );
+
 	    $uucss_api = new UnusedCSS_Api();
 
 	    $result = $uucss_api->post( 'purger',
@@ -61,18 +59,7 @@ class UnusedCSS_Store {
 
 	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-	        $link_data = array(
-	            'url' => $this->url,
-                'files' => null,
-                'status' => 'failed',
-                'meta' => [
-                    "error" => $this->extract_error( $result )
-                ]
-            );
-
-            $link_data = UnusedCSS_DB::transform_link($link_data, false);
-
-            UnusedCSS_DB::add_link($link_data, true);
+	        UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
 
             $this->log( [
                 'log' => 'fetched data stored status failed',
@@ -87,20 +74,30 @@ class UnusedCSS_Store {
 	    $this->purged_files = $result->data;
 
 	    if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
-		    $this->cache_files();
+
+		    $files = $this->cache_files($this->purged_files);
+            $this->add_link($files);
+            $this->uucss_cached();
+
 	    }else{
+
             $this->add_link(null);
         }
 
     }
 
+    public function uucss_cached(){
+        do_action( 'uucss/cached', [
+            'url' => $this->url
+        ]);
+    }
 
-    protected function cache_files() {
+    public function cache_files($purged_files) {
 
 	    $files              = [];
 	    $found_uucssed_file = false;
 
-	    foreach ( $this->purged_files as $file ) {
+	    foreach ( $purged_files as $file ) {
 
 		    if ( $this->is_uucss_file( $file->file ) ) {
 			    $found_uucssed_file = true;
@@ -133,14 +130,15 @@ class UnusedCSS_Store {
 
 	    }
 
-	    $this->add_link($files);
-
-	    $this->args['url'] = $this->url;
-	    do_action( 'uucss/cached', $this->args );
-
+	    return $files;
     }
 
-    public function add_link($files){
+    public function add_link($files, $result = false){
+
+        if($result){
+            $this->result = $result;
+        }
+
         $stats = $this->result->meta->stats;
         $warnings = $this->result->meta->warnings;
 
@@ -205,29 +203,6 @@ class UnusedCSS_Store {
 		$hash_made_from['content'] = $content;
 
 		return $this->file_name( $file, $hash_made_from );
-	}
-
-	protected function extract_error( $result ) {
-		if ( gettype( $result ) === 'string' ) {
-			return [
-				'code'    => 500,
-				'message' => $result
-			];
-		}
-
-		if ( gettype( $result ) === 'object' && isset( $result->errors ) ) {
-
-			return [
-				'code'    => $result->errors[0]->code,
-				'message' => $result->errors[0]->detail
-			];
-
-		}
-
-		return [
-			'code'    => 500,
-			'message' => 'Unknown Error Occurred'
-		];
 	}
 
 

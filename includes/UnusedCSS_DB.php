@@ -533,6 +533,23 @@ class UnusedCSS_DB
         ]);
     }
 
+    static function update_failed($link, $error){
+
+        $link_data = array(
+            'url' => $link,
+            'files' => null,
+            'status' => 'failed',
+            'meta' => [
+                "error" => $error
+            ]
+        );
+
+        $link_data = self::transform_link($link_data, false);
+
+        self::add_link($link_data, true);
+
+    }
+
     static function clear_links(){
         global $wpdb;
 

@@ -35,13 +35,25 @@ class UnusedCSS_Queue
 
         if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) && !$uucss_cron) {
             self::log([
-                'log' => 'cron scheduled',
+                'log' => 'job cron scheduled',
                 'type' => 'uucss-cron'
             ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
         }
 
+        $uucss_result_cron = $this->cron_exist('cron_uucss_process_result');
+
+        if ( ! wp_next_scheduled( 'cron_uucss_process_result' ) && !$uucss_result_cron) {
+            self::log([
+                'log' => 'job result cron scheduled',
+                'type' => 'uucss-cron'
+            ]);
+            wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_result');
+        }
+
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
+
+        add_action( 'cron_uucss_process_result', [$this ,'uucss_process_result'] );
 
         add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
 
@@ -56,7 +68,7 @@ class UnusedCSS_Queue
         ));
     }
 
-    function cron_exist(){
+    function cron_exist($cron_name = 'cron_uucss_process_queue'){
 
         $cron_array = _get_cron_array();
 
@@ -64,7 +76,7 @@ class UnusedCSS_Queue
             return false;
         }
 
-        $uucss_cron = array_column($cron_array, 'cron_uucss_process_queue');
+        $uucss_cron = array_column($cron_array, $cron_name);
 
         if(!isset($uucss_cron) || empty($uucss_cron)){
             return false;
@@ -221,7 +233,10 @@ class UnusedCSS_Queue
 
             foreach ($links as $link){
 
-                UnusedCSS_DB::update_status('processing', $link->url);
+                UnusedCSS_DB::update_meta([
+                    'status' => 'processing',
+                    'job_id' => null
+                ], $link->url);
 
                 self::log([
                     'log' => 'status updated to processing',
@@ -247,20 +262,98 @@ class UnusedCSS_Queue
 
     }
 
+    function uucss_process_result(){
+
+        $links = UnusedCSS_DB::get_links_by_status(["'processing'"], self::$job_count);
+
+        if(!empty($links)){
+
+            foreach ($links as $link){
+
+                $this->update_result($link->url, $link->job_id);
+
+            }
+
+        }
+
+    }
+
     function cache($url){
         global $uucss;
 
         $post_id = url_to_postid($url);
 
         self::log([
-            'log' => 'caching initiated by cron',
+            'log' => 'fetching job id',
             'url' => $url,
             'type' => 'uucss-cron'
         ]);
 
-        $uucss->init_async_store( $uucss->provider, $url, [
-            'options' => $uucss->api_options($post_id)
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->post( 's/unusedcss',
+            array_merge( $uucss->api_options($post_id),
+                [ 'url' => $url ]
+            ));
+
+        if($uucss_api->is_error($result)){
+
+            UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $url,
+                'type' => 'uucss-cron'
+            ] );
+
+            return;
+        }
+
+        if(isset($result->id)){
+
+            UnusedCSS_DB::update_meta(['job_id' => $result->id ], $url);
+        }
+
+    }
+
+    public function update_result($url, $job_id){
+
+        $this->log( [
+            'log' => 'fetching data for job ' . $job_id,
+            'url' => $url,
+            'type' => 'store'
         ] );
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->get( 's/unusedcss/' . $job_id);
+
+        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
+
+            UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $url,
+                'type' => 'uucss-cron'
+            ] );
+
+            return;
+        }
+
+        $uucss_store = new UnusedCSS_Store(null, $url,null);
+
+        if(isset($result->data) && count($result->data) > 0){
+
+            $files = $uucss_store->cache_files($result->data);
+            $uucss_store->add_link($files, $result);
+            $uucss_store->uucss_cached();
+
+        }else{
+
+            $uucss_store->add_link(null, $result);
+        }
+
     }
 
     function uucss_process_queue_schedule($schedules){

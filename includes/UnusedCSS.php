@@ -194,6 +194,7 @@ abstract class UnusedCSS {
     public function init_async_store($provider, $url, $args)
     {
         $this->store = new UnusedCSS_Store($provider, $url, $args);
+        $this->store->purge_css();
     }
 
     public function is_url_allowed($url = null, $args = null)

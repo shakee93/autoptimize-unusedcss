@@ -108,5 +108,26 @@ class UnusedCSS_Api
 		return ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false );
 	}
 
+    public function extract_error( $result ) {
+        if ( gettype( $result ) === 'string' ) {
+            return [
+                'code'    => 500,
+                'message' => $result
+            ];
+        }
 
+        if ( gettype( $result ) === 'object' && isset( $result->errors ) ) {
+
+            return [
+                'code'    => $result->errors[0]->code,
+                'message' => $result->errors[0]->detail
+            ];
+
+        }
+
+        return [
+            'code'    => 500,
+            'message' => 'Unknown Error Occurred'
+        ];
+    }
 }
