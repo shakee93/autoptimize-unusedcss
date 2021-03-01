@@ -60,7 +60,7 @@ class UnusedCSS_Store {
 		    ) );
 
         $this->log( [
-            'log' => 'data fetched : ' . json_encode($result),
+            'log' => 'data fetched',
             'url' => $this->url,
             'type' => 'store'
         ] );
