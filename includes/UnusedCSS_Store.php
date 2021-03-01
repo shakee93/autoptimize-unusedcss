@@ -161,11 +161,14 @@ class UnusedCSS_Store {
             'files' => $files,
             'status' => 'success',
             'meta' => [
-                "id" => $this->result->meta->id,
                 "stats" => $stats,
                 "warnings" => $warnings
             ]
         );
+
+        if(isset($this->result->meta->id)){
+            $link_data['meta']['id'] = $this->result->meta->id;
+        }
 
         $link_data = UnusedCSS_DB::transform_link($link_data, false);
 

@@ -343,13 +343,13 @@ class UnusedCSS_Queue
 
         $uucss_store = new UnusedCSS_Store(null, $url,null);
 
-        if(isset($result->data) && count($result->data) > 0){
+        if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
 
             $files = $uucss_store->cache_files($result->data);
             $uucss_store->add_link($files, $result);
             $uucss_store->uucss_cached();
 
-        }else{
+        }else if(isset($result->completed) && $result->completed){
 
             $uucss_store->add_link(null, $result);
         }
