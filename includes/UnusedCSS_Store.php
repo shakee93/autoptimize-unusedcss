@@ -74,10 +74,6 @@ class UnusedCSS_Store {
 
             UnusedCSS_DB::add_link($link_data, true);
 
-	        /*UnusedCSS_Settings::add_link( $this->url, null, "failed", [
-			    "error" => $this->extract_error( $result )
-		    ] );*/
-
             $this->log( [
                 'log' => 'fetched data stored status failed',
                 'url' => $this->url,

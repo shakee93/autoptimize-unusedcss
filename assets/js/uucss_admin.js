@@ -739,7 +739,6 @@
 
                 $content.find('ul').append('<li data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
                 $content.find('ul').append('<li data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
                 $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
 
@@ -771,10 +770,6 @@
                             break;
                         }case 'requeue_warnings':{
                             requeue('warnings');
-                            $.uucssAlert('links added to queue');
-                            break;
-                        }case 'requeue_processing':{
-                            requeue('processing');
                             $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_failed':{
