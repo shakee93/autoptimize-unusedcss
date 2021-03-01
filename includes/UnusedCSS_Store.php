@@ -54,7 +54,7 @@ class UnusedCSS_Store {
 
 	    $result = $uucss_api->post( 'purger',
 		    array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
-			    [ 'url' => $this->url ]
+			    [ 'url' => $this->url, 'service' => true ]
 		    ) );
 
 	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
