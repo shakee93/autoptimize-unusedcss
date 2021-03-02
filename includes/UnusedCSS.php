@@ -18,9 +18,6 @@ abstract class UnusedCSS {
 	public $options = [];
 	public $async = true;
 
-	/**
-	 * @var WP_Filesystem_Direct
-	 */
 	public $file_system;
 
 	public static $base_dir;
@@ -37,6 +34,8 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
+        $this->file_system = new UnusedCSS_FileSystem();
+
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
 
@@ -113,8 +112,6 @@ abstract class UnusedCSS {
 
 
 	public function initFileSystem() {
-
-		$this->file_system = new UnusedCSS_FileSystem();
 
 		if ( ! $this->file_system ) {
 			return false;
