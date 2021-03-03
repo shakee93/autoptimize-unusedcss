@@ -318,6 +318,10 @@ class UnusedCSS_Queue
 
     public function update_result($url, $job_id){
 
+        if(!$job_id){
+            return;
+        }
+
         $this->log( [
             'log' => 'fetching data for job ' . $job_id,
             'url' => $url,
