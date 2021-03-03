@@ -49,7 +49,7 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
                     'log' => 'wprocket post url page cache cleared',
                     'type' => 'purging'
                 ]);
-                rocket_clean_post( $post_id );
+                rocket_clean_files($url);
             }else{
                 self::log([
                     'url' => $url,
