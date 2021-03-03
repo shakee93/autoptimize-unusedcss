@@ -83,6 +83,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.13 - 03/03/2021 =
+ * improve: file path filtering on frontend
+ * fix: WP Rocket clear cache
+
 = 1.3.12 - 25/02/2021 =
  * feat: allow users to disable adding jobs to queue on user visits
  * feat: add support to WP Optimize plugin
