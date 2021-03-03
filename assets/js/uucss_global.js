@@ -1,10 +1,10 @@
 (function ($) {
 
-    $.uucssAlert = function(message, type = 'success', duration = 5000) {
+    $.uucssAlert = function(message, type = 'success', duration = 3000) {
         new Noty({
             text: message,
             layout: 'bottomCenter',
-            timeout: 3000,
+            timeout: duration,
             type : type,
             animation: {
                 open: null, //'animated bounceInLeft',
