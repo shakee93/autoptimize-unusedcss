@@ -993,7 +993,7 @@ input#uucss-pack-suggest {
 .uucss-history .spinner-history {
     position: absolute;
     top: 7px;
-    left: 107px;
+    left: 135px;
     transition: ease opacity .15s;
     opacity: 0;
     visibility: visible;
@@ -1253,4 +1253,15 @@ li.rapidload-status .content p {
 
 li.rapidload-status .content .status-action-wrap{
     margin-top: 10px;
+}
+
+.noty_layout .noty_bar{
+    border-radius: 5px;
+    background-color: #455a64!important;
+    color: #ffffff!important;
+    border-bottom: 1px solid #455a64 !important;
+}
+
+#noty_layout__bottomCenter{
+    z-index: 2147483649;
 }

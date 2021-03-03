@@ -29,7 +29,7 @@
 			<?php if ( $api_key_verified) : ?>
                 <li class="uucss-history">
                     <h2>
-                        Optimizations
+                        Optimization Jobs
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                             <span class="dashicons dashicons-plus"></span>Add
                         </span>

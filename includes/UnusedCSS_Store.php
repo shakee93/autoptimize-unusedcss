@@ -59,6 +59,12 @@ class UnusedCSS_Store {
 			    [ 'url' => $this->url ]
 		    ) );
 
+        $this->log( [
+            'log' => 'data fetched',
+            'url' => $this->url,
+            'type' => 'store'
+        ] );
+
 	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
 	        $link_data = array(
