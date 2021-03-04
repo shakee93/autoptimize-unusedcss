@@ -1265,3 +1265,31 @@ li.rapidload-status .content .status-action-wrap{
 #noty_layout__bottomCenter{
     z-index: 2147483649;
 }
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .content .info-details{
+    padding-left: 0;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.nav-faq{
+    position: absolute;
+    cursor: pointer;
+    top: 7px;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.next-faq{
+    right: 0;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.prev-faq{
+    right: 15px;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq h3{
+    margin: 0 0 6px 0;
+    color: #444;
+    font-size: 1.2em;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq{
+    border-left: solid 3px #674399;
+}

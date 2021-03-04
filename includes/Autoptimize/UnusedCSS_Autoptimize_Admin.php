@@ -172,6 +172,37 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         wp_send_json_success(true);
     }
 
+    public function get_faqs(){
+	    $faqs = [];
+
+	    $faqs[] = [
+            "title" => "Who can use Rapidload?",
+            "message" => "Anyone with a WordPress website can use Rapidload! It works on sites large and small, no matter the type. From a personal blog to an ecommerce store, Rapidload will accelerate loading times bringing a better user experience to all.",
+        ];
+
+        $faqs[] = [
+            "title" => "Do I need to have coding skills to use Rapidload?",
+            "message" => "Not at all! You only need to install it and activate it. Rapidload is the only CSS removal tool that continues to automatically optimize your site while you sleep.",
+        ];
+
+        $faqs[] = [
+            "title" => "Do you offer a trial?",
+            "message" => "We don’t offer a trial version, but we do have a 14 day refund policy, so you can buy with confidence.",
+        ];
+
+        $faqs[] = [
+            "title" => "Can I use Rapidload on client sites?",
+            "message" => "Yes, you can use Rapidload on your client sites. You get to pick and choose which sites your license is applied to.",
+        ];
+
+        $faqs[] = [
+            "title" => "Do you offer support if I need it?",
+            "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
+        ];
+
+	    return $faqs;
+    }
+
 	public function getNotifications() {
 		$notifications = [];
 
@@ -226,7 +257,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
 			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified(),
-            'notifications' => $this->getNotifications()
+            'notifications' => $this->getNotifications(),
+            'faqs' => $this->get_faqs()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );

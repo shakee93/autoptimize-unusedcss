@@ -11,6 +11,47 @@
         container.prepend('<li class="uucss-notification uucss-notification-'+ type +' uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
 
+    function showFaqs() {
+
+        if (window.uucss && window.uucss.faqs.length) {
+
+            var container = $('#uucss-wrapper')
+            var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
+
+            content.prepend('<h3>FAQ - RapidLoad</h3>');
+            content.find('h4').text(window.uucss.faqs[0].title);
+            content.find('h4').attr('data-index',0);
+            content.find('.info-icon').remove();
+            content.find('p').remove();
+            content.find('.info-details').append('<p class="divider"></p>').append('<p class="answer">' + window.uucss.faqs[0].message + '</p>');
+
+            container.prepend('<li class="uucss-notification uucss-notification-faq uucss-info-wrapper"><span class="dashicons dashicons-arrow-left-alt2 prev-faq nav-faq"></span><span class="dashicons dashicons-arrow-right-alt2 next-faq nav-faq"></span><div class="content">'+ content.html() +'</div></li>').parent().show()
+
+            container.find('.uucss-notification-faq .dashicons.nav-faq').click(function () {
+                var $this = $(this)
+                var $heading = $this.parent().find('h4')
+                var $answer = $this.parent().find('p.answer')
+                var faq_index = $heading.data('index');
+                if($this.hasClass('prev-faq')){
+                    if(faq_index === 0){
+                        faq_index = window.uucss.faqs.length;
+                    }
+                    $heading.text(window.uucss.faqs[faq_index-1].title);
+                    $answer.text(window.uucss.faqs[faq_index-1].message);
+                    $heading.data('index',faq_index-1);
+                }else{
+                    if(faq_index === window.uucss.faqs.length - 1){
+                        faq_index = -1;
+                    }
+                    $heading.text(window.uucss.faqs[faq_index+1].title);
+                    $answer.text(window.uucss.faqs[faq_index+1].message);
+                    $heading.data('index',faq_index+1);
+                }
+            })
+        }
+
+    }
+
 
     function hideNotification() {
         var container = $('.uucss-notification');
@@ -1036,6 +1077,7 @@
 
         })
 
+        showFaqs();
     });
 
 
