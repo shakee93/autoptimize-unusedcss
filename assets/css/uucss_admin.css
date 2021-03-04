@@ -1273,15 +1273,16 @@ li.rapidload-status .content .status-action-wrap{
 #uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.nav-faq{
     position: absolute;
     cursor: pointer;
-    top: 7px;
+    top: 8px;
+    font-size: 1.3em;
 }
 
 #uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.next-faq{
-    right: 0;
+    right: 3px;
 }
 
 #uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.prev-faq{
-    right: 15px;
+    right: 20px;
 }
 
 #uucss-wrapper .uucss-notification.uucss-notification-faq h3{

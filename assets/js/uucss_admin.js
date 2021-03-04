@@ -18,7 +18,7 @@
             var container = $('#uucss-wrapper')
             var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
-            content.prepend('<h3>FAQ - RapidLoad</h3>');
+            content.prepend('<h3>Frequently Asked Questions</h3>');
             content.find('h4').text(window.uucss.faqs[0].title);
             content.find('h4').attr('data-index',0);
             content.find('.info-icon').remove();
