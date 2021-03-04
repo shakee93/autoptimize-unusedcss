@@ -1264,6 +1264,8 @@ li.rapidload-status .content .status-action-wrap{
 
 #noty_layout__bottomCenter{
     z-index: 2147483649;
+    width: auto;
+    text-align: center;
 }
 
 #uucss-wrapper .uucss-notification.uucss-notification-faq .content .info-details{
