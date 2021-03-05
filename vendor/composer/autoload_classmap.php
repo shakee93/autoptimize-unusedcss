@@ -26,6 +26,7 @@ return array(
     'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
+    'WP_Fastest_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
     'WP_Optimize_Compatible' => $baseDir . '/includes/third-party/plugins/wp-optimize/WP_Optimize_Compatible.php',
     'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
     'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
