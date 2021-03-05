@@ -173,34 +173,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
     public function get_faqs(){
-	    $faqs = [];
 
-	    $faqs[] = [
-            "title" => "Who can use Rapidload?",
-            "message" => "Anyone with a WordPress website can use Rapidload! It works on sites large and small, no matter the type. From a personal blog to an ecommerce store, Rapidload will accelerate loading times bringing a better user experience to all.",
-        ];
+        $api = new UnusedCSS_Api();
 
-        $faqs[] = [
-            "title" => "Do I need to have coding skills to use Rapidload?",
-            "message" => "Not at all! You only need to install it and activate it. Rapidload is the only CSS removal tool that continues to automatically optimize your site while you sleep.",
-        ];
+        $result = $api->get('faqs');
 
-        $faqs[] = [
-            "title" => "Do you offer a trial?",
-            "message" => "We don’t offer a trial version, but we do have a 14 day refund policy, so you can buy with confidence.",
-        ];
+        self::uucss_log($result);
 
-        $faqs[] = [
-            "title" => "Can I use Rapidload on client sites?",
-            "message" => "Yes, you can use Rapidload on your client sites. You get to pick and choose which sites your license is applied to.",
-        ];
-
-        $faqs[] = [
-            "title" => "Do you offer support if I need it?",
-            "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
-        ];
-
-	    return $faqs;
+        return !$api->is_error($result) && isset($result->data) ? $result->data : [];
     }
 
 	public function getNotifications() {
