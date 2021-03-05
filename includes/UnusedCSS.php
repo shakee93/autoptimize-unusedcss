@@ -513,8 +513,9 @@ abstract class UnusedCSS {
 			$cdn = content_url();
 		} else {
 
-			// see if we can do this dynamically
-			$cdn = rtrim( $cdn, '/' ) . '/wp-content';
+            $url_parts = parse_url( content_url() );
+
+			$cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
 
 		}
 
