@@ -44,7 +44,7 @@
                         faq_index = -1;
                     }
                     $heading.text(window.uucss.faqs[faq_index+1].title);
-                    $answer.text(window.uucss.faqs[faq_index+1].message);
+                    $answer.html(window.uucss.faqs[faq_index+1].message);
                     $heading.data('index',faq_index+1);
                 }
             })
