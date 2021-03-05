@@ -35,7 +35,7 @@ class WP_Fastest_Cache_Compatible extends RapidLoad_ThirdParty{
 
                 self::log([
                     'url' => $url,
-                    'log' => 'Cloudflare url page cache cleared',
+                    'log' => 'WP Fastest Cache post cache cleared',
                     'type' => 'purging'
                 ]);
                 $wpfc = new WpFastestCache();
