@@ -178,8 +178,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $result = $api->get('faqs');
 
-        self::uucss_log($result);
-
         return !$api->is_error($result) && isset($result->data) ? $result->data : [];
     }
 
