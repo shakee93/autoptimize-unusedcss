@@ -357,6 +357,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    if($is_ao_css){
 
+                            self::log([
+                                'log' => 'ao handled',
+                                'url' => $link,
+                                'type' => 'injection'
+                            ]);
+
 					        array_push($inject->ao_optimized_css, $link);
 
                         }
