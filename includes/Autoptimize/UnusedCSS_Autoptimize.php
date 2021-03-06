@@ -484,7 +484,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	public function ao_handled($link){
         $ao_base = $this->uucss_ao_base;
         return array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
-            return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
+            return $this->str_contains( $ao_base->url_replace_cdn($item), preg_replace('/\?.*/', '', $link) );
         } );
     }
 
