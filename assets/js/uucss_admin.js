@@ -18,6 +18,10 @@
             var container = $('#uucss-wrapper')
             var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
+            if(!content.length){
+                return;
+            }
+
             content.prepend('<h3>Frequently Asked Questions<a id="uucss-faq-read" href="#">close</a></h3>');
             content.find('h4').text(window.uucss.faqs[0].title);
             content.find('h4').attr('data-index',0);
