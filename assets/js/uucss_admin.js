@@ -18,7 +18,7 @@
             var container = $('#uucss-wrapper')
             var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
-            content.prepend('<h3>Frequently Asked Questions</h3>');
+            content.prepend('<h3>Frequently Asked Questions<a id="uucss-faq-read" href="#">close</a></h3>');
             content.find('h4').text(window.uucss.faqs[0].title);
             content.find('h4').attr('data-index',0);
             content.find('.info-icon').remove();
@@ -37,7 +37,7 @@
                         faq_index = window.uucss.faqs.length;
                     }
                     $heading.text(window.uucss.faqs[faq_index-1].title);
-                    $answer.text(window.uucss.faqs[faq_index-1].message);
+                    $answer.html(window.uucss.faqs[faq_index-1].message);
                     $heading.data('index',faq_index-1);
                 }else{
                     if(faq_index === window.uucss.faqs.length - 1){
@@ -47,6 +47,15 @@
                     $answer.html(window.uucss.faqs[faq_index+1].message);
                     $heading.data('index',faq_index+1);
                 }
+            })
+
+            container.find('#uucss-faq-read').click(function (e) {
+                e.preventDefault();
+                wp.ajax.post('mark_faqs_read',{}).then(function (i) {
+                    container.find('.uucss-notification.uucss-notification-faq').remove();
+                }).fail(function (i) {
+
+                });
             })
         }
 

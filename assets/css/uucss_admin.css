@@ -1296,3 +1296,10 @@ li.rapidload-status .content .status-action-wrap{
 #uucss-wrapper .uucss-notification.uucss-notification-faq{
     border-left: solid 3px #674399;
 }
+
+#uucss-wrapper #uucss-faq-read{
+    margin-left: 5px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 12px;
+}

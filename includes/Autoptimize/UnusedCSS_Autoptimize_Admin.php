@@ -59,6 +59,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
+            add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -90,6 +91,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    parent::__construct( $ao_uucss );
 
+    }
+
+    function mark_faqs_read(){
+
+	    $options = self::fetch_options();
+	    $options['faqs_read'] = true;
+        self::update_site_option('autoptimize_uucss_settings', $options);
+        wp_send_json_success(true);
     }
 
     function clear_page_cache(){
@@ -173,6 +182,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
     public function get_faqs(){
+
+        $options = self::fetch_options();
+
+        if(isset($options['faqs_read'])){
+            return [];
+        }
 
         $api = new UnusedCSS_Api();
 
