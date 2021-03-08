@@ -521,7 +521,7 @@ abstract class UnusedCSS {
 
 		return implode( '/', [
 			$cdn,
-			$this->base,
+            trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . $this->base,
 			$file_url
 		] );
 	}
@@ -545,7 +545,7 @@ abstract class UnusedCSS {
 		    return;
 	    }
 
-	    $delete = trailingslashit(WP_CONTENT_DIR) . $this->base;
+	    $delete = self::$base_dir;
 
 	    if ( ! $this->file_system->exists( $delete ) ) {
 		    return;
