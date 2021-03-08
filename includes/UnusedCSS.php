@@ -9,7 +9,7 @@ abstract class UnusedCSS {
 
 	use UnusedCSS_Utils;
 
-	public $base = 'uucss';
+	public $base = null;
 	public $provider = null;
 
 	public $url = null;
@@ -35,6 +35,8 @@ abstract class UnusedCSS {
     public function __construct()
     {
         $this->file_system = new UnusedCSS_FileSystem();
+
+        $this->base = trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
@@ -409,7 +411,7 @@ abstract class UnusedCSS {
 
 	public function init_base_dir() {
 
-		self::$base_dir = WP_CONTENT_DIR . trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . $this->base;
+		self::$base_dir = WP_CONTENT_DIR . $this->base;
 
 		if ( $this->file_system->exists( self::$base_dir ) ) {
 			return true;
@@ -518,7 +520,7 @@ abstract class UnusedCSS {
 
 		return implode( '/', [
 			$cdn,
-            trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . $this->base,
+            trim($this->base, "/"),
 			$file_url
 		] );
 	}
