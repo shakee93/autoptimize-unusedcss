@@ -221,11 +221,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function get_public_notices(){
 
-        $api = new UnusedCSS_Api();
+	    return [];
+        /*$api = new UnusedCSS_Api();
 
         $result = $api->get('notification');
 
-        return !$api->is_error($result) && isset($result->data) ? $result->data : [];
+        return !$api->is_error($result) && isset($result->data) ? $result->data : [];*/
     }
 
 	public function getNotifications() {
