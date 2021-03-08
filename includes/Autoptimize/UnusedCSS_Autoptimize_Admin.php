@@ -248,6 +248,15 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
     }
 
+    public function get_public_notices(){
+
+        $api = new UnusedCSS_Api();
+
+        $result = $api->get('notification');
+
+        return !$api->is_error($result) && isset($result->data) ? $result->data : [];
+    }
+
 	public function getNotifications() {
 		$notifications = [];
 
@@ -303,7 +312,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
 			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified(),
             'notifications' => $this->getNotifications(),
-            'faqs' => $this->get_faqs()
+            'faqs' => $this->get_faqs(),
+            'public_notices' => $this->get_public_notices()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );

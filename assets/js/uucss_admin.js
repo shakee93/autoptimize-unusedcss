@@ -4,6 +4,10 @@
         var container = $('#uucss-wrapper')
         var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
+        if(!content.length){
+            return;
+        }
+
         content.find('h4').text(heading);
         content.find('p').remove();
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
@@ -65,6 +69,13 @@
 
     }
 
+    function showPublicNotices() {
+        if (window.uucss && window.uucss.public_notices.length) {
+            window.uucss.public_notices.forEach(function(value){
+                showNotification(value.title, value.message, value.type);
+            })
+        }
+    }
 
     function hideNotification() {
         var container = $('.uucss-notification');
@@ -1090,6 +1101,7 @@
 
         })
 
+        showPublicNotices();
         showFaqs();
     });
 
