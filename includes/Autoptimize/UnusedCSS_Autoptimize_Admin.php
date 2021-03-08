@@ -193,56 +193,27 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $result = $api->get('faqs');
 
-        $default = [];
-
-        $default[] = [
-            "title" => "My Site is broken after using RapidLoad. What can i do?",
-            "message" => "There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on “Load Original CSS files” and add safelist rules. if you are not sure how to add safelist rules create a support ticket in <a href='https://rapidload.zendesk.com/hc/en-us' target='_blank'>https://rapidload.zendesk.com/hc/en-us</a> one of our support member will help you out .",
-        ];
-
-        $default[] = [
-            "title" => "Still seeing remove unused css flag in Google page speed insights?",
-            "message" => "Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.",
-        ];
-
-        $default[] = [
-            "title" => "Will this plugin work with other caching plugins?",
-            "message" => "RapidLoad works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with RapidLoad, please submit your issue and caching plugin name to our support team and we will review.",
-        ];
-
-        $default[] = [
-            "title" => "How is this plugin different from CriticalCSS?",
-            "message" => "RapidLoad looks for CSS that is not being applied at all and stops it from being loaded. CriticalCSS looks for CSS that needs to be applied when the page begins loading and reorders it based on priority.",
-        ];
-
-        $default[] = [
-            "title" => "How do exclusions work?",
-            "message" => "RapidLoad accepts both broad and star(*) expressions and regular expression exclusions of CSS selectors. You can add your exclusions in the unused CSS tab of the Autoptimize plugin settings.",
-        ];
-
-        $default[] = [
-            "title" => "Will this plugin work with Woocommerce?",
-            "message" => "Absolutely. RapidLoad works with Woocommerce, Woocommerce themes, and Woocommerce plugins.",
-        ];
-
-        $default[] = [
-            "title" => "Do I need to run this every time I make a change?",
-            "message" => "No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!",
-        ];
-
-        $default[] = [
-            "title" => "How does this plugin speed up my site?",
-            "message" => "RapidLoad analyzes the content of your WordPress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!",
-        ];
-
-        $default[] = [
-            "title" => "Do you offer support if I need it?",
-            "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
-        ];
-
-        $default[] = [
-            "title" => "Can I use Rapidload on client sites?",
-            "message" => "Yes, you can use Rapidload on your client sites. You get to pick and choose which sites your license is applied to.",
+        $default = [
+	        [
+		        "title" => "My Site is broken after using RapidLoad. What can i do?",
+		        "message" => "There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on “Load Original CSS files” and add safelist rules. if you are not sure how to add safelist rules create a support ticket in <a href='https://rapidload.zendesk.com/hc/en-us' target='_blank'>https://rapidload.zendesk.com/hc/en-us</a> one of our support member will help you out .",
+	        ],
+	        [
+		        "title" => "Still seeing remove unused css flag in Google page speed insights?",
+		        "message" => "Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.",
+	        ],
+	        [
+		        "title" => "Will this plugin work with other caching plugins?",
+		        "message" => "RapidLoad works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with RapidLoad, please submit your issue and caching plugin name to our support team and we will review.",
+	        ],
+	        [
+		        "title" => "Do I need to run this every time I make a change?",
+		        "message" => "No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!",
+	        ],
+	        [
+		        "title" => "Do you offer support if I need it?",
+		        "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
+	        ]
         ];
 
         return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
