@@ -83,7 +83,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.3.14 - 03/03/2021 =
+= 1.3.15 - 03/03/2021 =
  * feat: add support to WP Fastest Cache plugin
  * feat: add support to Cookie Notice plugin
  * feat: add support to AUTOPTIMIZE_CACHE_CHILD_DIR constant
