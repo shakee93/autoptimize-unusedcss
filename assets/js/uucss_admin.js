@@ -925,7 +925,7 @@
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh || $('.tippy-content').length){
+            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length){
                 return;
             }
 
