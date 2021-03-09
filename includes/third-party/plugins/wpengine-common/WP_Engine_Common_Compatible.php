@@ -6,9 +6,10 @@ class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
-        $this->plugin = 'wpengine-common/dify-widget.php';
+        $this->plugin = 'mu-plugin.php';
         $this->catgeory = 'cache';
         $this->name = 'wpengine-common';
+        $this->is_mu_plugin = true;
 
         parent::__construct();
     }

@@ -9,6 +9,7 @@ abstract class RapidLoad_ThirdParty
     public $plugin = null;
     public $catgeory = null;
     public $name = null;
+    public $is_mu_plugin = false;
 
     public function __construct(){
 
@@ -22,7 +23,7 @@ abstract class RapidLoad_ThirdParty
 
     public function is_exists(){
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-        if(function_exists('is_plugin_active') && is_plugin_active($this->plugin)){
+        if(function_exists('is_plugin_active') && is_plugin_active($this->plugin) || $this->is_mu_plugin){
             return true;
         }
         return false;
