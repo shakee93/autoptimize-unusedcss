@@ -449,6 +449,9 @@
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
+                            <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
+                        </p>
+                        <p>
                             <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
