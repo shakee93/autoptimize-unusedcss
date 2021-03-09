@@ -400,14 +400,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>
-                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
-                                </th>
-                                <td>
-                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
-                                </td>
-                            </tr>
-                            <tr>
                                 <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_disable_add_to_queue"><input id='uucss_disable_add_to_queue' type='checkbox'
