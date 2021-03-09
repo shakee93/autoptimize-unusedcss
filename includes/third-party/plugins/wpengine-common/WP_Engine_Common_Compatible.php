@@ -9,9 +9,13 @@ class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
         $this->plugin = 'mu-plugin.php';
         $this->catgeory = 'cache';
         $this->name = 'wpengine-common';
-        $this->is_mu_plugin = true;
+        $this->is_mu_plugin = $this->is_mu_plugin();
 
         parent::__construct();
+    }
+
+    public function is_mu_plugin(){
+        return class_exists('WpeCommon');
     }
 
     public function init_hooks()
