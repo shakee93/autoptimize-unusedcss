@@ -681,7 +681,7 @@
                                             $content.append('<div class="devider"></div>');
                                             $content.append('<div class="description"></div>');
 
-                                            if(response.success && response.data && response.data.injected && response.data.injectedCSS > 0){
+                                            if((response.success && response.data && response.data.injected || response.success && response.data && response.data.success) && response.data.injectedCSS > 0){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
