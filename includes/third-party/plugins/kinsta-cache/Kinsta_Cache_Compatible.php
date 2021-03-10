@@ -35,8 +35,7 @@ class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
 
             if($url){
 
-                $cache_purge = 'Cache_Purge';
-                $cp = new $cache_purge();
+                $cp = new Cache_Purge();
                 $cp->purge_complete_caches();
 
             }
