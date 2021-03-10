@@ -1303,3 +1303,16 @@ li.rapidload-status .content .status-action-wrap{
     text-decoration: none;
     font-size: 12px;
 }
+
+.featherlight.uucss-job-details .featherlight-content{
+    padding: 30px 15px 15px;
+}
+
+.featherlight.uucss-job-details .featherlight-inner{
+    height: 100%;
+}
+
+.featherlight.uucss-job-details .featherlight-inner .code{
+    height: 100%;
+    overflow-y: scroll;
+}

@@ -455,7 +455,7 @@
                                     '       </div>' +
                                     $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
-                                    '   <p class="val">Created at ' +
+                                    '   <p class="val uucss-show-job-details">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
                                     '   </p>' +
                                     '   <p class="attempts">' +
@@ -505,6 +505,11 @@
                             },
                             onShown: function (instance) {
                                 $(instance.popper).find('.progress-bar.w-100').removeClass('w-100')
+                                console.log(rowData);
+                                $('.uucss-show-job-details')
+                                    .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(rowData, undefined, 2) +'</code></pre></div></div>',{
+                                        variant : 'uucss-job-details'
+                                    })
                             },
                             onHide: function (instance) {
                                 innerTippy.hide()
