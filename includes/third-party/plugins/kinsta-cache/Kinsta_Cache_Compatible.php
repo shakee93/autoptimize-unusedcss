@@ -2,19 +2,19 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
+class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
-        $this->plugin = 'mu-plugin.php';
+        $this->plugin = 'kinsta-mu-plugins.php';
         $this->catgeory = 'cache';
-        $this->name = 'wpengine-common';
+        $this->name = 'kinsta-cache';
 
         parent::__construct();
     }
 
     public function is_mu_plugin(){
-        return class_exists('WpeCommon');
+        return class_exists('Cache_Purge');
     }
 
     public function init_hooks()
@@ -25,7 +25,7 @@ class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
 
     public function handle($args)
     {
-        if(class_exists('WpeCommon')){
+        if(class_exists('Cache_Purge')){
 
             $url = null;
 
@@ -35,9 +35,9 @@ class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
 
             if($url){
 
-                WpeCommon::purge_memcached();
-                WpeCommon::clear_maxcdn_cache();
-                WpeCommon::purge_varnish_cache();
+                $cache_purge = 'Cache_Purge';
+                $cp = new $cache_purge();
+                $cp->purge_complete_caches();
 
             }
 

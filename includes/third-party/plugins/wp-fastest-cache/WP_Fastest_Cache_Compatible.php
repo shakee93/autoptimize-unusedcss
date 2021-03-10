@@ -45,4 +45,9 @@ class WP_Fastest_Cache_Compatible extends RapidLoad_ThirdParty{
 
         }
     }
+
+    public function is_mu_plugin()
+    {
+        return false;
+    }
 }
