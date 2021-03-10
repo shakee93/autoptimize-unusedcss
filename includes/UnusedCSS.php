@@ -308,7 +308,11 @@ abstract class UnusedCSS {
 
 	    if ( isset( $args['immediate'] ) ) {
 
-	    	UnusedCSS_DB::update_status('processing', $url);
+	    	UnusedCSS_DB::update_meta([
+	    	    'status' => 'processing',
+                'job_id' => null
+            ],$url);
+
 		    wp_schedule_single_event( time(), 'uucss_async_queue', [
 			    'provider' => $this->provider,
 			    'url'      => $url,
