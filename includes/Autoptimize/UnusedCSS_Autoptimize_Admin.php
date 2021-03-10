@@ -59,6 +59,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
+            add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
 
 			add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
@@ -90,6 +91,14 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    parent::__construct( $ao_uucss );
 
+    }
+
+    function mark_faqs_read(){
+
+	    $options = self::fetch_options();
+	    $options['faqs_read'] = true;
+        self::update_site_option('autoptimize_uucss_settings', $options);
+        wp_send_json_success(true);
     }
 
     function clear_page_cache(){
@@ -172,6 +181,54 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         wp_send_json_success(true);
     }
 
+    public function get_faqs(){
+
+        $options = self::fetch_options();
+
+        if(isset($options['faqs_read'])){
+            return [];
+        }
+
+        $api = new UnusedCSS_Api();
+
+        $result = $api->get('faqs');
+
+        $default = [
+	        [
+		        "title" => "My Site is broken after using RapidLoad. What can i do?",
+		        "message" => "There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on “Load Original CSS files” and add safelist rules. if you are not sure how to add safelist rules create a support ticket in <a href='https://rapidload.zendesk.com/hc/en-us' target='_blank'>https://rapidload.zendesk.com/hc/en-us</a> one of our support member will help you out .",
+	        ],
+	        [
+		        "title" => "Still seeing remove unused css flag in Google page speed insights?",
+		        "message" => "Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.",
+	        ],
+	        [
+		        "title" => "Will this plugin work with other caching plugins?",
+		        "message" => "RapidLoad works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with RapidLoad, please submit your issue and caching plugin name to our support team and we will review.",
+	        ],
+	        [
+		        "title" => "Do I need to run this every time I make a change?",
+		        "message" => "No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!",
+	        ],
+	        [
+		        "title" => "Do you offer support if I need it?",
+		        "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
+	        ]
+        ];
+
+        return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
+    }
+
+    public function get_public_notices(){
+
+	    return [];
+        /*$api = new UnusedCSS_Api();
+
+        $result = $api->get('notification');
+
+        return !$api->is_error($result) && isset($result->data) ? $result->data : [];*/
+    }
+
 	public function getNotifications() {
 		$notifications = [];
 
@@ -226,7 +283,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 			'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
 			'api_key_verified' => UnusedCSS_Autoptimize_Admin::is_api_key_verified(),
-            'notifications' => $this->getNotifications()
+            'notifications' => $this->getNotifications(),
+            'faqs' => $this->get_faqs(),
+            'public_notices' => $this->get_public_notices()
 		);
 
 		wp_localize_script( 'uucss_admin', 'uucss', $data );

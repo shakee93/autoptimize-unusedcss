@@ -357,6 +357,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 					    if($is_ao_css){
 
+                            self::log([
+                                'log' => 'ao handled',
+                                'url' => $link,
+                                'type' => 'injection'
+                            ]);
+
 					        array_push($inject->ao_optimized_css, $link);
 
                         }
@@ -426,11 +432,12 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
                     'type' => 'injection'
                 ]);
 
-            }else if(!$inject->successfully_injected && ($data['attempts'] <= 2 || ($time_diff > 86400 && $data['attempts'] <= 4))){
+            }else if(!$inject->successfully_injected && ($data['attempts'] <= 2 || ($time_diff > 86400))){
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'queued',
-                    'attempts' => $data['attempts'] + 1
+                    'attempts' => $data['attempts'] + 1,
+                    'created_at' => date( "Y-m-d H:m:s", time() )
                 ], $data['url']);
 
                 self::log([
@@ -477,7 +484,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	public function ao_handled($link){
         $ao_base = $this->uucss_ao_base;
         return array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {
-            return $this->str_contains( $ao_base->url_replace_cdn($item), $link );
+            return $this->str_contains( $ao_base->url_replace_cdn($item), preg_replace('/\?.*/', '', $link) );
         } );
     }
 

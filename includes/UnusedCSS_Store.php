@@ -57,6 +57,12 @@ class UnusedCSS_Store {
 			    [ 'url' => $this->url, 'service' => true ]
 		    ) );
 
+        $this->log( [
+            'log' => 'data fetched',
+            'url' => $this->url,
+            'type' => 'store'
+        ] );
+
 	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
 	        UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));

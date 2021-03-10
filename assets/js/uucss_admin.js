@@ -4,6 +4,10 @@
         var container = $('#uucss-wrapper')
         var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
+        if(!content.length){
+            return;
+        }
+
         content.find('h4').text(heading);
         content.find('p').remove();
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
@@ -11,6 +15,67 @@
         container.prepend('<li class="uucss-notification uucss-notification-'+ type +' uucss-info-wrapper"><div class="content">'+ content.html() +'</div></li>').parent().show()
     }
 
+    function showFaqs() {
+
+        if (window.uucss && window.uucss.faqs.length) {
+
+            var container = $('#uucss-wrapper')
+            var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
+
+            if(!content.length){
+                return;
+            }
+
+            content.prepend('<h3>Frequently Asked Questions<a id="uucss-faq-read" href="#">close</a></h3>');
+            content.find('h4').text(window.uucss.faqs[0].title);
+            content.find('h4').attr('data-index',0);
+            content.find('.info-icon').remove();
+            content.find('p').remove();
+            content.find('.info-details').append('<p class="divider"></p>').append('<p class="answer">' + window.uucss.faqs[0].message + '</p>');
+
+            container.prepend('<li class="uucss-notification uucss-notification-faq uucss-info-wrapper"><span class="dashicons dashicons-arrow-left-alt2 prev-faq nav-faq"></span><span class="dashicons dashicons-arrow-right-alt2 next-faq nav-faq"></span><div class="content">'+ content.html() +'</div></li>').parent().show()
+
+            container.find('.uucss-notification-faq .dashicons.nav-faq').click(function () {
+                var $this = $(this)
+                var $heading = $this.parent().find('h4')
+                var $answer = $this.parent().find('p.answer')
+                var faq_index = $heading.data('index');
+                if($this.hasClass('prev-faq')){
+                    if(faq_index === 0){
+                        faq_index = window.uucss.faqs.length;
+                    }
+                    $heading.text(window.uucss.faqs[faq_index-1].title);
+                    $answer.html(window.uucss.faqs[faq_index-1].message);
+                    $heading.data('index',faq_index-1);
+                }else{
+                    if(faq_index === window.uucss.faqs.length - 1){
+                        faq_index = -1;
+                    }
+                    $heading.text(window.uucss.faqs[faq_index+1].title);
+                    $answer.html(window.uucss.faqs[faq_index+1].message);
+                    $heading.data('index',faq_index+1);
+                }
+            })
+
+            container.find('#uucss-faq-read').click(function (e) {
+                e.preventDefault();
+                wp.ajax.post('mark_faqs_read',{}).then(function (i) {
+                    container.find('.uucss-notification.uucss-notification-faq').remove();
+                }).fail(function (i) {
+
+                });
+            })
+        }
+
+    }
+
+    function showPublicNotices() {
+        if (window.uucss && window.uucss.public_notices.length) {
+            window.uucss.public_notices.forEach(function(value){
+                showNotification(value.title, value.message, value.type);
+            })
+        }
+    }
 
     function hideNotification() {
         var container = $('.uucss-notification');
@@ -390,7 +455,7 @@
                                     '       </div>' +
                                     $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
-                                    '   <p class="val">Created at ' +
+                                    '   <p class="val uucss-show-job-details">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
                                     '   </p>' +
                                     '   <p class="attempts">' +
@@ -440,6 +505,11 @@
                             },
                             onShown: function (instance) {
                                 $(instance.popper).find('.progress-bar.w-100').removeClass('w-100')
+                                console.log(rowData);
+                                $('.uucss-show-job-details')
+                                    .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(rowData, undefined, 2) +'</code></pre></div></div>',{
+                                        variant : 'uucss-job-details'
+                                    })
                             },
                             onHide: function (instance) {
                                 innerTippy.hide()
@@ -616,7 +686,7 @@
                                             $content.append('<div class="devider"></div>');
                                             $content.append('<div class="description"></div>');
 
-                                            if(response.success && response.data && response.data.injected && response.data.injectedCSS > 0){
+                                            if(response.success && response.data && ( response.data.injected || response.data.success) && response.data.injectedCSS > 0){
 
                                                 $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
@@ -855,7 +925,7 @@
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh){
+            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length){
                 return;
             }
 
@@ -1031,6 +1101,8 @@
 
         })
 
+        showPublicNotices();
+        showFaqs();
     });
 
 

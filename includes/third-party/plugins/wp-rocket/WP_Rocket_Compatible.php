@@ -41,19 +41,10 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
                 $url = $this->transform_url( $args['url'] );
             }
 
-            $post_id = url_to_postid( $url );
-
-            if ( $post_id ) {
+            if ( $url ) {
                 self::log([
                     'url' => $url,
                     'log' => 'wprocket post url page cache cleared',
-                    'type' => 'purging'
-                ]);
-                rocket_clean_post( $post_id );
-            }else{
-                self::log([
-                    'url' => $url,
-                    'log' => 'wprocket url page cache cleared',
                     'type' => 'purging'
                 ]);
                 rocket_clean_files($url);
@@ -61,6 +52,11 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
 
         }
 
+    }
+
+    public function is_mu_plugin()
+    {
+        return false;
     }
 }
 

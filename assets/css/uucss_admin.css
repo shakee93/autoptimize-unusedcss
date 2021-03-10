@@ -993,7 +993,7 @@ input#uucss-pack-suggest {
 .uucss-history .spinner-history {
     position: absolute;
     top: 7px;
-    left: 107px;
+    left: 135px;
     transition: ease opacity .15s;
     opacity: 0;
     visibility: visible;
@@ -1253,4 +1253,66 @@ li.rapidload-status .content p {
 
 li.rapidload-status .content .status-action-wrap{
     margin-top: 10px;
+}
+
+.noty_layout .noty_bar{
+    border-radius: 5px;
+    background-color: #455a64!important;
+    color: #ffffff!important;
+    border-bottom: 1px solid #455a64 !important;
+}
+
+#noty_layout__bottomCenter{
+    z-index: 2147483649;
+    width: auto;
+    text-align: center;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .content .info-details{
+    padding-left: 0;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.nav-faq{
+    position: absolute;
+    cursor: pointer;
+    top: 8px;
+    font-size: 1.3em;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.next-faq{
+    right: 3px;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq .dashicons.prev-faq{
+    right: 20px;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq h3{
+    margin: 0 0 6px 0;
+    color: #444;
+    font-size: 1.2em;
+}
+
+#uucss-wrapper .uucss-notification.uucss-notification-faq{
+    border-left: solid 3px #674399;
+}
+
+#uucss-wrapper #uucss-faq-read{
+    margin-left: 5px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.featherlight.uucss-job-details .featherlight-content{
+    padding: 30px 15px 15px;
+}
+
+.featherlight.uucss-job-details .featherlight-inner{
+    height: 100%;
+}
+
+.featherlight.uucss-job-details .featherlight-inner .code{
+    height: 100%;
+    overflow-y: scroll;
 }

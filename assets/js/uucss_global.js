@@ -1,18 +1,17 @@
 (function ($) {
 
-    $.uucssAlert = function(message, type = 'success', duration = 5000) {
-        /*new Noty({
+    $.uucssAlert = function(message, type = 'success', duration = 3000) {
+        new Noty({
             text: message,
-            theme: 'mint',
-            layout: 'topCenter',
-            timeout: 3000,
+            layout: 'bottomCenter',
+            timeout: duration,
             type : type,
             animation: {
-                open: null,
-                close: null
+                open: null, //'animated bounceInLeft',
+                close: null, //'animated bounceOutRight'
             }
-        }).show();*/
-        alert(message);
+        }).show();
+        //alert(message);
     }
 
     $.uucss_log = function (log) {

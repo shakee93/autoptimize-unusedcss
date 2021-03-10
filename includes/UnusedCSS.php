@@ -9,7 +9,7 @@ abstract class UnusedCSS {
 
 	use UnusedCSS_Utils;
 
-	public $base = 'cache/autoptimize/uucss';
+	public $base = null;
 	public $provider = null;
 
 	public $url = null;
@@ -35,6 +35,8 @@ abstract class UnusedCSS {
     public function __construct()
     {
         $this->file_system = new UnusedCSS_FileSystem();
+
+        $this->base = trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
@@ -77,6 +79,7 @@ abstract class UnusedCSS {
 			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
 			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
 			wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
+			wp_enqueue_style( 'noty-animate', UUCSS_PLUGIN_URL . 'assets/libs/noty/animate.css' );
 			wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
 			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
             wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
@@ -409,7 +412,7 @@ abstract class UnusedCSS {
 
 	public function init_base_dir() {
 
-		self::$base_dir = trailingslashit(WP_CONTENT_DIR) . $this->base;
+		self::$base_dir = WP_CONTENT_DIR . $this->base;
 
 		if ( $this->file_system->exists( self::$base_dir ) ) {
 			return true;
@@ -510,14 +513,15 @@ abstract class UnusedCSS {
 			$cdn = content_url();
 		} else {
 
-			// see if we can do this dynamically
-			$cdn = rtrim( $cdn, '/' ) . '/wp-content';
+            $url_parts = parse_url( content_url() );
+
+			$cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
 
 		}
 
 		return implode( '/', [
 			$cdn,
-			$this->base,
+            trim($this->base, "/"),
 			$file_url
 		] );
 	}
@@ -541,7 +545,7 @@ abstract class UnusedCSS {
 		    return;
 	    }
 
-	    $delete = trailingslashit(WP_CONTENT_DIR) . $this->base;
+	    $delete = self::$base_dir;
 
 	    if ( ! $this->file_system->exists( $delete ) ) {
 		    return;

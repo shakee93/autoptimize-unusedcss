@@ -2,13 +2,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Cloudflare_Compatible extends RapidLoad_ThirdParty{
+class WP_Fastest_Cache_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
-        $this->plugin = 'cloudflare/cloudflare.php';
+        $this->plugin = 'wp-fastest-cache/wpFastestCache.php';
         $this->catgeory = 'cache';
-        $this->name = 'cloudflare';
+        $this->name = 'wpFastestCache';
 
         parent::__construct();
     }
@@ -21,7 +21,7 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
 
     public function handle($args)
     {
-        if(class_exists('\CF\WordPress\Hooks')){
+        if(class_exists('WpFastestCache')){
 
             $url = null;
 
@@ -35,12 +35,11 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
 
                 self::log([
                     'url' => $url,
-                    'log' => 'Cloudflare url page cache cleared',
+                    'log' => 'WP Fastest Cache post cache cleared',
                     'type' => 'purging'
                 ]);
-                $hooks = '\CF\WordPress\Hooks';
-                $cfHooks = new $hooks();
-                $cfHooks->purgeCacheByRelevantURLs($post_id);
+                $wpfc = new WpFastestCache();
+                $wpfc->singleDeleteCache(false, $post_id);
 
             }
 

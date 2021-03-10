@@ -44,7 +44,7 @@ class UnusedCSS_DB
             $notice = [
 	            'action'  => 'rapidload-db-update',
 	            'title'   => 'RapidLoad Power Up',
-	            'message' => 'Migrate your database to the latest version. to enjoy optimized data handling.',
+	            'message' => 'Migrate your database to the latest version to enjoy optimized data handling.',
 
 	            'main_action' => [
 		            'key'   => 'Update Database',

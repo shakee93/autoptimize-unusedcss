@@ -29,7 +29,7 @@
 			<?php if ( $api_key_verified) : ?>
                 <li class="uucss-history">
                     <h2>
-                        Optimizations
+                        Optimization Jobs
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                             <span class="dashicons dashicons-plus"></span>Add
                         </span>
@@ -400,14 +400,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>
-                                    <?php _e( 'Queue Actions', 'uucss' ); ?>
-                                </th>
-                                <td>
-                                    <input type="button" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url" class="button button-primary queue-posts" id="queue-posts-type" value="Requeue">
-                                </td>
-                            </tr>
-                            <tr>
                                 <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_disable_add_to_queue"><input id='uucss_disable_add_to_queue' type='checkbox'
@@ -456,6 +448,9 @@
                         $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
+                        <p>
+                            <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
+                        </p>
                         <p>
                             <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>

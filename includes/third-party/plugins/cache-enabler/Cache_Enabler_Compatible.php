@@ -44,6 +44,11 @@ class Cache_Enabler_Compatible  extends RapidLoad_ThirdParty {
         }
 
     }
+
+    public function is_mu_plugin()
+    {
+        return false;
+    }
 }
 
 
