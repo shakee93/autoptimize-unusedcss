@@ -1316,3 +1316,7 @@ li.rapidload-status .content .status-action-wrap{
     height: 100%;
     overflow-y: scroll;
 }
+
+.featherlight.uucss-job-details .featherlight-inner .code code{
+    background-color: #fff;
+}
