@@ -217,7 +217,7 @@ class UnusedCSS_DB
 
         $status = str_replace('"', '', $status);
 
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY created_at DESC LIMIT " . $limit, OBJECT);
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY job_id LIMIT " . $limit, OBJECT);
 
         $error = $wpdb->last_error;
 
