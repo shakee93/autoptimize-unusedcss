@@ -209,7 +209,17 @@ abstract class UnusedCSS_Admin {
 	    $url = esc_url_raw( $_POST['url'] );
 
 	    if ( isset( $_POST['clear'] ) && boolval($_POST['clear'] == 'true') ) {
-		    wp_send_json_success( $this->uucss->clear_cache( $url, $args ) );
+	        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
+
+	        if(isset($list) && is_array($list) && !empty($list)){
+	            foreach ($list as $item){
+                    $this->uucss->clear_cache( $item, $args );
+                }
+            }else{
+                $this->uucss->clear_cache( $url, $args );
+            }
+
+		    wp_send_json_success( true );
 		    return;
 	    }
 

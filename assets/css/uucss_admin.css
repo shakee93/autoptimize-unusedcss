@@ -1324,3 +1324,13 @@ li.rapidload-status .content .status-action-wrap{
 .featherlight.uucss-gpsi-result-details .featherlight-inner .code code{
     background-color: #fff;
 }
+
+#uucss-history_length{
+    position: absolute;
+    top: -35px;
+    right: 115px;
+}
+
+#uucss-history tbody tr.selected{
+    background-color: #f7f7f7;
+}

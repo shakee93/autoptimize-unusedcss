@@ -286,6 +286,10 @@
 
             $exact_search.prop('checked', exact_search_val);
 
+            $('#uucss-history tbody tr').off();
+            $('#uucss-history tbody tr').click(function () {
+                $(this).toggleClass('selected');
+            });
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
@@ -365,6 +369,7 @@
             pagingType: "simple",
             bLengthChange: false,
             tfoot: false,
+            //lengthChange : true,
             bSort: false,
             columns: [
                 {
@@ -857,8 +862,15 @@
                             $.uucssAlert('links added to queue');
                             break;
                         }case 'remove_all':{
+                            var url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    url_list.push(table_row_value.url)
+                                });
+                            }
                             wp.ajax.post('uucss_purge_url',{
                                 url : '',
+                                url_list : url_list,
                                 clear : true,
                                 nonce: uucss.nonce
                             }).then(function (i) {
