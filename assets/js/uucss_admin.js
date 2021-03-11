@@ -286,6 +286,10 @@
 
             $exact_search.prop('checked', exact_search_val);
 
+            $('#uucss-history tbody tr').off();
+            $('#uucss-history tbody tr').click(function () {
+                $(this).toggleClass('selected');
+            });
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
@@ -365,6 +369,7 @@
             pagingType: "simple",
             bLengthChange: false,
             tfoot: false,
+            //lengthChange : true,
             bSort: false,
             columns: [
                 {
@@ -505,7 +510,6 @@
                             },
                             onShown: function (instance) {
                                 $(instance.popper).find('.progress-bar.w-100').removeClass('w-100')
-                                console.log(rowData);
                                 $('.uucss-show-job-details')
                                     .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(rowData, undefined, 2) +'</code></pre></div></div>',{
                                         variant : 'uucss-job-details'
@@ -688,17 +692,17 @@
 
                                             if(response.success && response.data && ( response.data.injected || response.data.success) && response.data.injectedCSS > 0){
 
-                                                $content.find('.header').append('<h2><span class="dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
 
                                             }else if(response.success && response.data && response.data.injected){
 
-                                                $content.find('.header').append('<h2><span class="dashicons dashicons-warning"></span>Pending</h2>')
+                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-warning"></span>Pending</h2>')
                                                 $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
 
                                             }else{
 
-                                                $content.find('.header').append('<h2><span class="dashicons dashicons-no"></span>Error</h2>');
+                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-no"></span>Error</h2>');
                                                 var error_message = typeof response.data === 'string' ? response.data : 'Something went wrong';
                                                 $content.find('.description').append('<p>' + error_message + '</p>');
                                             }
@@ -725,6 +729,12 @@
                                             $feather_content.find('.spinner').remove();
                                             $feather_content.append($content.wrap('<div></div>').parent().html());
 
+                                            if(response.success && response.data){
+                                                $('.js-gpsi-reult')
+                                                    .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(response.data, undefined, 2) +'</code></pre></div></div>',{
+                                                        variant : 'uucss-gpsi-result-details'
+                                                    })
+                                            }
                                         },
                                         complete:function () {
                                             $this.data('fetching', false);
@@ -847,8 +857,15 @@
                             $.uucssAlert('links added to queue');
                             break;
                         }case 'remove_all':{
+                            var url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    url_list.push(table_row_value.url)
+                                });
+                            }
                             wp.ajax.post('uucss_purge_url',{
                                 url : '',
+                                url_list : url_list,
                                 clear : true,
                                 nonce: uucss.nonce
                             }).then(function (i) {

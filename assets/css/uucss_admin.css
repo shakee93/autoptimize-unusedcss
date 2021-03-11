@@ -1304,19 +1304,33 @@ li.rapidload-status .content .status-action-wrap{
     font-size: 12px;
 }
 
-.featherlight.uucss-job-details .featherlight-content{
+.featherlight.uucss-job-details .featherlight-content,
+.featherlight.uucss-gpsi-result-details .featherlight-content{
     padding: 30px 15px 15px;
 }
 
-.featherlight.uucss-job-details .featherlight-inner{
+.featherlight.uucss-job-details .featherlight-inner,
+.featherlight.uucss-gpsi-result-details .featherlight-inner{
     height: 100%;
 }
 
-.featherlight.uucss-job-details .featherlight-inner .code{
+.featherlight.uucss-job-details .featherlight-inner .code,
+.featherlight.uucss-gpsi-result-details .featherlight-inner .code{
     height: 100%;
     overflow-y: scroll;
 }
 
-.featherlight.uucss-job-details .featherlight-inner .code code{
+.featherlight.uucss-job-details .featherlight-inner .code code,
+.featherlight.uucss-gpsi-result-details .featherlight-inner .code code{
     background-color: #fff;
+}
+
+#uucss-history_length{
+    position: absolute;
+    top: -35px;
+    right: 115px;
+}
+
+#uucss-history tbody tr.selected{
+    background-color: #f7f7f7;
 }
