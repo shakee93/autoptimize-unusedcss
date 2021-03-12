@@ -408,7 +408,7 @@
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
                         }else if(row.status === 'queued' || row.status === 'processing'){
-                            return '-';
+                            return '<span class="job-file-size">-</span>';
                         }
 
                         return '0 KB'

@@ -432,11 +432,11 @@ class UnusedCSS_DB
 
 		if(!$link){
 
-			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' WHERE id > 1");
+			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 1");
 
 		}else{
 
-			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' WHERE url = '" . $link . "'" );
+			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "'" );
 
 		}
 
@@ -453,11 +453,11 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE warnings IS NOT NULL");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE warnings IS NOT NULL");
 
         }else{
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE status ='{$status}'");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
         }
 
         $error = $wpdb->last_error;
