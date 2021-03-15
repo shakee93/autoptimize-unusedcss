@@ -420,7 +420,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		    if($status_filter == 'warning'){
 
-                $filters[] = " warnings IS NOT NULL ";
+                $filters[] = " warnings IS NOT NULL AND status ='success'";
             }else{
 
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
