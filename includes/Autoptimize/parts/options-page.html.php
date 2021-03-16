@@ -352,7 +352,7 @@
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Consider links with query strings as separate links.
+                                            Consider URLs with query strings as separate links.
                                         </i>
                                     </label>
                                 </td>
@@ -428,7 +428,7 @@
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
-                                            Enable error logs for RapidLoad.
+                                            Enable debug logs for RapidLoad.
                                         </i>
                                         <?php
                                             $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
@@ -457,16 +457,16 @@
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
-                            <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                            <strong>Cached Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
                         </p>
                         <p>
-                            <strong>Can We Write</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                            <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                         </p>
                         <p class="more-info-uucss-status">
-                            <strong>Total URLs</strong> :  <?php echo $total; ?>
+                            <strong>Total Optimization Jobs</strong> :  <?php echo $total; ?>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <p>
