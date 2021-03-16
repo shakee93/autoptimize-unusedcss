@@ -35,6 +35,11 @@ class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
 
             if($url){
 
+                self::log([
+                    'url' => $url,
+                    'log' => 'Kinsta Cache page cache cleared',
+                    'type' => 'purging'
+                ]);
                 $cp = new Cache_Purge();
                 $cp->purge_complete_caches();
 

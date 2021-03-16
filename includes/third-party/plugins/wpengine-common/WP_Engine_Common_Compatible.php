@@ -35,6 +35,11 @@ class WP_Engine_Common_Compatible extends RapidLoad_ThirdParty{
 
             if($url){
 
+                self::log([
+                    'url' => $url,
+                    'log' => 'WP Engine page cache cleared',
+                    'type' => 'purging'
+                ]);
                 WpeCommon::purge_memcached();
                 WpeCommon::clear_maxcdn_cache();
                 WpeCommon::purge_varnish_cache();
