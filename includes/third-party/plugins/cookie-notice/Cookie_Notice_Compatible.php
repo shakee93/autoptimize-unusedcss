@@ -26,4 +26,9 @@ class Cookie_Notice_Compatible extends RapidLoad_ThirdParty{
         ];
         return $args;
     }
+
+    public function is_mu_plugin()
+    {
+        return false;
+    }
 }
