@@ -42,12 +42,14 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
             }
 
             if ( $url ) {
+
+                rocket_clean_files($url);
                 self::log([
                     'url' => $url,
                     'log' => 'wprocket post url page cache cleared',
                     'type' => 'purging'
                 ]);
-                rocket_clean_files($url);
+
             }
 
         }
