@@ -340,27 +340,6 @@
 
                     var results = d.data;
 
-                    if (results.length < 3 && firstReload) {
-                        showNotification(
-                            'Tip : When will I see the results ?',
-                            'The plugin will trigger the removal of unused css whenever a page is loaded for the first time. Completed jobs are listed below.'
-                        );
-                    }
-
-                    var queued_jobs = results.filter(function (file) {
-                        return file.status === 'queued';
-                    });
-
-                    var success_jobs = results.filter(function (file) {
-                        return file.status === 'success';
-                    });
-
-                    if (queued_jobs.length > 3 && success_jobs.length === 0 && firstReload) {
-                        showNotification(
-                            'Caution : Please verify cron your job is working!',
-                            'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
-                        );
-                    }
                     firstReload = false;
                     return results;
                 }

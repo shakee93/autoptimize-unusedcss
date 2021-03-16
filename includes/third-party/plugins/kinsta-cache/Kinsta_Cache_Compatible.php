@@ -4,6 +4,8 @@ defined( 'ABSPATH' ) || exit;
 
 class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
 
+    public $kinsta_cache;
+
     function __construct(){
 
         $this->plugin = 'kinsta-mu-plugins.php';
@@ -11,10 +13,14 @@ class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
         $this->name = 'kinsta-cache';
 
         parent::__construct();
+
+        add_action('kinsta_cache_init', function ($kinsta){
+            $this->kinsta_cache = $kinsta->kinsta_cache_purge;
+        },10,1);
     }
 
     public function is_mu_plugin(){
-        return class_exists('Cache_Purge');
+        return class_exists('\Kinsta\Cache_Purge');
     }
 
     public function init_hooks()
@@ -25,7 +31,7 @@ class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
 
     public function handle($args)
     {
-        if(class_exists('Cache_Purge')){
+        if(class_exists('\Kinsta\Cache_Purge')){
 
             $url = null;
 
@@ -33,11 +39,14 @@ class Kinsta_Cache_Compatible extends RapidLoad_ThirdParty{
                 $url = $this->transform_url( $args['url'] );
             }
 
-            if($url){
+            if($url && isset($this->kinsta_cache)){
 
-                $cp = new Cache_Purge();
-                $cp->purge_complete_caches();
-
+                $this->kinsta_cache->purge_complete_caches();
+                self::log([
+                    'url' => $url,
+                    'log' => 'Kinsta Cache page cache cleared',
+                    'type' => 'purging'
+                ]);
             }
 
         }
