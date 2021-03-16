@@ -824,7 +824,7 @@
                 $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
-                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
+                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
                 }
 
 
