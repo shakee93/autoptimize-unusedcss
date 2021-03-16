@@ -83,6 +83,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.17 - 16/03/2021 =
+ * fix: Kinsta Cache clear cache
+
 = 1.3.16 - 16/03/2021 =
  * feat: add support to WP Engine Cache plugin
  * feat: add support to Kinsta Cache plugin
