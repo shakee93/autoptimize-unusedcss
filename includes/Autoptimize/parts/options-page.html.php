@@ -452,7 +452,7 @@
                             <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
                         </p>
                         <p>
-                            <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                            <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
