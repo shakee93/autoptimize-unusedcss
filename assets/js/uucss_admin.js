@@ -234,6 +234,16 @@
             });
             $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
 
+            var lengthChange = '<div class="dataTables_length" id="uucss-history_length"><label>Show ' +
+                '<select name="uucss-history_length" aria-controls="uucss-history" class="">' +
+                '<option value="10" selected>10</option>' +
+                '<option value="25">25</option>' +
+                '<option value="50">50</option>' +
+                '<option value="100">100</option>' +
+                '</select></label></div>';
+
+            $(lengthChange).prependTo($('#uucss-history_info'));
+
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
@@ -298,6 +308,20 @@
                     $container.hasClass('multi-select') && $container.removeClass('multi-select')
                 }
             });
+
+            $('#uucss-history_length select').change(function(){
+                page_length = $(this).val()
+                if(!page_length){
+                    return;
+                }
+                $uucss_spinner.addClass('loading');
+                table.page.len(page_length)
+                table.ajax.reload(null, false);
+            })
+
+            if(Number(page_length) !== 10){
+                $('#uucss-history_length select').val(page_length)
+            }
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
@@ -305,6 +329,7 @@
 
         var status_filter = '';
         var url_filter = '';
+        var page_length = '10';
         var exact_search_val = false;
 
         $uucss_spinner.addClass('loading')
@@ -1132,7 +1157,13 @@
                 $info.slideDown();
             }
 
-        })
+        });
+
+        $('#js-uucss-clear-selection').click(function (e) {
+           e.preventDefault();
+           $('#uucss-history tbody tr').removeClass('selected');
+           $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
+        });
 
         showPublicNotices();
         showFaqs();

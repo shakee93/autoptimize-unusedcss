@@ -135,6 +135,11 @@ light
     font-size: 13px;
 }
 
+#uucss-wrapper li.uucss-history .multiple-selected-text a{
+    font-weight: 400;
+    text-decoration: none;
+}
+
 #uucss-wrapper li.uucss-history.multi-select .multiple-selected-text{
     display: inline-block;
 }
@@ -1354,9 +1359,9 @@ li.rapidload-status .content .status-action-wrap{
 }
 
 #uucss-history_length{
-    position: absolute;
-    top: -35px;
-    right: 115px;
+    float: unset;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 #uucss-history tbody tr.selected{

@@ -33,6 +33,7 @@
                         <span class="multiple-selected-text">
                             <span class="multiple-selected-value"></span>
                             Selected
+                            <a href="#" id="js-uucss-clear-selection">clear</a>
                         </span>
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                             <span class="dashicons dashicons-plus"></span>Add
