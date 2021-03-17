@@ -690,6 +690,10 @@ table#uucss-history{
     color: #FFC107;
 }
 
+#uucss-history td span span.dashicons.dashicons-star-filled{
+    color: #674399;
+}
+
 #uucss-history td span span.dashicons.error {
     color: #f44337;
 }
