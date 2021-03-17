@@ -127,6 +127,22 @@ light
     transition: cubic-bezier(0.46, 0.03, 0.52, 0.96) transform .5s;
 }
 
+#uucss-wrapper li.uucss-history .multiple-selected-text{
+    display: none;
+    position: absolute;
+    right: 50px;
+    top: 14px;
+    font-size: 13px;
+}
+
+#uucss-wrapper li.uucss-history.multi-select .multiple-selected-text{
+    display: inline-block;
+}
+
+#uucss-wrapper li.uucss-history.multi-select .uucss-add-site-urls{
+    display: none;
+}
+
 .uucss-add-site-urls{
     cursor: pointer;
     position: absolute;
@@ -482,6 +498,18 @@ table.dataTable thead th, table.dataTable thead td {
 
 .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list{
     width: 135px;
+}
+
+li.uucss-history.multi-select .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.simple-menu{
+    display: none;
+}
+
+li.uucss-history .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
+    display: none;
+}
+
+li.uucss-history.multi-select .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
+    display: block;
 }
 
 .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li,

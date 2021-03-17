@@ -447,6 +447,23 @@ class UnusedCSS_DB
 		}
 	}
 
+    static function requeue_urls($list = false){
+
+        global $wpdb;
+
+        if($list){
+
+            $urls = implode("','", $list);
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE url IN('{$urls}')");
+        }
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
 	static function requeue_jobs($status = 'failed'){
 
         global $wpdb;

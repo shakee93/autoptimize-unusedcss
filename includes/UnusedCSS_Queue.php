@@ -93,11 +93,18 @@ class UnusedCSS_Queue
 
         $post_type = sanitize_text_field($_REQUEST['post_type']);
 
+        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
+
         $posts = null;
 
         global $uucss;
 
-        if($post_type == 'all'){
+        if(isset($list) && is_array($list) && !empty($list)){
+
+            UnusedCSS_DB::requeue_urls($list);
+            wp_send_json_success('successfully links added to the queue');
+        }
+        else if($post_type == 'all'){
 
             $posts = new WP_Query(array(
                 'post_type'=> self::$post_types,

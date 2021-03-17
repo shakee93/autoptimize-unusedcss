@@ -289,6 +289,14 @@
             $('#uucss-history tbody tr').off();
             $('#uucss-history tbody tr').click(function () {
                 $(this).toggleClass('selected');
+                var $table_row = $('#uucss-history tbody tr.selected');
+                var $container = $('#uucss-wrapper li.uucss-history');
+                $('#uucss-wrapper li.uucss-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
+                if($table_row.length > 1){
+                    !$container.hasClass('multi-select') && $container.addClass('multi-select')
+                }else{
+                    $container.hasClass('multi-select') && $container.removeClass('multi-select')
+                }
             });
         });
 
@@ -346,9 +354,8 @@
             },
             searching: true,
             pagingType: "simple",
-            bLengthChange: false,
             tfoot: false,
-            //lengthChange : true,
+            lengthChange : false,
             bSort: false,
             columns: [
                 {
@@ -772,14 +779,17 @@
             e.preventDefault();
         });
 
-        function requeue(post_type){
+        function requeue(post_type, list = []){
             wp.ajax.post('uucss_queue',{
+                url_list : list,
                 url : '',
                 post_type : post_type,
             }).then(function (i) {
                 if(table){
                     table.ajax.reload(null, false);
                 }
+            }).done(function () {
+                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
         }
 
@@ -796,11 +806,13 @@
 
                 var $content = $('<div class="uucss-submenu-option-list"><ul class="option-list"></ul></div>')
 
-                $content.find('ul').append('<li data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
-                $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="requeue_selected"><a data-action_name="requeue_selected" href="#">Requeue Selected</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
                     $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
@@ -824,8 +836,15 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
+                        case 'requeue_selected':
                         case 'requeue_all':{
-                            requeue('current');
+                            var requeue_url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    requeue_url_list.push(table_row_value.url)
+                                });
+                            }
+                            requeue('current',requeue_url_list);
                             $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_warnings':{
@@ -840,23 +859,34 @@
                             requeue('failed');
                             $.uucssAlert('links added to queue');
                             break;
-                        }case 'remove_all':{
-                            var url_list = [];
-                            if(table.rows('.selected').data().length){
-                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    url_list.push(table_row_value.url)
-                                });
-                            }
-                            wp.ajax.post('uucss_purge_url',{
+                        }
+                        case 'remove_selected':
+                        case 'remove_all':{
+                            var data = {
                                 url : '',
-                                url_list : url_list,
                                 clear : true,
                                 nonce: uucss.nonce
-                            }).then(function (i) {
+                            }
+
+                            if(action === 'remove_selected'){
+                                var url_list = [];
+                                if(table.rows('.selected').data().length){
+                                    $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                        url_list.push(table_row_value.url)
+                                    });
+                                }
+                                if(url_list.length){
+                                    data.url_list = url_list
+                                }
+                            }
+
+                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
                                     $.uucssAlert('links removed from list', 'info');
                                 }
+                            }).done(function(){
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
@@ -1088,6 +1118,8 @@
                 $.uucssAlert(i, 'error');
                 $target.attr('disabled', false);
                 $target.val('Add');
+            }).done(function () {
+                table.ajax.reload(null, false);
             })
         });
 
