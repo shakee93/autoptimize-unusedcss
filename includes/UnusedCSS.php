@@ -65,7 +65,7 @@ abstract class UnusedCSS {
 			return;
 		}
 
-		wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ] );
+		wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ], UUCSS_VERSION );
 		wp_localize_script( 'rapidload', 'rapidload', $data['files'] );
 		wp_enqueue_script( 'rapidload' );
 
