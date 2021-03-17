@@ -13,7 +13,7 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated unused CSS removal for WordPress [PREMIUM PLUGIN] **
+**Automated unused CSS removal for WordPress [PREMIUM PLUGIN]**
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
