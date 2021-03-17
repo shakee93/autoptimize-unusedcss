@@ -234,6 +234,16 @@
             });
             $('#uucss_auto_refresh_frontend').prop('checked', auto_refresh);
 
+            var lengthChange = '<div class="dataTables_length" id="uucss-history_length"><label>Show ' +
+                '<select name="uucss-history_length" aria-controls="uucss-history" class="">' +
+                '<option value="10" selected>10</option>' +
+                '<option value="25">25</option>' +
+                '<option value="50">50</option>' +
+                '<option value="100">100</option>' +
+                '</select></label></div>';
+
+            $(lengthChange).prependTo($('#uucss-history_info'));
+
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
@@ -289,7 +299,29 @@
             $('#uucss-history tbody tr').off();
             $('#uucss-history tbody tr').click(function () {
                 $(this).toggleClass('selected');
+                var $table_row = $('#uucss-history tbody tr.selected');
+                var $container = $('#uucss-wrapper li.uucss-history');
+                $('#uucss-wrapper li.uucss-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
+                if($table_row.length > 1){
+                    !$container.hasClass('multi-select') && $container.addClass('multi-select')
+                }else{
+                    $container.hasClass('multi-select') && $container.removeClass('multi-select')
+                }
             });
+
+            $('#uucss-history_length select').change(function(){
+                page_length = $(this).val()
+                if(!page_length){
+                    return;
+                }
+                $uucss_spinner.addClass('loading');
+                table.page.len(page_length)
+                table.ajax.reload(null, false);
+            })
+
+            if(Number(page_length) !== 10){
+                $('#uucss-history_length select').val(page_length)
+            }
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
@@ -297,6 +329,7 @@
 
         var status_filter = '';
         var url_filter = '';
+        var page_length = '10';
         var exact_search_val = false;
 
         $uucss_spinner.addClass('loading')
@@ -340,36 +373,14 @@
 
                     var results = d.data;
 
-                    if (results.length < 3 && firstReload) {
-                        showNotification(
-                            'Tip : When will I see the results ?',
-                            'The plugin will trigger the removal of unused css whenever a page is loaded for the first time. Completed jobs are listed below.'
-                        );
-                    }
-
-                    var queued_jobs = results.filter(function (file) {
-                        return file.status === 'queued';
-                    });
-
-                    var success_jobs = results.filter(function (file) {
-                        return file.status === 'success';
-                    });
-
-                    if (queued_jobs.length > 3 && success_jobs.length === 0 && firstReload) {
-                        showNotification(
-                            'Caution : Please verify cron your job is working!',
-                            'We have noticed some amount of jobs are still on processing and not completed. It maybe because your sites cron is not working properly.'
-                        );
-                    }
                     firstReload = false;
                     return results;
                 }
             },
             searching: true,
             pagingType: "simple",
-            bLengthChange: false,
             tfoot: false,
-            //lengthChange : true,
+            lengthChange : false,
             bSort: false,
             columns: [
                 {
@@ -793,14 +804,17 @@
             e.preventDefault();
         });
 
-        function requeue(post_type){
+        function requeue(post_type, list = []){
             wp.ajax.post('uucss_queue',{
+                url_list : list,
                 url : '',
                 post_type : post_type,
             }).then(function (i) {
                 if(table){
                     table.ajax.reload(null, false);
                 }
+            }).done(function () {
+                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
         }
 
@@ -817,13 +831,16 @@
 
                 var $content = $('<div class="uucss-submenu-option-list"><ul class="option-list"></ul></div>')
 
-                $content.find('ul').append('<li data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
-                $content.find('ul').append('<li data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
-                $content.find('ul').append('<li data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="requeue_selected"><a data-action_name="requeue_selected" href="#">Requeue Selected</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
-                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Cache</a></li>');
+                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
                 }
 
 
@@ -844,8 +861,15 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
+                        case 'requeue_selected':
                         case 'requeue_all':{
-                            requeue('current');
+                            var requeue_url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    requeue_url_list.push(table_row_value.url)
+                                });
+                            }
+                            requeue('current',requeue_url_list);
                             $.uucssAlert('links added to queue');
                             break;
                         }case 'requeue_warnings':{
@@ -856,23 +880,34 @@
                             requeue('failed');
                             $.uucssAlert('links added to queue');
                             break;
-                        }case 'remove_all':{
-                            var url_list = [];
-                            if(table.rows('.selected').data().length){
-                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    url_list.push(table_row_value.url)
-                                });
-                            }
-                            wp.ajax.post('uucss_purge_url',{
+                        }
+                        case 'remove_selected':
+                        case 'remove_all':{
+                            var data = {
                                 url : '',
-                                url_list : url_list,
                                 clear : true,
                                 nonce: uucss.nonce
-                            }).then(function (i) {
+                            }
+
+                            if(action === 'remove_selected'){
+                                var url_list = [];
+                                if(table.rows('.selected').data().length){
+                                    $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                        url_list.push(table_row_value.url)
+                                    });
+                                }
+                                if(url_list.length){
+                                    data.url_list = url_list
+                                }
+                            }
+
+                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
                                     $.uucssAlert('links removed from list', 'info');
                                 }
+                            }).done(function(){
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
@@ -1104,6 +1139,8 @@
                 $.uucssAlert(i, 'error');
                 $target.attr('disabled', false);
                 $target.val('Add');
+            }).done(function () {
+                table.ajax.reload(null, false);
             })
         });
 
@@ -1116,7 +1153,13 @@
                 $info.slideDown();
             }
 
-        })
+        });
+
+        $('#js-uucss-clear-selection').click(function (e) {
+           e.preventDefault();
+           $('#uucss-history tbody tr').removeClass('selected');
+           $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
+        });
 
         showPublicNotices();
         showFaqs();

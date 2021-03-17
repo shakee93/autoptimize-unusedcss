@@ -33,14 +33,14 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
 
             if($post_id){
 
+                $hooks = '\CF\WordPress\Hooks';
+                $cfHooks = new $hooks();
+                $cfHooks->purgeCacheByRelevantURLs($post_id);
                 self::log([
                     'url' => $url,
                     'log' => 'Cloudflare url page cache cleared',
                     'type' => 'purging'
                 ]);
-                $hooks = '\CF\WordPress\Hooks';
-                $cfHooks = new $hooks();
-                $cfHooks->purgeCacheByRelevantURLs($post_id);
 
             }
 

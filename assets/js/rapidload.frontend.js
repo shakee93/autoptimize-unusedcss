@@ -29,9 +29,9 @@
                 link.setAttribute('uucss-reverted', '')
                 link.prev = file
 
-                link.onload = function (e) {
+                link.addEventListener('load',function (e) {
                     if (link.prev) link.prev.remove();
-                };
+                });
 
                 file.parentNode.insertBefore(link, file.nextSibling);
 

@@ -30,6 +30,11 @@
                 <li class="uucss-history">
                     <h2>
                         Optimization Jobs
+                        <span class="multiple-selected-text">
+                            <span class="multiple-selected-value"></span>
+                            Selected
+                            <a href="#" id="js-uucss-clear-selection">clear</a>
+                        </span>
                         <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                             <span class="dashicons dashicons-plus"></span>Add
                         </span>
@@ -352,7 +357,7 @@
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Consider links with query strings as separate links.
+                                            Consider URLs with query strings as separate links.
                                         </i>
                                     </label>
                                 </td>
@@ -420,7 +425,7 @@
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
-                                            Enable error logs for RapidLoad.
+                                            Enable debug logs for RapidLoad.
                                         </i>
                                         <?php
                                             $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
@@ -453,16 +458,16 @@
                             <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
                         </p>
                         <p>
-                            <strong>Cache Styles</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                            <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
                         </p>
                         <p>
-                            <strong>Can We Write</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                            <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                         </p>
                         <p class="more-info-uucss-status">
-                            <strong>Total URLs</strong> :  <?php echo $total; ?>
+                            <strong>Total Optimization Jobs</strong> :  <?php echo $total; ?>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <p>

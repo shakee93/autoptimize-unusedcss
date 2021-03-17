@@ -32,12 +32,12 @@ class Cache_Enabler_Compatible  extends RapidLoad_ThirdParty {
 
             if($url){
 
+                Cache_Enabler::clear_page_cache_by_url( $url );
                 self::log([
                     'url' => $url,
                     'log' => 'Cache Enabler url page cache cleared',
                     'type' => 'purging'
                 ]);
-                Cache_Enabler::clear_page_cache_by_url( $url );
 
             }
 

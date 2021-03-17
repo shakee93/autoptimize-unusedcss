@@ -13,7 +13,7 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated unused CSS removal for WordPress**
+**Automated unused CSS removal for WordPress [PREMIUM PLUGIN]**
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
@@ -82,6 +82,19 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.3.18 - 17/03/2021 =
+ * fix: media update on load original css
+
+= 1.3.17 - 16/03/2021 =
+ * fix: Kinsta Cache clear cache
+
+= 1.3.16 - 16/03/2021 =
+ * feat: add support to WP Engine Cache plugin
+ * feat: add support to Kinsta Cache plugin
+ * fix: base dir double slash in url
+ * fix: disable refresh table when popup is open
+ * fix: null error on rapidload menu registration
 
 = 1.3.15 - 03/03/2021 =
  * feat: add support to WP Fastest Cache plugin
