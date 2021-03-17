@@ -553,7 +553,7 @@
                         }
 
                         if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
-                            var hits_star = '<span class="dashicons dashicons-star-half"></span>';
+                            var hits_star = '<span class="dashicons dashicons-star-empty"></span>';
                             if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
                                 hits_star = '<span style="margin-left: -3px; margin-top: -3px" class="dashicons dashicons-star-filled"></span>';
                             }

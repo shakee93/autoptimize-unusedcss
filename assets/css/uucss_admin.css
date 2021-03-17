@@ -691,7 +691,7 @@ table#uucss-history{
 }
 
 #uucss-history td span span.dashicons.dashicons-star-filled,
-#uucss-history td span span.dashicons.dashicons-star-half{
+#uucss-history td span span.dashicons.dashicons-star-empty{
     color: #674399;
 }
 
