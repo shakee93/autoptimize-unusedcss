@@ -13,6 +13,8 @@
 	<?php settings_fields( 'autoptimize_uucss_settings' );
 
 	$api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
+    $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
+    $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_debug_mode);
 
 	?>
     <div>
@@ -427,10 +429,6 @@
                                         <i>
                                             Enable debug logs for RapidLoad.
                                         </i>
-                                        <?php
-                                            $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
-                                            $hide_view_log = apply_filters('uucss/view_debug/frontend', $default_debug_mode);
-                                        ?>
                                         <a id="view-uucss-log" href="#" <?php if(!$hide_view_log) echo 'style="display:none"' ?>>View Logs</a>
                                     </label>
                                 </td>
@@ -461,6 +459,9 @@
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
+                        </p>
+                        <p <?php if(!$hide_view_log) echo 'style="display:none"' ?>>
+                            <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                         </p>
                         <p>
                             <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
