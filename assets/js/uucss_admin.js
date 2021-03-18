@@ -553,11 +553,7 @@
                         }
 
                         if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
-                            var hits_star = '<span class="dashicons dashicons-star-empty"></span>';
-                            if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
-                                hits_star = '<span class="dashicons dashicons-star-filled"></span>';
-                            }
-                            stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>' + hits_star);
+                            stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
