@@ -83,6 +83,16 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.3.19 - 18/03/2021 =
+ * feat: tested with WordPress 5.7
+ * feat: add support to Yoast SEO plugin
+ * feat: add support to Rankmath SEO plugin
+ * feat: add option to requeue and remove multiple jobs
+ * feat: add option to select jobs per page
+ * feat: url and file exclusion with wild card expressions
+ * improve: requeue when autoptimize cache cleared
+ * fix: immediate jobs being held in processing
+
 = 1.3.18 - 17/03/2021 =
  * fix: media update on load original css
 
