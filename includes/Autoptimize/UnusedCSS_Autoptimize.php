@@ -145,8 +145,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 			    }
 
-			    // check using string contains instead of regex
-			    if ( self::str_contains( urldecode($url), $pattern ) ) {
+			    if(self::str_contains( $pattern, '*' ) && $this->is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
 				    $this->log( 'skipped : ' . $url );
                     return false;
                 }
@@ -157,7 +159,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
-	public function check_dependencies() {
+    public function check_dependencies() {
 
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;

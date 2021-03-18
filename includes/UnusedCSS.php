@@ -308,17 +308,19 @@ abstract class UnusedCSS {
 
 	    if ( isset( $args['immediate'] ) ) {
 
-	    	UnusedCSS_DB::update_meta([
-	    	    'status' => 'processing',
-                'job_id' => null
-            ],$url);
+	    	UnusedCSS_DB::update_status('processing', $url);
 
-		    wp_schedule_single_event( time(), 'uucss_async_queue', [
-			    'provider' => $this->provider,
-			    'url'      => $url,
-			    'args'     => $args
-		    ] );
-		    spawn_cron();
+	    	$spawned = $this->schedule_cron('uucss_async_queue', [
+                'provider' => $this->provider,
+                'url'      => $url,
+                'args'     => $args
+            ]);
+
+            self::log([
+                'log' => 'cron spawned : ' . $spawned,
+                'url' => $url,
+                'type' => 'queued'
+            ]);
 
 	    }
 	    self::log([

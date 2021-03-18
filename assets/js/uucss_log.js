@@ -11,7 +11,7 @@
         var exact_search_val = false;
         var auto_refresh = false;
 
-        $('#view-uucss-log').click(function (e) {
+        $('#view-uucss-log, #status-view-uucss-log').click(function (e) {
             e.preventDefault();
             $.featherlight('<div class="spinner loading"></div><div class="uucss-logs-content"><table id="uucss-logs-table" width="100%" class="hover"></table>' +
                 '<input type="button" class="button button-primary clear-uucss-log" id="clear-uucss-log" value="Clear Logs"></div>', {

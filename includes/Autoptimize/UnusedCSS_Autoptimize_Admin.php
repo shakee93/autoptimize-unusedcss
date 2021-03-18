@@ -195,12 +195,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
         $default = [
 	        [
-		        "title" => "My Site is broken after using RapidLoad. What can i do?",
-		        "message" => "There is a possibility the page can be broken with RapidLoad as it does the removal automatically. you can easily fix broken elements with safelist rules. we recommend to turn on “Load Original CSS files” and add safelist rules. if you are not sure how to add safelist rules create a support ticket in <a href='https://rapidload.zendesk.com/hc/en-us' target='_blank'>https://rapidload.zendesk.com/hc/en-us</a> one of our support member will help you out .",
+		        "title" => "I enabled RapidLoad and now my site is broken. What do I do?",
+		        "message" => "If you are encountering layout or styling issues on a RapidLoad optimized page, try enabling the “Load Original CSS Files” option or <a href='https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists'>adding safelist rules</a> for affected elements in the plugin Advanced Settings. Always remember to requeue affected pages after making plugin changes. Need more help? Head over to the RapidLoad docs for more information or to submit a Support request: <a href='https://rapidload.zendesk.com/hc/en-us'>https://rapidload.zendesk.com/hc/en-us</a>",
 	        ],
 	        [
-		        "title" => "Still seeing remove unused css flag in Google page speed insights?",
-		        "message" => "Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.",
+		        "title" => "Why am I still seeing the “Removed unused CSS” flag in Google Page Speed Insights?",
+		        "message" => "It’s possible that the RapidLoad optimized version of the page is not yet being served. Try clearing your page cache and running the GPSI test again.",
 	        ],
 	        [
 		        "title" => "Will this plugin work with other caching plugins?",

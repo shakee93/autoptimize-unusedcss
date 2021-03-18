@@ -22,7 +22,7 @@ light
 .uucss-tag .newtag,
 .uucss-tag-links .newtag {
     width: 100%;
-    max-width: 300px;
+    max-width: 310px;
 }
 
 .uucss-tag-links .tagchecklist > li {
@@ -1207,7 +1207,7 @@ input#uucss-pack-suggest {
 }
 
 #whitelist_packs + span.select2{
-    max-width: 377px !important;
+    max-width: 388px !important;
 }
 
 #uucss-logs-table .log-content p, .log-content ul {
@@ -1370,4 +1370,8 @@ li.rapidload-status .content .status-action-wrap{
 
 #uucss-history tbody tr.selected{
     background-color: #f7f7f7;
+}
+
+table#uucss-options tbody tr td{
+    padding-bottom: 0;
 }

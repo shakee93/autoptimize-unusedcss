@@ -13,6 +13,8 @@
 	<?php settings_fields( 'autoptimize_uucss_settings' );
 
 	$api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
+    $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
+    $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_debug_mode);
 
 	?>
     <div>
@@ -75,12 +77,16 @@
                                         <input id="safelist-add" type="text" size="27"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
+                                        <p style="font-size: 12px; margin-left: 5px">
+                                            Matched safelist rules <u><strong>will not be</strong> removed</u> during optimization
+                                            <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
+                                        </p>
                                     </div>
                                     <div class="safelist-list">
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px;">
+                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px; display: none">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
@@ -113,12 +119,16 @@
                                         <input id="blocklist-add" type="text" size="27" class="newtag"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
+                                        <p style="font-size: 12px; margin-left: 5px">
+                                            Matched blocklist rules <u><strong>will be</strong> removed</u> during optimization
+                                            <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
+                                        </p>
                                     </div>
                                     <div class="blocklist-list">
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
+                                    <!--<div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
@@ -135,7 +145,7 @@
                                                 examples : <em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </td>
                             </tr>
 
@@ -427,10 +437,6 @@
                                         <i>
                                             Enable debug logs for RapidLoad.
                                         </i>
-                                        <?php
-                                            $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
-                                            $hide_view_log = apply_filters('uucss/view_debug/frontend', $default_debug_mode);
-                                        ?>
                                         <a id="view-uucss-log" href="#" <?php if(!$hide_view_log) echo 'style="display:none"' ?>>View Logs</a>
                                     </label>
                                 </td>
@@ -462,6 +468,9 @@
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
+                        </p>
+                        <p <?php if(!$hide_view_log) echo 'style="display:none"' ?>>
+                            <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                         </p>
                         <p>
                             <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
