@@ -383,19 +383,6 @@ trait UnusedCSS_Utils {
 
     public function schedule_cron($hook_name, $args){
 
-        $counter = 0;
-        $max = 10;
-
-        $spawned = false;
-
-        wp_schedule_single_event( time(), $hook_name, $args);
-
-        while (!$spawned && $counter < $max){
-
-            $counter++;
-            $spawned = spawn_cron();
-        }
-
-        return $spawned;
+        return wp_schedule_single_event( time() + 1, $hook_name, $args);
     }
 }

@@ -77,8 +77,8 @@
                                         <input id="safelist-add" type="text" size="27"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
-                                        <p style="font-size: 12px">
-                                            Matched safelist rules <strong>will not be removed</strong> during optimization
+                                        <p style="font-size: 12px; margin-left: 5px">
+                                            Matched safelist rules <ul><strong>will not be</strong> removed</ul> during optimization
                                             <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
                                         </p>
                                     </div>
@@ -119,8 +119,8 @@
                                         <input id="blocklist-add" type="text" size="27" class="newtag"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
-                                        <p style="font-size: 12px">
-                                            Matched blocklist rules <strong>will be removed</strong> during optimization
+                                        <p style="font-size: 12px; margin-left: 5px">
+                                            Matched blocklist rules <ul><strong>will be</strong> removed</ul> during optimization
                                             <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
                                         </p>
                                     </div>
