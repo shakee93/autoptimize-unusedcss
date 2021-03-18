@@ -382,7 +382,6 @@ trait UnusedCSS_Utils {
     }
 
     public function schedule_cron($hook_name, $args){
-
-        return wp_schedule_single_event( time() + 1, $hook_name, $args);
+        return wp_schedule_single_event( time() + 5, $hook_name, $args);
     }
 }
