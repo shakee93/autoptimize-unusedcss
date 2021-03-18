@@ -357,7 +357,7 @@
 											echo 'checked="checked"';
 										} ?> value='1'>
                                         <i>
-                                            Consider URLs with query strings as separate links.
+                                            Consider URLs with query strings as separate URLs.
                                         </i>
                                     </label>
                                 </td>
