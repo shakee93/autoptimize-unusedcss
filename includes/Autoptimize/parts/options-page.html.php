@@ -77,12 +77,16 @@
                                         <input id="safelist-add" type="text" size="27"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
+                                        <p style="font-size: 12px">
+                                            Matched safelist rules <strong>will not be removed</strong> during optimization
+                                            <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
+                                        </p>
                                     </div>
                                     <div class="safelist-list">
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px;">
+                                    <div class="uucss-info-wrapper safelist-settings" style="max-width: 350px; display: none">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
@@ -115,12 +119,16 @@
                                         <input id="blocklist-add" type="text" size="27" class="newtag"
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
+                                        <p style="font-size: 12px">
+                                            Matched blocklist rules <strong>will be removed</strong> during optimization
+                                            <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
+                                        </p>
                                     </div>
                                     <div class="blocklist-list">
                                         <ul></ul>
                                     </div>
 
-                                    <div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
+                                    <!--<div class="uucss-info-wrapper blocklist-settings" style="max-width: 350px;">
                                         <div class="info-icon">
                                             <span class="dashicons dashicons-info"></span>
                                         </div>
@@ -137,7 +145,7 @@
                                                 examples : <em>my-class*</em>, <em>*my-id</em>, <em>*li*</em><br>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </td>
                             </tr>
 
