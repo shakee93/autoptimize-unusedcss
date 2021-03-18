@@ -40,7 +40,7 @@ class UnusedCSS_DB
 
         add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
 
-        if (self::$current_version  != self::$db_version ) {
+        if (self::$current_version  < self::$db_version ) {
             $notice = [
 	            'action'  => 'rapidload-db-update',
 	            'title'   => 'RapidLoad Power Up',
