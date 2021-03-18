@@ -275,7 +275,7 @@
                                                 <input type="button" class="button tagadd" value="Add URL">
                                             </div>
                                             <p class="howto">
-                                                Exclude URLs from RapidLoad <em> hello-url/some-url, product/ </em>
+                                                Exclude URLs from RapidLoad <em> *hello-url/some-url*, *product/**/ex/* </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -309,7 +309,7 @@
                                                 <input type="button" class="button tagadd" value="Add File">
                                             </div>
                                             <p class="howto">
-                                                Exclude specific CSS files from RapidLoad <em> my-styles.css, /my-theme/style.css </em>
+                                                Exclude specific CSS files from RapidLoad <em> *my-styles.css, */my-theme*/style.css </em>
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
