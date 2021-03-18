@@ -693,6 +693,9 @@ table#uucss-history{
 #uucss-history td span span.dashicons.dashicons-star-filled,
 #uucss-history td span span.dashicons.dashicons-star-empty{
     color: #674399;
+    margin-left: -7px;
+    margin-top: -4px;
+    font-size: 10px;
 }
 
 #uucss-history td span span.dashicons.error {
