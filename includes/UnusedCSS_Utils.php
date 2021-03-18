@@ -380,4 +380,22 @@ trait UnusedCSS_Utils {
         return (bool) preg_match($expr, $path);
 
     }
+
+    public function schedule_cron($hook_name, $args){
+
+        $counter = 0;
+        $max = 10;
+
+        $spawned = false;
+
+        wp_schedule_single_event( time(), $hook_name, $args);
+
+        while (!$spawned && $counter < $max){
+
+            $counter++;
+            $spawned = spawn_cron();
+        }
+
+        return $spawned;
+    }
 }

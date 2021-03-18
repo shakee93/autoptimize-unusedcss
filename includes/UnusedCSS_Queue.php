@@ -151,10 +151,21 @@ class UnusedCSS_Queue
 
             $sitemap = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
-            wp_schedule_single_event( time(), 'uucss_sitemap_queue', [
+            if(!$sitemap){
+
+                wp_send_json_error('site map url required');
+            }
+
+            $spawned = $this->schedule_cron('uucss_sitemap_queue',[
                 'url' => $sitemap
-            ] );
-            spawn_cron();
+            ]);
+
+            self::log([
+                'log' => 'cron spawned : ' . $spawned,
+                'url' => $sitemap,
+                'type' => 'queued'
+            ]);
+
             wp_send_json_success('sitemap links schedule to add queue');
 
         }else{
