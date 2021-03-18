@@ -686,6 +686,10 @@ table#uucss-history{
     margin-left: 1px;
 }
 
+#uucss-history td span span.dashicons.hits-success{
+    color: #017065;
+}
+
 #uucss-history td span span.dashicons.dashicons-warning{
     color: #FFC107;
 }

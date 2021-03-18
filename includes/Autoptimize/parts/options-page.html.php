@@ -605,7 +605,7 @@
             </select>
         </div>
         <div>
-            <input type="text" class="site-map-url show" placeholder="https://example.com/">
+            <input type="text" class="site-map-url show" placeholder="<?php echo trailingslashit(get_site_url())?>" data-site_url="<?php echo trailingslashit(get_site_url())?>" data-sitemap_url="<?php echo apply_filters('uucss/sitemap-path', home_url('/sitemap_index.xml')) ?>">
         </div>
         <div class="add-action-wrap">
             <input id="model-queue-posts-type" type="button" class="button button-primary" value="Add to Optimization">

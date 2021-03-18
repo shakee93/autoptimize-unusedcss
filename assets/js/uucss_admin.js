@@ -553,7 +553,8 @@
                         }
 
                         if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
-                            stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
+                            var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 ? 'hits-success' : '';
+                            stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
@@ -1100,8 +1101,12 @@
             $model_content = $('.featherlight.add-site-url-model');
 
             if($(this).val() === 'site_map' || $(this).val() === 'url'){
-                $(this).val() === 'site_map' && $model_content.find('input.site-map-url').attr('placeholder', 'https://example.com/sitemap_index.xml');
-                $(this).val() === 'url' && $model_content.find('input.site-map-url').attr('placeholder', 'https://example.com/');
+                if($(this).val() === 'site_map'){
+                    $model_content.find('input.site-map-url').attr('placeholder', $model_content.find('input.site-map-url').data('sitemap_url'));
+                    $model_content.find('input.site-map-url').val($model_content.find('input.site-map-url').data('sitemap_url'));
+                }else if($(this).val() === 'url'){
+                    $model_content.find('input.site-map-url').attr('placeholder', $model_content.find('input.site-map-url').data('site_url'));
+                }
                 !$model_content.find('input.site-map-url').hasClass('show') && $model_content.find('input.site-map-url').addClass('show')
                 !$model_content.hasClass('show-url') && $model_content.addClass('show-url')
             }else{
