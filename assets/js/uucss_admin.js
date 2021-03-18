@@ -981,7 +981,7 @@
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length){
+            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-history').hasClass('multi-select')){
                 return;
             }
 
