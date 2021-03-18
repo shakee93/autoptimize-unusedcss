@@ -78,7 +78,7 @@
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
                                         <p style="font-size: 12px; margin-left: 5px">
-                                            Matched safelist rules <ul><strong>will not be</strong> removed</ul> during optimization
+                                            Matched safelist rules <u><strong>will not be</strong> removed</u> during optimization
                                             <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
                                         </p>
                                     </div>
@@ -120,7 +120,7 @@
                                                autocomplete="off">
                                         <button class="button">Add Rule</button>
                                         <p style="font-size: 12px; margin-left: 5px">
-                                            Matched blocklist rules <ul><strong>will be</strong> removed</ul> during optimization
+                                            Matched blocklist rules <u><strong>will be</strong> removed</u> during optimization
                                             <a href="https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists" target="_blank">learn more</a>.
                                         </p>
                                     </div>
