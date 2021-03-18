@@ -39,6 +39,7 @@ class UnusedCSS_FileSystem
                 unlink($path);
             }
         }
+        return true;
     }
 
     public function size($file){

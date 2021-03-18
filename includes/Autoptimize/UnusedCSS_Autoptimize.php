@@ -47,7 +47,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
 
-	    add_action( 'autoptimize_action_cachepurged', [ $this, 'clear_cache' ] );
+	    add_action( 'autoptimize_action_cachepurged', function (){
+	        $args['soft'] = true;
+	        $this->clear_cache(null, $args);
+        });
 
 
 	    add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
