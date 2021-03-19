@@ -312,7 +312,7 @@ trait UnusedCSS_Utils {
     public static function activation_url( $action, $to = 'options-general.php?page=uucss' ) {
 
 	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
-		    define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
+		    define( 'UUCSS_ACTIVATION_URL', 'https://v-app.rapidload.io/activate' );
 	    }
 
 	    return UUCSS_ACTIVATION_URL . '?' . build_query( [
