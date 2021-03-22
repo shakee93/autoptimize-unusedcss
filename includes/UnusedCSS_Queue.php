@@ -24,7 +24,7 @@ class UnusedCSS_Queue
         }
 
         if(isset($options['uucss_jobs_per_queue'])){
-            self::$job_count = (int) $options['uucss_jobs_per_queue'];
+            self::$job_count = defined('UUCSS_JOB_COUNT_PER_QUEUE') ? UUCSS_JOB_COUNT_PER_QUEUE : (int) $options['uucss_jobs_per_queue'];
         }
 
         add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);
