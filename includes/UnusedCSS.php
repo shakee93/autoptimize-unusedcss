@@ -512,7 +512,7 @@ abstract class UnusedCSS {
     }
 
 
-	protected function get_cached_file( $file_url, $cdn = null ) {
+	public function get_cached_file( $file_url, $cdn = null ) {
 
 		if ( ! $cdn || empty( $cdn ) ) {
 			$cdn = content_url();
