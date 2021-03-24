@@ -52,6 +52,29 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        $this->clear_cache(null, $args);
         });
 
+	    add_filter('uucss/autoptimize-cdn-url', function ($link){
+	        return $this->uucss_ao_base->url_replace_cdn($link);
+        },10,1);
+
+	    add_filter('uucss/ao-handled', function ($handled , $link ){
+	        return $this->ao_handled($link);
+        },10,2);
+
+	    add_filter('uucss/cache-file-path', function ($uucss_file){
+	        return $this->get_cached_file($uucss_file, $this->uucss_ao_base->cdn_url);
+        },10,1);
+
+	    add_action('uucss/inject/inline-sheet', function ($sheet, $link){
+	        $this->inline_sheet($sheet, $link);
+        },10,2);
+
+	    add_filter('uucss/inline-css-enabled', function ($value){
+	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
+        },10,1);
+
+	    add_filter('uucss/settings-options', function ($value){
+	        return UnusedCSS_Autoptimize_Admin::fetch_options();
+        }, 10, 1);
 
 	    add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
 	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
@@ -264,7 +287,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-        return apply_filters('uucss/enqueue/inject-css',$html, $data, $this);
+        return apply_filters('uucss/enqueue/inject-css',$html, $data);
 	}
 
 	public function ao_handled($link){

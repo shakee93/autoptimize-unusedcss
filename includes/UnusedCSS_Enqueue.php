@@ -10,12 +10,14 @@ class UnusedCSS_Enqueue {
 
     private $inject;
     private $dom;
-    private $uucss_autoptimize;
     private $data;
+    private $options;
 
     function __construct()
     {
         $this->file_system = new UnusedCSS_FileSystem();
+
+        $this->options = apply_filters('uucss/settings-options', []);
 
         add_filter('uucss/enqueue/inject-css', [$this, 'inject_css'], 10, 3);
         add_action('uucss/enqueue/before-enqueue', [$this, 'before_enqueue']);
@@ -28,9 +30,9 @@ class UnusedCSS_Enqueue {
 
         $inline_styles = $this->dom->find('style');
 
-        if(isset($this->uucss_autoptimize->options['uucss_include_inline_css']) &&
-            $this->uucss_autoptimize->options['uucss_include_inline_css'] == '1' &&
-            autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on' &&
+        if(isset($this->options['uucss_include_inline_css']) &&
+            $this->options['uucss_include_inline_css'] == '1' &&
+            apply_filters('uucss/inline-css-enabled', false) &&
             isset($this->data['files']) && !empty($this->data['files'])){
 
             $inline_style_content = '';
@@ -110,8 +112,6 @@ class UnusedCSS_Enqueue {
             'url' => $this->data['url'],
             'type' => 'injection'
         ]);
-
-        return $this->dom;
     }
 
     public function enqueue_completed(){
@@ -173,8 +173,6 @@ class UnusedCSS_Enqueue {
             ]);
 
         }
-
-        return $this->dom;
     }
 
     public function replace_style_sheets(){
@@ -218,7 +216,7 @@ class UnusedCSS_Enqueue {
 
                     if ( ! $file ) {
                         // Retry to see if file can be found with CDN url
-                        $file = array_search( $this->uucss_autoptimize->uucss_ao_base->url_replace_cdn($link), array_column( $this->data['files'], 'original' ) );
+                        $file = array_search( apply_filters('uucss/autoptimize-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
                     }
 
                     $key = isset($this->data['files']) ? $file : null;
@@ -231,10 +229,10 @@ class UnusedCSS_Enqueue {
 
                     array_push( $this->inject->found_css_cache_files, $link );
 
-                    $newLink = $this->uucss_autoptimize->get_cached_file( $uucss_file, $this->uucss_autoptimize->uucss_ao_base->cdn_url );
+                    $newLink = apply_filters('uucss/cache-file-path', $uucss_file);
 
                     // check the file is processed via AO
-                    $is_ao_css = $this->uucss_autoptimize->ao_handled($link);
+                    $is_ao_css = apply_filters('uucss/ao-handled', false, $link);
 
                     if($is_ao_css){
 
@@ -248,13 +246,14 @@ class UnusedCSS_Enqueue {
 
                     }
 
-                    if ( $is_ao_css || isset( $this->uucss_autoptimize->options['autoptimize_uucss_include_all_files'] ) ) {
+                    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
                         $sheet->uucss = true;
                         $sheet->href  = $newLink;
 
-                        if ( isset( $this->uucss_autoptimize->options['uucss_inline_css'] ) ) {
-                            $this->uucss_autoptimize->inline_sheet( $sheet, $uucss_file );
+                        if ( isset( $this->options['uucss_inline_css'] ) ) {
+
+                            do_action('uucss/inject/inline-sheet', $sheet, $uucss_file);
                         }
 
                         array_push( $this->inject->injected_css_files, $newLink );
@@ -264,9 +263,7 @@ class UnusedCSS_Enqueue {
                 }
                 else {
 
-                    $uucss_injected = $sheet->getAttribute('uucss');
-
-                    if(!$uucss_injected && !$this->uucss_autoptimize->is_file_excluded($this->uucss_autoptimize->options, $link)){
+                    if(!$sheet->uucss && !$this->is_file_excluded($this->options, $link)){
 
                         $this->inject->successfully_injected = false;
 
@@ -285,11 +282,9 @@ class UnusedCSS_Enqueue {
             }
 
         }
-
-        return $this->dom;
     }
 
-    public function inject_css($html, $data, $autoptimize){
+    public function inject_css($html, $data){
 
         $this->data = $data;
 
@@ -311,8 +306,6 @@ class UnusedCSS_Enqueue {
             \simplehtmldom\DEFAULT_TARGET_CHARSET,
             false
         );
-
-        $this->uucss_autoptimize = $autoptimize;
 
         if ( $this->dom ) {
 
