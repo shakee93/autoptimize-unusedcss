@@ -21,8 +21,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    new UnusedCSS_Feedback();
 
-	    new UnusedCSS_Enqueue();
-
         add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
         $this->add_update_message();
@@ -68,6 +66,8 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
 	    new UnusedCSS_Queue();
+
+        new UnusedCSS_Enqueue();
     }
 
     function add_update_message(){

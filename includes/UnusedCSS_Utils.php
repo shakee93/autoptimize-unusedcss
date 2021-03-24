@@ -381,6 +381,11 @@ trait UnusedCSS_Utils {
 
     }
 
+    public static function remove_white_space($str){
+
+        return preg_replace('/[\n\s+]/', '', $str);
+    }
+
     public function schedule_cron($hook_name, $args){
         return wp_schedule_single_event( time() + 5, $hook_name, $args);
     }

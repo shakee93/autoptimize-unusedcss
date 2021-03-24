@@ -386,6 +386,7 @@ abstract class UnusedCSS {
 			"variables"         => isset( $this->options['uucss_variables'] ),
 			"minify"            => isset( $this->options['uucss_minify'] ),
 			"analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
+            "inlineCss"          => isset( $this->options['uucss_include_inline_css'] ),
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
 			"blocklist"          => $blocklist,
