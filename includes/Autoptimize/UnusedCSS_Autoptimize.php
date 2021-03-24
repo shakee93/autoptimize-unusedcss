@@ -57,7 +57,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         },10,1);
 
 	    add_filter('uucss/ao-handled', function ($handled , $link ){
-	        return $this->ao_handled($link);
+	        return count($this->ao_handled($link)) > 0;
         },10,2);
 
 	    add_filter('uucss/cache-file-path', function ($uucss_file){
