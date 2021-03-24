@@ -238,13 +238,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     public function replace_css(){
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
-
-            self::log([
-                'log' => 'injecting css initiated after autoptimize minify',
-                'url' => $this->url,
-                'type' => 'injection'
-            ]);
-
             return apply_filters('uucss/enqueue/inject-css', $html);
 	    }, 99 );
     }

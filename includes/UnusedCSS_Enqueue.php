@@ -108,12 +108,6 @@ class UnusedCSS_Enqueue {
         $this->inject->parsed_html = true;
 
         $this->dom->find( 'html' )[0]->uucss = true;
-
-        self::log([
-            'log' => 'header injection done',
-            'url' => $this->data['url'],
-            'type' => 'injection'
-        ]);
     }
 
     public function enqueue_completed(){
@@ -123,13 +117,6 @@ class UnusedCSS_Enqueue {
         if(isset($this->data['time'])){
             $time_diff = time() - $this->data['time'];
         }
-
-        self::log([
-            'log' => json_encode((array) $this->inject),
-            'url' => $this->data['url'],
-            'type' => 'injection'
-        ]);
-
 
         if($this->inject->successfully_injected){
 
@@ -142,12 +129,6 @@ class UnusedCSS_Enqueue {
 
             UnusedCSS_DB::update_success_count($this->data['url']);
 
-            self::log([
-                'log' => 'injection success',
-                'url' => $this->data['url'],
-                'type' => 'injection'
-            ]);
-
         }else if(!$this->inject->successfully_injected && ($this->data['attempts'] <= 2 || ($time_diff > 86400))){
 
             UnusedCSS_DB::update_meta([
@@ -156,23 +137,11 @@ class UnusedCSS_Enqueue {
                 'created_at' => date( "Y-m-d H:m:s", time() )
             ], $this->data['url']);
 
-            self::log([
-                'log' => 're-queued due to warnings',
-                'url' => $this->data['url'],
-                'type' => 'injection'
-            ]);
-
         }else{
 
             UnusedCSS_DB::update_meta([
                 'warnings' => $this->data['meta']['warnings']
             ], $this->data['url']);
-
-            self::log([
-                'log' => 'file not found warnings added',
-                'url' => $this->data['url'],
-                'type' => 'injection'
-            ]);
 
         }
     }
@@ -238,12 +207,6 @@ class UnusedCSS_Enqueue {
 
                     if($is_ao_css){
 
-                        self::log([
-                            'log' => 'ao handled',
-                            'url' => $link,
-                            'type' => 'injection'
-                        ]);
-
                         array_push($this->inject->ao_optimized_css, $link);
 
                     }
@@ -287,12 +250,6 @@ class UnusedCSS_Enqueue {
     }
 
     public function inject_css($html){
-
-        self::log([
-            'log' => 'injection started',
-            'url' => $this->data['url'],
-            'type' => 'injection'
-        ]);
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
             self::log( 'Dom parser not loaded' );

@@ -224,22 +224,10 @@ abstract class UnusedCSS {
 
 	public function purge_css() {
 
-        self::log([
-            'log' => 'purging css started',
-            'url' => $this->url,
-            'type' => 'purging'
-        ]);
-
 		$this->url = $this->transform_url( $this->url );
 
 		// disabled exceptions only for frontend
 		if ( $this->enabled_frontend() ) {
-
-            self::log([
-                'log' => 'frontend enabled',
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
 
 			$this->get_css();
 
