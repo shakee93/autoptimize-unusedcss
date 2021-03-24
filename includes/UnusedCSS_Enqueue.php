@@ -13,13 +13,15 @@ class UnusedCSS_Enqueue {
     private $data;
     private $options;
 
-    function __construct()
+    function __construct($data)
     {
         $this->file_system = new UnusedCSS_FileSystem();
 
+        $this->data = $data;
+
         $this->options = apply_filters('uucss/settings-options', []);
 
-        add_filter('uucss/enqueue/inject-css', [$this, 'inject_css'], 10, 3);
+        add_filter('uucss/enqueue/inject-css', [$this, 'inject_css'], 10, 1);
         add_action('uucss/enqueue/before-enqueue', [$this, 'before_enqueue']);
         add_action('uucss/enqueue/replace-inline-css', [$this, 'replace_inline_css']);
         add_action('uucss/enqueue/replace-style-sheets', [$this, 'replace_style_sheets']);
@@ -284,9 +286,7 @@ class UnusedCSS_Enqueue {
         }
     }
 
-    public function inject_css($html, $data){
-
-        $this->data = $data;
+    public function inject_css($html){
 
         self::log([
             'log' => 'injection started',

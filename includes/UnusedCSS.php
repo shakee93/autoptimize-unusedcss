@@ -36,7 +36,7 @@ abstract class UnusedCSS {
     {
         $this->file_system = new UnusedCSS_FileSystem();
 
-        $this->base = trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . 'uucss';
+        $this->base = apply_filters('uucss/cache-file-base-dir','/cache/rapidload/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
@@ -242,7 +242,23 @@ abstract class UnusedCSS {
             ]);
 
 			$this->get_css();
-			$this->replace_css();
+
+			if(UnusedCSS_Settings::link_exists( $this->url ) && !isset( $_REQUEST['no_uucss'] )){
+
+                $data = UnusedCSS_Settings::get_link( $this->url );
+
+                if ( $data['status'] === 'success' && isset($data['files']) ) {
+
+                    $this->frontend_scripts($data);
+
+                    new UnusedCSS_Enqueue($data);
+
+                    $this->replace_css();
+                }
+
+            }
+
+
 		}
 
         if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {

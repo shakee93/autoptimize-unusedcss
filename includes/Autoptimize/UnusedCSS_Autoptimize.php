@@ -52,6 +52,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        $this->clear_cache(null, $args);
         });
 
+	    add_filter('uucss/cache-file-base-dir', function ($value){
+            return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
+        });
+
 	    add_filter('uucss/autoptimize-cdn-url', function ($link){
 	        return $this->uucss_ao_base->url_replace_cdn($link);
         },10,1);
@@ -89,8 +93,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
 
 	    new UnusedCSS_Queue();
-
-        new UnusedCSS_Enqueue();
     }
 
     function add_update_message(){
@@ -235,49 +237,16 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     public function replace_css(){
 
-        self::log([
-            'log' => 'replacing css initiated',
-            'url' => $this->url,
-            'type' => 'injection'
-        ]);
-
-	    $this->url = $this->transform_url( $this->url );
-
-	    if ( ! UnusedCSS_Settings::link_exists( $this->url ) ) {
-		    return;
-	    }
-
-	    if ( isset( $_REQUEST['no_uucss'] ) ) {
-		    return;
-	    }
-
-	    $data = UnusedCSS_Settings::get_link( $this->url );
-
-	    if ( $data['status'] !== 'success' && ! $data['files'] ) {
-		    return;
-	    }
-
-	    // inject frontend scripts
-	    $this->frontend_scripts( $data );
-
-	    add_action( 'autoptimize_html_after_minify', function ( $html ) use ( $data ) {
+	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
 
             self::log([
                 'log' => 'injecting css initiated after autoptimize minify',
-                'url' => $data['url'],
+                'url' => $this->url,
                 'type' => 'injection'
             ]);
 
-            $html = $this->inject_css( $html, $data );
-
-		    return $html;
+            return apply_filters('uucss/enqueue/inject-css', $html);
 	    }, 99 );
-
-        self::log([
-            'log' => 'injection initialized',
-            'url' => $this->url,
-            'type' => 'injection'
-        ]);
     }
 
 	public static function is_css( $el ) {
