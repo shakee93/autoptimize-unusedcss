@@ -264,7 +264,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-        return apply_filters('uucss/inject-css',$html, $data, $this);
+        return apply_filters('uucss/enqueue/inject-css',$html, $data, $this);
 	}
 
 	public function ao_handled($link){
