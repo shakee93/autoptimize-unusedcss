@@ -170,7 +170,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
 	public static function ao_installed() {
-	    return file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php') ||
+	    return file_exists(ABSPATH . PLUGINDIR . '/' . UnusedCSS_Autoptimize::$provider_path) ||
             file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php');
     }
 
@@ -180,7 +180,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 	    }
 
-	    return is_plugin_active( 'autoptimize/autoptimize.php' ) ||
+	    return is_plugin_active( UnusedCSS_Autoptimize::$provider_path ) ||
 	           is_plugin_active( 'autoptimize-beta/autoptimize.php' );
     }
 
@@ -190,8 +190,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
     public static function get_installed_ao_plugin(){
-	    if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php')){
-	        return 'autoptimize/autoptimize.php';
+	    if(file_exists(ABSPATH . PLUGINDIR . '/' . UnusedCSS_Autoptimize::$provider_path)){
+	        return '/' . UnusedCSS_Autoptimize::$provider_path;
         }
 	    if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
 	        return 'autoptimize-beta/autoptimize.php';

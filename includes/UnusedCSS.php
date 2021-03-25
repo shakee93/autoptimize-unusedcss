@@ -11,7 +11,7 @@ abstract class UnusedCSS {
 
 	public $base = null;
 	public $provider = null;
-	public $provider_path = null;
+	public static $provider_path = null;
 
 	public $url = null;
 	public $css = [];
@@ -658,7 +658,7 @@ abstract class UnusedCSS {
     }
 
     public function is_provider_installed() {
-        $file = ABSPATH . PLUGINDIR . '/' . $this->provider_path;
+        $file = ABSPATH . PLUGINDIR . '/' . self::$provider_path;
 
         return file_exists( $file );
     }

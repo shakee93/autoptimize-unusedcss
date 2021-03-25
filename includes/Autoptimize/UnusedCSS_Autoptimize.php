@@ -21,7 +21,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->provider = 'autoptimize';
 
-	    $this->provider_path = 'autoptimize/autoptimize.php';
+	    self::$provider_path = 'autoptimize/autoptimize.php';
 
         $this->options = UnusedCSS_Admin::fetch_options();
 
