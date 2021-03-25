@@ -56,11 +56,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
         });
 
-	    add_filter('uucss/enqueue/autoptimize-cdn-url', function ($link){
+	    add_filter('uucss/enqueue/provider-cdn-url', function ($link){
 	        return $this->uucss_ao_base->url_replace_cdn($link);
         },10,1);
 
-	    add_filter('uucss/enqueue/autoptimize-handled', function ($handled , $link ){
+	    add_filter('uucss/enqueue/provider-handled-file', function ($handled , $link ){
 	        return count($this->ao_handled($link)) > 0;
         },10,2);
 

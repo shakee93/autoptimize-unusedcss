@@ -22,10 +22,6 @@ class UnusedCSS_Enqueue {
         $this->options = apply_filters('uucss/settings-options', []);
 
         add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
-        add_action('uucss/enqueue/before-enqueue', [$this, 'before_enqueue']);
-        add_action('uucss/enqueue/replace-inline-css', [$this, 'replace_inline_css']);
-        add_action('uucss/enqueue/replace-style-sheets', [$this, 'replace_style_sheets']);
-        add_action('uucss/enqueue/enqueue-completed', [$this, 'enqueue_completed']);
     }
 
     public function replace_inline_css(){
@@ -189,7 +185,7 @@ class UnusedCSS_Enqueue {
 
                     if ( ! $file ) {
                         // Retry to see if file can be found with CDN url
-                        $file = array_search( apply_filters('uucss/enqueue/autoptimize-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
+                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
                     }
 
                     $key = isset($this->data['files']) ? $file : null;
@@ -205,7 +201,7 @@ class UnusedCSS_Enqueue {
                     $newLink = apply_filters('uucss/enqueue/cache-file-url', $uucss_file);
 
                     // check the file is processed via AO
-                    $is_ao_css = apply_filters('uucss/enqueue/autoptimize-handled', false, $link);
+                    $is_ao_css = apply_filters('uucss/enqueue/provider-handled-file', false, $link);
 
                     if($is_ao_css){
 
@@ -272,13 +268,13 @@ class UnusedCSS_Enqueue {
 
         if ( $this->dom ) {
 
-            do_action('uucss/enqueue/before-enqueue');
+            $this->before_enqueue();
 
-            do_action('uucss/enqueue/replace-style-sheets');
+            $this->replace_style_sheets();
 
-            do_action('uucss/enqueue/replace-inline-css');
+            $this->replace_inline_css();
 
-            do_action('uucss/enqueue/enqueue-completed');
+            $this->enqueue_completed();
 
             header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $this->inject->found_css_files ) . count( $this->inject->found_css_cache_files ) . count( $this->inject->injected_css_files ) . ']' );
 
