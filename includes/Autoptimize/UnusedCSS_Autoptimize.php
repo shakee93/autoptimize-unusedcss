@@ -68,10 +68,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        return $this->get_cached_file($uucss_file, $this->uucss_ao_base->cdn_url);
         },10,1);
 
-	    add_action('uucss/enqueue/inline-css-content', function ($sheet, $link){
-	        $this->inline_sheet($sheet, $link);
-        },10,2);
-
 	    add_filter('uucss/enqueue/inline-css-enabled', function ($value){
 	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
         },10,1);
@@ -258,19 +254,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return $this->str_contains( $ao_base->url_replace_cdn($item), preg_replace('/\?.*/', '', $link) );
         } );
     }
-
-	protected function inline_sheet( $sheet, $link ) {
-
-		$inline = $this->get_inline_content( $link );
-
-		if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/inline-css-limit', 5 * 1000 ) ) {
-			return;
-		}
-
-		$sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
-
-	}
-
 
 	public function flush_page_cache( $args ) {
 		$url = null;

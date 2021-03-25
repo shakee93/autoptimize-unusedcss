@@ -320,11 +320,11 @@ class UnusedCSS_Enqueue {
 
     }
 
-    private function get_inline_content( $file_url ) {
+    private function get_inline_content( $file_name ) {
 
         $file = implode( '/', [
             UnusedCSS::$base_dir,
-            $file_url
+            $file_name
         ] );
 
         return [

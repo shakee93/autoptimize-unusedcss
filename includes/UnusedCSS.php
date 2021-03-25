@@ -536,20 +536,6 @@ abstract class UnusedCSS {
 		] );
 	}
 
-	protected function get_inline_content( $file_url ) {
-
-		$file = implode( '/', [
-			self::$base_dir,
-			$file_url
-		] );
-
-		return [
-			'size'    => $this->file_system->size( $file ),
-			'content' => $this->file_system->get_contents( $file )
-		];
-	}
-
-
     public function vanish() {
 	    if ( ! $this->initFileSystem() ) {
 		    return;
