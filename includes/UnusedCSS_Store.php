@@ -36,7 +36,7 @@ class UnusedCSS_Store {
         $this->provider = $provider;
         $this->url = $url;
         $this->args = $args;
-        $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
+        $this->options = UnusedCSS_Admin::fetch_options();
 
         $this->file_system = new UnusedCSS_FileSystem();
 

@@ -17,7 +17,7 @@ class UnusedCSS_Queue
 
     function init(){
 
-        $options = UnusedCSS_Autoptimize_Admin::fetch_options();
+        $options = UnusedCSS_Admin::fetch_options();
 
         if(isset($options['uucss_queue_interval'])){
             self::$interval = (int) $options['uucss_queue_interval'];

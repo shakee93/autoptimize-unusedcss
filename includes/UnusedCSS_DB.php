@@ -28,13 +28,13 @@ class UnusedCSS_DB
         $error = self::create_tables($new_site->blog_id . '_');
 
         if(empty($error)){
-            UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+            UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
         }
     }
 
     static function check_db_updates(){
 
-        self::$current_version = UnusedCSS_Autoptimize_Admin::get_site_option( self::$db_option );
+        self::$current_version = UnusedCSS_Admin::get_site_option( self::$db_option );
 
         add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
 
@@ -71,11 +71,11 @@ class UnusedCSS_DB
 		            ));
 	            }
 
-	            if(!UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option)){
+	            if(!UnusedCSS_Admin::get_site_option(self::$db_option)){
 		            self::seed();
 	            }
 
-                UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
+                UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
 
 	            wp_send_json_success([
 		            'db_updated' => true
@@ -92,7 +92,7 @@ class UnusedCSS_DB
 
 	static function seed() {
 
-		$maps = UnusedCSS_Autoptimize_Admin::get_site_option( UnusedCSS_Settings::$map_key );
+		$maps = UnusedCSS_Admin::get_site_option( UnusedCSS_Settings::$map_key );
 
 		if ( empty( $maps ) ) {
 			return;
@@ -126,7 +126,7 @@ class UnusedCSS_DB
 		}
 
 		// remove old option after seeding completed
-        UnusedCSS_Autoptimize_Admin::delete_site_option( UnusedCSS_Settings::$map_key );
+        UnusedCSS_Admin::delete_site_option( UnusedCSS_Settings::$map_key );
 	}
 
 
@@ -242,7 +242,7 @@ class UnusedCSS_DB
 
 
     static function migrated(){
-        $option = UnusedCSS_Autoptimize_Admin::get_site_option(self::$db_option);
+        $option = UnusedCSS_Admin::get_site_option(self::$db_option);
         return isset($option) && !empty($option );
     }
 
@@ -590,8 +590,8 @@ class UnusedCSS_DB
         	return;
         }
 
-        UnusedCSS_Autoptimize_Admin::update_site_option( self::$db_option, self::$db_version );
-        UnusedCSS_Autoptimize_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
+        UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
+        UnusedCSS_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
 
@@ -692,7 +692,7 @@ class UnusedCSS_DB
 
         if(empty($wpdb->last_error)){
 
-            UnusedCSS_Autoptimize_Admin::delete_site_option(self::$db_option);
+            UnusedCSS_Admin::delete_site_option(self::$db_option);
 
 		}
 

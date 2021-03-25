@@ -276,4 +276,34 @@ abstract class UnusedCSS_Admin {
         }
         return get_site_option( 'autoptimize_uucss_settings', false );
     }
+
+    public static function get_site_option($name)
+    {
+        if(is_multisite()){
+
+            return get_blog_option(get_current_blog_id(), $name, false);
+
+        }
+        return get_site_option( $name, false );
+    }
+
+    public static function update_site_option($name, $value){
+
+        if(is_multisite()){
+
+            return update_blog_option(get_current_blog_id(), $name, $value);
+
+        }
+        return update_site_option($name, $value);
+    }
+
+    public static function delete_site_option($name){
+
+        if(is_multisite()){
+
+            return delete_blog_option(get_current_blog_id(), $name);
+
+        }
+        return delete_site_option($name);
+    }
 }

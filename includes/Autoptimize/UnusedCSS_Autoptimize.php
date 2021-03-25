@@ -19,19 +19,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     public function __construct()
     {
 
-	    new UnusedCSS_Feedback();
-
-        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-        $this->add_update_message();
-
-	    parent::enqueueGlobalScript();
-
 	    $this->provider = 'autoptimize';
 
-	    UnusedCSS_DB::check_db_updates();
-
-	    register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
+	    $this->provider_path = 'autoptimize/autoptimize.php';
 
 	    /**
 	     * initialize on-boarding functions
@@ -45,7 +35,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         $this->uucss_ao_base = new autoptimizeStyles(null);
         $this->uucss_ao_base->cdn_url = autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
 
-	    $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
+	    $this->options = UnusedCSS_Admin::fetch_options();
 
 	    add_action( 'autoptimize_action_cachepurged', function (){
 	        $args['soft'] = true;
@@ -72,9 +62,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
         },10,1);
 
-	    add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
-	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
-	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 
 	    parent::__construct();
@@ -83,59 +70,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	     * Initialize admin area functions
 	     */
 	    new UnusedCSS_Autoptimize_Admin( $this );
-
-	    new UnusedCSS_Queue();
-    }
-
-    function add_update_message(){
-
-        global $pagenow;
-
-        if ( 'plugins.php' === $pagenow )
-        {
-            $file   = basename( UUCSS_PLUGIN_FILE );
-            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
-            $hook = "in_plugin_update_message-{$folder}/{$file}";
-            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
-        }
-
-    }
-
-    function render_update_message($plugin_data, $r ){
-
-        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
-
-        $changelog  = stristr( $data, '== Changelog ==' );
-
-        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
-
-        if(isset($changelog[1])){
-
-            $changelog = explode('*', $changelog[1]);
-
-            array_shift($changelog);
-
-            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
-
-            foreach ($changelog as $index => $log){
-                if($index == 3){
-                    break;
-                }
-                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
-            }
-
-            echo '</ol></div><p style="display: none" class="empty">';
-
-        }
-    }
-
-    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
-    {
-        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
-        }
-        return $plugin_meta;
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -201,7 +135,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		return $this->deps_available;
 	}
 
-
     public function enabled() {
 
         if (!parent::enabled()) {
@@ -215,7 +148,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         return true;
     }
 
-
     public function get_css(){
 
 
@@ -226,23 +158,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     }
 
-
     public function replace_css(){
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
             return apply_filters('uucss/enqueue/content', $html);
 	    }, 99 );
+
     }
-
-	public static function is_css( $el ) {
-		return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
-	}
-
-
-	public function inject_css( $html, $data ) {
-
-        return apply_filters('uucss/enqueue/content',$html, $data);
-	}
 
 	public function ao_handled($link){
         $ao_base = $this->uucss_ao_base;
@@ -250,43 +172,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return $this->str_contains( $ao_base->url_replace_cdn($item), preg_replace('/\?.*/', '', $link) );
         } );
     }
-
-	public function flush_page_cache( $args ) {
-		$url = null;
-
-		//autoptimizeCache::flushPageCache();
-
-		if ( isset( $args['url'] ) ) {
-			$url = $this->transform_url( $args['url'] );
-		}
-
-		$this->flush_lw_varnish( $url );
-
-	}
-
-    public function flush_lw_varnish($url = null)
-    {
-        if (!class_exists('LW_Varnish_Cache_Purger')) {
-            return;
-        }
-
-	    if ( $url ) {
-		    LW_Varnish_Cache_Purger::get_instance()->purge_url( $url );
-		    LW_Varnish_Cache_Purger::get_instance()->do_purge();
-
-		    return;
-	    }
-
-	    LW_Varnish_Cache_Purger::get_instance()->do_purge_all();
-    }
-
-
-	public function is_autoptimize_installed() {
-		$file = ABSPATH . PLUGINDIR . '/autoptimize/autoptimize.php';
-
-		return file_exists( $file );
-	}
-
 
 	public function create_server_compressed_files( $file_location, $css ) {
 

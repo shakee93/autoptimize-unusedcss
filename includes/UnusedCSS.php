@@ -11,6 +11,7 @@ abstract class UnusedCSS {
 
 	public $base = null;
 	public $provider = null;
+	public $provider_path = null;
 
 	public $url = null;
 	public $css = [];
@@ -34,6 +35,18 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
+        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
+
+        new UnusedCSS_Feedback();
+
+        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+        $this->add_update_message();
+
+        self::enqueueGlobalScript();
+
+        UnusedCSS_DB::check_db_updates();
+
         $this->file_system = new UnusedCSS_FileSystem();
 
         $this->base = apply_filters('uucss/cache-file-base-dir','/cache/rapidload/') . 'uucss';
@@ -43,6 +56,8 @@ abstract class UnusedCSS {
 
 		    return;
 	    }
+
+        add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
@@ -56,8 +71,59 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
+        new UnusedCSS_Queue();
     }
 
+    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
+        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
+        }
+        return $plugin_meta;
+    }
+
+    function add_update_message(){
+
+        global $pagenow;
+
+        if ( 'plugins.php' === $pagenow )
+        {
+            $file   = basename( UUCSS_PLUGIN_FILE );
+            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
+            $hook = "in_plugin_update_message-{$folder}/{$file}";
+            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
+        }
+
+    }
+
+    function render_update_message($plugin_data, $r ){
+
+        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+
+        $changelog  = stristr( $data, '== Changelog ==' );
+
+        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
+
+        if(isset($changelog[1])){
+
+            $changelog = explode('*', $changelog[1]);
+
+            array_shift($changelog);
+
+            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+
+            foreach ($changelog as $index => $log){
+                if($index == 3){
+                    break;
+                }
+                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
+            }
+
+            echo '</ol></div><p style="display: none" class="empty">';
+
+        }
+    }
 
 	public function frontend_scripts( $data ) {
 
@@ -558,5 +624,11 @@ abstract class UnusedCSS {
            return false !== strpos($file, '.css');
         });
         return count($files);
+    }
+
+    public function is_provider_installed() {
+        $file = ABSPATH . PLUGINDIR . '/' . $this->provider_path;
+
+        return file_exists( $file );
     }
 }
