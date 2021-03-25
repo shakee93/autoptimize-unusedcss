@@ -144,6 +144,8 @@ class UnusedCSS_Enqueue {
             ], $this->data['url']);
 
         }
+
+        $this->log_action(json_encode($this->inject));
     }
 
     public function replace_style_sheets(){
