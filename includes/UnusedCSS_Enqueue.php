@@ -202,6 +202,12 @@ class UnusedCSS_Enqueue {
 
                     $newLink = apply_filters('uucss/cache-file-path', $uucss_file);
 
+                    self::log([
+                        'log' => 'file replaced ' . $newLink . ' for ' . $link,
+                        'url' => $this->data['url'],
+                        'type' => 'injection'
+                    ]);
+
                     // check the file is processed via AO
                     $is_ao_css = apply_filters('uucss/ao-handled', false, $link);
 
