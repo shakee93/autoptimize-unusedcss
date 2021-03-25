@@ -217,7 +217,7 @@ class UnusedCSS_Enqueue {
                         $sheet->href  = $newLink;
 
                         self::log([
-                            'log' => 'file replaced ' . $sheet->href . '\nfor ' . $link,
+                            'log' => 'file replaced ' . $sheet->href . '<br>for ' . $link,
                             'url' => $this->data['url'],
                             'type' => 'injection'
                         ]);
