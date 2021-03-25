@@ -318,7 +318,7 @@ trait UnusedCSS_Utils {
 	    return UUCSS_ACTIVATION_URL . '?' . build_query( [
 			    'action' => $action,
 			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
-			    'site'   => get_site_url(),
+			    'site'   => trailingslashit(get_site_url()),
 			    'back'   => admin_url( $to ),
 			    'goto'   => UUCSS_ACTIVATION_URL
 		    ] );

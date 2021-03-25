@@ -42,7 +42,7 @@ class UnusedCSS_Autoptimize_Onboard {
         }
 
         add_filter('uucss/purge/async', function ($async){ return false;}, 10, 1);
-        $this->uucss->cache(get_site_url(), []);
+        $this->uucss->cache(trailingslashit(get_site_url()), []);
 
         $this->ao_installed();
 

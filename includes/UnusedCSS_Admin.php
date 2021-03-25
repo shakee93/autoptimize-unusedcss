@@ -143,7 +143,7 @@ abstract class UnusedCSS_Admin {
 		$api = new UnusedCSS_Api();
 
 		$data = $api->get( 'license', [
-			'url' => get_site_url()
+			'url' => trailingslashit(get_site_url())
 		] );
 
 		if ( ! is_wp_error( $data ) ) {
