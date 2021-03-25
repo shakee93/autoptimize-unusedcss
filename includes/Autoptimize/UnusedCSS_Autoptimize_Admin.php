@@ -95,9 +95,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     function mark_faqs_read(){
 
-	    $options = self::fetch_options();
-	    $options['faqs_read'] = true;
-        self::update_site_option('autoptimize_uucss_settings', $options);
+        self::update_site_option('rapidload_faqs_read', true);
         wp_send_json_success(true);
     }
 
@@ -183,9 +181,9 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function get_faqs(){
 
-        $options = self::fetch_options();
+        $rapidload_faqs_read = self::get_site_option('rapidload_faqs_read');
 
-        if(isset($options['faqs_read'])){
+        if(!empty($rapidload_faqs_read)){
             return [];
         }
 
