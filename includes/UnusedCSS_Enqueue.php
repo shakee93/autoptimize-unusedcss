@@ -216,7 +216,7 @@ class UnusedCSS_Enqueue {
                         $sheet->uucss = true;
                         $sheet->href  = $newLink;
 
-                        $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'<br><br>for <a href="' . $link . '" target="_blank">'. $link);
+                        $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'</a><br><br>for <a href="' . $link . '" target="_blank">'. $link . '</a>');
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
@@ -235,6 +235,8 @@ class UnusedCSS_Enqueue {
                         $this->inject->successfully_injected = false;
 
                         if(!in_array($link, array_column($this->data['meta']['warnings'], 'file'))){
+
+                            $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
 
                             $this->data['meta']['warnings'][] = [
                                 "file" => $link,
