@@ -216,7 +216,7 @@ class UnusedCSS_Enqueue {
                         $sheet->uucss = true;
                         $sheet->href  = $newLink;
 
-                        $this->log_action('file replaced ' . $sheet->href . '<br>for ' . $link);
+                        $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'<br>for <a href="' . $link . '" target="_blank">'. $link);
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
