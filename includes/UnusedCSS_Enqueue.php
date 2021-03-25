@@ -216,11 +216,7 @@ class UnusedCSS_Enqueue {
                         $sheet->uucss = true;
                         $sheet->href  = $newLink;
 
-                        self::log([
-                            'log' => 'file replaced ' . $sheet->href . '<br>for ' . $link,
-                            'url' => $this->data['url'],
-                            'type' => 'injection'
-                        ]);
+                        $this->log_action('file replaced ' . $sheet->href . '<br>for ' . $link);
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
@@ -298,5 +294,13 @@ class UnusedCSS_Enqueue {
             return true;
         }
         return substr( $haystack, -$length ) === $needle;
+    }
+
+    public function log_action($message){
+        self::log([
+            'log' => $message,
+            'url' => isset($this->data['url']) ? $this->data['url'] : null,
+            'type' => 'injection'
+        ]);
     }
 }
