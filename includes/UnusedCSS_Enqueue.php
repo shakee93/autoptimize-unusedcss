@@ -34,7 +34,7 @@ class UnusedCSS_Enqueue {
 
         if(isset($this->options['uucss_include_inline_css']) &&
             $this->options['uucss_include_inline_css'] == '1' &&
-            apply_filters('uucss/inline-css-enabled', false) &&
+            apply_filters('uucss/enqueue/inline-css-enabled', false) &&
             isset($this->data['files']) && !empty($this->data['files'])){
 
             $inline_style_content = '';
@@ -47,7 +47,7 @@ class UnusedCSS_Enqueue {
                     continue;
                 }
 
-                $exclude_ids = apply_filters('uucss/inline/exclude-id',[]);
+                $exclude_ids = apply_filters('uucss/enqueue/inline-exclude-id',[]);
 
                 if(in_array($style->id, $exclude_ids)){
                     continue;
@@ -170,7 +170,7 @@ class UnusedCSS_Enqueue {
 
                 $key = false;
 
-                if(apply_filters('uucss/path-based-search', true) && self::endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
+                if(apply_filters('uucss/enqueue/path-based-search', true) && self::endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
 
                     $url_parts = parse_url( $link );
 
@@ -183,13 +183,13 @@ class UnusedCSS_Enqueue {
 
                 }else{
 
-                    $link = apply_filters('uucss/cdn-url', $link);
+                    $link = apply_filters('uucss/enqueue/cdn-url', $link);
 
                     $file = array_search( $link, array_column( $this->data['files'], 'original' ) );
 
                     if ( ! $file ) {
                         // Retry to see if file can be found with CDN url
-                        $file = array_search( apply_filters('uucss/autoptimize-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
+                        $file = array_search( apply_filters('uucss/enqueue/autoptimize-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
                     }
 
                     $key = isset($this->data['files']) ? $file : null;
@@ -202,10 +202,10 @@ class UnusedCSS_Enqueue {
 
                     array_push( $this->inject->found_css_cache_files, $link );
 
-                    $newLink = apply_filters('uucss/cache-file-path', $uucss_file);
+                    $newLink = apply_filters('uucss/enqueue/cache-file-path', $uucss_file);
 
                     // check the file is processed via AO
-                    $is_ao_css = apply_filters('uucss/ao-handled', false, $link);
+                    $is_ao_css = apply_filters('uucss/enqueue/autoptimize-handled', false, $link);
 
                     if($is_ao_css){
 
@@ -222,7 +222,7 @@ class UnusedCSS_Enqueue {
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
-                            do_action('uucss/inject/inline-sheet', $sheet, $uucss_file);
+                            do_action('uucss/enqueue/inline-css-content', $sheet, $uucss_file);
                         }
 
                         array_push( $this->inject->injected_css_files, $newLink );

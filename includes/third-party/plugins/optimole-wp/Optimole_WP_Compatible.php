@@ -15,7 +15,7 @@ class Optimole_WP_Compatible extends RapidLoad_ThirdParty {
 
     public function init_hooks()
     {
-        add_filter( 'uucss/cdn-url', [$this, 'handle'], 10, 1 );
+        add_filter( 'uucss/enqueue/cdn-url', [$this, 'handle'], 10, 1 );
     }
 
     public function handle($args)

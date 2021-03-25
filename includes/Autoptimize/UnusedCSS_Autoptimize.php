@@ -56,23 +56,23 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
         });
 
-	    add_filter('uucss/autoptimize-cdn-url', function ($link){
+	    add_filter('uucss/enqueue/autoptimize-cdn-url', function ($link){
 	        return $this->uucss_ao_base->url_replace_cdn($link);
         },10,1);
 
-	    add_filter('uucss/ao-handled', function ($handled , $link ){
+	    add_filter('uucss/enqueue/autoptimize-handled', function ($handled , $link ){
 	        return count($this->ao_handled($link)) > 0;
         },10,2);
 
-	    add_filter('uucss/cache-file-path', function ($uucss_file){
+	    add_filter('uucss/enqueue/cache-file-path', function ($uucss_file){
 	        return $this->get_cached_file($uucss_file, $this->uucss_ao_base->cdn_url);
         },10,1);
 
-	    add_action('uucss/inject/inline-sheet', function ($sheet, $link){
+	    add_action('uucss/enqueue/inline-css-content', function ($sheet, $link){
 	        $this->inline_sheet($sheet, $link);
         },10,2);
 
-	    add_filter('uucss/inline-css-enabled', function ($value){
+	    add_filter('uucss/enqueue/inline-css-enabled', function ($value){
 	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
         },10,1);
 
