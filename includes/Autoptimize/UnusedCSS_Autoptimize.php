@@ -73,46 +73,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	    new UnusedCSS_Autoptimize_Admin( $this );
     }
 
-    public function is_url_allowed($url = null, $args = null)
-    {
-	    if ( ! $url ) {
-		    $url = $this->url;
-	    }
-
-	    if ( ! parent::is_url_allowed( $url, $args ) ) {
-		    return false;
-	    }
-
-	    if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
-		    $exploded = explode( ',', $this->options['uucss_excluded_links'] );
-
-		    foreach ( $exploded as $pattern ) {
-
-			    if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
-
-                    $pattern = parse_url( $pattern );
-
-				    $path = $pattern['path'];
-				    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
-
-				    $pattern = $path . $query;
-
-			    }
-
-			    if(self::str_contains( $pattern, '*' ) && $this->is_path_glob_matched(urldecode($url), $pattern)){
-                    $this->log( 'skipped : ' . $url );
-                    return false;
-                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
-				    $this->log( 'skipped : ' . $url );
-                    return false;
-                }
-
-            }
-        }
-
-        return true;
-    }
-
     public function check_dependencies() {
 
 		if(function_exists('autoptimize')) {
