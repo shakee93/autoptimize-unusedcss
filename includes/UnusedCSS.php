@@ -154,7 +154,7 @@ abstract class UnusedCSS {
 			$data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
 		        'home_url' => home_url(),
 		        'api_url' => UnusedCSS_Api::get_key()
 	        );
