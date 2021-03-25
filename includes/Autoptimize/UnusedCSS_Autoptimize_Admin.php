@@ -25,11 +25,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-        if ( ! self::enabled() ) {
-            self::$enabled = false;
-            return;
-        }
-
 		if ( is_admin() ) {
 
 			add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
@@ -37,6 +32,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
 		}
+
+        parent::__construct( $ao_uucss );
+
+        if ( ! self::enabled() ) {
+            self::$enabled = false;
+            return;
+        }
 
 	    add_action( 'admin_bar_menu', function () {
 
@@ -56,8 +58,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    ) );
 
 	    }, 1 );
-
-	    parent::__construct( $ao_uucss );
 
     }
 
