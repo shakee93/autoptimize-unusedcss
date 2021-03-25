@@ -274,9 +274,9 @@ class UnusedCSS_Enqueue {
 
             do_action('uucss/enqueue/before-enqueue');
 
-            do_action('uucss/enqueue/replace-inline-css');
-
             do_action('uucss/enqueue/replace-style-sheets');
+
+            do_action('uucss/enqueue/replace-inline-css');
 
             do_action('uucss/enqueue/enqueue-completed');
 
