@@ -45,7 +45,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         }
 
-	    add_filter('uucss/cache-file-base-dir', function ($value){
+	    add_filter('uucss/cache-base-dir', function ($value){
             return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
         });
 

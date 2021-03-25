@@ -49,7 +49,7 @@ abstract class UnusedCSS {
 
         $this->file_system = new UnusedCSS_FileSystem();
 
-        $this->base = apply_filters('uucss/cache-file-base-dir','/cache/rapidload/') . 'uucss';
+        $this->base = apply_filters('uucss/cache-base-dir','/cache/rapidload/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );

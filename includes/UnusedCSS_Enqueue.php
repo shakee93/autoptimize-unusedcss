@@ -144,7 +144,7 @@ class UnusedCSS_Enqueue {
         $this->log_action(json_encode($this->inject));
     }
 
-    public function replace_style_sheets(){
+    public function replace_stylesheets(){
 
         $sheets = $this->dom->find( 'link' );
 
@@ -270,7 +270,7 @@ class UnusedCSS_Enqueue {
 
             $this->before_enqueue();
 
-            $this->replace_style_sheets();
+            $this->replace_stylesheets();
 
             $this->replace_inline_css();
 
