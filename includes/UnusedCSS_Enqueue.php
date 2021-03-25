@@ -222,7 +222,7 @@ class UnusedCSS_Enqueue {
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
-                            do_action('uucss/enqueue/inline-css-content', $sheet, $uucss_file);
+                            $this->inline_sheet($sheet, $uucss_file);
                         }
 
                         array_push( $this->inject->injected_css_files, $newLink );
@@ -288,11 +288,11 @@ class UnusedCSS_Enqueue {
         return $html;
     }
 
-    public static function is_css( $el ) {
+    private static function is_css( $el ) {
         return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
     }
 
-    public static function endsWith( $haystack, $needle ) {
+    private static function endsWith( $haystack, $needle ) {
         $length = strlen( $needle );
         if( !$length ) {
             return true;
@@ -300,11 +300,36 @@ class UnusedCSS_Enqueue {
         return substr( $haystack, -$length ) === $needle;
     }
 
-    public function log_action($message){
+    private function log_action($message){
         self::log([
             'log' => $message,
             'url' => isset($this->data['url']) ? $this->data['url'] : null,
             'type' => 'injection'
         ]);
+    }
+
+    private function inline_sheet( $sheet, $link ) {
+
+        $inline = $this->get_inline_content( $link );
+
+        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 1000 ) ) {
+            return;
+        }
+
+        $sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
+
+    }
+
+    private function get_inline_content( $file_url ) {
+
+        $file = implode( '/', [
+            UnusedCSS::$base_dir,
+            $file_url
+        ] );
+
+        return [
+            'size'    => $this->file_system->size( $file ),
+            'content' => $this->file_system->get_contents( $file )
+        ];
     }
 }
