@@ -21,11 +21,11 @@ class UnusedCSS_Feedback {
 
 	function enqueue_feedback_scripts(){
 
-		wp_enqueue_script( 'uucss_feedback', UUCSS_PLUGIN_URL . 'assets/js/utils/uucss_feedback.js?v=1.0', array(
+		wp_enqueue_script( 'uucss_feedback', UUCSS_PLUGIN_URL . 'assets/js/utils/uucss_feedback.js', array(
 			'jquery'
-		) );
+		),UUCSS_VERSION );
 
-		wp_enqueue_style('uucss_feedback', UUCSS_PLUGIN_URL . 'assets/css/utils/uucss_feedback.css?v=1.0');
+		wp_enqueue_style('uucss_feedback', UUCSS_PLUGIN_URL . 'assets/css/utils/uucss_feedback.css', null, UUCSS_VERSION);
 	}
 
 	function render_feedback_model(){
