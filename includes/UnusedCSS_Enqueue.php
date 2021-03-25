@@ -202,7 +202,7 @@ class UnusedCSS_Enqueue {
 
                     array_push( $this->inject->found_css_cache_files, $link );
 
-                    $newLink = apply_filters('uucss/enqueue/cache-file-path', $uucss_file);
+                    $newLink = apply_filters('uucss/enqueue/cache-file-url', $uucss_file);
 
                     // check the file is processed via AO
                     $is_ao_css = apply_filters('uucss/enqueue/autoptimize-handled', false, $link);

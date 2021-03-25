@@ -64,7 +64,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        return count($this->ao_handled($link)) > 0;
         },10,2);
 
-	    add_filter('uucss/enqueue/cache-file-path', function ($uucss_file){
+	    add_filter('uucss/enqueue/cache-file-url', function ($uucss_file){
 	        return $this->get_cached_file($uucss_file, $this->uucss_ao_base->cdn_url);
         },10,1);
 
