@@ -19,7 +19,7 @@ class UnusedCSS_Enqueue {
 
         $this->data = $data;
 
-        $this->options = apply_filters('uucss/settings-options', []);
+        $this->options = UnusedCSS_Admin::fetch_options();
 
         add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
     }

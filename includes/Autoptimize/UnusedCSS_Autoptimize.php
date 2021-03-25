@@ -72,10 +72,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
         },10,1);
 
-	    add_filter('uucss/settings-options', function ($value){
-	        return UnusedCSS_Autoptimize_Admin::fetch_options();
-        }, 10, 1);
-
 	    add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
 	    add_action( 'uucss/cached', [ $this, 'flush_page_cache' ], 10, 2 );
 	    add_action( 'uucss/cache_cleared', [ $this, 'flush_page_cache' ], 10, 2 );
