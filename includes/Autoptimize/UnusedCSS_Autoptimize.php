@@ -23,19 +23,18 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    $this->provider_path = 'autoptimize/autoptimize.php';
 
-	    /**
-	     * initialize on-boarding functions
-	     */
-	    new UnusedCSS_Autoptimize_Onboard( $this );
+        $this->options = UnusedCSS_Admin::fetch_options();
 
-	    if ( ! $this->check_dependencies() ) {
-		    return;
-	    }
+        parent::__construct();
+
+        new UnusedCSS_Autoptimize_Onboard( $this );
+
+        if ( ! $this->check_dependencies() ) {
+            return;
+        }
 
         $this->uucss_ao_base = new autoptimizeStyles(null);
         $this->uucss_ao_base->cdn_url = autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
-
-	    $this->options = UnusedCSS_Admin::fetch_options();
 
 	    add_action( 'autoptimize_action_cachepurged', function (){
 	        $args['soft'] = true;
@@ -63,8 +62,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         },10,1);
 
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
-
-	    parent::__construct();
 
 	    /**
 	     * Initialize admin area functions
