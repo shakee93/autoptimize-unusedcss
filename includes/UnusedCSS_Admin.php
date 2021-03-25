@@ -51,6 +51,7 @@ abstract class UnusedCSS_Admin {
         } );
 
 	    $this->cache_trigger_hooks();
+
 	    add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
 	    add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
 
@@ -443,7 +444,7 @@ abstract class UnusedCSS_Admin {
         return !$api->is_error($result) && isset($result->data) ? $result->data : [];*/
     }
 
-    function uucss_test_url(){
+    public function uucss_test_url(){
 
         if(!isset($_REQUEST['url'])){
             wp_send_json_error('url required');
@@ -525,7 +526,7 @@ abstract class UnusedCSS_Admin {
         return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
     }
 
-    function clear_uucss_logs(){
+    public function clear_uucss_logs(){
         $file_system = new UnusedCSS_FileSystem();
 
         if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
@@ -536,7 +537,7 @@ abstract class UnusedCSS_Admin {
         wp_send_json_success(true);
     }
 
-    function uucss_logs(){
+    public function uucss_logs(){
 
         $file_system = new UnusedCSS_FileSystem();
 
@@ -555,7 +556,7 @@ abstract class UnusedCSS_Admin {
         wp_send_json_success(json_decode($data));
     }
 
-    function frontend_logs(){
+    public function frontend_logs(){
 
         $args = [];
 
@@ -568,13 +569,13 @@ abstract class UnusedCSS_Admin {
         wp_send_json_success(true);
     }
 
-    function mark_faqs_read(){
+    public function mark_faqs_read(){
 
         self::update_site_option('rapidload_faqs_read', true);
         wp_send_json_success(true);
     }
 
-    function clear_page_cache(){
+    public function clear_page_cache(){
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
@@ -639,7 +640,7 @@ abstract class UnusedCSS_Admin {
         );
     }
 
-    function meta_box( $post ) {
+    public function meta_box( $post ) {
 
         $options = $this->get_page_options($post->ID);
 
@@ -674,7 +675,6 @@ abstract class UnusedCSS_Admin {
         $this->update_meta($post_id);
 
     }
-
 
 	public function cache_trigger_hooks() {
 		add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
@@ -713,9 +713,7 @@ abstract class UnusedCSS_Admin {
 		return $data;
 	}
 
-
 	public function uucss_license() {
-
 
 		$api = new UnusedCSS_Api();
 
@@ -740,7 +738,6 @@ abstract class UnusedCSS_Admin {
 
 		wp_send_json_error( 'unknown error occurred' );
 	}
-
 
 	public function verify_api_key() {
 
