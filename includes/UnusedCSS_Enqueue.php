@@ -21,7 +21,7 @@ class UnusedCSS_Enqueue {
 
         $this->options = apply_filters('uucss/settings-options', []);
 
-        add_filter('uucss/enqueue/inject-css', [$this, 'inject_css'], 10, 1);
+        add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
         add_action('uucss/enqueue/before-enqueue', [$this, 'before_enqueue']);
         add_action('uucss/enqueue/replace-inline-css', [$this, 'replace_inline_css']);
         add_action('uucss/enqueue/replace-style-sheets', [$this, 'replace_style_sheets']);
@@ -249,7 +249,7 @@ class UnusedCSS_Enqueue {
         }
     }
 
-    public function inject_css($html){
+    public function the_content($html){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
             self::log( 'Dom parser not loaded' );

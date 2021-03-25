@@ -238,7 +238,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
     public function replace_css(){
 
 	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
-            return apply_filters('uucss/enqueue/inject-css', $html);
+            return apply_filters('uucss/enqueue/content', $html);
 	    }, 99 );
     }
 
@@ -249,7 +249,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	public function inject_css( $html, $data ) {
 
-        return apply_filters('uucss/enqueue/inject-css',$html, $data);
+        return apply_filters('uucss/enqueue/content',$html, $data);
 	}
 
 	public function ao_handled($link){
