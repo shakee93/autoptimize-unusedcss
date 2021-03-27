@@ -656,7 +656,13 @@ class UnusedCSS_DB
             $wpdb->query( "ALTER TABLE `$table_name` DROP INDEX `$index`" );
         }
 
-        $charset_collate = $wpdb->get_charset_collate();
+        $charset_collate = '';
+
+        if($wpdb->has_cap( 'collation' )){
+            $charset_collate = $wpdb->get_charset_collate();
+        }
+
+        $charset_collate = apply_filters('uucss/db/charset-collate', $charset_collate);
 
         $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
