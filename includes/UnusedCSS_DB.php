@@ -705,7 +705,10 @@ class UnusedCSS_DB
     }
 
     static function show_db_error($message){
-        self::log($message);
-        //self::add_admin_notice($message, 'error');
+        self::log([
+            'log' => $message,
+            'type' => 'general',
+            'url' => trailingslashit(get_site_url())
+        ]);
     }
 }
