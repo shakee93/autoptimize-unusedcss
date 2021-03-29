@@ -26,6 +26,9 @@ class UnusedCSS_Autoptimize_Onboard {
 		add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
 		add_action( "wp_ajax_run_first_job", [ $this, 'run_first_job' ] );
 		add_action( 'admin_head', [ $this, 'remove_notices' ] );
+		add_filter('uucss/on-board/complete', function ($value){
+		    return self::on_board_completed();
+        }, 10, 1);
 	}
 
 
@@ -42,7 +45,7 @@ class UnusedCSS_Autoptimize_Onboard {
         }
 
         add_filter('uucss/purge/async', function ($async){ return false;}, 10, 1);
-        $this->uucss->cache(get_site_url(), []);
+        $this->uucss->cache(trailingslashit(get_site_url()), []);
 
         $this->ao_installed();
 

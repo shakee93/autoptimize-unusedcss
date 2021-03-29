@@ -11,6 +11,7 @@ abstract class UnusedCSS {
 
 	public $base = null;
 	public $provider = null;
+	public static $provider_path = null;
 
 	public $url = null;
 	public $css = [];
@@ -34,15 +35,29 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
+        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
+
+        new UnusedCSS_Feedback();
+
+        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+        $this->add_update_message();
+
+        self::enqueueGlobalScript();
+
+        UnusedCSS_DB::check_db_updates();
+
         $this->file_system = new UnusedCSS_FileSystem();
 
-        $this->base = trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/') . 'uucss';
+        $this->base = apply_filters('uucss/cache-base-dir','/cache/rapidload/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
 
 		    return;
 	    }
+
+        add_action( 'uucss/content_updated', [ $this, 'refresh' ], 10, 1 );
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
@@ -56,8 +71,59 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
+        new UnusedCSS_Queue();
     }
 
+    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
+        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
+        }
+        return $plugin_meta;
+    }
+
+    function add_update_message(){
+
+        global $pagenow;
+
+        if ( 'plugins.php' === $pagenow )
+        {
+            $file   = basename( UUCSS_PLUGIN_FILE );
+            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
+            $hook = "in_plugin_update_message-{$folder}/{$file}";
+            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
+        }
+
+    }
+
+    function render_update_message($plugin_data, $r ){
+
+        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+
+        $changelog  = stristr( $data, '== Changelog ==' );
+
+        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
+
+        if(isset($changelog[1])){
+
+            $changelog = explode('*', $changelog[1]);
+
+            array_shift($changelog);
+
+            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+
+            foreach ($changelog as $index => $log){
+                if($index == 3){
+                    break;
+                }
+                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
+            }
+
+            echo '</ol></div><p style="display: none" class="empty">';
+
+        }
+    }
 
 	public function frontend_scripts( $data ) {
 
@@ -88,7 +154,7 @@ abstract class UnusedCSS {
 			$data = array(
 		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => UnusedCSS_Autoptimize_Onboard::on_board_completed(),
+		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
 		        'home_url' => home_url(),
 		        'api_url' => UnusedCSS_Api::get_key()
 	        );
@@ -200,6 +266,10 @@ abstract class UnusedCSS {
     public function is_url_allowed($url = null, $args = null)
     {
 
+        if ( ! $url ) {
+            $url = $this->url;
+        }
+
 	    // remove .css .js files from being analyzed
 	    if ( preg_match( '/cache\/autoptimize/', $url ) ) {
 		    return false;
@@ -219,31 +289,62 @@ abstract class UnusedCSS {
 
 	    }
 
+        if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
+            $exploded = explode( ',', $this->options['uucss_excluded_links'] );
+
+            foreach ( $exploded as $pattern ) {
+
+                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+
+                    $pattern = parse_url( $pattern );
+
+                    $path = $pattern['path'];
+                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+                    $pattern = $path . $query;
+
+                }
+
+                if(self::str_contains( $pattern, '*' ) && $this->is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }
+
+            }
+        }
+
 	    return true;
     }
 
 
 	public function purge_css() {
 
-        self::log([
-            'log' => 'purging css started',
-            'url' => $this->url,
-            'type' => 'purging'
-        ]);
-
 		$this->url = $this->transform_url( $this->url );
 
 		// disabled exceptions only for frontend
 		if ( $this->enabled_frontend() ) {
 
-            self::log([
-                'log' => 'frontend enabled',
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
-
 			$this->get_css();
-			$this->replace_css();
+
+			if(UnusedCSS_Settings::link_exists( $this->url ) && !isset( $_REQUEST['no_uucss'] )){
+
+                $data = UnusedCSS_Settings::get_link( $this->url );
+
+                if ( $data['status'] === 'success' && isset($data['files']) ) {
+
+                    $this->frontend_scripts($data);
+
+                    new UnusedCSS_Enqueue($data);
+
+                    $this->replace_css();
+                }
+
+            }
+
+
 		}
 
         if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {
@@ -387,6 +488,7 @@ abstract class UnusedCSS {
 			"variables"         => isset( $this->options['uucss_variables'] ),
 			"minify"            => isset( $this->options['uucss_minify'] ),
 			"analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
+            "inlineCss"          => isset( $this->options['uucss_include_inline_css'] ),
 			"whitelistPacks"    => $whitelist_packs,
 			"safelist"          => $safelist,
 			"blocklist"          => $blocklist,
@@ -513,7 +615,7 @@ abstract class UnusedCSS {
     }
 
 
-	protected function get_cached_file( $file_url, $cdn = null ) {
+	public function get_cached_file( $file_url, $cdn = null ) {
 
 		if ( ! $cdn || empty( $cdn ) ) {
 			$cdn = content_url();
@@ -531,20 +633,6 @@ abstract class UnusedCSS {
 			$file_url
 		] );
 	}
-
-	protected function get_inline_content( $file_url ) {
-
-		$file = implode( '/', [
-			self::$base_dir,
-			$file_url
-		] );
-
-		return [
-			'size'    => $this->file_system->size( $file ),
-			'content' => $this->file_system->get_contents( $file )
-		];
-	}
-
 
     public function vanish() {
 	    if ( ! $this->initFileSystem() ) {
@@ -568,5 +656,11 @@ abstract class UnusedCSS {
            return false !== strpos($file, '.css');
         });
         return count($files);
+    }
+
+    public function is_provider_installed() {
+        $file = ABSPATH . PLUGINDIR . '/' . self::$provider_path;
+
+        return file_exists( $file );
     }
 }

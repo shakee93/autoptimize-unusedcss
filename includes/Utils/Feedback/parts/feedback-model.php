@@ -39,7 +39,7 @@
                 <ul>
                     <li><strong>Plugin version </strong> <code
                                 id="uucss_plugin_version"> <?php echo UUCSS_VERSION ?> </code></li>
-                    <li><strong>Current website:</strong> <code> <?php echo get_site_url() ?> </code></li>
+                    <li><strong>Current website:</strong> <code> <?php echo trailingslashit(get_site_url()) ?> </code></li>
                     <li><strong>Uninstall reason </strong> <i> Selected reason from the above survey </i></li>
                 </ul>
             </div>

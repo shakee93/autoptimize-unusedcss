@@ -223,6 +223,19 @@
                                         </label>
                                     </p>
 
+                                    <?php  if(autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on'): ?>
+                                        <p>
+                                            <label for="uucss_include_inline_css">
+                                                <input id='uucss_include_inline_css' type='checkbox'
+                                                       name='autoptimize_uucss_settings[uucss_include_inline_css]'
+                                                    <?php if ( isset( $options['uucss_include_inline_css'] ) )
+                                                        echo 'checked="checked"' ?>
+                                                       value='1'>
+                                                Inline CSS <em>-- Optimize Inline CSS</em>
+                                            </label>
+                                        </p>
+                                    <?php endif; ?>
+
                                     <p>
                                         <label for="uucss_cache_busting_v2">
                                             <input id='uucss_cache_busting_v2' type='checkbox'

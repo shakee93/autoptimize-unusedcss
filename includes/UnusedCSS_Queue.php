@@ -17,14 +17,14 @@ class UnusedCSS_Queue
 
     function init(){
 
-        $options = UnusedCSS_Autoptimize_Admin::fetch_options();
+        $options = UnusedCSS_Admin::fetch_options();
 
         if(isset($options['uucss_queue_interval'])){
             self::$interval = (int) $options['uucss_queue_interval'];
         }
 
         if(isset($options['uucss_jobs_per_queue'])){
-            self::$job_count = (int) $options['uucss_jobs_per_queue'];
+            self::$job_count = defined('UUCSS_JOB_COUNT_PER_QUEUE') ? UUCSS_JOB_COUNT_PER_QUEUE : (int) $options['uucss_jobs_per_queue'];
         }
 
         add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);

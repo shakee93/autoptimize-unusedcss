@@ -36,7 +36,7 @@ class UnusedCSS_Store {
         $this->provider = $provider;
         $this->url = $url;
         $this->args = $args;
-        $this->options = UnusedCSS_Autoptimize_Admin::fetch_options();
+        $this->options = UnusedCSS_Admin::fetch_options();
 
         $this->file_system = new UnusedCSS_FileSystem();
 
@@ -115,24 +115,35 @@ class UnusedCSS_Store {
 			    continue;
 		    }
 
-		    $file_location = $this->append_cache_file_dir( $file->file, $file->css );
+            if(!$this->str_contains($file->file,'//inline-style@'))
+            {
 
-		    $files[] = [
-			    'original' => $file->file,
-			    'uucss'    => $this->hashed_file_name( $file->file, $file->css ),
-		    ];
+                $file_location = $this->append_cache_file_dir( $file->file, $file->css );
 
-		    $css = '';
+                $files[] = [
+                    'original' => $file->file,
+                    'uucss'    => $this->hashed_file_name( $file->file, $file->css ),
+                ];
 
-		    if ( $this->endsWith($file->file, '.php')) {
-		    	$css = '<?php header("Content-type: text/css; charset=utf-8"); ?>';
-		    }
+                $css = '';
 
-		    $css .=  $file->css;
+                if ( $this->endsWith($file->file, '.php')) {
+                    $css = '<?php header("Content-type: text/css; charset=utf-8"); ?>';
+                }
 
-		    $this->file_system->put_contents( $file_location, $css );
+                $css .=  $file->css;
 
-		    do_action( 'uucss/cache_file_created', $file_location, $file->css );
+                $this->file_system->put_contents( $file_location, $css );
+
+                do_action( 'uucss/cache_file_created', $file_location, $file->css );
+
+            }else{
+
+                $files[] = [
+                    'original' => $file->file,
+                    'uucss'    => $file->css,
+                ];
+            }
 
 	    }
 
