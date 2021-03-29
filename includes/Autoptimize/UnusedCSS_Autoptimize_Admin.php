@@ -199,7 +199,4 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    return null;
     }
 
-    public static function first_job_done(){
-	    return (UnusedCSS_Settings::get_first_link() ? true :  false);
-    }
 }

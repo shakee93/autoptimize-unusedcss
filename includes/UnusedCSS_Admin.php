@@ -880,4 +880,8 @@ abstract class UnusedCSS_Admin {
         }
         return delete_site_option($name);
     }
+
+    public static function first_job_done(){
+        return (UnusedCSS_Settings::get_first_link() ? true :  false);
+    }
 }
