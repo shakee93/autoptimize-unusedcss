@@ -476,6 +476,10 @@ abstract class UnusedCSS {
                 [
                     'type' => 'query',
                     'rule' => 'no_uucss=true'
+                ],
+                [
+                    'type' => 'header',
+                    'rule' => 'ModPagespeed=off'
                 ]
             ]);
 
