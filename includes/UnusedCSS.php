@@ -479,7 +479,7 @@ abstract class UnusedCSS {
                 ],
                 [
                     'type' => 'header',
-                    'rule' => 'ModPagespeed=off'
+                    'rule' => 'ModPagespeed:off'
                 ]
             ]);
 
