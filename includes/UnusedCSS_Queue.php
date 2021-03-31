@@ -1,5 +1,6 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
 
 class UnusedCSS_Queue
 {

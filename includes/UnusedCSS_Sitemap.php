@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
