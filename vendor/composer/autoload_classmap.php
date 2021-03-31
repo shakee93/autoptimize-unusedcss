@@ -9,6 +9,7 @@ return array(
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
+    'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
     'Optimole_WP_Compatible' => $baseDir . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
