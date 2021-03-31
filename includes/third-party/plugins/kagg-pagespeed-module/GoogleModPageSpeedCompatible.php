@@ -25,10 +25,12 @@ class GoogleModPageSpeedCompatible extends RapidLoad_ThirdParty{
 
     public function handle($args)
     {
-        $args[] = [
-            'type' => 'query',
-            'rule' => 'ModPagespeed=off'
-        ];
+        if(class_exists('Mod_PageSpeed')){
+            $args[] = [
+                'type' => 'query',
+                'rule' => 'ModPagespeed=off'
+            ];
+        }
         return $args;
     }
 }
