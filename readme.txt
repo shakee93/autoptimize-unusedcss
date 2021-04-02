@@ -87,7 +87,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 = 1.3.20 - 02/04/2021 =
  * feat: removing unused css for inline css
  * feat: add support to Google Mod Page Speed plugin
- * improve: code refactoring
+ * improve: add filter to allow users to stop adding items to the queues dynamically
 
 = 1.3.19 - 18/03/2021 =
  * feat: tested with WordPress 5.7
