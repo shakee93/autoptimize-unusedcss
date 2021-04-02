@@ -161,7 +161,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 		    return false;
 	    }*/
 
-        return apply_filters('uucss/enabled', true);
+        return true;
     }
 
     public function render_form() {

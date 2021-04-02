@@ -238,7 +238,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    return true;
+	    return apply_filters('uucss/enabled', true);
 
     }
 
