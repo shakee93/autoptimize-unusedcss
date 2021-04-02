@@ -6,7 +6,7 @@ class UnusedCSS_Api
 {
     use UnusedCSS_Utils;
 
-    public static $apiUrl = 'https://v-app.rapidload.io/api/v1';
+    public static $apiUrl = 'https://app.rapidload.io/api/v1';
 
     public $apiKey = null;
 
