@@ -25,6 +25,10 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $this->options = UnusedCSS_Admin::fetch_options();
 
+        add_filter('uucss/cache-base-dir', function ($value){
+            return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
+        });
+
         parent::__construct();
 
         new UnusedCSS_Autoptimize_Onboard( $this );
@@ -44,10 +48,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             });
 
         }
-
-	    add_filter('uucss/cache-base-dir', function ($value){
-            return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
-        });
 
 	    add_filter('uucss/enqueue/provider-cdn-url', function ($link){
 	        return $this->uucss_ao_base->url_replace_cdn($link);
