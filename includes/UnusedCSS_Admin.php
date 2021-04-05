@@ -439,7 +439,6 @@ abstract class UnusedCSS_Admin {
 
     public function get_public_notices(){
 
-        return [];
         $api = new UnusedCSS_Api();
 
         $result = $api->get('notification');
