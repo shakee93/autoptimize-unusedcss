@@ -83,6 +83,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.1 - 05/04/2021 =
+ * NOTE: It is recommended to update immediately to v1.4.1
+ * ROLLBACK: rolling back to older queue processing method.
+
 = 1.4.0 - 05/04/2021 =
  * NOTE: It is recommended to update immediately to v1.4
  * feat: improved and faster job processing
