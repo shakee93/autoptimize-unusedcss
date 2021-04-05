@@ -385,6 +385,9 @@ abstract class UnusedCSS_Admin {
 
     public function enqueueScripts() {
 
+        wp_dequeue_script('select2');
+        wp_deregister_script('select2');
+
         wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
 
         wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.js', array(
