@@ -440,11 +440,11 @@ abstract class UnusedCSS_Admin {
     public function get_public_notices(){
 
         return [];
-        /*$api = new UnusedCSS_Api();
+        $api = new UnusedCSS_Api();
 
         $result = $api->get('notification');
 
-        return !$api->is_error($result) && isset($result->data) ? $result->data : [];*/
+        return !$api->is_error($result) && isset($result->data) ? $result->data : [];
     }
 
     public function uucss_test_url(){
