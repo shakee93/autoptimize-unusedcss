@@ -83,6 +83,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.0 - 05/04/2021 =
+ * NOTE: It is recommended to update immediately to v1.4
+ * feat: improved and faster job processing
+
 = 1.3.21 - 02/04/2021 =
  * improve: update filter stylesheet patch
 
