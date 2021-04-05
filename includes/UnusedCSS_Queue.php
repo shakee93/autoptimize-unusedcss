@@ -300,38 +300,47 @@ class UnusedCSS_Queue
     function cache($url){
         global $uucss;
 
-        $post_id = url_to_postid($url);
+        if(apply_filters('uucss/queue/redis', false)){
 
-        self::log([
-            'log' => 'fetching job id',
-            'url' => $url,
-            'type' => 'uucss-cron'
-        ]);
+            $post_id = url_to_postid($url);
 
-        $uucss_api = new UnusedCSS_Api();
-
-        $result = $uucss_api->post( 's/unusedcss',
-            array_merge( $uucss->api_options($post_id),
-                [ 'url' => $url ]
-            ));
-
-        if($uucss_api->is_error($result)){
-
-            UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
-
-            $this->log( [
-                'log' => 'fetched data stored status failed',
+            self::log([
+                'log' => 'fetching job id',
                 'url' => $url,
                 'type' => 'uucss-cron'
-            ] );
+            ]);
 
-            return;
+            $uucss_api = new UnusedCSS_Api();
+
+            $result = $uucss_api->post( 's/unusedcss',
+                array_merge( $uucss->api_options($post_id),
+                    [ 'url' => $url ]
+                ));
+
+            if($uucss_api->is_error($result)){
+
+                UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
+
+                $this->log( [
+                    'log' => 'fetched data stored status failed',
+                    'url' => $url,
+                    'type' => 'uucss-cron'
+                ] );
+
+                return;
+            }
+
+            if(isset($result->id)){
+
+                UnusedCSS_DB::update_meta(['job_id' => $result->id ], $url);
+            }
+        }else{
+
+            $post_id = url_to_postid($url);
+            $uucss->init_async_store( $uucss->provider, $url, $uucss->api_options($post_id) );
         }
 
-        if(isset($result->id)){
 
-            UnusedCSS_DB::update_meta(['job_id' => $result->id ], $url);
-        }
 
     }
 
