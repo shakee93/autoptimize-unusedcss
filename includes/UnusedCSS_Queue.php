@@ -300,7 +300,7 @@ class UnusedCSS_Queue
     function cache($url){
         global $uucss;
 
-        if(apply_filters('uucss/queue/redis', false)){
+        if(apply_filters('uucss/queue/redis', true)){
 
             $post_id = url_to_postid($url);
 
