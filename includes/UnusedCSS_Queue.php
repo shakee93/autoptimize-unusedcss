@@ -375,6 +375,20 @@ class UnusedCSS_Queue
 
         $uucss_store = new UnusedCSS_Store(null, $url,null);
 
+        if(isset($result->state)){
+
+            if($result->state == 'waiting' || $result->state == 'delayed'){
+                UnusedCSS_DB::update_meta([
+                    'status' => 'waiting'
+                ], $url);
+            }else if($result->state == 'active'){
+                UnusedCSS_DB::update_meta([
+                    'status' => 'active'
+                ], $url);
+            }
+
+        }
+
         if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
 
             $files = $uucss_store->cache_files($result->data);
