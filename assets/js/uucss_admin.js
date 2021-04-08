@@ -420,7 +420,7 @@
                     render: function (data, type, row, meta) {
                         if (row.status === 'success') {
                             return row.meta.stats.reduction + '%'
-                        }else if(row.status === 'queued' || row.status === 'processing'){
+                        }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'active' || row.status === 'waiting'){
                             return '<span class="job-file-size">-</span>';
                         }
 
