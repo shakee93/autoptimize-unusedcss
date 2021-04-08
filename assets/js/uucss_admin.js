@@ -396,7 +396,7 @@
                             classNames += 'refresh ';
                         }
                         classNames += data + ' ';
-                        return '<span class="' + classNames +'">'+ data +'</span>'
+                        return '<span class="job-status ' + classNames +'">'+ data +'</span>'
                     },
                 },
                 {

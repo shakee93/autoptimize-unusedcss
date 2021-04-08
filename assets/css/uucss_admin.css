@@ -466,6 +466,8 @@ table.dataTable thead th, table.dataTable thead td {
     border-radius: 4px;
 }
 
+#uucss-history .job-status.active,
+#uucss-history .job-status.waiting,
 #uucss-history .processing {
     background: #ccfffa;
     color: #009688;
