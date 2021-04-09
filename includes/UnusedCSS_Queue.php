@@ -72,7 +72,7 @@ class UnusedCSS_Queue
     }
 
     function update_result_hook(){
-        self::uucss_log($_POST);
+
     }
 
     function cron_exist($cron_name = 'cron_uucss_process_queue'){
