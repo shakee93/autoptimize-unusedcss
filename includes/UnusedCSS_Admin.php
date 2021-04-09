@@ -804,6 +804,7 @@ abstract class UnusedCSS_Admin {
 	    }
 
 	    $args['immediate'] = true;
+	    $args['priority'] = true;
 
 	    wp_send_json_success( $this->uucss->cache( $url, $args ) );
     }

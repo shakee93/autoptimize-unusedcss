@@ -56,7 +56,7 @@ class UnusedCSS_Store {
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
-                    [ 'url' => $this->url, 'service' => true, 'priority' => true ]
+                    [ 'url' => $this->url, 'service' => true, 'priority' => isset($this->args['priority']),'wp_nonce' => wp_create_nonce('uucss_job_hook')]
                 ) );
 
             if($uucss_api->is_error($result)){
