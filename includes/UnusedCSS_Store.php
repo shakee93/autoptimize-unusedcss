@@ -52,43 +52,73 @@ class UnusedCSS_Store {
 
 	    $uucss_api = new UnusedCSS_Api();
 
-	    $result = $uucss_api->post( 'purger',
-		    array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
-			    [ 'url' => $this->url, 'service' => true ]
-		    ) );
+        if(apply_filters('uucss/queue/redis', true)){
 
-        $this->log( [
-            'log' => 'data fetched',
-            'url' => $this->url,
-            'type' => 'store'
-        ] );
+            $result = $uucss_api->post( 's/unusedcss',
+                array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+                    [ 'url' => $this->url, 'service' => true, 'priority' => true ]
+                ) );
 
-	    if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
+            if($uucss_api->is_error($result)){
 
-	        UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
+                UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
+
+                $this->log( [
+                    'log' => 'fetched data stored status failed',
+                    'url' => $this->url,
+                    'type' => 'uucss-cron'
+                ] );
+
+                return;
+            }
+
+            if(isset($result->id)){
+
+                UnusedCSS_DB::update_meta(['job_id' => $result->id ], $this->url);
+            }
+
+        }else{
+
+            $result = $uucss_api->post( 'purger',
+                array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+                    [ 'url' => $this->url, 'service' => true ]
+                ) );
 
             $this->log( [
-                'log' => 'fetched data stored status failed',
+                'log' => 'data fetched',
                 'url' => $this->url,
                 'type' => 'store'
             ] );
 
-		    return;
-	    }
+            if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-	    $this->result       = $result;
-	    $this->purged_files = $result->data;
+                UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
 
-	    if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
+                $this->log( [
+                    'log' => 'fetched data stored status failed',
+                    'url' => $this->url,
+                    'type' => 'store'
+                ] );
 
-		    $files = $this->cache_files($this->purged_files);
-            $this->add_link($files);
-            $this->uucss_cached();
+                return;
+            }
 
-	    }else{
+            $this->result       = $result;
+            $this->purged_files = $result->data;
 
-            $this->add_link(null);
+            if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
+
+                $files = $this->cache_files($this->purged_files);
+                $this->add_link($files);
+                $this->uucss_cached();
+
+            }else{
+
+                $this->add_link(null);
+            }
+
         }
+
 
     }
 
