@@ -60,7 +60,7 @@ class UnusedCSS_Queue
 
         add_action('uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
 
-        add_action('wp_ajax_update_result_hook', [$this, 'update_result_hook']);
+        add_action('init', [$this, 'update_result_hook']);
 
         $this->async = apply_filters('uucss/queue/async',false);
 
@@ -72,7 +72,7 @@ class UnusedCSS_Queue
     }
 
     function update_result_hook(){
-
+        self::uucss_log($_POST);
     }
 
     function cron_exist($cron_name = 'cron_uucss_process_queue'){
@@ -320,7 +320,7 @@ class UnusedCSS_Queue
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss->api_options($post_id),
-                    [ 'url' => $url, 'wp_nonce' => wp_create_nonce('uucss_job_hook') ]
+                    [ 'url' => $url ]
                 ));
 
             if($uucss_api->is_error($result)){

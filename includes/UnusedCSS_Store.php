@@ -52,11 +52,11 @@ class UnusedCSS_Store {
 
 	    $uucss_api = new UnusedCSS_Api();
 
-        if(apply_filters('uucss/queue/redis', true)){
+        if(apply_filters('uucss/queue/redis', true) && !isset($this->args['first_job'])){
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
-                    [ 'url' => $this->url, 'service' => true, 'priority' => isset($this->args['priority']),'wp_nonce' => wp_create_nonce('uucss_job_hook')]
+                    [ 'url' => $this->url, 'service' => true, 'priority' => isset($this->args['priority']),'wp_nonce' => wp_create_nonce('uucss_job_hook'), 'hook_end_point' => trailingslashit(get_site_url())]
                 ) );
 
             if($uucss_api->is_error($result)){
