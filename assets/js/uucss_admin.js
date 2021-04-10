@@ -836,7 +836,7 @@
 
                 $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="requeue_selected"><a data-action_name="requeue_selected" href="#">Requeue Selected</a></li>');
-                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Processing</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Pending</a></li>');
                 $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
                 $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
