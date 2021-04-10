@@ -246,13 +246,13 @@
 
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
-                    '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
-                    '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
-                    '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
                     '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
                     '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
                     '<option value="waiting" ' + (status_filter === 'waiting'? 'selected' : '') +'>Waiting</option>' +
                     '<option value="active" ' + (status_filter === 'active'? 'selected' : '') +'>Active</option>' +
+                    '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
+                    '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
+                    '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
                 '</select>');
 
             var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
