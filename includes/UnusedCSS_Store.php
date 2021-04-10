@@ -52,7 +52,7 @@ class UnusedCSS_Store {
 
 	    $uucss_api = new UnusedCSS_Api();
 
-        if(apply_filters('uucss/queue/redis', true) && !isset($this->args['first_job'])){
+        if(apply_filters('uucss/queue/redis', true) && !isset($this->args['first_job']) && apply_filters('uucss/queue/purger-enabled', false)){
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
