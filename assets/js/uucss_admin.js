@@ -883,6 +883,10 @@
                             requeue('failed');
                             $.uucssAlert('links added to queue');
                             break;
+                        }case 'requeue_processing':{
+                            requeue('processing');
+                            $.uucssAlert('links added to queue');
+                            break;
                         }
                         case 'remove_selected':
                         case 'remove_all':{

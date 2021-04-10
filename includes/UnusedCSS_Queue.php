@@ -138,6 +138,8 @@ class UnusedCSS_Queue
         }else if($post_type == 'processing'){
 
             UnusedCSS_DB::requeue_jobs('processing');
+            UnusedCSS_DB::requeue_jobs('active');
+            UnusedCSS_DB::requeue_jobs('waiting');
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'warnings'){
