@@ -369,6 +369,29 @@ class UnusedCSS_Queue
 
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
+            $error = $uucss_api->extract_error( $result );
+
+            $errors = [
+                'Unexpected exit code: null signal: SIGILL',
+                'Unexpected exit code: null signal: SIGKILL',
+                'Unexpected exit code: null signal: SIGUSR2',
+                'job stalled more than allowable limit',
+                'Missing lock for job ' . $result->id . ' finished'
+            ];
+
+            if(in_array($error, $errors)){
+
+                UnusedCSS_DB::requeue_urls([
+                    $url
+                ]);
+
+                $this->log( [
+                    'log' => 'requeud due to allowed errors',
+                    'url' => $url,
+                    'type' => 'uucss-cron'
+                ] );
+            }
+
             UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
 
             $this->log( [
