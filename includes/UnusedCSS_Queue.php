@@ -371,15 +371,7 @@ class UnusedCSS_Queue
 
             $error = $uucss_api->extract_error( $result );
 
-            $errors = [
-                'Unexpected exit code: null signal: SIGILL',
-                'Unexpected exit code: null signal: SIGKILL',
-                'Unexpected exit code: null signal: SIGUSR2',
-                'job stalled more than allowable limit',
-                'Missing lock for job ' . $result->id . ' finished'
-            ];
-
-            if(in_array($error, $errors)){
+            if($error == 'Processing job queue failed'){
 
                 UnusedCSS_DB::requeue_urls([
                     $url
