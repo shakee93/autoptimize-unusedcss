@@ -83,6 +83,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.3 - 12/04/2021 =
+ * feat: added new 'waiting' job status
+ * improve: improved error handling for jobs
+
 = 1.4.2 - 06/04/2021 =
  * fix: improved and faster job processing
 
