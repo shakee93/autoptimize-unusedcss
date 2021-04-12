@@ -138,7 +138,6 @@ class UnusedCSS_Queue
         }else if($post_type == 'processing'){
 
             UnusedCSS_DB::requeue_jobs('processing');
-            UnusedCSS_DB::requeue_jobs('active');
             UnusedCSS_DB::requeue_jobs('waiting');
             wp_send_json_success('successfully links added to the queue');
 
@@ -261,12 +260,12 @@ class UnusedCSS_Queue
             foreach ($links as $link){
 
                 UnusedCSS_DB::update_meta([
-                    'status' => 'processing',
+                    'status' => 'waiting',
                     'job_id' => null
                 ], $link->url);
 
                 self::log([
-                    'log' => 'status updated to processing',
+                    'log' => 'status updated to waiting',
                     'url' => $link->url,
                     'type' => 'uucss-cron'
                 ]);
@@ -291,7 +290,7 @@ class UnusedCSS_Queue
 
     function uucss_process_result(){
 
-        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'active'","'waiting'"], self::$job_count);
+        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
 
         if(!empty($links)){
 
@@ -391,7 +390,7 @@ class UnusedCSS_Queue
                 ], $url);
             }else if($result->state == 'active'){
                 UnusedCSS_DB::update_meta([
-                    'status' => 'active'
+                    'status' => 'processing'
                 ], $url);
             }
 
