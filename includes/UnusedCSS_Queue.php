@@ -390,6 +390,8 @@ class UnusedCSS_Queue
                     'url' => $url,
                     'type' => 'uucss-cron'
                 ] );
+
+                return;
             }
 
             UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
