@@ -371,7 +371,7 @@ class UnusedCSS_Queue
 
             $error = $uucss_api->extract_error( $result );
 
-            if($error == 'Processing job queue failed'){
+            if($error == 'Job processing failed in queue'){
 
                 UnusedCSS_DB::requeue_urls([
                     $url
