@@ -260,7 +260,7 @@ class UnusedCSS_DB
         return (int)$count;
     }
 
-    static function get_links($start_from = 0, $limit = 10, $where = ''){
+    static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = ''){
         global $wpdb;
 
 	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} ORDER BY id DESC LIMIT {$start_from},{$limit}", OBJECT);
@@ -327,6 +327,7 @@ class UnusedCSS_DB
         if($get){
 
             $data['files'] = isset($link->files) ? unserialize($link->files) : null;
+            $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
             $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
             $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
             $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
