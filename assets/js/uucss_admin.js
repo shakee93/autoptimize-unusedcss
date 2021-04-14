@@ -1,6 +1,6 @@
 (function ($) {
 
-    function showNotification(heading, message, type = 'info') {
+    function showNotification(heading, message, type = 'info', enableClose = false, notice_id = false) {
         var container = $('#uucss-wrapper')
         var content = $($('.uucss-info-wrapper.safelist-settings')[0]).clone().css('max-width', '100%');
 
@@ -8,7 +8,12 @@
             return;
         }
 
-        content.find('h4').text(heading);
+        if(enableClose){
+            content.find('h4').html(heading + '<span data-notice_id="' + notice_id + '" class="dashicons dashicons-no-alt notice-close '+ type +'"></span>');
+        }else{
+            content.find('h4').text(heading);
+        }
+
         content.find('p').remove();
         content.find('.info-details').append('<p class="divider"></p>').append('<p>' + message + '</p>');
 
@@ -72,9 +77,23 @@
     function showPublicNotices() {
         if (window.uucss && window.uucss.public_notices.length) {
             window.uucss.public_notices.forEach(function(value){
-                showNotification(value.title, value.message, value.type);
+                showNotification(value.title, value.message, value.type + ' public-notice public-notice-' + value.id, true, value.id);
             })
         }
+
+        var container = $('#uucss-wrapper');
+
+        container.find('span.public-notice').click(function (e) {
+            e.preventDefault();
+            var $this = $(this);
+            wp.ajax.post('mark_notice_read',{
+                notice_id : $this.data('notice_id')
+            }).then(function (i) {
+                $this.parents('li').remove();
+            }).fail(function (i) {
+
+            });
+        })
     }
 
     function hideNotification() {

@@ -67,6 +67,7 @@ abstract class UnusedCSS_Admin {
             add_action('current_screen', [$this, 'validate_domain']);
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
             add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
+            add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
             add_action('wp_ajax_uucss_logs', [$this, 'uucss_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
@@ -443,7 +444,26 @@ abstract class UnusedCSS_Admin {
 
         $result = $api->get('notification');
 
-        return !$api->is_error($result) && isset($result->data) ? $result->data : [];
+        $data = !$api->is_error($result) && isset($result->data) ? $result->data : [];
+
+        $data = array_filter($data, function ($notice){
+            $notice_read = UnusedCSS_Admin::get_site_option('uucss_notice_' . $notice->id . '_read');
+            return empty($notice_read);
+        });
+
+        $keys = array_keys($data);
+
+        if(empty($keys)){
+            return $data;
+        }
+
+        $notices = [];
+
+        foreach ($data as $key => $notice){
+            array_push($notices, $notice);
+        }
+
+        return $notices;
     }
 
     public function uucss_test_url(){
@@ -574,6 +594,17 @@ abstract class UnusedCSS_Admin {
     public function mark_faqs_read(){
 
         self::update_site_option('rapidload_faqs_read', true);
+        wp_send_json_success(true);
+    }
+
+    public function mark_notice_read(){
+
+        $notice_id = isset($_REQUEST['notice_id']) ? $_REQUEST['notice_id'] : false;
+
+        if($notice_id){
+            self::update_site_option('uucss_notice_' . $notice_id . '_read', true);
+        }
+
         wp_send_json_success(true);
     }
 

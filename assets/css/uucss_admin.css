@@ -1383,3 +1383,10 @@ li.rapidload-status .content .status-action-wrap{
 table#uucss-options tbody tr td{
     padding-bottom: 0;
 }
+
+#uucss-wrapper .notice-close{
+    position: absolute;
+    right: 3px;
+    top: 4px;
+    cursor: pointer;
+}
