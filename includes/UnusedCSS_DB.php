@@ -210,14 +210,14 @@ class UnusedCSS_DB
 	    }
     }
 
-    static function get_links_by_status($status, $limit = 1){
+    static function get_links_by_status($status, $limit = 1, $order_by = 'id DESC'){
         global $wpdb;
 
         $status = implode(",", $status);
 
         $status = str_replace('"', '', $status);
 
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY job_id LIMIT " . $limit, OBJECT);
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -260,12 +260,8 @@ class UnusedCSS_DB
         return (int)$count;
     }
 
-    static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = ''){
+    static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
         global $wpdb;
-
-        if($order_by == ''){
-            $order_by = 'id DESC';
-        }
 
 	    $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
 

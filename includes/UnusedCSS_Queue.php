@@ -292,7 +292,7 @@ class UnusedCSS_Queue
 
     function uucss_process_result(){
 
-        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
+        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count, 'job_id');
 
         if(!empty($links)){
 
