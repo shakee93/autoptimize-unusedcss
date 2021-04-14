@@ -372,7 +372,7 @@ abstract class UnusedCSS_Admin {
 
         }
 
-        $data  = UnusedCSS_Settings::get_links($start, $length, $where_clause);
+        $data  = UnusedCSS_Settings::get_links($start, $length, $where_clause, 'job_id DESC');
 
         wp_send_json([
             'data' => $data,
