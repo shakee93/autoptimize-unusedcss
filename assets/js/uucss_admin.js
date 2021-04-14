@@ -89,7 +89,7 @@
             wp.ajax.post('mark_notice_read',{
                 notice_id : $this.data('notice_id')
             }).then(function (i) {
-                $this.parents('li').remove();
+                $this.parents('li:first').remove();
             }).fail(function (i) {
 
             });
