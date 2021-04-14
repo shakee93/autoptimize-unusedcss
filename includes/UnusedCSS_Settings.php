@@ -8,7 +8,7 @@ class UnusedCSS_Settings {
 
 	static $map_key = 'uucss_map';
 
-	public static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = '') {
+	public static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC') {
         if(UnusedCSS_DB::migrated()){
 
             return UnusedCSS_DB::get_links($start_from, $limit, $where, $order_by);
