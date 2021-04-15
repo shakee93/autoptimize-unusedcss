@@ -186,8 +186,8 @@ class UnusedCSS_Store {
             $this->result = $result;
         }
 
-        $stats = $this->result->meta->stats;
-        $warnings = $this->result->meta->warnings;
+        $stats = isset($this->result) && isset($this->result->meta) ? $this->result->meta->stats : null;
+        $warnings = isset($this->result) && isset($this->result->meta) ? $this->result->meta->warnings : null;
 
         if ( isset( $stats->beforeBytes ) ) {
             unset( $stats->beforeBytes );

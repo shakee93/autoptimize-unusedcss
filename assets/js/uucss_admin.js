@@ -436,7 +436,7 @@
                     title: "File Size Reduction",
                     width: '145px',
                     render: function (data, type, row, meta) {
-                        if (row.status === 'success') {
+                        if (row.meta && row.meta.stats && row.meta.stats.reduction && row.status === 'success') {
                             return row.meta.stats.reduction + '%'
                         }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'waiting'){
                             return '<span class="job-file-size">-</span>';
@@ -478,7 +478,9 @@
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count
                         }
 
-                        var tippyOptions = {
+                        var tippyOptions;
+
+                        tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
                             content: function () {
@@ -553,8 +555,6 @@
                             }
 
                         }
-
-
 
                         if (rowData.status === 'failed') {
                             stat.find('span').append('<span class="dashicons dashicons-info error"></span>');

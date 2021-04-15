@@ -399,6 +399,12 @@ class UnusedCSS_Queue
             return;
         }
 
+        if(isset($result->state) && $result->state == 'failed'){
+
+            UnusedCSS_DB::update_failed($url, 'Unknown error occurred');
+            return;
+        }
+
         $uucss_store = new UnusedCSS_Store(null, $url,null);
 
         if(isset($result->state)){
