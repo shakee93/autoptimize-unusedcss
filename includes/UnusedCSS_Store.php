@@ -203,6 +203,11 @@ class UnusedCSS_Store {
             ];
         }
 
+        if(isset($this->result) && isset($this->result->meta) && isset($this->result->meta->options) && isset($this->result->meta->options->redirectUrls)){
+
+            $stats->redirectUrls = $this->result->meta->options->redirectUrls;
+        }
+
         $link_data = array(
             'url' => $this->url,
             'files' => $files,
