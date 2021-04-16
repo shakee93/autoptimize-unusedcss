@@ -793,8 +793,6 @@
                     content: 'Waiting to be processed',
                     placement: 'top',
                     appendTo: "parent",
-                    trigger: 'click',
-                    hideOnClick: 'toggle',
                 });
 
                 tippy($(row).find('button[data-uucss-optimize]')[0], {
