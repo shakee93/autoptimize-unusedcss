@@ -409,7 +409,7 @@ class UnusedCSS_Queue
 
         if(isset($result->state)){
 
-            if($result->state == 'waiting' || $result->state == 'delayed'){
+            if($result->state == 'waiting' || $result->state == 'delayed' || $result->state == 'created' || $result->state == 'stalling'){
                 UnusedCSS_DB::update_meta([
                     'status' => 'waiting'
                 ], $url);

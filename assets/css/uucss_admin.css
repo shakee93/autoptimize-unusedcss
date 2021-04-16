@@ -1390,3 +1390,7 @@ table#uucss-options tbody tr td{
     top: 4px;
     cursor: pointer;
 }
+
+#uucss-history span.job-status.status + div div.tippy-content{
+    font-size: 11px;
+}

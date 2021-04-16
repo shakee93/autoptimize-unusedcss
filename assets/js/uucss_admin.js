@@ -789,11 +789,19 @@
                     placement: 'bottom-end',
                 })
 
+                tippy($(row).find('span.job-status.status.waiting')[0], {
+                    content: 'Waiting to be processed',
+                    placement: 'top',
+                    appendTo: "parent",
+                    trigger: 'click',
+                    hideOnClick: 'toggle',
+                });
+
                 tippy($(row).find('button[data-uucss-optimize]')[0], {
                     content: 'Refresh files Immediately',
                     placement: 'top',
                     appendTo: "parent"
-                })
+                });
 
                 $(row).find('button').data('index',dataIndex);
 
