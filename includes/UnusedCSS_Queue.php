@@ -42,7 +42,7 @@ class UnusedCSS_Queue
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
         }
 
-        $uucss_result_cron = $this->cron_exist('cron_uucss_process_result');
+        /*$uucss_result_cron = $this->cron_exist('cron_uucss_process_result');
 
         if ( ! wp_next_scheduled( 'cron_uucss_process_result' ) && !$uucss_result_cron) {
             self::log([
@@ -50,11 +50,11 @@ class UnusedCSS_Queue
                 'type' => 'uucss-cron'
             ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_result');
-        }
+        }*/
 
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
 
-        add_action( 'cron_uucss_process_result', [$this ,'uucss_process_result'] );
+        //add_action( 'cron_uucss_process_result', [$this ,'uucss_process_result'] );
 
         add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
 
@@ -287,6 +287,8 @@ class UnusedCSS_Queue
             }
 
         }
+
+        $this->uucss_process_result();
 
     }
 
