@@ -7,8 +7,8 @@
             timeout: duration,
             type : type,
             animation: {
-                open: null, //'animated bounceInLeft',
-                close: null, //'animated bounceOutRight'
+                open: 'animated bounceInUp',
+                close: 'animated bounceOutDown'
             }
         }).show();
         //alert(message);
