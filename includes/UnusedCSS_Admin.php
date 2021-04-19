@@ -857,7 +857,10 @@ abstract class UnusedCSS_Admin {
     public function clear_on_actions($post_ID)
     {
         $link = get_permalink($post_ID);
-        $this->uucss->clear_cache($link);
+
+        if($link){
+            $this->uucss->clear_cache($link);
+        }
     }
 
     public function update_meta($post_id)
