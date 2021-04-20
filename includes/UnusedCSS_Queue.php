@@ -391,6 +391,9 @@ class UnusedCSS_Queue
             }
 
             UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
+            do_action( 'uucss/cache_cleared', [
+                'url' => $url
+            ]);
 
             $this->log( [
                 'log' => 'fetched data stored status failed',
@@ -404,6 +407,9 @@ class UnusedCSS_Queue
         if(isset($result->state) && $result->state == 'failed'){
 
             UnusedCSS_DB::update_failed($url, 'Unknown error occurred');
+            do_action( 'uucss/cache_cleared', [
+                'url' => $url
+            ]);
             return;
         }
 
