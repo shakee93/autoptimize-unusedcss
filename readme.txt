@@ -83,6 +83,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.6 - 17/04/2021 =
+ * improve: add filter to allow users to stop re-queueing jobs on fail or warnings
+ * improve: clear page cache for failed jobs
+
 = 1.4.5 - 17/04/2021 =
  * improve: improved job queueing process
 
