@@ -711,7 +711,14 @@
                                         error: function(XMLHttpRequest, textStatus, errorThrown) {
                                             var $feather_content = $('.featherlight.uucss-gpsi-test .featherlight-content');
                                             var $content = $('<div class="content"></div>');
-                                            $content.append('<span>Something went wrong</span>');
+
+                                            $content.append('<div class="header"></div>');
+                                            $content.append('<div class="devider"></div>');
+                                            $content.append('<div class="description"></div>');
+
+                                            $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-warning"></span>Pending</h2>')
+                                            $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
+
                                             $feather_content.find('.spinner').remove();
                                             $feather_content.append($content.wrap('<div></div>').parent().html());
                                         },
@@ -727,16 +734,11 @@
                                                 $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-yes-alt"></span>Success</h2>')
                                                 $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
 
-                                            }else if(response.success && response.data && response.data.injected){
+                                            }else{
 
                                                 $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-warning"></span>Pending</h2>')
                                                 $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
 
-                                            }else{
-
-                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-no"></span>Error</h2>');
-                                                var error_message = typeof response.data === 'string' ? response.data : 'Something went wrong';
-                                                $content.find('.description').append('<p>' + error_message + '</p>');
                                             }
 
                                             if(response.success && response.data && response.data.success){
