@@ -125,7 +125,7 @@ class UnusedCSS_Enqueue {
 
             UnusedCSS_DB::update_success_count($this->data['url']);
 
-        }else if(!$this->inject->successfully_injected && ($this->data['attempts'] <= 2 || ($time_diff > 86400))){
+        }else if(!$this->inject->successfully_injected && ($this->data['attempts'] <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
             UnusedCSS_DB::update_meta([
                 'status' => 'queued',
