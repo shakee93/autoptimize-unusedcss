@@ -723,8 +723,9 @@
                                             $feather_content.append($content.wrap('<div></div>').parent().html());
                                         },
                                         success: function (response) {
-                                            var $feather_content = $('.featherlight .featherlight-content');
+                                            var $feather_content = $('.featherlight.uucss-gpsi-test .featherlight-content');
                                             var $content = $('<div class="content"></div>');
+
                                             $content.append('<div class="header"></div>');
                                             $content.append('<div class="devider"></div>');
                                             $content.append('<div class="description"></div>');
