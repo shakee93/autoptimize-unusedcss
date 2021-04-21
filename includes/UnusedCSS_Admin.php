@@ -72,6 +72,8 @@ abstract class UnusedCSS_Admin {
             add_action('wp_ajax_uucss_logs', [$this, 'uucss_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
             add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
+            add_action( "wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
+            add_action( "uucss_get_gpsi_test_result", [ $this, 'get_gpsi_test_result' ], 10, 1 );
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
@@ -421,7 +423,8 @@ abstract class UnusedCSS_Admin {
             'api_key_verified' => self::is_api_key_verified(),
             'notifications' => $this->getNotifications(),
             'faqs' => $this->get_faqs(),
-            'public_notices' => $this->get_public_notices()
+            'public_notices' => $this->get_public_notices(),
+            'dev_mode' => apply_filters('uucss/dev_mode', false),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
@@ -436,6 +439,26 @@ abstract class UnusedCSS_Admin {
     public function getNotifications() {
 
         return apply_filters('uucss/notifications', []);
+    }
+
+    public function run_gpsi_status_check_for_all(){
+
+        $links = UnusedCSS_DB::get_links_where(" WHERE warnings IS NULL AND status = 'success'");
+
+        if(!empty($links)){
+
+            foreach ($links as $link){
+
+                /*wp_schedule_single_event( time() + 5, 'uucss_get_gpsi_test_result', [
+                    'link' => $link
+                ]);*/
+                $this->get_gpsi_test_result($link);
+
+            }
+
+        }
+
+        wp_send_json_success(true);
     }
 
     public function get_public_notices(){
@@ -466,17 +489,11 @@ abstract class UnusedCSS_Admin {
         return $notices;
     }
 
-    public function uucss_test_url(){
+    public function get_gpsi_test_result($link){
 
-        if(!isset($_REQUEST['url'])){
-            wp_send_json_error('url required');
-        }
-
-        $url = $_REQUEST['url'];
+        error_log('i am running');
 
         $uucss_api = new UnusedCSS_Api();
-
-        $link = UnusedCSS_DB::get_link($url);
 
         $cached_files = [];
         $original_files = [];
@@ -492,12 +509,28 @@ abstract class UnusedCSS_Admin {
             });
         }
 
-        $result = $uucss_api->post( 'test/wordpress',
+        return $uucss_api->post( 'test/wordpress',
             [
-                'url' => urldecode($url),
+                'url' => urldecode($link['url']),
                 'files' => !empty($cached_files) ? array_column($cached_files, 'uucss') : [],
                 'aoFiles' => !empty($original_files) ? array_column($original_files, 'original') : []
             ]);
+
+    }
+
+    public function uucss_test_url(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $link = UnusedCSS_DB::get_link($url);
+
+        $result = $this->get_gpsi_test_result($link);
 
         if ( $uucss_api->is_error( $result ) ) {
             if(isset($result->errors) && isset($result->errors[0])){

@@ -869,6 +869,10 @@
                 $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
 
+                if(window.uucss && window.uucss.dev_mode === "1"){
+                    $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
+                }
+
                 if($('#thirtd_part_cache_plugins').val() === "1"){
                     $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
                 }
@@ -953,6 +957,14 @@
                             }).fail(function (i) {
 
                                 $.uucssAlert(i, 'error')
+                            });
+                            break;
+                        }
+                        case 'run_gpsi_test':{
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+
+                            }).fail(function (i) {
+
                             });
                             break;
                         }
