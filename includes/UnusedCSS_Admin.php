@@ -54,6 +54,7 @@ abstract class UnusedCSS_Admin {
 
 	    add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
 	    add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
+        add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
 
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
             $this,
@@ -73,7 +74,6 @@ abstract class UnusedCSS_Admin {
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_uucss_logs']);
             add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
             add_action( "wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
-            add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
@@ -449,7 +449,7 @@ abstract class UnusedCSS_Admin {
 
             foreach ($links as $link){
 
-                if(isset($link['meta']) && isset($link['meta']['stats']) && isset($link['meta']['stats']['success_count']) && $link['meta']['stats']['success_count'] > 0){
+                if(isset($link['meta']) && isset($link['meta']['stats']) && isset($link['meta']['stats']->success_count) && $link['meta']['stats']->success_count > 0){
                     continue;
                 }
 
@@ -463,9 +463,11 @@ abstract class UnusedCSS_Admin {
 
     public function run_gpsi_status_check_for_all(){
 
-        wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
+        $spawned = wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
 
-        wp_send_json_success(true);
+        wp_send_json_success([
+            'spawned' => $spawned
+        ]);
     }
 
     public function get_public_notices(){
