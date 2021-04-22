@@ -470,6 +470,7 @@
                         $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
                         $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
                         $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
+                        $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
                         $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
@@ -497,6 +498,9 @@
                             </p>
                             <p>
                                 <strong>Queued</strong> : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
+                            </p>
+                            <p>
+                                <strong>Waiting</strong> : <?php echo $waiting; ?> - <?php echo ($total != 0) ? number_format($waiting/$total*100, 0) : '0' ?>%
                             </p>
                             <p>
                                 <strong>Processing</strong> : <?php echo $processing; ?> - <?php echo ($total != 0) ? number_format($processing/$total*100, 0) : '0' ?>%
