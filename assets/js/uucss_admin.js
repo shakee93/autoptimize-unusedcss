@@ -962,7 +962,7 @@
                         }
                         case 'run_gpsi_test':{
                             wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
-
+                                $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
                             });
