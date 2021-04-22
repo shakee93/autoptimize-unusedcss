@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
     'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
@@ -24,7 +25,7 @@ return array(
     'UnusedCSS_Autoptimize_Onboard' => $baseDir . '/includes/Autoptimize/UnusedCSS_Autoptimize_Onboard.php',
     'UnusedCSS_DB' => $baseDir . '/includes/UnusedCSS_DB.php',
     'UnusedCSS_Enqueue' => $baseDir . '/includes/UnusedCSS_Enqueue.php',
-    'UnusedCSS_Feedback' => $baseDir . '/includes/Utils/Feedback/UnusedCSS_Feedback.php',
+    'UnusedCSS_Feedback' => $baseDir . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
     'UnusedCSS_FileSystem' => $baseDir . '/includes/UnusedCSS_FileSystem.php',
     'UnusedCSS_Queue' => $baseDir . '/includes/UnusedCSS_Queue.php',
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',

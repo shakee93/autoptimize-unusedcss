@@ -9,6 +9,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     public static $classMap = array (
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
         'Cloudflare_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Cookie_Notice_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
         'GoogleModPageSpeedCompatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
         'Kinsta_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
@@ -25,7 +26,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Autoptimize_Onboard' => __DIR__ . '/../..' . '/includes/Autoptimize/UnusedCSS_Autoptimize_Onboard.php',
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/UnusedCSS_DB.php',
         'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Enqueue.php',
-        'UnusedCSS_Feedback' => __DIR__ . '/../..' . '/includes/Utils/Feedback/UnusedCSS_Feedback.php',
+        'UnusedCSS_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
         'UnusedCSS_FileSystem' => __DIR__ . '/../..' . '/includes/UnusedCSS_FileSystem.php',
         'UnusedCSS_Queue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Queue.php',
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
