@@ -316,6 +316,13 @@ abstract class UnusedCSS {
             }
         }
 
+        $url_parts = parse_url( $url );
+
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
 	    return true;
     }
 
