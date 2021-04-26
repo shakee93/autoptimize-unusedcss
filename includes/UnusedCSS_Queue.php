@@ -375,14 +375,14 @@ class UnusedCSS_Queue
 
             $error = $uucss_api->extract_error( $result );
 
-            if($error == 'Job processing failed in queue'){
+            if(isset($error['message']) && $error['message'] == 'Job processing failed in queue'){
 
                 UnusedCSS_DB::requeue_urls([
                     $url
                 ]);
 
                 $this->log( [
-                    'log' => 'requeud due to allowed errors',
+                    'log' => 're-queued due to allowed errors',
                     'url' => $url,
                     'type' => 'uucss-cron'
                 ] );
@@ -390,7 +390,7 @@ class UnusedCSS_Queue
                 return;
             }
 
-            UnusedCSS_DB::update_failed($url, $uucss_api->extract_error( $result ));
+            UnusedCSS_DB::update_failed($url, $error);
             do_action( 'uucss/cache_cleared', [
                 'url' => $url
             ]);
