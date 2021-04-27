@@ -207,7 +207,7 @@
         </div>
 
         <div class="skip-wrap">
-            <a href="<?php echo admin_url('options-general.php?page=uucss') ?>">Skip</a>
+            <a href="<?php echo (UnusedCSS_Autoptimize_Admin::ao_installed() && UnusedCSS_Autoptimize_Admin::ao_active() ? admin_url('options-general.php?page=uucss') : admin_url()) ?>">Skip</a>
         </div>
     </div>
     <div class="card-complete loading">
