@@ -289,6 +289,7 @@
                                             </div>
                                             <p class="howto">
                                                 Exclude URLs from RapidLoad <em> *hello-url/some-url*, *product/**/ex/* </em>
+                                                <a href="https://rapidload.zendesk.com/hc/en-us/articles/1500003020622-Excluding-Files-URLs" target="_blank">learn more</a>.
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -323,6 +324,7 @@
                                             </div>
                                             <p class="howto">
                                                 Exclude specific CSS files from RapidLoad <em> *my-styles.css, */my-theme*/style.css </em>
+                                                <a href="https://rapidload.zendesk.com/hc/en-us/articles/1500003020622-Excluding-Files-URLs" target="_blank">learn more</a>.
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
