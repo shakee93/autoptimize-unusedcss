@@ -245,11 +245,17 @@ trait UnusedCSS_Utils {
 
 	    $file_name = explode( "?", basename( $file ) )[0];
 
-	    if ( !$this->str_contains( $file_name, '.' ) ) {
-		    $file_name .= '.css';
+	    $final_file_name = 'uucss-' . $file_hash;
+
+	    if ( apply_filters( 'uucss/suffix-original-filename', true ) ) {
+            $final_file_name .= '-' . $file_name;
 	    }
 
-	    return 'uucss-' . $file_hash . '-' . $file_name;
+	    if ( !$this->str_contains( $final_file_name, '.' ) ) {
+		    $final_file_name .= '.css';
+	    }
+
+	    return $final_file_name;
     }
 
 	function str_contains( $string, $find ) {

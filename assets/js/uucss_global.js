@@ -213,7 +213,7 @@
                     $('.uucss-on-board .card-complete').addClass('has-error');
                 } else if (response.data.uucss_first_job) {
                     var innerTippy = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
-                        content: 'Before RapidLoad <span class="perc">' + response.data.uucss_first_job.meta.stats.before + '</span>',
+                        content: 'Without RapidLoad <span class="perc">' + response.data.uucss_first_job.meta.stats.before + '</span>',
                         allowHTML: true,
                         placement: 'bottom-end',
                         trigger: 'manual',
@@ -226,7 +226,7 @@
                     })
                     innerTippy.show();
                     var innerTippy2 = tippy($('.uucss-on-board.complete .card-complete .stat-tooltip .progress-bar-wrapper')[0], {
-                        content: 'After RapidLoad <span class="perc"> ' + response.data.uucss_first_job.meta.stats.after + '</span>',
+                        content: 'RapidLoad <span class="perc"> ' + response.data.uucss_first_job.meta.stats.after + '</span>',
                         allowHTML: true,
                         placement: 'top-start',
                         trigger: 'manual',

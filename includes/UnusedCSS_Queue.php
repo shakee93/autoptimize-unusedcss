@@ -186,7 +186,7 @@ class UnusedCSS_Queue
                 'type' => 'queued'
             ]);
 
-            wp_send_json_success('sitemap links schedule to add queue');
+            wp_send_json_success('Sitemap links scheduled to be added to the queue.');
 
         }else{
 

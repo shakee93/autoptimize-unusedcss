@@ -289,6 +289,7 @@
                                             </div>
                                             <p class="howto">
                                                 Exclude URLs from RapidLoad <em> *hello-url/some-url*, *product/**/ex/* </em>
+                                                <a href="https://rapidload.zendesk.com/hc/en-us/articles/1500003020622-Excluding-Files-URLs" target="_blank">learn more</a>.
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -323,6 +324,7 @@
                                             </div>
                                             <p class="howto">
                                                 Exclude specific CSS files from RapidLoad <em> *my-styles.css, */my-theme*/style.css </em>
+                                                <a href="https://rapidload.zendesk.com/hc/en-us/articles/1500003020622-Excluding-Files-URLs" target="_blank">learn more</a>.
                                             </p>
                                         </div>
                                         <ul class="tagchecklist" role="list"></ul>
@@ -394,10 +396,10 @@
                                 <td>
                                     <?php
                                         $intervals = [
-                                                ['value' => 60, 'name' => '1 Minute', 'max' => 8],
-                                                ['value' => 300, 'name' => '5 Minutes', 'max' => 8],
-                                                ['value' => 600, 'name' => '10 Minutes', 'max' => 8],
-                                                ['value' => 1200, 'name' => '20 Minutes', 'max' => 8],
+                                                ['value' => 60, 'name' => '1 Minute', 'max' => 16],
+                                                ['value' => 300, 'name' => '5 Minutes', 'max' => 16],
+                                                ['value' => 600, 'name' => '10 Minutes', 'max' => 16],
+                                                ['value' => 1200, 'name' => '20 Minutes', 'max' => 16],
                                                 ['value' => 1800, 'name' => '30 Minutes', 'max' => 16],
                                                 ['value' => 3600, 'name' => '1 Hour', 'max' => 16],
                                         ];
