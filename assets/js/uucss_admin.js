@@ -387,7 +387,7 @@
                     $uucss_spinner.removeClass('loading')
 
                     if (!d.success) {
-                        $.uucssAlert("failed to fetch data", 'error')
+                        $.uucssAlert("Failed to fetch optimizations", 'error')
                         return [];
                     }
 
@@ -684,11 +684,11 @@
 
                                     wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
 
-                                        $.uucssAlert(i, 'success')
+                                        $.uucssAlert(i, 'Successfully cleared your page cache')
 
                                     }).fail(function (i) {
 
-                                        $.uucssAlert(i, 'error')
+                                        $.uucssAlert(i, 'Unknown error occurred when clearing the page cache')
                                     });
 
                                     break;
@@ -904,19 +904,19 @@
                                 });
                             }
                             requeue('current',requeue_url_list);
-                            $.uucssAlert('links added to queue');
+                            $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
                             requeue('warnings');
-                            $.uucssAlert('links added to queue');
+                            $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
                             requeue('failed');
-                            $.uucssAlert('links added to queue');
+                            $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
                             requeue('processing');
-                            $.uucssAlert('links added to queue');
+                            $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }
                         case 'remove_selected':
@@ -942,7 +942,7 @@
                             wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
-                                    $.uucssAlert('links removed from list', 'info');
+                                    $.uucssAlert('Successfully removed links from the table', 'info');
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
@@ -952,11 +952,11 @@
                         case 'clear_warnings_cache':{
                             wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
 
-                                $.uucssAlert(i, 'success')
+                                $.uucssAlert(i, 'Successfully cleared your page cache')
 
                             }).fail(function (i) {
 
-                                $.uucssAlert(i, 'error')
+                                $.uucssAlert(i, 'Unknown error occurred when clearing the page cache')
                             });
                             break;
                         }
@@ -1106,7 +1106,7 @@
                     var license_key = $('a.connect-with-license .tippy-connect-with-license-content .input-wrap input').val();
 
                     if(license_key === ''){
-                        $.uucssAlert('Please enter license key', 'error');
+                        $.uucssAlert('Please enter a license key', 'error');
                         return;
                     }
 
@@ -1161,13 +1161,13 @@
 
             if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
                 && ($model_content.find('input.site-map-url').val() === "" || $model_content.find('input.site-map-url').val() === undefined)){
-                $.uucssAlert('Please enter url', 'error');
+                $.uucssAlert('Add a valid URL', 'error');
                 return;
             }
 
             if(($model_content.find('#model-requeue-post-type').val() === 'site_map' || $model_content.find('#model-requeue-post-type').val() === 'url')
                 && !isUrl($model_content.find('input.site-map-url').val())){
-                $.uucssAlert('Please enter valid url', 'error');
+                $.uucssAlert('Add a valid URL', 'error');
                 return;
             }
 
