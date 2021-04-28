@@ -388,8 +388,12 @@ abstract class UnusedCSS_Admin {
 
     public function enqueueScripts() {
 
-        wp_dequeue_script('select2');
-        wp_deregister_script('select2');
+        $deregister_scripts = apply_filters('uucss/scripts/deregister', ['select2']);
+
+        foreach ($deregister_scripts as $deregister_script){
+            wp_dequeue_script($deregister_script);
+            wp_deregister_script($deregister_script);
+        }
 
         wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
 
