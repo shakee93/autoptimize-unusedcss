@@ -8,7 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
-    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
     'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
@@ -32,6 +31,7 @@ return array(
     'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',
     'UnusedCSS_Utils' => $baseDir . '/includes/UnusedCSS_Utils.php',
+    'W3_Total_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',
     'WP_Engine_Common_Compatible' => $baseDir . '/includes/third-party/plugins/wpengine-common/WP_Engine_Common_Compatible.php',
     'WP_Fastest_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
     'WP_Optimize_Compatible' => $baseDir . '/includes/third-party/plugins/wp-optimize/WP_Optimize_Compatible.php',
