@@ -323,6 +323,11 @@ abstract class UnusedCSS {
             return false;
         }
 
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'elementor-preview')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
 	    return true;
     }
 
