@@ -485,12 +485,7 @@ abstract class UnusedCSS {
 
         if(isset($this->options['uucss_cache_busting_v2'])){
 
-            $cacheBusting = apply_filters('uucss/cache/bust',[
-                [
-                    'type' => 'query',
-                    'rule' => 'no_uucss=true'
-                ]
-            ]);
+            $cacheBusting = apply_filters('uucss/cache/bust',[]);
 
         }
 
