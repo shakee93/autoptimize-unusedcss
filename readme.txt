@@ -85,6 +85,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.9 - 04/05/2021 =
+ * feat: add support to W3 Total Cache
+ * improve: exclude elementor preview url from RapidLoad
+ * fix: is_file warning File name is longer than allowed path length
+
 = 1.4.8 - 27/04/2021 =
  * feat: add filter to disable original file name suffix
  * improve: exclude customizer from rapidload
