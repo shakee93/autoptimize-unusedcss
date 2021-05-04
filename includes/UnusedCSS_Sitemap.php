@@ -99,7 +99,7 @@ class UnusedCSS_Sitemap
                     'log' => 'fetched from site map'
                 ]);
 
-                array_push($urls, $url);
+                array_push($urls, $this->transform_url($url));
             }
 
             return $urls;

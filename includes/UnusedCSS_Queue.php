@@ -162,7 +162,7 @@ class UnusedCSS_Queue
             }
 
             UnusedCSS_DB::add_link(array(
-                'url' => trailingslashit($url),
+                'url' => $url,
                 'status' => 'queued',
             ));
             wp_send_json_success('successfully link added to the queue');

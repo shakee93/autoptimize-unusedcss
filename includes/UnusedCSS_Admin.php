@@ -231,7 +231,7 @@ abstract class UnusedCSS_Admin {
 
         $uucss_api         = new UnusedCSS_Api();
         $uucss_api->apiKey = $license_key;
-        $results           = $uucss_api->post( 'connect', [ 'url' => trailingslashit(get_site_url()), 'type' => 'wordpress' ] );
+        $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
 
         if ( $uucss_api->is_error( $results ) ) {
             if(isset($results->errors) && isset($results->errors[0])){
@@ -799,7 +799,7 @@ abstract class UnusedCSS_Admin {
 		$api = new UnusedCSS_Api();
 
 		$data = $api->get( 'license', [
-			'url' => trailingslashit(get_site_url())
+			'url' => $this->transform_url(get_site_url())
 		] );
 
 		if ( ! is_wp_error( $data ) ) {

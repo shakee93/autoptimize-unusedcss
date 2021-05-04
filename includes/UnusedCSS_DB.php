@@ -718,7 +718,7 @@ class UnusedCSS_DB
         self::log([
             'log' => $message,
             'type' => 'general',
-            'url' => trailingslashit(get_site_url())
+            'url' => get_site_url()
         ]);
     }
 }

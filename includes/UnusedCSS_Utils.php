@@ -289,7 +289,11 @@ trait UnusedCSS_Utils {
 			$url  = $url_parts['scheme'] . '://' . $url_parts['host'] . $path;
 		}
 
-		return $url;
+		if(apply_filters('uucss/url/trailingslash', false)){
+		    return trailingslashit($url);
+        }else{
+		    return rtrim($url,'/');
+        }
 	}
 
 	public static function activate_plugin( $plugin, $action = 'activate' ) {
