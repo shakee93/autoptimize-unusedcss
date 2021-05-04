@@ -259,6 +259,14 @@ class UnusedCSS_Enqueue {
         }
 
         $this->dom = new \simplehtmldom\HtmlDocument(
+            null,
+            false,
+            false,
+            \simplehtmldom\DEFAULT_TARGET_CHARSET,
+            false
+        );
+
+        $this->dom->load(
             $html,
             false,
             false,
