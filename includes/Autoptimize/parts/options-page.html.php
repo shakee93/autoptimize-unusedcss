@@ -513,6 +513,22 @@
                             <p>
                                 <strong>Failed Jobs</strong> : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
                             </p>
+                            <?php
+                                if(count($third_party_plugins) > 0):
+                                ?>
+                                    <p>
+                                        <strong>Support Plugins</strong> :
+                                    </p>
+                                <?php
+                                endif;
+                            ?>
+                            <ul>
+                                <?php
+                                    foreach ($third_party_plugins as $party_plugin){
+                                        echo '<li style="margin-bottom:0">' . ($party_plugin['plugin'] ?? '') . ' - ' . ($party_plugin['category'] ?? '') .'</li>';
+                                    }
+                                ?>
+                            </ul>
                         </div>
                     </div>
                 </li>
