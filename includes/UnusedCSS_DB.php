@@ -6,7 +6,7 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.1";
+    static $db_version = "1.2";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -187,8 +187,6 @@ class UnusedCSS_DB
 
 	}
 
-
-
     static function get_link($url){
         global $wpdb;
 
@@ -239,7 +237,6 @@ class UnusedCSS_DB
 
         return $transformed_links;
     }
-
 
     static function migrated(){
         $option = UnusedCSS_Admin::get_site_option(self::$db_option);
@@ -314,8 +311,6 @@ class UnusedCSS_DB
 	    return $links;
     }
 
-
-
     static function transform_link($link, $get = true){
 
         if(empty($link)){
@@ -326,6 +321,12 @@ class UnusedCSS_DB
 
         if($get){
 
+            $data['id'] = isset($link->id) ? $link->id : null;
+            $data['url'] = isset( $link->url ) ? $link->url : null;
+            $data['status'] = isset( $link->status ) ? $link->status : null;
+            $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
+
+            $data['rule'] = isset( $link->rule ) ? $link->rule : null;
             $data['files'] = isset($link->files) ? unserialize($link->files) : null;
             $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
             $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
@@ -334,11 +335,9 @@ class UnusedCSS_DB
             $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
             $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
             $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
-            $data['status'] = isset( $link->status ) ? $link->status : null;
             $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
             $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
-            $data['url'] = isset( $link->url ) ? $link->url : null;
-            $data['id'] = isset($link->id) ? $link->id : null;
+            $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
 
         }else{
 
@@ -382,8 +381,6 @@ class UnusedCSS_DB
 	    return false;
     }
 
-
-
     static function link_exists($url){
         global $wpdb;
 
@@ -398,8 +395,6 @@ class UnusedCSS_DB
 	    return isset($result) && !empty($result );
     }
 
-
-
     static function link_exists_with_error($url){
         global $wpdb;
 
@@ -413,8 +408,6 @@ class UnusedCSS_DB
 
 	    return isset($result) && !empty($result);
     }
-
-
 
     static function delete_link($url){
         global $wpdb;
@@ -580,8 +573,6 @@ class UnusedCSS_DB
 	    }
     }
 
-
-
     static function update($data, $where){
         global $wpdb;
 
@@ -598,8 +589,6 @@ class UnusedCSS_DB
 	    }
     }
 
-
-
     static function initialize(){
         $error = self::create_tables();
 
@@ -611,8 +600,6 @@ class UnusedCSS_DB
         UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
         UnusedCSS_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
-
-
 
     static function link_files_used_elsewhere( $link ){
 
@@ -661,8 +648,6 @@ class UnusedCSS_DB
         return $unused;
     }
 
-
-
     static function create_tables($blog_id = ''){
         global $wpdb;
 
@@ -677,6 +662,7 @@ class UnusedCSS_DB
         $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
+		rule longtext NULL,
 		url longtext NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
@@ -684,6 +670,8 @@ class UnusedCSS_DB
 		review longtext NULL,
 		error longtext NULL,
 		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		ignore_rule mediumint(1) NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
@@ -692,8 +680,6 @@ class UnusedCSS_DB
         dbDelta( $sql );
 	    return $wpdb->last_error;
     }
-
-
 
     static function drop(){
         global $wpdb;
