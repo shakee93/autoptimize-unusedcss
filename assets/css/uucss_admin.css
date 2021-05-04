@@ -1037,14 +1037,15 @@ input#uucss-pack-suggest {
 
 .uucss-history .spinner-history {
     position: absolute;
-    top: 7px;
-    left: 135px;
+    top: 12px;
+    left: 150px;
     transition: ease opacity .15s;
     opacity: 0;
     visibility: visible;
     width: 15px;
     height: 15px;
     background-size: 15px 15px;
+    margin: 0;
 }
 
 .uucss-history .spinner-history.loading {
