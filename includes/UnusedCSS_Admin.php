@@ -512,14 +512,15 @@ abstract class UnusedCSS_Admin {
 
         $cached_files = [];
         $original_files = [];
+        $files = $link->get_files();
 
-        if(isset($link['files']) && !empty($link['files'])){
+        if(count($files) > 0){
 
-            $cached_files = array_filter($link['files'], function ($file){
+            $cached_files = array_filter($files, function ($file){
                 return !$this->str_contains($file['original'], '//inline-style@');
             });
 
-            $original_files = array_filter($link['files'], function ($file){
+            $original_files = array_filter($files, function ($file){
                 return !$this->str_contains($file['original'], '//inline-style@');
             });
         }
@@ -543,7 +544,9 @@ abstract class UnusedCSS_Admin {
 
         $uucss_api = new UnusedCSS_Api();
 
-        $link = UnusedCSS_DB::get_link($url);
+        $link = new UnusedCSS_Path([
+            'url' => $url
+        ]);
 
         $result = $this->get_gpsi_test_result($link);
 
