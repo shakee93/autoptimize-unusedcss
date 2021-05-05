@@ -311,7 +311,7 @@ class UnusedCSS_DB
 	    return $links;
     }
 
-    static function transform_link($link, $get = true){
+    static function transform_link($link){
 
         if(empty($link)){
             return null;
@@ -319,45 +319,23 @@ class UnusedCSS_DB
 
         $data = array();
 
-        if($get){
+        $data['id'] = isset($link->id) ? $link->id : null;
+        $data['url'] = isset( $link->url ) ? $link->url : null;
+        $data['status'] = isset( $link->status ) ? $link->status : null;
+        $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
 
-            $data['id'] = isset($link->id) ? $link->id : null;
-            $data['url'] = isset( $link->url ) ? $link->url : null;
-            $data['status'] = isset( $link->status ) ? $link->status : null;
-            $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
-
-            $data['rule'] = isset( $link->rule ) ? $link->rule : null;
-            $data['files'] = isset($link->files) ? unserialize($link->files) : null;
-            $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
-            $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
-            $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
-            $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
-            $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
-            $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
-            $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
-            $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
-            $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
-            $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
-
-        }else{
-
-            if(isset($link['id'])) $data['job_id'] = $link['id'];
-
-            $data['url'] = $link['url'];
-
-            if(isset($link['meta'])){
-
-                $data['stats'] = isset($link['meta']['stats']) ? serialize($link['meta']['stats']) : null;
-                $data['warnings'] = isset($link['meta']['warnings']) && !empty($link['meta']['warnings']) ? serialize($link['meta']['warnings']) : null;
-                $data['review'] = isset($link['meta']['review']) ? serialize($link['meta']['review']) : null;
-                $data['error'] = isset($link['meta']['error']) ? serialize($link['meta']['error']) : null;
-
-            }
-
-            $data['files'] = isset($link['files']) ? serialize($link['files']) : null;
-            $data['status'] = $link['status'];
-
-        }
+        $data['rule'] = isset( $link->rule ) ? $link->rule : null;
+        $data['files'] = isset($link->files) ? unserialize($link->files) : null;
+        $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
+        $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
+        $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
+        $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
+        $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
+        $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
+        $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
+        $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
+        $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
+        $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
 
         return $data;
 
