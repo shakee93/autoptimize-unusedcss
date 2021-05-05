@@ -426,7 +426,7 @@ class UnusedCSS_DB
         if($list){
 
             $urls = implode("','", $list);
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', warnings = NULL, hits = 0 WHERE url IN('{$urls}')");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', job_id = NULL WHERE url IN('{$urls}')");
         }
 
         $error = $wpdb->last_error;
@@ -442,11 +442,11 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, warnings = NULL, hits = 0 WHERE warnings IS NOT NULL");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE warnings IS NOT NULL");
 
         }else{
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, warnings = NULL, hits = 0 WHERE status ='{$status}'");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
         }
 
         $error = $wpdb->last_error;

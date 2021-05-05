@@ -11,6 +11,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         global $wpdb;
 
         self::$table = $wpdb->prefix . 'rapidload_uucss_job';
+        $this->type = 'Path';
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
@@ -52,6 +53,8 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 unset($data['ignore_rule']);
             }
 
+            unset($data['type']);
+
             $wpdb->insert(
                 self::$table,
                 $data
@@ -77,6 +80,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $id = $data['id'];
 
             unset($data['id']);
+            unset($data['type']);
 
             if(UnusedCSS_DB::$current_version < 1.2){
                 unset($data['rule']);

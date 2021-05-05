@@ -122,32 +122,15 @@ class UnusedCSS_Enqueue {
 
             $this->dom->find( 'body' )[0]->uucss = true;
 
-            $this->data->attempts = 0;
-            $this->data->hits++;
-
-            if(UnusedCSS_DB::$current_version < 1.2){
-                $stats = $this->data->get_stats();
-                if(isset($stats)){
-                    if(!isset($stats->success_count)){
-                        $stats->success_count = 1;
-                    }else{
-                        $stats->success_count++;
-                    }
-                }
-                $this->data->stats = isset($stats) ? serialize($stats) : null;
-            }
+            $this->data->mark_as_successful_hit();
 
         }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
-            $this->data->status = 'queued';
-            $this->data->attempts++;
-            $this->data->hits = 0;
-            $this->data->created_at = date( "Y-m-d H:m:s", time() );
+            $this->data->requeue();
 
         }else{
 
-            $this->data->hits = 0;
-            $this->data->warnings = count($this->warnings) > 0 ? serialize($this->warnings) : null;
+            $this->data->set_warnings($this->warnings);
 
         }
 
