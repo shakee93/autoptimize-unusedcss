@@ -141,10 +141,12 @@ class UnusedCSS_Enqueue {
 
             $this->data->status = 'queued';
             $this->data->attempts++;
+            $this->data->hits = 0;
             $this->data->created_at = date( "Y-m-d H:m:s", time() );
 
         }else{
 
+            $this->data->hits = 0;
             $this->data->warnings = count($this->warnings) > 0 ? serialize($this->warnings) : null;
 
         }
