@@ -341,15 +341,21 @@ abstract class UnusedCSS {
 
 			$this->get_css();
 
-			if(UnusedCSS_Settings::link_exists( $this->url ) && !isset( $_REQUEST['no_uucss'] )){
+            $path = new UnusedCSS_Path([
+                'url' => $this->url
+            ]);
 
-                $data = UnusedCSS_Settings::get_link( $this->url );
+			if($path->status === 'success' && !isset( $_REQUEST['no_uucss'] )){
 
-                if ( $data['status'] === 'success' && isset($data['files']) ) {
+                $files = $path->get_files();
 
-                    $this->frontend_scripts($data);
+                if (count($files) > 0 ) {
 
-                    new UnusedCSS_Enqueue($data);
+                    $this->frontend_scripts([
+                        'files' => $files
+                    ]);
+
+                    new UnusedCSS_Enqueue($path);
 
                     $this->replace_css();
                 }

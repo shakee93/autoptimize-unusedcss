@@ -13,7 +13,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         self::$table = $wpdb->prefix . 'rapidload_uucss_job';
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
-        $url = isset($args['url']) ? $this->transform_url($args['url']) : null;
+        $url = isset($args['url']) ? $args['url'] : null;
 
         $path_exist = $wpdb->get_results("SELECT * FROM ". self::$table ." WHERE url = '" . $url . "'", OBJECT);
 

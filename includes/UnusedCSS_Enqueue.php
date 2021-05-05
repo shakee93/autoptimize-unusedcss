@@ -12,12 +12,16 @@ class UnusedCSS_Enqueue {
     private $dom;
     private $data;
     private $options;
+    private $files;
+    private $warnings;
 
     function __construct($data)
     {
         $this->file_system = new UnusedCSS_FileSystem();
 
         $this->data = $data;
+        $this->files = $this->data->get_files();
+        $this->warnings = $this->data->get_warnings();
 
         $this->options = UnusedCSS_Admin::fetch_options();
 
@@ -31,7 +35,7 @@ class UnusedCSS_Enqueue {
         if(isset($this->options['uucss_include_inline_css']) &&
             $this->options['uucss_include_inline_css'] == '1' &&
             apply_filters('uucss/enqueue/inline-css-enabled', false) &&
-            isset($this->data['files']) && !empty($this->data['files'])){
+            isset($this->files) && !empty($this->files)){
 
             $inline_style_content = '';
 
@@ -51,20 +55,20 @@ class UnusedCSS_Enqueue {
 
                 $search = '//inline-style@' . md5(self::remove_white_space($style->innertext));
 
-                $file_key = array_search( $search, array_column( $this->data['files'], 'original' ) );
+                $file_key = array_search( $search, array_column( $this->files, 'original' ) );
 
                 if(is_numeric( $file_key ) && $file_key){
 
                     $style->outertext = '';
-                    $inline_style_content .= $this->data['files'][$file_key]['uucss'];
+                    $inline_style_content .= $this->files[$file_key]['uucss'];
 
                 }else{
 
                     $this->inject->successfully_injected = false;
 
-                    if(!in_array($search, array_column($this->data['meta']['warnings'], 'file'))){
+                    if(!in_array($search, array_column($this->warnings, 'file'))){
 
-                        $this->data['meta']['warnings'][] = [
+                        $this->warnings[] = [
                             "file" => $search,
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
@@ -75,7 +79,7 @@ class UnusedCSS_Enqueue {
 
             if(!empty($inline_style_content)){
 
-                $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data['url']) . '" uucss>' . $inline_style_content . '</style>';
+                $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data->url) . '" uucss>' . $inline_style_content . '</style>';
 
                 $header_content = $this->dom->find( 'head' )[0]->outertext;
                 $header_content = str_replace('</head>','', $header_content);
@@ -110,37 +114,30 @@ class UnusedCSS_Enqueue {
 
         $time_diff = 0;
 
-        if(isset($this->data['time'])){
-            $time_diff = time() - $this->data['time'];
+        if(isset($this->data->created_at)){
+            $time_diff = time() - strtotime($this->data->created_at);
         }
 
         if($this->inject->successfully_injected){
 
-            if($this->data['attempts'] > 0){
-
-                UnusedCSS_DB::reset_attempts($this->data['url']);
-            }
-
             $this->dom->find( 'body' )[0]->uucss = true;
 
-            UnusedCSS_DB::update_success_count($this->data['url']);
+            $this->data->attempts = 0;
+            $this->data->hits++;
 
-        }else if(!$this->inject->successfully_injected && ($this->data['attempts'] <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
+        }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
-            UnusedCSS_DB::update_meta([
-                'status' => 'queued',
-                'attempts' => $this->data['attempts'] + 1,
-                'created_at' => date( "Y-m-d H:m:s", time() )
-            ], $this->data['url']);
+            $this->data->status = 'queued';
+            $this->data->attempts++;
+            $this->data->created_at = date( "Y-m-d H:m:s", time() );
 
         }else{
 
-            UnusedCSS_DB::update_meta([
-                'warnings' => $this->data['meta']['warnings']
-            ], $this->data['url']);
+            $this->data->warnings = count($this->warnings) > 0 ? serialize($this->warnings) : null;
 
         }
 
+        $this->data->save();
         $this->log_action(json_encode($this->inject));
     }
 
@@ -172,7 +169,7 @@ class UnusedCSS_Enqueue {
 
                     if(isset($url_parts['path'])){
 
-                        $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $this->data['files'], 'original' ));
+                        $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $this->files, 'original' ));
 
                         $key = isset($result) && !empty($result) ? key($result) : null;
                     }
@@ -181,20 +178,20 @@ class UnusedCSS_Enqueue {
 
                     $link = apply_filters('uucss/enqueue/cdn-url', $link);
 
-                    $file = array_search( $link, array_column( $this->data['files'], 'original' ) );
+                    $file = array_search( $link, array_column( $this->files, 'original' ) );
 
                     if ( ! $file ) {
                         // Retry to see if file can be found with CDN url
-                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->data['files'], 'original' ) );
+                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->files, 'original' ) );
                     }
 
-                    $key = isset($this->data['files']) ? $file : null;
+                    $key = isset($this->files) ? $file : null;
 
                 }
 
                 // check if we found a script index and the file exists
-                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->data['files'][ $key ]['uucss'] ) ) {
-                    $uucss_file = $this->data['files'][ $key ]['uucss'];
+                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
+                    $uucss_file = $this->files[ $key ]['uucss'];
 
                     array_push( $this->inject->found_css_cache_files, $link );
 
@@ -232,11 +229,11 @@ class UnusedCSS_Enqueue {
 
                         $this->inject->successfully_injected = false;
 
-                        if(!in_array($link, array_column($this->data['meta']['warnings'], 'file'))){
+                        if(!in_array($link, array_column($this->warnings, 'file'))){
 
                             $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
 
-                            $this->data['meta']['warnings'][] = [
+                            $this->warnings[] = [
                                 "file" => $link,
                                 "message" => "RapidLoad optimized version for the file missing."
                             ];
@@ -307,7 +304,7 @@ class UnusedCSS_Enqueue {
     private function log_action($message){
         self::log([
             'log' => $message,
-            'url' => isset($this->data['url']) ? $this->data['url'] : null,
+            'url' => $this->data->url,
             'type' => 'injection'
         ]);
     }

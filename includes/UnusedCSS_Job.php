@@ -33,14 +33,14 @@ abstract class UnusedCSS_Job
     abstract public function save();
 
     public function get_files(){
-        if($this->files){
+        if(isset($this->files)){
             return unserialize($this->files);
         }
         return [];
     }
 
     public function get_warnings(){
-        if($this->warnings){
+        if(isset($this->warnings)){
             return unserialize($this->warnings);
         }
         return [];
