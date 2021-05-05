@@ -27,6 +27,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Enqueue.php',
         'UnusedCSS_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
         'UnusedCSS_FileSystem' => __DIR__ . '/../..' . '/includes/UnusedCSS_FileSystem.php',
+        'UnusedCSS_Job' => __DIR__ . '/../..' . '/includes/UnusedCSS_Job.php',
+        'UnusedCSS_Path' => __DIR__ . '/../..' . '/includes/UnusedCSS_Path.php',
         'UnusedCSS_Queue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Queue.php',
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
         'UnusedCSS_Sitemap' => __DIR__ . '/../..' . '/includes/UnusedCSS_Sitemap.php',

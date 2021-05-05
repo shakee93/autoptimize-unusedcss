@@ -26,6 +26,8 @@ return array(
     'UnusedCSS_Enqueue' => $baseDir . '/includes/UnusedCSS_Enqueue.php',
     'UnusedCSS_Feedback' => $baseDir . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
     'UnusedCSS_FileSystem' => $baseDir . '/includes/UnusedCSS_FileSystem.php',
+    'UnusedCSS_Job' => $baseDir . '/includes/UnusedCSS_Job.php',
+    'UnusedCSS_Path' => $baseDir . '/includes/UnusedCSS_Path.php',
     'UnusedCSS_Queue' => $baseDir . '/includes/UnusedCSS_Queue.php',
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',
     'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
