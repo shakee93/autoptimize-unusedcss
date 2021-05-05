@@ -416,14 +416,21 @@ abstract class UnusedCSS {
         $path->warnings = null;
         $path->status = 'queued';
         $path->hits = 0;
+        $path->save();
 
         $this->async = apply_filters('uucss/purge/async',true);
 
-	    if (! $this->async ) {
-		    $this->init_async_store( $this->provider, $url, $args );
-	    }
+	    if (! $this->async || isset($args['first_job'])) {
 
-	    if ( isset( $args['immediate'] ) ) {
+            $this->init_async_store($this->provider, $url, $args);
+
+            self::log([
+                'log' => 'link purged',
+                'url' => $url,
+                'type' => 'queued'
+            ]);
+
+        }else if ( isset( $args['immediate'] ) ) {
 
             $spawned = $this->schedule_cron('uucss_async_queue', [
                 'provider' => $this->provider,
@@ -433,6 +440,7 @@ abstract class UnusedCSS {
 
 	    	if($spawned){
                 $path->status = 'processing';
+                $path->save();
             }
 
             self::log([
@@ -441,14 +449,12 @@ abstract class UnusedCSS {
                 'type' => 'queued'
             ]);
 
+            self::log([
+                'log' => 'link added to queue',
+                'url' => $url,
+                'type' => 'queued'
+            ]);
 	    }
-	    self::log([
-		    'log' => 'link added to queue',
-		    'url' => $url,
-		    'type' => 'queued'
-	    ]);
-
-	    $path->save();
 
 	    return true;
     }

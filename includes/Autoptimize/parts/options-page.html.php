@@ -495,6 +495,16 @@
                             <strong>Total Optimization Jobs</strong> :  <?php echo $total; ?>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
+                            <?php
+                                if(UnusedCSS_DB::$current_version >= 1.2 ) :
+                                    $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
+                                    ?>
+                                        <p>
+                                            <strong>Hits</strong> : <?php echo $hits; ?> - <?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?>%
+                                        </p>
+                                    <?php
+                                endif;
+                            ?>
                             <p>
                                 <strong>Success</strong> : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
                             </p>
