@@ -208,11 +208,14 @@ class UnusedCSS_Store {
             ];
         }
 
-        $this->rule->status = 'success';
-        $this->rule->hits = 0;
-        $this->rule->files = $files ? serialize($files) : null;
-        $this->rule->stats = isset($this->result->meta->stats) ? serialize($this->result->meta->stats) : null;
-        $this->rule->warnings = isset($warnings) && count($warnings) > 0 ? serialize($warnings) : null;
+        $stats = isset($this->result->meta->stats) ? $this->result->meta->stats : null;
+
+        if(isset($this->result) && isset($this->result->meta) && isset($this->result->meta->options) && isset($this->result->meta->options->redirectUrls)){
+
+            $stats->redirectUrls = $this->result->meta->options->redirectUrls;
+        }
+
+        $this->rule->mark_as_success($files, $stats, $warnings);
         $this->rule->save();
 
     }
