@@ -1371,7 +1371,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info .dataTables_length{
 }
 
 .uucss-history-table tbody tr.selected{
-    background-color: #f7f7f7;
+    background-color: #f7f7f7!important;
 }
 
 table#uucss-options tbody tr td{
