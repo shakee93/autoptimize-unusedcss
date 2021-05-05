@@ -506,26 +506,27 @@ abstract class UnusedCSS_Admin {
 
     public function get_gpsi_test_result($link){
 
+        error_log('i am running');
+
         $uucss_api = new UnusedCSS_Api();
 
         $cached_files = [];
         $original_files = [];
-        $files = $link->get_files();
 
-        if(count($files) > 0){
+        if(isset($link['files']) && !empty($link['files'])){
 
-            $cached_files = array_filter($files, function ($file){
+            $cached_files = array_filter($link['files'], function ($file){
                 return !$this->str_contains($file['original'], '//inline-style@');
             });
 
-            $original_files = array_filter($files, function ($file){
+            $original_files = array_filter($link['files'], function ($file){
                 return !$this->str_contains($file['original'], '//inline-style@');
             });
         }
 
         return $uucss_api->post( 'test/wordpress',
             [
-                'url' => urldecode($link->url),
+                'url' => urldecode($link['url']),
                 'files' => !empty($cached_files) ? array_column($cached_files, 'uucss') : [],
                 'aoFiles' => !empty($original_files) ? array_column($original_files, 'original') : []
             ]);
@@ -542,9 +543,7 @@ abstract class UnusedCSS_Admin {
 
         $uucss_api = new UnusedCSS_Api();
 
-        $link = new UnusedCSS_Path([
-            'url' => $url
-        ]);
+        $link = UnusedCSS_DB::get_link($url);
 
         $result = $this->get_gpsi_test_result($link);
 
