@@ -100,7 +100,12 @@ class UnusedCSS_Store {
 
             if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-                UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
+                $path = new UnusedCSS_Path([
+                    'url' => $this->url
+                ]);
+
+                $path->mark_as_failed($uucss_api->extract_error( $result ));
+                $path->save();
 
                 $this->log( [
                     'log' => 'fetched data stored status failed',
@@ -244,12 +249,7 @@ class UnusedCSS_Store {
            'url' => $this->url
         ]);
 
-        $path->files = isset($files) ? serialize($files) : null;
-        $path->status = 'success';
-        $path->hits = 0;
-        $path->stats = isset($stats) ? serialize($stats) : null;
-        $path->warnings = isset($warnings) && count($warnings) > 0 ? serialize($warnings) : null;
-        $path->error = null;
+        $path->mark_as_success($files, $stats, $warnings);
         $path->save();
 
         $this->log( [
