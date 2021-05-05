@@ -215,7 +215,8 @@ class UnusedCSS_Store {
         $path->files = isset($files) ? serialize($files) : null;
         $path->status = 'success';
         $path->stats = isset($stats) ? serialize($stats) : null;
-        $path->warnings = isset($warnings) ? serialize($warnings) : null;
+        $path->warnings = isset($warnings) && count($warnings) > 0 ? serialize($warnings) : null;
+        $path->error = null;
         $path->save();
 
         $this->log( [
