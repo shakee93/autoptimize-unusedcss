@@ -476,6 +476,8 @@
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }else if(Number(rowData.attempts) === 0 && rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                        }else if(Number(rowData.attempts) === 0 && rowData.success_count){
+                            attemptsString = 'Hits : ' + rowData.success_count
                         }
 
                         var tippyOptions;
