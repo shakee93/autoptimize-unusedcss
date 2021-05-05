@@ -12,6 +12,7 @@ class UnusedCSS_Store {
 	public $provider;
 
     public $url;
+    public $rule;
     public $args;
     public $purged_files = [];
 	public $result;
@@ -29,17 +30,24 @@ class UnusedCSS_Store {
      * @param $provider
      * @param $url
      * @param $args
+     * @param $rule
      */
-    public function __construct($provider, $url, $args = [])
+    public function __construct($provider, $url, $args = [], $rule = false)
     {
 
         $this->provider = $provider;
-        $this->url = $url;
         $this->args = $args;
         $this->options = UnusedCSS_Admin::fetch_options();
 
         $this->file_system = new UnusedCSS_FileSystem();
 
+        if(!$rule){
+
+            $this->url = $url;
+        }else{
+
+            $this->rule = $rule;
+        }
     }
 
     public function purge_css() {
@@ -178,6 +186,30 @@ class UnusedCSS_Store {
 	    }
 
 	    return $files;
+    }
+
+    public function add_rule($files, $result = false){
+
+        if($result){
+            $this->result = $result;
+        }
+
+        $warnings = [];
+
+        if(isset($this->result->meta->stats) && isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)){
+
+            $warnings[] = [
+                "message" => "Clear your page cache"
+            ];
+        }
+
+        $this->rule->status = 'success';
+        $this->rule->hits = 0;
+        $this->rule->files = $files ? serialize($files) : null;
+        $this->rule->stats = isset($this->result->meta->stats) ? serialize($this->result->meta->stats) : null;
+        $this->rule->warnings = isset($warnings) && count($warnings) > 0 ? serialize($warnings) : null;
+        $this->rule->save();
+
     }
 
     public function add_link($files, $result = false){

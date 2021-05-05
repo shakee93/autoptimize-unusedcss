@@ -117,7 +117,8 @@
         window.tagBox.init();
 
         var $input = $('#uucss_api_key')
-        var $uucss_spinner = $('.spinner-history')
+        var $uucss_spinner = $('.uucss-history.uucss-job-history .spinner-history')
+        var $uucss_rule_spinner = $('.uucss-history.uucss-rule-history .spinner-history')
 
         try {
             var _url = new URL(window.location.href);
@@ -226,9 +227,14 @@
         });
 
         var table = $('#uucss-history')
+        var rule_table = $('#uucss-rule-history')
 
         table.on('init.dt', function () {
             setInterval(refreshTable, 1000 * 5)
+        });
+
+        rule_table.on('init.dt', function () {
+            //setInterval(refreshRuleTable, 1000 * 5)
         });
 
         var x = 0;
@@ -346,6 +352,7 @@
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
         var firstReload = true;
+        var firstRuleReload = true;
 
         var status_filter = '';
         var url_filter = '';
@@ -420,6 +427,494 @@
                 {
                     "data": "url",
                     title: "URL",
+                    className: "url",
+                    render(data) {
+
+                        if (!data) {
+                            return '';
+                        }
+
+                        return '<a href="'+ decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>';
+                    }
+                },
+                {
+                    data: "url",
+                    className: 'dt-body-center dt-head-center stats th-reduction',
+                    title: "File Size Reduction",
+                    width: '145px',
+                    render: function (data, type, row, meta) {
+                        if (row.meta && row.meta.stats && row.meta.stats.reduction && row.status === 'success') {
+                            return row.meta.stats.reduction + '%'
+                        }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'waiting'){
+                            return '<span class="job-file-size">-</span>';
+                        }
+
+                        return '0 KB'
+                    },
+                    createdCell: function (td, cellData, rowData) {
+
+                        var innerTippy
+                        var innerTippy2
+
+                        var stat = $(td).wrapInner($('<span></span>'));
+
+                        var $warnings_html = $('<div class="uucss-warnings"></div>');
+
+                        if(rowData.meta.warnings && rowData.meta.warnings.length){
+                            var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
+                            $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
+                            $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
+                            $.each(rowData.meta.warnings, function(index, value){
+                                var $warning_html = $('<li class="warning"></li>')
+                                $warning_html.append('<div class="warning-info"></div>');
+                                $warning_html.find('.warning-info').append('<p class="warning-header">' +  value.message + '</p>');
+                                if(value.file){
+                                    $warning_html.find('.warning-info').append('<p class="warning-content"><a href="' + value.file +'" target="_blank">' +  value.file + '</a></p>');
+                                }
+                                $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
+                            })
+                        }else{
+                            $warnings_html.removeClass('uucss-warnings');
+                        }
+
+                        var attemptsString = '';
+
+                        if(Number(rowData.attempts) !== 0){
+                            attemptsString = 'Attempts : ' + rowData.attempts
+                        }else if(Number(rowData.attempts) === 0 && rowData.success_count > 0){
+                            attemptsString = 'Hits : ' + rowData.success_count
+                        }else if(Number(rowData.attempts) === 0 && rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
+                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                        }
+
+                        var tippyOptions;
+
+                        tippyOptions = {
+                            theme: 'light',
+                            triggerTarget: stat.find('span')[0],
+                            content: function () {
+                                var c = $('<div class="stat-tooltip">' +
+                                    '       <div class="progress-bar-wrapper">' +
+                                    '           <div class="progress-bar w-100">' +
+                                    '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                    '               </span>' +
+                                    '           </div>' +
+                                    '       </div>' +
+                                    $warnings_html.wrap('<div></div>').parent().html() +
+                                    '<div class="time">' +
+                                    '   <p class="val uucss-show-job-details">Created at ' +
+                                    new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
+                                    '   </p>' +
+                                    '   <p class="attempts">' +
+                                    attemptsString +
+                                    '   </p>' +
+                                    '</div>' +
+                                    '</div>');
+
+                                innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
+                                    content: 'Without RapidLoad <span class="perc">' + rowData.meta.stats.before + '</span>',
+                                    allowHTML: true,
+                                    placement: 'bottom-end',
+                                    trigger: 'manual',
+                                    hideOnClick: false,
+                                    animation: null,
+                                    theme: 'tomato',
+                                    interactive: true,
+                                    delay: 0,
+                                    offset: [0, 7],
+                                    inlinePositioning: true,
+                                })
+
+                                innerTippy2 = tippy(c.find('.progress-bar')[0], {
+                                    content: 'RapidLoad <span class="perc"> ' + rowData.meta.stats.after + '</span>',
+                                    allowHTML: true,
+                                    placement: 'top-start',
+                                    trigger: 'manual',
+                                    hideOnClick: false,
+                                    animation: null,
+                                    theme: 'ketchup',
+                                    interactive: true,
+                                    delay: 0,
+                                    inlinePositioning: true,
+                                })
+
+                                return c[0]
+                            },
+                            placement: 'left',
+                            //trigger: 'click',
+                            interactive: true,
+                            allowHTML: true,
+                            animation: "shift-toward-extreme",
+                            appendTo: "parent",
+                            onShow: function () {
+                                innerTippy.show()
+                                innerTippy2.show()
+                            },
+                            onShown: function (instance) {
+                                $(instance.popper).find('.progress-bar.w-100').removeClass('w-100')
+                                $('.uucss-show-job-details')
+                                    .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(rowData, undefined, 2) +'</code></pre></div></div>',{
+                                        variant : 'uucss-job-details'
+                                    })
+                            },
+                            onHide: function (instance) {
+                                innerTippy.hide()
+                                innerTippy2.hide()
+                                $(instance.popper).find('.progress-bar').addClass('w-100')
+                            }
+
+                        }
+
+                        if (rowData.status === 'failed') {
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+
+                            tippyOptions.onShow = function () {
+                            }
+                            tippyOptions.onHide = function () {
+                            }
+
+                            var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
+                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <br><span>' + rowData.meta.error.message + '</span></div>';
+
+                            //tippyOptions.triggerTarget = $(td).closest('tr')[0]
+                            tippy(stat.find('span')[0], tippyOptions);
+                            return
+                        }
+
+                        if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
+                            var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || rowData.success_count > 0 ? 'hits-success' : '';
+                            stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
+                        } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
+                            stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
+                        }
+
+                    }
+                },
+                {
+                    "data": "url",
+                    className: 'dt-body-right dt-head-right action th-actions',
+                    "targets": 0,
+                    title: "Actions",
+                    width: '60px',
+                    render: function (data, type, row, meta) {
+                        var _render = '';
+
+                        _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
+
+                        _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+
+                        return _render;
+                    },
+                },
+                {
+                    "data": "meta",
+                    visible : false,
+                    render: function (data, type, row, meta) {
+                        if (data.warnings && data.warnings.length > 0) return 'warning';
+                        return data.status;
+                    }
+                }
+            ],
+            rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
+
+                tippy($(row).find('button[data-uucss-options]')[0], {
+                    allowHTML: true,
+                    trigger: 'click',
+                    arrow: true,
+                    appendTo: $(row).find('button[data-uucss-options]')[0],
+                    interactive: true,
+                    animation: 'shift-toward',
+                    hideOnClick: true,
+                    theme: 'light',
+                    content: ()=>{
+
+                        var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
+
+                        if(data.status === 'success'){
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
+                        }
+
+                        if($('#thirtd_part_cache_plugins').val() === "1"){
+                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
+                        }
+
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
+
+                        return $content.wrap('<div></div>').parent().html();
+                    },
+                    onClickOutside(instance, event) {
+                        instance.hide()
+                    },
+                    onCreate(){
+
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="remove"]')[0], {
+                            content: 'Remove RapidLoad cache files',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        })
+
+                        tippy($('.uucss-option-list ul.option-list li[data-action_name="test"]')[0], {
+                            content: 'Test Url',
+                            allowHTML: true,
+                            placement: 'left',
+                            hideOnClick: false,
+                            animation: null,
+                            interactive: true,
+                            delay: 0,
+                            inlinePositioning: true,
+                            maxWidth: 500,
+                            appendTo: 'parent'
+                        });
+
+                    },
+                    onMount(instance) {
+
+                        $('.uucss-option-list ul.option-list li a').off().click(function (e) {
+
+                            var $this = $(this);
+
+                            var action = $this.data('action_name');
+
+                            switch (action) {
+                                case 'remove':{
+                                    uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    break;
+                                }
+                                case 'purge-url':{
+
+                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+
+                                        $.uucssAlert(i, 'Successfully cleared your page cache')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'Unknown error occurred when clearing the page cache')
+                                    });
+
+                                    break;
+                                }
+                                case 'test':{
+
+                                    if($this.data('fetching')){
+                                        return;
+                                    }
+
+                                    $.ajax({
+                                        method : 'POST',
+                                        url: wp.ajax.settings.url + '?action=uucss_test_url',
+                                        data : {
+                                            url: data.url,
+                                        },
+                                        beforeSend(){
+                                            $this.data('fetching', true);
+                                        },
+                                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                            var $feather_content = $('.featherlight.uucss-gpsi-test .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+
+                                            $content.append('<div class="header"></div>');
+                                            $content.append('<div class="devider"></div>');
+                                            $content.append('<div class="description"></div>');
+
+                                            $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-warning"></span>Pending</h2>')
+                                            $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
+
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+                                        },
+                                        success: function (response) {
+                                            var $feather_content = $('.featherlight.uucss-gpsi-test .featherlight-content');
+                                            var $content = $('<div class="content"></div>');
+
+                                            $content.append('<div class="header"></div>');
+                                            $content.append('<div class="devider"></div>');
+                                            $content.append('<div class="description"></div>');
+
+                                            if(response.success && response.data && ( response.data.injected || response.data.success) && response.data.injectedCSS > 0){
+
+                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-yes-alt"></span>Success</h2>')
+                                                $content.find('.description').append('<p>Optimization is now reflected in Google Page Speed Insight, GT Metrix and all other page speed testing tools.</p>')
+
+                                            }else{
+
+                                                $content.find('.header').append('<h2><span class="js-gpsi-reult dashicons dashicons-warning"></span>Pending</h2>')
+                                                $content.find('.description').append('<p>Your optimization is yet to be reflected on Google Page Insight, GT Metrix and all other page speed testing tools.</p>')
+
+                                            }
+
+                                            if(response.success && response.data && response.data.success){
+
+                                                const with_uucss = new URL(response.data.url);
+                                                const without_uucss = new URL(response.data.url);
+                                                without_uucss.searchParams.append('no_uucss','');
+
+                                                $content.find('.description').html('<p>' + $content.find('.description').text() + ' Compare your page speed scores:' + '</p>')
+                                                $content.find('.description').append('<p class="test-site-links-heading without-rapidload"><strong>Without RapidLoad</strong></p>');
+                                                $content.find('.description').append('<ul class="test-site-links test-site-links-without"></ul>');
+                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">GT Metrix</a></li>')
+                                                $content.find('.test-site-links-without').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ without_uucss.toString().replace('no_uucss=','no_uucss') +'" target="_blank">Google Insights</a></li>')
+
+
+                                                $content.find('.description').append('<p class="test-site-links-heading with-rapidload"><strong>RapidLoad</strong></p>');
+                                                $content.find('.description').append('<ul class="test-site-links test-site-links-with"></ul>');
+                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://gtmetrix.com/?url='+ with_uucss.toString() +'" target="_blank">GT Metrix</a></li>')
+                                                $content.find('.test-site-links-with').append('<li class="test-site-link"><a href="https://developers.google.com/speed/pagespeed/insights/?url='+ with_uucss.toString() +'" target="_blank">Google Insights</a></li>')
+                                            }
+
+                                            $feather_content.find('.spinner').remove();
+                                            $feather_content.append($content.wrap('<div></div>').parent().html());
+
+                                            if(response.success && response.data){
+                                                $('.js-gpsi-reult')
+                                                    .featherlight('<div><div class="code"><pre><code>'+ JSON.stringify(response.data, undefined, 2) +'</code></pre></div></div>',{
+                                                        variant : 'uucss-gpsi-result-details'
+                                                    })
+                                            }
+                                        },
+                                        complete:function () {
+                                            $this.data('fetching', false);
+                                        }
+                                    });
+
+                                    break;
+                                }
+                                default:{
+                                    break;
+                                }
+                            }
+                        })
+
+                        $('.uucss-option-list ul.option-list li a[data-action_name="test"]')
+                            .featherlight('<div class="spinner loading"></div>',{
+                                variant : 'uucss-gpsi-test'
+                            })
+                    },
+                    placement: 'bottom-end',
+                })
+
+                tippy($(row).find('span.job-status.status.waiting')[0], {
+                    content: 'Waiting to be processed',
+                    placement: 'top',
+                    appendTo: "parent",
+                });
+
+                tippy($(row).find('button[data-uucss-optimize]')[0], {
+                    content: 'Refresh files Immediately',
+                    placement: 'top',
+                    appendTo: "parent"
+                });
+
+                $(row).find('button').data('index',dataIndex);
+
+                $(row).find('button[data-uucss-options]').off('click').click(function (e) {
+                    e.preventDefault();
+                });
+
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                    e.preventDefault()
+
+                    var is_clear = (typeof $(this).data().uucssClear === 'string')
+
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+
+                });
+
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                    e.preventDefault()
+
+                    var is_clear = (typeof $(this).data().uucssClear === 'string')
+
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+
+                });
+            }
+        });
+
+        rule_table = rule_table.DataTable({
+            serverSide: true,
+            processing: false,
+            language: {
+                processing: '<span class="spinner loading"></span>'
+            },
+            ajax: {
+                beforeSend() {
+                    !$uucss_rule_spinner.hasClass('loading') && $uucss_rule_spinner.addClass('loading');
+                },
+                url: wp.ajax.settings.url + '?action=uucss_data',
+                data: function (d) {
+
+                    if(status_filter !== "" && status_filter !== undefined){
+                        if(d.columns[0] && d.columns[0].search){
+                            d.columns[0].search.value = status_filter
+                        }
+                    }
+
+                    if(url_filter !== "" && url_filter !== undefined){
+                        if(d.columns[1] && d.columns[1].search){
+                            d.columns[1].search.value = url_filter;
+                            d.columns[1].search.regex = exact_search_val
+                        }
+                    }
+
+                    d.nonce = uucss.nonce
+
+                    return d;
+                },
+                dataSrc: function (d) {
+                    $uucss_rule_spinner.removeClass('loading')
+
+                    if (!d.success) {
+                        $.uucssAlert("Failed to fetch optimizations", 'error')
+                        return [];
+                    }
+
+                    var results = d.data;
+
+                    firstRuleReload = false;
+                    return results;
+                }
+            },
+            searching: true,
+            pagingType: "simple",
+            tfoot: false,
+            lengthChange : false,
+            bSort: false,
+            columns: [
+                {
+                    "data": "status",
+                    title: "Status",
+                    width: '40px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        var classNames = 'status ';
+                        if(data === 'queued' || data === 'processing'){
+                            classNames += 'refresh ';
+                        }
+                        classNames += data + ' ';
+                        return '<span class="job-status ' + classNames +'">'+ data +'</span>'
+                    },
+                },
+                {
+                    "data": "rule",
+                    title: "Rule",
+                    width: '40px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ?? '') +'</span>';
+                    },
+                },
+                {
+                    "data": "url",
+                    title: "Base",
                     className: "url",
                     render(data) {
 

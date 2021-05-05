@@ -250,6 +250,16 @@ class UnusedCSS_Queue
 
     function uucss_process_queue(){
 
+        $this->fetch_job_id();
+
+        $this->fetch_rule_job_id();
+
+        $this->uucss_process_result();
+
+    }
+
+    function fetch_job_id(){
+
         $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
 
         $links = UnusedCSS_DB::get_links_by_status(["'queued'"], (self::$job_count - count($current_waiting)));
@@ -285,7 +295,22 @@ class UnusedCSS_Queue
 
         }
 
-        $this->uucss_process_result();
+    }
+
+    function fetch_rule_job_id(){
+
+        $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
+
+        $rules = UnusedCSS_DB::get_rules_by_status(["'queued'"], (self::$job_count - count($current_waiting)));
+
+        if(!empty($rules)){
+
+            foreach ($rules as $rule){
+
+                $this->cache_rule($rule);
+            }
+
+        }
 
     }
 
@@ -303,6 +328,69 @@ class UnusedCSS_Queue
 
         }
 
+        $rules = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], self::$job_count, 'job_id');
+
+        if(!empty($rules)){
+
+            foreach ($rules as $rule){
+
+                $this->update_rule_result($rule);
+
+            }
+
+        }
+
+    }
+
+    function update_rule_result($uucss_rule){
+
+        if(!$uucss_rule->job_id){
+            return;
+        }
+
+        $rule = new UnusedCSS_Rule([
+            'rule' => $uucss_rule->rule,
+            'url' => $uucss_rule->url
+        ]);
+
+        $this->log( [
+            'log' => 'fetching data for job ' . $rule->job_id,
+            'url' => $rule->url,
+            'type' => 'store'
+        ] );
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->get( 's/unusedcss/' . $rule->job_id);
+
+        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
+
+            $rule->status = 'failed';
+            $rule->attempts++;
+            $rule->error = $uucss_api->extract_error( $result );
+            $rule->save();
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $rule->url,
+                'type' => 'uucss-cron'
+            ] );
+
+            return;
+        }
+
+        $uucss_store = new UnusedCSS_Store(null, $rule->url,null, $rule);
+
+        if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+
+            $files = $uucss_store->cache_files($result->data);
+            $uucss_store->add_rule($files, $result);
+            $uucss_store->uucss_cached();
+
+        }else if(isset($result->completed) && $result->completed){
+
+            $uucss_store->add_rule(null, $result);
+        }
     }
 
     function cache($url){
@@ -348,7 +436,57 @@ class UnusedCSS_Queue
             $uucss->init_async_store( $uucss->provider, $url, $uucss->api_options($post_id) );
         }
 
+    }
 
+    function cache_rule($rule){
+
+        global $uucss;
+
+        $post_id = url_to_postid($rule->url);
+
+        $rule = new UnusedCSS_Rule([
+            'rule' => $rule->rule,
+            'url' => $rule->url
+        ]);
+
+        $rule->status = 'waiting';
+        $rule->job_id = null;
+        $rule->save();
+
+        self::log([
+            'log' => 'fetching job id',
+            'url' => $rule->url,
+            'type' => 'uucss-cron'
+        ]);
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->post( 's/unusedcss',
+            array_merge( $uucss->api_options($post_id),
+                [ 'url' => $rule->url ]
+            ));
+
+        if($uucss_api->is_error($result)){
+
+            $rule->status = 'failed';
+            $rule->hits = 0;
+            $rule->error = $uucss_api->extract_error( $result );
+            $rule->save();
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $rule->url,
+                'type' => 'uucss-cron'
+            ] );
+
+            return;
+        }
+
+        if(isset($result->id)){
+
+            $rule->job_id = $result->id;
+            $rule->save();
+        }
 
     }
 

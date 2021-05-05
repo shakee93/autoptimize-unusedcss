@@ -29,6 +29,7 @@ return array(
     'UnusedCSS_Job' => $baseDir . '/includes/UnusedCSS_Job.php',
     'UnusedCSS_Path' => $baseDir . '/includes/UnusedCSS_Path.php',
     'UnusedCSS_Queue' => $baseDir . '/includes/UnusedCSS_Queue.php',
+    'UnusedCSS_Rule' => $baseDir . '/includes/UnusedCSS_Rule.php',
     'UnusedCSS_Settings' => $baseDir . '/includes/UnusedCSS_Settings.php',
     'UnusedCSS_Sitemap' => $baseDir . '/includes/UnusedCSS_Sitemap.php',
     'UnusedCSS_Store' => $baseDir . '/includes/UnusedCSS_Store.php',

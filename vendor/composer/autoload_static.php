@@ -30,6 +30,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Job' => __DIR__ . '/../..' . '/includes/UnusedCSS_Job.php',
         'UnusedCSS_Path' => __DIR__ . '/../..' . '/includes/UnusedCSS_Path.php',
         'UnusedCSS_Queue' => __DIR__ . '/../..' . '/includes/UnusedCSS_Queue.php',
+        'UnusedCSS_Rule' => __DIR__ . '/../..' . '/includes/UnusedCSS_Rule.php',
         'UnusedCSS_Settings' => __DIR__ . '/../..' . '/includes/UnusedCSS_Settings.php',
         'UnusedCSS_Sitemap' => __DIR__ . '/../..' . '/includes/UnusedCSS_Sitemap.php',
         'UnusedCSS_Store' => __DIR__ . '/../..' . '/includes/UnusedCSS_Store.php',

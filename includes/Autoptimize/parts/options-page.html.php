@@ -50,6 +50,16 @@
                     </div>
                 </li>
 
+                <li class="uucss-history uucss-rule-history">
+                    <h2>
+                        Rules
+                    </h2>
+                    <div class="content">
+                        <div class="spinner spinner-history"></div>
+                        <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
+                    </div>
+                </li>
+
                 <li>
                     <h2>
                         Advanced Settings

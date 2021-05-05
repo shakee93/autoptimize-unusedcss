@@ -6,6 +6,8 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
     use UnusedCSS_Utils;
 
+    public $ignore_rule;
+
     public function init($args){
 
         global $wpdb;

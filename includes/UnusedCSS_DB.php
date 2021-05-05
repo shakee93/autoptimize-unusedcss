@@ -6,7 +6,7 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.2";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -321,10 +321,17 @@ class UnusedCSS_DB
 
         $data['id'] = isset($link->id) ? $link->id : null;
         $data['url'] = isset( $link->url ) ? $link->url : null;
-        $data['status'] = isset( $link->status ) ? $link->status : null;
         $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
 
-        $data['rule'] = isset( $link->rule ) ? $link->rule : null;
+        if(isset($link->rule) && !empty($link->rule)){
+            $link = new UnusedCSS_Rule([
+                'url' => $link->url,
+                'rule' => $link->rule
+            ]);
+            $data['rule'] = $link->rule ?? null;
+            $data['base'] = $link->url ?? null;
+        }
+
         $data['files'] = isset($link->files) ? unserialize($link->files) : null;
         $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
         $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
@@ -336,6 +343,7 @@ class UnusedCSS_DB
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
         $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
         $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
+        $data['status'] = isset( $link->status ) ? $link->status : null;
 
         return $data;
 
@@ -592,15 +600,17 @@ class UnusedCSS_DB
     static function create_tables($blog_id = ''){
         global $wpdb;
 
-        $table_name = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
+        $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
+        $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
         if(self::$current_version < 1.1 && in_array($blog_id . 'rapidload_uucss_job', $wpdb->tables)){
             $index = 'url';
-            $wpdb->query( "ALTER TABLE `$table_name` DROP INDEX `$index`" );
+            $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $table_name (
+        $sql = "CREATE TABLE $rapidload_uucss_job (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		job_id mediumint(9) NULL,
 		rule longtext NULL,
@@ -616,6 +626,22 @@ class UnusedCSS_DB
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_uucss_rule (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		job_id mediumint(9) NULL,
+		rule longtext NOT NULL,
+		url longtext NOT NULL,
+		stats longtext NULL,
+		files longtext NULL,
+		warnings longtext NULL,
+		review longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
 	) ;";
 
         dbDelta( $sql );
@@ -627,6 +653,7 @@ class UnusedCSS_DB
 
         $tableArray = [
             $wpdb->prefix . "rapidload_uucss_job",
+            $wpdb->prefix . "rapidload_uucss_rule",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -639,6 +666,25 @@ class UnusedCSS_DB
 
 		}
 
+    }
+
+    public static function get_rules_by_status($status = ['queued'], $limit = 1, $order_by = 'id DESC'){
+
+        global $wpdb;
+
+        $status = implode(",", $status);
+
+        $status = str_replace('"', '', $status);
+
+        $rules = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT  " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $rules;
     }
 
     static function show_db_error($message){

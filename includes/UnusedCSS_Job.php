@@ -19,7 +19,6 @@ abstract class UnusedCSS_Job
     public $error;
     public $attempts;
     public $hits;
-    public $ignore_rule;
     public $status;
     public $created_at;
 

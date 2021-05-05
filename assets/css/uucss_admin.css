@@ -1047,6 +1047,10 @@ input#uucss-pack-suggest {
     background-size: 15px 15px;
 }
 
+.uucss-history.uucss-rule-history .spinner-history {
+    left: 48px;
+}
+
 .uucss-history .spinner-history.loading {
     opacity: 1;
 }
