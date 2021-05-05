@@ -28,9 +28,9 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->warnings = $path_exist[0]->warnings;
             $this->review = $path_exist[0]->review;
             $this->error = $path_exist[0]->error;
-            $this->attempts = $path_exist[0]->attempts;
-            $this->hits = $path_exist[0]->hits;
-            $this->ignore_rule = $path_exist[0]->ignore_rule;
+            $this->attempts = $path_exist[0]->attempts ?? 0;
+            $this->hits = $path_exist[0]->hits ?? 0;
+            $this->ignore_rule = $path_exist[0]->ignore_rule ?? 0;
             $this->status = $path_exist[0]->status;
             $this->created_at = $path_exist[0]->created_at;
 

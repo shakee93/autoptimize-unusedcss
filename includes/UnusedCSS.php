@@ -337,7 +337,7 @@ abstract class UnusedCSS {
 		$this->url = $this->transform_url( $this->url );
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() ) {
+		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] )) {
 
 			$this->get_css();
 
@@ -397,9 +397,11 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $exist_link = UnusedCSS_DB::get_link($url);
+        $path = new UnusedCSS_Path([
+	       'url' => $url
+        ]);
 
-        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3 && !isset($args['immediate'])){
+        if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
                 'url' => $url,
@@ -408,16 +410,12 @@ abstract class UnusedCSS {
             return false;
         }
 
-        $link_data = array(
-            'url' => $url,
-            'files' => null,
-            'status' => 'queued',
-            'meta' => null
-        );
-
-        $link_data = UnusedCSS_DB::transform_link($link_data, false);
-
-        UnusedCSS_DB::add_link($link_data);
+        $path->files = null;
+        $path->stats = null;
+        $path->review = null;
+        $path->warnings = null;
+        $path->status = 'queued';
+        $path->hits = 0;
 
         $this->async = apply_filters('uucss/purge/async',true);
 
@@ -427,13 +425,15 @@ abstract class UnusedCSS {
 
 	    if ( isset( $args['immediate'] ) ) {
 
-	    	UnusedCSS_DB::update_status('processing', $url);
-
-	    	$spawned = $this->schedule_cron('uucss_async_queue', [
+            $spawned = $this->schedule_cron('uucss_async_queue', [
                 'provider' => $this->provider,
                 'url'      => $url,
                 'args'     => $args
             ]);
+
+	    	if($spawned){
+                $path->status = 'processing';
+            }
 
             self::log([
                 'log' => 'cron spawned : ' . $spawned,
@@ -447,6 +447,9 @@ abstract class UnusedCSS {
 		    'url' => $url,
 		    'type' => 'queued'
 	    ]);
+
+	    $path->save();
+
 	    return true;
     }
 

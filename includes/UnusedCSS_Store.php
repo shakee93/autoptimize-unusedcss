@@ -208,23 +208,16 @@ class UnusedCSS_Store {
             $stats->redirectUrls = $this->result->meta->options->redirectUrls;
         }
 
-        $link_data = array(
-            'url' => $this->url,
-            'files' => $files,
-            'status' => 'success',
-            'meta' => [
-                "stats" => $stats,
-                "warnings" => $warnings
-            ]
-        );
+        $path = new UnusedCSS_Path([
+           'url' => $this->url
+        ]);
 
-        if(isset($this->result->meta->id)){
-            $link_data['meta']['id'] = $this->result->meta->id;
-        }
-
-        $link_data = UnusedCSS_DB::transform_link($link_data, false);
-
-        UnusedCSS_DB::add_link($link_data);
+        $path->files = isset($files) ? serialize($files) : null;
+        $path->status = 'success';
+        $path->stats = isset($stats) ? serialize($stats) : null;
+        $path->warnings = isset($warnings) ? serialize($warnings) : null;
+        $path->job_id = isset($this->result->meta->id) ? $this->result->meta->id : null;
+        $path->save();
 
         $this->log( [
             'log' => 'fetched data stored status success',
