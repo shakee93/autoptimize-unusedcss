@@ -45,4 +45,11 @@ abstract class UnusedCSS_Job
         }
         return [];
     }
+
+    public function get_stats(){
+        if(isset($this->stats)){
+            return unserialize($this->stats);
+        }
+        return null;
+    }
 }

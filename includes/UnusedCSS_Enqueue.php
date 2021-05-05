@@ -125,6 +125,18 @@ class UnusedCSS_Enqueue {
             $this->data->attempts = 0;
             $this->data->hits++;
 
+            if(UnusedCSS_DB::$current_version < 1.2){
+                $stats = $this->data->get_stats();
+                if(isset($stats)){
+                    if(!isset($stats->success_count)){
+                        $stats->success_count = 1;
+                    }else{
+                        $stats->success_count++;
+                    }
+                }
+                $this->data->stats = isset($stats) ? serialize($stats) : null;
+            }
+
         }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
             $this->data->status = 'queued';

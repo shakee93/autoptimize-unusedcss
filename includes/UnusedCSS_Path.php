@@ -21,7 +21,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
             $this->id = $path_exist[0]->id;
             $this->url = $path_exist[0]->url;
-            $this->rule = $path_exist[0]->rule;
+            $this->rule = $path_exist[0]->rule ?? null;
             $this->job_id = $path_exist[0]->job_id;
             $this->stats = $path_exist[0]->stats;
             $this->files = $path_exist[0]->files;
@@ -45,6 +45,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->created_at = date( "Y-m-d H:m:s", time() );
 
             $data = (array) $this;
+
+            if(UnusedCSS_DB::$current_version < 1.2){
+                unset($data['rule']);
+                unset($data['hits']);
+                unset($data['ignore_rule']);
+            }
 
             $wpdb->insert(
                 self::$table,
@@ -71,6 +77,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $id = $data['id'];
 
             unset($data['id']);
+
+            if(UnusedCSS_DB::$current_version < 1.2){
+                unset($data['rule']);
+                unset($data['hits']);
+                unset($data['ignore_rule']);
+            }
 
             $wpdb->update(
                 self::$table,

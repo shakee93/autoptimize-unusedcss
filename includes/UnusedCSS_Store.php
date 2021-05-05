@@ -216,7 +216,6 @@ class UnusedCSS_Store {
         $path->status = 'success';
         $path->stats = isset($stats) ? serialize($stats) : null;
         $path->warnings = isset($warnings) ? serialize($warnings) : null;
-        $path->job_id = isset($this->result->meta->id) ? $this->result->meta->id : null;
         $path->save();
 
         $this->log( [
