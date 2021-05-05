@@ -506,8 +506,6 @@ abstract class UnusedCSS_Admin {
 
     public function get_gpsi_test_result($link){
 
-        error_log('i am running');
-
         $uucss_api = new UnusedCSS_Api();
 
         $cached_files = [];
@@ -527,7 +525,7 @@ abstract class UnusedCSS_Admin {
 
         return $uucss_api->post( 'test/wordpress',
             [
-                'url' => urldecode($link['url']),
+                'url' => urldecode($link->url),
                 'files' => !empty($cached_files) ? array_column($cached_files, 'uucss') : [],
                 'aoFiles' => !empty($original_files) ? array_column($original_files, 'original') : []
             ]);
