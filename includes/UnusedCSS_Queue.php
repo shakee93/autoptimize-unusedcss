@@ -161,10 +161,9 @@ class UnusedCSS_Queue
                 wp_send_json_error('url is excluded');
             }
 
-            UnusedCSS_DB::add_link(array(
-                'url' => $url,
-                'status' => 'queued',
-            ));
+            new UnusedCSS_Path([
+               'url' => $url
+            ]);
             wp_send_json_success('successfully link added to the queue');
 
         }else if($post_type == 'site_map'){
@@ -203,11 +202,10 @@ class UnusedCSS_Queue
 
                 $url = $uucss->transform_url(get_the_permalink(get_the_ID()));
 
-                if(!UnusedCSS_DB::link_exists($url) && $uucss->is_url_allowed($url)){
-                    UnusedCSS_DB::add_link(array(
-                        'url' => $url,
-                        'status' => 'queued',
-                    ));
+                if($uucss->is_url_allowed($url)){
+                    new UnusedCSS_Path([
+                       'url' => $url
+                    ]);
                 }
 
             }
@@ -237,10 +235,9 @@ class UnusedCSS_Queue
 
                 if($uucss->is_url_allowed($url)){
 
-                    UnusedCSS_DB::add_link(array(
-                        'url' => $url,
-                        'status' => 'queued',
-                    ));
+                    new UnusedCSS_Path([
+                        'url' => $url
+                    ]);
                 }
 
             }

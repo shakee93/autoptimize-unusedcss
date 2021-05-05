@@ -426,7 +426,7 @@ class UnusedCSS_DB
 
 		if(!$link){
 
-			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 1");
+			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0");
 
 		}else{
 
@@ -564,7 +564,7 @@ class UnusedCSS_DB
     static function clear_links(){
         global $wpdb;
 
-	    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > " . 0 );
+	    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
 
 	    $error = $wpdb->last_error;
 
