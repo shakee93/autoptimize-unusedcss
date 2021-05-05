@@ -29,7 +29,7 @@
                 </li>
 			<?php endif; ?>
 			<?php if ( $api_key_verified) : ?>
-                <li class="uucss-history">
+                <li class="uucss-history uucss-job-history">
                     <h2>
                         Optimization Jobs
                         <span class="multiple-selected-text">
@@ -46,7 +46,7 @@
                     </h2>
                     <div class="content">
                         <div class="spinner spinner-history"></div>
-                        <table id="uucss-history" width="100%" class="hover"></table>
+                        <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
 
