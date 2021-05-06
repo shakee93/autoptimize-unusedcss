@@ -1241,10 +1241,10 @@
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
                         if(data.status === 'success'){
-                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-rule="'+ data.rule +'">GPSI Status</a></li>')
                         }
 
-                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-rule="'+ data.rule +'">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
                     },
@@ -1287,10 +1287,11 @@
                             var $this = $(this);
 
                             var action = $this.data('action_name');
+                            var rule = $this.data('rule');
 
                             switch (action) {
                                 case 'remove':{
-                                    uucss_purge_url(data.url, true, row, dataIndex, data, { rule : 'rule' })
+                                    uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule })
                                     break;
                                 }
                                 case 'purge-url':{

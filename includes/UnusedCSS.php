@@ -536,8 +536,10 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $path = new UnusedCSS_Path([
+        $path = isset( $args['rule'] ) ? new UnusedCSS_Path([
 	       'url' => $url
+        ]) : new UnusedCSS_Rule([
+           'rule' => $args['rule']
         ]);
 
         if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
@@ -556,7 +558,11 @@ abstract class UnusedCSS {
 
 	    if (! $this->async || isset($args['first_job'])) {
 
-            $this->init_async_store($this->provider, $url, $args);
+            if($path->is_type('path')){
+                $this->init_async_store($this->provider, $url, $args);
+            }else{
+                $this->init_async_store_rule($this->provider, $url, $args, $path);
+            }
 
             self::log([
                 'log' => 'link purged',
@@ -566,11 +572,22 @@ abstract class UnusedCSS {
 
         }else if ( isset( $args['immediate'] ) ) {
 
-            $spawned = $this->schedule_cron('uucss_async_queue', [
-                'provider' => $this->provider,
-                'url'      => $url,
-                'args'     => $args
-            ]);
+            $spawned = false;
+
+            if($path->is_type('path')){
+                $spawned = $this->schedule_cron('uucss_async_queue', [
+                    'provider' => $this->provider,
+                    'url'      => $url,
+                    'args'     => $args
+                ]);
+            }else{
+                $spawned = $this->schedule_cron('uucss_async_queue_rule', [
+                    'provider' => $this->provider,
+                    'url'      => $url,
+                    'args'     => $args,
+                    'rule'     => $path
+                ]);
+            }
 
 	    	if($spawned){
                 $path->status = 'processing';
@@ -740,9 +757,9 @@ abstract class UnusedCSS {
 
 		    UnusedCSS_Settings::delete_link( $url );
 
-		    if(isset($args['rule']) && $args['rule'] == 'rule'){
+		    if(isset($args['rule'])){
 
-		        UnusedCSS_DB::delete_rule($url);
+		        UnusedCSS_DB::delete_rule($args);
             }
 
 		    return true;
@@ -757,9 +774,8 @@ abstract class UnusedCSS {
 	    // if soft sets the status to queued
 	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
 
-        if(isset($args['rule']) && $args['rule'] == 'rule'){
-
-            UnusedCSS_DB::clear_rules( isset( $args['soft'] ) );
+        if(isset($args['rule'])){
+            UnusedCSS_DB::clear_rules( isset( $args['soft'] ) , $args);
         }
 
 

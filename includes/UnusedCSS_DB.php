@@ -379,6 +379,7 @@ class UnusedCSS_DB
         $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
         $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
+        $data['rule'] = isset( $link->rule ) ? $link->rule : null;
 
         return $data;
 
@@ -470,10 +471,13 @@ class UnusedCSS_DB
 	    }
     }
 
-    static function delete_rule($url){
+    static function delete_rule($args = []){
         global $wpdb;
 
-        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE url = '" . $url . "'" );
+        if(isset($args['rule'])){
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $args['rule'] . "'" );
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "'" );
+        }
 
         $error = $wpdb->last_error;
 
@@ -502,16 +506,16 @@ class UnusedCSS_DB
 		}
 	}
 
-    static function update_rule_status($status = 'queued', $link = false){
+    static function update_rule_status($status = 'queued', $rule = false){
         global $wpdb;
 
-        if(!$link){
+        if(!$rule){
 
             $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = '". $status ."' , job_id = NULL WHERE id > 0");
 
         }else{
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "'" );
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = '". $status ."' , job_id = NULL WHERE rule = '" . $rule . "'" );
 
         }
 
@@ -617,17 +621,23 @@ class UnusedCSS_DB
 	    }
     }
 
-    static function clear_rules($soft = false){
+    static function clear_rules($soft = false, $args = []){
 
         if($soft){
 
-            self::update_rule_status();
+            if(isset($args['rule'])){
+
+                self::update_rule_status('queued', $args['rule']);
+
+            }
 
         }else{
 
             global $wpdb;
 
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE id > 0");
+
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule IS NOT NULL" );
 
             $error = $wpdb->last_error;
 
