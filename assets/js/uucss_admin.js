@@ -234,7 +234,7 @@
         });
 
         rule_table.on('init.dt', function () {
-            //setInterval(refreshRuleTable, 1000 * 5)
+            setInterval(refreshRulesTable, 1000 * 5)
         });
 
         var x = 0;
@@ -245,9 +245,15 @@
             })
         });
 
+        rule_table.on('error.dt', function(e, settings, techNote, message){
+            $.uucss_log({
+                log : message,
+            })
+        });
+
         table.on('draw.dt', function (x,y) {
 
-            var element = '<div id="uucss-auto-refresh">' +
+            var element = '<div id="uucss-auto-refresh" class="uucss-auto-refresh">' +
                 '<input type="checkbox" id="uucss_auto_refresh_frontend" name="autoptimize_uucss_settings[uucss_auto_refresh_frontend]" value="1">' +
                 '<label for="uucss_auto_refresh_frontend"> Auto Refresh</label><br>' +
                 '<div>';
@@ -327,8 +333,8 @@
             $('#uucss-history tbody tr').click(function () {
                 $(this).toggleClass('selected');
                 var $table_row = $('#uucss-history tbody tr.selected');
-                var $container = $('#uucss-wrapper li.uucss-history');
-                $('#uucss-wrapper li.uucss-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
+                var $container = $('#uucss-wrapper li.uucss-history.uucss-job-history');
+                $('#uucss-wrapper li.uucss-history.uucss-job-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
                 if($table_row.length > 1){
                     !$container.hasClass('multi-select') && $container.addClass('multi-select')
                 }else{
@@ -351,14 +357,124 @@
             }
         });
 
+        rule_table.on('draw.dt', function (x,y) {
+
+            var element = '<div id="uucss-auto-refresh-rule" class="uucss-auto-refresh">' +
+                '<input type="checkbox" id="uucss_auto_refresh_frontend_rule" name="autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]" value="1">' +
+                '<label for="uucss_auto_refresh_frontend_rule"> Auto Refresh</label><br>' +
+                '<div>';
+
+            $('#uucss-rule-history_wrapper .dataTables_info').append(element);
+            $('#uucss_auto_refresh_frontend_rule').change(function () {
+                $('#uucss_auto_refresh_frontend-hidden_rule').val($(this).is(':checked') ? 1 : 0);
+                auto_refresh_rule = $(this).is(':checked');
+            });
+            $('#uucss_auto_refresh_frontend_rule').prop('checked', auto_refresh_rule);
+
+            var lengthChange = '<div class="dataTables_length" id="uucss-rule-history_length"><label>Show ' +
+                '<select name="uucss-rule-history_length" aria-controls="uucss-rule-history" class="">' +
+                '<option value="10" selected>10</option>' +
+                '<option value="25">25</option>' +
+                '<option value="50">50</option>' +
+                '<option value="100">100</option>' +
+                '</select></label></div>';
+
+            $(lengthChange).prependTo($('#uucss-rule-history_info'));
+
+            var select = $('<select class="status">' +
+                '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
+                '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
+                '<option value="waiting" ' + (status_filter === 'waiting'? 'selected' : '') +'>Waiting</option>' +
+                '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
+                '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
+                '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
+                '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
+                '</select>');
+
+            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact_rule" value="1"></div>';
+            $(input).prependTo($('#uucss-rule-history_info'));
+
+            $(select).prependTo($('#uucss-rule-history_info'));
+
+            $('#uucss-rule-history_info select.status').on('change', function(){
+                status_filter = $(this).val();
+                table.column(4).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                    .draw();
+            });
+
+            /*tippy($('.uucss_search_exact')[0], {
+                content: 'Exact Match',
+                placement: 'top',
+                appendTo: 'parent',
+            });*/
+
+            var $input = $('#uucss-rule-history_info input[type="search"]')
+            var $exact_search = $('#uucss-rule-history_info input.uucss_search_exact')
+
+            $input.on('input',function () {
+                url_filter_rule = $(this).val();
+
+                var regex = url_filter_rule;
+
+                if(exact_search_val_rule){
+                    regex = '^' + url_filter_rule + '$';
+                }
+
+                rule_table.column(1).search( url_filter_rule ? regex : '', true, false )
+                    .draw();
+            });
+
+            $exact_search.on('change',function () {
+                exact_search_val_rule = $(this).prop('checked');
+            });
+
+            if(url_filter_rule !== ''){
+                $input.focus().val('').val(url_filter_rule);
+            }
+
+            $exact_search.prop('checked', exact_search_val_rule);
+
+            $('#uucss-rule-history tbody tr').off();
+            $('#uucss-rule-history tbody tr').click(function () {
+                $(this).toggleClass('selected');
+                var $table_row = $('#uucss-rule-history tbody tr.selected');
+                var $container = $('#uucss-wrapper li.uucss-history.uucss-rule-history');
+                $('#uucss-wrapper li.uucss-history.uucss-rule-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
+                if($table_row.length > 1){
+                    !$container.hasClass('multi-select') && $container.addClass('multi-select')
+                }else{
+                    $container.hasClass('multi-select') && $container.removeClass('multi-select')
+                }
+            });
+
+            $('#uucss-rule-history_length select').change(function(){
+                page_length_rule = $(this).val()
+                if(!page_length_rule){
+                    return;
+                }
+                $uucss_rule_spinner.addClass('loading');
+                rule_table.page.len(page_length_rule)
+                rule_table.ajax.reload(null, false);
+            })
+
+            if(Number(page_length_rule) !== 10){
+                $('#uucss-rule-history_length select').val(page_length_rule)
+            }
+        });
+
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
+        var auto_refresh_rule = $('#uucss_auto_refresh_frontend-hidden_rule').val() == '1';
         var firstReload = true;
         var firstRuleReload = true;
 
         var status_filter = '';
+        var status_filter_rule = '';
         var url_filter = '';
+        var url_filter_rule = '';
         var page_length = '10';
+        var page_length_rule = '10';
         var exact_search_val = false;
+        var exact_search_val_rule = false;
 
         $uucss_spinner.addClass('loading')
         table = table.DataTable({
@@ -840,6 +956,7 @@
             }
         });
 
+        $uucss_rule_spinner.addClass('loading')
         rule_table = rule_table.DataTable({
             serverSide: true,
             processing: false,
@@ -1528,12 +1645,23 @@
         function refreshTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-history').hasClass('multi-select')){
+            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-job-history').hasClass('multi-select')){
                 return;
             }
 
             $uucss_spinner.addClass('loading')
             table.ajax.reload(null, false);
+        }
+
+        function refreshRulesTable(){
+            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
+
+            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
+                return;
+            }
+
+            $uucss_rule_spinner.addClass('loading')
+            rule_table.ajax.reload(null, false);
         }
 
         function validateJobPerQue(value, reset) {

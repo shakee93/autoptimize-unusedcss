@@ -1024,7 +1024,7 @@ input#uucss-pack-suggest {
     border-bottom-left-radius: 4px;
 }
 
-#uucss-wrapper div#uucss-auto-refresh,
+#uucss-wrapper div.uucss-auto-refresh,
 #uucss-logs-table_wrapper div#uucss-auto-refresh-logs {
     display: inline-block;
     margin-left: 10px;

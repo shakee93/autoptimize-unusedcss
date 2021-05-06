@@ -583,6 +583,10 @@
                                        name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
                                     echo '1';
                                 } ?>">
+                                <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
+                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend_rule'] ) && '1' === $options['uucss_auto_refresh_frontend_rule'] ) {
+                                    echo '1';
+                                } ?>">
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
 									       echo $options['uucss_api_key_verified'] ?>">

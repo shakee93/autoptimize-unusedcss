@@ -466,9 +466,7 @@ class UnusedCSS_Queue
 
         if($uucss_api->is_error($result)){
 
-            $rule->status = 'failed';
-            $rule->hits = 0;
-            $rule->error = $uucss_api->extract_error( $result );
+            $rule->mark_as_failed($uucss_api->extract_error( $result ));
             $rule->save();
 
             $this->log( [
