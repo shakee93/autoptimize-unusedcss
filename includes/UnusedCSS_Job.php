@@ -75,7 +75,6 @@ abstract class UnusedCSS_Job
 
     public function mark_as_failed($error){
         $this->files = null;
-        $this->attempts++;
         $this->status = 'failed';
         $this->error = serialize($error);
         $this->hits = 0;

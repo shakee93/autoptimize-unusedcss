@@ -550,12 +550,7 @@ abstract class UnusedCSS {
             return false;
         }
 
-        $path->files = null;
-        $path->stats = null;
-        $path->review = null;
-        $path->warnings = null;
-        $path->status = 'queued';
-        $path->hits = 0;
+        $path->requeue();
         $path->save();
 
         $this->async = apply_filters('uucss/purge/async',true);
