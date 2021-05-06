@@ -311,6 +311,8 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
         }
 
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+
         $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
         $length = isset($_REQUEST['length']) ? $_REQUEST['length'] : 10;
         $draw = isset($_REQUEST['draw']) ? $_REQUEST['draw'] : 1;
@@ -375,13 +377,15 @@ abstract class UnusedCSS_Admin {
 
         }
 
-        $data  = UnusedCSS_Settings::get_links($start, $length, $where_clause);
+        $data  = $type == 'path' ?
+            UnusedCSS_DB::get_links($start, $length, $where_clause):
+            UnusedCSS_DB::get_rules($start, $length, $where_clause);
 
         wp_send_json([
             'data' => $data,
             "draw" => (int)$draw,
-            "recordsTotal" => UnusedCSS_DB::get_total_job_count(),
-            "recordsFiltered" => UnusedCSS_DB::get_total_job_count($where_clause),
+            "recordsTotal" => $type == 'path' ? UnusedCSS_DB::get_total_job_count() : UnusedCSS_DB::get_total_rule_count(),
+            "recordsFiltered" => $type == 'path' ? UnusedCSS_DB::get_total_job_count($where_clause) : UnusedCSS_DB::get_total_rule_count($where_clause),
             "success" => true
         ]);
     }

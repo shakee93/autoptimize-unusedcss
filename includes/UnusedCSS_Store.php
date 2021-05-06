@@ -135,6 +135,56 @@ class UnusedCSS_Store {
 
     }
 
+    public function purge_rule() {
+
+        $this->log( [
+            'log' => 'fetching data',
+            'url' => $this->rule->url,
+            'type' => 'store'
+        ] );
+
+        $uucss_api = new UnusedCSS_Api();
+
+        $result = $uucss_api->post( 'purger',
+            array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+                [ 'url' => $this->rule->url, 'service' => true ]
+            ) );
+
+        $this->log( [
+            'log' => 'data fetched',
+            'url' => $this->rule->url,
+            'type' => 'store'
+        ] );
+
+        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
+
+            $this->rule->mark_as_failed($uucss_api->extract_error( $result ));
+            $this->rule->save();
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $this->rule->url,
+                'type' => 'store'
+            ] );
+
+            return;
+        }
+
+        $this->result       = $result;
+        $this->purged_files = $result->data;
+        $files              = false;
+
+        if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
+
+            $files = $this->cache_files($this->purged_files);
+        }
+
+        $this->add_rule($files, $result);
+
+        $this->uucss_cached();
+
+    }
+
     public function uucss_cached(){
         do_action( 'uucss/cached', [
             'url' => $this->url

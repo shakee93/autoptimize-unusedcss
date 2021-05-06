@@ -257,6 +257,20 @@ class UnusedCSS_DB
         return (int)$count;
     }
 
+    static function get_total_rule_count($where = ''){
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_uucss_rule {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
+
     static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
         global $wpdb;
 
@@ -273,6 +287,24 @@ class UnusedCSS_DB
 	    }
 
 	    return $links;
+    }
+
+    static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
+        global $wpdb;
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
+
+        $links = array_map(function ($link){
+            return self::transform_link($link, 'rule');
+        }, $links);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $links;
     }
 
     static function get_links_where($where = ''){
@@ -311,7 +343,7 @@ class UnusedCSS_DB
 	    return $links;
     }
 
-    static function transform_link($link){
+    static function transform_link($link, $rule = 'path'){
 
         if(empty($link)){
             return null;
@@ -321,15 +353,19 @@ class UnusedCSS_DB
 
         $data['id'] = isset($link->id) ? $link->id : null;
         $data['url'] = isset( $link->url ) ? $link->url : null;
-        $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
+        $data['status'] = isset( $link->status ) ? $link->status : null;
 
-        if(isset($link->rule) && !empty($link->rule)){
-            $link = new UnusedCSS_Rule([
-                'url' => $link->url,
-                'rule' => $link->rule
-            ]);
-            $data['rule'] = $link->rule ?? null;
-            $data['base'] = $link->url ?? null;
+        if($rule = 'path'){
+            $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
+
+            if(isset($link->rule) && !empty($link->rule)){
+                $link = new UnusedCSS_Rule([
+                    'url' => $link->url,
+                    'rule' => $link->rule
+                ]);
+                $data['rule'] = $link->rule ?? null;
+                $data['base'] = $link->url ?? null;
+            }
         }
 
         $data['files'] = isset($link->files) ? unserialize($link->files) : null;
@@ -343,7 +379,6 @@ class UnusedCSS_DB
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
         $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
         $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
-        $data['status'] = isset( $link->status ) ? $link->status : null;
 
         return $data;
 

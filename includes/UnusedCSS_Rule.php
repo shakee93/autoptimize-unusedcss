@@ -44,6 +44,8 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             $data = (array) $this;
 
+            unset($data['type']);
+
             $wpdb->insert(
                 self::$table,
                 $data
@@ -69,6 +71,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             $id = $data['id'];
 
             unset($data['id']);
+            unset($data['type']);
 
             $wpdb->update(
                 self::$table,

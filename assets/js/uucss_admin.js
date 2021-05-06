@@ -277,6 +277,7 @@
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
                     '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
                     '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
+                    '<option value="rule-based" ' + (status_filter === 'rule-based'? 'selected' : '') +'>Rule Based</option>' +
                 '</select>');
 
             var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
@@ -413,7 +414,7 @@
                 {
                     "data": "status",
                     title: "Status",
-                    width: '40px',
+                    width: '50px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         var classNames = 'status ';
@@ -443,9 +444,9 @@
                     title: "File Size Reduction",
                     width: '145px',
                     render: function (data, type, row, meta) {
-                        if (row.meta && row.meta.stats && row.meta.stats.reduction && row.status === 'success') {
+                        if ((row.meta && row.meta.stats) && (row.status === 'success' || row.status === 'rule-based')) {
                             return row.meta.stats.reduction + '%'
-                        }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'waiting'){
+                        }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'waiting' || row.status === 'rule-based'){
                             return '<span class="job-file-size">-</span>';
                         }
 
@@ -581,11 +582,11 @@
                             return
                         }
 
-                        if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
+                        if ((rowData.status === 'success' || rowData.meta && rowData.meta.stats && rowData.status === 'rule-based') && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
                             var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || rowData.success_count > 0 ? 'hits-success' : '';
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
-                        } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
+                        } else if ((rowData.status === 'success' || rowData.status === 'rule-based') && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
@@ -632,7 +633,7 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
-                        if(data.status === 'success'){
+                        if((data.status === 'success' || data.status === 'rule-based') && data.meta && data.meta.stats){
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
                         }
 
@@ -866,6 +867,7 @@
                     }
 
                     d.nonce = uucss.nonce
+                    d.type = 'rule'
 
                     return d;
                 },
@@ -892,7 +894,7 @@
                 {
                     "data": "status",
                     title: "Status",
-                    width: '40px',
+                    width: '50px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         var classNames = 'status ';
@@ -901,15 +903,6 @@
                         }
                         classNames += data + ' ';
                         return '<span class="job-status ' + classNames +'">'+ data +'</span>'
-                    },
-                },
-                {
-                    "data": "rule",
-                    title: "Rule",
-                    width: '40px',
-                    className: 'dt-body-center dt-head-center',
-                    render: function (data, type, row, meta) {
-                        return '<span class="">'+ (data ?? '') +'</span>';
                     },
                 },
                 {
@@ -924,6 +917,15 @@
 
                         return '<a href="'+ decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>';
                     }
+                },
+                {
+                    "data": "rule",
+                    title: "Rule",
+                    width: '60px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ?? '') +'</span>';
+                    },
                 },
                 {
                     data: "url",

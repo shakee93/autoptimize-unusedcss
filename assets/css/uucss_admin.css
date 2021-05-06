@@ -490,6 +490,14 @@ table.dataTable thead th, table.dataTable thead td {
     border-radius: 4px;
 }
 
+.uucss-history-table .rule-based {
+    background: #ffe9d6;
+    color: #FF7500;
+    padding: 3px 6px 3px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
 .uucss-history-table .action button {
     position: relative;
     border: none;

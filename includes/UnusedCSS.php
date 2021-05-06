@@ -61,6 +61,8 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
+        add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
+
 	    add_action( 'wp_enqueue_scripts', function () {
 
 		    $this->url = $this->get_current_url();
@@ -71,7 +73,92 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
+        add_filter('uucss/rules', [$this, 'uucss_rule_types'], 10 , 1);
+
         new UnusedCSS_Queue();
+    }
+
+    function uucss_rule_types($rules){
+
+        $rules[] = [
+            'name' => '404',
+            'rule' => 'is_404',
+            'callback' => is_404(),
+        ];
+
+        $rules[] = [
+            'name' => 'archive',
+            'rule' => 'is_archive',
+            'callback' => is_archive(),
+        ];
+
+        $rules[] = [
+            'name' => 'author',
+            'rule' => 'is_author',
+            'callback' => is_author(),
+        ];
+
+        $rules[] = [
+            'name' => 'category',
+            'rule' => 'is_category',
+            'callback' => is_category(),
+        ];
+
+        $rules[] = [
+            'name' => 'front_page',
+            'rule' => 'is_front_page',
+            'callback' => is_front_page(),
+        ];
+
+        $rules[] = [
+            'name' => 'home',
+            'rule' => 'is_home',
+            'callback' => is_home(),
+        ];
+
+        $rules[] = [
+            'name' => 'page',
+            'rule' => 'is_page',
+            'callback' => is_page(),
+        ];
+
+        $rules[] = [
+            'name' => 'post',
+            'rule' => 'is_post',
+            'callback' => is_singular(),
+        ];
+
+        $rules[] = [
+            'name' => 'search',
+            'rule' => 'is_search',
+            'callback' => is_search(),
+        ];
+
+        $rules[] = [
+            'name' => 'search',
+            'rule' => 'is_attachment',
+            'callback' => is_attachment(),
+        ];
+
+        $rules[] = [
+            'name' => 'single',
+            'rule' => 'is_single',
+            'callback' => is_single(),
+        ];
+
+        $rules[] = [
+            'name' => 'sticky',
+            'rule' => 'is_sticky',
+            'callback' => is_sticky(),
+        ];
+
+        $rules[] = [
+            'name' => 'paged',
+            'rule' => 'is_paged',
+            'callback' => is_paged(),
+        ];
+
+        return $rules;
     }
 
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
@@ -256,6 +343,11 @@ abstract class UnusedCSS {
 	    return apply_filters('uucss/frontend/enabled', true);
     }
 
+    public function init_async_store_rule($provider, $url, $args, $rule)
+    {
+        $this->store = new UnusedCSS_Store($provider, $url, $args, $rule);
+        $this->store->purge_rule();
+    }
 
     public function init_async_store($provider, $url, $args)
     {
@@ -336,18 +428,48 @@ abstract class UnusedCSS {
 
 		$this->url = $this->transform_url( $this->url );
 
+        $related_rule = UnusedCSS_Rule::get_related_rule();
+
 		// disabled exceptions only for frontend
 		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] )) {
 
 			$this->get_css();
 
-            $path = new UnusedCSS_Path([
-                'url' => $this->url
-            ]);
+            $data = null;
 
-			if($path->status === 'success' && !isset( $_REQUEST['no_uucss'] )){
+            if(apply_filters('uucss/rules/enable', true)){
 
-                $files = $path->get_files();
+                if($related_rule && isset($related_rule['rule'])) {
+
+                    $data = new UnusedCSS_Path([
+                        'url' => $this->url,
+                        'rule' => $related_rule['rule'],
+                        'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
+                    ]);
+
+                    if(isset($data->rule)){
+
+                        $data = new UnusedCSS_Rule([
+                            'rule' => $data->rule,
+                            'url' => $this->url
+                        ]);
+                    }
+
+                }
+
+            }
+            else if(UnusedCSS_Settings::link_exists( $this->url ) && !isset( $_REQUEST['no_uucss'] )){
+
+                $data = new UnusedCSS_Path([
+                    'url' => $this->url,
+                    'rule' => $related_rule['rule']
+                ]);
+
+            }
+
+			if($data->status === 'success' && !isset( $_REQUEST['no_uucss'] )){
+
+                $files = $data->get_files();
 
                 if (count($files) > 0 ) {
 
@@ -355,15 +477,33 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new UnusedCSS_Enqueue($path);
+                    new UnusedCSS_Enqueue($data);
 
                     $this->replace_css();
                 }
 
             }
 
-
 		}
+
+        if(apply_filters('uucss/rules/enable', true)){
+
+            if($related_rule && isset($related_rule['rule'])){
+
+                new UnusedCSS_Rule([
+                    'rule' => $related_rule['rule'],
+                    'url' => $this->url
+                ]);
+            }
+
+            new UnusedCSS_Path([
+                'url' => $this->url,
+                'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
+                'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
+            ]);
+
+            return;
+        }
 
         if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {
             return;
