@@ -741,6 +741,11 @@ abstract class UnusedCSS {
 
 		    UnusedCSS_Settings::delete_link( $url );
 
+		    if(isset($args['rule']) && $args['rule'] == 'rule'){
+
+		        UnusedCSS_DB::delete_rule($url);
+            }
+
 		    return true;
 	    }
 
@@ -752,6 +757,11 @@ abstract class UnusedCSS {
 
 	    // if soft sets the status to queued
 	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+
+        if(isset($args['rule']) && $args['rule'] == 'rule'){
+
+            UnusedCSS_DB::clear_rules( isset( $args['soft'] ) );
+        }
 
 
 	    do_action( 'uucss/cache_cleared', $args );

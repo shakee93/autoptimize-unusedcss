@@ -1126,10 +1126,6 @@
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
                         }
 
-                        if($('#thirtd_part_cache_plugins').val() === "1"){
-                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
-                        }
-
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -1176,7 +1172,7 @@
 
                             switch (action) {
                                 case 'remove':{
-                                    uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    uucss_purge_url(data.url, true, row, dataIndex, data, { rule : 'rule' })
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1476,15 +1472,19 @@
             placement: 'bottom-end',
         })
 
-        function uucss_purge_url(url , isClear, row, index, data) {
+        function uucss_purge_url(url , isClear, row, index, data, args = {}) {
 
-            var _row = table.row(index);
+            var _row = args.rule === undefined ? table.row(index) : rule_table.row(index);
 
             var $row  = $(row);
 
             $row.addClass('loading');
 
-            $uucss_spinner.addClass('loading');
+            if(args.rule === undefined){
+                $uucss_spinner.addClass('loading');
+            }else{
+                $uucss_rule_spinner.addClass('loading');
+            }
 
             if (!isClear) {
                 $(this).hide();
@@ -1496,11 +1496,17 @@
                 data : {
                     url: data.url,
                     clear: isClear,
-                    nonce: uucss.nonce
+                    nonce: uucss.nonce,
+                    args : args
                 },
                 success : function(response){
 
-                    $uucss_spinner.removeClass('loading')
+                    if(args.rule === undefined){
+                        $uucss_spinner.removeClass('loading')
+                    }else{
+                        $uucss_rule_spinner.removeClass('loading');
+                    }
+
 
                     if(response.success){
 

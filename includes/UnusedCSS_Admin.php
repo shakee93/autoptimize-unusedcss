@@ -851,7 +851,7 @@ abstract class UnusedCSS_Admin {
 		    return;
 	    }
 
-	    $args = [];
+	    $args = isset($_POST['args']) ? $_POST['args'] : [];
 
 	    if ( ! isset( $_POST['url'] ) ) {
 		    wp_send_json_error();

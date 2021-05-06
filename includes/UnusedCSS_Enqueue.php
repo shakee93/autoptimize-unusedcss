@@ -121,7 +121,6 @@ class UnusedCSS_Enqueue {
         if($this->inject->successfully_injected){
 
             $this->dom->find( 'body' )[0]->uucss = true;
-
             $this->data->mark_as_successful_hit();
 
         }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
