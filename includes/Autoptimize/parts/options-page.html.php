@@ -545,7 +545,7 @@
                             <ul>
                                 <?php
                                     foreach ($third_party_plugins as $party_plugin){
-                                        echo '<li style="margin-bottom:0">' . ($party_plugin['plugin'] ?? '') . ' - ' . ($party_plugin['category'] ?? '') .'</li>';
+                                        echo '<li style="margin-bottom:0">' . (isset($party_plugin['plugin']) ? $party_plugin['plugin'] : '') . ' - ' . ($party_plugin['category'] ?? '') .'</li>';
                                     }
                                 ?>
                             </ul>
