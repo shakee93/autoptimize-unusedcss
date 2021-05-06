@@ -536,7 +536,7 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $path = isset( $args['rule'] ) ? new UnusedCSS_Path([
+        $path = !isset( $args['rule'] ) && isset( $args['ignore_rule'] ) && $args['ignore_rule'] == '1' ? new UnusedCSS_Path([
 	       'url' => $url
         ]) : new UnusedCSS_Rule([
            'rule' => $args['rule']

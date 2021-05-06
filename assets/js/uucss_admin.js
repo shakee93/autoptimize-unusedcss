@@ -719,9 +719,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-ignore_rule="' + row.ignore_rule + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-ignore_rule="' + row.ignore_rule + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -941,19 +941,21 @@
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
+                    var rule = $(this).data('rule');
+                    var ignore_rule = $(this).data('ignore_rule');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, ignore_rule : ignore_rule})
 
                 });
 
-                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
                     uucss_purge_url(data.url, is_clear, row, dataIndex, data)
 
-                });
+                });*/
             }
         });
 
@@ -1217,9 +1219,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule +'"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule +'"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -1428,19 +1430,20 @@
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
+                    var rule = $(this).data('rule');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule})
 
                 });
 
-                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
                     uucss_purge_url(data.url, is_clear, row, dataIndex, data)
 
-                });
+                });*/
             }
         });
 
