@@ -382,13 +382,13 @@
             $(lengthChange).prependTo($('#uucss-rule-history_info'));
 
             var select = $('<select class="status">' +
-                '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
-                '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
-                '<option value="waiting" ' + (status_filter === 'waiting'? 'selected' : '') +'>Waiting</option>' +
-                '<option value="processing" ' + (status_filter === 'processing'? 'selected' : '') +'>Processing</option>' +
-                '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
-                '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
-                '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
+                '<option value="" ' + (status_filter_rule === ''? 'selected' : '') +'>All</option>' +
+                '<option value="queued" ' + (status_filter_rule === 'queued'? 'selected' : '') +'>Queued</option>' +
+                '<option value="waiting" ' + (status_filter_rule === 'waiting'? 'selected' : '') +'>Waiting</option>' +
+                '<option value="processing" ' + (status_filter_rule === 'processing'? 'selected' : '') +'>Processing</option>' +
+                '<option value="success" ' + (status_filter_rule === 'success'? 'selected' : '') +'>Success</option>' +
+                '<option value="warning" ' + (status_filter_rule === 'warning'? 'selected' : '') +'>Warning</option>' +
+                '<option value="failed" ' + (status_filter_rule === 'failed'? 'selected' : '') +'>Failed</option>' +
                 '</select>');
 
             var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact_rule" value="1"></div>';
@@ -397,8 +397,9 @@
             $(select).prependTo($('#uucss-rule-history_info'));
 
             $('#uucss-rule-history_info select.status').on('change', function(){
-                status_filter = $(this).val();
-                table.column(4).search( status_filter ? '^'+ status_filter +'$' : '', true, false )
+                status_filter_rule = $(this).val();
+                console.log(status_filter_rule);
+                rule_table.column(4).search( status_filter_rule ? '^'+ status_filter_rule +'$' : '', true, false )
                     .draw();
             });
 
@@ -970,16 +971,16 @@
                 url: wp.ajax.settings.url + '?action=uucss_data',
                 data: function (d) {
 
-                    if(status_filter !== "" && status_filter !== undefined){
+                    if(status_filter_rule !== "" && status_filter_rule !== undefined){
                         if(d.columns[0] && d.columns[0].search){
-                            d.columns[0].search.value = status_filter
+                            d.columns[0].search.value = status_filter_rule
                         }
                     }
 
-                    if(url_filter !== "" && url_filter !== undefined){
+                    if(url_filter_rule !== "" && url_filter_rule !== undefined){
                         if(d.columns[1] && d.columns[1].search){
-                            d.columns[1].search.value = url_filter;
-                            d.columns[1].search.regex = exact_search_val
+                            d.columns[1].search.value = url_filter_rule;
+                            d.columns[1].search.regex = exact_search_val_rule
                         }
                     }
 
@@ -1200,6 +1201,14 @@
                     }
                 },
                 {
+                    "data": "meta",
+                    visible : false,
+                    render: function (data, type, row, meta) {
+                        if (data.warnings && data.warnings.length > 0) return 'warning';
+                        return data.status;
+                    }
+                },
+                {
                     "data": "url",
                     className: 'dt-body-right dt-head-right action th-actions',
                     "targets": 0,
@@ -1214,14 +1223,6 @@
 
                         return _render;
                     },
-                },
-                {
-                    "data": "meta",
-                    visible : false,
-                    render: function (data, type, row, meta) {
-                        if (data.warnings && data.warnings.length > 0) return 'warning';
-                        return data.status;
-                    }
                 }
             ],
             rowCallback: function (row, data, displayNum, displayIndex, dataIndex) {
@@ -1656,7 +1657,7 @@
         function refreshRulesTable(){
             var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
+            if(!auto_refresh_rule || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
                 return;
             }
 
