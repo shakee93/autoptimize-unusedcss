@@ -365,9 +365,7 @@ class UnusedCSS_Queue
 
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-            $rule->status = 'failed';
-            $rule->attempts++;
-            $rule->error = $uucss_api->extract_error( $result );
+            $rule->mark_as_failed($uucss_api->extract_error( $result ));
             $rule->save();
 
             $this->log( [
