@@ -425,9 +425,8 @@ abstract class UnusedCSS {
 
     public function rules_enabled(){
         return
-            (!isset( $this->options['uucss_enable_rule_based'] ) ||
             isset( $this->options['uucss_enable_rule_based'] ) &&
-            $this->options['uucss_enable_rule_based'] != "1") &&
+            $this->options['uucss_enable_rule_based'] == "1" &&
             UnusedCSS_DB::$current_version > 1.2 &&
             apply_filters('uucss/rules/enable', false);
     }

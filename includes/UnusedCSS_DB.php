@@ -831,7 +831,7 @@ class UnusedCSS_DB
 		error longtext NULL,
 		attempts mediumint(2) NULL DEFAULT 0,
 		hits mediumint(3) NULL DEFAULT 0,
-		ignore_rule mediumint(1) NULL DEFAULT 0,
+		ignore_rule mediumint(1) NULL DEFAULT 1,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)

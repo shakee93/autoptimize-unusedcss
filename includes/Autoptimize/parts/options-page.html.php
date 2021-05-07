@@ -442,7 +442,7 @@
 
                                 </td>
                             </tr>
-                            <?php if ( $uucss->rules_enabled() ) : ?>
+                            <?php if ( UnusedCSS_DB::$current_version > 1.2 ) : ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Enable Rule based injection', 'uucss' ); ?></th>
                                 <td>
