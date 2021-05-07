@@ -290,10 +290,12 @@ trait UnusedCSS_Utils {
 		}
 
 		if(apply_filters('uucss/url/trailingslash', true)){
-		    return trailingslashit($url);
+            $url = trailingslashit($url);
         }else{
-		    return rtrim($url,'/');
+            $url = rtrim($url,'/');
         }
+
+		return apply_filters('uucss/url', $url);
 	}
 
 	public static function activate_plugin( $plugin, $action = 'activate' ) {

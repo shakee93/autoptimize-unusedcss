@@ -415,7 +415,7 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'elementor-preview')){
+        if(!apply_filters('uucss/url/exclude', $url)){
             $this->log( 'skipped : ' . $url );
             return false;
         }
