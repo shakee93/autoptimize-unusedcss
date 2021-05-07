@@ -497,6 +497,7 @@ abstract class UnusedCSS {
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
+                    'rule' => $related_rule['rule']
                 ]);
 
                 if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0' && UnusedCSS_DB::rule_exists($data->rule)) {
