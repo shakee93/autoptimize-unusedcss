@@ -90,7 +90,7 @@ abstract class UnusedCSS {
                 $rules[] = [
                     'name' => $value,
                     'rule' => 'is_' . $value,
-                    'callback' => is_singular($value),
+                    'callback' => get_post_type( get_the_ID() ) == $value,
                 ];
             }
         }
