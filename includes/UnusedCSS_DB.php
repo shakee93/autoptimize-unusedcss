@@ -269,6 +269,11 @@ class UnusedCSS_DB
     }
 
     static function get_total_job_count($where = ''){
+
+        if(self::$current_version < 1.2 && strpos( $where, 'hits' ) !== false){
+            return 0;
+        }
+
         global $wpdb;
 
         $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_uucss_job {$where}");
