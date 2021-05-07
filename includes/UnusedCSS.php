@@ -82,6 +82,16 @@ abstract class UnusedCSS {
 
         $custom_posts = get_post_types();
 
+        foreach ($custom_posts as $key => $value){
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'callback' => is_singular($value),
+                ];
+            }
+        }
+
         $rules[] = [
             'name' => '404',
             'rule' => 'is_404',
@@ -159,16 +169,6 @@ abstract class UnusedCSS {
             'rule' => 'is_paged',
             'callback' => is_paged(),
         ];
-
-        foreach ($custom_posts as $key => $value){
-            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
-                $rules[] = [
-                    'name' => $value,
-                    'rule' => 'is_' . $value,
-                    'callback' => is_singular($value),
-                ];
-            }
-        }
 
         return $rules;
     }
