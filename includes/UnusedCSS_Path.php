@@ -105,7 +105,6 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         if(!$rule){
             $this->ignore_rule = 1;
             $this->status = 'queued';
-            $this->rule = 'queued';
         }
     }
 }

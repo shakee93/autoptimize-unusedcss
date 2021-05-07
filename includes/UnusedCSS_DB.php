@@ -371,7 +371,13 @@ class UnusedCSS_DB
     static function get_rules_exclude($rule){
         global $wpdb;
 
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule != '" . $rule . "'", OBJECT);
+        $links = $wpdb->get_results(
+            "SELECT id,job_id,url,stats,files,warnings,review,error,attempts,status,created_at,rule,hits
+            FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule != '" . $rule . "'
+            UNION
+            SELECT id,job_id,url,stats,files,warnings,review,error,attempts,status,created_at,rule,hits
+            FROM {$wpdb->prefix}rapidload_uucss_job WHERE ignore_rule = 1 AND rule != '" . $rule . "'
+            ", OBJECT);
 
         $links = array_map(function ($link){
             return self::transform_link($link);
@@ -735,19 +741,11 @@ class UnusedCSS_DB
 
     static function link_files_used_elsewhere( $link , $rule = false){
 
-        $links = self::get_links_exclude($link);
+        $links = !$rule ? self::get_links_exclude($link) : self::get_rules_exclude($rule);
 
-        $rules = self::get_rules_exclude($rule);
-
-        $file = (array) self::get_link($link);
-
-        $file2 = (array) self::get_rule($rule);
+        $file = !$rule ? (array) self::get_link($link) : (array) self::get_rule($rule);
 
         $files = $file && isset($file['files']) ? $file['files'] : [];
-
-        $files2 = $file && isset($file2['files']) ? $file2['files'] : [];
-
-        $files = array_merge($files,$files2);
 
         $used   = [];
         $unused = [];
@@ -759,14 +757,6 @@ class UnusedCSS_DB
                 foreach ( $files as $item ) {
 
                     foreach ( $links as $key => $value ) {
-
-                        if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
-                            $used[] = $item['uucss'];
-                            break;
-                        }
-                    }
-
-                    foreach ($rules as $key => $value){
 
                         if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
                             $used[] = $item['uucss'];
