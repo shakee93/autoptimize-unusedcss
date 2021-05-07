@@ -1060,7 +1060,7 @@
                     width: '60px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
-                        return '<span class="">'+ (data ?? '') +'</span>';
+                        return '<span class="">'+ (data ? data : '') +'</span>';
                     },
                 },
                 {

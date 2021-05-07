@@ -413,8 +413,8 @@ class UnusedCSS_DB
                     'url' => $link->url,
                     'rule' => $link->rule
                 ]);
-                $data['rule'] = $link->rule ?? null;
-                $data['base'] = $link->url ?? null;
+                $data['rule'] = $link->rule ? $link->rule : null;
+                $data['base'] = $link->url ? $link->url : null;
             }
         }
 
