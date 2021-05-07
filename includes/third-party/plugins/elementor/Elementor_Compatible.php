@@ -22,7 +22,10 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
     {
         $url_parts = parse_url( $args );
 
-        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'elementor-preview')){
+        if(isset($url_parts['query']) &&
+            ( $this->str_contains($url_parts['query'], 'elementor-preview') ||
+                $this->str_contains($url_parts['query'], 'preview_id'))
+        ){
             return false;
         }
 
