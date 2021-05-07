@@ -480,6 +480,9 @@
                             <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
                         </p>
                         <p>
+                            <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
+                        </p>
+                        <p>
                             <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
