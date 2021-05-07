@@ -22,16 +22,16 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
             $this->id = $path_exist[0]->id;
             $this->url = $path_exist[0]->url;
-            $this->rule = $path_exist[0]->rule ?? null;
+            $this->rule = isset($path_exist[0]->rule) ? $path_exist[0]->rule : null;
             $this->job_id = $path_exist[0]->job_id;
             $this->stats = $path_exist[0]->stats;
             $this->files = $path_exist[0]->files;
             $this->warnings = $path_exist[0]->warnings;
             $this->review = $path_exist[0]->review;
             $this->error = $path_exist[0]->error;
-            $this->attempts = $path_exist[0]->attempts ?? 0;
-            $this->hits = $path_exist[0]->hits ?? 0;
-            $this->ignore_rule = $path_exist[0]->ignore_rule ?? 0;
+            $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
+            $this->hits = isset($path_exist[0]->hits) ? $path_exist[0]->hits : 0;
+            $this->ignore_rule = isset($path_exist[0]->ignore_rule) ? $path_exist[0]->ignore_rule : 0;
             $this->status = $path_exist[0]->status;
             $this->created_at = $path_exist[0]->created_at;
 
