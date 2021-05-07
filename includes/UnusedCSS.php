@@ -83,6 +83,9 @@ abstract class UnusedCSS {
         $custom_posts = get_post_types();
 
         foreach ($custom_posts as $key => $value){
+            if($value == 'page' || $value == 'post'){
+                continue;
+            }
             if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
                 $rules[] = [
                     'name' => $value,
