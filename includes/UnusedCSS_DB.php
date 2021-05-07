@@ -55,6 +55,10 @@ class UnusedCSS_DB
             self::add_advanced_admin_notice($notice);
             add_action( "wp_ajax_rapidload_db_update", 'UnusedCSS_DB::update_db' );
         }
+
+        add_filter('uucss/rules/enable', function ($arg){
+            return self::$current_version > 1.2;
+        },90,1);
     }
 
 
@@ -417,10 +421,10 @@ class UnusedCSS_DB
 	    return isset($result) && !empty($result );
     }
 
-    static function rule_exists($url){
+    static function rule_exists($rule){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE url = '" . $url . "' AND status IN('success','processing','waiting')", OBJECT);
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND status IN('success','processing','waiting')", OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -445,10 +449,10 @@ class UnusedCSS_DB
 	    return isset($result) && !empty($result);
     }
 
-    static function rule_exists_with_error($url){
+    static function rule_exists_with_error($rule){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE url = '" . $url . "'", OBJECT);
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "'", OBJECT);
 
         $error = $wpdb->last_error;
 

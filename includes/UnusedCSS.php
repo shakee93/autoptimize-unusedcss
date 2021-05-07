@@ -430,53 +430,35 @@ abstract class UnusedCSS {
 
         $related_rule = UnusedCSS_Rule::get_related_rule();
 
-        if(apply_filters('uucss/rules/enable', true)){
+        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
+            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
+                isset( $this->options['uucss_disable_add_to_queue'] ) &&
+                $this->options['uucss_disable_add_to_queue'] != "1") &&
+            !apply_filters('uucss/rules/enable', false))
+        {
+            $this->cache( $this->url );
+        }
 
-            if($related_rule && isset($related_rule['rule'])){
+        if(     isset($related_rule['rule']) &&
+                !UnusedCSS_DB::rule_exists( $related_rule['rule'] ) &&
+            (!isset( $this->options['uucss_disable_rule_add_to_queue'] ) ||
+                isset( $this->options['uucss_disable_rule_add_to_queue'] ) &&
+                $this->options['uucss_disable_rule_add_to_queue'] != "1") &&
+            apply_filters('uucss/rules/enable', false)){
 
-                new UnusedCSS_Rule([
-                    'rule' => $related_rule['rule'],
-                    'url' => $this->url
-                ]);
-            }
-
-            new UnusedCSS_Path([
-                'url' => $this->url,
-                'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
-                'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
-            ]);
-
+            $this->cache_rule( $related_rule );
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] )) {
+		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
 
 			$this->get_css();
 
             $data = null;
 
-            if(apply_filters('uucss/rules/enable', true)){
-
-                if($related_rule && isset($related_rule['rule'])) {
-
-                    $data = new UnusedCSS_Path([
-                        'url' => $this->url,
-                        'rule' => $related_rule['rule'],
-                        'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
-                    ]);
-
-                    if(isset($data->rule)){
-
-                        $data = new UnusedCSS_Rule([
-                            'rule' => $data->rule,
-                            'url' => $this->url
-                        ]);
-                    }
-
-                }
-
-            }
-            else if(UnusedCSS_Settings::link_exists( $this->url ) && !isset( $_REQUEST['no_uucss'] )){
+            if( !apply_filters('uucss/rules/enable', false) &&
+                UnusedCSS_Settings::link_exists( $this->url )
+            ){
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
@@ -484,8 +466,26 @@ abstract class UnusedCSS {
                 ]);
 
             }
+            else if(apply_filters('uucss/rules/enable', false) &&
+                UnusedCSS_Settings::link_exists( $this->url )
+            ){
 
-			if($data->status === 'success' && !isset( $_REQUEST['no_uucss'] )){
+                $data = new UnusedCSS_Path([
+                    'url' => $this->url,
+                ]);
+
+                if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0' && UnusedCSS_DB::rule_exists($data->rule)) {
+
+                    $data = new UnusedCSS_Rule([
+                        'rule' => $data->rule,
+                        'url' => $this->url
+                    ]);
+
+                }
+
+            }
+
+			if(isset($data) && $data->status === 'success'){
 
                 $files = $data->get_files();
 
@@ -504,15 +504,40 @@ abstract class UnusedCSS {
 
 		}
 
-        if ( isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" ) {
-            return;
+	}
+
+	public function cache_rule($related_rule = null, $args = []){
+
+        if ( ! $this->is_url_allowed( $this->url, $args ) ) {
+            self::log([
+                'log' => 'url not allowed to purge',
+                'url' => $this->url,
+                'type' => 'purging'
+            ]);
+            return false;
         }
 
-		if ( ! UnusedCSS_Settings::link_exists( $this->url ) && !apply_filters('uucss/rules/enable', true)) {
-			$this->cache( $this->url );
-		}
+        if($related_rule && isset($related_rule['rule'])){
 
-	}
+            new UnusedCSS_Rule([
+                'rule' => $related_rule['rule'],
+                'url' => $this->url
+            ]);
+        }
+
+        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
+            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
+                isset( $this->options['uucss_disable_add_to_queue'] ) &&
+                $this->options['uucss_disable_add_to_queue'] != "1"))
+        {
+            new UnusedCSS_Path([
+                'url' => $this->url,
+                'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
+                'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
+            ]);
+        }
+
+    }
 
     public function cache($url = null, $args = []) {
 
@@ -756,14 +781,12 @@ abstract class UnusedCSS {
 		    }
 
 		    UnusedCSS_Settings::delete_link( $url );
-
-		    if(isset($args['rule'])){
-
-		        UnusedCSS_DB::delete_rule($args);
-            }
-
-		    return true;
 	    }
+
+        if(isset($args['rule']) && UnusedCSS_DB::rule_exists_with_error( $args['rule'] )){
+
+            UnusedCSS_DB::delete_rule($args);
+        }
 
 	    if ( $url ) {
 		    return false;
