@@ -73,23 +73,14 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
-	    add_action('registered_post_type', function ($post_type, $post_object){
-            add_filter('uucss/rules', function ($rules) use($post_type){
-                $rules[] = [
-                    'name' => $post_type,
-                    'rule' => 'is_' . $post_type,
-                    'callback' => is_singular($post_type),
-                ];
-                return $rules;
-            }, 60 , 1);
-        }, 10 , 2);
-
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
         new UnusedCSS_Queue();
     }
 
     function uucss_rule_types($rules){
+
+        $custom_posts = get_post_types();
 
         $rules[] = [
             'name' => '404',
@@ -168,6 +159,16 @@ abstract class UnusedCSS {
             'rule' => 'is_paged',
             'callback' => is_paged(),
         ];
+
+        foreach ($custom_posts as $key => $value){
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'callback' => is_singular($value),
+                ];
+            }
+        }
 
         return $rules;
     }
