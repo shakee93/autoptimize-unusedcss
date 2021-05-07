@@ -471,6 +471,10 @@ abstract class UnusedCSS {
 
             $this->cache_rule( $related_rule );
         }
+        else{
+
+            $this->cache( $this->url );
+        }
 
 		// disabled exceptions only for frontend
 		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
@@ -485,7 +489,7 @@ abstract class UnusedCSS {
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
-                    'rule' => $related_rule['rule']
+                    'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null
                 ]);
 
             }
@@ -493,7 +497,8 @@ abstract class UnusedCSS {
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
-                    'rule' => $related_rule['rule']
+                    'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
+                    'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued'
                 ]);
 
                 if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0' && UnusedCSS_DB::rule_exists($data->rule)) {
