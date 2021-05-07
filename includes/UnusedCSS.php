@@ -493,9 +493,7 @@ abstract class UnusedCSS {
                 ]);
 
             }
-            else if($this->rules_enabled() &&
-                UnusedCSS_Settings::link_exists( $this->url )
-            ){
+            else if($this->rules_enabled()){
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
