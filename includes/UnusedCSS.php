@@ -483,6 +483,8 @@ abstract class UnusedCSS {
 
                 }
 
+
+
             }
 
 			if(isset($data) && $data->status === 'success'){

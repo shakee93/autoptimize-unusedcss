@@ -288,6 +288,11 @@ class UnusedCSS_DB
     }
 
     static function get_total_rule_count($where = ''){
+
+        if(self::$current_version < 1.3){
+            return 0;
+        }
+
         global $wpdb;
 
         $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_uucss_rule {$where}");
@@ -320,6 +325,11 @@ class UnusedCSS_DB
     }
 
     static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
+
+        if(self::$current_version < 1.3){
+            return [];
+        }
+
         global $wpdb;
 
         $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
@@ -472,6 +482,11 @@ class UnusedCSS_DB
     }
 
     static function rule_exists($rule){
+
+        if(self::$current_version < 1.3){
+            return false;
+        }
+
         global $wpdb;
 
         $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND status IN('success','processing','waiting')", OBJECT);
@@ -863,6 +878,10 @@ class UnusedCSS_DB
     }
 
     public static function get_rules_by_status($status = ['queued'], $limit = 1, $order_by = 'id DESC'){
+
+        if(self::$current_version < 1.3){
+            return [];
+        }
 
         global $wpdb;
 
