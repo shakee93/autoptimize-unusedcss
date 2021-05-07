@@ -471,10 +471,6 @@ abstract class UnusedCSS {
 
             $this->cache_rule( $related_rule );
         }
-        else{
-
-            $this->cache( $this->url );
-        }
 
 		// disabled exceptions only for frontend
 		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
