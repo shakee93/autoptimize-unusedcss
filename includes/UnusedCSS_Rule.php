@@ -87,6 +87,9 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
     public static function get_related_rule(){
 
         $rules = apply_filters('uucss/rules', []);
+
+        self::uucss_log($rules);
+
         $related_rule = false;
 
         foreach ($rules as $rule){

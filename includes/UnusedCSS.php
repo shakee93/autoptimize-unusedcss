@@ -73,7 +73,7 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
-        add_filter('uucss/rules', [$this, 'uucss_rule_types'], 10 , 1);
+        add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
         new UnusedCSS_Queue();
     }
@@ -571,11 +571,23 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $path = !isset( $args['rule'] ) && isset( $args['ignore_rule'] ) && $args['ignore_rule'] == '1' ? new UnusedCSS_Path([
-	       'url' => $url
-        ]) : new UnusedCSS_Rule([
-           'rule' => $args['rule']
-        ]);
+        $path = null;
+
+	    if(isset($args['rule'])){
+
+	        $path = $args['ignore_rule'] == '1' ? new UnusedCSS_Path([
+                'url' => $url
+            ]) : new UnusedCSS_Rule([
+                'rule' => $args['rule']
+            ]);
+
+        }else{
+
+            $path = new UnusedCSS_Path([
+                'url' => $url
+            ]);
+        }
+
 
         if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
             self::log([
