@@ -558,7 +558,7 @@
                 {
                     "data": "rule",
                     title: "Rule",
-                    width: '60px',
+                    width: '100px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
@@ -1066,7 +1066,7 @@
                 {
                     "data": "rule",
                     title: "Rule",
-                    width: '60px',
+                    width: '100px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
