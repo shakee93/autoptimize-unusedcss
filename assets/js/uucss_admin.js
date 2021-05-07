@@ -556,6 +556,15 @@
                     }
                 },
                 {
+                    "data": "rule",
+                    title: "Rule",
+                    width: '60px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ? data : '') +'</span>';
+                    },
+                },
+                {
                     data: "url",
                     className: 'dt-body-center dt-head-center stats th-reduction',
                     title: "File Size Reduction",
