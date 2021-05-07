@@ -423,6 +423,14 @@ abstract class UnusedCSS {
 	    return true;
     }
 
+    public function rules_enabled(){
+        return
+            (!isset( $this->options['uucss_enable_rule_based'] ) ||
+            isset( $this->options['uucss_enable_rule_based'] ) &&
+            $this->options['uucss_enable_rule_based'] != "1") &&
+            UnusedCSS_DB::$current_version > 1.2 &&
+            apply_filters('uucss/rules/enable', false);
+    }
 
 	public function purge_css() {
 
@@ -430,21 +438,22 @@ abstract class UnusedCSS {
 
         $related_rule = UnusedCSS_Rule::get_related_rule();
 
-        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
-            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
+        if (    !$this->rules_enabled() &&
+                !UnusedCSS_Settings::link_exists( $this->url ) &&
+                (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1") &&
-            !apply_filters('uucss/rules/enable', false))
+                $this->options['uucss_disable_add_to_queue'] != "1"))
         {
             $this->cache( $this->url );
         }
 
-        if(     isset($related_rule['rule']) &&
+        if(     $this->rules_enabled() &&
+                isset($related_rule['rule']) &&
                 !UnusedCSS_DB::rule_exists( $related_rule['rule'] ) &&
-            (!isset( $this->options['uucss_disable_rule_add_to_queue'] ) ||
+                (!isset( $this->options['uucss_disable_rule_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_rule_add_to_queue'] ) &&
-                $this->options['uucss_disable_rule_add_to_queue'] != "1") &&
-            apply_filters('uucss/rules/enable', false)){
+                $this->options['uucss_disable_rule_add_to_queue'] != "1"))
+        {
 
             $this->cache_rule( $related_rule );
         }
@@ -456,7 +465,7 @@ abstract class UnusedCSS {
 
             $data = null;
 
-            if( !apply_filters('uucss/rules/enable', false) &&
+            if( !$this->rules_enabled() &&
                 UnusedCSS_Settings::link_exists( $this->url )
             ){
 
@@ -466,7 +475,7 @@ abstract class UnusedCSS {
                 ]);
 
             }
-            else if(apply_filters('uucss/rules/enable', false) &&
+            else if($this->rules_enabled() &&
                 UnusedCSS_Settings::link_exists( $this->url )
             ){
 
@@ -482,8 +491,6 @@ abstract class UnusedCSS {
                     ]);
 
                 }
-
-
 
             }
 

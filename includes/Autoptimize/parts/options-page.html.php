@@ -3,6 +3,8 @@
 <script>document.title = "Autoptimize: RapidLoad " + document.title;</script>
 
 <?php
+
+    global $uucss;
     $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
@@ -50,7 +52,7 @@
                     </div>
                 </li>
 
-            <?php if ( UnusedCSS_DB::$current_version > 1.2) : ?>
+            <?php if ( $uucss->rules_enabled() ) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
@@ -440,6 +442,21 @@
 
                                 </td>
                             </tr>
+                            <?php if ( $uucss->rules_enabled() ) : ?>
+                            <tr>
+                                <th scope="row"><?php _e( 'Enable Rule based injection', 'uucss' ); ?></th>
+                                <td>
+                                    <label for="uucss_enable_rule_based"><input id='uucss_enable_rule_based' type='checkbox'
+                                                                                   name='autoptimize_uucss_settings[uucss_enable_rule_based]' <?php if ( ! empty( $options['uucss_enable_rule_based'] ) && '1' === $options['uucss_enable_rule_based'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable Rule based injection.
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <?php endif; ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>

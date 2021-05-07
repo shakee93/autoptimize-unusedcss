@@ -758,7 +758,7 @@
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
 
-                        if(data.ignore_rule === '0'){
+                        if(data.ignore_rule === '0' && window.uucss.rules_enabled !== ""){
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
