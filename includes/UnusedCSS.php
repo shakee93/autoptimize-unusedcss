@@ -455,6 +455,9 @@ abstract class UnusedCSS {
         {
 
             $this->cache_rule( $related_rule );
+        }else{
+
+            $this->cache( $this->url );
         }
 
 		// disabled exceptions only for frontend
