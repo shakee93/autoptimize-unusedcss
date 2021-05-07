@@ -100,4 +100,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
         }
     }
+
+    public function attach_rule($rule = false ){
+        if(!$rule){
+            $this->ignore_rule = 1;
+            $this->status = 'queued';
+            $this->rule = 'queued';
+        }
+    }
 }

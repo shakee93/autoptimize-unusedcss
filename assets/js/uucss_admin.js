@@ -758,6 +758,10 @@
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
 
+                        if(data.ignore_rule === '0'){
+                            $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
+                        }
+
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -803,6 +807,18 @@
                             var action = $this.data('action_name');
 
                             switch (action) {
+                                case 'detach_from_rule':{
+                                    wp.ajax.post('attach_rule',{ url : data.url, type : 'detach' }).then(function (i) {
+
+                                        $.uucssAlert(i, 'success')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'error')
+                                    });
+
+                                    break;
+                                }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
                                     break;

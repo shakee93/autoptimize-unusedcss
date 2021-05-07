@@ -517,6 +517,16 @@ abstract class UnusedCSS {
             return false;
         }
 
+        if(UnusedCSS_Settings::link_exists_with_error( $this->url )){
+
+            $path = new UnusedCSS_Path([
+                'url' => $this->url,
+            ]);
+
+            $path->ignore_rule = '1';
+            return false;
+        }
+
         if($related_rule && isset($related_rule['rule'])){
 
             new UnusedCSS_Rule([
@@ -758,6 +768,7 @@ abstract class UnusedCSS {
     public function clear_cache($url = null, $args = []) {
 
 	    $args['url'] = $url;
+	    $rule = isset($args['rule']) ? $args['rule'] : false;
 
 	    self::log( [
 	        'log' => 'cleared',
@@ -770,7 +781,7 @@ abstract class UnusedCSS {
 		    if ( UnusedCSS_Settings::link_exists( $url ) ) {
 
 			    // get unused files
-			    $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
+			    $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
 
 			    // remove unused files from filesystem
 			    foreach ( $unused_files as $unused_file ) {
@@ -783,7 +794,7 @@ abstract class UnusedCSS {
 		    UnusedCSS_Settings::delete_link( $url );
 	    }
 
-        if(isset($args['rule']) && UnusedCSS_DB::rule_exists_with_error( $args['rule'] )){
+        if($rule && UnusedCSS_DB::rule_exists_with_error( $rule )){
 
             UnusedCSS_DB::delete_rule($args);
         }

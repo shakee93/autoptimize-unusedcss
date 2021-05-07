@@ -212,6 +212,27 @@ class UnusedCSS_DB
 	    }
     }
 
+    static function get_rule($rule){
+        global $wpdb;
+
+        $link = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "'", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        if(!empty($link)){
+
+            return self::transform_link($link[0]);
+
+        }else{
+
+            return null;
+        }
+    }
+
     static function get_links_by_status($status, $limit = 1, $order_by = 'id DESC'){
         global $wpdb;
 
@@ -347,6 +368,24 @@ class UnusedCSS_DB
 	    return $links;
     }
 
+    static function get_rules_exclude($rule){
+        global $wpdb;
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule != '" . $rule . "'", OBJECT);
+
+        $links = array_map(function ($link){
+            return self::transform_link($link);
+        }, $links);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $links;
+    }
+
     static function transform_link($link, $rule = 'path'){
 
         if(empty($link)){
@@ -363,7 +402,7 @@ class UnusedCSS_DB
         if($rule == 'path'){
             $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
 
-            if(isset($link->rule) && !empty($link->rule)){
+            if(isset($link->rule) && !empty($link->rule) && $data['ignore_rule'] == 0 && UnusedCSS_DB::rule_exists_with_error($link->rule)){
                 $link = new UnusedCSS_Rule([
                     'url' => $link->url,
                     'rule' => $link->rule
@@ -410,7 +449,7 @@ class UnusedCSS_DB
     static function link_exists($url){
         global $wpdb;
 
-	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting')", OBJECT);
+	    $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
 
 	    $error = $wpdb->last_error;
 
@@ -463,6 +502,20 @@ class UnusedCSS_DB
         return isset($result) && !empty($result);
     }
 
+    static function rule_exist_by_url($url){
+        global $wpdb;
+
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE url = '" . $url . "'", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return isset($result) && !empty($result);
+    }
+
     static function delete_link($url){
         global $wpdb;
 
@@ -480,7 +533,7 @@ class UnusedCSS_DB
 
         if(isset($args['rule'])){
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $args['rule'] . "'" );
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "'" );
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "' AND ignore_rule = 0" );
         }
 
         $error = $wpdb->last_error;
@@ -680,24 +733,40 @@ class UnusedCSS_DB
         UnusedCSS_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
-    static function link_files_used_elsewhere( $link ){
+    static function link_files_used_elsewhere( $link , $rule = false){
 
         $links = self::get_links_exclude($link);
 
+        $rules = self::get_rules_exclude($rule);
+
         $file = (array) self::get_link($link);
+
+        $file2 = (array) self::get_rule($rule);
+
+        $files = $file && isset($file['files']) ? $file['files'] : [];
+
+        $files2 = $file && isset($file2['files']) ? $file2['files'] : [];
+
+        $files = array_merge($files,$files2);
 
         $used   = [];
         $unused = [];
 
         if($file){
 
-	        $files = $file['files'];
-
             if(isset($files) && !empty($files)){
 
                 foreach ( $files as $item ) {
 
                     foreach ( $links as $key => $value ) {
+
+                        if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                            $used[] = $item['uucss'];
+                            break;
+                        }
+                    }
+
+                    foreach ($rules as $key => $value){
 
                         if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
                             $used[] = $item['uucss'];

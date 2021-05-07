@@ -80,8 +80,34 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
             add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
             add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+            add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+        }
+
+    }
+
+    public function attach_rule(){
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+        if(!$type || !$url){
+            wp_send_json_error('Required field missing');
+        }
+
+        if(UnusedCSS_DB::rule_exist_by_url($url)){
+            wp_send_json_error('Rule exist with same url');
+        }
+
+        if($type == 'detach' && UnusedCSS_DB::link_exists_with_error($url)){
+
+            $path = new UnusedCSS_Path([
+               'url' => $url
+            ]);
+            $path->attach_rule();
+            $path->save();
+            wp_send_json_success('Successfully detached from rule');
         }
 
     }
@@ -191,7 +217,7 @@ abstract class UnusedCSS_Admin {
 
         $job = UnusedCSS_Settings::get_first_link();
 
-        if ( $job && $job['status'] == 'success' ) : ?>
+        if ( $job && $job['status'] == 'success' && isset($job['ignore_rule']) && $job['ignore_rule'] == '1') : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> RapidLoad successfully ran your first job!</h4>
