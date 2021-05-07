@@ -73,6 +73,16 @@ abstract class UnusedCSS {
 
 	    }, 99);
 
+	    add_action('registered_post_type', function ($post_type, $post_object){
+            add_filter('uucss/rules', function () use($post_type){
+                $rules[] = [
+                    'name' => $post_type,
+                    'rule' => 'is_' . $post_type,
+                    'callback' => is_singular($post_type),
+                ];
+            }, 60 , 1);
+        }, 10 , 2);
+
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
         new UnusedCSS_Queue();
