@@ -6,7 +6,7 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.3";
+    static $db_version = "1.4";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -879,7 +879,7 @@ class UnusedCSS_DB
 
         $sql = "CREATE TABLE $rapidload_uucss_job (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		job_id mediumint(9) NULL,
+		job_id mediumint(12) NULL,
 		rule longtext NULL,
 		url longtext NOT NULL,
 		stats longtext NULL,
@@ -896,7 +896,7 @@ class UnusedCSS_DB
 	) ;
 	    CREATE TABLE $rapidload_uucss_rule (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		job_id mediumint(9) NULL,
+		job_id mediumint(12) NULL,
 		rule longtext NOT NULL,
 		url longtext NOT NULL,
 		stats longtext NULL,
