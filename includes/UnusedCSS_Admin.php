@@ -691,6 +691,8 @@ abstract class UnusedCSS_Admin {
 
         $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
 
+        $type = isset($_REQUEST['type']) ? $_REQUEST['status'] : 'path';
+
         if($url){
 
             do_action( 'uucss/cached', [
@@ -702,7 +704,15 @@ abstract class UnusedCSS_Admin {
 
         if($status && $status == 'warnings'){
 
-            $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+            if($type == 'path'){
+
+                $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+
+            }else{
+
+                $links = UnusedCSS_DB::get_rules_where(' WHERE warnings IS NOT NULL ');
+
+            }
 
         }
 

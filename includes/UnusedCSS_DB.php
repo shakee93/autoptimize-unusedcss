@@ -365,6 +365,24 @@ class UnusedCSS_DB
         return $links;
     }
 
+    static function get_rules_where($where = ''){
+        global $wpdb;
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job {$where} ORDER BY id DESC ", OBJECT);
+
+        $links = array_map(function ($link){
+            return self::transform_link($link, 'rule');
+        }, $links);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $links;
+    }
+
     static function get_links_exclude($url){
         global $wpdb;
 
@@ -626,6 +644,23 @@ class UnusedCSS_DB
         }
     }
 
+    static function requeue_rules($list = false){
+
+        global $wpdb;
+
+        if($list){
+
+            $urls = implode("','", $list);
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued', job_id = NULL WHERE url IN('{$urls}')");
+        }
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
 	static function requeue_jobs($status = 'failed'){
 
         global $wpdb;
@@ -637,6 +672,26 @@ class UnusedCSS_DB
         }else{
 
             $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
+        }
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
+    static function requeue_rule_jobs($status = 'failed'){
+
+        global $wpdb;
+
+        if($status == 'warnings'){
+
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL WHERE warnings IS NOT NULL");
+
+        }else{
+
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
         }
 
         $error = $wpdb->last_error;
@@ -712,6 +767,9 @@ class UnusedCSS_DB
 
                 self::update_rule_status('queued', $args['rule']);
 
+            }else{
+
+                self::update_rule_status();
             }
 
         }else{

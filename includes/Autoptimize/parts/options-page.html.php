@@ -35,14 +35,14 @@
                     <h2>
                         Optimization Jobs
                         <span class="multiple-selected-text">
-                            <span class="multiple-selected-value"></span>
+                            <span class="multiple-selected-value multiple-selected-value-job"></span>
                             Selected
                             <a href="#" id="js-uucss-clear-selection">clear</a>
                         </span>
-                        <span class="uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
+                        <span class="uucss-add-menu uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
                             <span class="dashicons dashicons-plus"></span>Add
                         </span>
-                        <button class="uucss-add-site-urls-submenu" aria-expanded="false">
+                        <button class="uucss-sub-menu uucss-add-site-urls-submenu" aria-expanded="false">
                             <span class="dashicons dashicons-ellipsis"></span>
                         </button>
                     </h2>
@@ -56,6 +56,17 @@
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
+                        <span class="multiple-selected-text">
+                            <span class="multiple-selected-value multiple-selected-value-rule"></span>
+                            Selected
+                            <a href="#" id="js-uucss-clear-selection-rule">clear</a>
+                        </span>
+                        <span class="uucss-add-menu uucss-add-site-rule" data-featherlight="#add_rule_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-rule-model">
+                            <span class="dashicons dashicons-plus"></span>Add
+                        </span>
+                        <button class="uucss-sub-menu uucss-add-site-rule-submenu" aria-expanded="false">
+                            <span class="dashicons dashicons-ellipsis"></span>
+                        </button>
                     </h2>
                     <div class="content">
                         <div class="spinner spinner-history"></div>
@@ -672,7 +683,13 @@
 
 </form>
 
-<div id="add_url_featherlight_content" class="main-content">
+<div id="add_rule_featherlight_content" class="main-content uucss-menu-fetherlight">
+    <div class="action-content">
+        Rules
+    </div>
+</div>
+
+<div id="add_url_featherlight_content" class="main-content uucss-menu-fetherlight">
     <div class="action-content">
         <div>
             <select id="model-requeue-post-type">

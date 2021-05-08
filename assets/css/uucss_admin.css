@@ -144,11 +144,11 @@ li.uucss-history .dataTables_wrapper .dataTables_info input[type="search"],
     display: inline-block;
 }
 
-#uucss-wrapper li.uucss-history.multi-select .uucss-add-site-urls{
+#uucss-wrapper li.uucss-history.multi-select .uucss-add-menu{
     display: none;
 }
 
-.uucss-add-site-urls{
+.uucss-add-menu{
     cursor: pointer;
     position: absolute;
     right: 44px;
@@ -167,7 +167,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info input[type="search"],
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
 }
 
-.uucss-add-site-urls-submenu{
+.uucss-sub-menu{
     position: absolute;
     right: 11px;
     top: 8px;
@@ -182,13 +182,13 @@ li.uucss-history .dataTables_wrapper .dataTables_info input[type="search"],
     margin-right: 4px;
 }
 
-.uucss-add-site-urls-submenu .dashicons.dashicons-ellipsis{
+.uucss-sub-menu .dashicons.dashicons-ellipsis{
     transform: rotate(90deg) translateY(4px);
     line-height: 20px;
     font-size: 14px;
 }
 
-.uucss-add-site-urls .dashicons.dashicons-plus{
+.uucss-add-menu .dashicons.dashicons-plus{
     line-height: 28px;
 }
 
@@ -511,39 +511,39 @@ table.dataTable thead th, table.dataTable thead td {
     margin-right: 4px;
 }
 
-.uucss-history-table .tippy-content .uucss-option-list, .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list{
+.uucss-history-table .tippy-content .uucss-option-list, .uucss-sub-menu .tippy-content .uucss-submenu-option-list{
     width: 125px;
     margin-right: -10px;
     margin-left: -10px;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list{
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list{
     width: 135px;
 }
 
-li.uucss-history.multi-select .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.simple-menu{
+li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li.simple-menu{
     display: none;
 }
 
-li.uucss-history .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
+li.uucss-history .uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
     display: none;
 }
 
-li.uucss-history.multi-select .uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
+li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li.multi-select-menu{
     display: block;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li,
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li,
 .uucss-history-table .tippy-content .uucss-option-list ul li{
     margin: 0;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li:hover,
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li:hover,
 .uucss-history-table .tippy-content .uucss-option-list ul li:hover{
     background-color: #ededed;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li a,
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li a,
 .uucss-history-table .tippy-content .uucss-option-list ul li a{
     font-size: 12px;
     padding: 5px 10px;
@@ -552,11 +552,11 @@ li.uucss-history.multi-select .uucss-add-site-urls-submenu .tippy-content .uucss
     display: block;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li a{
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li a{
     font-weight: normal;
 }
 
-.uucss-add-site-urls-submenu .tippy-content .uucss-submenu-option-list ul li:last-child,
+.uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li:last-child,
 .uucss-history-table .tippy-content .uucss-option-list ul li:last-child{
     margin-bottom: 0;
 }
@@ -1260,15 +1260,18 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     display: inline-block;
 }
 
+#add_rule_featherlight_content,
 #add_url_featherlight_content{
     display: none;
 }
 
-.featherlight .featherlight-content #add_url_featherlight_content{
+.featherlight .featherlight-content #add_url_featherlight_content,
+.featherlight .featherlight-content #add_rule_featherlight_content{
     display: block;
 }
 
-.featherlight.add-site-url-model .featherlight-content{
+.featherlight.add-site-url-model .featherlight-content,
+.featherlight.add-site-rule-model .featherlight-content{
     width: 310px;
     height: 120px;
     padding: 25px 20px;

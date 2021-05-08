@@ -221,7 +221,7 @@
             });
         });*/
 
-        $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
+        $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
             $(this).parent().find('.content').slideToggle('fast');
             $(this).find('.uucss-toggle-section').toggleClass('rotate')
         });
@@ -440,7 +440,7 @@
                 $(this).toggleClass('selected');
                 var $table_row = $('#uucss-rule-history tbody tr.selected');
                 var $container = $('#uucss-wrapper li.uucss-history.uucss-rule-history');
-                $('#uucss-wrapper li.uucss-history.uucss-rule-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') URLs');
+                $('#uucss-wrapper li.uucss-history.uucss-rule-history .multiple-selected-text .multiple-selected-value').text('(' + $table_row.length + ') Rules');
                 if($table_row.length > 1){
                     !$container.hasClass('multi-select') && $container.addClass('multi-select')
                 }else{
@@ -700,8 +700,9 @@
                             tippyOptions.onHide = function () {
                             }
 
-                            var code = (rowData.meta.error.code) ? rowData.meta.error.code : 500;
-                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <br><span>' + rowData.meta.error.message + '</span></div>';
+                            var code = (rowData.meta.error && rowData.meta.error.code) ? rowData.meta.error.code : 500;
+                            var message = (rowData.meta.error && rowData.meta.error.message) ? rowData.meta.error.message : 'Unknown Error Occurred';
+                            tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <br><span>' + message + '</span></div>';
 
                             //tippyOptions.triggerTarget = $(td).closest('tr')[0]
                             tippy(stat.find('span')[0], tippyOptions);
@@ -1476,14 +1477,21 @@
             e.preventDefault();
         });
 
-        function requeue(post_type, list = []){
+        $('button.uucss-add-site-rule-submenu').off('click').click(function (e) {
+            e.preventDefault();
+        });
+
+        function requeue(post_type, list = [], type = 'path'){
             wp.ajax.post('uucss_queue',{
                 url_list : list,
                 url : '',
                 post_type : post_type,
+                type : type,
             }).then(function (i) {
-                if(table){
+                if(table && type === 'path'){
                     table.ajax.reload(null, false);
+                }else if(rule_table && type === 'rule'){
+                    rule_table.ajax.reload(null, false);
                 }
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
@@ -1619,6 +1627,135 @@
             placement: 'bottom-end',
         })
 
+        tippy($('button.uucss-add-site-rule-submenu')[0], {
+            allowHTML: true,
+            trigger: 'click',
+            arrow: true,
+            appendTo: $('button.uucss-add-site-rule-submenu')[0],
+            interactive: true,
+            animation: 'shift-toward',
+            hideOnClick: true,
+            theme: 'light',
+            content: ()=>{
+
+                var $content = $('<div class="uucss-submenu-option-list"><ul class="option-list"></ul></div>')
+
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_all"><a data-action_name="requeue_all" href="#">Requeue All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="requeue_selected"><a data-action_name="requeue_selected" href="#">Requeue Selected</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_processing"><a data-action_name="requeue_processing" href="#">Requeue Pending</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_warnings"><a data-action_name="requeue_warnings" href="#">Requeue Warnings</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
+                $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
+                $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
+
+                if(window.uucss && window.uucss.dev_mode === "1"){
+                    $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
+                }
+
+                if($('#thirtd_part_cache_plugins').val() === "1"){
+                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
+                }
+
+                return $content.wrap('<div></div>').parent().html();
+            },
+            onClickOutside(instance, event) {
+                instance.hide()
+            },
+            onCreate(){
+
+            },
+            onMount(instance) {
+
+                $('.uucss-submenu-option-list ul.option-list li a').off().click(function (e) {
+
+                    var $this = $(this);
+
+                    var action = $this.data('action_name');
+
+                    switch (action) {
+                        case 'requeue_selected':
+                        case 'requeue_all':{
+                            var requeue_url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    requeue_url_list.push(table_row_value.url)
+                                });
+                            }
+                            requeue('current',requeue_url_list, 'rule');
+                            $.uucssAlert('Successfully added links added to the queue');
+                            break;
+                        }case 'requeue_warnings':{
+                            requeue('warnings', null, 'rule');
+                            $.uucssAlert('Successfully added links added to the queue');
+                            break;
+                        }case 'requeue_failed':{
+                            requeue('failed', null, 'rule');
+                            $.uucssAlert('Successfully added links added to the queue');
+                            break;
+                        }case 'requeue_processing':{
+                            requeue('processing', null, 'rule');
+                            $.uucssAlert('Successfully added links added to the queue');
+                            break;
+                        }
+                        case 'remove_selected':
+                        case 'remove_all':{
+                            var data = {
+                                url : '',
+                                clear : true,
+                                nonce: uucss.nonce,
+                                type : 'rule'
+                            }
+
+                            if(action === 'remove_selected'){
+                                var url_list = [];
+                                if(rule_table.rows('.selected').data().length){
+                                    $.each(rule_table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                        url_list.push(table_row_value.url)
+                                    });
+                                }
+                                if(url_list.length){
+                                    data.url_list = url_list
+                                }
+                            }
+
+                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
+                                if(rule_table){
+                                    rule_table.ajax.reload(null, false);
+                                    $.uucssAlert('Successfully removed links from the table', 'info');
+                                }
+                            }).done(function(){
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
+                            });
+                            break;
+                        }
+                        case 'clear_warnings_cache':{
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule' }).then(function (i) {
+
+                                $.uucssAlert(i, 'Successfully cleared your page cache')
+
+                            }).fail(function (i) {
+
+                                $.uucssAlert(i, 'Unknown error occurred when clearing the page cache')
+                            });
+                            break;
+                        }
+                        case 'run_gpsi_test':{
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+                                $.uucssAlert('GPSI test run started')
+                            }).fail(function (i) {
+
+                            });
+                            break;
+                        }
+                        default:{
+                            break;
+                        }
+                    }
+                })
+            },
+            placement: 'bottom-end',
+        })
+
         function uucss_purge_url(url , isClear, row, index, data, args = {}) {
 
             var _row = args.rule === undefined ? table.row(index) : rule_table.row(index);
@@ -1684,7 +1821,7 @@
         }
 
         function refreshRulesTable(){
-            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
+            var $queuedJobs = $('#uucss-rule-history tr td span.status.refresh');
 
             if(!auto_refresh_rule || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
                 return;
@@ -1871,7 +2008,13 @@
         $('#js-uucss-clear-selection').click(function (e) {
            e.preventDefault();
            $('#uucss-history tbody tr').removeClass('selected');
-           $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
+           $('#uucss-wrapper li.uucss-history.uucss-job-history').removeClass('multi-select');
+        });
+
+        $('#js-uucss-clear-selection-rule').click(function (e) {
+            e.preventDefault();
+            $('#uucss-rule-history tbody tr').removeClass('selected');
+            $('#uucss-wrapper li.uucss-history.uucss-rule-history').removeClass('multi-select');
         });
 
         showPublicNotices();

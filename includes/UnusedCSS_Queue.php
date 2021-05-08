@@ -110,6 +110,10 @@ class UnusedCSS_Queue
 		    wp_send_json_error('post type not found');
 	    }
 
+    	//self::uucss_log($_REQUEST);
+
+    	$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+
         $post_type = sanitize_text_field($_REQUEST['post_type']);
 
         $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
@@ -120,35 +124,48 @@ class UnusedCSS_Queue
 
         if(isset($list) && is_array($list) && !empty($list)){
 
-            UnusedCSS_DB::requeue_urls($list);
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_urls($list);
+            }else{
+                UnusedCSS_DB::requeue_rules($list);
+            }
             wp_send_json_success('successfully links added to the queue');
-        }
-        else if($post_type == 'all'){
-
-            $posts = new WP_Query(array(
-                'post_type'=> self::$post_types,
-	            'posts_per_page' => -1
-            ));
-
         }else if($post_type == 'current'){
 
-            UnusedCSS_Settings::clear_links(true);
+            if($type == 'path'){
+                UnusedCSS_Settings::clear_links(true);
+            }else{
+                UnusedCSS_DB::clear_rules(true);
+            }
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'processing'){
 
-            UnusedCSS_DB::requeue_jobs('processing');
-            UnusedCSS_DB::requeue_jobs('waiting');
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('processing');
+                UnusedCSS_DB::requeue_jobs('waiting');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('processing');
+                UnusedCSS_DB::requeue_rule_jobs('waiting');
+            }
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'warnings'){
 
-            UnusedCSS_DB::requeue_jobs('warnings');
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('warnings');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('warnings');
+            }
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'failed'){
 
-            UnusedCSS_DB::requeue_jobs();
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs();
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs();
+            }
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'url'){
