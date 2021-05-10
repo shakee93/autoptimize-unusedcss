@@ -101,6 +101,10 @@ abstract class UnusedCSS_Admin {
         $url = $_REQUEST['url'];
         $regex = $_REQUEST['regex'];
 
+        if(!self::is_path_glob_matched($url, $regex)){
+            wp_send_json_error('Invalid regex for the url');
+        }
+
         if(UnusedCSS_DB::rule_exists_with_error($rule, $regex)){
             wp_send_json_error('Rule already exist');
         }

@@ -570,7 +570,7 @@
                     width: '100px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
-                        return '<span class="">'+ (data ? data : '') +'</span>';
+                        return '<span class="">'+ (data ? data.replace('is_','') : '') +'</span>';
                     },
                 },
                 {
@@ -1079,7 +1079,7 @@
                     width: '100px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
-                        return '<span class="">'+ (data ? data : '') +'</span>';
+                        return '<span class="">'+ (data ? data.replace('is_','') : '') +'</span>';
                     },
                 },
                 {
@@ -1983,6 +1983,11 @@
 
             if($rule.val() === "" || $url.val() === "" || $regex.val() === ""){
                 $.uucssAlert('Required fields missing', 'error');
+                return;
+            }
+
+            if(!isUrl($rule.val())){
+                $.uucssAlert('Invalid Url', 'error');
                 return;
             }
 
