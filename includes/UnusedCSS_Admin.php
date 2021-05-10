@@ -117,15 +117,15 @@ abstract class UnusedCSS_Admin {
 
             if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['old_rule'], $_REQUEST['old_regex'])){
 
-                $rule = new UnusedCSS_Rule([
+                $ruleObject = new UnusedCSS_Rule([
                    'rule' => $_REQUEST['old_rule'],
                    'regex' => $_REQUEST['old_regex']
                 ]);
 
-                $rule->rule = $rule;
-                $rule->regex = $regex;
-                $rule->url = $url;
-                $rule->save();
+                $ruleObject->rule = $rule;
+                $ruleObject->regex = $regex;
+                $ruleObject->url = $url;
+                $ruleObject->save();
 
                 wp_send_json_success('Rule updated successfully');
             }
