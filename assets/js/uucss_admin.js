@@ -1277,15 +1277,17 @@
 
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
+                        $content.find('ul').append('<li data-action_name="edit_rule"><a data-action_name="edit_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Edit</a></li>');
+
                         if(data.status === 'success'){
-                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">GPSI Status</a></li>')
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">GPSI Status</a></li>')
                         }
 
                         if($('#thirtd_part_cache_plugins').val() === "1"){
-                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" href="#">Clear Page Cache</a></li>');
+                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" href="#" data-url="'+ data.url + '" data-index="'+ dataIndex + '">Clear Page Cache</a></li>');
                         }
 
-                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">Remove</a></li>');
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
                     },
@@ -1330,8 +1332,23 @@
                             var action = $this.data('action_name');
                             var rule = $this.data('rule');
                             var regex = $this.data('regex');
+                            var url = $this.data('url');
 
                             switch (action) {
+                                case 'edit_rule':{
+                                    $.featherlight($('#add_rule_featherlight_content'),{
+                                        variant : 'add-site-rule-model',
+                                        afterOpen:function (){
+                                            this.$content.find('#model-uucss-rules').val(rule);
+                                            this.$content.data('old_rule',rule);
+                                            this.$content.find('input.rule-base-url').val(url);
+                                            this.$content.data('old_base_url',url);
+                                            this.$content.find('input.rule-url-regex').val(regex);
+                                            this.$content.data('old_rule_regex',regex);
+                                        }
+                                    })
+                                    break;
+                                }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
                                     break;
@@ -2006,7 +2023,10 @@
             wp.ajax.post('uucss_update_rule',{
                 rule : $rule.val(),
                 url : $url.val(),
-                regex : $regex.val()
+                regex : $regex.val(),
+                old_rule : $model_content.data('old_rule'),
+                old_url : $model_content.data('old_base_url'),
+                old_regex : $model_content.data('old_rule_regex')
             }).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();

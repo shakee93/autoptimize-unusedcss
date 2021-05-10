@@ -101,12 +101,35 @@ abstract class UnusedCSS_Admin {
         $url = $_REQUEST['url'];
         $regex = $_REQUEST['regex'];
 
+        $url = $this->transform_url($url);
+
+        global $uucss;
+
+        if(!$uucss->is_url_allowed($url)){
+            wp_send_json_error('URL not allowed');
+        }
+
         if(!self::is_path_glob_matched($url, $regex)){
             wp_send_json_error('Invalid regex for the url');
         }
 
-        if(UnusedCSS_DB::rule_exists_with_error($rule, $regex)){
-            wp_send_json_error('Rule already exist');
+        if(isset($_REQUEST['old_rule']) && isset($_REQUEST['old_regex'])){
+
+            if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['old_rule'], $_REQUEST['old_regex'])){
+
+                $rule = new UnusedCSS_Rule([
+                   'rule' => $_REQUEST['old_rule'],
+                   'regex' => $_REQUEST['old_regex']
+                ]);
+
+                $rule->rule = $rule;
+                $rule->regex = $regex;
+                $rule->url = $url;
+                $rule->save();
+
+                wp_send_json_success('Rule updated successfully');
+            }
+
         }
 
         new UnusedCSS_Rule([
