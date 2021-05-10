@@ -670,6 +670,7 @@ abstract class UnusedCSS {
         }else if ( isset( $args['immediate'] ) ) {
 
             $spawned = false;
+            $path->status = 'processing';
 
             if($path->is_type('path')){
                 $spawned = $this->schedule_cron('uucss_async_queue', [
@@ -678,6 +679,7 @@ abstract class UnusedCSS {
                     'args'     => $args
                 ]);
             }else{
+
                 $spawned = $this->schedule_cron('uucss_async_queue_rule', [
                     'provider' => $this->provider,
                     'url'      => $url,
@@ -687,7 +689,7 @@ abstract class UnusedCSS {
             }
 
 	    	if($spawned){
-                $path->status = 'processing';
+
                 $path->save();
             }
 

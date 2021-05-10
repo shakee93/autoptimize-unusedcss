@@ -778,7 +778,6 @@
                         }
 
                         if(data.ignore_rule === "0" && window.uucss.rules_enabled !== ""){
-                            console.log(data.ignore_rule)
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 

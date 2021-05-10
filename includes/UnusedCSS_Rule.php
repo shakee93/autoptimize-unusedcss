@@ -12,13 +12,11 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         global $wpdb;
 
-        self::$table = $wpdb->prefix . 'rapidload_uucss_rule';
-
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
         $regex = isset($args['regex']) ? $args['regex'] : null;
 
-        $rule_current = $wpdb->get_results("SELECT * FROM ". self::$table ." rapidload_uucss_rule where rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+        $rule_current = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule where rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
 
         if(isset($rule_current) && !empty($rule_current)){
 
@@ -52,11 +50,11 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             unset($data['type']);
 
             $wpdb->insert(
-                self::$table,
+                $wpdb->prefix . 'rapidload_uucss_rule',
                 $data
             );
 
-            $id = $wpdb->get_var("SELECT id FROM ". self::$table ." rapidload_uucss_rule where rule = '" . $rule . "'");
+            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule where rule = '" . $rule . "'");
 
             if(isset($id) && !empty($id)){
 
@@ -79,7 +77,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             unset($data['type']);
 
             $wpdb->update(
-                self::$table,
+                $wpdb->prefix . 'rapidload_uucss_rule',
                 $data,
                 [
                     'id' => $id

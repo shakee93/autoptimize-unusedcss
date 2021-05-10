@@ -12,13 +12,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
         global $wpdb;
 
-        self::$table = $wpdb->prefix . 'rapidload_uucss_job';
         $this->type = 'Path';
 
         $rule = isset($args['rule']) ? $args['rule'] : get_post_type( get_the_ID() );
         $url = isset($args['url']) ? $args['url'] : null;
 
-        $path_exist = $wpdb->get_results("SELECT * FROM ". self::$table ." WHERE url = '" . $url . "'", OBJECT);
+        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
 
         if(isset($path_exist) && !empty($path_exist)){
 
@@ -58,11 +57,11 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             unset($data['type']);
 
             $wpdb->insert(
-                self::$table,
+                $wpdb->prefix . 'rapidload_uucss_job',
                 $data
             );
 
-            $id = $wpdb->get_var("SELECT id FROM ". self::$table . " WHERE url = '" . $this->url . "'");
+            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $this->url . "'");
 
             if(isset($id) && !empty($id)){
 
@@ -91,7 +90,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             }
 
             $wpdb->update(
-                self::$table,
+                $wpdb->prefix . 'rapidload_uucss_job',
                 $data,
                 [
                     'id' => $id
