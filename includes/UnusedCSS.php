@@ -14,6 +14,7 @@ abstract class UnusedCSS {
 	public static $provider_path = null;
 
 	public $url = null;
+	public $rule = null;
 	public $css = [];
 	public $store = null;
 	public $options = [];
@@ -412,7 +413,7 @@ abstract class UnusedCSS {
 
                 }
 
-                if(self::str_contains( $pattern, '*' ) && $this->is_path_glob_matched(urldecode($url), $pattern)){
+                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
                     $this->log( 'skipped : ' . $url );
                     return false;
                 }else if ( self::str_contains( urldecode($url), $pattern ) ) {
@@ -450,26 +451,14 @@ abstract class UnusedCSS {
 
 		$this->url = $this->transform_url( $this->url );
 
-        $related_rule = UnusedCSS_Rule::get_related_rule();
+        $this->rule = UnusedCSS_Rule::get_related_rule();
 
-        if (    !$this->rules_enabled() &&
-                !UnusedCSS_Settings::link_exists( $this->url ) &&
-                (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
+        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
+            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
                 $this->options['uucss_disable_add_to_queue'] != "1"))
         {
-            $this->cache( $this->url );
-        }
-
-        if(     $this->rules_enabled() &&
-                isset($related_rule['rule']) &&
-                !UnusedCSS_DB::rule_exists( $related_rule['rule'] ) &&
-                (!isset( $this->options['uucss_disable_rule_add_to_queue'] ) ||
-                isset( $this->options['uucss_disable_rule_add_to_queue'] ) &&
-                $this->options['uucss_disable_rule_add_to_queue'] != "1"))
-        {
-
-            $this->cache_rule( $related_rule );
+            $this->cache( $this->url , $this->rule);
         }
 
 		// disabled exceptions only for frontend
@@ -485,24 +474,31 @@ abstract class UnusedCSS {
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
-                    'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null
+                    'rule' => isset($this->rule['rule']) ? $this->rule['rule'] : null
                 ]);
 
             }
-            else if($this->rules_enabled()){
+            else if($this->rules_enabled() &&
+                UnusedCSS_Settings::link_exists( $this->url )){
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
-                    'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
-                    'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued'
+                    'rule' => isset($this->rule['rule']) ? $this->rule['rule'] : null,
+                    'status' => isset($this->rule['rule']) ? 'rule-based' : 'queued'
                 ]);
 
-                if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0' && UnusedCSS_DB::rule_exists($data->rule)) {
+                if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0') {
 
-                    $data = new UnusedCSS_Rule([
-                        'rule' => $data->rule,
-                        'url' => $this->url
-                    ]);
+                    $applicable_rule = UnusedCSS_DB::get_applied_rule($data->rule, $data->url);
+
+                    if($applicable_rule){
+
+                        $data = new UnusedCSS_Rule([
+                            'rule' => $applicable_rule->rule,
+                            'regex' => $applicable_rule->regex
+                        ]);
+
+                    }
 
                 }
 
@@ -529,7 +525,7 @@ abstract class UnusedCSS {
 
 	}
 
-	public function cache_rule($related_rule = null, $args = []){
+	/*public function cache_rule($related_rule = null, $args = []){
 
         if ( ! $this->is_url_allowed( $this->url, $args ) ) {
             self::log([
@@ -570,7 +566,7 @@ abstract class UnusedCSS {
             ]);
         }
 
-    }
+    }*/
 
     public function cache($url = null, $args = []) {
 
@@ -594,23 +590,24 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $path = null;
+        $applicable_rule = false;
+        $rules_enabled = $this->rules_enabled();
 
-	    if(isset($args['rule'])){
+	    if(isset($args['rule']) && $rules_enabled){
 
-	        $path = $args['ignore_rule'] == '1' ? new UnusedCSS_Path([
-                'url' => $url
-            ]) : new UnusedCSS_Rule([
-                'rule' => $args['rule']
-            ]);
+            $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
-        }else{
-
-            $path = new UnusedCSS_Path([
-                'url' => $url
-            ]);
         }
 
+        $path = new UnusedCSS_Path([
+            'url' => $url,
+            'rule' => isset($args['rule']) ? $args['rule'] : null,
+            'status' => $applicable_rule ? 'rule-based' : 'queued'
+        ]);
+
+	    if($rules_enabled && $applicable_rule){
+            return true;
+        }
 
         if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
             self::log([
@@ -804,6 +801,7 @@ abstract class UnusedCSS {
 
 	    $args['url'] = $url;
 	    $rule = isset($args['rule']) ? $args['rule'] : false;
+	    $regex = isset($args['regex']) ? $args['regex'] : false;
 
 	    self::log( [
 	        'log' => 'cleared',
@@ -829,12 +827,12 @@ abstract class UnusedCSS {
 		    UnusedCSS_Settings::delete_link( $url );
 	    }
 
-        if($rule && UnusedCSS_DB::rule_exists_with_error( $rule )){
+        if($rule && UnusedCSS_DB::rule_exists_with_error( $rule , $regex)){
 
             UnusedCSS_DB::delete_rule($args);
         }
 
-	    if ( $url ) {
+	    if ( $url || $rule) {
 		    return false;
 	    }
 
@@ -842,10 +840,7 @@ abstract class UnusedCSS {
 
 	    // if soft sets the status to queued
 	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
-
-        if(isset($args['rule'])){
-            UnusedCSS_DB::clear_rules( isset( $args['soft'] ) , $args);
-        }
+	    UnusedCSS_DB::clear_rules( isset( $args['soft'] ) );
 
 
 	    do_action( 'uucss/cache_cleared', $args );

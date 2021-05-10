@@ -81,10 +81,37 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
             add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
             add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
+            add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
+    }
+
+    public function uucss_update_rule(){
+
+        if( !isset($_REQUEST['rule']) || empty($_REQUEST['rule']) ||
+            !isset($_REQUEST['url']) || empty($_REQUEST['url']) ||
+            !isset($_REQUEST['regex']) || empty($_REQUEST['regex'])
+        ){
+            wp_send_json_error('Required fields missing');
+        }
+
+        $rule = $_REQUEST['rule'];
+        $url = $_REQUEST['url'];
+        $regex = $_REQUEST['regex'];
+
+        if(UnusedCSS_DB::rule_exists_with_error($rule, $regex)){
+            wp_send_json_error('Rule already exist');
+        }
+
+        new UnusedCSS_Rule([
+            'rule' => $rule,
+            'url' => $url,
+            'regex' => $regex,
+        ]);
+
+        wp_send_json_success('Rule updated successfully');
     }
 
     public function attach_rule(){
@@ -907,7 +934,18 @@ abstract class UnusedCSS_Admin {
 
 	        if(isset($list) && is_array($list) && !empty($list)){
 	            foreach ($list as $item){
-                    $this->uucss->clear_cache( $item, $args );
+
+	                $url = is_array($item) && isset($item['url']) ? $item['url'] : $item;
+
+	                if(is_array($item) && isset($item['rule'])){
+	                    $args['rule'] = $item['rule'];
+                    }
+
+                    if(is_array($item) && isset($item['rule'])){
+                        $args['regex'] = $item['regex'];
+                    }
+
+                    $this->uucss->clear_cache( $url, $args );
                 }
             }else{
                 $this->uucss->clear_cache( $url, $args );

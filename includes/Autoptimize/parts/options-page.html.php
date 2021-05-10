@@ -683,13 +683,39 @@
 
 </form>
 
-<div id="add_rule_featherlight_content" class="main-content uucss-menu-fetherlight">
+<div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight">
     <div class="action-content">
-        Rules
+        <div>
+            <select id="model-uucss-rules">
+                <?php
+                $rules = UnusedCSS_Rule::get_rules();
+                if(isset($rules) && !empty($rules)){
+                    foreach ($rules as $rule){
+
+                        if(isset($rule['rule']) && !empty($rule['rule'])){
+                            echo sprintf('<option value="%s">%s</option>', $rule['rule'], $rule['rule']);
+                        }
+
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div>
+            <input type="text" class="rule-base-url"
+                   placeholder="<?php echo trailingslashit(get_site_url())?>" >
+        </div>
+        <div>
+            <input type="text" class="rule-url-regex"
+                   placeholder="/path/*" >
+        </div>
+        <div class="add-action-wrap">
+            <input id="model-update-rule" type="button" class="button button-primary" value="Update Rule">
+        </div>
     </div>
 </div>
 
-<div id="add_url_featherlight_content" class="main-content uucss-menu-fetherlight">
+<div id="add_url_featherlight_content" class="main-content uucss-update-form-fetherlight">
     <div class="action-content">
         <div>
             <select id="model-requeue-post-type">

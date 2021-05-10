@@ -13,7 +13,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         global $wpdb;
 
         self::$table = $wpdb->prefix . 'rapidload_uucss_job';
-        $this->type = 'Path';self::uucss_log($args);
+        $this->type = 'Path';
 
         $rule = isset($args['rule']) ? $args['rule'] : get_post_type( get_the_ID() );
         $url = isset($args['url']) ? $args['url'] : null;

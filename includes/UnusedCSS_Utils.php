@@ -359,7 +359,7 @@ trait UnusedCSS_Utils {
 
             foreach ( $files as $excluded_file ) {
 
-                if($this->str_contains( trim($excluded_file), '*' ) && $this->is_path_glob_matched($file, trim($excluded_file))){
+                if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
                     return true;
                 }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
                     return true;
@@ -371,7 +371,7 @@ trait UnusedCSS_Utils {
         return false;
     }
 
-    public function is_path_glob_matched($path, $pattern, $ignoreCase = FALSE) {
+    public static function is_path_glob_matched($path, $pattern, $ignoreCase = FALSE) {
 
         $expr = preg_replace_callback('/[\\\\^$.[\\]|()?*+{}\\-\\/]/', function($matches) {
             switch ($matches[0]) {

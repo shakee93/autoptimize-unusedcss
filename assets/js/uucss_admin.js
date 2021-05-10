@@ -1245,9 +1245,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule +'"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule + ' data-regex="'+ row.regex + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule +'"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule + ' data-regex="'+ row.regex + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -1269,10 +1269,10 @@
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
                         if(data.status === 'success'){
-                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-rule="'+ data.rule +'">GPSI Status</a></li>')
+                            $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">GPSI Status</a></li>')
                         }
 
-                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-rule="'+ data.rule +'">Remove</a></li>');
+                        $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
                     },
@@ -1316,10 +1316,11 @@
 
                             var action = $this.data('action_name');
                             var rule = $this.data('rule');
+                            var regex = $this.data('regex');
 
                             switch (action) {
                                 case 'remove':{
-                                    uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule })
+                                    uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1678,7 +1679,11 @@
                             var requeue_url_list = [];
                             if(table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    requeue_url_list.push(table_row_value.url)
+                                    requeue_url_list.push({
+                                        url : table_row_value.url,
+                                        rule : table_row_value.rule,
+                                        regex : table_row_value.regex
+                                    })
                                 });
                             }
                             requeue('current',requeue_url_list, 'rule');
@@ -1710,7 +1715,11 @@
                                 var url_list = [];
                                 if(rule_table.rows('.selected').data().length){
                                     $.each(rule_table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                        url_list.push(table_row_value.url)
+                                        url_list.push({
+                                            url : table_row_value.url,
+                                            rule : table_row_value.rule,
+                                            regex : table_row_value.regex
+                                        })
                                     });
                                 }
                                 if(url_list.length){
@@ -1955,6 +1964,42 @@
                 $model_content.hasClass('show-url') && $model_content.removeClass('show-url')
             }
         });
+
+        $('#model-update-rule').click(function(){
+            $model_content = $('.featherlight #add_rule_featherlight_content');
+
+            var $rule = $model_content.find('#model-uucss-rules')
+            var $url = $model_content.find('.rule-base-url')
+            var $regex = $model_content.find('.rule-url-regex')
+
+            if($rule.val() === "" || $url.val() === "" || $regex.val() === ""){
+                $.uucssAlert('Required fields missing', 'error');
+                return;
+            }
+
+            var $target = $(this);
+
+            $target.attr('disabled', true);
+            $target.val('Please wait....');
+
+            wp.ajax.post('uucss_update_rule',{
+                rule : $rule.val(),
+                url : $url.val(),
+                regex : $regex.val()
+            }).then(function (i) {
+                $.uucssAlert(i);
+                var currentFeather = $.featherlight.current();
+                if(currentFeather) currentFeather.close();
+                $target.attr('disabled', false);
+                $target.val('Update Rule');
+            }).fail(function (i) {
+                $.uucssAlert(i, 'error');
+                $target.attr('disabled', false);
+                $target.val('Update Rule');
+            }).done(function () {
+                rule_table.ajax.reload(null, false);
+            })
+        })
 
         $('#model-queue-posts-type').click(function () {
             $model_content = $('.featherlight #add_url_featherlight_content');

@@ -367,7 +367,7 @@ class UnusedCSS_Queue
 
         $rule = new UnusedCSS_Rule([
             'rule' => $uucss_rule->rule,
-            'url' => $uucss_rule->url
+            'regex' => $uucss_rule->regex
         ]);
 
         $this->log( [
@@ -461,7 +461,7 @@ class UnusedCSS_Queue
 
         $rule = new UnusedCSS_Rule([
             'rule' => $rule->rule,
-            'url' => $rule->url
+            'regex' => $rule->regex
         ]);
 
         $rule->status = 'waiting';

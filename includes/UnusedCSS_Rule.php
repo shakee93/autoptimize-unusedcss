@@ -6,6 +6,8 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
     use UnusedCSS_Utils;
 
+    public $regex;
+
     public function init($args){
 
         global $wpdb;
@@ -14,14 +16,16 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
+        $regex = isset($args['regex']) ? $args['regex'] : null;
 
-        $rule_current = $wpdb->get_results("SELECT * FROM ". self::$table ." rapidload_uucss_rule where rule = '" . $rule . "'", OBJECT);
+        $rule_current = $wpdb->get_results("SELECT * FROM ". self::$table ." rapidload_uucss_rule where rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
 
         if(isset($rule_current) && !empty($rule_current)){
 
             $this->id = $rule_current[0]->id;
             $this->url = $rule_current[0]->url;
             $this->rule = $rule_current[0]->rule;
+            $this->regex = $rule_current[0]->regex;
             $this->job_id = $rule_current[0]->job_id;
             $this->stats = $rule_current[0]->stats;
             $this->files = $rule_current[0]->files;
@@ -37,6 +41,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             $this->url = $url;
             $this->rule = $rule;
+            $this->regex = $regex;
             $this->status = isset($args['status']) ? $args['status'] : 'queued';
             $this->attempts = 0;
             $this->hits = 0;
@@ -82,6 +87,10 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             );
 
         }
+    }
+
+    public static function get_rules(){
+        return apply_filters('uucss/rules', []);
     }
 
     public static function get_related_rule(){

@@ -1234,7 +1234,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     margin: 0;
 }
 
-#add_url_featherlight_content .action-content #model-queue-posts-type{
+.uucss-update-form-fetherlight .action-content .add-action-wrap input{
     margin-top: 10px;
     background: #674399;
     font-size: 13px;
@@ -1244,28 +1244,28 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     border: none;
 }
 
-#add_url_featherlight_content .action-content input, #add_url_featherlight_content .action-content select{
+.uucss-update-form-fetherlight .action-content input, .uucss-update-form-fetherlight .action-content select{
     width: 100%;
 }
 
-#add_url_featherlight_content .action-content input{
+.uucss-update-form-fetherlight .action-content input{
     margin-top: 10px;
 }
 
-#add_url_featherlight_content .action-content input.site-map-url {
+.uucss-update-form-fetherlight .action-content input.site-map-url {
     display: none;
 }
 
-#add_url_featherlight_content .action-content input.site-map-url.show{
+.uucss-update-form-fetherlight .action-content input.site-map-url.show{
     display: inline-block;
 }
 
 #add_rule_featherlight_content,
-#add_url_featherlight_content{
+.uucss-update-form-fetherlight{
     display: none;
 }
 
-.featherlight .featherlight-content #add_url_featherlight_content,
+.featherlight .featherlight-content .uucss-update-form-fetherlight,
 .featherlight .featherlight-content #add_rule_featherlight_content{
     display: block;
 }
@@ -1275,6 +1275,10 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     width: 310px;
     height: 120px;
     padding: 25px 20px;
+}
+
+.featherlight.add-site-rule-model .featherlight-content{
+    height: 205px;
 }
 
 .featherlight.add-site-url-model.show-url .featherlight-content{
