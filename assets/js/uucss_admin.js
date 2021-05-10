@@ -1254,9 +1254,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule + ' data-regex="'+ row.regex + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule + '" data-regex="'+ row.regex + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule + ' data-regex="'+ row.regex + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule + '" data-regex="'+ row.regex + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
