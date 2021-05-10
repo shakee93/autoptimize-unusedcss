@@ -539,15 +539,23 @@
                         <div class="uucss-status-more-info" style="display: none">
                             <?php
                                 $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
-                                ?>
-                                <p>
-                                    <strong>Hits</strong> : <?php echo $hits; ?> - <?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?>%
-                                </p>
-                                <?php
                             ?>
+                            <p>
+                                <strong>Hits</strong> : <?php echo $hits; ?> - <?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?>%
+                            </p>
                             <p>
                                 <strong>Success</strong> : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
                             </p>
+                            <?php
+                                if ( $uucss->rules_enabled() ) :
+                                $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
+                            ?>
+                            <p>
+                                <strong>Rule Based</strong> : <?php echo $rule_based; ?> - <?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?>%
+                            </p>
+                            <?php
+                                endif;
+                            ?>
                             <p>
                                 <strong>Queued</strong> : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
                             </p>
