@@ -594,20 +594,35 @@ abstract class UnusedCSS {
         $applicable_rule = false;
         $rules_enabled = $this->rules_enabled();
 
+        $path = null;
+
 	    if(isset($args['rule']) && $rules_enabled){
 
             $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
         }
 
-        $path = new UnusedCSS_Path([
-            'url' => $url,
-            'rule' => isset($args['rule']) ? $args['rule'] : null,
-            'status' => $applicable_rule ? 'rule-based' : 'queued'
-        ]);
+	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
 
-	    if($rules_enabled && $applicable_rule){
-            return true;
+            new UnusedCSS_Path([
+                'url' => $url,
+                'rule' => $applicable_rule->rule,
+                'status' => 'rule-based'
+            ]);
+
+            $path = new UnusedCSS_Rule([
+                'rule' => $applicable_rule->rule,
+                'regex' => $applicable_rule->regex
+            ]);
+
+        }else{
+
+            $path = new UnusedCSS_Path([
+                'url' => $url,
+                'rule' => isset($args['rule']) ? $args['rule'] : null,
+                'status' => $applicable_rule ? 'rule-based' : 'queued'
+            ]);
+
         }
 
         if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
@@ -619,8 +634,22 @@ abstract class UnusedCSS {
             return false;
         }
 
-        $path->requeue();
-        $path->save();
+        if($path->is_type('path')){
+
+            $path->ignore_rule = 1;
+            $path->requeue();
+            $path->save();
+
+        }else{
+
+            if($path->status == 'failed'){
+
+                $path->requeue();
+                $path->save();
+
+            }
+
+        }
 
         $this->async = apply_filters('uucss/purge/async',true);
 
@@ -836,8 +865,6 @@ abstract class UnusedCSS {
 	    if ( $url || $rule) {
 		    return false;
 	    }
-
-	    self::uucss_log('here');
 
 	    $results = $this->file_system->delete( self::$base_dir, true );
 

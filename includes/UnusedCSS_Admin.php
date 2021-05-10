@@ -595,15 +595,26 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_test_url(){
 
+        global $uucss;
+
         if(!isset($_REQUEST['url'])){
             wp_send_json_error('url required');
         }
 
         $url = $_REQUEST['url'];
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+
+        if($type == 'rule'){
+
+            if(!isset($_REQUEST['rule']) || !isset($_REQUEST['regex'])){
+                wp_send_json_error('rule and regex required');
+            }
+
+        }
 
         $uucss_api = new UnusedCSS_Api();
 
-        $link = UnusedCSS_DB::get_link($url);
+        $link = $type == 'path' ? UnusedCSS_DB::get_link($url) : UnusedCSS_DB::get_rule($_REQUEST['rule'],$_REQUEST['regex']);
 
         $result = $this->get_gpsi_test_result($link);
 

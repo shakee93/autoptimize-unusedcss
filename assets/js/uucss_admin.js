@@ -777,7 +777,8 @@
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
 
-                        if(data.ignore_rule === '0' && window.uucss.rules_enabled !== ""){
+                        if(data.ignore_rule === "0" && window.uucss.rules_enabled !== ""){
+                            console.log(data.ignore_rule)
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
@@ -1281,6 +1282,10 @@
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">GPSI Status</a></li>')
                         }
 
+                        if($('#thirtd_part_cache_plugins').val() === "1"){
+                            $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" href="#">Clear Page Cache</a></li>');
+                        }
+
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -1356,6 +1361,9 @@
                                         url: wp.ajax.settings.url + '?action=uucss_test_url',
                                         data : {
                                             url: data.url,
+                                            type: 'rule',
+                                            rule : rule,
+                                            regex : regex
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
