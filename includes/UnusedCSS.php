@@ -836,11 +836,16 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
+	    self::uucss_log('here');
+
 	    $results = $this->file_system->delete( self::$base_dir, true );
 
 	    // if soft sets the status to queued
 	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
-	    UnusedCSS_DB::clear_rules( isset( $args['soft'] ) );
+
+        if(isset($_POST['type']) && $_POST['type'] == 'rule'){
+            UnusedCSS_DB::clear_rules( isset( $args['soft'] ));
+        }
 
 
 	    do_action( 'uucss/cache_cleared', $args );
