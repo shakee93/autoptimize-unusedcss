@@ -221,10 +221,19 @@
             });
         });*/
 
-        $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
-            $(this).parent().find('.content').slideToggle('fast');
-            $(this).find('.uucss-toggle-section').toggleClass('rotate')
-        });
+        if(window.uucss.rules_enabled !== ""){
+            $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
+                $(this).parent().find('.content').slideToggle('fast');
+                $(this).find('.uucss-toggle-section').toggleClass('rotate')
+            });
+        }else{
+            $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
+                $(this).parent().find('.content').slideToggle('fast');
+                $(this).find('.uucss-toggle-section').toggleClass('rotate')
+            });
+        }
+
+
 
         var table = $('#uucss-history')
         var rule_table = $('#uucss-rule-history')
