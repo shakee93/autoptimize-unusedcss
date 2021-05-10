@@ -83,18 +83,11 @@ abstract class UnusedCSS {
 
         $custom_posts = get_post_types();
 
-        foreach ($custom_posts as $key => $value){
-            if($value == 'page' || $value == 'post' || $value == 'product'){
-                continue;
-            }
-            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
-                $rules[] = [
-                    'name' => $value,
-                    'rule' => 'is_' . $value,
-                    'callback' => get_post_type( get_the_ID() ) == $value,
-                ];
-            }
-        }
+        $rules[] = [
+            'name' => 'front_page',
+            'rule' => 'is_front_page',
+            'callback' => is_front_page(),
+        ];
 
         $rules[] = [
             'name' => '404',
@@ -108,6 +101,20 @@ abstract class UnusedCSS {
             'callback' => is_archive(),
         ];
 
+        foreach ($custom_posts as $key => $value){
+            if($value == 'page' || $value == 'post' || $value == 'product'){
+                continue;
+            }
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'callback' => get_post_type( get_the_ID() ) == $value,
+                ];
+            }
+        }
+
+
         $rules[] = [
             'name' => 'author',
             'rule' => 'is_author',
@@ -118,12 +125,6 @@ abstract class UnusedCSS {
             'name' => 'category',
             'rule' => 'is_category',
             'callback' => is_category(),
-        ];
-
-        $rules[] = [
-            'name' => 'front_page',
-            'rule' => 'is_front_page',
-            'callback' => is_front_page(),
         ];
 
         $rules[] = [
@@ -151,7 +152,7 @@ abstract class UnusedCSS {
         ];
 
         $rules[] = [
-            'name' => 'search',
+            'name' => 'attachment',
             'rule' => 'is_attachment',
             'callback' => is_attachment(),
         ];
