@@ -1993,7 +1993,7 @@
                 return;
             }
 
-            if(!isUrl($rule.val())){
+            if(!isUrl($url.val())){
                 $.uucssAlert('Invalid Url', 'error');
                 return;
             }
