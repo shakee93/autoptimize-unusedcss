@@ -442,8 +442,7 @@ abstract class UnusedCSS {
 
     public function rules_enabled(){
         return
-            isset( $this->options['uucss_enable_rule_based'] ) &&
-            $this->options['uucss_enable_rule_based'] == "1" &&
+            UnusedCSS_DB::get_total_rule_count(' WHERE id > 0 ') > 0 &&
             UnusedCSS_DB::$current_version > 1.2 &&
             apply_filters('uucss/rules/enable', false);
     }
@@ -488,7 +487,7 @@ abstract class UnusedCSS {
                     'status' => isset($this->rule['rule']) ? 'rule-based' : 'queued'
                 ]);
 
-                if(isset($data->rule) && isset($data->ignore_rule) && $data->ignore_rule == '0') {
+                if(isset($data->rule) && isset($data->rule_id)) {
 
                     $applicable_rule = UnusedCSS_DB::get_applied_rule($data->rule, $data->url);
 
@@ -526,49 +525,6 @@ abstract class UnusedCSS {
 
 	}
 
-	/*public function cache_rule($related_rule = null, $args = []){
-
-        if ( ! $this->is_url_allowed( $this->url, $args ) ) {
-            self::log([
-                'log' => 'url not allowed to purge',
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
-            return false;
-        }
-
-        if(UnusedCSS_Settings::link_exists_with_error( $this->url )){
-
-            $path = new UnusedCSS_Path([
-                'url' => $this->url,
-            ]);
-
-            $path->ignore_rule = '1';
-            return false;
-        }
-
-        if($related_rule && isset($related_rule['rule'])){
-
-            new UnusedCSS_Rule([
-                'rule' => $related_rule['rule'],
-                'url' => $this->url
-            ]);
-        }
-
-        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
-            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
-                isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1"))
-        {
-            new UnusedCSS_Path([
-                'url' => $this->url,
-                'rule' => isset($related_rule['rule']) ? $related_rule['rule'] : null,
-                'status' => isset($related_rule['rule']) ? 'rule-based' : 'queued',
-            ]);
-        }
-
-    }*/
-
     public function cache($url = null, $args = []) {
 
 	    if ( ! $this->is_url_allowed( $url, $args ) ) {
@@ -604,15 +560,16 @@ abstract class UnusedCSS {
 
 	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
 
+	        $path = new UnusedCSS_Rule([
+                'rule' => $applicable_rule->rule,
+                'regex' => $applicable_rule->regex
+            ]);
+
             new UnusedCSS_Path([
                 'url' => $url,
                 'rule' => $applicable_rule->rule,
-                'status' => 'rule-based'
-            ]);
-
-            $path = new UnusedCSS_Rule([
-                'rule' => $applicable_rule->rule,
-                'regex' => $applicable_rule->regex
+                'status' => 'rule-based',
+                'rule_id' => $path->id
             ]);
 
         }else{
@@ -620,7 +577,7 @@ abstract class UnusedCSS {
             $path = new UnusedCSS_Path([
                 'url' => $url,
                 'rule' => isset($args['rule']) ? $args['rule'] : null,
-                'status' => $applicable_rule ? 'rule-based' : 'queued'
+                'status' => 'queued'
             ]);
 
         }
@@ -636,7 +593,7 @@ abstract class UnusedCSS {
 
         if($path->is_type('path')){
 
-            $path->ignore_rule = 1;
+            $path->rule_id = NULL;
             $path->requeue();
             $path->save();
 

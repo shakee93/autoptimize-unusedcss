@@ -411,7 +411,7 @@ class UnusedCSS_DB
             FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule != '" . $rule . "' AND regex != '" . $regex . "'
             UNION
             SELECT id,job_id,url,stats,files,warnings,review,error,attempts,status,created_at,rule,hits
-            FROM {$wpdb->prefix}rapidload_uucss_job WHERE ignore_rule = 1 AND rule != '" . $rule . "'
+            FROM {$wpdb->prefix}rapidload_uucss_job WHERE ignore_rule IS NULL AND rule != '" . $rule . "'
             ", OBJECT);
 
         $links = array_map(function ($link){
@@ -441,9 +441,9 @@ class UnusedCSS_DB
         $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
 
         if($rule == 'path'){
-            $data['ignore_rule'] = isset( $link->ignore_rule ) ? $link->ignore_rule : 0;
+            $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
 
-            if(isset($link->rule) && !empty($link->rule) && $data['ignore_rule'] == 0){
+            if(isset($link->rule) && !empty($link->rule) && $data['rule_id'] != null){
 
                 $appied_rule = self::get_applied_rule($link->rule, $link->url);
 
@@ -494,7 +494,7 @@ class UnusedCSS_DB
     static function get_first_link(){
 	    global $wpdb;
 
-	    $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job LIMIT 1", OBJECT );
+	    $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN('rule-based') LIMIT 1", OBJECT );
 
 	    $error = $wpdb->last_error;
 
@@ -601,7 +601,7 @@ class UnusedCSS_DB
 
         if(isset($args['rule']) && isset($args['regex'])){
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $args['rule'] . "' AND regex = '" . $args['regex'] . "'" );
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "' AND ignore_rule = 0" );
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "' AND rule_id IS NOT NULL" );
         }
 
         $error = $wpdb->last_error;
@@ -807,7 +807,7 @@ class UnusedCSS_DB
 
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE id > 0");
 
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule IS NOT NULL AND ignore_rule = 0" );
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule IS NOT NULL AND rule_id IS NOT NULL" );
 
             $error = $wpdb->last_error;
 
@@ -918,7 +918,7 @@ class UnusedCSS_DB
 		error longtext NULL,
 		attempts mediumint(2) NULL DEFAULT 0,
 		hits mediumint(3) NULL DEFAULT 0,
-		ignore_rule mediumint(1) NULL DEFAULT 1,
+		rule_id INT NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)

@@ -271,7 +271,7 @@ abstract class UnusedCSS_Admin {
 
         $job = UnusedCSS_Settings::get_first_link();
 
-        if ( $job && $job['status'] == 'success' && isset($job['ignore_rule']) && $job['ignore_rule'] == '1') : ?>
+        if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
                  class="updated notice uucss-notice notice-success is-dismissible">
                 <h4><span class="dashicons dashicons-yes-alt"></span> RapidLoad successfully ran your first job!</h4>

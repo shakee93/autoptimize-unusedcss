@@ -738,9 +738,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-ignore_rule="' + row.ignore_rule + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-ignore_rule="' + row.ignore_rule + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -777,7 +777,7 @@
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
 
-                        if(data.ignore_rule === "0" && window.uucss.rules_enabled !== ""){
+                        if(data.rule_id && window.uucss.rules_enabled !== ""){
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
@@ -977,9 +977,9 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
-                    var ignore_rule = $(this).data('ignore_rule');
+                    var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, ignore_rule : ignore_rule})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
 
                 });
 

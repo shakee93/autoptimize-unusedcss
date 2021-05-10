@@ -6,7 +6,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
     use UnusedCSS_Utils;
 
-    public $ignore_rule;
+    public $rule_id;
 
     public function init($args){
 
@@ -32,7 +32,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->error = $path_exist[0]->error;
             $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
             $this->hits = isset($path_exist[0]->hits) ? $path_exist[0]->hits : 0;
-            $this->ignore_rule = isset($path_exist[0]->ignore_rule) ? $path_exist[0]->ignore_rule : 0;
+            $this->rule_id = isset($path_exist[0]->rule_id) ? $path_exist[0]->rule_id : 0;
             $this->status = $path_exist[0]->status;
             $this->created_at = $path_exist[0]->created_at;
 
@@ -41,9 +41,9 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->url = $url;
             $this->rule = $rule;
             $this->status = isset($args['status']) ? $args['status'] : 'queued';
+            $this->rule_id = isset($args['rule_id']) ? $args['rule_id'] : null;
             $this->attempts = 0;
             $this->hits = 0;
-            $this->ignore_rule = 0;
             $this->created_at = date( "Y-m-d H:m:s", time() );
 
             $data = (array) $this;
@@ -51,7 +51,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             if(UnusedCSS_DB::$current_version < 1.2){
                 unset($data['rule']);
                 unset($data['hits']);
-                unset($data['ignore_rule']);
+                unset($data['rule_id']);
             }
 
             unset($data['type']);
@@ -86,7 +86,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             if(UnusedCSS_DB::$current_version < 1.2){
                 unset($data['rule']);
                 unset($data['hits']);
-                unset($data['ignore_rule']);
+                unset($data['rule_id']);
             }
 
             $wpdb->update(
@@ -100,10 +100,13 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         }
     }
 
-    public function attach_rule($rule = false ){
-        if(!$rule){
-            $this->ignore_rule = 1;
+    public function attach_rule($rule_id = false ){
+        if(!$rule_id){
+            $this->rule_id = NULL;
             $this->status = 'queued';
+        }else{
+            $this->rule_id = $rule_id;
+            $this->status = 'rule-based';
         }
     }
 }

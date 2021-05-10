@@ -52,7 +52,6 @@
                     </div>
                 </li>
 
-            <?php if ( $uucss->rules_enabled() ) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
@@ -73,7 +72,7 @@
                         <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
                     </div>
                 </li>
-            <?php endif; ?>
+
                 <li>
                     <h2>
                         Advanced Settings
@@ -453,21 +452,21 @@
 
                                 </td>
                             </tr>
-                            <?php if ( UnusedCSS_DB::$current_version > 1.2 ) : ?>
+                            <?php /*if ( UnusedCSS_DB::$current_version > 1.2 ) : */?><!--
                             <tr>
-                                <th scope="row"><?php _e( 'Enable Rule based injection', 'uucss' ); ?></th>
+                                <th scope="row"><?php /*_e( 'Enable Rule based injection', 'uucss' ); */?></th>
                                 <td>
                                     <label for="uucss_enable_rule_based"><input id='uucss_enable_rule_based' type='checkbox'
-                                                                                   name='autoptimize_uucss_settings[uucss_enable_rule_based]' <?php if ( ! empty( $options['uucss_enable_rule_based'] ) && '1' === $options['uucss_enable_rule_based'] ) {
+                                                                                   name='autoptimize_uucss_settings[uucss_enable_rule_based]' <?php /*if ( ! empty( $options['uucss_enable_rule_based'] ) && '1' === $options['uucss_enable_rule_based'] ) {
                                             echo 'checked="checked"';
-                                        } ?> value='1'>
+                                        } */?> value='1'>
                                         <i>
                                             Enable Rule based injection.
                                         </i>
                                     </label>
                                 </td>
                             </tr>
-                            <?php endif; ?>
+                            --><?php /*endif; */?>
                             <tr>
                                 <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>
