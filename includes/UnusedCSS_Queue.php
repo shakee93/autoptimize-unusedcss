@@ -313,7 +313,7 @@ class UnusedCSS_Queue
                         $path->attach_rule($applicable_rule->id, $applicable_rule->rule);
                         $path->save();
 
-                        do_action( 'uucss/cache_cleared', [
+                        do_action( 'uucss/cached', [
                             'url' => $link->url
                         ]);
 
