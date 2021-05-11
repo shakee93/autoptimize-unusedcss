@@ -287,16 +287,28 @@ class UnusedCSS_Queue
 
             foreach ($links as $link){
 
-                if($uucss->rules_enabled() && isset($link->rule)){
+                $rule = false;
 
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule($link->rule, $link->url);
+                if(isset($link->rule)){
+                    $rule = $link->rule;
+                }else{
+                    $post_id = url_to_postid($link->url);
+                    $rule = get_post_type($post_id);
+                    if($rule){
+                        $rule = 'is_' . $rule;
+                    }
+                }
+
+                if($uucss->rules_enabled() && $rule){
+
+                    $applicable_rule = UnusedCSS_DB::get_applied_rule($rule, $link->url);
 
                     if($applicable_rule){
 
                         $path = new UnusedCSS_Path([
                             'url' => $link->url
                         ]);
-                        $path->attach_rule($applicable_rule->id);
+                        $path->attach_rule($applicable_rule->id, $applicable_rule->rule);
                         $path->save();
                         continue;
 
