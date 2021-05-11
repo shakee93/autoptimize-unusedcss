@@ -700,7 +700,8 @@
                     foreach ($rules as $rule){
 
                         if(isset($rule['rule']) && !empty($rule['rule'])){
-                            echo sprintf('<option value="%s">%s</option>', $rule['rule'], $rule['rule']);
+                            $permalink = isset($rule['permalink']) ? $rule['permalink'] : trailingslashit(get_site_url());
+                            echo sprintf('<option data-type="%s" data-permalink="%s" value="%s">%s</option>', $rule['rule'], $permalink,$rule['rule'], $rule['rule']);
                         }
 
                     }
@@ -714,7 +715,7 @@
         </div>
         <div>
             <input type="text" class="rule-url-regex"
-                   placeholder="/path/*" >
+                   placeholder="*/slug/*" value="/">
         </div>
         <div class="add-action-wrap">
             <input id="model-update-rule" type="button" class="button button-primary" value="Update Rule">

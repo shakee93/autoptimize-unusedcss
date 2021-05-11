@@ -2124,6 +2124,17 @@
 
         showPublicNotices();
         showFaqs();
+
+        var $updateRuleForm = $('#add_rule_featherlight_content');
+
+        $updateRuleForm.find('select').change(function(){
+            var permalink = $updateRuleForm.find('option[data-type="'+ $(this).val() + '"]').data('permalink')
+            if(permalink){
+                $('#add_rule_featherlight_content input.rule-base-url').focus().val('').val(permalink);
+            }
+        })
+
+        $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
     });
 
 

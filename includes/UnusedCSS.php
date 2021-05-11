@@ -106,14 +106,14 @@ abstract class UnusedCSS {
                 continue;
             }
             if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
                 $rules[] = [
                     'name' => $value,
                     'rule' => 'is_' . $value,
-                    'callback' => get_post_type( get_the_ID() ) == $value,
+                    'callback' => get_post_type( get_the_ID() ) == $value
                 ];
             }
         }
-
 
         $rules[] = [
             'name' => 'author',

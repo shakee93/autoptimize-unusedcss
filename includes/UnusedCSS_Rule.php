@@ -90,12 +90,26 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
     }
 
     public static function get_rules(){
-        return apply_filters('uucss/rules', []);
+        $rules = apply_filters('uucss/rules', []);
+        $rules_with_permalink = [];
+        foreach ($rules as $rule){
+            if(!isset($rule['permalink']) && isset($rule['name'])){
+                $posts = get_posts([
+                    'posts_per_page' => 1,
+                    'post_type' => $rule['name']
+                ]);
+                $rule['permalink'] = !empty($posts) ? get_permalink($posts[0]->ID) : trailingslashit(get_site_url());
+            }else{
+                $rule['permalink'] = trailingslashit(get_site_url());
+            }
+            array_push($rules_with_permalink, $rule);
+        }
+        return $rules_with_permalink;
     }
 
     public static function get_related_rule(){
 
-        $rules = apply_filters('uucss/rules', []);
+        $rules = self::get_rules();
 
         $related_rule = false;
 
