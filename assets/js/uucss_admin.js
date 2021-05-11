@@ -221,17 +221,10 @@
             });
         });*/
 
-        if(window.uucss.rules_enabled === ""){
-            $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
-                $(this).parent().find('.content').slideToggle('fast');
-                $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });
-        }else{
-            $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
-                $(this).parent().find('.content').slideToggle('fast');
-                $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });
-        }
+        $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
+            $(this).parent().find('.content').slideToggle('fast');
+            $(this).find('.uucss-toggle-section').toggleClass('rotate')
+        });
 
 
 
@@ -777,7 +770,7 @@
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
 
-                        if(data.rule_id && window.uucss.rules_enabled !== ""){
+                        if(data.rule_id){
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
