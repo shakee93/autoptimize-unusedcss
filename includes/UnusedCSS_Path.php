@@ -104,16 +104,17 @@ class UnusedCSS_Path extends UnusedCSS_Job {
     }
 
     public function attach_rule($rule_id = false ){
+        $this->files = NULL;
+        $this->stats = NULL;
+        $this->warnings = NULL;
+        $this->error = NULL;
+        $this->hits = 0;
         if(!$rule_id){
             $this->rule_id = NULL;
             $this->status = 'queued';
         }else{
             $this->rule_id = $rule_id;
             $this->status = 'rule-based';
-            $this->files = NULL;
-            $this->stats = NULL;
-            $this->warnings = NULL;
-            $this->error = NULL;
         }
     }
 }
