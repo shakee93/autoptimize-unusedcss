@@ -51,7 +51,7 @@
                         <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
-
+                <?php if(UnusedCSS_DB::$current_version > 1.2) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
@@ -72,7 +72,7 @@
                         <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
                     </div>
                 </li>
-
+                <?php endif; ?>
                 <li>
                     <h2>
                         Advanced Settings

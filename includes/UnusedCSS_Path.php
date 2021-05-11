@@ -86,6 +86,9 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             if(UnusedCSS_DB::$current_version < 1.2){
                 unset($data['rule']);
                 unset($data['hits']);
+            }
+
+            if(UnusedCSS_DB::$current_version < 1.3){
                 unset($data['rule_id']);
             }
 
