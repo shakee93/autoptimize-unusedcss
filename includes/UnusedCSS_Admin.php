@@ -519,7 +519,7 @@ abstract class UnusedCSS_Admin {
             'faqs' => $this->get_faqs(),
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', false),
-            'rules_enabled' => $this->uucss->rules_enabled(),
+            'rules_enabled' => UnusedCSS_DB::$current_version > 1.2,
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
