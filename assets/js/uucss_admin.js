@@ -1771,7 +1771,9 @@
                                 url : '',
                                 clear : true,
                                 nonce: uucss.nonce,
-                                type : 'rule'
+                                args: {
+                                    type : 'rule'
+                                }
                             }
 
                             if(action === 'remove_selected'){

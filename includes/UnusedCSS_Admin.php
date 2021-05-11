@@ -983,7 +983,7 @@ abstract class UnusedCSS_Admin {
 	                    $args['rule'] = $item['rule'];
                     }
 
-                    if(is_array($item) && isset($item['rule'])){
+                    if(is_array($item) && isset($item['regex'])){
                         $args['regex'] = $item['regex'];
                     }
 

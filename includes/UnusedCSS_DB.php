@@ -408,11 +408,10 @@ class UnusedCSS_DB
 
         $links = $wpdb->get_results(
             "SELECT id,job_id,url,stats,files,warnings,review,error,attempts,status,created_at,rule,hits
-            FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule != '" . $rule . "' AND regex != '" . $regex . "'
+            FROM {$wpdb->prefix}rapidload_uucss_rule WHERE id NOT IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule  = '" . $rule . "' AND regex = '" . $regex . "')
             UNION
             SELECT id,job_id,url,stats,files,warnings,review,error,attempts,status,created_at,rule,hits
-            FROM {$wpdb->prefix}rapidload_uucss_job WHERE ignore_rule IS NULL AND rule != '" . $rule . "'
-            ", OBJECT);
+            FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule_id IS NULL OR rule_id NOT IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule  = '" . $rule . "' AND regex = '" . $regex . "')", OBJECT);
 
         $links = array_map(function ($link){
             return self::transform_link($link);
@@ -872,11 +871,11 @@ class UnusedCSS_DB
         UnusedCSS_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
     }
 
-    static function link_files_used_elsewhere( $link , $rule = false){
+    static function link_files_used_elsewhere( $link , $rule = false, $regex = false){
 
-        $links = !$rule ? self::get_links_exclude($link) : self::get_rules_exclude($rule);
+        $links = $rule && $regex ? self::get_rules_exclude($rule, $regex) : self::get_links_exclude($link);
 
-        $file = !$rule ? (array) self::get_link($link) : (array) self::get_rule($rule);
+        $file = $rule && $regex ? (array) self::get_rule($rule, $regex) : (array) self::get_link($link);
 
         $files = $file && isset($file['files']) ? $file['files'] : [];
 

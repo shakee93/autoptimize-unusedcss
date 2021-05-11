@@ -798,48 +798,67 @@ abstract class UnusedCSS {
             'type' => 'store'
         ] );
 
-	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) ) {
+	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) || $rule && $regex && UnusedCSS_DB::rule_exists_with_error($rule, $regex)) {
 
-		    if ( UnusedCSS_Settings::link_exists( $url ) ) {
-
-			    // get unused files
-			    $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
-
-			    // remove unused files from filesystem
-			    foreach ( $unused_files as $unused_file ) {
-				    $this->file_system->delete( self::$base_dir . '/' . $unused_file );
-			    }
-
-			    do_action( 'uucss/cache_cleared', $args );
-		    }
-
-		    UnusedCSS_Settings::delete_link( $url );
+		    $this->clear_files($url, $args, $rule, $regex);
 	    }
 
-        if($rule && UnusedCSS_DB::rule_exists_with_error( $rule , $regex)){
-
-            UnusedCSS_DB::delete_rule($args);
-        }
-
-	    if ( $url || $rule) {
+	    if ( $url || $rule && $regex) {
 		    return false;
 	    }
 
-	    $results = $this->file_system->delete( self::$base_dir, true );
+        $results = false;
 
-	    // if soft sets the status to queued
-	    UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+	    if(isset($args['type']) && $args['type'] == 'rule'){
 
-        if(isset($_POST['type']) && $_POST['type'] == 'rule'){
-            UnusedCSS_DB::clear_rules( isset( $args['soft'] ));
+            $rules = UnusedCSS_DB::get_rules_where(' WHERE id > 0');
+
+            foreach ($rules as $rule){
+
+                $this->clear_files($rule['url'], [ 'url' => $rule['url'] , 'soft' => isset( $args['soft']) ] , $rule['rule'], $rule['regex']);
+
+            }
+
+        }else{
+
+            $this->file_system->delete( self::$base_dir, true );
+
+            UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+            UnusedCSS_DB::update_rule_status();
+
+            do_action( 'uucss/cache_cleared', $args );
         }
 
-
-	    do_action( 'uucss/cache_cleared', $args );
-
-	    return ! is_wp_error( $results );
+	    return true;
     }
 
+    public function clear_files($url, $args, $rule = false, $regex = false ){
+
+        if ( UnusedCSS_Settings::link_exists( $url ) || UnusedCSS_DB::rule_exists($rule, $regex)) {
+
+            // get unused files
+            $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
+
+            // remove unused files from filesystem
+            foreach ( $unused_files as $unused_file ) {
+                $this->file_system->delete( self::$base_dir . '/' . $unused_file );
+            }
+
+            if($url){
+                UnusedCSS_Settings::delete_link($url);
+            }
+
+            if($rule && $regex){
+                UnusedCSS_DB::delete_rule([
+                    'rule' => $rule,
+                    'regex' => $regex
+                ]);
+            }
+
+            do_action( 'uucss/cache_cleared', $args );
+        }
+
+    }
 
     public function size() {
 
