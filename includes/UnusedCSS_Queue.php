@@ -293,9 +293,11 @@ class UnusedCSS_Queue
                     $rule = $link->rule;
                 }else{
                     $post_id = url_to_postid($link->url);
-                    $rule = get_post_type($post_id);
-                    if($rule){
-                        $rule = 'is_' . $rule;
+                    if($post_id){
+                        $rule = get_post_type($post_id);
+                        if($rule){
+                            $rule = 'is_' . $rule;
+                        }
                     }
                 }
 
