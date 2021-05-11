@@ -277,6 +277,8 @@ class UnusedCSS_Queue
 
     function fetch_job_id(){
 
+        global $uucss;
+
         $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
 
         $links = UnusedCSS_DB::get_links_by_status(["'queued'"], (self::$job_count - count($current_waiting)));
@@ -284,6 +286,15 @@ class UnusedCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
+
+                if($uucss->rules_enabled() && isset($links->rule) && boolval($applicable_rule = UnusedCSS_DB::get_applied_rule($link->rule, $link->url))){
+
+                    $path = new UnusedCSS_Path([
+                       'url' => $link->url
+                    ]);
+                    $path->attach_rule($applicable_rule->id);
+                    $path->save();
+                }
 
                 UnusedCSS_DB::update_meta([
                     'status' => 'waiting',

@@ -110,6 +110,10 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         }else{
             $this->rule_id = $rule_id;
             $this->status = 'rule-based';
+            $this->files = NULL;
+            $this->stats = NULL;
+            $this->warnings = NULL;
+            $this->error = NULL;
         }
     }
 }

@@ -91,15 +91,14 @@ abstract class UnusedCSS_Admin {
     public function uucss_update_rule(){
 
         if( !isset($_REQUEST['rule']) || empty($_REQUEST['rule']) ||
-            !isset($_REQUEST['url']) || empty($_REQUEST['url']) ||
-            !isset($_REQUEST['regex']) || empty($_REQUEST['regex'])
+            !isset($_REQUEST['url']) || empty($_REQUEST['url'])
         ){
             wp_send_json_error('Required fields missing');
         }
 
         $rule = $_REQUEST['rule'];
         $url = $_REQUEST['url'];
-        $regex = $_REQUEST['regex'];
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : '/';
 
         $url = $this->transform_url($url);
 
