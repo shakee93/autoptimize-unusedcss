@@ -1075,16 +1075,7 @@
                 },
                 {
                     "data": "applied_links",
-                    title: "Paths",
-                    width: '25px',
-                    className: 'dt-body-center dt-head-center',
-                    render: function (data, type, row, meta) {
-                        return '<span class="">'+ data +'</span>';
-                    },
-                },
-                {
-                    "data": "applied_successful_links",
-                    title: "Hits",
+                    title: "Jobs",
                     width: '25px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
