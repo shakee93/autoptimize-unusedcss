@@ -451,6 +451,8 @@ class UnusedCSS_DB
                     $link = $appied_rule;
                     $data['rule'] = $link->rule ? $link->rule : null;
                     $data['base'] = $link->url ? $link->url : null;
+                    $data['rule_status'] = $link->status ? $link->status : null;
+                    $data['rule_hits'] = $link->hits ? $link->hits : 0;
                 }
 
             }
@@ -459,7 +461,8 @@ class UnusedCSS_DB
         if($rule == 'rule'){
             $data['regex'] = isset( $link->regex ) ? $link->regex : '/';
             $data['applied_links'] = self::get_total_job_count(" WHERE rule_id = " . $link->id);
-            $data['applied_links'] = self::get_total_job_count(" WHERE hits > 0 AND rule_id = " . $link->id);
+            $data['applied_successful_links'] = $link->status == 'success' && $link->hits > 0 ?
+                self::get_total_job_count(" WHERE hits > 0 AND rule_id = " . $link->id) : 0;
         }
 
         $data['files'] = isset($link->files) ? unserialize($link->files) : null;
@@ -618,11 +621,19 @@ class UnusedCSS_DB
 
 		if(!$link){
 
-			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0");
+			if(UnusedCSS_DB::$current_version < 1.3){
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0");
+            }else{
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0 AND rule_id IS NULL");
+            }
 
 		}else{
 
-			$wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "'" );
+			if(UnusedCSS_DB::$current_version < 1.3){
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "'" );
+            }else{
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "' AND rule_id IS NULL" );
+            }
 
 		}
 
@@ -638,10 +649,16 @@ class UnusedCSS_DB
 
         if(!$rule){
 
+            if($status == 'queued'){
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE rule_id IS NOT NULL");
+            }
             $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = '". $status ."' , job_id = NULL WHERE id > 0");
 
         }else{
 
+            if($status == 'queued'){
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE rule_id IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND regex = '" . $regex . "')");
+            }
             $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = '". $status ."' , job_id = NULL WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'" );
 
         }
@@ -660,7 +677,7 @@ class UnusedCSS_DB
         if($list){
 
             $urls = implode("','", $list);
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', job_id = NULL WHERE url IN('{$urls}')");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE url IN('{$urls}')");
         }
 
         $error = $wpdb->last_error;
@@ -680,7 +697,8 @@ class UnusedCSS_DB
 
                 if(isset($item['rule']) && isset($item['regex'])){
 
-                    $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued', job_id = NULL WHERE rule ='". $item['rule'] ."' AND regex ='" . $item['regex'] ."'" );
+                    $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE rule_id IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule ='". $item['rule'] ."' AND regex ='" . $item['regex'] ."')");
+                    $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued', job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE rule ='". $item['rule'] ."' AND regex ='" . $item['regex'] ."'" );
                 }
             }
         }
@@ -698,11 +716,11 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE warnings IS NOT NULL");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE warnings IS NOT NULL");
 
         }else{
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE status ='{$status}'");
         }
 
         $error = $wpdb->last_error;
@@ -718,11 +736,13 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL WHERE warnings IS NOT NULL");
+            $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE rule_id IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE warnings IS NOT NULL)");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE warnings IS NOT NULL");
 
         }else{
 
-            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL WHERE status ='{$status}'");
+            $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE rule_id IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE status ='{$status}')");
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_rule SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE status ='{$status}'");
         }
 
         $error = $wpdb->last_error;

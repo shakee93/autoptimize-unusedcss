@@ -579,7 +579,7 @@
                     title: "File Size Reduction",
                     width: '145px',
                     render: function (data, type, row, meta) {
-                        if ((row.meta && row.meta.stats) && (row.status === 'success' || row.status === 'rule-based')) {
+                        if ((row.meta && row.meta.stats) && (row.status === 'success' || row.rule_status === 'success')) {
                             return row.meta.stats.reduction + '%'
                         }else if(row.status === 'queued' || row.status === 'processing' || row.status === 'waiting' || row.status === 'rule-based'){
                             return '<span class="job-file-size">-</span>';
@@ -617,7 +617,7 @@
 
                         if(Number(rowData.attempts) !== 0){
                             attemptsString = 'Attempts : ' + rowData.attempts
-                        }else if(Number(rowData.attempts) === 0 && rowData.success_count > 0){
+                        }else if(Number(rowData.attempts) === 0 && (rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
                             attemptsString = 'Hits : ' + rowData.success_count
                         }else if(Number(rowData.attempts) === 0 && rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count
@@ -718,11 +718,11 @@
                             return
                         }
 
-                        if ((rowData.status === 'success' || rowData.meta && rowData.meta.stats && rowData.status === 'rule-based') && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
-                            var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || rowData.success_count > 0 ? 'hits-success' : '';
+                        if ((rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
+                            var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || (rowData.status === 'success' && rowData.success_count > 0 || rowData.status === 'rule-based' && rowData.success_count > 0 && rowData.success_count > 0) ? 'hits-success' : '';
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
-                        } else if ((rowData.status === 'success' || rowData.status === 'rule-based') && rowData.meta.warnings.length) {
+                        } else if ((rowData.status === 'success' || rowData.rule_status === 'success') && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
@@ -1074,6 +1074,24 @@
                     }
                 },
                 {
+                    "data": "applied_links",
+                    title: "Paths",
+                    width: '25px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ data +'</span>';
+                    },
+                },
+                {
+                    "data": "applied_successful_links",
+                    title: "Hits",
+                    width: '25px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ data +'</span>';
+                    },
+                },
+                {
                     "data": "rule",
                     title: "Rule",
                     width: '100px',
@@ -1278,6 +1296,7 @@
                         var $content = $('<div class="uucss-option-list"><ul class="option-list"></ul></div>')
 
                         $content.find('ul').append('<li data-action_name="edit_rule"><a data-action_name="edit_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Edit</a></li>');
+                        $content.find('ul').append('<li data-action_name="duplicate_rule"><a data-action_name="duplicate_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Duplicate</a></li>');
 
                         if(data.status === 'success'){
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">GPSI Status</a></li>')
@@ -1335,6 +1354,17 @@
                             var url = $this.data('url');
 
                             switch (action) {
+                                case 'duplicate_rule':{
+                                    $.featherlight($('#add_rule_featherlight_content'),{
+                                        variant : 'add-site-rule-model',
+                                        afterOpen:function (){
+                                            this.$content.find('#model-uucss-rules').val(rule);
+                                            this.$content.find('input.rule-base-url').val(url);
+                                            this.$content.find('input.rule-url-regex').val(regex);
+                                        }
+                                    })
+                                    break;
+                                }
                                 case 'edit_rule':{
                                     $.featherlight($('#add_rule_featherlight_content'),{
                                         variant : 'add-site-rule-model',

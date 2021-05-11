@@ -132,6 +132,10 @@ abstract class UnusedCSS_Admin {
 
         }
 
+        if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['rule'], $_REQUEST['regex'])){
+            wp_send_json_error('Rule already exist');
+        }
+
         new UnusedCSS_Rule([
             'rule' => $rule,
             'url' => $url,
