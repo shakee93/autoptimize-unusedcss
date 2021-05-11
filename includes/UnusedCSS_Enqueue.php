@@ -14,10 +14,15 @@ class UnusedCSS_Enqueue {
     private $options;
     private $files;
     private $warnings;
+    private $link;
 
-    function __construct($data)
+    function __construct($data, $url = '')
     {
         $this->file_system = new UnusedCSS_FileSystem();
+
+        $this->link = new UnusedCSS_Path([
+            'url' => $url
+        ]);
 
         $this->data = $data;
         $this->files = $this->data->get_files();
@@ -122,6 +127,10 @@ class UnusedCSS_Enqueue {
 
             $this->dom->find( 'body' )[0]->uucss = true;
             $this->data->mark_as_successful_hit();
+            if($this->data->is_type('Rule')){
+
+                $this->link->mark_as_successful_hit();
+            }
 
         }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 2 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
@@ -130,10 +139,18 @@ class UnusedCSS_Enqueue {
         }else{
 
             $this->data->set_warnings($this->warnings);
+            if($this->data->is_type('Rule')){
+
+                $this->link->reset_success_hits();
+            }
 
         }
 
         $this->data->save();
+        if($this->data->is_type('Rule')){
+
+            $this->link->save();
+        }
         $this->log_action(json_encode($this->inject));
     }
 

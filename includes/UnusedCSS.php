@@ -514,7 +514,7 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new UnusedCSS_Enqueue($data);
+                    new UnusedCSS_Enqueue($data, $this->url);
 
                     $this->replace_css();
                 }

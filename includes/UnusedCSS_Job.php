@@ -60,7 +60,11 @@ abstract class UnusedCSS_Job
     public function requeue(){
         $this->status = 'queued';
         $this->attempts++;
+        $this->files = null;
         $this->hits = 0;
+        $this->stats = null;
+        $this->warnings = null;
+        $this->error = null;
         $this->created_at = date( "Y-m-d H:m:s", time() );
     }
 
@@ -100,6 +104,17 @@ abstract class UnusedCSS_Job
         if(isset($warnings) && count($warnings) > 0){
             $this->hits = 0;
             $this->warnings = serialize($warnings);
+        }
+    }
+
+    public function reset_success_hits(){
+        $this->hits = 0;
+        if(UnusedCSS_DB::$current_version < 1.2){
+            $stats = $this->get_stats();
+            if(isset($stats)){
+                $stats->success_count = 0;
+            }
+            $this->stats = isset($stats) ? serialize($stats) : null;
         }
     }
 }

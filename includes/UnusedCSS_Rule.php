@@ -12,6 +12,8 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         global $wpdb;
 
+        $this->type = 'Rule';
+
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
         $regex = isset($args['regex']) ? $args['regex'] : null;

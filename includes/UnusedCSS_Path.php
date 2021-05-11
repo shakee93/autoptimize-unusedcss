@@ -32,7 +32,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->error = $path_exist[0]->error;
             $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
             $this->hits = isset($path_exist[0]->hits) ? $path_exist[0]->hits : 0;
-            $this->rule_id = isset($path_exist[0]->rule_id) ? $path_exist[0]->rule_id : 0;
+            $this->rule_id = isset($path_exist[0]->rule_id) ? $path_exist[0]->rule_id : null;
             $this->status = $path_exist[0]->status;
             $this->created_at = $path_exist[0]->created_at;
 

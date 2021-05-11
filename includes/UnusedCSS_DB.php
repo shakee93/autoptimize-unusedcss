@@ -458,6 +458,8 @@ class UnusedCSS_DB
 
         if($rule == 'rule'){
             $data['regex'] = isset( $link->regex ) ? $link->regex : '/';
+            $data['applied_links'] = self::get_total_job_count(" WHERE rule_id = " . $link->id);
+            $data['applied_links'] = self::get_total_job_count(" WHERE hits > 0 AND rule_id = " . $link->id);
         }
 
         $data['files'] = isset($link->files) ? unserialize($link->files) : null;
@@ -779,7 +781,11 @@ class UnusedCSS_DB
     static function clear_links(){
         global $wpdb;
 
-	    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
+        if(UnusedCSS_DB::$current_version < 1.3){
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
+        }else{
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0 AND rule_id IS NULL");
+        }
 
 	    $error = $wpdb->last_error;
 
