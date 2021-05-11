@@ -401,7 +401,7 @@ abstract class UnusedCSS {
 	       'url' => $url
         ]);
 
-        if($path->status == 'failed' && $path->attempts >= 3 && !isset($args['immediate'])){
+        if($path->status == 'failed' && $path->attempts >= 1 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
                 'url' => $url,
