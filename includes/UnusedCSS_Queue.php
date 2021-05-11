@@ -294,6 +294,7 @@ class UnusedCSS_Queue
                     ]);
                     $path->attach_rule($applicable_rule->id);
                     $path->save();
+                    continue;
                 }
 
                 UnusedCSS_DB::update_meta([
