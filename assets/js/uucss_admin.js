@@ -1727,7 +1727,7 @@
                         case 'requeue_selected':
                         case 'requeue_all':{
                             var requeue_url_list = [];
-                            if(table.rows('.selected').data().length){
+                            if(rule_table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
                                     requeue_url_list.push({
                                         url : table_row_value.url,

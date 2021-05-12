@@ -955,7 +955,6 @@ abstract class UnusedCSS_Admin {
 
 		    return;
 	    }
-	    self::uucss_log($_POST);
 
 	    $args = isset($_POST['args']) ? $_POST['args'] : [];
 
