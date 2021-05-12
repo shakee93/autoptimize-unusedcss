@@ -470,6 +470,14 @@
             if(Number(page_length_rule) !== 10){
                 $('#uucss-rule-history_length select').val(page_length_rule)
             }
+
+            $('#uucss-rule-history thead tr th.applied-links').click(function (){
+                rule_table.columns([3]).visible(true);
+            })
+
+            $('#uucss-rule-history thead tr th.hits-count').click(function (){
+                rule_table.columns([3]).visible(false);
+            })
         });
 
         var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
@@ -1077,7 +1085,17 @@
                     "data": "applied_links",
                     title: "Jobs",
                     width: '25px',
-                    className: 'dt-body-center dt-head-center',
+                    className: 'dt-body-center dt-head-center applied-links hits-hidden',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ data +'</span>';
+                    },
+                },
+                {
+                    "data": "applied_successful_links",
+                    title: "Hits",
+                    width: '25px',
+                    visible : false,
+                    className: 'dt-body-center dt-head-center hits-count',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ data +'</span>';
                     },
