@@ -372,11 +372,19 @@ abstract class UnusedCSS {
         $this->store->purge_css();
     }
 
+    public function is_valid_url($url){
+        return filter_var($url, FILTER_VALIDATE_URL);
+    }
+
     public function is_url_allowed($url = null, $args = null)
     {
 
         if ( ! $url ) {
             $url = $this->url;
+        }
+
+        if(!$this->is_valid_url($url)){
+            return false;
         }
 
 	    // remove .css .js files from being analyzed
