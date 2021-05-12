@@ -604,8 +604,8 @@ class UnusedCSS_DB
         global $wpdb;
 
         if(isset($args['rule']) && isset($args['regex'])){
+            $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' WHERE rule_id IN(SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $args['rule'] . "' AND regex = '" . $args['regex'] . "')" );
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $args['rule'] . "' AND regex = '" . $args['regex'] . "'" );
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE rule = '" . $args['rule'] . "' AND rule_id IS NOT NULL" );
         }
 
         $error = $wpdb->last_error;
