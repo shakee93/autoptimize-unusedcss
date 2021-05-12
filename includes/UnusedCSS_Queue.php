@@ -157,6 +157,10 @@ class UnusedCSS_Queue
 
             $url = $uucss->transform_url($url);
 
+            if(!$uucss->is_valid_url($url)){
+                wp_send_json_error('url is not valid');
+            }
+
             if($url && !$uucss->is_url_allowed($url)){
                 wp_send_json_error('url is excluded');
             }
