@@ -955,6 +955,7 @@ abstract class UnusedCSS_Admin {
 
 		    return;
 	    }
+	    self::uucss_log($_POST);
 
 	    $args = isset($_POST['args']) ? $_POST['args'] : [];
 
@@ -969,6 +970,14 @@ abstract class UnusedCSS_Admin {
 	    }
 
 	    $url = esc_url_raw( $_POST['url'] );
+
+	    if(isset($args['rule_id'])){
+            $rule = UnusedCSS_Rule::get_rule_from_id($args['rule_id']);
+            if($rule){
+                $url = $rule->url;
+                $args['rule'] = $rule->rule;
+            }
+        }
 
 	    if ( isset( $_POST['clear'] ) && boolval($_POST['clear'] == 'true') ) {
 	        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;

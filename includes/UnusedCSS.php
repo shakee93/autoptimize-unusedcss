@@ -844,19 +844,20 @@ abstract class UnusedCSS {
                 $this->file_system->delete( self::$base_dir . '/' . $unused_file );
             }
 
-            if($url){
-                UnusedCSS_Settings::delete_link($url);
-            }
-
-            if($rule && $regex){
-                UnusedCSS_DB::delete_rule([
-                    'rule' => $rule,
-                    'regex' => $regex
-                ]);
-            }
-
-            do_action( 'uucss/cache_cleared', $args );
         }
+
+        if($url){
+            UnusedCSS_Settings::delete_link($url);
+        }
+
+        if($rule && $regex){
+            UnusedCSS_DB::delete_rule([
+                'rule' => $rule,
+                'regex' => $regex
+            ]);
+        }
+
+        do_action( 'uucss/cache_cleared', $args );
 
     }
 

@@ -124,4 +124,24 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         return $related_rule;
     }
+
+    public static function get_rule_from_id($rule_id){
+
+        if(!$rule_id){
+            return false;
+        }
+
+        global $wpdb;
+
+        $rule_current = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule where id = " . $rule_id, OBJECT);
+
+        if(isset($rule_current) && !empty($rule_current)){
+            return new UnusedCSS_Rule([
+               'rule' => $rule_current[0]->rule,
+               'regex' => $rule_current[0]->regex,
+            ]);
+        }
+
+        return false;
+    }
 }

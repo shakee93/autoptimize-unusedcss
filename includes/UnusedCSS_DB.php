@@ -803,7 +803,8 @@ class UnusedCSS_DB
         if(UnusedCSS_DB::$current_version < 1.3){
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
         }else{
-            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0 AND rule_id IS NULL");
+            $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
+            //$wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0 AND rule_id IS NULL");
         }
 
 	    $error = $wpdb->last_error;
