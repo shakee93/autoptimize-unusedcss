@@ -774,11 +774,11 @@ abstract class UnusedCSS_Admin {
 
             if($type == 'path'){
 
-                $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+                $links = UnusedCSS_DB::get_links_where(' ');
 
             }else{
 
-                $links = UnusedCSS_DB::get_rules_where(' WHERE warnings IS NOT NULL ');
+                $links = UnusedCSS_DB::get_rules_where(' ');
 
             }
 
