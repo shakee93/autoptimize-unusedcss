@@ -1889,9 +1889,12 @@
         }
 
         function refreshTable(){
-            var $queuedJobs = $('#uucss-history tr td span.status.refresh');
 
-            if(!auto_refresh || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-job-history').hasClass('multi-select')){
+            if(!auto_refresh ||
+                $('.tippy-content').length ||
+                $('#uucss-wrapper .uucss-job-history select:focus').length ||
+                $('html.with-featherlight').length ||
+                $('#uucss-wrapper li.uucss-job-history').hasClass('multi-select')){
                 return;
             }
 
@@ -1900,9 +1903,12 @@
         }
 
         function refreshRulesTable(){
-            var $queuedJobs = $('#uucss-rule-history tr td span.status.refresh');
 
-            if(!auto_refresh_rule || $('.tippy-content').length || $('html.with-featherlight').length || $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
+            if(!auto_refresh_rule ||
+                $('.tippy-content').length ||
+                $('#uucss-wrapper .uucss-rule-history select:focus').length ||
+                $('html.with-featherlight').length ||
+                $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
                 return;
             }
 
