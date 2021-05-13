@@ -6,7 +6,7 @@ class UnusedCSS_DB
 {
     use UnusedCSS_Utils;
 
-    static $db_version = "1.3";
+    static $db_version = "1.2";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -56,9 +56,6 @@ class UnusedCSS_DB
             add_action( "wp_ajax_rapidload_db_update", 'UnusedCSS_DB::update_db' );
         }
 
-        add_filter('uucss/rules/enable', function ($arg){
-            return self::$current_version > 1.2;
-        },90,1);
     }
 
 
@@ -289,7 +286,7 @@ class UnusedCSS_DB
 
     static function get_total_rule_count($where = ''){
 
-        if(self::$current_version < 1.3){
+        if(self::$current_version < 1.2){
             return 0;
         }
 
@@ -326,7 +323,7 @@ class UnusedCSS_DB
 
     static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
 
-        if(self::$current_version < 1.3){
+        if(self::$current_version < 1.2){
             return [];
         }
 
@@ -529,7 +526,7 @@ class UnusedCSS_DB
 
     static function rule_exists($rule, $regex = '/'){
 
-        if(self::$current_version < 1.3){
+        if(self::$current_version < 1.2){
             return false;
         }
 
@@ -620,7 +617,7 @@ class UnusedCSS_DB
 
 		if(!$link){
 
-			if(UnusedCSS_DB::$current_version < 1.3){
+			if(UnusedCSS_DB::$current_version < 1.2){
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0");
             }else{
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0 AND rule_id IS NULL");
@@ -628,7 +625,7 @@ class UnusedCSS_DB
 
 		}else{
 
-			if(UnusedCSS_DB::$current_version < 1.3){
+			if(UnusedCSS_DB::$current_version < 1.2){
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "'" );
             }else{
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE url = '" . $link . "' AND rule_id IS NULL" );
@@ -677,7 +674,7 @@ class UnusedCSS_DB
 
             $urls = implode("','", $list);
 
-            if(UnusedCSS_DB::$current_version < 1.3){
+            if(UnusedCSS_DB::$current_version < 1.2){
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE url IN('{$urls}')");
             }else{
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued', job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE rule_id IS NULL AND url IN('{$urls}')");
@@ -721,7 +718,7 @@ class UnusedCSS_DB
 
         if($status == 'warnings'){
 
-            if(UnusedCSS_DB::$current_version < 1.3){
+            if(UnusedCSS_DB::$current_version < 1.2){
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE warnings IS NOT NULL");
             }else{
                 $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = 'queued' , job_id = NULL, files = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE warnings IS NOT NULL AND rule_id IS NULL");
@@ -810,7 +807,7 @@ class UnusedCSS_DB
     static function clear_links(){
         global $wpdb;
 
-        if(UnusedCSS_DB::$current_version < 1.3){
+        if(UnusedCSS_DB::$current_version < 1.2){
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
         }else{
             $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id > 0");
@@ -1003,7 +1000,7 @@ class UnusedCSS_DB
 
     public static function get_rules_by_status($status = ['queued'], $limit = 1, $order_by = 'id DESC'){
 
-        if(self::$current_version < 1.3){
+        if(self::$current_version < 1.2){
             return [];
         }
 

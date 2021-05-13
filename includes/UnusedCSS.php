@@ -451,8 +451,8 @@ abstract class UnusedCSS {
     public function rules_enabled(){
         return
             UnusedCSS_DB::get_total_rule_count(' WHERE id > 0 ') > 0 &&
-            UnusedCSS_DB::$current_version > 1.2 &&
-            apply_filters('uucss/rules/enable', false);
+            UnusedCSS_DB::$current_version > 1.1 &&
+            apply_filters('uucss/rules/enable', true);
     }
 
 	public function purge_css() {

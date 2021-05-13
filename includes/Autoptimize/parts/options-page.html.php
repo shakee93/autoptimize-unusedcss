@@ -51,7 +51,7 @@
                         <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
-                <?php if(UnusedCSS_DB::$current_version > 1.2) : ?>
+                <?php if(UnusedCSS_DB::$current_version > 1.1) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
@@ -452,7 +452,7 @@
 
                                 </td>
                             </tr>
-                            <?php /*if ( UnusedCSS_DB::$current_version > 1.2 ) : */?><!--
+                            <?php /*if ( UnusedCSS_DB::$current_version > 1.1 ) : */?><!--
                             <tr>
                                 <th scope="row"><?php /*_e( 'Enable Rule based injection', 'uucss' ); */?></th>
                                 <td>
