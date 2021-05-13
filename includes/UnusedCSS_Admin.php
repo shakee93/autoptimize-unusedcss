@@ -770,7 +770,7 @@ abstract class UnusedCSS_Admin {
 
         $links = false;
 
-        if($status && $status == 'warnings'){
+        if($status){
 
             if($type == 'path'){
 
