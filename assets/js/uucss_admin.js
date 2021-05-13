@@ -1087,7 +1087,8 @@
                     width: '25px',
                     className: 'dt-body-center dt-head-center applied-links hits-hidden',
                     render: function (data, type, row, meta) {
-                        return '<span class="">'+ data +'</span>';
+                        var font_style = row.applied_links === row.applied_successful_links ? 'style="font-weight:500"' : '';
+                        return '<span class="" '+ font_style +'>'+ data +'</span>';
                     },
                 },
                 {
