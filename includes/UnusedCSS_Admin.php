@@ -671,9 +671,9 @@ abstract class UnusedCSS_Admin {
 
         $links = false;
 
-        if($status && $status == 'warnings'){
+        if($status){
 
-            $links = UnusedCSS_DB::get_links_where(' WHERE warnings IS NOT NULL ');
+            $links = UnusedCSS_DB::get_links_where(' ');
 
         }
 
