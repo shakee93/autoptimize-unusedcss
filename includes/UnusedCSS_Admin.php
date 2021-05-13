@@ -506,8 +506,6 @@ abstract class UnusedCSS_Admin {
 
     public function get_gpsi_test_result($link){
 
-        error_log('i am running');
-
         $uucss_api = new UnusedCSS_Api();
 
         $cached_files = [];
@@ -673,7 +671,7 @@ abstract class UnusedCSS_Admin {
 
         if($status){
 
-            $links = UnusedCSS_DB::get_links_where(' ');
+            $links = UnusedCSS_DB::get_links_where('');
 
         }
 
