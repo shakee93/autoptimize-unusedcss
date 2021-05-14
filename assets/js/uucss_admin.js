@@ -1894,6 +1894,7 @@
             if(!auto_refresh ||
                 $('.tippy-content').length ||
                 $('#uucss-wrapper .uucss-job-history select:focus').length ||
+                $('#uucss-wrapper .uucss-job-history .uucss-url-search-wrap input[type="search"]:focus').length ||
                 $('html.with-featherlight').length ||
                 $('#uucss-wrapper li.uucss-job-history').hasClass('multi-select')){
                 return;
@@ -1908,6 +1909,7 @@
             if(!auto_refresh_rule ||
                 $('.tippy-content').length ||
                 $('#uucss-wrapper .uucss-rule-history select:focus').length ||
+                $('#uucss-wrapper .uucss-job-history .uucss-url-search-wrap input[type="search"]:focus').length ||
                 $('html.with-featherlight').length ||
                 $('#uucss-wrapper li.uucss-rule-history').hasClass('multi-select')){
                 return;
