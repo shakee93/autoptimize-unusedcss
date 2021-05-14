@@ -331,7 +331,7 @@
             $exact_search.on('change',function () {
                 exact_search_val = $(this).prop('checked');
             });
-
+            console.log(url_filter);
             if(url_filter !== ''){
                 $input.focus().val('').val(url_filter);
             }
