@@ -333,7 +333,6 @@
             });
 
             if(url_filter !== ''){
-                console.log(url_filter + ' table');
                 $input.focus().val('').val(url_filter);
             }
 
@@ -440,7 +439,6 @@
             });
 
             if(url_filter_rule !== ''){
-                console.log(url_filter_rule + ' rule_table');
                 $input.focus().val('').val(url_filter_rule);
             }
 
