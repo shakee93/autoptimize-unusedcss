@@ -403,14 +403,16 @@ class UnusedCSS_Queue
 
     function update_rule_result($uucss_rule){
 
-        if(!$uucss_rule->job_id){
-            return;
-        }
-
         $rule = new UnusedCSS_Rule([
             'rule' => $uucss_rule->rule,
             'regex' => $uucss_rule->regex
         ]);
+
+        if(!$rule->job_id){
+            $rule->requeue();
+            $rule->save();
+            return;
+        }
 
         $this->log( [
             'log' => 'fetching data for job ' . $rule->job_id,
@@ -548,6 +550,9 @@ class UnusedCSS_Queue
     public function update_result($url, $job_id){
 
         if(!$job_id){
+            UnusedCSS_DB::requeue_urls([
+                $url
+            ]);
             return;
         }
 
