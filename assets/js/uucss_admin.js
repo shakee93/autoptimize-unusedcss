@@ -868,6 +868,7 @@
                 $content.find('ul').append('<li class="simple-menu" data-action_name="requeue_failed"><a data-action_name="requeue_failed" href="#">Requeue Failed</a></li>');
                 $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
+                $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
 
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
@@ -967,6 +968,18 @@
 
                             });
                             break;
+                        }
+                        case 'select_all':{
+                            var $container = $('#uucss-wrapper li.uucss-history');
+                            if($container.hasClass('multi-select')){
+                                $container.removeClass('multi-select');
+                            }
+                            if($container.find('table tbody tr').hasClass('selected')){
+                                $container.find('table tbody tr').removeClass('selected')
+                            }
+                            $container.find('table tbody tr').addClass('selected')
+                            $container.addClass('multi-select');
+                            $container.find('.multiple-selected-text .multiple-selected-value').text('(' + $container.find('table tbody tr.selected').length + ') URLs');
                         }
                         default:{
                             break;

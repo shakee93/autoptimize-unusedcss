@@ -148,6 +148,11 @@ light
     display: none;
 }
 
+#uucss-wrapper li.uucss-history.multi-select li.select-all[data-action_name="select_all"]{
+    display: none;
+}
+
+
 .uucss-add-site-urls{
     cursor: pointer;
     position: absolute;
