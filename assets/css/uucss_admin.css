@@ -148,6 +148,10 @@ li.uucss-history .dataTables_wrapper .dataTables_info input[type="search"],
     display: none;
 }
 
+#uucss-wrapper li.uucss-history.multi-select li.select-all[data-action_name="select_all"]{
+    display: none;
+}
+
 .uucss-add-menu{
     cursor: pointer;
     position: absolute;
