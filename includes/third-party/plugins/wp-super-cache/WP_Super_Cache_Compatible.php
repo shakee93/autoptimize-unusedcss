@@ -17,6 +17,7 @@ class WP_Super_Cache_Compatible extends RapidLoad_ThirdParty {
 
         add_action( 'uucss/cached', [$this, 'handle'], 10, 2 );
         add_action( 'uucss/cache_cleared', [$this, 'handle'], 10, 2 );
+        add_filter('wpsc_protected_directories', [$this, 'add_css_files_to_protected_directories']);
 
     }
 
@@ -48,5 +49,23 @@ class WP_Super_Cache_Compatible extends RapidLoad_ThirdParty {
     public function is_mu_plugin()
     {
         return false;
+    }
+
+    public function add_css_files_to_protected_directories(){
+
+        $path = UnusedCSS::$base_dir;
+
+        if ($handle = opendir($path)) {
+            while (false !== ($file = readdir($handle))) {
+                if ('.' === $file) continue;
+                if ('..' === $file) continue;
+
+                $args[] = UnusedCSS::$base_dir . '/' . $file;
+            }
+            closedir($handle);
+        }
+
+        return $args;
+
     }
 }
