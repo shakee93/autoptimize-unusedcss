@@ -132,7 +132,11 @@ class UnusedCSS_Enqueue {
                 $this->link->mark_as_successful_hit();
             }
 
-        }else if(!$this->inject->successfully_injected && ($this->data->attempts <= 1 || ($time_diff > 86400)) && apply_filters('uucss/enqueue/re-queue-on-fail', true)){
+        }else if(
+            !isset($this->options['uucss_disable_add_to_re_queue']) &&
+            !$this->inject->successfully_injected &&
+            ($this->data->attempts <= 2 || ($time_diff > 86400)) &&
+            apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
             $this->data->requeue();
 
