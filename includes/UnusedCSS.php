@@ -599,6 +599,11 @@ abstract class UnusedCSS {
 
             $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
+            if(!$applicable_rule){
+
+                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
+
+            }
         }
 
 	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){

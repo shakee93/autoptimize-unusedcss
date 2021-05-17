@@ -309,6 +309,12 @@ class UnusedCSS_Queue
 
                     $applicable_rule = UnusedCSS_DB::get_applied_rule($rule, $link->url);
 
+                    if(!$applicable_rule){
+
+                        $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $link->url);
+
+                    }
+
                     if($applicable_rule){
 
                         $path = new UnusedCSS_Path([
