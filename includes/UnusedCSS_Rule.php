@@ -96,9 +96,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
                 'rule' => 'is_path',
                 'category' => 'Path Based',
                 'priority' => 20,
-                'callback' => function($url, $regex){
-                    return self::is_path_glob_matched($url,$regex);
-                }
+                'callback' => false
             ]
         ]);
         $rules_with_permalink = [];
