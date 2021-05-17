@@ -443,6 +443,19 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php _e( 'Disable Re-Queue', 'uucss' ); ?></th>
+                                <td>
+                                    <label for="uucss_disable_add_to_re_queue"><input id='uucss_disable_add_to_re_queue' type='checkbox'
+                                                                                   name='autoptimize_uucss_settings[uucss_disable_add_to_re_queue]' <?php if ( ! empty( $options['uucss_disable_add_to_re_queue'] ) && '1' === $options['uucss_disable_add_to_re_queue'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Disable jobs re-queuing on warnings.
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Debug Mode', 'uucss' ); ?></th>
                                 <td>
                                     <label for="uucss_enable_debug"><input id='uucss_enable_debug' type='checkbox'

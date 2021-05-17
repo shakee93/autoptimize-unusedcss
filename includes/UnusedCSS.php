@@ -393,7 +393,7 @@ abstract class UnusedCSS {
 
         $exist_link = UnusedCSS_DB::get_link($url);
 
-        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] >= 3 && !isset($args['immediate'])){
+        if($exist_link && $exist_link['status'] == 'failed' && $exist_link['attempts'] > 2 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
                 'url' => $url,
