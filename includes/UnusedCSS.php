@@ -81,23 +81,36 @@ abstract class UnusedCSS {
 
     function uucss_rule_types($rules){
 
-        $custom_posts = get_post_types();
+        $custom_posts = get_post_types(
+            array(
+                'public'   => true,
+                '_builtin' => false,
+            ),
+            'names',
+            'and'
+        );
 
         $rules[] = [
             'name' => 'front_page',
             'rule' => 'is_front_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_front_page(),
         ];
 
         $rules[] = [
             'name' => '404',
             'rule' => 'is_404',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_404(),
         ];
 
         $rules[] = [
             'name' => 'archive',
             'rule' => 'is_archive',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_archive(),
         ];
 
@@ -110,6 +123,8 @@ abstract class UnusedCSS {
                 $rules[] = [
                     'name' => $value,
                     'rule' => 'is_' . $value,
+                    'category' => 'Custom Post Types',
+                    'priority' => 10,
                     'callback' => get_post_type( get_the_ID() ) == $value
                 ];
             }
@@ -118,60 +133,80 @@ abstract class UnusedCSS {
         $rules[] = [
             'name' => 'author',
             'rule' => 'is_author',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_author(),
         ];
 
         $rules[] = [
             'name' => 'category',
             'rule' => 'is_category',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_category(),
         ];
 
         $rules[] = [
             'name' => 'home',
             'rule' => 'is_home',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_home(),
         ];
 
         $rules[] = [
             'name' => 'page',
             'rule' => 'is_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_page(),
         ];
 
         $rules[] = [
             'name' => 'post',
             'rule' => 'is_post',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_singular(),
         ];
 
         $rules[] = [
             'name' => 'search',
             'rule' => 'is_search',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_search(),
         ];
 
         $rules[] = [
             'name' => 'attachment',
             'rule' => 'is_attachment',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_attachment(),
         ];
 
         $rules[] = [
             'name' => 'single',
             'rule' => 'is_single',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_single(),
         ];
 
         $rules[] = [
             'name' => 'sticky',
             'rule' => 'is_sticky',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_sticky(),
         ];
 
         $rules[] = [
             'name' => 'paged',
             'rule' => 'is_paged',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
             'callback' => is_paged(),
         ];
 

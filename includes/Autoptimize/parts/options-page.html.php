@@ -709,15 +709,40 @@
             <select id="model-uucss-rules">
                 <?php
                 $rules = UnusedCSS_Rule::get_rules();
-                if(isset($rules) && !empty($rules)){
-                    foreach ($rules as $rule){
 
-                        if(isset($rule['rule']) && !empty($rule['rule'])){
-                            $permalink = isset($rule['permalink']) ? $rule['permalink'] : trailingslashit(get_site_url());
-                            echo sprintf('<option data-type="%s" data-permalink="%s" value="%s">%s</option>', $rule['rule'], $permalink,$rule['rule'], $rule['rule']);
+                if(isset($rules) && !empty($rules)){
+
+                    $rules_by_category = [];
+
+                    foreach($rules as $rule)
+                    {
+                        if(isset($rule['category'])){
+                            $rules_by_category[$rule['category']][] = $rule;
+                        }else{
+                            $rules_by_category['general'][] = $rule;
+                        }
+                    }
+
+                    foreach ($rules_by_category as $key => $category){
+
+                        echo sprintf('<optgroup label="%s">', $key);
+
+                        foreach ($category as $rule){
+
+                            if(isset($rule['rule']) && !empty($rule['rule'])){
+
+                                $permalink = isset($rule['permalink']) ? $rule['permalink'] : trailingslashit(get_site_url());
+
+                                echo sprintf('<option data-type="%s" data-permalink="%s" value="%s">%s</option>', $rule['rule'], $permalink,$rule['rule'], $rule['rule']);
+
+                            }
+
                         }
 
+                        echo '</optgroup>';
                     }
+
+
                 }
                 ?>
             </select>
