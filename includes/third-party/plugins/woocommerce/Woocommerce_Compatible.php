@@ -23,8 +23,8 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
         $args[] = [
             'name' => 'product',
             'rule' => 'is_product',
-            'category' => 'Standard Conditional Tags',
-            'priority' => 10,
+            'category' => 'Woocommerce',
+            'priority' => 5,
             'callback' => is_product(),
         ];
 

@@ -105,7 +105,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             array_push($rules_with_permalink, $rule);
         }
         usort($rules_with_permalink, function ($a, $b){
-            return strcmp($a['category'],$b['category']);
+            return $a['priority'] > $b['priority'];
         });
         return $rules_with_permalink;
     }

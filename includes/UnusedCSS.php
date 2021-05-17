@@ -124,7 +124,7 @@ abstract class UnusedCSS {
                     'name' => $value,
                     'rule' => 'is_' . $value,
                     'category' => 'Custom Post Types',
-                    'priority' => 10,
+                    'priority' => 5,
                     'callback' => get_post_type( get_the_ID() ) == $value
                 ];
             }
