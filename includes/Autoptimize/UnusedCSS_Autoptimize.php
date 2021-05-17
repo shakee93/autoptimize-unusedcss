@@ -44,6 +44,11 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
             add_action( 'autoptimize_action_cachepurged', function (){
                 $args['soft'] = true;
+                self::log([
+                    'log' => 'autoptimize cache purge fired',
+                    'url' => null,
+                    'type' => 'purging'
+                ]);
                 $this->clear_cache(null, $args);
             });
 
