@@ -980,6 +980,7 @@
                             $container.find('table tbody tr').addClass('selected')
                             $container.addClass('multi-select');
                             $container.find('.multiple-selected-text .multiple-selected-value').text('(' + $container.find('table tbody tr.selected').length + ') URLs');
+                            break;
                         }
                         default:{
                             break;
