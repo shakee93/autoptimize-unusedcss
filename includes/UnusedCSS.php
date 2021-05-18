@@ -900,8 +900,16 @@ abstract class UnusedCSS {
 
         }
 
-        if($url){
+        if($url && !$rule && !$regex){
+
             UnusedCSS_Settings::delete_link($url);
+
+        }else{
+
+            UnusedCSS_DB::requeue_urls([
+                $url
+            ]);
+
         }
 
         if($rule && $regex){
