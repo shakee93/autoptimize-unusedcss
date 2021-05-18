@@ -90,15 +90,18 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
     }
 
     public static function get_rules(){
-        $rules = apply_filters('uucss/rules', [
-            [
+        $rules = apply_filters('uucss/rules', []);
+
+        if(apply_filters('uucss/rules/path', false)){
+            $rules[] = [
                 'name' => 'path',
                 'rule' => 'is_path',
                 'category' => 'Path Based',
                 'priority' => 20,
                 'callback' => false
-            ]
-        ]);
+            ];
+        }
+
         $rules_with_permalink = [];
         foreach ($rules as $rule){
             if(!isset($rule['permalink']) && isset($rule['name'])){

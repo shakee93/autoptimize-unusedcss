@@ -55,6 +55,7 @@ abstract class UnusedCSS_Admin {
 	    add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
 	    add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
+        add_action( "uucss_apply_rules", [ $this, 'apply_rules' ]);
 
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
             $this,
@@ -159,7 +160,58 @@ abstract class UnusedCSS_Admin {
             'regex' => $regex,
         ]);
 
+        $this->schedule_cron('uucss_apply_rules', [] );
+
         wp_send_json_success('Rule updated successfully');
+    }
+
+    public function apply_rules(){
+
+        $links = UnusedCSS_DB::get_links_where('');
+
+        if(isset($links) && !empty($links)){
+
+            foreach ($links as $link){
+
+                $rule = false;
+
+                if(isset($link['rule'])){
+                    $rule = $link['rule'];
+                }else{
+                    $post_id = url_to_postid($link['url']);
+                    if($post_id){
+                        $rule = get_post_type($post_id);
+                        if($rule){
+                            $rule = 'is_' . $rule;
+                        }
+                    }
+                }
+
+                $applicable_rule = UnusedCSS_DB::get_applied_rule($rule, $link['url']);
+
+                if(!$applicable_rule){
+
+                    $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $link['url']);
+
+                }
+
+                if($applicable_rule){
+
+                    $path = new UnusedCSS_Path([
+                        'url' => $link['url']
+                    ]);
+                    $path->attach_rule($applicable_rule->id, $applicable_rule->rule);
+                    $path->save();
+
+                    do_action( 'uucss/cached', [
+                        'url' => $link['url']
+                    ]);
+
+                }
+
+            }
+
+        }
     }
 
     public function attach_rule(){

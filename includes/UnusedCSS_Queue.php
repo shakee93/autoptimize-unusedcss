@@ -351,48 +351,6 @@ class UnusedCSS_Queue
 
             foreach ($links as $link){
 
-                $rule = false;
-
-                if(isset($link->rule)){
-                    $rule = $link->rule;
-                }else{
-                    $post_id = url_to_postid($link->url);
-                    if($post_id){
-                        $rule = get_post_type($post_id);
-                        if($rule){
-                            $rule = 'is_' . $rule;
-                        }
-                    }
-                }
-
-                if($uucss->rules_enabled() && $rule){
-
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule($rule, $link->url);
-
-                    if(!$applicable_rule){
-
-                        $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $link->url);
-
-                    }
-
-                    if($applicable_rule){
-
-                        $path = new UnusedCSS_Path([
-                            'url' => $link->url
-                        ]);
-                        $path->attach_rule($applicable_rule->id, $applicable_rule->rule);
-                        $path->save();
-
-                        do_action( 'uucss/cached', [
-                            'url' => $link->url
-                        ]);
-
-                        continue;
-
-                    }
-
-                }
-
                 UnusedCSS_DB::update_meta([
                     'status' => 'waiting',
                     'job_id' => null
