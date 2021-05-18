@@ -190,7 +190,7 @@ class UnusedCSS_Queue
 
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
-            $url = $uucss->transform_url($url);
+            $url = $this->transform_url($url);
 
             if(!$uucss->is_valid_url($url)){
                 wp_send_json_error('url is not valid');
@@ -239,7 +239,7 @@ class UnusedCSS_Queue
             while ($posts->have_posts()){
                 $posts->the_post();
 
-                $url = $uucss->transform_url(get_the_permalink(get_the_ID()));
+                $url = $this->transform_url(get_the_permalink(get_the_ID()));
 
                 if($uucss->is_url_allowed($url)){
                     new UnusedCSS_Path([
