@@ -533,7 +533,7 @@
                         <p>
                             <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
                         </p>
-                        <p>
+                        <p class="style-sheet-count">
                             <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                         </p>
                         <p>
@@ -552,36 +552,36 @@
                             <?php
                                 $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
                             ?>
-                            <p>
-                                <strong>Hits</strong> : <?php echo $hits; ?> - <?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?>%
+                            <p class="status-hits-count">
+                                <strong>Hits</strong> : <span class="number"><?php echo $hits; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?></span>%
                             </p>
-                            <p>
-                                <strong>Success</strong> : <?php echo $success; ?> - <?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?>%
+                            <p class="status-success-count">
+                                <strong>Success</strong> : <span class="number"><?php echo $success; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?></span>%
                             </p>
                             <?php
                                 if ( $uucss->rules_enabled() ) :
                                 $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
                             ?>
-                            <p>
-                                <strong>Rule Based</strong> : <?php echo $rule_based; ?> - <?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?>%
+                            <p class="status-rule-based-count">
+                                <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%
                             </p>
                             <?php
                                 endif;
                             ?>
-                            <p>
-                                <strong>Queued</strong> : <?php echo $queued; ?> - <?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?>%
+                            <p class="status-queued-count">
+                                <strong>Queued</strong> : <span class="number"><?php echo $queued; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?></span>%
                             </p>
-                            <p>
-                                <strong>Waiting</strong> : <?php echo $waiting; ?> - <?php echo ($total != 0) ? number_format($waiting/$total*100, 0) : '0' ?>%
+                            <p class="status-waiting-count">
+                                <strong>Waiting</strong> : <span class="number"><?php echo $waiting; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($waiting/$total*100, 0) : '0' ?></span>%
                             </p>
-                            <p>
-                                <strong>Processing</strong> : <?php echo $processing; ?> - <?php echo ($total != 0) ? number_format($processing/$total*100, 0) : '0' ?>%
+                            <p class="status-processing-count">
+                                <strong>Processing</strong> : <span class="number"><?php echo $processing; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($processing/$total*100, 0) : '0' ?></span>%
                             </p>
-                            <p>
-                                <strong>Warnings</strong> : <?php echo $warnings; ?> - <?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?>%
+                            <p class="status-warnings-count">
+                                <strong>Warnings</strong> : <span class="number"><?php echo $warnings; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?></span>%
                             </p>
-                            <p>
-                                <strong>Failed Jobs</strong> : <?php echo $failed; ?> - <?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?>%
+                            <p class="status-failed-count">
+                                <strong>Failed Jobs</strong> : <span class="number"><?php echo $failed; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?></span>%
                             </p>
                             <?php
                                 if(count($third_party_plugins) > 0):

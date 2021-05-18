@@ -2190,6 +2190,35 @@
         })
 
         $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
+
+        function updateRapidLoadStatus(){
+            wp.ajax.post('uucss_status').then(function(res){
+                if(res.success && res.data){
+                    var $status = $('li.rapidload-status')
+                    var total = res.data.total;
+
+                    $status.find('p.style-sheet-count').html('<strong>CSS Stylesheets</strong> : ' + res.data.cssStyleSheetsCount + ' files, totalling ' + res.data.cssStyleSheetsSize)
+                    $status.find('p.status-hits-count span.number').text(res.data.hits);
+                    $status.find('p.status-hits-count span.percentage').text(total ? Number(res.data.hits/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-success-count span.number').text(res.data.success);
+                    $status.find('p.status-success-count span.percentage').text(total ? Number(res.data.success/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-rule-based-count span.number').text(res.data.ruleBased);
+                    $status.find('p.status-rule-based-count span.percentage').text(total ? Number(res.data.ruleBased/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-queued-count span.number').text(res.data.queued);
+                    $status.find('p.status-queued-count span.percentage').text(total ? Number(res.data.queued/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-waiting-count span.number').text(res.data.waiting);
+                    $status.find('p.status-waiting-count span.percentage').text(total ? Number(res.data.waiting/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-processing-count span.number').text(res.data.processing);
+                    $status.find('p.status-processing-count span.percentage').text(total ? Number(res.data.processing/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-warnings-count span.number').text(res.data.warnings);
+                    $status.find('p.status-warnings-count span.percentage').text(total ? Number(res.data.warnings/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-failed-count span.number').text(res.data.failed);
+                    $status.find('p.status-failed-count span.percentage').text(total ? Number(res.data.failed/total * 100).toFixed(0) : 0);
+                }
+            })
+        }
+
+        setInterval(updateRapidLoadStatus, 5000);
     });
 
 

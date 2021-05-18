@@ -76,6 +76,7 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+            add_action( "wp_ajax_uucss_status", [ $this, 'uucss_status' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
             add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
             add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
@@ -86,6 +87,23 @@ abstract class UnusedCSS_Admin {
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
+    }
+
+    public function uucss_status(){
+
+        wp_send_json_success([
+            'cssStyleSheetsCount' => $this->uucss->cache_file_count(),
+            'cssStyleSheetsSize' => $this->uucss->size(),
+            'hits' => UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 '),
+            'success' => UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL '),
+            'ruleBased' => UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'"),
+            'queued' => UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" '),
+            'waiting' => UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" '),
+            'processing' => UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" '),
+            'warnings' => UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL '),
+            'failed' => UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" '),
+            'total' => UnusedCSS_DB::get_total_job_count(),
+        ]);
     }
 
     public function uucss_update_rule(){
