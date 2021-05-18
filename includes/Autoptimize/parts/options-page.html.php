@@ -546,7 +546,7 @@
                             <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                         </p>
                         <p class="more-info-uucss-status">
-                            <strong>Total Optimization Jobs</strong> :  <?php echo $total; ?>
+                            <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <?php

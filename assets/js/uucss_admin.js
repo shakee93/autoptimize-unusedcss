@@ -2214,6 +2214,7 @@
                     $status.find('p.status-warnings-count span.percentage').text(total ? Number(res.data.warnings/total * 100).toFixed(0) : 0);
                     $status.find('p.status-failed-count span.number').text(res.data.failed);
                     $status.find('p.status-failed-count span.percentage').text(total ? Number(res.data.failed/total * 100).toFixed(0) : 0);
+                    $status.find('p.more-info-uucss-status span.total-jobs').text(res.data.failed);
                 }
             })
         }
