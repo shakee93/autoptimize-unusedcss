@@ -382,7 +382,7 @@ class UnusedCSS_Queue
 
     function fetch_rule_job_id(){
 
-        $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
+        $current_waiting = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], self::$job_count);
 
         $rules = UnusedCSS_DB::get_rules_by_status(["'queued'"], (self::$job_count - count($current_waiting)));
 
