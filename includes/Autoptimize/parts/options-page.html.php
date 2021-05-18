@@ -706,6 +706,9 @@
 <div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight">
     <div class="action-content">
         <div>
+            <label for="model-uucss-rules">
+                <strong>Type</strong>
+            </label>
             <select id="model-uucss-rules">
                 <?php
                 $rules = UnusedCSS_Rule::get_rules();
@@ -748,10 +751,16 @@
             </select>
         </div>
         <div>
+            <label for="rule-base-url">
+                <strong>Base URL</strong>
+            </label>
             <input type="text" class="rule-base-url"
                    placeholder="<?php echo trailingslashit(get_site_url())?>" >
         </div>
         <div>
+            <label for="rule-url-regex">
+                <strong>Pattern</strong>
+            </label>
             <input type="text" class="rule-url-regex"
                    placeholder="*/slug/*" value="/">
         </div>

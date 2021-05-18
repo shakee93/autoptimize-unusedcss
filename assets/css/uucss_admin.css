@@ -1239,7 +1239,6 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
 }
 
 .uucss-update-form-fetherlight .action-content .add-action-wrap input{
-    margin-top: 10px;
     background: #674399;
     font-size: 13px;
     padding: 5px;
@@ -1252,7 +1251,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     width: 100%;
 }
 
-.uucss-update-form-fetherlight .action-content input{
+.uucss-update-form-fetherlight .action-content div{
     margin-top: 10px;
 }
 
@@ -1274,15 +1273,25 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     display: block;
 }
 
-.featherlight.add-site-url-model .featherlight-content,
-.featherlight.add-site-rule-model .featherlight-content{
+.featherlight.add-site-url-model .featherlight-content{
     width: 310px;
     height: 120px;
     padding: 25px 20px;
 }
 
+.featherlight.add-site-rule-model .featherlight-content div.action-content div{
+    display: flex;
+    align-items: center;
+}
+
+.featherlight.add-site-rule-model .featherlight-content div.action-content div label{
+    width: 75px;
+}
+
 .featherlight.add-site-rule-model .featherlight-content{
     height: 205px;
+    width: 400px;
+    padding: 20px 20px;
 }
 
 .featherlight.add-site-url-model.show-url .featherlight-content{
