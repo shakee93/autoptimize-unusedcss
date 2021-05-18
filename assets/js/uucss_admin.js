@@ -1113,7 +1113,7 @@
                 {
                     "data": "regex",
                     title: "pattern",
-                    width: '100px',
+                    width: '200px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
