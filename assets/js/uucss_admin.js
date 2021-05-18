@@ -2193,28 +2193,28 @@
 
         function updateRapidLoadStatus(){
             wp.ajax.post('uucss_status').then(function(res){
-                if(res.success && res.data){
+                if(res){
                     var $status = $('li.rapidload-status')
-                    var total = res.data.total;
-
-                    $status.find('p.style-sheet-count').html('<strong>CSS Stylesheets</strong> : ' + res.data.cssStyleSheetsCount + ' files, totalling ' + res.data.cssStyleSheetsSize)
-                    $status.find('p.status-hits-count span.number').text(res.data.hits);
-                    $status.find('p.status-hits-count span.percentage').text(total ? Number(res.data.hits/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-success-count span.number').text(res.data.success);
-                    $status.find('p.status-success-count span.percentage').text(total ? Number(res.data.success/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-rule-based-count span.number').text(res.data.ruleBased);
-                    $status.find('p.status-rule-based-count span.percentage').text(total ? Number(res.data.ruleBased/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-queued-count span.number').text(res.data.queued);
-                    $status.find('p.status-queued-count span.percentage').text(total ? Number(res.data.queued/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-waiting-count span.number').text(res.data.waiting);
-                    $status.find('p.status-waiting-count span.percentage').text(total ? Number(res.data.waiting/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-processing-count span.number').text(res.data.processing);
-                    $status.find('p.status-processing-count span.percentage').text(total ? Number(res.data.processing/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-warnings-count span.number').text(res.data.warnings);
-                    $status.find('p.status-warnings-count span.percentage').text(total ? Number(res.data.warnings/total * 100).toFixed(0) : 0);
-                    $status.find('p.status-failed-count span.number').text(res.data.failed);
-                    $status.find('p.status-failed-count span.percentage').text(total ? Number(res.data.failed/total * 100).toFixed(0) : 0);
-                    $status.find('p.more-info-uucss-status span.total-jobs').text(res.data.failed);
+                    var total = res.total;
+                    console.log($status.find('p.style-sheet-count'));
+                    $status.find('p.style-sheet-count').html('<strong>CSS Stylesheets</strong> : ' + res.cssStyleSheetsCount + ' files, totalling ' + res.cssStyleSheetsSize)
+                    $status.find('p.status-hits-count span.number').text(res.hits);
+                    $status.find('p.status-hits-count span.percentage').text(total ? Number(res.hits/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-success-count span.number').text(res.success);
+                    $status.find('p.status-success-count span.percentage').text(total ? Number(res.success/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-rule-based-count span.number').text(res.ruleBased);
+                    $status.find('p.status-rule-based-count span.percentage').text(total ? Number(res.ruleBased/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-queued-count span.number').text(res.queued);
+                    $status.find('p.status-queued-count span.percentage').text(total ? Number(res.queued/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-waiting-count span.number').text(res.waiting);
+                    $status.find('p.status-waiting-count span.percentage').text(total ? Number(res.waiting/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-processing-count span.number').text(res.processing);
+                    $status.find('p.status-processing-count span.percentage').text(total ? Number(res.processing/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-warnings-count span.number').text(res.warnings);
+                    $status.find('p.status-warnings-count span.percentage').text(total ? Number(res.warnings/total * 100).toFixed(0) : 0);
+                    $status.find('p.status-failed-count span.number').text(res.failed);
+                    $status.find('p.status-failed-count span.percentage').text(total ? Number(res.failed/total * 100).toFixed(0) : 0);
+                    $status.find('p.more-info-uucss-status span.total-jobs').text(res.total);
                 }
             })
         }
