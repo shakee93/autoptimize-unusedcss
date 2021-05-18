@@ -1102,21 +1102,21 @@
                     },
                 },
                 {
-                    "data": "rule",
-                    title: "Rule",
-                    width: '100px',
-                    className: 'dt-body-center dt-head-center',
-                    render: function (data, type, row, meta) {
-                        return '<span class="">'+ (data ? data.replace('is_','') : '') +'</span>';
-                    },
-                },
-                {
                     "data": "regex",
                     title: "pattern",
                     width: '200px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
+                    },
+                },
+                {
+                    "data": "rule",
+                    title: "Rule",
+                    width: '100px',
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ? data.replace('is_','') : '') +'</span>';
                     },
                 },
                 {
