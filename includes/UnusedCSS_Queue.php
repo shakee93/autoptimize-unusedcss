@@ -433,8 +433,6 @@ class UnusedCSS_Queue
         ]);
 
         if(!$rule->job_id){
-            $rule->requeue();
-            $rule->save();
             return;
         }
 
@@ -574,9 +572,6 @@ class UnusedCSS_Queue
     public function update_result($url, $job_id){
 
         if(!$job_id){
-            UnusedCSS_DB::requeue_urls([
-                $url
-            ]);
             return;
         }
 
