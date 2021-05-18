@@ -160,7 +160,15 @@ abstract class UnusedCSS_Admin {
             'regex' => $regex,
         ]);
 
-        $this->schedule_cron('uucss_apply_rules', [] );
+        $spawned = $this->schedule_cron('uucss_apply_rules', [] );
+
+        if($spawned){
+            self::log([
+                'log' => 'apply rules initiated',
+                'url' => $url,
+                'type' => 'uucss-cron'
+            ]);
+        }
 
         wp_send_json_success('Rule updated successfully');
     }
