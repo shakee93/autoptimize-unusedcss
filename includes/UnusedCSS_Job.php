@@ -32,6 +32,8 @@ abstract class UnusedCSS_Job
 
     abstract public function save();
 
+    abstract public function clearFiles();
+
     public function get_files(){
         if(isset($this->files)){
             return unserialize($this->files);
@@ -66,6 +68,7 @@ abstract class UnusedCSS_Job
         $this->warnings = null;
         $this->error = null;
         $this->created_at = date( "Y-m-d H:m:s", time() );
+        $this->clearFiles();
     }
 
     public function mark_as_success($files, $stats, $warnings){
@@ -82,6 +85,7 @@ abstract class UnusedCSS_Job
         $this->status = 'failed';
         $this->error = serialize($error);
         $this->hits = 0;
+        $this->clearFiles();
     }
 
     public function mark_as_successful_hit(){

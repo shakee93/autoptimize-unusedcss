@@ -142,16 +142,6 @@ class UnusedCSS_Enqueue {
 
             $this->data->requeue();
 
-            if($this->data->is_type('Rule')){
-
-                $uucss->remove_unused_files($this->data->url, $this->data->rule, $this->data->regex);
-
-            }else{
-
-                $uucss->remove_unused_files($this->data->url);
-
-            }
-
         }else{
 
             $this->data->set_warnings($this->warnings);
