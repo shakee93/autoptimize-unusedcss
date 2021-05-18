@@ -85,6 +85,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.10 - 18/05/2021 =
+ * improve: support for wp super cache
+ * improve: add option to disable requeue jobs on warnings
+
 = 1.4.9 - 04/05/2021 =
  * feat: add support to W3 Total Cache
  * improve: exclude elementor preview url from RapidLoad
