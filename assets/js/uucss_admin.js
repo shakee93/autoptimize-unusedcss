@@ -2196,7 +2196,6 @@
                 if(res){
                     var $status = $('li.rapidload-status')
                     var total = res.total;
-                    console.log($status.find('p.style-sheet-count'));
                     $status.find('p.style-sheet-count').html('<strong>CSS Stylesheets</strong> : ' + res.cssStyleSheetsCount + ' files, totalling ' + res.cssStyleSheetsSize)
                     $status.find('p.status-hits-count span.number').text(res.hits);
                     $status.find('p.status-hits-count span.percentage').text(total ? Number(res.hits/total * 100).toFixed(0) : 0);
