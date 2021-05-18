@@ -2219,7 +2219,7 @@
             })
         }
 
-        setInterval(updateRapidLoadStatus, 5000);
+        setInterval(updateRapidLoadStatus, 60000);
     });
 
 
