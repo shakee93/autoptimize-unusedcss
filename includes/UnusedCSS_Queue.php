@@ -10,6 +10,7 @@ class UnusedCSS_Queue
     public static $job_count = 4;
     public $async = false;
     public static $post_types = [];
+    public $fileSystem;
 
     function __construct()
     {
@@ -69,6 +70,8 @@ class UnusedCSS_Queue
             'page',
             'product',
         ));
+
+        $this->fileSystem = new UnusedCSS_FileSystem();
     }
 
     function update_result_hook(){
@@ -129,6 +132,9 @@ class UnusedCSS_Queue
             }else{
                 UnusedCSS_DB::requeue_rules($list);
             }
+
+            $this->cleanCacheFiles();
+
             wp_send_json_success('successfully links added to the queue');
         }else if($post_type == 'current'){
 
@@ -137,6 +143,9 @@ class UnusedCSS_Queue
             }else{
                 UnusedCSS_DB::clear_rules(true);
             }
+
+            $this->cleanCacheFiles();
+
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'processing'){
@@ -148,6 +157,9 @@ class UnusedCSS_Queue
                 UnusedCSS_DB::requeue_rule_jobs('processing');
                 UnusedCSS_DB::requeue_rule_jobs('waiting');
             }
+
+            $this->cleanCacheFiles();
+
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'warnings'){
@@ -157,6 +169,9 @@ class UnusedCSS_Queue
             }else{
                 UnusedCSS_DB::requeue_rule_jobs('warnings');
             }
+
+            $this->cleanCacheFiles();
+
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'failed'){
@@ -166,6 +181,9 @@ class UnusedCSS_Queue
             }else{
                 UnusedCSS_DB::requeue_rule_jobs();
             }
+
+            $this->cleanCacheFiles();
+
             wp_send_json_success('successfully links added to the queue');
 
         }else if($post_type == 'url'){
@@ -236,6 +254,48 @@ class UnusedCSS_Queue
 
         wp_send_json_success('successfully links added to the queue');
 
+    }
+
+    public function cleanCacheFiles(){
+
+        $links = UnusedCSS_DB::get_links_where(" WHERE status = 'success' ");
+        $rules = UnusedCSS_DB::get_rules_where(" WHERE status = 'success' ");
+
+        $used_files = [];
+
+        foreach ($links as $link){
+
+            if(isset($link['files']) && !empty($link['files'])){
+                $uucss_files = array_column($link['files'],'uucss');
+                if(isset($uucss_files) && !empty($uucss_files)){
+                    $used_files = array_merge($used_files, $uucss_files);
+                }
+            }
+
+        }
+
+        foreach ($rules as $rule){
+
+            if(isset($rule['files']) && !empty($rule['files'])){
+                $uucss_files = array_column($rule['files'],'uucss');
+                if(isset($uucss_files) && !empty($uucss_files)){
+                    $used_files = array_merge($used_files, $uucss_files);
+                }
+            }
+
+        }
+
+        if ($handle = opendir(UnusedCSS::$base_dir)) {
+            while (false !== ($file = readdir($handle))) {
+                if ('.' === $file) continue;
+                if ('..' === $file) continue;
+
+                if(!in_array($file, $used_files) && $this->fileSystem->exists(UnusedCSS::$base_dir . '/' . $file)){
+                    $this->fileSystem->delete(UnusedCSS::$base_dir . '/' . $file);
+                }
+            }
+            closedir($handle);
+        }
     }
 
     static function queue_sitemap($url = false){

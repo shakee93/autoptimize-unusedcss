@@ -1746,10 +1746,6 @@
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
                 $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
 
-                if($('#thirtd_part_cache_plugins').val() === "1"){
-                    $content.find('ul').append('<li data-action_name="clear_warnings_cache"><a data-action_name="clear_warnings_cache" href="#">Clear Page Cache</a></li>');
-                }
-
                 return $content.wrap('<div></div>').parent().html();
             },
             onClickOutside(instance, event) {

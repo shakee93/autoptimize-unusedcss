@@ -880,17 +880,23 @@ abstract class UnusedCSS {
 	    return true;
     }
 
+    public function remove_unused_files($url, $rule = false, $regex = false){
+
+        // get unused files
+        $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
+
+        // remove unused files from filesystem
+        foreach ( $unused_files as $unused_file ) {
+            $this->file_system->delete( self::$base_dir . '/' . $unused_file );
+        }
+
+    }
+
     public function clear_files($url, $args, $rule = false, $regex = false ){
 
         if ( UnusedCSS_Settings::link_exists( $url ) || UnusedCSS_DB::rule_exists($rule, $regex)) {
 
-            // get unused files
-            $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
-
-            // remove unused files from filesystem
-            foreach ( $unused_files as $unused_file ) {
-                $this->file_system->delete( self::$base_dir . '/' . $unused_file );
-            }
+            $this->remove_unused_files($url, $rule, $regex);
 
         }
 

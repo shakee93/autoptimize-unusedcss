@@ -117,6 +117,8 @@ class UnusedCSS_Enqueue {
 
     public function enqueue_completed(){
 
+        global $uucss;
+
         $time_diff = 0;
 
         if(isset($this->data->created_at)){
@@ -139,6 +141,16 @@ class UnusedCSS_Enqueue {
             apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
             $this->data->requeue();
+
+            if($this->data->is_type('Rule')){
+
+                $uucss->remove_unused_files($this->data->url, $this->data->rule, $this->data->regex);
+
+            }else{
+
+                $uucss->remove_unused_files($this->data->url);
+
+            }
 
         }else{
 
