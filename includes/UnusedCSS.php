@@ -505,6 +505,16 @@ abstract class UnusedCSS {
 
         $this->rule = UnusedCSS_Rule::get_related_rule();
 
+        if(isset($this->rule['rule'])){
+
+            self::log([
+                'log' => 'rule identified : ' . $this->rule['rule'],
+                'url' => $this->url,
+                'type' => 'purging'
+            ]);
+
+        }
+
         if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
