@@ -284,6 +284,12 @@
 
             $(lengthChange).prependTo($('#uucss-history_info'));
 
+            var rule_based_status = '';
+
+            if(window.uucss.rules_enabled === "1"){
+                rule_based_status = '<option value="rule-based" ' + (status_filter === 'rule-based'? 'selected' : '') +'>Rule Based</option>'
+            }
+
             var select = $('<select class="status">' +
                     '<option value="" ' + (status_filter === ''? 'selected' : '') +'>All</option>' +
                     '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') +'>Queued</option>' +
@@ -292,7 +298,7 @@
                     '<option value="success" ' + (status_filter === 'success'? 'selected' : '') +'>Success</option>' +
                     '<option value="warning" ' + (status_filter === 'warning'? 'selected' : '') +'>Warning</option>' +
                     '<option value="failed" ' + (status_filter === 'failed'? 'selected' : '') +'>Failed</option>' +
-                    '<option value="rule-based" ' + (status_filter === 'rule-based'? 'selected' : '') +'>Rule Based</option>' +
+                    rule_based_status +
                 '</select>');
 
             var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
