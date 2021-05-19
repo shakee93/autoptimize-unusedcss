@@ -318,10 +318,10 @@
                 appendTo: 'parent',
             });
 
-            var $input = $('#uucss-history_info input[type="search"]')
+            var $url_input = $('#uucss-history_info input[type="search"]')
             var $exact_search = $('#uucss-history_info input.uucss_search_exact')
 
-            $input.on('input',function () {
+            $url_input.on('input',function () {
                 url_filter = $(this).val();
 
                 var regex = url_filter;
@@ -339,7 +339,7 @@
             });
 
             if(url_filter !== ''){
-                $input.focus().val('').val(url_filter);
+                $url_input.focus().val('').val(url_filter);
             }
 
             $exact_search.prop('checked', exact_search_val);
