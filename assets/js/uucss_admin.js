@@ -781,7 +781,9 @@
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
                         }
 
-                        $content.find('ul').append('<li data-action_name="requeue_url"><a data-action_name="requeue_url" href="#">Requeue</a></li>')
+                        if(data.status !== 'queued' && data.status !== 'rule-based'){
+                            $content.find('ul').append('<li data-action_name="requeue_url"><a data-action_name="requeue_url" href="#">Requeue</a></li>')
+                        }
 
                         if($('#thirtd_part_cache_plugins').val() === "1"){
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
@@ -1322,7 +1324,10 @@
 
                         $content.find('ul').append('<li data-action_name="edit_rule"><a data-action_name="edit_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Edit</a></li>');
                         $content.find('ul').append('<li data-action_name="duplicate_rule"><a data-action_name="duplicate_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Duplicate</a></li>');
-                        $content.find('ul').append('<li data-action_name="requeue_rule"><a data-action_name="requeue_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Requeue</a></li>');
+
+                        if(data.status !== 'queued'){
+                            $content.find('ul').append('<li data-action_name="requeue_rule"><a data-action_name="requeue_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Requeue</a></li>');
+                        }
 
                         if(data.status === 'success'){
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">GPSI Status</a></li>')

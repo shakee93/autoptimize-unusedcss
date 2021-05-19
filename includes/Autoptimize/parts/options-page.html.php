@@ -492,6 +492,7 @@
                                     </label>
                                 </td>
                             </tr>
+                            <?php if(UnusedCSS_DB::$current_version > 1.1): ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Rule Based Injection (Beta)', 'uucss' ); ?></th>
                                 <td>
@@ -505,6 +506,7 @@
                                     </label>
                                 </td>
                             </tr>
+                            <?php endif; ?>
                         </table>
                     </div>
                 </li>
