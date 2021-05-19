@@ -143,7 +143,6 @@ abstract class UnusedCSS {
                     'category' => 'Taxonomies',
                     'priority' => 5,
                     'callback' => is_tax($value),
-                    'permalink' => get_term_link($value)
                 ];
             }
         }
