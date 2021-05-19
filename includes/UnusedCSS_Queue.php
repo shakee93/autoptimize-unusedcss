@@ -116,6 +116,8 @@ class UnusedCSS_Queue
     	//self::uucss_log($_REQUEST);
 
     	$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+    	$rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+    	$regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
 
         $post_type = sanitize_text_field($_REQUEST['post_type']);
 
@@ -200,9 +202,32 @@ class UnusedCSS_Queue
                 wp_send_json_error('url is excluded');
             }
 
-            new UnusedCSS_Path([
-               'url' => $url
-            ]);
+            $url_object = false;
+
+            if($type == 'path'){
+
+                $url_object = new UnusedCSS_Path([
+                    'url' => $url
+                ]);
+
+            }else{
+
+                $url_object = new UnusedCSS_Rule([
+                   'rule' => $rule,
+                   'regex' => $regex
+                ]);
+
+            }
+
+            if(!$url_object){
+
+                wp_send_json_error('Invalid URL');
+
+            }
+
+            $url_object->requeue();
+            $url_object->save();
+
             wp_send_json_success('successfully link added to the queue');
 
         }else if($post_type == 'site_map'){

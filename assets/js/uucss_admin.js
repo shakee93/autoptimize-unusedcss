@@ -781,6 +781,8 @@
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#">GPSI Status</a></li>')
                         }
 
+                        $content.find('ul').append('<li data-action_name="requeue_url"><a data-action_name="requeue_url" href="#">Requeue</a></li>')
+
                         if($('#thirtd_part_cache_plugins').val() === "1"){
                             $content.find('ul').append('<li data-action_name="purge-url"><a data-action_name="purge-url" href="#">Clear Page Cache</a></li>');
                         }
@@ -834,6 +836,10 @@
                             var action = $this.data('action_name');
 
                             switch (action) {
+                                case 'requeue_url':{
+                                    requeue('url', {url : data.url})
+                                    break;
+                                }
                                 case 'detach_from_rule':{
                                     wp.ajax.post('attach_rule',{ url : data.url, type : 'detach' }).then(function (i) {
 
@@ -1316,6 +1322,7 @@
 
                         $content.find('ul').append('<li data-action_name="edit_rule"><a data-action_name="edit_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Edit</a></li>');
                         $content.find('ul').append('<li data-action_name="duplicate_rule"><a data-action_name="duplicate_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Duplicate</a></li>');
+                        $content.find('ul').append('<li data-action_name="requeue_rule"><a data-action_name="requeue_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Requeue</a></li>');
 
                         if(data.status === 'success'){
                             $content.find('ul').append('<li data-action_name="test"><a data-action_name="test" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">GPSI Status</a></li>')
@@ -1373,6 +1380,14 @@
                             var url = $this.data('url');
 
                             switch (action) {
+                                case 'requeue_rule':{
+                                    requeue('url', {
+                                        url : url,
+                                        rule : rule,
+                                        regex : regex
+                                    }, null, 'rule');
+                                    break;
+                                }
                                 case 'duplicate_rule':{
                                     $.featherlight($('#add_rule_featherlight_content'),{
                                         variant : 'add-site-rule-model',
@@ -1564,10 +1579,12 @@
             e.preventDefault();
         });
 
-        function requeue(post_type, list = [], type = 'path'){
+        function requeue(post_type, data = {}, list = [], type = 'path'){
             wp.ajax.post('uucss_queue',{
                 url_list : list,
-                url : '',
+                url : data.url,
+                rule : data.rule,
+                regex : data.regex,
                 post_type : post_type,
                 type : type,
             }).then(function (i) {
@@ -1635,7 +1652,7 @@
                                     requeue_url_list.push(table_row_value.url)
                                 });
                             }
-                            requeue('current',requeue_url_list);
+                            requeue('current', {}, requeue_url_list);
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
@@ -1773,19 +1790,19 @@
                                     })
                                 });
                             }
-                            requeue('current',requeue_url_list, 'rule');
+                            requeue('current', {}, requeue_url_list, 'rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
-                            requeue('warnings', null, 'rule');
+                            requeue('warnings', {},  null, 'rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
-                            requeue('failed', null, 'rule');
+                            requeue('failed', {}, null, 'rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
-                            requeue('processing', null, 'rule');
+                            requeue('processing', {}, null, 'rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }
