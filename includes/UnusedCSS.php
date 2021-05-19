@@ -559,7 +559,7 @@ abstract class UnusedCSS {
 
                     }
 
-                }elseif (isset($this->rule) && isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
+                }elseif (isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
 
                     $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
 
@@ -609,6 +609,14 @@ abstract class UnusedCSS {
             ]);
 		    return false;
 	    }
+
+	    if(isset( $args['rule'] )){
+            self::log([
+                'log' => 'url caching with ' . $args['rule'],
+                'url' => $url,
+                'type' => 'purging'
+            ]);
+        }
 
 	    if ( ! isset( $args['post_id'] )) {
 		    $args['post_id'] = url_to_postid($url);
@@ -670,7 +678,7 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if($path->is_type('path')){
+        if($path->is_type('Path')){
 
             $path->rule_id = NULL;
             $path->requeue();
@@ -691,7 +699,7 @@ abstract class UnusedCSS {
 
 	    if (! $this->async || isset($args['first_job'])) {
 
-            if($path->is_type('path')){
+            if($path->is_type('Path')){
                 $this->init_async_store($this->provider, $url, $args);
             }else{
                 $this->init_async_store_rule($this->provider, $url, $args, $path);
@@ -707,7 +715,7 @@ abstract class UnusedCSS {
 
             $spawned = false;
 
-            if($path->is_type('path')){
+            if($path->is_type('Path')){
                 $spawned = $this->schedule_cron('uucss_async_queue', [
                     'provider' => $this->provider,
                     'url'      => $url,
@@ -728,7 +736,7 @@ abstract class UnusedCSS {
 
 	    	if(!$spawned){
 
-                if($path->is_type('path')){
+                if($path->is_type('Path')){
                     $this->init_async_store($this->provider, $url, $args);
                 }else{
                     $this->init_async_store_rule($this->provider, $url, $args, $path);
