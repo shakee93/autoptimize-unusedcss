@@ -289,7 +289,6 @@ abstract class UnusedCSS_Admin {
                 isset( $diffs['uucss_safelist'] ) ||
                 isset( $diffs['whitelist_packs'] ) ||
                 isset( $diffs['uucss_blocklist'] ) ||
-                isset( $diffs['uucss_enable_rules'] ) ||
                 isset( $diffs['uucss_variables'] ) ) {
                 $needs_to_cleared = true;
             }
@@ -301,9 +300,11 @@ abstract class UnusedCSS_Admin {
                 }
             }
 
-            if ( $needs_to_cleared ) {
-
+            if(isset( $diffs['uucss_enable_rules'] )){
                 UnusedCSS_DB::detach_all_rules();
+            }
+
+            if ( $needs_to_cleared ) {
 
                 $this->uucss->clear_cache( null, [
                     'soft' => true
