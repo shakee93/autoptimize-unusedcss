@@ -676,6 +676,10 @@ class UnusedCSS_DB
     static function update_rule_status($status = 'queued', $rule = false, $regex = '/'){
         global $wpdb;
 
+        if(UnusedCSS_DB::$current_version < 1.2){
+            return false;
+        }
+
         if(!$rule){
 
             if($status == 'queued'){
