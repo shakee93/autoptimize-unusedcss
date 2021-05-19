@@ -90,6 +90,10 @@ abstract class UnusedCSS {
             'and'
         );
 
+        $taxonomies = get_taxonomies([
+            'public' => true
+        ]);
+
         $rules[] = [
             'name' => 'front_page',
             'rule' => 'is_front_page',
@@ -126,6 +130,19 @@ abstract class UnusedCSS {
                     'category' => 'Custom Post Types',
                     'priority' => 5,
                     'callback' => get_post_type( get_the_ID() ) == $value
+                ];
+            }
+        }
+
+        foreach ($taxonomies as $key => $value){
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'category' => 'Taxonomies',
+                    'priority' => 5,
+                    'callback' => is_tax($value)
                 ];
             }
         }
