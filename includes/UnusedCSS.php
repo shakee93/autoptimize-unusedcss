@@ -496,7 +496,6 @@ abstract class UnusedCSS {
         return
             isset($this->options['uucss_enable_rules']) &&
             $this->options['uucss_enable_rules'] == "1" &&
-            UnusedCSS_DB::get_total_rule_count(' WHERE id > 0 ') > 0 &&
             UnusedCSS_DB::$current_version > 1.1 &&
             apply_filters('uucss/rules/enable', true);
     }
