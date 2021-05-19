@@ -85,9 +85,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.4.10 - 18/05/2021 =
+= 1.4.10 - 19/05/2021 =
+ * feat: added select all option in optimization table
  * improve: support for wp super cache
  * improve: add option to disable requeue jobs on warnings
+ * improve: handle jobs hanging in processing status
+ * fix: url trailing slash with query param
 
 = 1.4.9 - 04/05/2021 =
  * feat: add support to W3 Total Cache
