@@ -175,7 +175,7 @@ abstract class UnusedCSS_Admin {
 
     public function apply_rules(){
 
-        $links = UnusedCSS_DB::get_links_where('');
+        $links = UnusedCSS_DB::get_links_where(" WHERE rule_note != 'detached' ");
 
         if(isset($links) && !empty($links)){
 
