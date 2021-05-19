@@ -445,7 +445,7 @@
             });
 
             if(url_filter_rule !== ''){
-                $input.focus().val('').val(url_filter_rule);
+                //$input.focus().val('').val(url_filter_rule);
             }
 
             $exact_search.prop('checked', exact_search_val_rule);
