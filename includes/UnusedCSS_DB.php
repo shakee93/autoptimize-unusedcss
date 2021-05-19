@@ -529,6 +529,20 @@ class UnusedCSS_DB
 	    return false;
     }
 
+    static function detach_all_rules(){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET rule_id = NULL, status = 'queued' WHERE status = 'rule-based'" );
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+    }
+
     static function link_exists($url){
         global $wpdb;
 

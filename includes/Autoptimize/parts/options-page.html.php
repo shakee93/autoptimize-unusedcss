@@ -51,7 +51,7 @@
                         <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
-                <?php if(UnusedCSS_DB::$current_version > 1.1) : ?>
+                <?php if($uucss->rules_enabled()) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules
@@ -452,21 +452,6 @@
 
                                 </td>
                             </tr>
-                            <?php /*if ( UnusedCSS_DB::$current_version > 1.1 ) : */?><!--
-                            <tr>
-                                <th scope="row"><?php /*_e( 'Enable Rule based injection', 'uucss' ); */?></th>
-                                <td>
-                                    <label for="uucss_enable_rule_based"><input id='uucss_enable_rule_based' type='checkbox'
-                                                                                   name='autoptimize_uucss_settings[uucss_enable_rule_based]' <?php /*if ( ! empty( $options['uucss_enable_rule_based'] ) && '1' === $options['uucss_enable_rule_based'] ) {
-                                            echo 'checked="checked"';
-                                        } */?> value='1'>
-                                        <i>
-                                            Enable Rule based injection.
-                                        </i>
-                                    </label>
-                                </td>
-                            </tr>
-                            --><?php /*endif; */?>
                             <tr>
                                 <th scope="row"><?php _e( 'Disable Auto Queue', 'uucss' ); ?></th>
                                 <td>
@@ -504,6 +489,19 @@
                                             Enable debug logs for RapidLoad.
                                         </i>
                                         <a id="view-uucss-log" href="#" <?php if(!$hide_view_log) echo 'style="display:none"' ?>>View Logs</a>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Rule Based Injection (Beta)', 'uucss' ); ?></th>
+                                <td>
+                                    <label for="uucss_enable_rules"><input id='uucss_enable_rules' type='checkbox'
+                                                                           name='autoptimize_uucss_settings[uucss_enable_rules]' <?php if ( ! empty( $options['uucss_enable_rules'] ) && '1' === $options['uucss_enable_rules'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable rule based injection.
+                                        </i>
                                     </label>
                                 </td>
                             </tr>

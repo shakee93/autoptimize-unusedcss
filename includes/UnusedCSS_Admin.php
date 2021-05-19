@@ -289,6 +289,7 @@ abstract class UnusedCSS_Admin {
                 isset( $diffs['uucss_safelist'] ) ||
                 isset( $diffs['whitelist_packs'] ) ||
                 isset( $diffs['uucss_blocklist'] ) ||
+                isset( $diffs['uucss_enable_rules'] ) ||
                 isset( $diffs['uucss_variables'] ) ) {
                 $needs_to_cleared = true;
             }
@@ -301,6 +302,9 @@ abstract class UnusedCSS_Admin {
             }
 
             if ( $needs_to_cleared ) {
+
+                UnusedCSS_DB::detach_all_rules();
+
                 $this->uucss->clear_cache( null, [
                     'soft' => true
                 ] );
@@ -602,7 +606,7 @@ abstract class UnusedCSS_Admin {
             'faqs' => $this->get_faqs(),
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', false),
-            'rules_enabled' => UnusedCSS_DB::$current_version > 1.1,
+            'rules_enabled' => $this->uucss->rules_enabled(),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
