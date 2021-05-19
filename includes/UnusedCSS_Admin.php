@@ -218,7 +218,7 @@ abstract class UnusedCSS_Admin {
                 }
 
                 self::log([
-                    'log' => 'rule validated',
+                    'log' => 'rule validated : ' . $rule,
                     'url' => $link['url'],
                     'type' => 'uucss-cron'
                 ]);
