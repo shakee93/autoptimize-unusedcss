@@ -293,7 +293,16 @@ trait UnusedCSS_Utils {
             }else{
                 $url = rtrim($url,'/');
             }
-		}
+
+		}elseif (!isset($url_parts['query']) || empty($url_parts['query'])){
+
+            if(apply_filters('uucss/url/trailingslash', true)){
+                $url = trailingslashit($url);
+            }else{
+                $url = rtrim($url,'/');
+            }
+
+        }
 
 		return apply_filters('uucss/url', $url);
 	}
