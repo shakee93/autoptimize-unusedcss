@@ -576,6 +576,7 @@
                     "data": "rule",
                     title: "Rule",
                     width: '100px',
+                    visible : window.uucss.dev_mode === "1",
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data.replace('is_','') : '') +'</span>';
