@@ -15,7 +15,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
         $this->type = 'Path';
 
-        $rule = isset($args['rule']) ? $args['rule'] : get_post_type( get_the_ID() );
+        $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
 
         $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
