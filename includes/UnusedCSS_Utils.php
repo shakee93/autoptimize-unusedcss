@@ -287,13 +287,23 @@ trait UnusedCSS_Utils {
 		if ( ! isset( $options['uucss_query_string'] ) || empty( $options['uucss_query_string'] ) ) {
 			$path = ( isset( $url_parts['path'] ) ) ? $url_parts['path'] : '';
 			$url  = $url_parts['scheme'] . '://' . $url_parts['host'] . $path;
-		}
 
-		if(apply_filters('uucss/url/trailingslash', true)){
-		    return trailingslashit($url);
-        }else{
-		    return rtrim($url,'/');
+            if(apply_filters('uucss/url/trailingslash', true)){
+                return trailingslashit($url);
+            }else{
+                return rtrim($url,'/');
+            }
+
+		}elseif (! isset( $url_parts['query'] ) || empty($url_parts['query'])){
+
+            if(apply_filters('uucss/url/trailingslash', true)){
+                $url = trailingslashit($url);
+            }else{
+                $url = rtrim($url,'/');
+            }
+
         }
+		
 	}
 
 	public static function activate_plugin( $plugin, $action = 'activate' ) {
