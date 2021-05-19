@@ -433,8 +433,10 @@ abstract class UnusedCSS {
                 'type' => 'queued'
             ]);
 
-            if($spawned){
-                UnusedCSS_DB::update_status('processing', $url);
+            UnusedCSS_DB::update_status('processing', $url);
+
+            if(!$spawned){
+                $this->init_async_store( $this->provider, $url, $args );
             }
 
 	    }
