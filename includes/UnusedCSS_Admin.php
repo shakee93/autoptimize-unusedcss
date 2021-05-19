@@ -217,6 +217,12 @@ abstract class UnusedCSS_Admin {
 
                 }
 
+                self::log([
+                    'log' => 'rule validated',
+                    'url' => $link['url'],
+                    'type' => 'uucss-cron'
+                ]);
+
             }
 
         }
