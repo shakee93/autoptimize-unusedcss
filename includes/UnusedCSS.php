@@ -142,7 +142,8 @@ abstract class UnusedCSS {
                     'rule' => 'is_' . $value,
                     'category' => 'Taxonomies',
                     'priority' => 5,
-                    'callback' => is_tax($value)
+                    'callback' => is_tax($value),
+                    'permalink' => get_term_link($value)
                 ];
             }
         }
@@ -153,14 +154,6 @@ abstract class UnusedCSS {
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
             'callback' => is_author(),
-        ];
-
-        $rules[] = [
-            'name' => 'category',
-            'rule' => 'is_category',
-            'category' => 'Standard Conditional Tags',
-            'priority' => 10,
-            'callback' => is_category(),
         ];
 
         $rules[] = [
