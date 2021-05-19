@@ -7,6 +7,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
     use UnusedCSS_Utils;
 
     public $rule_id;
+    public $rule_note;
 
     public function init($args){
 
@@ -33,6 +34,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
             $this->hits = isset($path_exist[0]->hits) ? $path_exist[0]->hits : 0;
             $this->rule_id = isset($path_exist[0]->rule_id) ? $path_exist[0]->rule_id : null;
+            $this->rule_note = isset($path_exist[0]->rule_note) ? $path_exist[0]->rule_note : null;
             $this->status = $path_exist[0]->status;
             $this->created_at = $path_exist[0]->created_at;
 
@@ -52,6 +54,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 unset($data['rule']);
                 unset($data['hits']);
                 unset($data['rule_id']);
+                unset($data['rule_note']);
             }
 
             unset($data['type']);
@@ -87,6 +90,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 unset($data['rule']);
                 unset($data['hits']);
                 unset($data['rule_id']);
+                unset($data['rule_note']);
             }
 
             $wpdb->update(
@@ -109,10 +113,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         if(!$rule_id){
             $this->rule_id = NULL;
             $this->rule = NULL;
+            $this->rule_note = 'detached';
             $this->status = 'queued';
         }else{
             $this->rule_id = $rule_id;
             $this->rule = $rule;
+            $this->rule_note = NULL;
             $this->status = 'rule-based';
         }
     }

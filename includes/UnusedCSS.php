@@ -530,17 +530,29 @@ abstract class UnusedCSS {
                     'status' => isset($this->rule['rule']) ? 'rule-based' : 'queued'
                 ]);
 
-                if(isset($data->rule) && isset($data->rule_id)) {
+                if(isset($data->rule_id)) {
 
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule($data->rule, $data->url);
+                    $applicable_rule = UnusedCSS_Rule::get_rule_from_id($data->rule_id);
 
                     if($applicable_rule){
 
-                        $data = new UnusedCSS_Rule([
-                            'rule' => $applicable_rule->rule,
-                            'regex' => $applicable_rule->regex
-                        ]);
+                        $data = $applicable_rule;
 
+                    }
+
+                }elseif (isset($this->rule) && isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
+
+                    $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+
+                    if($applicable_rule){
+
+                        $data->attach_rule($applicable_rule->id, $applicable_rule->rule);
+                        $data->save();
+
+                        $data = new UnusedCSS_Rule([
+                           'rule' => $applicable_rule->rule,
+                           'regex' => $applicable_rule->regex,
+                        ]);
                     }
 
                 }

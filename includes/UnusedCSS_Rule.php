@@ -89,7 +89,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
         }
     }
 
-    public static function get_rules(){
+    public static function get_defined_rules(){
         $rules = apply_filters('uucss/rules', []);
 
         if(apply_filters('uucss/rules/path', false)){
@@ -123,11 +123,18 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
     public static function get_related_rule(){
 
-        $rules = self::get_rules();
+        $rules = self::get_defined_rules();
+
+        $rule_names = UnusedCSS_DB::get_rule_names();
 
         $related_rule = false;
 
         foreach ($rules as $rule){
+
+            if(!isset($rule['rule']) || isset($rule['rule']) && !in_array($rule['rule'], $rule_names)){
+
+                continue;
+            }
 
             if(isset($rule['callback']) && $rule['callback']){
 

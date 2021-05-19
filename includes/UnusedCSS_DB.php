@@ -321,6 +321,25 @@ class UnusedCSS_DB
 	    return $links;
     }
 
+    static function get_rule_names(){
+
+        if(self::$current_version < 1.2){
+            return [];
+        }
+
+        global $wpdb;
+
+        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return array_column($names, 'rule');
+    }
+
     static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
 
         if(self::$current_version < 1.2){
@@ -952,6 +971,7 @@ class UnusedCSS_DB
 		attempts mediumint(2) NULL DEFAULT 0,
 		hits mediumint(3) NULL DEFAULT 0,
 		rule_id INT NULL,
+		rule_note longtext NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
