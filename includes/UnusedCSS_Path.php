@@ -108,6 +108,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         $this->hits = 0;
         if(!$rule_id){
             $this->rule_id = NULL;
+            $this->rule = NULL;
             $this->status = 'queued';
         }else{
             $this->rule_id = $rule_id;
