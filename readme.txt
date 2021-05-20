@@ -85,6 +85,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.11 - 20/05/2021 =
+ * feat: (beta) rule based injection
+
 = 1.4.10 - 19/05/2021 =
  * feat: added select all option in optimization table
  * improve: support for wp super cache
