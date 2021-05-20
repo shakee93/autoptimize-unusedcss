@@ -288,6 +288,16 @@ abstract class UnusedCSS {
 
 	public static function enqueueGlobalScript() {
 		add_action( 'admin_enqueue_scripts', function () {
+
+            $deregister_scripts = apply_filters('uucss/scripts/global/deregister', ['popper']);
+
+            if(isset($deregister_scripts) && is_array($deregister_scripts)){
+                foreach ($deregister_scripts as $deregister_script){
+                    wp_dequeue_script($deregister_script);
+                    wp_deregister_script($deregister_script);
+                }
+            }
+
 			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
 			wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
 			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
