@@ -1280,9 +1280,15 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
 }
 
 .featherlight.attach-rule-content-model .featherlight-content{
-    width: 310px;
-    height: 120px;
+    width: 350px;
+    height: 155px;
     padding: 20px 20px;
+}
+
+.featherlight.attach-rule-content-model .featherlight-content p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .featherlight.add-site-rule-model .featherlight-content div.action-content div{

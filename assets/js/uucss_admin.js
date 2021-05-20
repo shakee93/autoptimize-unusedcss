@@ -855,12 +855,12 @@
                                 }
                                 case 'attach_to_rule':{
 
-                                    var $attach_rule_content = $('<div class="action-content"><div><select class="rule-items" id="attach-rule-item"></select></div><div class="add-action-wrap"></div></div>');
+                                    var $attach_rule_content = $('<div class="action-content"><div><select class="rule-items" id="attach-rule-item"></select></div><div><p>Base URL : <a class="base-url" target="_blank" href=""></a></p></div><div class="add-action-wrap"></div></div>');
 
                                     var rule_data = rule_table.rows().data();
 
                                     rule_data.each(function (value, index) {
-                                        var $rule_item = $('<option class="rule-item">Rule : [ '+ value.rule +' ] Pattern : [ '+ value.regex +' ] Base : [ '+ value.url +' ]</option>')
+                                        var $rule_item = $('<option class="rule-item" data-url="'+ value.url +'"  data-id="'+ value.id +'">Rule : [ '+ value.rule +' ] Pattern : [ '+ value.regex +' ]</option>')
                                         $rule_item.attr('value', value.id);
                                         $attach_rule_content.find('select.rule-items').append($rule_item)
                                     });
@@ -871,6 +871,16 @@
                                     $.featherlight($attach_rule_content,{
                                         variant : 'attach-rule-content-model uucss-update-form-fetherlight',
                                         afterOpen:function(){
+
+                                            $('#attach-rule-item').change(function(){
+
+                                                var baseUrl = $attach_rule_content.find('option[value="'+ $(this).val() +'"]').data('url');
+                                                $('.attach-rule-content-model a.base-url').text(baseUrl);
+                                                $('.attach-rule-content-model a.base-url').attr('href',baseUrl);
+                                            })
+
+                                            $('#attach-rule-item').trigger('change');
+
                                             $('#update-attach-rule').click(function(){
 
                                                 wp.ajax.post('attach_rule',{ url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
