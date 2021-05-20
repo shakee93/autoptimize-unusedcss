@@ -876,6 +876,8 @@
                                                 wp.ajax.post('attach_rule',{ url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
 
                                                     $.uucssAlert(i, 'success')
+                                                    var currentFeather = $.featherlight.current();
+                                                    if(currentFeather) currentFeather.close();
 
                                                 }).fail(function (i) {
 
