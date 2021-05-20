@@ -54,7 +54,7 @@
                 <?php if($uucss->rules_enabled()) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
-                        Rules
+                        Rules <a href="" style="font-size: 11px">Learn More</a>
                         <span class="multiple-selected-text">
                             <span class="multiple-selected-value multiple-selected-value-rule"></span>
                             Selected
