@@ -800,6 +800,10 @@
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
+                        if(!data.rule_id && window.uucss.rules_enabled === "1"){
+                            $content.find('ul').append('<li data-action_name="attach_to_rule"><a data-action_name="attach_to_rule" href="#">Attach Rule</a></li>')
+                        }
+
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
                         return $content.wrap('<div></div>').parent().html();
@@ -847,6 +851,40 @@
                             switch (action) {
                                 case 'requeue_url':{
                                     requeue('url', {url : data.url})
+                                    break;
+                                }
+                                case 'attach_to_rule':{
+
+                                    var $attach_rule_content = $('<div class="action-content"><div><select class="rule-items" id="attach-rule-item"></select></div><div class="add-action-wrap"></div></div>');
+
+                                    var rule_data = rule_table.rows().data();
+
+                                    rule_data.each(function (value, index) {
+                                        var $rule_item = $('<option class="rule-item">Rule : [ '+ value.rule +' ] Pattern : [ '+ value.regex +' ] Base : [ '+ value.url +' ]</option>')
+                                        $rule_item.attr('value', value.id);
+                                        $attach_rule_content.find('select.rule-items').append($rule_item)
+                                    });
+
+                                    $attach_rule_content.find('.add-action-wrap').append('<input id="update-attach-rule" type="button" class="button button-primary" value="Attach Rule">')
+                                    $attach_rule_content.find('#update-attach-rule').data('url', data.url)
+
+                                    $.featherlight($attach_rule_content,{
+                                        variant : 'attach-rule-content-model uucss-update-form-fetherlight',
+                                        afterOpen:function(){
+                                            $('#update-attach-rule').click(function(){
+
+                                                wp.ajax.post('attach_rule',{ url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
+
+                                                    $.uucssAlert(i, 'success')
+
+                                                }).fail(function (i) {
+
+                                                    $.uucssAlert(i, 'error')
+                                                });
+
+                                            })
+                                        }
+                                    })
                                     break;
                                 }
                                 case 'detach_from_rule':{

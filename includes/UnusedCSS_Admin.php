@@ -267,9 +267,14 @@ abstract class UnusedCSS_Admin {
             $path = new UnusedCSS_Path([
                 'url' => $url
             ]);
+
+            if(!self::is_path_glob_matched($url,$rule->regex)){
+                wp_send_json_success('Pattern not matched');
+            }
+
             $path->attach_rule($rule->id, $rule->rule);
             $path->save();
-            wp_send_json_success('Successfully detached from rule');
+            wp_send_json_success('Successfully attached to rule');
         }
 
     }
