@@ -232,12 +232,13 @@ abstract class UnusedCSS_Admin {
 
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule_id = isset($_REQUEST['rule_id']) ? $_REQUEST['rule_id'] : false;
 
         if(!$type || !$url){
             wp_send_json_error('Required field missing');
         }
 
-        if(UnusedCSS_DB::rule_exist_by_url($url)){
+        if($type == 'detach' && UnusedCSS_DB::rule_exist_by_url($url)){
             wp_send_json_error('Rule exist with same url');
         }
 
@@ -247,6 +248,26 @@ abstract class UnusedCSS_Admin {
                'url' => $url
             ]);
             $path->attach_rule();
+            $path->save();
+            wp_send_json_success('Successfully detached from rule');
+        }
+
+        if(!$type || $type == 'attach' && !$rule_id){
+            wp_send_json_error('Required field missing');
+        }
+
+        if($type == 'attach'){
+
+            $rule = UnusedCSS_Rule::get_rule_from_id($rule_id);
+
+            if(!$rule){
+                wp_send_json_error('Rule not found');
+            }
+
+            $path = new UnusedCSS_Path([
+                'url' => $url
+            ]);
+            $path->attach_rule($rule->id, $rule->rule);
             $path->save();
             wp_send_json_success('Successfully detached from rule');
         }
