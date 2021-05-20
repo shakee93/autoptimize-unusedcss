@@ -54,7 +54,7 @@
                 <?php if($uucss->rules_enabled()) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
-                        Rules <a href="" style="font-size: 11px">Learn More</a>
+                        Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500011459802-Rule-based-injection" style="font-size: 11px">Learn More</a>
                         <span class="multiple-selected-text">
                             <span class="multiple-selected-value multiple-selected-value-rule"></span>
                             Selected
