@@ -800,7 +800,7 @@
                             $content.find('ul').append('<li data-action_name="detach_from_rule"><a data-action_name="detach_from_rule" href="#">Detach from Rule</a></li>')
                         }
 
-                        if(!data.rule_id && window.uucss.rules_enabled === "1"){
+                        if(!data.rule_id && window.uucss.rules_enabled === "1" && rule_table && rule_table.rows().data().length){
                             $content.find('ul').append('<li data-action_name="attach_to_rule"><a data-action_name="attach_to_rule" href="#">Attach Rule</a></li>')
                         }
 
