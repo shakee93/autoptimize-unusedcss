@@ -430,10 +430,10 @@ class UnusedCSS_DB
             (SELECT url FROM {$wpdb->prefix}rapidload_uucss_job WHERE files = derivedTable.files LIMIT 1) as url FROM 
             (
             SELECT files, count(files) as count
-            FROM {$wpdb->prefix}rapidload_uucss_job
+            FROM (SELECT * FROM {$wpdb->prefix}rapidload_uucss_job ORDER BY files) job_table
             WHERE files IS NOT NULL
-            ORDER BY files
-            GROUP BY files HAVING count >1
+            GROUP BY files
+            HAVING count >1
             ) derivedTable", OBJECT);
 
         foreach ($duplicates as $duplicate){
