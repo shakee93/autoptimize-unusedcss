@@ -1847,16 +1847,16 @@
                             wp.ajax.post('uucss_rule_stats').then(function (i) {
                                 if(i){
 
-                                    var $ruleStatsContent = $('<div class="rule-stats-cont"><ul class="duplicates"></ul></div>');
+                                    var $ruleStatsContent = $('<div class="rule-stats-cont"><ol class="duplicates"></ol></div>');
 
                                     if(i.duplicateFiles && i.duplicateFiles.length){
 
                                         $.each(i.duplicateFiles,function(index, value){
-                                            var $duplicateFile = $('<li>' + value.url +'</li>');
-                                            $ruleStatsContent.find('ul.duplicates').append($duplicateFile);
+                                            var $duplicateFile = $('<li></li>');
+                                            $duplicateFile.append('<p>Count : '+ value.count +' Link : <a target="_blank" href="'+ value.url +'">'+value.url+'</a></p>')
+                                            $ruleStatsContent.find('ol.duplicates').append($duplicateFile);
                                         });
                                     }
-
 
                                     $.featherlight($ruleStatsContent,{
                                             variant : 'uucss-rule-stats'

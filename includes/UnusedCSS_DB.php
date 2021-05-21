@@ -435,8 +435,6 @@ class UnusedCSS_DB
             GROUP BY files HAVING count >1
             ) derivedTable", OBJECT);
 
-        self::uucss_log($duplicates);
-
         foreach ($duplicates as $duplicate){
             array_push($duplicate_files, [
                 'url' => $duplicate->url,

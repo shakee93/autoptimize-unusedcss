@@ -214,7 +214,9 @@ class UnusedCSS_Enqueue {
 
                     if(isset($url_parts['path'])){
 
-                        $result = preg_grep('~' . $url_parts['path'] . '~', array_column( $this->files, 'original' ));
+                        $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
+
+                        $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
 
                         $key = isset($result) && !empty($result) ? key($result) : null;
                     }
