@@ -153,7 +153,7 @@ class UnusedCSS_Enqueue {
 
             if($this->data->is_type('Rule')){
 
-                $this->link->attach_rule();
+                //$this->link->attach_rule();
 
             }else{
 
@@ -167,7 +167,7 @@ class UnusedCSS_Enqueue {
 
             if($this->data->is_type('Rule')){
 
-                $this->link->attach_rule();
+                //$this->link->attach_rule();
 
             }else{
 
@@ -278,7 +278,7 @@ class UnusedCSS_Enqueue {
 
                             $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
 
-                            $warning[] = [
+                            $warning = [
                                 "file" => $link,
                                 "message" => "RapidLoad optimized version for the file missing."
                             ];

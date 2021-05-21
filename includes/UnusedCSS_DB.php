@@ -454,6 +454,7 @@ class UnusedCSS_DB
         $data['url'] = isset( $link->url ) ? $link->url : null;
         $data['status'] = isset( $link->status ) ? $link->status : null;
         $data['success_count'] = isset( $link->hits ) ? $link->hits : 0;
+        $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
 
         if($rule == 'path'){
             $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
@@ -485,7 +486,7 @@ class UnusedCSS_DB
         $data['meta']['id'] = isset($link->job_id) ? $link->job_id : null;
         $data['meta']['stats'] = isset($link->stats) ? unserialize($link->stats) : null;
         $data['meta']['review'] = isset($link->review) ? unserialize($link->review) : null;
-        $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
+
         $data['meta']['error'] = isset($link->error) ? unserialize($link->error) : null;
         $data['meta']['status'] = isset( $link->status ) ? $link->status : null;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) : null;
