@@ -432,6 +432,7 @@ class UnusedCSS_DB
             SELECT files, count(files) as count
             FROM {$wpdb->prefix}rapidload_uucss_job
             WHERE files IS NOT NULL
+            ORDER BY files
             GROUP BY files HAVING count >1
             ) derivedTable", OBJECT);
 
