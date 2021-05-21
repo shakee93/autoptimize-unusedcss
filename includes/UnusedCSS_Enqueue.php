@@ -73,10 +73,21 @@ class UnusedCSS_Enqueue {
 
                     if(!in_array($search, array_column($this->warnings, 'file'))){
 
-                        $this->warnings[] = [
+                        $warning = [
                             "file" => $search,
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
+
+                        if($this->data->is_type('Rule')){
+
+                            $this->link->add_warning($warning);
+
+                        }else{
+
+                            $this->warnings[] = $warning;
+
+                        }
+
                     }
 
                 }
@@ -267,10 +278,20 @@ class UnusedCSS_Enqueue {
 
                             $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
 
-                            $this->warnings[] = [
+                            $warning[] = [
                                 "file" => $link,
                                 "message" => "RapidLoad optimized version for the file missing."
                             ];
+
+                            if($this->data->is_type('Rule')){
+
+                                $this->link->add_warning($warning);
+
+                            }else{
+
+                                $this->warnings[] = $warning;
+
+                            }
 
                         }
 

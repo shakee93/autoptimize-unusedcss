@@ -29,7 +29,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             $this->job_id = $rule_current[0]->job_id;
             $this->stats = $rule_current[0]->stats;
             $this->files = $rule_current[0]->files;
-            $this->warnings = $rule_current[0]->warnings;
+            $this->warnings = isset($rule_current[0]->warnings) ? unserialize($rule_current[0]->warnings) : [];
             $this->review = $rule_current[0]->review;
             $this->error = $rule_current[0]->error;
             $this->attempts = $rule_current[0]->attempts;
@@ -77,6 +77,10 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             unset($data['id']);
             unset($data['type']);
+
+            if(isset($data['warnings'])){
+                $data = serialize($data['warnings']);
+            }
 
             $wpdb->update(
                 $wpdb->prefix . 'rapidload_uucss_rule',
