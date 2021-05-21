@@ -87,7 +87,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             unset($data['type']);
 
             if(isset($data['warnings'])){
-                $data = serialize($data['warnings']);
+                $data['warnings'] = serialize($data['warnings']);
             }
 
             if(UnusedCSS_DB::$current_version < 1.2){

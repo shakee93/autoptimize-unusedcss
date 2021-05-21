@@ -79,7 +79,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             unset($data['type']);
 
             if(isset($data['warnings'])){
-                $data = serialize($data['warnings']);
+                $data['warnings'] = serialize($data['warnings']);
             }
 
             $wpdb->update(

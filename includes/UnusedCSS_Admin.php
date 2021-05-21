@@ -127,7 +127,7 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error('URL not allowed');
         }
 
-        if(!preg_match($regex, $url)){
+        if(!(bool)preg_match($regex, $url)){
             wp_send_json_error('Invalid regex for the url');
         }
 
@@ -268,7 +268,7 @@ abstract class UnusedCSS_Admin {
                 'url' => $url
             ]);
 
-            if(!preg_match($rule->regex, $url)){
+            if(!(bool)preg_match($rule->regex, $url)){
                 wp_send_json_success('Pattern not matched');
             }
 

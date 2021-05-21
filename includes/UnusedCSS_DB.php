@@ -502,7 +502,7 @@ class UnusedCSS_DB
         $applied_rule = false;
 
         foreach ($rules as $rule){
-            if(preg_match($rule->regex, $url)){
+            if((bool)preg_match($rule->regex, $url)){
                 $applied_rule = $rule;
                 break;
             }
