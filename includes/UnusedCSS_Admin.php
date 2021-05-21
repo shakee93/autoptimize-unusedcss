@@ -78,6 +78,7 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
             add_action( "wp_ajax_uucss_status", [ $this, 'uucss_status' ] );
+            add_action( "wp_ajax_uucss_rule_stats", [ $this, 'uucss_rule_stats' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
             add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
             add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
@@ -87,6 +88,14 @@ abstract class UnusedCSS_Admin {
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
+
+    }
+
+    public function uucss_rule_stats(){
+
+        wp_send_json_success([
+            'duplicateFiles' => UnusedCSS_DB::get_duplicate_files()
+        ]);
 
     }
 

@@ -419,6 +419,36 @@ class UnusedCSS_DB
 	    return $links;
     }
 
+    static function get_duplicate_files(){
+
+        global $wpdb;
+
+        $duplicate_files = [];
+
+        $duplicates = $wpdb->get_results(
+            "SELECT *, 
+            (SELECT url FROM {$wpdb->prefix}rapidload_uucss_job WHERE files = derivedTable.files LIMIT 1) as url FROM 
+            (
+            SELECT files, count(files) as count
+            FROM {$wpdb->prefix}rapidload_uucss_job
+            WHERE files IS NOT NULL
+            GROUP BY files HAVING count >1
+            ) derivedTable", OBJECT);
+
+        self::uucss_log($duplicates);
+
+        foreach ($duplicates as $duplicate){
+            array_push($duplicate_files, [
+                'url' => $duplicate->url,
+                'files' => isset($duplicate->files) ? unserialize($duplicate->files) : [],
+                'count' => $duplicate->count
+            ]);
+        }
+
+        return $duplicate_files;
+
+    }
+
     static function get_rules_exclude($rule, $regex = '/'){
         global $wpdb;
 

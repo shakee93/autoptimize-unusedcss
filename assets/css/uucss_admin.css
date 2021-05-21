@@ -1388,22 +1388,26 @@ li.rapidload-status .content .status-action-wrap{
 }
 
 .featherlight.uucss-job-details .featherlight-content,
+.featherlight.uucss-rule-stats .featherlight-content,
 .featherlight.uucss-gpsi-result-details .featherlight-content{
     padding: 30px 15px 15px;
 }
 
 .featherlight.uucss-job-details .featherlight-inner,
+.featherlight.uucss-rule-stats .featherlight-inner,
 .featherlight.uucss-gpsi-result-details .featherlight-inner{
     height: 100%;
 }
 
 .featherlight.uucss-job-details .featherlight-inner .code,
+.featherlight.uucss-rule-stats .featherlight-inner .code,
 .featherlight.uucss-gpsi-result-details .featherlight-inner .code{
     height: 100%;
     overflow-y: scroll;
 }
 
 .featherlight.uucss-job-details .featherlight-inner .code code,
+.featherlight.uucss-rule-stats .featherlight-inner .code code,
 .featherlight.uucss-gpsi-result-details .featherlight-inner .code code{
     background-color: #fff;
 }
