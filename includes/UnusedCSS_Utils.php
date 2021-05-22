@@ -382,7 +382,7 @@ trait UnusedCSS_Utils {
 
     public static function is_url_glob_matched($path, $pattern, $ignoreCase = FALSE) {
 
-        $expr = preg_replace_callback('/[\\\\^.|()?*+\\/]/', function($matches) {
+        $expr = preg_replace_callback('/[\\\\^.?*+\\/]/', function($matches) {
             switch ($matches[0]) {
                 case '*':
                     return '.*';
