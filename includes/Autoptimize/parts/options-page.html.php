@@ -524,7 +524,7 @@
                         $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
                         $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
                         $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
-                        $warnings = UnusedCSS_DB::get_total_job_count(" WHERE warnings IS NOT NULL and warnings != 'a:0:{}'");
+                        $warnings = UnusedCSS_DB::get_total_job_count(" WHERE warnings IS NOT NULL and warnings = 'a:0:{}'");
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
