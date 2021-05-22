@@ -397,7 +397,7 @@ trait UnusedCSS_Utils {
         if ($ignoreCase) {
             $expr .= 'i';
         }
-        error_log($expr);
+
         return (bool) preg_match($expr, $path);
 
     }
