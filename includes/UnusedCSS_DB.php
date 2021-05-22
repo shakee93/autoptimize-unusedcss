@@ -265,6 +265,22 @@ class UnusedCSS_DB
         return isset($option) && !empty($option );
     }
 
+    static function unlink_rule($rule_id = false){
+
+        if(!$rule_id){
+            return;
+        }
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET rule_id = NULL, status = 'queued' WHERE rule_id = " . $rule_id );
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+    }
+
     static function get_total_job_count($where = ''){
 
         if(self::$current_version < 1.2 && strpos( $where, 'hits' ) !== false){

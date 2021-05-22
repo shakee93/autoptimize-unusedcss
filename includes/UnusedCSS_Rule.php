@@ -174,4 +174,8 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
         global $uucss;
         $uucss->remove_unused_files($this->url, $this->rule, $this->regex);
     }
+
+    public function releaseRule(){
+        //UnusedCSS_DB::unlink_rule($this->id);
+    }
 }

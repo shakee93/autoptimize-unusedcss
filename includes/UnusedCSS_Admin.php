@@ -149,9 +149,15 @@ abstract class UnusedCSS_Admin {
                    'regex' => $_REQUEST['old_regex']
                 ]);
 
+                if(isset($_REQUEST['old_url']) && $_REQUEST['old_url'] != $url ||
+                    $_REQUEST['old_rule'] != $rule || $_REQUEST['old_regex'] != $regex){
+                    $ruleObject->requeue();
+                    $ruleObject->releaseRule();
+                }
+
+                $ruleObject->url = $url;
                 $ruleObject->rule = $rule;
                 $ruleObject->regex = $regex;
-                $ruleObject->url = $url;
                 $ruleObject->save();
 
                 wp_send_json_success('Rule updated successfully');
