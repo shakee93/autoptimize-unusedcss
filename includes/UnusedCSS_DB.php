@@ -550,7 +550,7 @@ class UnusedCSS_DB
         $applied_rule = false;
 
         foreach ($rules as $rule){
-            if(self::is_path_glob_matched($url,$rule->regex)){
+            if(self::is_url_glob_matched($url,$rule->regex)){
                 $applied_rule = $rule;
                 break;
             }

@@ -380,6 +380,28 @@ trait UnusedCSS_Utils {
         return false;
     }
 
+    public static function is_url_glob_matched($path, $pattern, $ignoreCase = FALSE) {
+
+        $expr = preg_replace_callback('/[\\\\^.|()?*+\\/]/', function($matches) {
+            switch ($matches[0]) {
+                case '*':
+                    return '.*';
+                case '?':
+                    return '.';
+                default:
+                    return '\\'.$matches[0];
+            }
+        }, $pattern);
+
+        $expr = '/'.$expr.'/';
+        if ($ignoreCase) {
+            $expr .= 'i';
+        }
+        error_log($expr);
+        return (bool) preg_match($expr, $path);
+
+    }
+
     public static function is_path_glob_matched($path, $pattern, $ignoreCase = FALSE) {
 
         $expr = preg_replace_callback('/[\\\\^$.[\\]|()?*+{}\\-\\/]/', function($matches) {
