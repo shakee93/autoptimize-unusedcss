@@ -65,7 +65,7 @@ abstract class UnusedCSS_Job
         $this->files = null;
         $this->hits = 0;
         $this->stats = null;
-        $this->warnings = [];
+        $this->warnings = null;
         $this->error = null;
         $this->created_at = date( "Y-m-d H:m:s", time() );
         $this->clearFiles();
@@ -76,7 +76,7 @@ abstract class UnusedCSS_Job
         $this->status = 'success';
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
-        $this->warnings = isset($warnings) ? $warnings : [];
+        $this->warnings = isset($warnings) ? $warnings : null;
         $this->error = null;
     }
 
@@ -88,10 +88,33 @@ abstract class UnusedCSS_Job
         $this->clearFiles();
     }
 
+    public function remove_file_missing_warnings(){
+
+        if(!isset($this->warnings)){
+            return;
+        }
+
+        $warnings = [];
+
+        foreach ($this->warnings as $warning){
+
+            if(isset($warning['message']) && $warning['message'] == 'RapidLoad optimized version for the file missing.'){
+                continue;
+            }
+
+            array_push($warnings, $warning);
+        }
+
+        if(count($warnings) > 0){
+            $this->set_warnings($warnings);
+        }
+
+    }
+
     public function mark_as_successful_hit(){
         $this->attempts = 0;
         $this->hits++;
-        $this->warnings = [];
+        $this->remove_file_missing_warnings();
         $this->error = NULL;
         if(UnusedCSS_DB::$current_version < 1.2){
             $stats = $this->get_stats();

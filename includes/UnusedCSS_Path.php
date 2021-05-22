@@ -28,7 +28,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->job_id = $path_exist[0]->job_id;
             $this->stats = $path_exist[0]->stats;
             $this->files = $path_exist[0]->files;
-            $this->warnings = isset($path_exist[0]->warnings) ? unserialize($path_exist[0]->warnings) : [];
+            $this->warnings = isset($path_exist[0]->warnings) ? unserialize($path_exist[0]->warnings) : null;
             $this->review = $path_exist[0]->review;
             $this->error = $path_exist[0]->error;
             $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
@@ -111,7 +111,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
     public function attach_rule($rule_id = false , $rule = null){
         $this->files = NULL;
         $this->stats = NULL;
-        $this->warnings = [];
+        $this->warnings = null;
         $this->error = NULL;
         $this->hits = 0;
         if(!$rule_id){

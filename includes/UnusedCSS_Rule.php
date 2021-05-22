@@ -29,7 +29,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
             $this->job_id = $rule_current[0]->job_id;
             $this->stats = $rule_current[0]->stats;
             $this->files = $rule_current[0]->files;
-            $this->warnings = isset($rule_current[0]->warnings) ? unserialize($rule_current[0]->warnings) : [];
+            $this->warnings = isset($rule_current[0]->warnings) ? unserialize($rule_current[0]->warnings) : null;
             $this->review = $rule_current[0]->review;
             $this->error = $rule_current[0]->error;
             $this->attempts = $rule_current[0]->attempts;

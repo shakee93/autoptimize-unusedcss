@@ -520,11 +520,11 @@
                     <div class="content" style="display:none;">
                         <?php
                         $total = UnusedCSS_DB::get_total_job_count();
-                        $success = UnusedCSS_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NULL || warnings = 'a:0:{}'");
+                        $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
                         $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
                         $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
                         $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
-                        $warnings = UnusedCSS_DB::get_total_job_count(" WHERE warnings IS NOT NULL AND warnings != 'a:0:{}'");
+                        $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
                         $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                         ?>
                         <p>
