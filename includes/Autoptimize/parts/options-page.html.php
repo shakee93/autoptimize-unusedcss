@@ -633,6 +633,10 @@
                                        name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
                                     echo '1';
                                 } ?>">
+                                <input id='uucss_dev_mode' type='hidden'
+                                       name='autoptimize_uucss_settings[uucss_dev_mode]'  value="<?php if ( ! empty( $options['uucss_dev_mode'] ) && '1' === $options['uucss_dev_mode'] ) {
+                                    echo '1';
+                                } ?>">
                                 <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend_rule'] ) && '1' === $options['uucss_auto_refresh_frontend_rule'] ) {
                                     echo '1';

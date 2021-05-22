@@ -440,12 +440,30 @@ class UnusedCSS_DB
             array_push($duplicate_files, [
                 'url' => $duplicate->url,
                 'files' => isset($duplicate->files) ? unserialize($duplicate->files) : [],
-                'count' => $duplicate->count
+                'count' => $duplicate->count,
+                'otherUrls' => self::get_urls_with_same_files(isset($duplicate->files) ? $duplicate->files : null)
             ]);
         }
 
         return $duplicate_files;
 
+    }
+
+    static function get_urls_with_same_files($files){
+
+        if(!$files){
+            return [];
+        }
+
+        global $wpdb;
+
+        $urls = $wpdb->get_col("SELECT url FROM {$wpdb->prefix}rapidload_uucss_job WHERE files = '" . $files . "'");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $urls;
     }
 
     static function get_rules_exclude($rule, $regex = '/'){

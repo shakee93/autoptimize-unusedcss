@@ -641,7 +641,7 @@ abstract class UnusedCSS_Admin {
             'notifications' => $this->getNotifications(),
             'faqs' => $this->get_faqs(),
             'public_notices' => $this->get_public_notices(),
-            'dev_mode' => apply_filters('uucss/dev_mode', false),
+            'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $this->uucss->rules_enabled(),
         );
 
