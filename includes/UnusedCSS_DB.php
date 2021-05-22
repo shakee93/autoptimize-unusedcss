@@ -457,7 +457,7 @@ class UnusedCSS_DB
 
         global $wpdb;
 
-        $urls = $wpdb->get_col("SELECT url FROM {$wpdb->prefix}rapidload_uucss_job WHERE files = '" . $files . "'");
+        $urls = $wpdb->get_col("SELECT url FROM {$wpdb->prefix}rapidload_uucss_job WHERE files = '" . $files . "' ORDER BY url");
 
         if(!empty($error)){
             self::show_db_error($error);
