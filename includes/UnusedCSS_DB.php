@@ -434,7 +434,7 @@ class UnusedCSS_DB
             WHERE files IS NOT NULL
             GROUP BY files
             HAVING count >1
-            ) derivedTable", OBJECT);
+            ) derivedTable ORDER BY url", OBJECT);
 
         foreach ($duplicates as $duplicate){
             array_push($duplicate_files, [
