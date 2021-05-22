@@ -715,9 +715,9 @@ class UnusedCSS_DB
 		if(!$link){
 
 			if(UnusedCSS_DB::$current_version < 1.2){
-                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0");
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL, warnings = NULL WHERE id > 0");
             }else{
-                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL WHERE id > 0 AND rule_id IS NULL");
+                $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_uucss_job SET status = '". $status ."' , job_id = NULL, warnings = NULL WHERE id > 0 AND rule_id IS NULL");
             }
 
 		}else{
