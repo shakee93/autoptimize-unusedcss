@@ -907,6 +907,8 @@ abstract class UnusedCSS_Admin {
 
         if($status){
 
+            UnusedCSS_DB::reset_hits();
+
             if($type == 'path'){
 
                 $links = UnusedCSS_DB::get_links_where(' ');

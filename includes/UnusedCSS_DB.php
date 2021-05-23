@@ -379,6 +379,24 @@ class UnusedCSS_DB
         return $links;
     }
 
+    static function reset_hits($type = 'path'){
+
+        if(self::$current_version < 1.2){
+            return false;
+        }
+
+        global $wpdb;
+
+        $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0 WHERE id > 0");
+        $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_rule SET hits = 0 WHERE id > 0");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+    }
+
     static function get_links_where($where = ''){
         global $wpdb;
 
