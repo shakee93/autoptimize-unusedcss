@@ -1684,6 +1684,7 @@
 
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
+                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -1708,6 +1709,28 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
+                        case 'rule-stats':{
+                            wp.ajax.post('uucss_rule_stats').then(function (i) {
+                                if(i){
+
+                                    var $ruleStatsContent = $('<div class="rule-stats-cont"><ol class="duplicates"></ol></div>');
+
+                                    if(i.duplicateFiles && i.duplicateFiles.length){
+
+                                        $.each(i.duplicateFiles,function(index, value){
+                                            var $duplicateFile = $('<li></li>');
+                                            $duplicateFile.append('<p>Count : '+ value.count +' Link : <a target="_blank" href="'+ value.url +'">'+value.url+'</a></p>')
+                                            $ruleStatsContent.find('ol.duplicates').append($duplicateFile);
+                                        });
+                                    }
+
+                                    $.featherlight($ruleStatsContent,{
+                                        variant : 'uucss-rule-stats'
+                                    });
+                                }
+                            });
+                            break;
+                        }
                         case 'requeue_selected':
                         case 'requeue_all':{
                             var requeue_url_list = [];
@@ -1825,10 +1848,6 @@
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
                 $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
 
-                if(window.uucss && window.uucss.dev_mode === "1"){
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Rule Stats</a></li>');
-                }
-
                 return $content.wrap('<div></div>').parent().html();
             },
             onClickOutside(instance, event) {
@@ -1846,28 +1865,6 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
-                        case 'rule-stats':{
-                            wp.ajax.post('uucss_rule_stats').then(function (i) {
-                                if(i){
-
-                                    var $ruleStatsContent = $('<div class="rule-stats-cont"><ol class="duplicates"></ol></div>');
-
-                                    if(i.duplicateFiles && i.duplicateFiles.length){
-
-                                        $.each(i.duplicateFiles,function(index, value){
-                                            var $duplicateFile = $('<li></li>');
-                                            $duplicateFile.append('<p>Count : '+ value.count +' Link : <a target="_blank" href="'+ value.url +'">'+value.url+'</a></p>')
-                                            $ruleStatsContent.find('ol.duplicates').append($duplicateFile);
-                                        });
-                                    }
-
-                                    $.featherlight($ruleStatsContent,{
-                                            variant : 'uucss-rule-stats'
-                                        });
-                                }
-                            });
-                            break;
-                        }
                         case 'requeue_selected':
                         case 'requeue_all':{
                             var requeue_url_list = [];

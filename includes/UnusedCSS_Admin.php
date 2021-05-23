@@ -667,13 +667,18 @@ abstract class UnusedCSS_Admin {
 
     public function run_gpsi_test_for_all(){
 
-        $links = UnusedCSS_DB::get_links_where(" WHERE warnings IS NULL AND status = 'success'");
+        $links = UnusedCSS_DB::get_links_where(" WHERE status = 'success' ");
 
         if(!empty($links)){
 
             foreach ($links as $link){
 
-                if(isset($link['meta']) && isset($link['meta']['stats']) && isset($link['meta']['stats']->success_count) && $link['meta']['stats']->success_count > 0){
+                if(isset($link['meta']) &&
+                    isset($link['meta']['stats']) &&
+                    isset($link['meta']['stats']->success_count) &&
+                    $link['meta']['stats']->success_count > 0 ||
+                    isset($link['success_count']) && $link['success_count']
+                ){
                     continue;
                 }
 
