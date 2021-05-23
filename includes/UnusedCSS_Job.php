@@ -76,7 +76,7 @@ abstract class UnusedCSS_Job
         $this->status = 'success';
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
-        $this->warnings = isset($warnings) ? $warnings : null;
+        $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
         $this->error = null;
     }
 
@@ -107,6 +107,8 @@ abstract class UnusedCSS_Job
 
         if(count($warnings) > 0){
             $this->set_warnings($warnings);
+        }else{
+            $this->warnings = null;
         }
 
     }
@@ -133,6 +135,8 @@ abstract class UnusedCSS_Job
         if(isset($warnings) && count($warnings) > 0){
             $this->hits = 0;
             $this->warnings = $warnings;
+        }else{
+            $this->warnings = null;
         }
     }
 
