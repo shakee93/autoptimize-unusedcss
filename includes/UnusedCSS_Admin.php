@@ -667,7 +667,7 @@ abstract class UnusedCSS_Admin {
 
     public function run_gpsi_test_for_all(){
 
-        $links = UnusedCSS_DB::get_links_where(" WHERE status = 'success' ");
+        $links = UnusedCSS_DB::get_links_where(" WHERE status IN('success','rule-based') ");
 
         if(!empty($links)){
 
