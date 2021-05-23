@@ -898,6 +898,7 @@ abstract class UnusedCSS_Admin {
 
         if($url){
 
+            UnusedCSS_DB::reset_hits($url);
             do_action( 'uucss/cached', [
                 'url' => $url
             ] );
