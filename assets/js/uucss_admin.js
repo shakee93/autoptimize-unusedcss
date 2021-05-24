@@ -1718,14 +1718,40 @@
                                     if(i.duplicateFiles && i.duplicateFiles.length){
 
                                         $.each(i.duplicateFiles,function(index, value){
-                                            var $duplicateFile = $('<li></li>');
-                                            $duplicateFile.append('<p>Count : '+ value.count +' Link : <a target="_blank" href="'+ value.url +'">'+value.url+'</a></p>')
+                                            var $duplicateFile = $('<li class="duplicate-file-item"></li>');
+                                            $duplicateFile.data('otherURLs', value.otherUrls)
+                                            $duplicateFile.append('<p>Count : '+ value.count +' Link : <a class="duplicate-file-item-base" target="_blank" href="'+ value.url +'">'+value.url+'</a></p>')
                                             $ruleStatsContent.find('ol.duplicates').append($duplicateFile);
                                         });
                                     }
 
                                     $.featherlight($ruleStatsContent,{
-                                        variant : 'uucss-rule-stats'
+                                        variant : 'uucss-rule-stats',
+                                        afterOpen: function(){
+
+                                            var $otherUrls = $('<div><ol class="duplicate-other-urls"></ol></div>');
+
+                                            $.each($('a.duplicate-file-item-base'), function (index, value){
+                                                var list = $(value).parent().parent().data('otherURLs');
+
+                                                if(list && list.length){
+
+                                                    $.each(list, function(index, url){
+                                                        $otherUrls.find('ol').append('<li><a target="_blank" href="' + url + '">'+ url +'</a>')
+                                                    })
+                                                }
+
+                                            });
+
+                                            tippy($('a.duplicate-file-item-base')[0],{
+                                                content: $otherUrls.html(),
+                                                theme: 'light',
+                                                allowHTML: true,
+                                                interactive: true,
+                                                hideOnClick:true,
+                                                placement:'right'
+                                            })
+                                        }
                                     });
                                 }
                             });

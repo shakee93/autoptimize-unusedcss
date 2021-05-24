@@ -15,8 +15,19 @@ class Cloudflare_Compatible extends RapidLoad_ThirdParty{
 
     public function init_hooks()
     {
+        add_filter('uucss/cache/bust', [$this, 'add_cache_busting_params'], 10, 1);
         add_action( 'uucss/cached', [$this, 'handle'], 10, 2 );
         add_action( 'uucss/cache_cleared', [$this, 'handle'], 10, 2 );
+    }
+
+    public function add_cache_busting_params($cacheBusting){
+
+        array_push($cacheBusting, [
+            'type' => 'query',
+            'rule' => 'nocache'
+        ]);
+
+        return $cacheBusting;
     }
 
     public function handle($args)
