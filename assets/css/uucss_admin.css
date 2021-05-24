@@ -1436,3 +1436,7 @@ table#uucss-options tbody tr td{
 .uucss-history-table span.job-status.status + div div.tippy-content{
     font-size: 11px;
 }
+
+.featherlight.uucss-rule-stats .rule-stats-cont .duplicate-file-item div .tippy-box{
+    max-width: 500px!important;
+}
