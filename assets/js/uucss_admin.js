@@ -1729,9 +1729,10 @@
                                         variant : 'uucss-rule-stats',
                                         afterOpen: function(){
 
-                                            var $otherUrls = $('<div><ol class="duplicate-other-urls"></ol></div>');
-
                                             $.each($('a.duplicate-file-item-base'), function (index, value){
+
+                                                var $otherUrls = $('<div><ol class="duplicate-other-urls"></ol></div>');
+
                                                 var list = $(value).parent().parent().data('otherURLs');
 
                                                 if(list && list.length){
