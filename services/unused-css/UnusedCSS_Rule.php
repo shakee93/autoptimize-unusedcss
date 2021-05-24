@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die();
 
 class UnusedCSS_Rule extends UnusedCSS_Job {
 
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     public $regex;
 

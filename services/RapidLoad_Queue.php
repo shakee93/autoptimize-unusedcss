@@ -2,10 +2,10 @@
 
 defined( 'ABSPATH' ) or die();
 
-class UnusedCSS_Queue
+class RapidLoad_Queue
 {
 
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
     public static $interval = 600;
     public static $job_count = 4;
     public $async = false;
@@ -71,7 +71,7 @@ class UnusedCSS_Queue
             'product',
         ));
 
-        $this->fileSystem = new UnusedCSS_FileSystem();
+        $this->fileSystem = new RapidLoad_FileSystem();
     }
 
     function update_result_hook(){
@@ -141,7 +141,7 @@ class UnusedCSS_Queue
         }else if($post_type == 'current'){
 
             if($type == 'path'){
-                UnusedCSS_Settings::clear_links(true);
+                RapidLoad_Settings::clear_links(true);
             }else{
                 UnusedCSS_DB::clear_rules(true);
             }
@@ -330,7 +330,7 @@ class UnusedCSS_Queue
             $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
         }
 
-        $site_map = new UnusedCSS_Sitemap();
+        $site_map = new RapidLoad_Sitemap();
         $urls = $site_map->process_site_map($url);
 
         global $uucss;
@@ -467,7 +467,7 @@ class UnusedCSS_Queue
             'type' => 'store'
         ] );
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->get( 's/unusedcss/' . $rule->job_id);
 
@@ -485,7 +485,7 @@ class UnusedCSS_Queue
             return;
         }
 
-        $uucss_store = new UnusedCSS_Store(null, $rule->url,null, $rule);
+        $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
 
         if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
 
@@ -512,7 +512,7 @@ class UnusedCSS_Queue
                 'type' => 'uucss-cron'
             ]);
 
-            $uucss_api = new UnusedCSS_Api();
+            $uucss_api = new RapidLoad_Api();
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss->api_options($post_id),
@@ -565,7 +565,7 @@ class UnusedCSS_Queue
             'type' => 'uucss-cron'
         ]);
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 's/unusedcss',
             array_merge( $uucss->api_options($post_id),
@@ -606,7 +606,7 @@ class UnusedCSS_Queue
             'type' => 'store'
         ] );
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->get( 's/unusedcss/' . $job_id);
 
@@ -652,7 +652,7 @@ class UnusedCSS_Queue
             return;
         }
 
-        $uucss_store = new UnusedCSS_Store(null, $url,null);
+        $uucss_store = new RapidLoad_Store(null, $url,null);
 
         if(isset($result->state)){
 

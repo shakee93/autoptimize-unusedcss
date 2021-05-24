@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) or die();
 /**
  * Class UnusedCSS
  */
-trait UnusedCSS_Utils {
+trait RapidLoad_Utils {
 
     private static $log_file_system = null;
 
@@ -62,7 +62,7 @@ trait UnusedCSS_Utils {
 
     private static function get_log_instance(){
 	    if(!self::$log_file_system){
-	        return new UnusedCSS_FileSystem();
+	        return new RapidLoad_FileSystem();
         }
 	    return self::$log_file_system;
     }

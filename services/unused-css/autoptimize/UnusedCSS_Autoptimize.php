@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die();
  */
 class UnusedCSS_Autoptimize extends UnusedCSS {
 
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
 	public $deps_available = false;
 

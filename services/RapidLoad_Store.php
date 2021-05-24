@@ -5,9 +5,9 @@ defined( 'ABSPATH' ) or die();
 /**
  * Class UnusedCSS
  */
-class UnusedCSS_Store {
+class RapidLoad_Store {
 
-	use UnusedCSS_Utils;
+	use RapidLoad_Utils;
 
 	public $provider;
 
@@ -26,7 +26,7 @@ class UnusedCSS_Store {
 
 
     /**
-     * UnusedCSS_Store constructor.
+     * RapidLoad_Store constructor.
      * @param $provider
      * @param $url
      * @param $args
@@ -39,7 +39,7 @@ class UnusedCSS_Store {
         $this->args = $args;
         $this->options = UnusedCSS_Admin::fetch_options();
 
-        $this->file_system = new UnusedCSS_FileSystem();
+        $this->file_system = new RapidLoad_FileSystem();
 
         if(!$rule){
 
@@ -58,7 +58,7 @@ class UnusedCSS_Store {
             'type' => 'store'
         ] );
 
-	    $uucss_api = new UnusedCSS_Api();
+	    $uucss_api = new RapidLoad_Api();
 
         if(apply_filters('uucss/queue/redis', true) && !isset($this->args['first_job']) && apply_filters('uucss/queue/purger-enabled', false)){
 
@@ -143,7 +143,7 @@ class UnusedCSS_Store {
             'type' => 'store'
         ] );
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 'purger',
             array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],

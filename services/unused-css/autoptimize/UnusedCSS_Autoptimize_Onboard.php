@@ -5,7 +5,7 @@
  */
 
 class UnusedCSS_Autoptimize_Onboard {
-	use UnusedCSS_Utils;
+	use RapidLoad_Utils;
 
 	/**
 	 * @var UnusedCSS_Autoptimize
@@ -82,8 +82,8 @@ class UnusedCSS_Autoptimize_Onboard {
         $status['active'] = UnusedCSS_Autoptimize_Admin::ao_active();
         $status['css_enabled'] = UnusedCSS_Autoptimize_Admin::ao_css_option_enabled();
         $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
-        $status['uucss_first_job_done'] = UnusedCSS_Settings::get_first_link() ? true : false;
-        $status['uucss_first_job'] = UnusedCSS_Settings::get_first_link();
+        $status['uucss_first_job_done'] = RapidLoad_Settings::get_first_link() ? true : false;
+        $status['uucss_first_job'] = RapidLoad_Settings::get_first_link();
 
         if(wp_doing_ajax()){
             wp_send_json_success($status);

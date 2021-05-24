@@ -2,9 +2,9 @@
 
 defined( 'ABSPATH' ) or die();
 
-class UnusedCSS_Settings {
+class RapidLoad_Settings {
 
-	use UnusedCSS_Utils;
+	use RapidLoad_Utils;
 
 	static $map_key = 'uucss_map';
 

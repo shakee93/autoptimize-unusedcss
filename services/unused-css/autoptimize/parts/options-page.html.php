@@ -426,8 +426,8 @@
                                                 ['value' => 1800, 'name' => '30 Minutes', 'max' => 16],
                                                 ['value' => 3600, 'name' => '1 Hour', 'max' => 16],
                                         ];
-                                        $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : UnusedCSS_Queue::$job_count;
-                                        $default_interval = isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : UnusedCSS_Queue::$interval;
+                                        $default_job_count = isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : RapidLoad_Queue::$job_count;
+                                        $default_interval = isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : RapidLoad_Queue::$interval;
                                     ?>
                                     Run
                                     <select name="autoptimize_uucss_settings[uucss_jobs_per_queue]" id="uucss_jobs_per_queue">
@@ -780,7 +780,7 @@
             <select id="model-requeue-post-type">
                 <option value="url">URL</option>
                 <?php
-                $include = UnusedCSS_Queue::get_post_types();
+                $include = RapidLoad_Queue::get_post_types();
                 if(isset($include)){
                     foreach ($include as $value){
                         $post_object = get_post_type_object( $value );

@@ -5,9 +5,9 @@ defined( 'ABSPATH' ) or die();
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
-class UnusedCSS_Sitemap
+class RapidLoad_Sitemap
 {
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     private $sitemap_error;
 

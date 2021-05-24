@@ -116,10 +116,10 @@
                         </div>
                         <div class="action-wrap">
                             <a class="skip-analyze js-uucss-connect"
-                               href="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>">Skip
+                               href="<?php echo RapidLoad_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>">Skip
                                 & Connect</a>
                             <a class="act-button <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'js-uucss-connect' : 'js-uucss-analyze-site' ?> "
-                               data-activation_url="<?php echo UnusedCSS_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
+                               data-activation_url="<?php echo RapidLoad_Utils::activation_url( "authorize", 'options-general.php?page=uucss-onboarding' ) ?>"
                                href="#"
                                target="_blank">
 			                    <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'Connect' : 'Analyze' ?>
@@ -145,12 +145,12 @@
                             <a class="act-button js-activate-ao"
                                href="<?php
                                if (UnusedCSS_Autoptimize_Admin::ao_installed()) {
-                                   echo UnusedCSS_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin());
+                                   echo RapidLoad_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin());
                                } else {
                                    echo network_admin_url('plugin-install.php?tab=plugin-information&plugin=autoptimize');
                                }
                                ?>"
-                               data-activation_url="<?php echo UnusedCSS_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin()); ?>"
+                               data-activation_url="<?php echo RapidLoad_Utils::activate_plugin(UnusedCSS_Autoptimize_Admin::get_installed_ao_plugin()); ?>"
                                target="_blank">
                                 <?php
                                 if (!UnusedCSS_Autoptimize_Admin::ao_installed()) {
@@ -185,7 +185,7 @@
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>
-                    <div class="run-job actions slide-content <?php if (UnusedCSS_Settings::get_first_link()) {
+                    <div class="run-job actions slide-content <?php if (RapidLoad_Settings::get_first_link()) {
                         echo 'done';
                     } ?>">
                         <h2>Run First Job</h2>

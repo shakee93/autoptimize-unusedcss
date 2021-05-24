@@ -2,10 +2,10 @@
 defined( 'ABSPATH' ) or die();
 
 /**
- * Class UnusedCSS_FileSystem
+ * Class RapidLoad_FileSystem
  */
 
-class UnusedCSS_FileSystem
+class RapidLoad_FileSystem
 {
     public function put_contents( $file_location, $css , $mode = null){
         return file_put_contents($file_location, $css, $mode);

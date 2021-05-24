@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die();
 
 class UnusedCSS_DB
 {
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     static $db_version = "1.2";
     static $db_option = "rapidload_migration";
@@ -93,7 +93,7 @@ class UnusedCSS_DB
 
 	static function seed() {
 
-		$maps = UnusedCSS_Admin::get_site_option( UnusedCSS_Settings::$map_key );
+		$maps = UnusedCSS_Admin::get_site_option( RapidLoad_Settings::$map_key );
 
 		if ( empty( $maps ) ) {
 			return;
@@ -127,7 +127,7 @@ class UnusedCSS_DB
 		}
 
 		// remove old option after seeding completed
-        UnusedCSS_Admin::delete_site_option( UnusedCSS_Settings::$map_key );
+        UnusedCSS_Admin::delete_site_option( RapidLoad_Settings::$map_key );
 	}
 
 
@@ -1000,7 +1000,7 @@ class UnusedCSS_DB
         }
 
         UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
-        UnusedCSS_Admin::delete_site_option(UnusedCSS_Settings::$map_key );
+        UnusedCSS_Admin::delete_site_option(RapidLoad_Settings::$map_key );
     }
 
     static function link_files_used_elsewhere( $link , $rule = false, $regex = false){

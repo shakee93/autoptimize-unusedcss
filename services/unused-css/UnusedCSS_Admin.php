@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die();
  */
 abstract class UnusedCSS_Admin {
 
-	use UnusedCSS_Utils;
+	use RapidLoad_Utils;
 
 	/**
 	 * @var UnusedCSS_Autoptimize
@@ -402,7 +402,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        $job = UnusedCSS_Settings::get_first_link();
+        $job = RapidLoad_Settings::get_first_link();
 
         if ( $job && $job['status'] == 'success' ) : ?>
             <div data-dismissible="first-uucss-job-forever"
@@ -442,7 +442,7 @@ abstract class UnusedCSS_Admin {
 
         $license_key = $_REQUEST['license_key'];
 
-        $uucss_api         = new UnusedCSS_Api();
+        $uucss_api         = new RapidLoad_Api();
         $uucss_api->apiKey = $license_key;
         $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
 
@@ -470,7 +470,7 @@ abstract class UnusedCSS_Admin {
 
         $this->uucss->vanish();
 
-        $api = new UnusedCSS_Api();
+        $api = new RapidLoad_Api();
 
         // remove domain from authorized list
         $api->post( 'deactivate', [
@@ -498,7 +498,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         if ( ! isset( $options['uucss_api_key'] ) ) {
             return;
@@ -637,7 +637,7 @@ abstract class UnusedCSS_Admin {
 
 
         $data = array(
-            'api' => UnusedCSS_Api::get_key(),
+            'api' => RapidLoad_Api::get_key(),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
             'url' => site_url(),
             'ajax_url'          => admin_url( 'admin-ajax.php' ),
@@ -701,7 +701,7 @@ abstract class UnusedCSS_Admin {
 
     public function get_public_notices(){
 
-        $api = new UnusedCSS_Api();
+        $api = new RapidLoad_Api();
 
         $result = $api->get('notification');
 
@@ -729,7 +729,7 @@ abstract class UnusedCSS_Admin {
 
     public function get_gpsi_test_result($link){
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $cached_files = [];
         $original_files = [];
@@ -773,7 +773,7 @@ abstract class UnusedCSS_Admin {
 
         }
 
-        $uucss_api = new UnusedCSS_Api();
+        $uucss_api = new RapidLoad_Api();
 
         $link = $type == 'path' ? UnusedCSS_DB::get_link($url) : UnusedCSS_DB::get_rule($_REQUEST['rule'],$_REQUEST['regex']);
 
@@ -798,7 +798,7 @@ abstract class UnusedCSS_Admin {
             return [];
         }
 
-        $api = new UnusedCSS_Api();
+        $api = new RapidLoad_Api();
 
         $result = $api->get('faqs');
 
@@ -829,7 +829,7 @@ abstract class UnusedCSS_Admin {
     }
 
     public function clear_uucss_logs(){
-        $file_system = new UnusedCSS_FileSystem();
+        $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
             wp_send_json_success(true);
@@ -841,7 +841,7 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_logs(){
 
-        $file_system = new UnusedCSS_FileSystem();
+        $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
             wp_send_json_success([]);
@@ -1024,7 +1024,7 @@ abstract class UnusedCSS_Admin {
 			return $item;
 		}, array_keys( $plugins ), $plugins );
 
-		$api = new UnusedCSS_Api();
+		$api = new RapidLoad_Api();
 
 		$data = $api->post( 'whitelist-packs/wp-suggest', [
 			'plugins' => $active_plugins,
@@ -1041,7 +1041,7 @@ abstract class UnusedCSS_Admin {
 
 	public function uucss_license() {
 
-		$api = new UnusedCSS_Api();
+		$api = new RapidLoad_Api();
 
 		$data = $api->get( 'license', [
 			'url' => $this->transform_url(get_site_url())
@@ -1073,7 +1073,7 @@ abstract class UnusedCSS_Admin {
 			return;
 		}
 
-		$uucss_api         = new UnusedCSS_Api();
+		$uucss_api         = new RapidLoad_Api();
 		$uucss_api->apiKey = sanitize_text_field( $_POST['api_key'] );
 
 		$results = $uucss_api->get( 'verify' );
@@ -1231,6 +1231,6 @@ abstract class UnusedCSS_Admin {
     }
 
     public static function first_job_done(){
-        return (UnusedCSS_Settings::get_first_link() ? true :  false);
+        return (RapidLoad_Settings::get_first_link() ? true :  false);
     }
 }

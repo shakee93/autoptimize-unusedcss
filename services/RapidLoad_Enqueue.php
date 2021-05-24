@@ -2,9 +2,9 @@
 
 defined( 'ABSPATH' ) or die();
 
-class UnusedCSS_Enqueue {
+class RapidLoad_Enqueue {
 
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     private $file_system;
 
@@ -18,7 +18,7 @@ class UnusedCSS_Enqueue {
 
     function __construct($data, $url = '')
     {
-        $this->file_system = new UnusedCSS_FileSystem();
+        $this->file_system = new RapidLoad_FileSystem();
 
         $this->link = new UnusedCSS_Path([
             'url' => $url

@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die();
 
 abstract class UnusedCSS_Job
 {
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     static $table;
     public $type;

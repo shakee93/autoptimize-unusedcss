@@ -2,9 +2,9 @@
 
 defined( 'ABSPATH' ) or die();
 
-class UnusedCSS_Api
+class RapidLoad_Api
 {
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     public static $apiUrl = 'https://api.rapidload.io/api/v1';
 
@@ -12,7 +12,7 @@ class UnusedCSS_Api
 
 
     /**
-     * UnusedCSS_Api constructor.
+     * RapidLoad_Api constructor.
      */
 	public function __construct() {
 		if ( defined( 'UUCSS_API_URL' ) ) {

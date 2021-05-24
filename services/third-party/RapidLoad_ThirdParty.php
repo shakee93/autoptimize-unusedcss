@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 
 abstract class RapidLoad_ThirdParty
 {
-    use UnusedCSS_Utils;
+    use RapidLoad_Utils;
 
     public $plugin = null;
     public $catgeory = null;

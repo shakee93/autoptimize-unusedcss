@@ -72,7 +72,7 @@ global $post;
     <div class="uucss-stats__actions">
 
 		<?php if ( $post ) {
-			$exists = UnusedCSS_Settings::link_exists( get_permalink( $post ) );?>
+			$exists = RapidLoad_Settings::link_exists( get_permalink( $post ) );?>
             <div id="button-uucss-clear" <?php if ( ! $exists ) echo 'class="hidden"' ?> title="clear page cache">remove
             </div>
             <div id="button-uucss-purge" <?php if ( $exists ) echo 'class="hidden"' ?> title="generate page cache">optimize

@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die();
  */
 abstract class UnusedCSS {
 
-	use UnusedCSS_Utils;
+	use RapidLoad_Utils;
 
 	public $base = null;
 	public $provider = null;
@@ -48,7 +48,7 @@ abstract class UnusedCSS {
 
         UnusedCSS_DB::check_db_updates();
 
-        $this->file_system = new UnusedCSS_FileSystem();
+        $this->file_system = new RapidLoad_FileSystem();
 
         $this->base = apply_filters('uucss/cache-base-dir','/cache/rapidload/') . 'uucss';
 
@@ -76,7 +76,7 @@ abstract class UnusedCSS {
 
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
-        new UnusedCSS_Queue();
+        new RapidLoad_Queue();
     }
 
     function uucss_rule_types($rules){
@@ -314,7 +314,7 @@ abstract class UnusedCSS {
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
 		        'home_url' => home_url(),
-		        'api_url' => UnusedCSS_Api::get_key()
+		        'api_url' => RapidLoad_Api::get_key()
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
@@ -416,13 +416,13 @@ abstract class UnusedCSS {
 
     public function init_async_store_rule($provider, $url, $args, $rule)
     {
-        $this->store = new UnusedCSS_Store($provider, $url, $args, $rule);
+        $this->store = new RapidLoad_Store($provider, $url, $args, $rule);
         $this->store->purge_rule();
     }
 
     public function init_async_store($provider, $url, $args)
     {
-        $this->store = new UnusedCSS_Store($provider, $url, $args);
+        $this->store = new RapidLoad_Store($provider, $url, $args);
         $this->store->purge_css();
     }
 
@@ -526,7 +526,7 @@ abstract class UnusedCSS {
 
         }
 
-        if (    !UnusedCSS_Settings::link_exists( $this->url ) &&
+        if (    !RapidLoad_Settings::link_exists( $this->url ) &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
                 $this->options['uucss_disable_add_to_queue'] != "1"))
@@ -542,7 +542,7 @@ abstract class UnusedCSS {
             $data = null;
 
             if( !$this->rules_enabled() &&
-                UnusedCSS_Settings::link_exists( $this->url )
+                RapidLoad_Settings::link_exists( $this->url )
             ){
 
                 self::log([
@@ -558,7 +558,7 @@ abstract class UnusedCSS {
 
             }
             else if($this->rules_enabled() &&
-                UnusedCSS_Settings::link_exists( $this->url )){
+                RapidLoad_Settings::link_exists( $this->url )){
 
                 self::log([
                     'log' => 'success link exist with rules ',
@@ -611,7 +611,7 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new UnusedCSS_Enqueue($data, $this->url);
+                    new RapidLoad_Enqueue($data, $this->url);
 
                     $this->replace_css();
                 }
@@ -915,7 +915,7 @@ abstract class UnusedCSS {
             'type' => 'store'
         ] );
 
-	    if ( $url && UnusedCSS_Settings::link_exists_with_error( $url ) || $rule && $regex && UnusedCSS_DB::rule_exists_with_error($rule, $regex)) {
+	    if ( $url && RapidLoad_Settings::link_exists_with_error( $url ) || $rule && $regex && UnusedCSS_DB::rule_exists_with_error($rule, $regex)) {
 
 		    $this->clear_files($url, $args, $rule, $regex);
 	    }
@@ -940,7 +940,7 @@ abstract class UnusedCSS {
 
             $this->file_system->delete( self::$base_dir, true );
 
-            UnusedCSS_Settings::clear_links( isset( $args['soft'] ) );
+            RapidLoad_Settings::clear_links( isset( $args['soft'] ) );
             UnusedCSS_DB::update_rule_status();
 
             do_action( 'uucss/cache_cleared', $args );
@@ -952,7 +952,7 @@ abstract class UnusedCSS {
     public function remove_unused_files($url, $rule = false, $regex = false){
 
         // get unused files
-        $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : UnusedCSS_Settings::link_files_used_elsewhere( $url );
+        $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : RapidLoad_Settings::link_files_used_elsewhere( $url );
 
         // remove unused files from filesystem
         foreach ( $unused_files as $unused_file ) {
@@ -963,7 +963,7 @@ abstract class UnusedCSS {
 
     public function clear_files($url, $args, $rule = false, $regex = false ){
 
-        if ( UnusedCSS_Settings::link_exists( $url ) || UnusedCSS_DB::rule_exists($rule, $regex)) {
+        if ( RapidLoad_Settings::link_exists( $url ) || UnusedCSS_DB::rule_exists($rule, $regex)) {
 
             $this->remove_unused_files($url, $rule, $regex);
 
@@ -971,7 +971,7 @@ abstract class UnusedCSS {
 
         if($url && !$rule && !$regex){
 
-            UnusedCSS_Settings::delete_link($url);
+            RapidLoad_Settings::delete_link($url);
 
         }else{
 
@@ -1034,7 +1034,7 @@ abstract class UnusedCSS {
 		    return;
 	    }
 
-	    UnusedCSS_Settings::clear_links();
+	    RapidLoad_Settings::clear_links();
 
 	    $this->file_system->delete( $delete, true );
     }
