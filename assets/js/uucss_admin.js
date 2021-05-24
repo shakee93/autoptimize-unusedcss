@@ -1741,16 +1741,18 @@
                                                     })
                                                 }
 
+                                                tippy($(value)[0],{
+                                                    content: $otherUrls.html(),
+                                                    theme: 'light',
+                                                    allowHTML: true,
+                                                    interactive: true,
+                                                    hideOnClick:true,
+                                                    placement:'right'
+                                                })
+
                                             });
 
-                                            tippy($('a.duplicate-file-item-base')[0],{
-                                                content: $otherUrls.html(),
-                                                theme: 'light',
-                                                allowHTML: true,
-                                                interactive: true,
-                                                hideOnClick:true,
-                                                placement:'right'
-                                            })
+
                                         }
                                     });
                                 }
