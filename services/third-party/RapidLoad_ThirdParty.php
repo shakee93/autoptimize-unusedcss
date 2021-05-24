@@ -46,7 +46,7 @@ abstract class RapidLoad_ThirdParty
 
     public static function initialize(){
 
-        $third_party_plugins_dir = plugin_dir_path(UUCSS_PLUGIN_FILE) . '/includes/third-party/plugins';
+        $third_party_plugins_dir = plugin_dir_path(UUCSS_PLUGIN_FILE) . '/services/third-party/plugins';
 
         $class_iterator = new RecursiveTreeIterator(new RecursiveDirectoryIterator($third_party_plugins_dir, RecursiveDirectoryIterator::SKIP_DOTS));
 
