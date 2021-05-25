@@ -49,8 +49,6 @@ class RapidLoad_Queue
 
         add_action('uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
 
-        add_action('init', [$this, 'update_result_hook']);
-
         $this->async = apply_filters('uucss/queue/async',false);
 
         self::$post_types = apply_filters('uucss/queue/post_types',array(

@@ -132,7 +132,7 @@ abstract class RapidLoad_DB
 
     static function update_db(){
 
-        if ( self::$current_version != self::$db_version ) {
+        if ( self::$current_version < self::$db_version ) {
 
             try{
                 $status = self::create_tables();
