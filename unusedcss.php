@@ -28,9 +28,9 @@ require __DIR__ . '/vendor/autoload.php';
 
 register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::uucss_activate' );
 
-register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_DB::initialize' );
+register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_DB::initialize' );
 
-register_uninstall_hook(UUCSS_PLUGIN_FILE, 'UnusedCSS_DB::drop');
+register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
 
 /**
  * @type $uucss UnusedCSS_Autoptimize

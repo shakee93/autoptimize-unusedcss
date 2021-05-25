@@ -9,7 +9,7 @@ class RapidLoad_Settings {
 	static $map_key = 'uucss_map';
 
 	public static function get_links($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC') {
-        if(UnusedCSS_DB::migrated()){
+        if(RapidLoad_DB::migrated()){
 
             return UnusedCSS_DB::get_links($start_from, $limit, $where, $order_by);
 
@@ -20,7 +20,7 @@ class RapidLoad_Settings {
 
 	public static function add_link( $link, $files = null, $status = 'success', $meta = null ) {
 
-	    if(UnusedCSS_DB::migrated()){
+	    if(RapidLoad_DB::migrated()){
 
 	    	if(!$link){
 	    		return;
@@ -98,7 +98,7 @@ class RapidLoad_Settings {
 
 	public static function get_link( $link ) {
 
-        if(UnusedCSS_DB::migrated()){
+        if(RapidLoad_DB::migrated()){
 
             return UnusedCSS_DB::get_link($link);
 
@@ -118,7 +118,7 @@ class RapidLoad_Settings {
 
 	public static function get_first_link() {
 
-	    if(UnusedCSS_DB::migrated()){
+	    if(RapidLoad_DB::migrated()){
 
 	        return UnusedCSS_DB::get_first_link();
 
@@ -142,7 +142,7 @@ class RapidLoad_Settings {
 
 	public static function link_exists( $link ) {
 
-        if(UnusedCSS_DB::migrated()){
+        if(RapidLoad_DB::migrated()){
 
             return UnusedCSS_DB::link_exists($link);
 
@@ -163,7 +163,7 @@ class RapidLoad_Settings {
 
 	public static function link_exists_with_error( $link ) {
 
-        if(UnusedCSS_DB::migrated()){
+        if(RapidLoad_DB::migrated()){
 
             return UnusedCSS_DB::link_exists_with_error($link);
 
@@ -183,7 +183,7 @@ class RapidLoad_Settings {
 
 	public static function delete_link( $link ) {
 
-	    if(UnusedCSS_DB::migrated()){
+	    if(RapidLoad_DB::migrated()){
 
 	        UnusedCSS_DB::delete_link($link);
 
@@ -201,7 +201,7 @@ class RapidLoad_Settings {
 
 	public static function clear_links( $soft = false ) {
 
-		if ( UnusedCSS_DB::migrated() ) {
+		if ( RapidLoad_DB::migrated() ) {
 
 			if ( ! $soft ) {
 				UnusedCSS_DB::clear_links();
@@ -221,7 +221,7 @@ class RapidLoad_Settings {
 
 	public static function link_files_used_elsewhere( $link ) {
 
-		if(UnusedCSS_DB::migrated()){
+		if(RapidLoad_DB::migrated()){
 
 			return UnusedCSS_DB::link_files_used_elsewhere($link);
 

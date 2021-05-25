@@ -46,7 +46,7 @@ abstract class UnusedCSS {
 
         self::enqueueGlobalScript();
 
-        UnusedCSS_DB::check_db_updates();
+        RapidLoad_DB::check_db_updates();
 
         $this->file_system = new RapidLoad_FileSystem();
 
@@ -506,7 +506,7 @@ abstract class UnusedCSS {
         return
             isset($this->options['uucss_enable_rules']) &&
             $this->options['uucss_enable_rules'] == "1" &&
-            UnusedCSS_DB::$current_version > 1.1 &&
+            RapidLoad_DB::$current_version > 1.1 &&
             apply_filters('uucss/rules/enable', true);
     }
 
@@ -952,7 +952,7 @@ abstract class UnusedCSS {
     public function remove_unused_files($url, $rule = false, $regex = false){
 
         // get unused files
-        $unused_files = UnusedCSS_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : RapidLoad_Settings::link_files_used_elsewhere( $url );
+        $unused_files = RapidLoad_DB::migrated() ? UnusedCSS_DB::link_files_used_elsewhere($url, $rule, $regex) : RapidLoad_Settings::link_files_used_elsewhere( $url );
 
         // remove unused files from filesystem
         foreach ( $unused_files as $unused_file ) {

@@ -50,7 +50,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
             $data = (array) $this;
 
-            if(UnusedCSS_DB::$current_version < 1.2){
+            if(RapidLoad_DB::$current_version < 1.2){
                 unset($data['rule']);
                 unset($data['hits']);
                 unset($data['rule_id']);
@@ -90,7 +90,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 $data['warnings'] = serialize($data['warnings']);
             }
 
-            if(UnusedCSS_DB::$current_version < 1.2){
+            if(RapidLoad_DB::$current_version < 1.2){
                 unset($data['rule']);
                 unset($data['hits']);
                 unset($data['rule_id']);

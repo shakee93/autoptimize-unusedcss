@@ -118,7 +118,7 @@ abstract class UnusedCSS_Job
         $this->hits++;
         $this->remove_file_missing_warnings();
         $this->error = NULL;
-        if(UnusedCSS_DB::$current_version < 1.2){
+        if(RapidLoad_DB::$current_version < 1.2){
             $stats = $this->get_stats();
             if(isset($stats)){
                 if(!isset($stats->success_count)){
@@ -142,7 +142,7 @@ abstract class UnusedCSS_Job
 
     public function reset_success_hits(){
         $this->hits = 0;
-        if(UnusedCSS_DB::$current_version < 1.2){
+        if(RapidLoad_DB::$current_version < 1.2){
             $stats = $this->get_stats();
             if(isset($stats)){
                 $stats->success_count = 0;
