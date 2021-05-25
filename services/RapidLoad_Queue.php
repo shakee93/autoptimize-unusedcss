@@ -43,19 +43,7 @@ class RapidLoad_Queue
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
         }
 
-        /*$uucss_result_cron = $this->cron_exist('cron_uucss_process_result');
-
-        if ( ! wp_next_scheduled( 'cron_uucss_process_result' ) && !$uucss_result_cron) {
-            self::log([
-                'log' => 'job result cron scheduled',
-                'type' => 'uucss-cron'
-            ]);
-            wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_result');
-        }*/
-
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
-
-        //add_action( 'cron_uucss_process_result', [$this ,'uucss_process_result'] );
 
         add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
 
@@ -72,10 +60,6 @@ class RapidLoad_Queue
         ));
 
         $this->fileSystem = new RapidLoad_FileSystem();
-    }
-
-    function update_result_hook(){
-
     }
 
     function cron_exist($cron_name = 'cron_uucss_process_queue'){
@@ -112,8 +96,6 @@ class RapidLoad_Queue
     	if(!isset($_REQUEST['post_type'])) {
 		    wp_send_json_error('post type not found');
 	    }
-
-    	//self::uucss_log($_REQUEST);
 
     	$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
     	$rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
