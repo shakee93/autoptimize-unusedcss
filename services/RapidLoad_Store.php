@@ -37,7 +37,7 @@ class RapidLoad_Store {
 
         $this->provider = $provider;
         $this->args = $args;
-        $this->options = UnusedCSS_Admin::fetch_options();
+        $this->options = RapidLoad_Base::fetch_options();
 
         $this->file_system = new RapidLoad_FileSystem();
 

@@ -940,7 +940,7 @@ abstract class UnusedCSS_Admin {
 
     public static function is_api_key_verified() {
 
-        $api_key_status = isset( static::fetch_options()['uucss_api_key_verified'] ) ? static::fetch_options()['uucss_api_key_verified'] : '';
+        $api_key_status = isset( RapidLoad_Base::fetch_options()['uucss_api_key_verified'] ) ? RapidLoad_Base::fetch_options()['uucss_api_key_verified'] : '';
 
         return $api_key_status == '1';
 
@@ -1188,16 +1188,6 @@ abstract class UnusedCSS_Admin {
 
 	        update_post_meta( $post_id, '_uucss_' . $option, $value );
         }
-    }
-
-    public static function fetch_options()
-    {
-        if(is_multisite()){
-
-            return get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
-
-        }
-        return get_site_option( 'autoptimize_uucss_settings', false );
     }
 
     public static function get_site_option($name)
