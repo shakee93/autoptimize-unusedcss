@@ -940,7 +940,7 @@ abstract class UnusedCSS_Admin {
 
     public static function is_api_key_verified() {
 
-        $api_key_status = isset( static::fetch_options()['uucss_api_key_verified'] ) ? static::fetch_options()['uucss_api_key_verified'] : '';
+        $api_key_status = isset( RapidLoad_Base::fetch_options()['uucss_api_key_verified'] ) ? RapidLoad_Base::fetch_options()['uucss_api_key_verified'] : '';
 
         return $api_key_status == '1';
 
