@@ -508,6 +508,9 @@
                             </tr>
                             <?php endif; ?>
                         </table>
+                        <?php
+                            do_action('uucss/after_option_table');
+                        ?>
                     </div>
                 </li>
 
