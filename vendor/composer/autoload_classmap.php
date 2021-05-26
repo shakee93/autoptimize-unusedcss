@@ -17,6 +17,7 @@ return array(
     'Optimole_WP_Compatible' => $baseDir . '/services/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
     'RankMathSEO_Compatible' => $baseDir . '/services/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
     'RapidLoad_Api' => $baseDir . '/services/RapidLoad_Api.php',
+    'RapidLoad_Base' => $baseDir . '/services/RapidLoad_Base.php',
     'RapidLoad_DB' => $baseDir . '/services/RapidLoad_DB.php',
     'RapidLoad_Enqueue' => $baseDir . '/services/RapidLoad_Enqueue.php',
     'RapidLoad_FileSystem' => $baseDir . '/services/RapidLoad_FileSystem.php',

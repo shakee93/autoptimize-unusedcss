@@ -39,9 +39,7 @@ global $uucss;
 
 add_action( 'plugins_loaded', function () {
 
-    global $uucss;
-    $uucss = new UnusedCSS_Autoptimize();
+    RapidLoad_Base::init();
 
-    RapidLoad_ThirdParty::initialize();
 } );
 
