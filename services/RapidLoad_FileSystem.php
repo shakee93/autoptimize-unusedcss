@@ -15,11 +15,11 @@ class RapidLoad_FileSystem
         return file_exists($dir);
     }
 
-    public function mkdir( $dir , $mode = 0755){
+    public function mkdir( $dir , $mode = 0755, $recursive = true){
         if($this->exists($dir)) {
             return true;
         }
-        return mkdir($dir, $mode, true);
+        return mkdir($dir, $mode, $recursive);
     }
 
     public function is_writable( $dir ){

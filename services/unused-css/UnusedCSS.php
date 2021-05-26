@@ -888,7 +888,7 @@ abstract class UnusedCSS {
             return true;
         }
 
-        $created = $this->file_system->mkdir( UUCSS_LOG_DIR );
+        $created = $this->file_system->mkdir( UUCSS_LOG_DIR , 0755, !$this->file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
 
         if (!$created || ! $this->file_system->is_writable( UUCSS_LOG_DIR ) || ! $this->file_system->is_readable( UUCSS_LOG_DIR ) ) {
             return false;
