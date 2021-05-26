@@ -1,9 +1,8 @@
 <?php
 
-defined( 'ABSPATH' ) or die();
+namespace RapidLoad\Service;
 
-abstract class CriticalCSS
-{
+abstract class CriticalCSS{
 
     public function __construct()
     {
