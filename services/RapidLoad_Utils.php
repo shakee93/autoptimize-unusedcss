@@ -278,7 +278,7 @@ trait RapidLoad_Utils {
 
 		$url_parts = parse_url( $url );
 
-		$options = UnusedCSS_Autoptimize_Admin::fetch_options();
+		$options = RapidLoad_Base::fetch_options();
 
 		if ( ! isset( $url_parts['host'] ) || ! isset( $url_parts['scheme'] ) ) {
 			return $url;

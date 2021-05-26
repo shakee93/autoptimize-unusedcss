@@ -165,7 +165,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     }
 
     public function render_form() {
-        $options = self::fetch_options();
+        $options = RapidLoad_Base::fetch_options();
         include( 'parts/options-page.html.php' );
     }
 

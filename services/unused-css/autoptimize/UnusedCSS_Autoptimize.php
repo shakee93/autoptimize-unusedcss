@@ -23,7 +23,7 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
 	    self::$provider_path = 'autoptimize/autoptimize.php';
 
-        $this->options = UnusedCSS_Admin::fetch_options();
+        $this->options = RapidLoad_Base::fetch_options();
 
         add_filter('uucss/cache-base-dir', function ($value){
             return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');

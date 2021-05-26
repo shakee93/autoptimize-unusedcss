@@ -28,7 +28,7 @@ class RapidLoad_Enqueue {
         $this->files = $this->data->get_files();
         $this->warnings = $this->data->get_warnings();
 
-        $this->options = UnusedCSS_Admin::fetch_options();
+        $this->options = RapidLoad_Base::fetch_options();
 
         add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
     }

@@ -1190,16 +1190,6 @@ abstract class UnusedCSS_Admin {
         }
     }
 
-    public static function fetch_options()
-    {
-        if(is_multisite()){
-
-            return get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
-
-        }
-        return get_site_option( 'autoptimize_uucss_settings', false );
-    }
-
     public static function get_site_option($name)
     {
         if(is_multisite()){

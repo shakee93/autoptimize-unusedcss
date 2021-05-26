@@ -19,7 +19,7 @@ class RapidLoad_Api
 			self::$apiUrl = UUCSS_API_URL;
 		}
 
-		$key          = isset( UnusedCSS_Admin::fetch_options()['uucss_api_key'] ) ? UnusedCSS_Admin::fetch_options()['uucss_api_key'] : null;
+		$key          = isset( RapidLoad_Base::fetch_options()['uucss_api_key'] ) ? UnusedCSS_Admin::fetch_options()['uucss_api_key'] : null;
 		$this->apiKey = $key;
 	}
 
