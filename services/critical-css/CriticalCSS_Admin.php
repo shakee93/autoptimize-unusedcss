@@ -19,8 +19,6 @@ abstract class CriticalCSS_Admin{
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
         $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : \UnusedCSS_DB::get_uucss_urls(" WHERE status = 'success' ");
 
-        self::uucss_log($url_list);
-
         if($type == 'path'){
 
             foreach ($url_list as $link){

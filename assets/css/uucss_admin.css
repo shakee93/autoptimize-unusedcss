@@ -435,6 +435,7 @@ table.dataTable thead th, table.dataTable thead td {
     padding: 0;
 }
 
+.uucss-history-table tr td.css-file,
 .uucss-history-table tr td.url {
     white-space: nowrap;
     overflow: hidden;

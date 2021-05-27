@@ -581,9 +581,9 @@
                 {
                     "data": "critical_css",
                     title: "Critical CSS",
-                    width: '200px',
+                    width: '150px',
                     visible : window.uucss.critical_css_enabled === "1",
-                    className: 'dt-body-center dt-head-center',
+                    className: 'dt-body-center dt-head-center css-file',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
                     },

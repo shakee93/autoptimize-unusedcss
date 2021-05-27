@@ -542,7 +542,6 @@ class RapidLoad_Queue
         }
 
         if(isset($result->data)){
-
             $this->add_path_ccss($path_ccss_object, $result);
 
         }
@@ -563,9 +562,10 @@ class RapidLoad_Queue
             ];
         }
 
-        $file_name = UnusedCSS::$base_dir . '/' . $this->encode($result->data);
-        $this->fileSystem->put_contents($file_name, null, $warnings);
+        $file_name = 'rccss-' . $this->encode($result->data) . '.css';
+        $this->fileSystem->put_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $file_name, $result->data);
         $css_object->mark_as_success($file_name, null, $warnings);
+        $css_object->save();
         do_action( 'uucss/cached', [
             'url' => $css_object->url
         ]);
