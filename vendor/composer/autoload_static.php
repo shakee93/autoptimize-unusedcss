@@ -17,6 +17,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Nginx_Helper_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
         'Optimole_WP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
         'RankMathSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
+        'RapidLoad_Admin' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin.php',
         'RapidLoad_Api' => __DIR__ . '/../..' . '/includes/RapidLoad_Api.php',
         'RapidLoad_Base' => __DIR__ . '/../..' . '/includes/RapidLoad_Base.php',
         'RapidLoad_DB' => __DIR__ . '/../..' . '/includes/RapidLoad_DB.php',

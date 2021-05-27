@@ -16,6 +16,7 @@ return array(
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
     'Optimole_WP_Compatible' => $baseDir . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
     'RankMathSEO_Compatible' => $baseDir . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
+    'RapidLoad_Admin' => $baseDir . '/includes/admin/RapidLoad_Admin.php',
     'RapidLoad_Api' => $baseDir . '/includes/RapidLoad_Api.php',
     'RapidLoad_Base' => $baseDir . '/includes/RapidLoad_Base.php',
     'RapidLoad_DB' => $baseDir . '/includes/RapidLoad_DB.php',
