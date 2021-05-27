@@ -249,7 +249,7 @@ class RapidLoad_Store {
             $this->result = $result;
         }
 
-        $warnings = [];
+        $warnings = isset($this->result) && isset($this->result->meta) ? $this->result->meta->warnings : null;
 
         if(isset($this->result->meta->stats) && isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)){
 
