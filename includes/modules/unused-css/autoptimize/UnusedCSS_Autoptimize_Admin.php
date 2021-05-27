@@ -126,7 +126,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function get_node_text() {
 		ob_start();
 
-		include( 'parts/admin-node.html.php' );
+		include('parts/admin-node.html.php');
 
 		$output = ob_get_contents();
 		ob_end_clean();
@@ -166,7 +166,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function render_form() {
         $options = RapidLoad_Base::fetch_options();
-        include( 'parts/options-page.html.php' );
+        include('parts/options-page.html.php');
     }
 
 	public static function ao_installed() {
@@ -177,7 +177,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     public static function ao_active(){
 
 	    if ( ! function_exists( 'is_plugin_active' ) ) {
-		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		    require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 	    }
 
 	    return is_plugin_active( UnusedCSS_Autoptimize::$provider_path ) ||
