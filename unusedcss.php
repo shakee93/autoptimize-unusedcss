@@ -62,7 +62,14 @@ final class RapidLoad{
     }
 
     private function is_requirements_meet(){
-        return true;
+
+        if(empty($this->messages)){
+            return true;
+        }
+
+        add_action( 'admin_init', [ $this, 'auto_deactivate' ] );
+        add_action( 'admin_notices', [ $this, 'activation_error' ] );
+
     }
 
     private function define_constants() {
@@ -88,13 +95,13 @@ final class RapidLoad{
     private function instantiate() {
 
         $this->container['file_system'] = new RapidLoad_FileSystem();
-
-        RapidLoad_Base::init();
+        $this->container['rapidload_module'] = new RapidLoad_Module();
 
         $this->load_3rd_party();
 
         $this->init_actions();
 
+        RapidLoad_Base::init();
     }
 
     private function load_3rd_party() {
@@ -113,6 +120,23 @@ final class RapidLoad{
 
     }
 
+    public function auto_deactivate() {
+        deactivate_plugins( plugin_basename( UUCSS_PLUGIN_FILE ) );
+        if ( isset( $_GET['activate'] ) ) { // phpcs:ignore
+            unset( $_GET['activate'] ); // phpcs:ignore
+        }
+    }
+
+    public function activation_error() {
+        ?>
+        <div class="notice rapidload-notice notice-error">
+            <p>
+                <?php echo join( '<br>', $this->messages ); // phpcs:ignore ?>
+            </p>
+        </div>
+        <?php
+    }
+
 }
 
 function rapidload() {
@@ -122,5 +146,7 @@ function rapidload() {
 add_action( 'plugins_loaded', function () {
 
     rapidload();
+    //delete_option('rapidload_modules');
+    error_log(json_encode(get_option('rapidload_modules')));
 });
 

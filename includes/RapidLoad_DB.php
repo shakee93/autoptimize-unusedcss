@@ -1,5 +1,6 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
 
 abstract class RapidLoad_DB
 {
