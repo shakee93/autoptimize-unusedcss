@@ -1724,7 +1724,22 @@
 
                     switch (action) {
                         case 'regenerate_critical_css_all':{
-                            wp.ajax.post('rccss_regenerate_critical_css', {}).then(function (i){
+                            var requeue_url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    requeue_url_list.push({
+                                        url : table_row_value.url,
+                                        rule : table_row_value.rule
+                                    })
+                                });
+                            }
+
+                            var data = {};
+                            if(requeue_url_list.length){
+                                data.url_list = requeue_url_list;
+                            }
+
+                            wp.ajax.post('rccss_regenerate_critical_css', data).then(function (i){
 
                                 $.uucssAlert('Jobs added to queue to regenerate critical css');
                             })

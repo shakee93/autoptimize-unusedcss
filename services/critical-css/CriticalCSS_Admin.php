@@ -23,6 +23,10 @@ abstract class CriticalCSS_Admin{
 
             foreach ($url_list as $link){
 
+                if(is_array($link)){
+                    $link = (object) $link;
+                }
+
                 if(isset($link->url)){
 
                     $path = new CriticalCSS_Path([
