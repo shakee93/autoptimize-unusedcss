@@ -579,6 +579,16 @@
                     }
                 },
                 {
+                    "data": "critical_css",
+                    title: "Critical CSS",
+                    width: '200px',
+                    visible : window.uucss.critical_css_enabled === "1",
+                    className: 'dt-body-center dt-head-center',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ? data : '') +'</span>';
+                    },
+                },
+                {
                     "data": "rule",
                     title: "Rule",
                     width: '100px',
@@ -1682,9 +1692,13 @@
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
                 $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
 
+                if(window.uucss && window.uucss.critical_css_enabled === "1"){
+                    $content.find('ul').append('<li class="regenerate-critical-css-all" data-action_name="regenerate_critical_css_all"><a data-action_name="regenerate_critical_css_all" href="#">Regenerate Critical CSS</a></li>');
+                }
+
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
+                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule_stats"><a data-action_name="rule_stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -1709,7 +1723,14 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
-                        case 'rule-stats':{
+                        case 'regenerate_critical_css_all':{
+                            wp.ajax.post('rccss_regenerate_critical_css', {}).then(function (i){
+
+                                $.uucssAlert('Jobs added to queue to regenerate critical css');
+                            })
+                            break;
+                        }
+                        case 'rule_stats':{
                             wp.ajax.post('uucss_rule_stats').then(function (i) {
                                 if(i){
 

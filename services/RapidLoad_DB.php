@@ -5,7 +5,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.2";
+    static $db_version = "1.2.1";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -37,6 +37,8 @@ abstract class RapidLoad_DB
         $tableArray = [
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
+            $wpdb->prefix . "rapidload_rccss_job",
+            $wpdb->prefix . "rapidload_rccss_rule",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -56,6 +58,8 @@ abstract class RapidLoad_DB
 
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
+        $rapidload_rccss_job = $wpdb->prefix . $blog_id . 'rapidload_rccss_job';
+        $rapidload_rccss_rule = $wpdb->prefix . $blog_id . 'rapidload_rccss_rule';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -92,6 +96,39 @@ abstract class RapidLoad_DB
 		files longtext NULL,
 		warnings longtext NULL,
 		review longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ; 
+	    CREATE TABLE $rapidload_rccss_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NULL,
+		rule longtext NULL,
+		url longtext NOT NULL,
+		critical_css longtext NULL,
+		exceptional_css longtext NULL,
+		warnings longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL DEFAULT 0,
+		hits mediumint(3) NULL DEFAULT 0,
+		rule_id INT NULL,
+		rule_note longtext NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_rccss_rule (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NULL,
+		rule longtext NOT NULL,
+		url longtext NOT NULL,
+		regex longtext NOT NULL,
+		critical_css longtext NULL,
+		exceptional_css longtext NULL,
+		warnings longtext NULL,
 		error longtext NULL,
 		attempts mediumint(2) NULL,
 		hits mediumint(3) NULL,
