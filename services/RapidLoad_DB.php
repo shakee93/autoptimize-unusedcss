@@ -5,7 +5,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.2.1";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
