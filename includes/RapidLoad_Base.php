@@ -6,12 +6,8 @@ class RapidLoad_Base
 {
     public static function init(){
 
-        new RapidLoad_Admin();
-
         global $uucss;
         $uucss = new UnusedCSS_Autoptimize();
-
-
 
     }
 

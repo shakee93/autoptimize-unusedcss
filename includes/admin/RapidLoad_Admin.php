@@ -16,7 +16,7 @@ class RapidLoad_Admin
     }
 
     function enqueue_scripts(){
-
+        error_log(get_current_screen()->base);
         if ( get_current_screen() && get_current_screen()->base == 'rapidload_page_rapidload' ) {
             add_action( 'admin_enqueue_scripts', function(){
                 wp_enqueue_style( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/css/dashboard.css' , [], UUCSS_VERSION);
@@ -37,7 +37,7 @@ class RapidLoad_Admin
             50
         );
 
-        add_submenu_page(
+        $this->add_submenu_page(
             'rapidload-main',
             'Dashboard',
             'Dashboard',
@@ -47,17 +47,19 @@ class RapidLoad_Admin
             1
         );
 
-        add_submenu_page(
-            'rapidload-main',
-            'Unused CSS',
-            'Unused CSS',
-            'manage_options',
-            'uucss',
-            [$this, 'render_dashboard'],
-            2
-        );
-
         remove_submenu_page('rapidload-main','rapidload-main');
+    }
+
+    public function add_submenu_page($paren_slug, $title, $menu_title, $capability, $menu_slug, $callback, $position = 1){
+        add_submenu_page(
+            $paren_slug,
+            $title,
+            $menu_title,
+            $capability,
+            $menu_slug,
+            $callback,
+            $position
+        );
     }
 
     function render_dashboard(){

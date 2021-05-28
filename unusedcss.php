@@ -55,7 +55,11 @@ final class RapidLoad{
 
         $this->includes();
 
-        $this->instantiate();
+        $this->init_actions();
+
+        add_action('plugins_loaded', function (){
+            $this->instantiate();
+        });
 
         do_action( 'rapidload/loaded' );
 
@@ -94,14 +98,25 @@ final class RapidLoad{
 
     private function instantiate() {
 
+        $this->container['rapidload_admin'] = new RapidLoad_Admin();;
         $this->container['file_system'] = new RapidLoad_FileSystem();
         $this->container['rapidload_module'] = new RapidLoad_Module();
 
         $this->load_3rd_party();
 
-        $this->init_actions();
-
         RapidLoad_Base::init();
+    }
+
+    public function admin(){
+        return $this->__get('rapidload_admin');
+    }
+
+    public function file_system(){
+        return $this->__get('file_system');
+    }
+
+    public function rapidload_module(){
+        return $this->__get('rapidload_module');
     }
 
     private function load_3rd_party() {
@@ -143,9 +158,5 @@ function rapidload() {
     return RapidLoad::get();
 }
 
-add_action( 'plugins_loaded', function () {
-
-    rapidload();
-
-});
+rapidload();
 
