@@ -146,7 +146,6 @@ function rapidload() {
 add_action( 'plugins_loaded', function () {
 
     rapidload();
-    //delete_option('rapidload_modules');
-    error_log(json_encode(get_option('rapidload_modules')));
+
 });
 
