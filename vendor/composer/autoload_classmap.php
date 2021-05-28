@@ -37,6 +37,7 @@ return array(
     'UnusedCSS_DB' => $baseDir . '/includes/modules/unused-css/UnusedCSS_DB.php',
     'UnusedCSS_Feedback' => $baseDir . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
     'UnusedCSS_Job' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Job.php',
+    'UnusedCSS_Module' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Module.php',
     'UnusedCSS_Path' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Path.php',
     'UnusedCSS_Rule' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Rule.php',
     'W3_Total_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',

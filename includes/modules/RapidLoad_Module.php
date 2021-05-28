@@ -4,9 +4,31 @@ defined( 'ABSPATH' ) or die();
 
 class RapidLoad_Module{
 
+    public $modules = [];
+
     public function __construct()
     {
+        $this->init();
         $this->hooks();
+        $this->load_modules();
+    }
+
+    function init(){
+
+        $this->modules['unused-css'] = [
+            'id' => 'unused-css',
+            'title' => 'Unused CSS',
+            'status' => 'off',
+            'class' => 'UnusedCSS_Module',
+            'global' => 'uucss'
+        ];
+
+        $stored_modules = get_option( 'rapidload_modules', [] );
+
+        foreach ($stored_modules as $key => $value){
+            $this->modules[$key]['status'] = $value;
+        }
+
     }
 
     function hooks(){
@@ -14,6 +36,20 @@ class RapidLoad_Module{
         if(is_admin()){
 
             add_action( 'wp_ajax_rapidload_module_activation', [ $this, 'activate_module' ] );
+
+        }
+
+    }
+
+    function load_modules(){
+
+        foreach ($this->modules as $module){
+
+            $class_object = $module['class'];
+
+            if(class_exists($class_object) && $module['status'] == 'on'){
+                rapidload()->get()->{$module['global']} = new $class_object();
+            }
 
         }
 
@@ -37,20 +73,4 @@ class RapidLoad_Module{
         wp_send_json_success();
     }
 
-    public static function update_modules( $modules ) {
-
-        foreach ( $modules as $module => $action ) {
-            if ( 'off' === $action ) {
-                if ( in_array( $module, $stored, true ) ) {
-                    $stored = array_diff( $stored, [ $module ] );
-                }
-                continue;
-            }
-
-            $stored[] = $module;
-            //Installer::create_tables( [ $module ] );
-        }
-
-        update_option( 'rank_math_modules', array_unique( $stored ) );
-    }
 }
