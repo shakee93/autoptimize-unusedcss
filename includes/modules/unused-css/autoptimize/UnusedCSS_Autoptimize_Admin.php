@@ -63,20 +63,51 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function add_ao_page() {
 
-        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
-            wp_enqueue_script( 'post' );
+	    rapidload()->get()->admin()->add_submenu_page(
+            'options-general.php',
+            'RapidLoad',
+            'RapidLoad',
+            'manage_options',
+            'uucss',
+            function () {
+                wp_enqueue_script( 'post' );
 
-            ?>
-            <div class="wrap">
-                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
-                <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
-                <div>
-                    <?php $this->render_form() ?>
+                ?>
+                <div class="wrap">
+                    <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+                    <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
+                    <div>
+                        <?php $this->render_form() ?>
+                    </div>
                 </div>
-            </div>
 
-            <?php
-        });
+                <?php
+            },
+            2
+        );
+
+        rapidload()->get()->admin()->add_submenu_page(
+            'rapidload-main',
+            'Unused CSS',
+            'Unused CSS',
+            'manage_options',
+            'uucss',
+            function () {
+                wp_enqueue_script( 'post' );
+
+                ?>
+                <div class="wrap">
+                    <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+                    <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
+                    <div>
+                        <?php $this->render_form() ?>
+                    </div>
+                </div>
+
+                <?php
+            },
+            2
+        );
 
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
@@ -126,7 +157,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	public function get_node_text() {
 		ob_start();
 
-		include( 'parts/admin-node.html.php' );
+		include('parts/admin-node.html.php');
 
 		$output = ob_get_contents();
 		ob_end_clean();
@@ -166,7 +197,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function render_form() {
         $options = RapidLoad_Base::fetch_options();
-        include( 'parts/options-page.html.php' );
+        include('parts/options-page.html.php');
     }
 
 	public static function ao_installed() {
@@ -177,7 +208,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
     public static function ao_active(){
 
 	    if ( ! function_exists( 'is_plugin_active' ) ) {
-		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		    require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 	    }
 
 	    return is_plugin_active( UnusedCSS_Autoptimize::$provider_path ) ||
