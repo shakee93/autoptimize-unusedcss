@@ -65,8 +65,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    rapidload()->get()->admin()->add_submenu_page(
             'options-general.php',
-            'Unused CSS',
-            'Unused CSS',
+            'RapidLoad',
+            'RapidLoad',
             'manage_options',
             'uucss',
             function () {
