@@ -16,13 +16,14 @@ class RapidLoad_Admin
     }
 
     function enqueue_scripts(){
-        error_log(get_current_screen()->base);
+
         if ( get_current_screen() && get_current_screen()->base == 'rapidload_page_rapidload' ) {
             add_action( 'admin_enqueue_scripts', function(){
                 wp_enqueue_style( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/css/dashboard.css' , [], UUCSS_VERSION);
                 wp_enqueue_script( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/js/dashboard.js', ['jquery'], UUCSS_VERSION );
             });
         }
+
     }
 
     function add_menu(){
