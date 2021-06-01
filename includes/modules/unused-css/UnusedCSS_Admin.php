@@ -653,7 +653,7 @@ abstract class UnusedCSS_Admin {
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $this->uucss->rules_enabled(),
-            'critical_css_enabled' => RapidLoad_Base::critical_css_enabled(),
+            'critical_css_enabled' => rapidload()->rapidload_module()->is_active('critical-css'),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );

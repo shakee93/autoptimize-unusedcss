@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) or die();
 
-class RapidLoad_Enqueue {
+abstract class RapidLoad_Enqueue {
 
     use RapidLoad_Utils;
 

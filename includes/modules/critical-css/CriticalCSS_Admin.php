@@ -10,8 +10,25 @@ abstract class CriticalCSS_Admin{
     {
         if(is_admin()){
 
+            add_action('admin_menu', [$this, 'add_critical_css_page']);
             add_action('wp_ajax_rccss_regenerate_critical_css', [$this, 'regenerate_critical_css']);
         }
+    }
+
+    public function add_critical_css_page(){
+
+        rapidload()->admin()->add_submenu_page(
+            'rapidload-main',
+            'Critical CSS',
+            'Critical CSS',
+            'manage_options',
+            'uucss',
+            function (){
+
+            },
+            3
+        );
+
     }
 
     public function regenerate_critical_css(){

@@ -29,8 +29,8 @@ class RapidLoad_Admin
     function add_menu(){
 
         add_menu_page(
-            esc_html__( 'Dashboard', 'rapidload' ),
-            esc_html__( 'RapidLoad', 'rapidload' ),
+            'RapidLoad',
+            'RapidLoad',
             'manage_options',
             'rapidload-main',
             [ $this, 'render_dashboard' ],
@@ -64,7 +64,7 @@ class RapidLoad_Admin
     }
 
     function render_dashboard(){
-        $rapidload_modules = get_option( 'rapidload_modules', [] );
+        $rapidload_modules = rapidload()->rapidload_module()->modules;
         include ('views/dashboard.html.php');
     }
 }

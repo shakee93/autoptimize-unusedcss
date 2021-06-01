@@ -17,6 +17,6 @@ class CriticalCSS_RapidLoad_Admin extends \RapidLoad\Service\CriticalCSS_Admin{
         }
 
         $options = RapidLoad_Base::fetch_options();
-        include( 'parts/options-page.html.php' );
+        include('parts/options-page.html.php');
     }
 }

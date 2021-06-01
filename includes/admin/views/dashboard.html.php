@@ -5,20 +5,21 @@
 <div id="rapidload-dashboard">
     <h2>RapidLoad</h2>
 
-    <p>
-        Unused CSS
-    </p>
-    <label class="switch" for="module-unused-css">
-        <input type="checkbox" class="rapidload-modules"
-               id="module-unused-css"
-               name="module-unused-css" value="unused-css"
-        <?php if(isset($rapidload_modules['unused-css']) && $rapidload_modules['unused-css'] == 'on') echo 'checked' ?>>
-        <span class="slider round"></span>
-    </label>
+    <?php foreach ($rapidload_modules as $module) : ?>
 
-    <!--<label class="switch">
-        <input type="checkbox" checked>
-        <span class="slider round"></span>
-    </label>-->
+        <p>
+            <?php echo $module['title'] ?>
+        </p>
+
+        <label class="switch" for="module-<?php echo $module['id'] ?>">
+            <input type="checkbox" class="rapidload-modules"
+                   id="module-<?php echo $module['id'] ?>"
+                   name="module-<?php echo $module['id'] ?>" value="<?php echo $module['id'] ?>"
+                <?php if(isset($module['status']) && $module['status'] == 'on') echo 'checked' ?>>
+            <span class="slider round"></span>
+        </label>
+
+    <?php endforeach; ?>
+
 
 </div>

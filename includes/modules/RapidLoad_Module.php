@@ -23,6 +23,14 @@ class RapidLoad_Module{
             'global' => 'uucss'
         ];
 
+        $this->modules['critical-css'] = [
+            'id' => 'critical-css',
+            'title' => 'Critical CSS',
+            'status' => 'off',
+            'class' => 'CriticalCSS_Module',
+            'global' => 'cpcss'
+        ];
+
         $stored_modules = get_option( 'rapidload_modules', [] );
 
         foreach ($stored_modules as $key => $value){
@@ -48,10 +56,17 @@ class RapidLoad_Module{
             $class_object = $module['class'];
 
             if(class_exists($class_object) && $module['status'] == 'on'){
-                rapidload()->get()->{$module['global']} = new $class_object();
+                rapidload()->{$module['global']} = new $class_object();
             }
 
         }
+
+    }
+
+    function is_active($module){
+
+        return isset($this->modules) && isset($this->modules[$module]) &&
+            isset($this->modules[$module]['status']) && $this->modules[$module]['status'] == "on";
 
     }
 

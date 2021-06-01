@@ -63,7 +63,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function add_ao_page() {
 
-	    rapidload()->get()->admin()->add_submenu_page(
+	    rapidload()->admin()->add_submenu_page(
             'options-general.php',
             'RapidLoad',
             'RapidLoad',
@@ -86,7 +86,7 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
             2
         );
 
-        rapidload()->get()->admin()->add_submenu_page(
+        rapidload()->admin()->add_submenu_page(
             'rapidload-main',
             'Unused CSS',
             'Unused CSS',
