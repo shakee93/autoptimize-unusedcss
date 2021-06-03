@@ -20,13 +20,15 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
 
     public function handle($args)
     {
-        $args[] = [
-            'name' => 'product',
-            'rule' => 'is_product',
-            'category' => 'Woocommerce',
-            'priority' => 5,
-            'callback' => is_product(),
-        ];
+        if(function_exists('is_product')){
+            $args[] = [
+                'name' => 'product',
+                'rule' => 'is_product',
+                'category' => 'Woocommerce',
+                'priority' => 5,
+                'callback' => is_product(),
+            ];
+        }
 
         return $args;
     }
