@@ -10,7 +10,7 @@
         return isset($plugin['category']) && $plugin['category'] == 'cache';
     });
 
-    if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
+    if(isset($options) && !isset($options['uucss_load_original']) && !isset($options['uucss_jobs_per_queue'])){
         $options['uucss_load_original'] = "1";
         UnusedCSS_Admin::update_site_option('autoptimize_uucss_settings', $options);
     }
