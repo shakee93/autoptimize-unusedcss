@@ -85,7 +85,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.4.12 - 20/05/2021 =
+= 1.4.12 - 04/06/2021 =
  * improve: update default value of load original css
  * improve: rule based injection regex pattern
  * improve: woocommerce plugin support
