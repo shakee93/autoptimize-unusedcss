@@ -9,6 +9,11 @@
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
     });
+
+    if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
+        $options['uucss_load_original'] = "1";
+        UnusedCSS_Admin::update_site_option('autoptimize_uucss_settings', $options);
+    }
 ?>
 
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
