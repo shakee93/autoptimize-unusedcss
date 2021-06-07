@@ -1223,4 +1223,33 @@ abstract class UnusedCSS_Admin {
     public static function first_job_done(){
         return (RapidLoad_Settings::get_first_link() ? true :  false);
     }
+
+    public static function get_robots_text($url){
+        $robotsUrl = $url . "/robots.txt";
+
+        $robot = new stdClass();
+        $robot->disAllow = [];
+        $robot->allow = [];
+
+        $fh = fopen($robotsUrl,'r');
+
+        while (($line = fgets($fh)) != false) {
+
+            if (preg_match("/user-agent.*/i", $line) ){
+                $robot->userAgent = trim(explode(':', $line, 2)[1]);
+            }
+            else if (preg_match("/disallow.*/i", $line)){
+                array_push($robot->disAllow, trim(explode(':', $line, 2)[1]));
+            }
+            else if (preg_match("/^allow.*/i", $line)){
+                array_push($robot->allow, trim(explode(':', $line, 2)[1]));
+            }
+            else if(preg_match("/sitemap.*/i", $line)){
+                $robot->sitemap = trim(explode(':', $line, 2)[1]);
+            }
+
+        }
+
+        return $robot;
+    }
 }
