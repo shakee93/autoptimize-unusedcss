@@ -166,7 +166,17 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     public function render_form() {
         $options = RapidLoad_Base::fetch_options();
+
+        if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
+            $this->update_defaults($options);
+        }
+
         include('parts/options-page.html.php');
+    }
+
+    public function update_defaults($options){
+        $options['uucss_load_original'] = "1";
+        UnusedCSS_Admin::update_site_option('autoptimize_uucss_settings', $options);
     }
 
 	public static function ao_installed() {
