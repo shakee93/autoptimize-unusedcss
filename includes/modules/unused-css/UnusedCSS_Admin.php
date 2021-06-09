@@ -91,10 +91,211 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
             add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
+            add_action( 'wp_ajax_uucss_queue', [$this, 'queue_posts']);
+            add_action( 'uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
+    }
+
+    function queue_posts(){
+
+        if(!isset($_REQUEST['post_type'])) {
+            wp_send_json_error('post type not found');
+        }
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
+
+        $post_type = sanitize_text_field($_REQUEST['post_type']);
+
+        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
+
+        $posts = null;
+
+        global $uucss;
+
+        if(isset($list) && is_array($list) && !empty($list)){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_urls($list);
+            }else{
+                UnusedCSS_DB::requeue_rules($list);
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+        }else if($post_type == 'current'){
+
+            if($type == 'path'){
+                RapidLoad_Settings::clear_links(true);
+            }else{
+                UnusedCSS_DB::clear_rules(true);
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'processing'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('processing');
+                UnusedCSS_DB::requeue_jobs('waiting');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('processing');
+                UnusedCSS_DB::requeue_rule_jobs('waiting');
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'warnings'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('warnings');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('warnings');
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'failed'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs();
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs();
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'url'){
+
+            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+            $url = $this->transform_url($url);
+
+            if(!$uucss->is_valid_url($url)){
+                wp_send_json_error('url is not valid');
+            }
+
+            if($url && !$uucss->is_url_allowed($url)){
+                wp_send_json_error('url is excluded');
+            }
+
+            $url_object = false;
+
+            if($type == 'path'){
+
+                $url_object = new UnusedCSS_Path([
+                    'url' => $url
+                ]);
+
+            }else{
+
+                $url_object = new UnusedCSS_Rule([
+                    'rule' => $rule,
+                    'regex' => $regex
+                ]);
+
+            }
+
+            if(!$url_object){
+
+                wp_send_json_error('Invalid URL');
+
+            }
+
+            $url_object->requeue();
+            $url_object->save();
+
+            wp_send_json_success('successfully link added to the queue');
+
+        }else if($post_type == 'site_map'){
+
+            $sitemap = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+            if(!$sitemap){
+
+                wp_send_json_error('site map url required');
+            }
+
+            $spawned = $this->schedule_cron('uucss_sitemap_queue',[
+                'url' => $sitemap
+            ]);
+
+            self::log([
+                'log' => 'cron spawned : ' . $spawned,
+                'url' => $sitemap,
+                'type' => 'queued'
+            ]);
+
+            wp_send_json_success('Sitemap links scheduled to be added to the queue.');
+
+        }else{
+
+            $posts = new WP_Query(array(
+                'post_type'=> $post_type,
+                'posts_per_page' => -1
+            ));
+
+        }
+
+        if($posts && $posts->have_posts()){
+            while ($posts->have_posts()){
+                $posts->the_post();
+
+                $url = $this->transform_url(get_the_permalink(get_the_ID()));
+
+                if($uucss->is_url_allowed($url)){
+                    new UnusedCSS_Path([
+                        'url' => $url
+                    ]);
+                }
+
+            }
+        }
+
+        wp_reset_query();
+
+        wp_send_json_success('successfully links added to the queue');
+
+    }
+
+    function queue_sitemap($url = false){
+
+        if(!$url){
+
+            $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
+        }
+
+        $site_map = new RapidLoad_Sitemap();
+        $urls = $site_map->process_site_map($url);
+
+        global $uucss;
+
+        if(isset($urls) && !empty($urls)){
+
+            foreach ($urls as $url){
+
+                if($uucss->is_url_allowed($url)){
+
+                    new UnusedCSS_Path([
+                        'url' => $url
+                    ]);
+                }
+
+            }
+        }
     }
 
     public function add_uucss_option_page() {

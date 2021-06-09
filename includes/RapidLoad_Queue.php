@@ -45,10 +45,6 @@ class RapidLoad_Queue
 
         add_action( 'cron_uucss_process_queue', [$this ,'uucss_process_queue'] );
 
-        add_action('wp_ajax_uucss_queue', [$this, 'queue_posts']);
-
-        add_action('uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
-
         $this->async = apply_filters('uucss/queue/async',false);
 
         self::$post_types = apply_filters('uucss/queue/post_types',array(
@@ -87,247 +83,6 @@ class RapidLoad_Queue
         }
 
         return $uucss_cron;
-    }
-
-    function queue_posts(){
-
-    	if(!isset($_REQUEST['post_type'])) {
-		    wp_send_json_error('post type not found');
-	    }
-
-    	$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
-    	$rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
-    	$regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
-
-        $post_type = sanitize_text_field($_REQUEST['post_type']);
-
-        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
-
-        $posts = null;
-
-        global $uucss;
-
-        if(isset($list) && is_array($list) && !empty($list)){
-
-            if($type == 'path'){
-                UnusedCSS_DB::requeue_urls($list);
-            }else{
-                UnusedCSS_DB::requeue_rules($list);
-            }
-
-            $this->cleanCacheFiles();
-
-            wp_send_json_success('successfully links added to the queue');
-        }else if($post_type == 'current'){
-
-            if($type == 'path'){
-                RapidLoad_Settings::clear_links(true);
-            }else{
-                UnusedCSS_DB::clear_rules(true);
-            }
-
-            $this->cleanCacheFiles();
-
-            wp_send_json_success('successfully links added to the queue');
-
-        }else if($post_type == 'processing'){
-
-            if($type == 'path'){
-                UnusedCSS_DB::requeue_jobs('processing');
-                UnusedCSS_DB::requeue_jobs('waiting');
-            }else{
-                UnusedCSS_DB::requeue_rule_jobs('processing');
-                UnusedCSS_DB::requeue_rule_jobs('waiting');
-            }
-
-            $this->cleanCacheFiles();
-
-            wp_send_json_success('successfully links added to the queue');
-
-        }else if($post_type == 'warnings'){
-
-            if($type == 'path'){
-                UnusedCSS_DB::requeue_jobs('warnings');
-            }else{
-                UnusedCSS_DB::requeue_rule_jobs('warnings');
-            }
-
-            $this->cleanCacheFiles();
-
-            wp_send_json_success('successfully links added to the queue');
-
-        }else if($post_type == 'failed'){
-
-            if($type == 'path'){
-                UnusedCSS_DB::requeue_jobs();
-            }else{
-                UnusedCSS_DB::requeue_rule_jobs();
-            }
-
-            $this->cleanCacheFiles();
-
-            wp_send_json_success('successfully links added to the queue');
-
-        }else if($post_type == 'url'){
-
-            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
-
-            $url = $this->transform_url($url);
-
-            if(!$uucss->is_valid_url($url)){
-                wp_send_json_error('url is not valid');
-            }
-
-            if($url && !$uucss->is_url_allowed($url)){
-                wp_send_json_error('url is excluded');
-            }
-
-            $url_object = false;
-
-            if($type == 'path'){
-
-                $url_object = new UnusedCSS_Path([
-                    'url' => $url
-                ]);
-
-            }else{
-
-                $url_object = new UnusedCSS_Rule([
-                   'rule' => $rule,
-                   'regex' => $regex
-                ]);
-
-            }
-
-            if(!$url_object){
-
-                wp_send_json_error('Invalid URL');
-
-            }
-
-            $url_object->requeue();
-            $url_object->save();
-
-            wp_send_json_success('successfully link added to the queue');
-
-        }else if($post_type == 'site_map'){
-
-            $sitemap = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
-
-            if(!$sitemap){
-
-                wp_send_json_error('site map url required');
-            }
-
-            $spawned = $this->schedule_cron('uucss_sitemap_queue',[
-                'url' => $sitemap
-            ]);
-
-            self::log([
-                'log' => 'cron spawned : ' . $spawned,
-                'url' => $sitemap,
-                'type' => 'queued'
-            ]);
-
-            wp_send_json_success('Sitemap links scheduled to be added to the queue.');
-
-        }else{
-
-            $posts = new WP_Query(array(
-                'post_type'=> $post_type,
-                'posts_per_page' => -1
-            ));
-
-        }
-
-        if($posts->have_posts()){
-            while ($posts->have_posts()){
-                $posts->the_post();
-
-                $url = $this->transform_url(get_the_permalink(get_the_ID()));
-
-                if($uucss->is_url_allowed($url)){
-                    new UnusedCSS_Path([
-                       'url' => $url
-                    ]);
-                }
-
-            }
-        }
-
-        wp_reset_query();
-
-        wp_send_json_success('successfully links added to the queue');
-
-    }
-
-    public function cleanCacheFiles(){
-
-        $links = UnusedCSS_DB::get_links_where(" WHERE status = 'success' ");
-        $rules = UnusedCSS_DB::get_rules_where(" WHERE status = 'success' ");
-
-        $used_files = [];
-
-        foreach ($links as $link){
-
-            if(isset($link['files']) && !empty($link['files'])){
-                $uucss_files = array_column($link['files'],'uucss');
-                if(isset($uucss_files) && !empty($uucss_files)){
-                    $used_files = array_merge($used_files, $uucss_files);
-                }
-            }
-
-        }
-
-        foreach ($rules as $rule){
-
-            if(isset($rule['files']) && !empty($rule['files'])){
-                $uucss_files = array_column($rule['files'],'uucss');
-                if(isset($uucss_files) && !empty($uucss_files)){
-                    $used_files = array_merge($used_files, $uucss_files);
-                }
-            }
-
-        }
-
-        if ($handle = opendir(UnusedCSS::$base_dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ('.' === $file) continue;
-                if ('..' === $file) continue;
-
-                if(!in_array($file, $used_files) && $this->fileSystem->exists(UnusedCSS::$base_dir . '/' . $file)){
-                    $this->fileSystem->delete(UnusedCSS::$base_dir . '/' . $file);
-                }
-            }
-            closedir($handle);
-        }
-    }
-
-    static function queue_sitemap($url = false){
-
-        if(!$url){
-
-            $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
-        }
-
-        $site_map = new RapidLoad_Sitemap();
-        $urls = $site_map->process_site_map($url);
-
-        global $uucss;
-
-        if(isset($urls) && !empty($urls)){
-
-            foreach ($urls as $url){
-
-                if($uucss->is_url_allowed($url)){
-
-                    new UnusedCSS_Path([
-                        'url' => $url
-                    ]);
-                }
-
-            }
-        }
     }
 
     static function get_post_types(){
@@ -430,55 +185,6 @@ class RapidLoad_Queue
 
     }
 
-    function update_rule_result($uucss_rule){
-
-        $rule = new UnusedCSS_Rule([
-            'rule' => $uucss_rule->rule,
-            'regex' => $uucss_rule->regex
-        ]);
-
-        if(!$rule->job_id){
-            return;
-        }
-
-        $this->log( [
-            'log' => 'fetching data for job ' . $rule->job_id,
-            'url' => $rule->url,
-            'type' => 'store'
-        ] );
-
-        $uucss_api = new RapidLoad_Api();
-
-        $result = $uucss_api->get( 's/unusedcss/' . $rule->job_id);
-
-        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
-
-            $rule->mark_as_failed($uucss_api->extract_error( $result ));
-            $rule->save();
-
-            $this->log( [
-                'log' => 'fetched data stored status failed',
-                'url' => $rule->url,
-                'type' => 'uucss-cron'
-            ] );
-
-            return;
-        }
-
-        $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
-
-        if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
-
-            $files = $uucss_store->cache_files($result->data);
-            $uucss_store->add_rule($files, $result);
-            $uucss_store->uucss_cached();
-
-        }else if(isset($result->completed) && $result->completed){
-
-            $uucss_store->add_rule(null, $result);
-        }
-    }
-
     function cache($url){
         global $uucss;
 
@@ -574,7 +280,7 @@ class RapidLoad_Queue
 
     }
 
-    public function update_result($url, $job_id){
+    function update_result($url, $job_id){
 
         if(!$job_id){
             return;
@@ -659,6 +365,55 @@ class RapidLoad_Queue
             $uucss_store->add_link(null, $result);
         }
 
+    }
+
+    function update_rule_result($uucss_rule){
+
+        $rule = new UnusedCSS_Rule([
+            'rule' => $uucss_rule->rule,
+            'regex' => $uucss_rule->regex
+        ]);
+
+        if(!$rule->job_id){
+            return;
+        }
+
+        $this->log( [
+            'log' => 'fetching data for job ' . $rule->job_id,
+            'url' => $rule->url,
+            'type' => 'store'
+        ] );
+
+        $uucss_api = new RapidLoad_Api();
+
+        $result = $uucss_api->get( 's/unusedcss/' . $rule->job_id);
+
+        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
+
+            $rule->mark_as_failed($uucss_api->extract_error( $result ));
+            $rule->save();
+
+            $this->log( [
+                'log' => 'fetched data stored status failed',
+                'url' => $rule->url,
+                'type' => 'uucss-cron'
+            ] );
+
+            return;
+        }
+
+        $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
+
+        if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+
+            $files = $uucss_store->cache_files($result->data);
+            $uucss_store->add_rule($files, $result);
+            $uucss_store->uucss_cached();
+
+        }else if(isset($result->completed) && $result->completed){
+
+            $uucss_store->add_rule(null, $result);
+        }
     }
 
     function uucss_process_queue_schedule($schedules){
