@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) or die();
 /**
  * Class UnusedCSS
  */
-class UnusedCSS_WP_Rocket extends UnusedCSS {
+class UnusedCSS_RapidLoad extends UnusedCSS {
 
     use RapidLoad_Utils;
 
@@ -18,7 +18,7 @@ class UnusedCSS_WP_Rocket extends UnusedCSS {
     {
         $this->provider = 'wp-rocket';
 
-        self::$provider_path = 'wp-rocket/wp-rocket.php';
+        self::$provider_path = 'unusedcss/unusedcss.php';
 
         $this->options = RapidLoad_Base::fetch_options();
 
@@ -50,14 +50,14 @@ class UnusedCSS_WP_Rocket extends UnusedCSS {
 
     public function replace_css()
     {
-        add_filter( 'rocket_buffer', function ( $html ) {
+        add_filter( 'rapidload_buffer', function ( $html ) {
             return apply_filters('uucss/enqueue/content', $html);
         }, 99 );
     }
 
     public function check_dependencies() {
 
-        if(function_exists('rocket_init')) {
+        if(class_exists('UnusedCSS')) {
             $this->deps_available = true;
         }else {
             /*$notice = [
@@ -83,7 +83,7 @@ class UnusedCSS_WP_Rocket extends UnusedCSS {
             return false;
         }
 
-        if (!UnusedCSS_WP_Rocket_Admin::enabled()) {
+        if (!UnusedCSS_RapidLoad_Admin::enabled()) {
             return false;
         }
 

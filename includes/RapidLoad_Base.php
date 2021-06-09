@@ -8,7 +8,7 @@ class RapidLoad_Base
 
         global $uucss;
 
-        $uucss = new UnusedCSS_Autoptimize();
+        $uucss = new UnusedCSS_RapidLoad();
 
         RapidLoad_ThirdParty::initialize();
 
