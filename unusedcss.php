@@ -37,8 +37,6 @@ register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
  */
 global $uucss;
 
-new RapidLoad_Buffer();
-
 add_action( 'plugins_loaded', function () {
 
     RapidLoad_Base::init();

@@ -6,6 +6,8 @@ class RapidLoad_Base
 {
     public static function init(){
 
+        new RapidLoad_Buffer();
+
         global $uucss;
 
         $uucss = new UnusedCSS_RapidLoad();

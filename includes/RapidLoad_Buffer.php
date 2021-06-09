@@ -16,13 +16,12 @@ class RapidLoad_Buffer
 
     public function maybe_process_buffer( $buffer ) {
 
-        do_action( 'uucss_before_maybe_process_buffer', $buffer );
+        do_action( 'rapidload_before_maybe_process_buffer', $buffer );
 
         if ( ! $this->is_html( $buffer ) ) {
             return $buffer;
         }
 
-        //error_log((string)$buffer);
         return (string) apply_filters( 'rapidload_buffer', $buffer );
     }
 
