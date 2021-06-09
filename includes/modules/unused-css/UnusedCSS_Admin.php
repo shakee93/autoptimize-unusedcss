@@ -1473,7 +1473,7 @@ abstract class UnusedCSS_Admin {
 
         $fh = fopen($robotsUrl,'r');
 
-        while (($line = fgets($fh)) != false) {
+        while ($fh && ($line = fgets($fh)) != false) {
 
             if (preg_match("/user-agent.*/i", $line) ){
                 $robot->userAgent = trim(explode(':', $line, 2)[1]);
