@@ -435,6 +435,7 @@ table.dataTable thead th, table.dataTable thead td {
     padding: 0;
 }
 
+.uucss-history-table tr td.css-file,
 .uucss-history-table tr td.url {
     white-space: nowrap;
     overflow: hidden;
@@ -522,7 +523,7 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .uucss-sub-menu .tippy-content .uucss-submenu-option-list{
-    width: 135px;
+    width: 150px;
 }
 
 li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-option-list ul li.simple-menu{

@@ -2,8 +2,8 @@
 
 defined( 'ABSPATH' ) or die();
 
-class RapidLoad_Base
-{
+class RapidLoad_Base{
+
     public static function init(){
 
         new RapidLoad_Buffer();
@@ -26,5 +26,11 @@ class RapidLoad_Base
 
         }
         return get_site_option( 'autoptimize_uucss_settings', false );
+    }
+
+    public static function critical_css_enabled(){
+        $options = self::fetch_options();
+        return isset($options['rccss_enable_critical_css']) &&
+            $options['rccss_enable_critical_css'] == "1";
     }
 }
