@@ -273,7 +273,7 @@ abstract class UnusedCSS_Admin {
     }
 
     function queue_sitemap($url = false){
-        error_log('here');
+
         if(!$url){
 
             $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
