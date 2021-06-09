@@ -9,7 +9,7 @@ class CriticalCSS_DB extends \RapidLoad_DB
 
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_rccss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -27,7 +27,7 @@ class CriticalCSS_DB extends \RapidLoad_DB
 
         $status = str_replace('"', '', $status);
 
-        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_rccss_job WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
 
         $error = $wpdb->last_error;
 

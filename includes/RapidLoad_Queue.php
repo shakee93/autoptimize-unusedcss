@@ -118,7 +118,7 @@ class RapidLoad_Queue
 
     function cache_path_ccss($value){
 
-        global $rccss;
+        global $cpcss;
 
         $post_id = url_to_postid($value->url);
 
@@ -139,7 +139,7 @@ class RapidLoad_Queue
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 's/criticalcss',
-            array_merge( $rccss->api_options($post_id),
+            array_merge( $cpcss->api_options($post_id),
                 [ 'url' => $path_ccss->url ]
             ));
 
@@ -317,7 +317,7 @@ class RapidLoad_Queue
             ];
         }
 
-        $file_name = 'rccss-' . $this->encode($result->data) . '.css';
+        $file_name = 'cpcss-' . $this->encode($result->data) . '.css';
         $this->fileSystem->put_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $file_name, $result->data);
         $css_object->mark_as_success($file_name, null, $warnings);
         $css_object->save();

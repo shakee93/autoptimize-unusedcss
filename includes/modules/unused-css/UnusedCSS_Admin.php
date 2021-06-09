@@ -318,6 +318,31 @@ abstract class UnusedCSS_Admin {
             <?php
         });
 
+        rapidload()->admin()->add_submenu_page(
+            'rapidload-main',
+            'Unused CSS',
+            'Unused CSS',
+            'manage_options',
+            'uucss',
+            function (){
+                wp_enqueue_script( 'post' );
+
+                ?>
+                <div class="wrap">
+                    <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
+                    <?php
+                    do_action('uucss/options/before_render_form');
+                    ?>
+                    <div>
+                        <?php $this->render_form() ?>
+                    </div>
+                </div>
+
+                <?php
+            },
+            2
+        );
+
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
     }
@@ -894,7 +919,7 @@ abstract class UnusedCSS_Admin {
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $this->uucss->rules_enabled(),
-            'critical_css_enabled' => rapidload()->rapidload_module()->is_active('critical-css'),
+            'critical_css_enabled' => rapidload()->rapidload_module()->is_active('critical-css') && RapidLoad_DB::$current_version > 1.2,
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );

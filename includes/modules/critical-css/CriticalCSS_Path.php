@@ -16,7 +16,7 @@ class CriticalCSS_Path extends CriticalCSS_Job {
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
 
-        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_rccss_job WHERE url = '" . $url . "'", OBJECT);
+        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $url . "'", OBJECT);
 
         if(isset($path_exist) && !empty($path_exist)){
 
@@ -50,11 +50,11 @@ class CriticalCSS_Path extends CriticalCSS_Job {
             unset($data['type']);
 
             $wpdb->insert(
-                $wpdb->prefix . 'rapidload_rccss_job',
+                $wpdb->prefix . 'rapidload_cpcss_job',
                 $data
             );
 
-            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_rccss_job WHERE url = '" . $this->url . "'");
+            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $this->url . "'");
 
             if(isset($id) && !empty($id)){
 
@@ -81,7 +81,7 @@ class CriticalCSS_Path extends CriticalCSS_Job {
             }
 
             $wpdb->update(
-                $wpdb->prefix . 'rapidload_rccss_job',
+                $wpdb->prefix . 'rapidload_cpcss_job',
                 $data,
                 [
                     'id' => $id

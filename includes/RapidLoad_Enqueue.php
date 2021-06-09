@@ -368,7 +368,7 @@ abstract class RapidLoad_Enqueue {
 
         $critical_css_content = $this->file_system->get_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $critical_css->critical_css );
 
-        $critical_css_content = '<style uucss-critical-css="' . $critical_css->critical_css . '" rccss>' . $critical_css_content . '</style>';
+        $critical_css_content = '<style uucss-critical-css="' . $critical_css->critical_css . '" cpcss>' . $critical_css_content . '</style>';
 
         $header_content = $this->dom->find( 'head' )[0]->outertext;
         $header_content = str_replace('</head>','', $header_content);

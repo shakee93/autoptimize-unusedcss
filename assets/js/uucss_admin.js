@@ -1739,7 +1739,7 @@
                                 data.url_list = requeue_url_list;
                             }
 
-                            wp.ajax.post('rccss_regenerate_critical_css', data).then(function (i){
+                            wp.ajax.post('cpcss_regenerate_critical_css', data).then(function (i){
 
                                 $.uucssAlert('Jobs added to queue to regenerate critical css');
                             })

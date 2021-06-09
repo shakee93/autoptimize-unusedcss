@@ -38,8 +38,8 @@ abstract class RapidLoad_DB
         $tableArray = [
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
-            $wpdb->prefix . "rapidload_rccss_job",
-            $wpdb->prefix . "rapidload_rccss_rule",
+            $wpdb->prefix . "rapidload_cpcss_job",
+            $wpdb->prefix . "rapidload_cpcss_rule",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -59,8 +59,8 @@ abstract class RapidLoad_DB
 
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
-        $rapidload_rccss_job = $wpdb->prefix . $blog_id . 'rapidload_rccss_job';
-        $rapidload_rccss_rule = $wpdb->prefix . $blog_id . 'rapidload_rccss_rule';
+        $rapidload_cpcss_job = $wpdb->prefix . $blog_id . 'rapidload_cpcss_job';
+        $rapidload_cpcss_rule = $wpdb->prefix . $blog_id . 'rapidload_cpcss_rule';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -104,7 +104,7 @@ abstract class RapidLoad_DB
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
 	) ; 
-	    CREATE TABLE $rapidload_rccss_job (
+	    CREATE TABLE $rapidload_cpcss_job (
 		id INT NOT NULL AUTO_INCREMENT,
 		job_id INT NULL,
 		rule longtext NULL,
@@ -121,7 +121,7 @@ abstract class RapidLoad_DB
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
 	) ;
-	    CREATE TABLE $rapidload_rccss_rule (
+	    CREATE TABLE $rapidload_cpcss_rule (
 		id INT NOT NULL AUTO_INCREMENT,
 		job_id INT NULL,
 		rule longtext NOT NULL,
@@ -154,7 +154,7 @@ abstract class RapidLoad_DB
             $notice = [
                 'action'  => 'rapidload-db-update',
                 'title'   => 'RapidLoad Power Up',
-                'message' => 'Migrate your database to the latest version to enjoy optimized data handling.',
+                'message' => 'Migrate your database to the latest version to (' . self::$db_version . ') enjoy optimized data handling.',
 
                 'main_action' => [
                     'key'   => 'Update Database',

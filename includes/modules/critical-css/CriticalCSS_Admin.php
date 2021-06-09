@@ -11,7 +11,7 @@ abstract class CriticalCSS_Admin{
         if(is_admin()){
 
             add_action('admin_menu', [$this, 'add_critical_css_page']);
-            add_action('wp_ajax_rccss_regenerate_critical_css', [$this, 'regenerate_critical_css']);
+            add_action('wp_ajax_cpcss_regenerate_critical_css', [$this, 'regenerate_critical_css']);
         }
     }
 

@@ -20,7 +20,7 @@ class RapidLoad_Base{
 
     public static function critical_css_enabled(){
         $options = self::fetch_options();
-        return isset($options['rccss_enable_critical_css']) &&
-            $options['rccss_enable_critical_css'] == "1";
+        return isset($options['cpcss_enable_critical_css']) &&
+            $options['cpcss_enable_critical_css'] == "1";
     }
 }
