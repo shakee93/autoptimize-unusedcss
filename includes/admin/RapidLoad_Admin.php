@@ -64,6 +64,7 @@ class RapidLoad_Admin
     }
 
     function render_dashboard(){
+        $options = RapidLoad_Base::fetch_options();
         $rapidload_modules = rapidload()->rapidload_module()->modules;
         include ('views/dashboard.html.php');
     }

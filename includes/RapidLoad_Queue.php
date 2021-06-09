@@ -118,8 +118,6 @@ class RapidLoad_Queue
 
     function cache_path_ccss($value){
 
-        global $cpcss;
-
         $post_id = url_to_postid($value->url);
 
         $path_ccss = new \RapidLoad\Service\CriticalCSS_Path([
@@ -139,7 +137,7 @@ class RapidLoad_Queue
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 's/criticalcss',
-            array_merge( $cpcss->api_options($post_id),
+            array_merge( rapidload()->cpcss->api_options($post_id),
                 [ 'url' => $path_ccss->url ]
             ));
 
@@ -166,8 +164,6 @@ class RapidLoad_Queue
     }
 
     function fetch_job_id(){
-
-        global $uucss;
 
         $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], self::$job_count);
 
@@ -327,7 +323,6 @@ class RapidLoad_Queue
     }
 
     function cache($url){
-        global $uucss;
 
         if(apply_filters('uucss/queue/redis', true)){
 
@@ -342,7 +337,7 @@ class RapidLoad_Queue
             $uucss_api = new RapidLoad_Api();
 
             $result = $uucss_api->post( 's/unusedcss',
-                array_merge( $uucss->api_options($post_id),
+                array_merge( rapidload()->uucss->api_options($post_id),
                     [ 'url' => $url ]
                 ));
 
@@ -366,14 +361,12 @@ class RapidLoad_Queue
         }else{
 
             $post_id = url_to_postid($url);
-            $uucss->init_async_store( $uucss->provider, $url, $uucss->api_options($post_id) );
+            rapidload()->uucss->init_async_store( rapidload()->uucss->provider, $url, rapidload()->uucss->api_options($post_id) );
         }
 
     }
 
     function cache_rule($rule){
-
-        global $uucss;
 
         $post_id = url_to_postid($rule->url);
 
@@ -395,7 +388,7 @@ class RapidLoad_Queue
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 's/unusedcss',
-            array_merge( $uucss->api_options($post_id),
+            array_merge( rapidload()->uucss->api_options($post_id),
                 [ 'url' => $rule->url ]
             ));
 

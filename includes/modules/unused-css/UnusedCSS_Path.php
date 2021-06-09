@@ -128,7 +128,6 @@ class UnusedCSS_Path extends UnusedCSS_Job {
     }
 
     public function clearFiles(){
-        global $uucss;
-        $uucss->remove_unused_files($this->url);
+        rapidload()->uucss->remove_unused_files($this->url);
     }
 }

@@ -36,6 +36,8 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $tableArray = [
+            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_rule",
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
             $wpdb->prefix . "rapidload_cpcss_job",
@@ -57,6 +59,8 @@ abstract class RapidLoad_DB
     static function create_tables($blog_id = ''){
         global $wpdb;
 
+        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_rule = $wpdb->prefix . $blog_id . 'rapidload_rule';
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
         $rapidload_cpcss_job = $wpdb->prefix . $blog_id . 'rapidload_cpcss_job';
@@ -69,7 +73,23 @@ abstract class RapidLoad_DB
             $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $rapidload_uucss_job (
+        $sql = "CREATE TABLE $rapidload_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		rule longtext NULL,
+		url longtext NOT NULL,
+		rule_id INT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+        CREATE TABLE $rapidload_rule (
+		id INT NOT NULL AUTO_INCREMENT,
+		rule longtext NOT NULL,
+		url longtext NOT NULL,
+		regex longtext NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+        CREATE TABLE $rapidload_uucss_job (
 		id INT NOT NULL AUTO_INCREMENT,
 		job_id INT NULL,
 		rule longtext NULL,

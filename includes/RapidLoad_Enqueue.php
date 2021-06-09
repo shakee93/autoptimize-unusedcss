@@ -128,8 +128,6 @@ abstract class RapidLoad_Enqueue {
 
     public function enqueue_completed(){
 
-        global $uucss;
-
         $time_diff = 0;
 
         if(isset($this->data->created_at)){

@@ -114,7 +114,7 @@
         }
 
         // options page
-        window.tagBox.init();
+        //window.tagBox.init();
 
         var $input = $('#uucss_api_key')
         var $uucss_spinner = $('.uucss-history.uucss-job-history .spinner-history')
@@ -222,17 +222,21 @@
         });*/
 
         if(window.uucss.rules_enabled === ""){
-            $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
+            /*$('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });
+            });*/
         }else{
-            $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
+            /*$('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });
+            });*/
         }
 
+        $('body.rapidload_page_rapidload #uucss-wrapper li h2').click(function () {
+            $(this).parent().find('.content').slideToggle('fast');
+            $(this).find('.uucss-toggle-section').toggleClass('rotate')
+        });
 
 
         var table = $('#uucss-history')

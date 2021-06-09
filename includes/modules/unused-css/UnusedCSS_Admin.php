@@ -50,8 +50,8 @@ abstract class UnusedCSS_Admin {
 	    }
 
         add_action( 'current_screen', function () {
-
-            if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
+            error_log(get_current_screen()->base);
+            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'rapidload_page_rapidload' ) ) {
                 add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
             }
         } );
@@ -115,8 +115,6 @@ abstract class UnusedCSS_Admin {
         $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
 
         $posts = null;
-
-        global $uucss;
 
         if(isset($list) && is_array($list) && !empty($list)){
 
@@ -185,11 +183,11 @@ abstract class UnusedCSS_Admin {
 
             $url = $this->transform_url($url);
 
-            if(!$uucss->is_valid_url($url)){
+            if(!rapidload()->uucss->is_valid_url($url)){
                 wp_send_json_error('url is not valid');
             }
 
-            if($url && !$uucss->is_url_allowed($url)){
+            if($url && !rapidload()->uucss->is_url_allowed($url)){
                 wp_send_json_error('url is excluded');
             }
 
@@ -257,7 +255,7 @@ abstract class UnusedCSS_Admin {
 
                 $url = $this->transform_url(get_the_permalink(get_the_ID()));
 
-                if($uucss->is_url_allowed($url)){
+                if(rapidload()->uucss->is_url_allowed($url)){
                     new UnusedCSS_Path([
                         'url' => $url
                     ]);
@@ -282,13 +280,11 @@ abstract class UnusedCSS_Admin {
         $site_map = new RapidLoad_Sitemap();
         $urls = $site_map->process_site_map($url);
 
-        global $uucss;
-
         if(isset($urls) && !empty($urls)){
 
             foreach ($urls as $url){
 
-                if($uucss->is_url_allowed($url)){
+                if(rapidload()->uucss->is_url_allowed($url)){
 
                     new UnusedCSS_Path([
                         'url' => $url
@@ -306,7 +302,7 @@ abstract class UnusedCSS_Admin {
 
             ?>
             <div class="wrap">
-                <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
+                <h1><?php _e( 'Unused CSS Settings', 'autoptimize' ); ?></h1>
                 <?php
                     do_action('uucss/options/before_render_form');
                 ?>
@@ -329,7 +325,7 @@ abstract class UnusedCSS_Admin {
 
                 ?>
                 <div class="wrap">
-                    <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
+                    <h1><?php _e( 'Unused CSS Settings', 'autoptimize' ); ?></h1>
                     <?php
                     do_action('uucss/options/before_render_form');
                     ?>
@@ -396,9 +392,7 @@ abstract class UnusedCSS_Admin {
 
         $url = $this->transform_url($url);
 
-        global $uucss;
-
-        if(!$uucss->is_url_allowed($url)){
+        if(!rapidload()->uucss->is_url_allowed($url)){
             wp_send_json_error('URL not allowed');
         }
 
@@ -1026,8 +1020,6 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_test_url(){
-
-        global $uucss;
 
         if(!isset($_REQUEST['url'])){
             wp_send_json_error('url required');

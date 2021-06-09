@@ -19,7 +19,7 @@ class RapidLoad_Module{
             'id' => 'unused-css',
             'title' => 'Unused CSS',
             'status' => 'off',
-            'class' => 'UnusedCSS_Module',
+            'class' => 'UnusedCSS_Autoptimize',
             'global' => 'uucss'
         ];
 
@@ -27,7 +27,7 @@ class RapidLoad_Module{
             'id' => 'critical-css',
             'title' => 'Critical CSS',
             'status' => 'off',
-            'class' => 'CriticalCSS_Module',
+            'class' => 'CriticalCSS_RapidLoad',
             'global' => 'cpcss'
         ];
 

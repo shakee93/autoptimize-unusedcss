@@ -22,9 +22,9 @@ abstract class CriticalCSS_Admin{
             'Critical CSS',
             'Critical CSS',
             'manage_options',
-            'uucss',
+            'cpcss',
             function (){
-
+                echo 'Critical Path CSS';
             },
             3
         );
