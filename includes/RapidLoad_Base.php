@@ -10,7 +10,9 @@ class RapidLoad_Base
 
         global $uucss;
 
-        $uucss = new UnusedCSS_RapidLoad();
+        $provider_class = apply_filters('uucss/provider/class', 'UnusedCSS_RapidLoad');
+
+        $uucss = new $provider_class();
 
         RapidLoad_ThirdParty::initialize();
 
