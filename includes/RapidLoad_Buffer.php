@@ -7,7 +7,7 @@ class RapidLoad_Buffer
 
     public function __construct()
     {
-        add_action('template_redirect', [$this, 'maybe_init_process']);
+        add_action('init', [$this, 'maybe_init_process'], 99);
     }
 
     public function maybe_init_process() {

@@ -31,8 +31,7 @@ class UnusedCSS_RapidLoad_Admin extends UnusedCSS_Admin {
 
     public static function enabled() {
 
-        if( !self::rapidload_active() ||
-            ! self::is_api_key_verified() && ! self::$deactivating
+        if(! self::is_api_key_verified() && ! self::$deactivating
         ){
             /*$notice = [
                 'action'      => 'on-board',
@@ -49,15 +48,5 @@ class UnusedCSS_RapidLoad_Admin extends UnusedCSS_Admin {
         }
 
         return true;
-    }
-
-    public static function rapidload_active(){
-
-        if ( ! function_exists( 'is_plugin_active' ) ) {
-            require_once(ABSPATH . '/wp-admin/includes/plugin.php');
-        }
-
-        return is_plugin_active( UnusedCSS_Autoptimize::$provider_path ) ||
-            is_plugin_active( 'autoptimize-unusedcss/unusedcss.php' );
     }
 }
