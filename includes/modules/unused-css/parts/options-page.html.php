@@ -250,7 +250,7 @@
                                         </label>
                                     </p>
 
-                                    <?php  if(apply_filters('uucss/inline-css-enabled', false)): ?>
+                                    <?php  if(apply_filters('uucss/inline-css-enabled', true)): ?>
                                         <p>
                                             <label for="uucss_include_inline_css">
                                                 <input id='uucss_include_inline_css' type='checkbox'
@@ -660,7 +660,7 @@
                                     <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
-                                    <a href="<?php echo apply_filters('uucss/activation/url', null, 'deactivate' ) ?>"
+                                    <a href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php else : ?>
@@ -668,12 +668,12 @@
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
                                     <a style="margin-left: 5px"
-                                        href="<?php echo apply_filters('uucss/activation/url', null, 'authorize' ) ?>"
+                                        href="<?php echo UnusedCSS::activation_url('authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
 
                                     <a style="margin-left: 5px"
-                                       href="<?php echo apply_filters('uucss/activation/url', null, 'deactivate' ) ?>"
+                                       href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php endif; ?>

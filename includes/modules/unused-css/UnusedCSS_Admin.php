@@ -104,7 +104,7 @@ abstract class UnusedCSS_Admin {
 
             ?>
             <div class="wrap">
-                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+                <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
                 <?php
                     do_action('uucss/options/before_render_form');
                 ?>
@@ -437,7 +437,7 @@ abstract class UnusedCSS_Admin {
 
     public function first_uucss_job() {
 
-        if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+        if ( class_exists('PAnD') && ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
             return;
         }
 

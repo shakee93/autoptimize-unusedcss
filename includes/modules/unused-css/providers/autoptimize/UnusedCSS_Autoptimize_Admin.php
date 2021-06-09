@@ -27,7 +27,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( is_admin() ) {
 
-		    add_filter('uucss/activation/url', [$this, 'get_activation_url'], 10, 2);
 		    add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
 			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
 			add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
@@ -60,10 +59,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 	    }, 1 );
 
-    }
-
-    public function get_activation_url($url, $action_type){
-	    return self::activation_url($action_type);
     }
 
     public function render_option_page_ao_admin_tabs(){
