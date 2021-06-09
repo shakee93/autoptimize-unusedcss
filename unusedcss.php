@@ -100,6 +100,7 @@ final class RapidLoad{
 
         $this->container['rapidload_admin'] = new RapidLoad_Admin();;
         $this->container['file_system'] = new RapidLoad_FileSystem();
+        $this->container['rapidload_buffer'] = new RapidLoad_Buffer();
         $this->container['rapidload_module'] = new RapidLoad_Module();
 
         $this->load_3rd_party();

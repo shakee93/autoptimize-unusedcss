@@ -6,6 +6,9 @@ class UnusedCSS_Module
     public function __construct()
     {
         global $uucss;
-        $uucss = new UnusedCSS_Autoptimize();
+
+        $provider_class = apply_filters('uucss/provider/class', 'UnusedCSS_Autoptimize');
+
+        $uucss = new $provider_class();
     }
 }
