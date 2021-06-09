@@ -27,7 +27,8 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
 		if ( is_admin() ) {
 
-			add_action( 'admin_menu', array( $this, 'add_ao_page' ) );
+		    add_filter('uucss/activation/url', [$this, 'get_activation_url'], 10, 2);
+		    add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
 			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
 			add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
@@ -61,24 +62,13 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 
     }
 
-    public function add_ao_page() {
+    public function get_activation_url($url, $action_type){
+	    return self::activation_url($action_type);
+    }
 
-        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
-            wp_enqueue_script( 'post' );
+    public function render_option_page_ao_admin_tabs(){
 
-            ?>
-            <div class="wrap">
-                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
-                <?php echo autoptimizeConfig::ao_admin_tabs(); ?>
-                <div>
-                    <?php $this->render_form() ?>
-                </div>
-            </div>
-
-            <?php
-        });
-
-        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+        echo autoptimizeConfig::ao_admin_tabs();
 
     }
 
@@ -162,16 +152,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 	    }*/
 
         return true;
-    }
-
-    public function render_form() {
-        $options = RapidLoad_Base::fetch_options();
-
-        if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
-            $this->update_defaults($options);
-        }
-
-        include('parts/options-page.html.php');
     }
 
     public function update_defaults($options){

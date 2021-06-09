@@ -38,6 +38,12 @@ abstract class UnusedCSS_Admin {
 
         $this->uucss = $uucss;
 
+        if(is_admin()){
+
+            add_action( 'admin_menu', array( $this, 'add_uucss_option_page' ) );
+
+        }
+
 
 	    if (!self::$enabled) {
 		    return;
@@ -89,6 +95,39 @@ abstract class UnusedCSS_Admin {
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
+    }
+
+    public function add_uucss_option_page() {
+
+        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+            wp_enqueue_script( 'post' );
+
+            ?>
+            <div class="wrap">
+                <h1><?php _e( 'Autoptimize Settings', 'autoptimize' ); ?></h1>
+                <?php
+                    do_action('uucss/options/before_render_form');
+                ?>
+                <div>
+                    <?php $this->render_form() ?>
+                </div>
+            </div>
+
+            <?php
+        });
+
+        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+
+    }
+
+    public function render_form() {
+        $options = RapidLoad_Base::fetch_options();
+
+        if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
+            $this->update_defaults($options);
+        }
+
+        include('parts/options-page.html.php');
     }
 
     public function uucss_rule_stats(){

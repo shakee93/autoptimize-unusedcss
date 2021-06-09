@@ -66,9 +66,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 	        return $this->get_cached_file($uucss_file, $this->uucss_ao_base->cdn_url);
         },10,1);
 
-	    add_filter('uucss/enqueue/inline-css-enabled', function ($value){
+	    add_filter('uucss/inline-css-enabled', function (){
 	        return autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on';
-        },10,1);
+        });
 
 	    add_action( 'uucss/cache_file_created', [ $this, 'create_server_compressed_files' ], 10, 2 );
 

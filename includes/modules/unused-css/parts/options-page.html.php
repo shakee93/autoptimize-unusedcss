@@ -82,6 +82,9 @@
                 </span>
                     </h2>
                     <div class="content" style="display:none;">
+                        <?php
+                            do_action('uucss/options/before_option_table');
+                        ?>
                         <table class="form-table" id="uucss-options">
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
@@ -247,7 +250,7 @@
                                         </label>
                                     </p>
 
-                                    <?php  if(autoptimizeOptionWrapper::get_option( 'autoptimize_css_include_inline' ) != 'on'): ?>
+                                    <?php  if(apply_filters('uucss/inline-css-enabled', false)): ?>
                                         <p>
                                             <label for="uucss_include_inline_css">
                                                 <input id='uucss_include_inline_css' type='checkbox'
@@ -510,7 +513,7 @@
                             <?php endif; ?>
                         </table>
                         <?php
-                            do_action('uucss/after_option_table');
+                            do_action('uucss/options/after_option_table');
                         ?>
                     </div>
                 </li>
@@ -657,7 +660,7 @@
                                     <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
-                                    <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
+                                    <a href="<?php echo apply_filters('uucss/activation/url', null, 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php else : ?>
@@ -665,12 +668,12 @@
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
                                     <a style="margin-left: 5px"
-                                        href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>"
+                                        href="<?php echo apply_filters('uucss/activation/url', null, 'authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
 
                                     <a style="margin-left: 5px"
-                                       href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'deactivate' ) ?>"
+                                       href="<?php echo apply_filters('uucss/activation/url', null, 'deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
 								<?php endif; ?>
@@ -710,6 +713,10 @@
     </div>
 
 </form>
+
+<?php
+    do_action('uucss/options/after_render_form');
+?>
 
 <div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight">
     <div class="action-content">

@@ -39,7 +39,7 @@ class RapidLoad_Enqueue {
 
         if(isset($this->options['uucss_include_inline_css']) &&
             $this->options['uucss_include_inline_css'] == '1' &&
-            apply_filters('uucss/enqueue/inline-css-enabled', false) &&
+            apply_filters('uucss/inline-css-enabled', false) &&
             isset($this->files) && !empty($this->files)){
 
             $inline_style_content = '';
