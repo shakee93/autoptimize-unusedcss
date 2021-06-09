@@ -1,5 +1,5 @@
 <?php
-$api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
+    $api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
     $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
@@ -9,7 +9,45 @@ $api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uuc
 ?>
 
 <div id="rapidload-dashboard">
+    <div class="rapidload-wrap wrap">
+        <div class="rapidload-body">
+            <header class="rapidload-header">
+                <div class="rapidload-header-logo">
+                    <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" width="163" height="44" alt="Logo WP Rocket" class="wpr-Header-logo-desktop">
+                </div>
+                <div class="rapidload-header-nav">
+                    <a href="#dashboard" id="rapidload-nav-dashboard" class="rapidload-menu-item isActive">
+                        <div class="rapidload-menu-item-title">Dashboard</div>
+                        <div class="rapidload-menu-item-description">Get help, account info</div>
+                    </a>
+                    <a href="#unusedcss" id="rapidload-nav-uucss" class="rapidload-menu-item">
+                        <div class="rapidload-menu-item-title">Unused CSS</div>
+                        <div class="rapidload-menu-item-description">Remove unused CSS</div>
+                    </a>
+                    <a href="#criticalcss" id="rapidload-nav-cpcss" class="rapidload-menu-item">
+                        <div class="rapidload-menu-item-title">Critical CSS</div>
+                        <div class="rapidload-menu-item-description">Optimize render blocking</div>
+                    </a>
+                <div class="rapidload-header-footer">
+                    version <?php echo UUCSS_VERSION ?>			</div>
+            </header>
+            <section class="wpr-Content isNotFull rapidload-content">
+                <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
+                    <?php settings_fields( 'autoptimize_uucss_settings' );?>
+                    <div id="dashboard" class="rapidload-page">
+                        <div class="rapidload-section-header">
+                            <h2 class="rapidload-title1 rapidload-icon-home">
+                                Dashboard
+                            </h2>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
 
+    </div>
+
+    </div>
     <?php foreach ($rapidload_modules as $module) : ?>
 
         <p>

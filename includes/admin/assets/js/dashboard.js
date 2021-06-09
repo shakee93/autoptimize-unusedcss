@@ -13,6 +13,12 @@
 
         });
 
+        $('.rapidload-menu-item').click(function(){
+
+            $('.rapidload-menu-item').removeClass('isActive');
+            $(this).addClass('isActive');
+        })
+
     })
 
 }(jQuery))
