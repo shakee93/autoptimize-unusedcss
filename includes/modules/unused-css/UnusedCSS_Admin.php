@@ -1473,19 +1473,23 @@ abstract class UnusedCSS_Admin {
 
         $fh = fopen($robotsUrl,'r');
 
-        while ($fh && ($line = fgets($fh)) != false) {
+        if($fh){
 
-            if (preg_match("/user-agent.*/i", $line) ){
-                $robot->userAgent = trim(explode(':', $line, 2)[1]);
-            }
-            else if (preg_match("/disallow.*/i", $line)){
-                array_push($robot->disAllow, trim(explode(':', $line, 2)[1]));
-            }
-            else if (preg_match("/^allow.*/i", $line)){
-                array_push($robot->allow, trim(explode(':', $line, 2)[1]));
-            }
-            else if(preg_match("/sitemap.*/i", $line)){
-                $robot->sitemap = trim(explode(':', $line, 2)[1]);
+            while (($line = fgets($fh)) != false) {
+
+                if (preg_match("/user-agent.*/i", $line) ){
+                    $robot->userAgent = trim(explode(':', $line, 2)[1]);
+                }
+                else if (preg_match("/disallow.*/i", $line)){
+                    array_push($robot->disAllow, trim(explode(':', $line, 2)[1]));
+                }
+                else if (preg_match("/^allow.*/i", $line)){
+                    array_push($robot->allow, trim(explode(':', $line, 2)[1]));
+                }
+                else if(preg_match("/sitemap.*/i", $line)){
+                    $robot->sitemap = trim(explode(':', $line, 2)[1]);
+                }
+
             }
 
         }
