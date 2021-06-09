@@ -50,7 +50,6 @@ abstract class UnusedCSS_Admin {
 	    }
 
         add_action( 'current_screen', function () {
-            error_log(get_current_screen()->base);
             if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'rapidload_page_rapidload' ) ) {
                 add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
             }
