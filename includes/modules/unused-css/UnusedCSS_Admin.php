@@ -92,10 +92,11 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
             add_action( 'wp_ajax_uucss_queue', [$this, 'queue_posts']);
-            add_action( 'uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
+
+        add_action( 'uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
 
     }
 
@@ -272,7 +273,7 @@ abstract class UnusedCSS_Admin {
     }
 
     function queue_sitemap($url = false){
-
+        error_log('here');
         if(!$url){
 
             $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
