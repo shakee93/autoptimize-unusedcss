@@ -128,7 +128,7 @@ final class RapidLoad{
 
     private function init_actions() {
 
-        register_activation_hook( UUCSS_PLUGIN_FILE, 'UnusedCSS_Autoptimize_Onboard::uucss_activate' );
+        register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Base::uucss_activate' );
 
         register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_DB::initialize' );
 
