@@ -40,7 +40,7 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
             return $this->get_cached_file($uucss_file, null);
         },10,1);
 
-        new UnusedCSS_WP_Rocket_Admin( $this );
+        new UnusedCSS_RapidLoad_Admin( $this );
     }
 
     public function get_css()
