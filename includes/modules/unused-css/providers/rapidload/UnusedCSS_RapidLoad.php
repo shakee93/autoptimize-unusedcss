@@ -16,7 +16,7 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
      */
     public function __construct()
     {
-        $this->provider = 'wp-rocket';
+        $this->provider = 'rapidload';
 
         self::$provider_path = 'unusedcss/unusedcss.php';
 
