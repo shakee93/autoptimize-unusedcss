@@ -25,11 +25,22 @@
             $('.rapidload-page-' + $(this).data('page')).css('display','block');
         })
 
+        $('p.more-info-uucss-status').click(function (e) {
+            e.preventDefault();
+            var $info = $('.rapidload-status .uucss-status-more-info');
+            if($info.css('display') === "block"){
+                $info.slideUp();
+            }else{
+                $info.slideDown();
+            }
+
+        });
+
         function updateLicense() {
 
-            /*if(uucss.api_key_verified === ""){
+            if(uucss.api_key_verified === ""){
                 return;
-            }*/
+            }
 
             var container = $('.license-info')
 

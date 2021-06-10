@@ -50,7 +50,7 @@ abstract class UnusedCSS_Admin {
 	    }
 
         add_action( 'current_screen', function () {
-            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'settings_page_rapidload' ) ) {
+            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' ) ) {
                 add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
             }
         } );
@@ -842,36 +842,12 @@ abstract class UnusedCSS_Admin {
 
     public function enqueueScripts() {
 
-        $deregister_scripts = apply_filters('uucss/scripts/deregister', ['select2']);
-
-        if(isset($deregister_scripts) && is_array($deregister_scripts)){
-            foreach ($deregister_scripts as $deregister_script){
-                wp_dequeue_script($deregister_script);
-                wp_deregister_script($deregister_script);
-            }
-        }
-
-        wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
-
-        wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.js', array(
-            'jquery',
-            'uucss_admin'
-        ) );
-        wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
         wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js', array(
             'jquery',
             'wp-util'
         ), UUCSS_VERSION );
-
-        wp_register_script( 'uucss_log', UUCSS_PLUGIN_URL . 'assets/js/uucss_log.js', array(
-            'jquery',
-            'wp-util'
-        ), UUCSS_VERSION );
-
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
-
-
 
         $data = array(
             'api' => RapidLoad_Api::get_key(),
@@ -892,9 +868,6 @@ abstract class UnusedCSS_Admin {
         wp_localize_script( 'uucss_admin', 'uucss', $data );
 
         wp_enqueue_script( 'uucss_admin' );
-        wp_enqueue_script( 'uucss_log' );
-
-        wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.css' );
 
     }
 

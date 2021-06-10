@@ -1,0 +1,108 @@
+#uucss-logs-table_info .uucss_log_search_exact{
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    opacity: 0;
+}
+
+#uucss-logs-table_info input[type="search"]:focus + input.uucss_log_search_exact,
+#uucss-logs-table_info input[type="search"]:hover + input.uucss_log_search_exact,
+#uucss-logs-table_info .uucss_log_search_exact:hover,
+.uucss_log_search_exact:hover{
+    opacity: 1;
+}
+
+#uucss-logs-table .log-content p, .log-content ul {
+    margin: 0;
+}
+
+#uucss-logs-table_info select{
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-top: -4px;
+    font-size: 12px;
+}
+
+#uucss-logs-table_info select{
+    margin-left: 0;
+}
+
+#uucss-logs-table_info input[type="search"]{
+    margin-right: 0.5em;
+}
+
+#uucss-logs-table_wrapper div#uucss-logs-table_info{
+    font-size: 11px !important;
+    margin: 2px 8px;
+    padding-bottom: 8px;
+}
+
+#uucss-logs-table_wrapper div#uucss-logs-table_info{
+    margin-left: 0;
+}
+
+.featherlight.uucss-log .featherlight-content .spinner.loading + div.uucss-logs-content input{
+    display: none;
+}
+
+#uucss-logs-table_wrapper div#uucss-auto-refresh-logs {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#uucss-logs-table_info .uucss-log-search-wrap{
+    display: inline-block;
+    position: relative;
+}
+
+#uucss-logs-table_info .uucss-log-search-wrap:hover{
+    opacity: 1;
+}
+
+#uucss-logs-table_wrapper .dataTables_filter {
+    float: unset;
+    text-align: left;
+    padding: 0 10px;
+}
+
+#uucss-logs-table_info{
+    padding-bottom: 0.755em;
+}
+
+#uucss-logs-table_info select.uucss-log-type{
+    margin-right: 10px;
+}
+
+#uucss-logs-table_filter{
+    display: none;
+}
+
+.featherlight.uucss-log .featherlight-content{
+    width: 90%;
+    height: 475px;
+    padding-bottom: 10px;
+}
+
+.uucss-log-search-wrap .tippy-content{
+    font-size: 12px;
+}
+
+.featherlight .featherlight-content {
+    margin: 0 auto;
+    padding: 10px 15px 10px;
+    border-radius: 5px;
+    border: 0;
+    width: 75%;
+    height: 75%;
+    overflow: hidden;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 8px 18px;
+}
+
+table.dataTable thead th {
+    border: none;
+    font-size: 10px;
+    text-transform: uppercase;
+}

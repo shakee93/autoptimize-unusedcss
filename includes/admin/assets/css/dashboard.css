@@ -171,10 +171,6 @@ input:checked + .slider:before {
     font-weight: 700;
 }
 
-.rapidload-page{
-    margin-bottom: 32px;
-}
-
 body.settings_page_rapidload #wpfooter{
     position:relative;
 }
@@ -325,22 +321,26 @@ div.rapidload-status .content p{
     margin:0;
 }
 
-#uucss-wrapper .license-info.loading ul {
+.rapidload-page .license-info.loading ul {
     visibility: hidden;
     display: block !important;
     min-height: 90px;
 }
 
-#uucss-wrapper .license-info ul {
+.rapidload-page .license-info{
+    position: relative;
+}
+
+.rapidload-page .license-info ul {
     margin-bottom: 12px;
     margin-top:0;
 }
 
-body.settings_page_rapidload #uucss-wrapper .license-info ul li{
+body.settings_page_rapidload .rapidload-page .license-info ul li{
     margin-bottom: 0;
 }
 
-#uucss-wrapper .license-info a.uucss-activate {
+.rapidload-page .license-info a.uucss-activate {
     display: inline-block;
     padding: 10px 16px;
     margin: 0;
@@ -349,7 +349,7 @@ body.settings_page_rapidload #uucss-wrapper .license-info ul li{
     line-height: 1;
 }
 
-#uucss-wrapper a.uucss-activate {
+.rapidload-page a.uucss-activate {
     background: #7f54b3;
     padding: 12px 28px;
     font-size: 14px;
@@ -366,21 +366,21 @@ body.settings_page_rapidload #uucss-wrapper .license-info ul li{
     text-align: center;
 }
 
-#uucss-wrapper a.uucss-activate:hover {
+.rapidload-page a.uucss-activate:hover {
     background: #674399;
 }
 
-#uucss-wrapper .license-info span#license-message {
+.rapidload-page .license-info span#license-message {
     margin-bottom: 5px;
     margin-left: 1px;
     display: none;
 }
 
-#uucss-wrapper .license-info.loading .spinner {
+.rapidload-page .license-info.loading .spinner {
     position: absolute;
     visibility: visible;
     opacity: 1;
-    top: calc(50% - -120px);
+    top: 35px;
     left: 85px;
 }
 

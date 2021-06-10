@@ -14,7 +14,11 @@ class RapidLoad_Admin
 
         if(is_admin()){
             add_action( 'admin_menu', [ $this, 'add_menu' ] );
-            add_action( 'current_screen', [$this, 'enqueue_scripts']);
+            add_action( 'current_screen', function (){
+                if(get_current_screen() && ( get_current_screen()->base == 'settings_page_rapidload' || get_current_screen()->base == 'settings_page_uucss')){
+                    add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts']);
+                }
+            });
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
         }
 
@@ -48,12 +52,35 @@ class RapidLoad_Admin
 
     function enqueue_scripts(){
 
-        if ( get_current_screen() && get_current_screen()->base == 'settings_page_rapidload' ) {
-            add_action( 'admin_enqueue_scripts', function(){
-                wp_enqueue_style( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/css/dashboard.css' , [], UUCSS_VERSION);
-                wp_enqueue_script( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/js/dashboard.js', ['jquery'], UUCSS_VERSION );
-            });
+        $deregister_scripts = apply_filters('uucss/scripts/deregister', ['select2']);
+
+        if(isset($deregister_scripts) && is_array($deregister_scripts)){
+            foreach ($deregister_scripts as $deregister_script){
+                wp_dequeue_script($deregister_script);
+                wp_deregister_script($deregister_script);
+            }
         }
+
+        wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
+
+        wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.css' );
+
+        wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
+
+        wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.js', array(
+            'jquery',
+        ) );
+
+        wp_enqueue_style( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/css/dashboard.css' , [], UUCSS_VERSION);
+
+        wp_enqueue_script( 'rapidload-dashboard', UUCSS_PLUGIN_URL . 'includes/admin/assets/js/dashboard.js', ['jquery'], UUCSS_VERSION );
+
+        wp_enqueue_style( 'uucss_log', UUCSS_PLUGIN_URL . 'assets/css/uucss_log.css' , [], UUCSS_VERSION);
+
+        wp_enqueue_script( 'uucss_log', UUCSS_PLUGIN_URL . 'assets/js/uucss_log.js', array(
+            'jquery',
+            'wp-util'
+        ), UUCSS_VERSION );
 
     }
 

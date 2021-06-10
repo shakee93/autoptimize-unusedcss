@@ -27,13 +27,9 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                         <div class="rapidload-menu-item-title">Modules</div>
                         <div class="rapidload-menu-item-description">Services</div>
                     </a>
-                    <a href="#unusedcss" id="rapidload-nav-uucss" class="rapidload-menu-item">
-                        <div class="rapidload-menu-item-title">Unused CSS</div>
-                        <div class="rapidload-menu-item-description">Remove unused CSS</div>
-                    </a>
-                    <a href="#criticalcss" id="rapidload-nav-cpcss" class="rapidload-menu-item">
-                        <div class="rapidload-menu-item-title">Critical CSS</div>
-                        <div class="rapidload-menu-item-description">Optimize render blocking</div>
+                    <a href="#optimize" id="rapidload-nav-uucss" class="rapidload-menu-item">
+                        <div class="rapidload-menu-item-title">File Optimization</div>
+                        <div class="rapidload-menu-item-description">Optimize CSS</div>
                     </a>
                     <div class="rapidload-header-footer">
                         version <?php echo UUCSS_VERSION ?>            </div>
@@ -49,6 +45,81 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                         </div>
                         <div class="rapidload-page-row">
                             <div class="rapidload-page-col">
+                                <div class="rapidload-option-header">
+                                    <h3 class="rapidload-title2">License Information</h3>
+                                </div>
+                                <div class="rapidload-field rapidload-field-license">
+                                    <div class="rapidload-flex">
+                                        <div class="license-info">
+                                            <span id="license-message"></span>
+                                            <div class="spinner"></div>
+                                            <ul style="display: none">
+                                                <li><strong>Name : </strong> <span id="license-name"></span></li>
+                                                <li><strong>Email : </strong> <span id="license-email"></span></li>
+                                                <li><strong>Plan : </strong><span id="license-plan"></span></li>
+                                                <li><strong>Next Billing : </strong><span
+                                                            id="license-next_billing"></span></li>
+                                                <li><strong>Domain : </strong><span id="license-domain"></span></li>
+                                            </ul>
+
+                                            <div style="display: inline-block">
+                                                <input id='thirtd_part_cache_plugins' type='hidden'
+                                                       value="<?php if (!empty($third_party_cache_plugins)) {
+                                                           echo '1';
+                                                       } ?>">
+                                                <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
+                                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'
+                                                       value="<?php if (!empty($options['uucss_auto_refresh_frontend']) && '1' === $options['uucss_auto_refresh_frontend']) {
+                                                           echo '1';
+                                                       } ?>">
+                                                <input id='uucss_dev_mode' type='hidden'
+                                                       name='autoptimize_uucss_settings[uucss_dev_mode]'
+                                                       value="<?php if (!empty($options['uucss_dev_mode']) && '1' === $options['uucss_dev_mode']) {
+                                                           echo '1';
+                                                       } ?>">
+                                                <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
+                                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'
+                                                       value="<?php if (!empty($options['uucss_auto_refresh_frontend_rule']) && '1' === $options['uucss_auto_refresh_frontend_rule']) {
+                                                           echo '1';
+                                                       } ?>">
+                                                <input type="hidden"
+                                                       name="autoptimize_uucss_settings[uucss_api_key_verified]"
+                                                       value="<?php if (isset($options['uucss_api_key_verified']))
+                                                           echo $options['uucss_api_key_verified'] ?>">
+                                                <input id='uucss_api_key' type='hidden'
+                                                       name='autoptimize_uucss_settings[uucss_api_key]'
+                                                       value="<?php echo (isset($options['uucss_api_key'])) ? $options['uucss_api_key'] : '' ?>"
+                                                       size="40">
+                                                <em id="verification_status"></em>
+                                                <?php if (isset($options['valid_domain']) && $options['valid_domain']) : ?>
+                                                    <a href="<?php echo(defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/') ?>"
+                                                       target="_blank"
+                                                       class="uucss-activate" id="my-account"> My Account
+                                                    </a>
+                                                    <a href="<?php echo UnusedCSS::activation_url('deactivate') ?>"
+                                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
+                                                    </a>
+                                                <?php else : ?>
+                                                    <a href="<?php echo(defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/') ?>"
+                                                       target="_blank"
+                                                       class="uucss-activate" id="my-account"> My Account
+                                                    </a>
+                                                    <a style="margin-left: 5px"
+                                                       href="<?php echo UnusedCSS::activation_url('authorize') ?>"
+                                                       class="uucss-activate"> Reactivate License
+                                                    </a>
+
+                                                    <a style="margin-left: 5px"
+                                                       href="<?php echo UnusedCSS::activation_url('deactivate') ?>"
+                                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
+                                                    </a>
+                                                <?php endif; ?>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="rapidload-option-header">
                                     <h3 class="rapidload-title2">Status</h3>
                                 </div>
@@ -159,81 +230,6 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="rapidload-option-header">
-                                    <h3 class="rapidload-title2">License Information</h3>
-                                </div>
-                                <div class="rapidload-field rapidload-field-license">
-                                    <div class="rapidload-flex">
-                                        <div class="license-info">
-                                            <span id="license-message"></span>
-                                            <div class="spinner"></div>
-                                            <ul style="display: none">
-                                                <li><strong>Name : </strong> <span id="license-name"></span></li>
-                                                <li><strong>Email : </strong> <span id="license-email"></span></li>
-                                                <li><strong>Plan : </strong><span id="license-plan"></span></li>
-                                                <li><strong>Next Billing : </strong><span
-                                                            id="license-next_billing"></span></li>
-                                                <li><strong>Domain : </strong><span id="license-domain"></span></li>
-                                            </ul>
-
-                                            <div style="display: inline-block">
-                                                <input id='thirtd_part_cache_plugins' type='hidden'
-                                                       value="<?php if (!empty($third_party_cache_plugins)) {
-                                                           echo '1';
-                                                       } ?>">
-                                                <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
-                                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'
-                                                       value="<?php if (!empty($options['uucss_auto_refresh_frontend']) && '1' === $options['uucss_auto_refresh_frontend']) {
-                                                           echo '1';
-                                                       } ?>">
-                                                <input id='uucss_dev_mode' type='hidden'
-                                                       name='autoptimize_uucss_settings[uucss_dev_mode]'
-                                                       value="<?php if (!empty($options['uucss_dev_mode']) && '1' === $options['uucss_dev_mode']) {
-                                                           echo '1';
-                                                       } ?>">
-                                                <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
-                                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'
-                                                       value="<?php if (!empty($options['uucss_auto_refresh_frontend_rule']) && '1' === $options['uucss_auto_refresh_frontend_rule']) {
-                                                           echo '1';
-                                                       } ?>">
-                                                <input type="hidden"
-                                                       name="autoptimize_uucss_settings[uucss_api_key_verified]"
-                                                       value="<?php if (isset($options['uucss_api_key_verified']))
-                                                           echo $options['uucss_api_key_verified'] ?>">
-                                                <input id='uucss_api_key' type='hidden'
-                                                       name='autoptimize_uucss_settings[uucss_api_key]'
-                                                       value="<?php echo (isset($options['uucss_api_key'])) ? $options['uucss_api_key'] : '' ?>"
-                                                       size="40">
-                                                <em id="verification_status"></em>
-                                                <?php if (isset($options['valid_domain']) && $options['valid_domain']) : ?>
-                                                    <a href="<?php echo(defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/') ?>"
-                                                       target="_blank"
-                                                       class="uucss-activate" id="my-account"> My Account
-                                                    </a>
-                                                    <a href="<?php echo UnusedCSS::activation_url('deactivate') ?>"
-                                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
-                                                    </a>
-                                                <?php else : ?>
-                                                    <a href="<?php echo(defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/') ?>"
-                                                       target="_blank"
-                                                       class="uucss-activate" id="my-account"> My Account
-                                                    </a>
-                                                    <a style="margin-left: 5px"
-                                                       href="<?php echo UnusedCSS::activation_url('authorize') ?>"
-                                                       class="uucss-activate"> Reactivate License
-                                                    </a>
-
-                                                    <a style="margin-left: 5px"
-                                                       href="<?php echo UnusedCSS::activation_url('deactivate') ?>"
-                                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
-                                                    </a>
-                                                <?php endif; ?>
-
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
