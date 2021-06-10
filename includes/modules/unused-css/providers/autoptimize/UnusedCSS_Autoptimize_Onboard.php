@@ -122,10 +122,6 @@ class UnusedCSS_Autoptimize_Onboard {
 	    }
     }
 
-	public static function uucss_activate() {
-		add_option( 'uucss_do_activation_redirect', true );
-	}
-
 	function uucss_register_on_board_page() {
 		global $submenu;
 		add_options_page(

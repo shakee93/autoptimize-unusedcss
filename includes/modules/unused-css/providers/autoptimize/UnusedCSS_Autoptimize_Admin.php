@@ -149,11 +149,6 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
         return true;
     }
 
-    public function update_defaults($options){
-        $options['uucss_load_original'] = "1";
-        UnusedCSS_Admin::update_site_option('autoptimize_uucss_settings', $options);
-    }
-
 	public static function ao_installed() {
 	    return file_exists(ABSPATH . PLUGINDIR . '/' . UnusedCSS_Autoptimize::$provider_path) ||
             file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php');

@@ -325,10 +325,6 @@ abstract class UnusedCSS_Admin {
     public function render_form() {
         $options = RapidLoad_Base::fetch_options();
 
-        if(isset($options) && !isset($options['uucss_jobs_per_queue'])){
-            $this->update_defaults($options);
-        }
-
         include('parts/options-page.html.php');
     }
 

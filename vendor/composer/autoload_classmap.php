@@ -40,8 +40,6 @@ return array(
     'UnusedCSS_RapidLoad' => $baseDir . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad.php',
     'UnusedCSS_RapidLoad_Admin' => $baseDir . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad_Admin.php',
     'UnusedCSS_Rule' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Rule.php',
-    'UnusedCSS_WP_Rocket' => $baseDir . '/includes/modules/unused-css/providers/wp-rocket/UnusedCSS_WP_Rocket.php',
-    'UnusedCSS_WP_Rocket_Admin' => $baseDir . '/includes/modules/unused-css/providers/wp-rocket/UnusedCSS_WP_Rocket_Admin.php',
     'W3_Total_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',
     'WP_Engine_Common_Compatible' => $baseDir . '/includes/third-party/plugins/wpengine-common/WP_Engine_Common_Compatible.php',
     'WP_Fastest_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
