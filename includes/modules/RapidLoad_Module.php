@@ -20,7 +20,7 @@ class RapidLoad_Module{
             'title' => 'Unused CSS',
             'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
             'status' => 'off',
-            'class' => 'UnusedCSS_Autoptimize',
+            'class' => defined('RAPIDLOAD_PROVIDER') && class_exists(RAPIDLOAD_PROVIDER) ? RAPIDLOAD_PROVIDER : UnusedCSS_Autoptimize::class,
             'global' => 'uucss'
         ];
 
@@ -29,7 +29,7 @@ class RapidLoad_Module{
             'title' => 'Critical CSS',
             'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
             'status' => 'off',
-            'class' => 'CriticalCSS_RapidLoad',
+            'class' => CriticalCSS_RapidLoad::class,
             'global' => 'cpcss'
         ];
 
