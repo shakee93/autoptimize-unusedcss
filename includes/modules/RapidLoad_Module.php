@@ -18,6 +18,7 @@ class RapidLoad_Module{
         $this->modules['unused-css'] = [
             'id' => 'unused-css',
             'title' => 'Unused CSS',
+            'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
             'status' => 'off',
             'class' => 'UnusedCSS_Autoptimize',
             'global' => 'uucss'
@@ -26,6 +27,7 @@ class RapidLoad_Module{
         $this->modules['critical-css'] = [
             'id' => 'critical-css',
             'title' => 'Critical CSS',
+            'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
             'status' => 'off',
             'class' => 'CriticalCSS_RapidLoad',
             'global' => 'cpcss'

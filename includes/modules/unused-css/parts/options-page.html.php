@@ -32,7 +32,7 @@
 			<?php endif; ?>
 			<?php if ( $api_key_verified) : ?>
 
-                <?php if (apply_filters('uucss/options/show-table', false)) : ?>
+                <?php if (apply_filters('uucss/options/show-table', true)) : ?>
                     <li class="uucss-history uucss-job-history">
                         <h2>
                             Optimization Jobs
@@ -82,10 +82,10 @@
                     <h2>
                         Advanced Settings
                         <span class="uucss-toggle-section rotate">
-                    <span class="dashicons dashicons-arrow-down-alt2"></span>
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="">
+                    <div class="content" style="display:none">
                         <?php
                             do_action('uucss/options/before_option_table');
                         ?>
@@ -522,7 +522,7 @@
                     </div>
                 </li>
 
-                <?php if (apply_filters('uucss/options/show-info', false)) : ?>
+                <?php if (apply_filters('uucss/options/show-info', true)) : ?>
 
                     <li class="rapidload-status">
                         <h2>RapidLoad Status

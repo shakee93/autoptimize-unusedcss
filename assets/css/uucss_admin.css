@@ -328,7 +328,7 @@ span.uucss-toggle-section.rotate {
     padding: 0 25px;
 }
 
-#uucss-wrapper h2 {
+body.settings_page_uucss #uucss-wrapper h2 {
     cursor: pointer;
     user-select: none;
     line-height: 1;
@@ -758,7 +758,7 @@ table.uucss-history-table{
     license info
  */
 
-#uucss-wrapper .license-info {
+body.settings_page_uucss #uucss-wrapper .license-info {
     padding: 10px;
 }
 
@@ -770,6 +770,7 @@ table.uucss-history-table{
 
 #uucss-wrapper .license-info ul {
     margin-bottom: 12px;
+    margin-top:0;
 }
 
 #uucss-wrapper .license-info a.uucss-activate {
@@ -784,10 +785,10 @@ table.uucss-history-table{
 #uucss-wrapper .license-info span#license-message {
     margin-bottom: 5px;
     margin-left: 1px;
-    display: inline-block;
+    display: none;
 }
 
-#uucss-wrapper .license-info.loading .spinner {
+body.settings_page_uucss #uucss-wrapper .license-info.loading .spinner {
     position: absolute;
     visibility: visible;
     opacity: 1;

@@ -222,15 +222,15 @@
         });*/
 
         if(window.uucss.rules_enabled === ""){
-            /*$('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
+            $('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });*/
+            });
         }else{
-            /*$('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
+            $('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
-            });*/
+            });
         }
 
         $('body.rapidload_page_rapidload #uucss-wrapper li h2').click(function () {
@@ -2418,7 +2418,7 @@
             container.removeClass('loading');
         }).fail(function (i) {
             $('.license-info ul').hide()
-            $('.license-info #license-message').show().html('Sorry, we couldn\'t collect license information of yours.')
+            $('.license-info #license-message').css('display','block').html('Sorry, we couldn\'t collect license information of yours.')
             container.removeClass('loading');
         })
 

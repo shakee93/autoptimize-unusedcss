@@ -50,7 +50,7 @@ abstract class UnusedCSS_Admin {
 	    }
 
         add_action( 'current_screen', function () {
-            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'rapidload_page_rapidload' ) ) {
+            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'settings_page_rapidload' ) ) {
                 add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
             }
         } );
@@ -81,7 +81,6 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
             add_action( "wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
-            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
             add_action( "wp_ajax_uucss_status", [ $this, 'uucss_status' ] );
             add_action( "wp_ajax_uucss_rule_stats", [ $this, 'uucss_rule_stats' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
@@ -296,7 +295,7 @@ abstract class UnusedCSS_Admin {
 
     public function add_uucss_option_page() {
 
-        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+        add_submenu_page( 'options-general.php', 'Unused CSS', 'Unused CSS', 'manage_options', 'uucss', function () {
             wp_enqueue_script( 'post' );
 
             ?>
@@ -312,31 +311,6 @@ abstract class UnusedCSS_Admin {
 
             <?php
         });
-
-        rapidload()->admin()->add_submenu_page(
-            'rapidload-main',
-            'Unused CSS',
-            'Unused CSS',
-            'manage_options',
-            'uucss',
-            function (){
-                wp_enqueue_script( 'post' );
-
-                ?>
-                <div class="wrap">
-                    <h1><?php _e( 'Unused CSS Settings', 'autoptimize' ); ?></h1>
-                    <?php
-                    do_action('uucss/options/before_render_form');
-                    ?>
-                    <div>
-                        <?php $this->render_form() ?>
-                    </div>
-                </div>
-
-                <?php
-            },
-            2
-        );
 
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
@@ -1299,32 +1273,6 @@ abstract class UnusedCSS_Admin {
 		}
 
 		return $data;
-	}
-
-	public function uucss_license() {
-
-		$api = new RapidLoad_Api();
-
-		$data = $api->get( 'license', [
-			'url' => $this->transform_url(get_site_url())
-		] );
-
-		if ( ! is_wp_error( $data ) ) {
-
-			if ( isset( $data->errors ) ) {
-				wp_send_json_error( $data->errors[0]->detail );
-			}
-
-			if ( gettype( $data ) === 'string' ) {
-				wp_send_json_error( $data );
-			}
-
-			do_action( 'uucss/license-verified' );
-
-			wp_send_json_success( $data->data );
-		}
-
-		wp_send_json_error( 'unknown error occurred' );
 	}
 
 	public function verify_api_key() {
