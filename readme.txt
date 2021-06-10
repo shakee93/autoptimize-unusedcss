@@ -85,11 +85,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.4.12 - 04/06/2021 =
- * improve: update default value of load original css
- * improve: rule based injection regex pattern
- * improve: woocommerce plugin support
- * improve: cloudflare plugin support
+= 1.4.12 - 10/06/2021 =
+ * improve: Load original CSS as default option to prevent layout breaks
+ * improve: rule based injection with regex pattern
+ * fix: undefined is_product function in Woocommerce rule based injection
+ * improve: add Cloudflare cache busting query param to RapidLoad
 
 = 1.4.11 - 20/05/2021 =
  * feat: (beta) rule based injection
