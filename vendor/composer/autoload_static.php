@@ -41,6 +41,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_RapidLoad' => __DIR__ . '/../..' . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad.php',
         'UnusedCSS_RapidLoad_Admin' => __DIR__ . '/../..' . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad_Admin.php',
         'UnusedCSS_Rule' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Rule.php',
+        'Varnish_Http_Purge_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/varnish-http-purge/Varnish_Http_Purge_Compatible.php',
         'W3_Total_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',
         'WP_Engine_Common_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wpengine-common/WP_Engine_Common_Compatible.php',
         'WP_Fastest_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
