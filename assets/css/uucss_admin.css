@@ -415,6 +415,10 @@ table.dataTable tbody th, table.dataTable tbody td {
     padding: 8px 10px;
 }
 
+table.dataTable tbody td.pattern{
+    word-break: break-all;
+}
+
 table.dataTable thead th, table.dataTable thead td {
     padding: 8px 18px;
 }
