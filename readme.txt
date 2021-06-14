@@ -85,6 +85,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.14 - 14/06/2021 =
+ * improve: set default sitemap url from robots.txt
+
 = 1.4.13 - 14/06/2021 =
  * feat: add Proxy Cache Purge plugin support
  * fix: options cleared on deactivation
