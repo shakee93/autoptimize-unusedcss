@@ -810,7 +810,7 @@
         </div>
         <div>
             <input type="text" class="site-map-url show" placeholder="<?php echo trailingslashit(get_site_url())?>" data-site_url="<?php echo trailingslashit(get_site_url())?>" data-sitemap_url="<?php
-                $robots = UnusedCSS_Admin::get_robots_text('https://rapidload.io');
+                $robots = UnusedCSS_Admin::get_robots_text(get_site_url());
                 if($robots && isset($robots->sitemap)){
                     echo apply_filters('uucss/sitemap-path', $robots->sitemap);
                 }else{
