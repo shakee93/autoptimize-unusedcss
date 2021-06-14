@@ -78,7 +78,7 @@ final class RapidLoad{
 
     private function define_constants() {
 
-        define( 'UUCSS_VERSION', '1.4.11.12' );
+        define( 'UUCSS_VERSION', $this->version );
         define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 
