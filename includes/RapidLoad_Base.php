@@ -53,10 +53,15 @@ class RapidLoad_Base
     }
 
     public static function uucss_activate() {
-        $default_options = [
+
+        $default_options = self::get_option('autoptimize_uucss_settings',[
             'uucss_load_original' => "1"
-        ];
-        self::update_option('autoptimize_uucss_settings', $default_options);
+        ]);
+
+        if(!isset($default_options['uucss_api_key'])){
+            self::update_option('autoptimize_uucss_settings', $default_options);
+        }
+
         add_option( 'uucss_do_activation_redirect', true );
     }
 }
