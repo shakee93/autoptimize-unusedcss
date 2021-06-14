@@ -39,6 +39,7 @@ class RapidLoad_Base{
     }
 
     public static function uucss_activate() {
+
         $default_options = self::get_option('autoptimize_uucss_settings',[
             'uucss_load_original' => "1"
         ]);
