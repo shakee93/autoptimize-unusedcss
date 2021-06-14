@@ -85,6 +85,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.13 - 14/06/2021 =
+ * feat: add Proxy Cache Purge plugin support
+ * fix: options cleared on deactivation
+
 = 1.4.12 - 10/06/2021 =
  * improve: Load original CSS as default option to prevent layout breaks
  * improve: rule based injection with regex pattern
