@@ -24,6 +24,7 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         parent::__construct();
 
+        RapidLoad_Base::activate();
         /*
             On-boarding
         */
