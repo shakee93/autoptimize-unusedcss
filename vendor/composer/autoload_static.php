@@ -45,6 +45,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'W3_Total_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',
         'WP_Engine_Common_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wpengine-common/WP_Engine_Common_Compatible.php',
         'WP_Fastest_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
+        'WP_Hummingbird_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-hummingbird/WP_Hummingbird_Compatible.php',
         'WP_Optimize_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-optimize/WP_Optimize_Compatible.php',
         'WP_Rocket_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
         'WP_Super_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wp-super-cache/WP_Super_Cache_Compatible.php',

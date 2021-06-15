@@ -4,6 +4,8 @@ defined( 'ABSPATH' ) or die();
 
 class RapidLoad_Base
 {
+    use RapidLoad_Utils;
+
     public static function init(){
 
         new RapidLoad_Buffer();
@@ -63,5 +65,50 @@ class RapidLoad_Base
         }
 
         add_option( 'uucss_do_activation_redirect', true );
+    }
+
+    public static function activate() {
+
+        if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
+            return;
+        }
+
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
+            self::add_admin_notice( 'RapidLoad : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
+            return;
+        }
+
+        $token = sanitize_text_field( $_REQUEST['token'] );
+
+        if ( strlen( $token ) !== 32 ) {
+            self::add_admin_notice( 'RapidLoad : Invalid Api Token Received from the Activation. Contact support if the problem persists.', 'error' );
+
+            return;
+        }
+
+        $options = self::get_option( 'autoptimize_uucss_settings' , []);
+
+        if ( ! isset( $options ) || empty( $options ) || ! $options ) {
+            $options = [];
+        }
+
+        // Hey 👋 you stalker ! you can set this key to true, but its no use ☹️ api_key will be verified on each server request
+        $options['uucss_api_key_verified'] = 1;
+        $options['uucss_api_key']          = $token;
+
+        self::update_option( 'autoptimize_uucss_settings', $options );
+
+        $data        = UnusedCSS_Admin::suggest_whitelist_packs();
+        $white_packs = $data->data;
+
+        $options['whitelist_packs'] = array();
+        foreach ( $white_packs as $white_pack ) {
+            $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+        }
+
+        self::update_option( 'autoptimize_uucss_settings', $options );
+
+        self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }
 }
