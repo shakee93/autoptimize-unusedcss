@@ -98,7 +98,9 @@ abstract class UnusedCSS_Job
 
         foreach ($this->warnings as $warning){
 
-            if(isset($warning['message']) && $warning['message'] == 'RapidLoad optimized version for the file missing.'){
+            $war = (array)$warning;
+
+            if(isset($war['message']) && $war['message'] == 'RapidLoad optimized version for the file missing.'){
                 continue;
             }
 
