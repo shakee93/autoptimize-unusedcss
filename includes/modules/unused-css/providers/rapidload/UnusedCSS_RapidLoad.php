@@ -24,6 +24,8 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         parent::__construct();
 
+        add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
+
         RapidLoad_Base::activate();
         /*
             On-boarding
@@ -42,6 +44,27 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         },10,1);
 
         new UnusedCSS_RapidLoad_Admin( $this );
+    }
+
+    public static function uucss_notfound_fallback() {
+
+        $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
+
+        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . UUCSS_CACHE_CHILD_DIR ) !== false && is_404() ) {
+
+            global $wp_query;
+            $wp_query->is_404 = false;
+
+            $fallback_target = UnusedCSS_DB::get_original_file_name($original_request);
+
+            if ( isset($fallback_target) ) {
+
+                wp_redirect( $fallback_target, 302 );
+            } else {
+
+                status_header( 410 );
+            }
+        }
     }
 
     public function get_css()

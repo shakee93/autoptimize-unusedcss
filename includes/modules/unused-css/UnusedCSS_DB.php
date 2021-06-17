@@ -930,4 +930,29 @@ class UnusedCSS_DB extends RapidLoad_DB
         return $urls;
     }
 
+    static function get_original_file_name($path){
+
+	    $orinal_file_name = null;
+
+        global $wpdb;
+
+        $files_list = $wpdb->get_col("SELECT files FROM {$wpdb->prefix}rapidload_uucss_job WHERE files IS NOT NULL UNION ALL SELECT files FROM {$wpdb->prefix}rapidload_uucss_rule WHERE files IS NOT NULL");
+
+        foreach ($files_list as $value){
+
+            $files = isset($value) ? unserialize($value) : [];
+
+            foreach ($files as $file){
+
+                if($file['uucss'] == basename($path)){
+                    $orinal_file_name = $file['original'];
+                    break;
+                }
+
+            }
+
+        }
+
+        return $orinal_file_name;
+    }
 }

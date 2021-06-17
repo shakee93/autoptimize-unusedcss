@@ -50,7 +50,7 @@ abstract class UnusedCSS {
 
         $this->file_system = new RapidLoad_FileSystem();
 
-        $this->base = apply_filters('uucss/cache-base-dir','/cache/rapidload/') . 'uucss';
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR) . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
@@ -445,6 +445,10 @@ abstract class UnusedCSS {
 	    if ( preg_match( '/cache\/autoptimize/', $url ) ) {
 		    return false;
 	    }
+
+        if ( preg_match( '/cache\/rapidload/', $url ) ) {
+            return false;
+        }
 
 	    global $post;
 
