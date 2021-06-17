@@ -46,7 +46,7 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         new UnusedCSS_RapidLoad_Admin( $this );
     }
 
-    public static function uucss_notfound_fallback() {
+    public function uucss_notfound_fallback() {
 
         $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
 
