@@ -1462,6 +1462,7 @@ abstract class UnusedCSS_Admin {
     }
 
     public static function get_robots_text($url){
+
         $robotsUrl = $url . "/robots.txt";
 
         $robot = new stdClass();
@@ -1470,11 +1471,11 @@ abstract class UnusedCSS_Admin {
 
         try {
 
-            $fh = fopen($robotsUrl,'r');
+            $fh = wp_remote_get($robotsUrl);
 
-            if($fh){
+            if(!is_wp_error($fh) && isset($fh['body'])){
 
-                while (($line = fgets($fh)) != false) {
+                foreach(preg_split("/((\r?\n)|(\r\n?))/", $fh['body']) as $line){
 
                     if (preg_match("/user-agent.*/i", $line) ){
                         $robot->userAgent = trim(explode(':', $line, 2)[1]);
