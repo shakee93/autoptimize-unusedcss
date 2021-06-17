@@ -85,6 +85,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.4.15 - 17/06/2021 =
+ * feat : added Hummingbird plugin support
+ * feat : added RapidLoad 404 error handler
+ * fix: Fatal Error Cannot use object of type stdClass as array
+
 = 1.4.14 - 14/06/2021 =
  * improve: set default sitemap url from robots.txt
 
