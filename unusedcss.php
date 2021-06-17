@@ -81,6 +81,7 @@ final class RapidLoad{
         define( 'UUCSS_VERSION', $this->version );
         define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'UUCSS_PLUGIN_FILE', __FILE__ );
+        define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
 
         if ( is_multisite() ) {
             $blog_id = get_current_blog_id();
