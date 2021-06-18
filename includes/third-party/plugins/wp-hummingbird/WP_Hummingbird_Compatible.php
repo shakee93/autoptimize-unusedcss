@@ -6,7 +6,7 @@ class WP_Hummingbird_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
-        $this->plugin = 'hummingbird-performance/wp-hummingbird.php';
+        $this->plugin = 'wp-hummingbird/wp-hummingbird.php';
         $this->catgeory = 'cache';
         $this->name = 'wp-hummingbird';
 
