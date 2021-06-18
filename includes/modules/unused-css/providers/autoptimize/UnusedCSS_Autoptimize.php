@@ -127,14 +127,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
     }
 
-    public function replace_css(){
-
-	    add_action( 'autoptimize_html_after_minify', function ( $html ) {
-            return apply_filters('uucss/enqueue/content', $html);
-	    }, 99 );
-
-    }
-
 	public function ao_handled($link){
         $ao_base = $this->uucss_ao_base;
         return array_filter( $this->css, function ( $item ) use ( $link, $ao_base ) {

@@ -67,13 +67,6 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         return [];
     }
 
-    public function replace_css()
-    {
-        add_filter( 'rapidload_buffer', function ( $html ) {
-            return apply_filters('uucss/enqueue/content', $html);
-        }, 99 );
-    }
-
     public function check_dependencies() {
 
         if(UnusedCSS_Admin::is_api_key_verified()) {

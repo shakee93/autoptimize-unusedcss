@@ -28,8 +28,13 @@ abstract class UnusedCSS {
 	abstract public function get_css();
 
 
-    abstract public function replace_css();
-
+    public function replace_css()
+    {
+        $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
+        add_filter( $buffer, function ( $html ) {
+            return apply_filters('uucss/enqueue/content', $html);
+        }, 99 );
+    }
 
     /**
      * UnusedCSS constructor.
