@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Autoptimize_Beta_Compatible' => $baseDir . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_BetaCompatible.php',
     'Autoptimize_Compatible' => $baseDir . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
