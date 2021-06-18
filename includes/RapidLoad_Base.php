@@ -16,9 +16,9 @@ class RapidLoad_Base
 
             if(class_exists($provider_class)){
 
-                $uucss = new $provider_class();
-
                 RapidLoad_ThirdParty::initialize();
+
+                $uucss = new $provider_class();
 
             }
 

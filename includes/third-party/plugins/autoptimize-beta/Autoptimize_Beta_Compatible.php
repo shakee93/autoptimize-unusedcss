@@ -15,6 +15,10 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
     public function init_hooks(){
 
+        add_filter('uucss/cache-base-dir', function ($value){
+            return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
+        });
+
         add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
 
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 10, 1 );

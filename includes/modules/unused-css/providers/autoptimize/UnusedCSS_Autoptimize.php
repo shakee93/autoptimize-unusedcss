@@ -25,10 +25,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 
         $this->options = RapidLoad_Base::fetch_options();
 
-        add_filter('uucss/cache-base-dir', function ($value){
-            return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
-        });
-
         parent::__construct();
 
         new UnusedCSS_Autoptimize_Onboard( $this );
