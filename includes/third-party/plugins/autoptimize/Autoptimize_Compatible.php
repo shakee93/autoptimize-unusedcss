@@ -4,8 +4,6 @@ defined( 'ABSPATH' ) or die();
 
 class Autoptimize_Compatible extends RapidLoad_ThirdParty {
 
-    private $uucss_ao_base;
-
     function __construct(){
 
         $this->plugin = 'autoptimize/autoptimize.php';
