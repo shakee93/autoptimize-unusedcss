@@ -1001,17 +1001,6 @@ abstract class UnusedCSS {
 
     }
 
-    public function size() {
-
-	    if ( ! $this->file_system || ! $this->file_system->exists( self::$base_dir ) ) {
-		    return "0 KB";
-	    }
-
-	    $size = $this->dirSize( self::$base_dir );
-
-	    return $this->human_file_size( $size );
-    }
-
 
 	public function get_cached_file( $file_url, $cdn = null ) {
 

@@ -3,7 +3,6 @@
 defined( 'ABSPATH' ) or die();
 
 global $post;
-global $uucss;
 ?>
 
 <style>
@@ -68,7 +67,7 @@ global $uucss;
     </script>
     <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">
-        <span class="uucss-stats__size">Size: <?php echo $uucss->size(); ?></span>
+        <span class="uucss-stats__size">Size: <?php echo $this->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
 

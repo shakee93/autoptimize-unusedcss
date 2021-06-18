@@ -428,4 +428,17 @@ trait RapidLoad_Utils {
     public function schedule_cron($hook_name, $args){
         return wp_schedule_single_event( time() + 5, $hook_name, $args);
     }
+
+    public function size() {
+
+	    $file_system = new RapidLoad_FileSystem();
+
+        if ( ! $file_system || ! $file_system->exists( UnusedCSS::$base_dir ) ) {
+            return "0 KB";
+        }
+
+        $size = $this->dirSize( UnusedCSS::$base_dir );
+
+        return $this->human_file_size( $size );
+    }
 }

@@ -17,29 +17,23 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
 
     public function init_hooks(){
 
-        global $uucss;
+        add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
+        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 10, 1 );
+        add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
+        add_action( 'admin_bar_menu', function () {
 
-        if($uucss->provider == 'rapidload'){
+            wp_enqueue_script( 'wp-util' );
 
-            add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
-            add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 10, 1 );
-            add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
-            add_action( 'admin_bar_menu', function () {
+            global $wp_admin_bar;
 
-                wp_enqueue_script( 'wp-util' );
+            $wp_admin_bar->add_node( array(
+                'id'     => 'autoptimize-uucss',
+                'title'  => $this->get_node_text(),
+                'parent' => 'autoptimize',
+                'tag'    => 'div'
+            ) );
 
-                global $wp_admin_bar;
-
-                $wp_admin_bar->add_node( array(
-                    'id'     => 'autoptimize-uucss',
-                    'title'  => $this->get_node_text(),
-                    'parent' => 'autoptimize',
-                    'tag'    => 'div'
-                ) );
-
-            }, 1 );
-
-        }
+        }, 1 );
 
     }
 

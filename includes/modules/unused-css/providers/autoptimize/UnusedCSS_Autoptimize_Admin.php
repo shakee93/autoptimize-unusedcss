@@ -25,98 +25,12 @@ class UnusedCSS_Autoptimize_Admin extends UnusedCSS_Admin {
 			return;
 		}
 
-		if ( is_admin() ) {
-
-		    add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
-			add_filter( 'autoptimize_filter_settingsscreen_tabs', [ $this, 'add_ao_tab' ], 20, 1 );
-			add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
-
-		}
-
         parent::__construct( $ao_uucss );
 
         if ( ! self::enabled() ) {
             self::$enabled = false;
-            return;
         }
 
-	    add_action( 'admin_bar_menu', function () {
-
-		    wp_enqueue_script( 'wp-util' );
-
-		    if ( self::$deactivating ) {
-			    return;
-		    }
-
-		    global $wp_admin_bar;
-
-		    $wp_admin_bar->add_node( array(
-			    'id'     => 'autoptimize-uucss',
-			    'title'  => $this->get_node_text(),
-			    'parent' => 'autoptimize',
-			    'tag'    => 'div'
-		    ) );
-
-	    }, 1 );
-
-    }
-
-    public function render_option_page_ao_admin_tabs(){
-
-        echo autoptimizeConfig::ao_admin_tabs();
-
-    }
-
-    public function add_ao_tab( $in ) {
-
-        $tab = 'RapidLoad';
-
-        $in = array_merge( $in, array(
-            'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>' . $tab . '</span></span>', 'autoptimize' ),
-        ) );
-
-        return $in;
-    }
-
-	public function addNotifications($notifications) {
-
-		if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
-		    $notifications[] = [
-			    "title" => "Incompatible Autoptimize option enabled",
-			    "message" => "It is recommended to enable <strong>'Save aggregated script/css as static files?'</strong> in Autoptimize to RapidLoad to work properly.",
-			    "type" => "error"
-		    ];
-		}
-
-        if(autoptimizeOptionWrapper::get_option( 'autoptimize_css_inline' ) == 'on'){
-            $notifications[] = [
-                "title" => "Incompatible Autoptimize option enabled",
-                "message" => "It is recommended to disable <strong>'inline all css?'</strong> in Autoptimize to RapidLoad to work properly.",
-                "type" => "warning"
-            ];
-        }
-
-		return $notifications;
-    }
-
-	public function add_on_board_action_link($links){
-
-        $_links = array(
-            '<a href="' . admin_url( 'options-general.php?page=uucss-onboarding' ) . '">Get Start</a>',
-        );
-
-        return array_merge( $_links, $links );
-    }
-
-	public function get_node_text() {
-		ob_start();
-
-		include('parts/admin-node.html.php');
-
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
     }
 
     public static function enabled() {
