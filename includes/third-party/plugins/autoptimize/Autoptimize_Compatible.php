@@ -18,8 +18,11 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
     public function init_hooks(){
 
         add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
+
         add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 10, 1 );
+
         add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
+
         add_action( 'admin_bar_menu', function () {
 
             wp_enqueue_script( 'wp-util' );
@@ -35,13 +38,17 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
 
         }, 1 );
 
+        if(apply_filters('uucss/autoptimize/clear-on-purge', true)){
+
+            add_action( 'autoptimize_action_cachepurged', function (){
+                do_action('uucss/clear');
+            });
+
+        }
+
     }
 
     public function addNotifications($notifications) {
-
-        if(!class_exists('autoptimizeOptionWrapper')){
-            return $notifications;
-        }
 
         if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
             $notifications[] = [

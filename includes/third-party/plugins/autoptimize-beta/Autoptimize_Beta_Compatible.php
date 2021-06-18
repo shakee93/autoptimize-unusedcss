@@ -34,6 +34,13 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
             ) );
 
         }, 1 );
+        if(apply_filters('uucss/autoptimize/clear-on-purge', true)){
+
+            add_action( 'autoptimize_action_cachepurged', function (){
+                do_action('uucss/clear');
+            });
+
+        }
 
     }
 

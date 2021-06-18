@@ -40,20 +40,6 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
         $this->uucss_ao_base = new autoptimizeStyles(null);
         $this->uucss_ao_base->cdn_url = autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
 
-	    if(apply_filters('uucss/autoptimize/clear-on-purge', true)){
-
-            add_action( 'autoptimize_action_cachepurged', function (){
-                $args['soft'] = true;
-                self::log([
-                    'log' => 'autoptimize cache purge fired',
-                    'url' => null,
-                    'type' => 'purging'
-                ]);
-                $this->clear_cache(null, $args);
-            });
-
-        }
-
 	    add_filter('uucss/enqueue/provider-cdn-url', function ($link){
 	        return $this->uucss_ao_base->url_replace_cdn($link);
         },10,1);

@@ -81,6 +81,11 @@ abstract class UnusedCSS {
 
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
+        add_action('uucss/clear', function (){
+            $args['soft'] = true;
+            $this->clear_cache(null, $args);
+        });
+
         new RapidLoad_Queue();
     }
 
