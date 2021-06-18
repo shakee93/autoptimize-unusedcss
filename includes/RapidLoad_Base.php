@@ -12,7 +12,7 @@ class RapidLoad_Base
 
             global $uucss;
 
-            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_Autoptimize::class;
+            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class;
 
             if(class_exists($provider_class)){
 
