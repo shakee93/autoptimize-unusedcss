@@ -83,6 +83,9 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
 		if(function_exists('autoptimize')) {
 			$this->deps_available = true;
 		}else {
+            if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
+                return;
+            }
             $notice = [
 	            'action'  => 'on-board',
 	            'title'   => 'RapidLoad Power Up',

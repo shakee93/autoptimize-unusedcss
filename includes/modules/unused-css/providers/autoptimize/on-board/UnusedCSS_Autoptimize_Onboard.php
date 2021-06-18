@@ -21,6 +21,13 @@ class UnusedCSS_Autoptimize_Onboard {
 
 //		UnusedCSS_Autoptimize_Admin::delete_site_option( 'autoptimize_uucss_settings' );
 
+        add_action( 'current_screen', function () {
+
+            if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss-onboarding' ) {
+                add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+            }
+        } );
+
 		add_action( 'admin_menu', [ $this, 'uucss_register_on_board_page' ] );
 		add_action( 'admin_init', [ $this, 'uucss_redirect' ] );
 		add_action( "wp_ajax_ao_installed", [ $this, 'ao_installed' ] );
@@ -31,6 +38,14 @@ class UnusedCSS_Autoptimize_Onboard {
         }, 10, 1);
 	}
 
+	function enqueueScripts(){
+
+        wp_enqueue_script( 'uucss_onboard', plugin_dir_url(__FILE__) . 'assets/uucss-on-board.js', array(
+            'jquery',
+            'wp-util'
+        ), UUCSS_VERSION );
+
+    }
 
 	function run_first_job(){
 
@@ -53,7 +68,6 @@ class UnusedCSS_Autoptimize_Onboard {
         $this->ao_installed();
 
 	}
-
 
 	function remove_notices(){
 
@@ -82,7 +96,7 @@ class UnusedCSS_Autoptimize_Onboard {
         $status['active'] = UnusedCSS_Autoptimize_Admin::ao_active();
         $status['css_enabled'] = UnusedCSS_Autoptimize_Admin::ao_css_option_enabled();
         $status['uucss_connected'] = UnusedCSS_Autoptimize_Admin::is_api_key_verified();
-        $status['uucss_first_job_done'] = RapidLoad_Settings::get_first_link() ? true : false;
+        $status['uucss_first_job_done'] = (bool)RapidLoad_Settings::get_first_link();
         $status['uucss_first_job'] = RapidLoad_Settings::get_first_link();
 
         if(wp_doing_ajax()){
@@ -104,9 +118,9 @@ class UnusedCSS_Autoptimize_Onboard {
     function uucss_on_boarding_page(){
         wp_enqueue_script('post');
         ?>
-        <div class="uucss-on-board">
+        <div class="rapidload-on-board uucss-on-board">
             <?php
-                include 'parts/onboarding.html.php';
+                include 'assets/onboarding.html.php';
             ?>
         </div>
         <?php
@@ -116,8 +130,8 @@ class UnusedCSS_Autoptimize_Onboard {
 	    if ( strpos( home_url( $_SERVER['REQUEST_URI'] ), '/options-general.php?page=uucss-onboarding' ) &&
 	         self::on_board_completed() ) {
 		    wp_redirect( admin_url( 'options-general.php?page=uucss' ) );
-	    } else if ( UnusedCSS_Autoptimize_Admin::get_site_option( 'uucss_do_activation_redirect', false ) ) {
-		    UnusedCSS_Autoptimize_Admin::delete_site_option( 'uucss_do_activation_redirect' );
+	    } else if ( UnusedCSS_Autoptimize_Admin::get_site_option( 'rapidload_do_activation_redirect' ) ) {
+		    UnusedCSS_Autoptimize_Admin::delete_site_option( 'rapidload_do_activation_redirect' );
 		    wp_redirect( '/wp-admin/options-general.php?page=uucss-onboarding' );
 	    }
     }

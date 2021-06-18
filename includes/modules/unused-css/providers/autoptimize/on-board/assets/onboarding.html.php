@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) or die(); ?>
 
 <div class="main-section on-board">
-    <div class="plugin-steps">
+    <div class="plugin-steps" data-total_steps="4">
         <div class="logo-section">
             <img src="<?php echo UUCSS_PLUGIN_URL . 'assets/images/ao+logo.svg' ?>" alt="RapidLoad logo">
         </div>
@@ -125,10 +125,6 @@
 			                    <?php echo UnusedCSS_Autoptimize_Admin::is_api_key_verified() ? 'Connect' : 'Analyze' ?>
                                 <span class="dashicons dashicons-yes-alt"></span>
                             </a>
-                            <!--<a class="act-button js-uucss-analyze-site "
-                               href="#">
-                                Test My Site <span class="dashicons dashicons-yes-alt"></span>
-                            </a>-->
                             <span class="next nav"><span class="dashicons dashicons-arrow-right-alt2"></span></span>
                         </div>
                     </div>

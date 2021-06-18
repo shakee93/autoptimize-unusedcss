@@ -8,20 +8,27 @@ class RapidLoad_Base
 
     public static function init(){
 
-        new RapidLoad_Buffer();
+        add_action('init', function (){
 
-        global $uucss;
+            global $uucss;
 
-        $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_Autoptimize::class;
+            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_Autoptimize::class;
 
-        if(class_exists($provider_class)){
+            if(class_exists($provider_class)){
 
-            $uucss = new $provider_class();
+                $uucss = new $provider_class();
 
-            RapidLoad_ThirdParty::initialize();
+                RapidLoad_ThirdParty::initialize();
 
-        }
+            }
 
+        });
+
+        add_action('plugins_loaded', function (){
+
+            new RapidLoad_Buffer();
+
+        });
     }
 
     public static function fetch_options()
@@ -64,7 +71,7 @@ class RapidLoad_Base
             self::update_option('autoptimize_uucss_settings', $default_options);
         }
 
-        add_option( 'uucss_do_activation_redirect', true );
+        add_option( 'rapidload_do_activation_redirect', true );
     }
 
     public static function activate() {

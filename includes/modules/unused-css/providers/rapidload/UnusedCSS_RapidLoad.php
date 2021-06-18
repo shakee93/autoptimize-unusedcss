@@ -26,14 +26,9 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
 
-        RapidLoad_Base::activate();
-        /*
-            On-boarding
-        */
+        new UnusedCSS_RapidLoad_Onboard( $this );
 
-        if ( ! $this->check_dependencies() ) {
-            return;
-        }
+        $this->check_dependencies();
 
         add_filter('uucss/enqueue/provider-handled-file', function ($handled , $link ){
             return true;
@@ -81,21 +76,22 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
     public function check_dependencies() {
 
-        if(class_exists('UnusedCSS')) {
+        if(UnusedCSS_Admin::is_api_key_verified()) {
             $this->deps_available = true;
         }else {
-            /*$notice = [
+            $notice = [
                 'action'  => 'on-board',
                 'title'   => 'RapidLoad Power Up',
                 'message' => 'Complete on-boarding steps, it only takes 2 minutes.',
 
                 'main_action' => [
                     'key'   => 'Get Started',
-                    'value' => admin_url( 'options-general.php?page=uucss-onboarding' )
+                    'value' => admin_url( 'options-general.php?page=rapidload-onboarding' )
                 ],
                 'type'        => 'warning'
             ];
-            self::add_advanced_admin_notice($notice);*/
+            self::add_advanced_admin_notice($notice);
+            UnusedCSS_RapidLoad_Onboard::display_get_start_link();
         }
 
         return $this->deps_available;

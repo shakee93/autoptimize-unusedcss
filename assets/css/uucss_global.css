@@ -47,7 +47,7 @@ span.uucss-tab-title img{
 
 /* On Boarding Page Style */
 
-div.uucss-on-board{
+div.rapidload-on-board{
     position: fixed;
     top: 0;
     left: 0;
@@ -58,7 +58,7 @@ div.uucss-on-board{
     overflow: scroll;
 }
 
-.uucss-on-board-popup {
+.rapidload-on-board-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -70,7 +70,7 @@ div.uucss-on-board{
     background-color: rgba(0,0,0,0.5);
 }
 
-.uucss-on-board-popup.show{
+.rapidload-on-board-popup.show{
     display: flex;
 }
 
@@ -83,36 +83,36 @@ div.uucss-on-board{
     border-radius: 5px;
 }
 
-.uucss-on-board .plugin-steps {
+.rapidload-on-board .plugin-steps {
     display: block;
     padding: 20px;
     max-width: 600px;
     margin: 0 auto;
 }
-.uucss-on-board .step-text li {
+.rapidload-on-board .step-text li {
     list-style: none;
     font-size: 12px;
     font-weight: 500;
     text-align: center;
 }
-.uucss-on-board .step-text ul {
+.rapidload-on-board .step-text ul {
     padding: 0;
     margin: 5px 0;
 }
-.uucss-on-board .progress-bar-wrap {
+.rapidload-on-board .progress-bar-wrap {
     width: 100%;
     background-color: #69459978;
     border-radius: 3px;
     margin: 0 auto;
 }
-.uucss-on-board #progress-bar {
+.rapidload-on-board #progress-bar {
     width: 1%;
     height: 6px;
     background-color: #7f54b3;
     transition: width .5s ease;
     border-radius: 3px;
 }
-.uucss-on-board .card.analyze{
+.rapidload-on-board .card.analyze{
     position: absolute;
     left: -15px;
     top: -20px;
@@ -124,18 +124,18 @@ div.uucss-on-board{
     z-index: -1;
     box-shadow: none;
 }
-.uucss-on-board .card.analyze.show{
+.rapidload-on-board .card.analyze.show{
     opacity: 1;
     z-index: 100;
 }
-.uucss-on-board .card.analyze .analyze-form,
-.uucss-on-board .card.analyze .analyze-result{
+.rapidload-on-board .card.analyze .analyze-form,
+.rapidload-on-board .card.analyze .analyze-result{
     width: 100%;
 }
-.uucss-on-board .card.analyze .analyze-form.hidden{
+.rapidload-on-board .card.analyze .analyze-form.hidden{
     display: none;
 }
-.uucss-on-board .connect.actions .action-wrap{
+.rapidload-on-board .connect.actions .action-wrap{
     bottom: 7px;
 }
 .action-content-header {
@@ -149,7 +149,7 @@ div.uucss-on-board{
     margin-bottom: 20px;
     margin-top: 10px;
 }
-.uucss-on-board .connect.actions .analyze-result .reduction{
+.rapidload-on-board .connect.actions .analyze-result .reduction{
     font-weight: bold;
     font-size: 50px;
     color: #674399;
@@ -161,36 +161,36 @@ div.uucss-on-board{
     font-size: 12px;
     text-align: center;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content {
+.rapidload-on-board .connect.actions .analyze-result .stats .content {
     display: flex;
     justify-content: space-between;
     position: relative;
 }
 
-.uucss-on-board .stats.stats-figures .content {
+.rapidload-on-board .stats.stats-figures .content {
     margin-top: 25px;
 }
 
-.uucss-on-board .connect.actions .analyze-result .stats .content img {
+.rapidload-on-board .connect.actions .analyze-result .stats .content img {
     position: absolute;
     width: 20px;
     top: 30px;
     left: 100px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .content span.title {
+.rapidload-on-board .connect.actions .analyze-result .stats .content span.title {
     font-size: 11px;
     line-height: 24px;
     font-weight: 500;
     text-align: center;
 }
 
-.uucss-on-board .connect.actions .analyze-result .stats .content span.value {
+.rapidload-on-board .connect.actions .analyze-result .stats .content span.value {
     font-size: 14px;
     line-height: 1;
     font-weight: 600;
 }
 
-.uucss-on-board .connect.actions .analyze-result .stats .content .details {
+.rapidload-on-board .connect.actions .analyze-result .stats .content .details {
     max-width: 84px;
     padding: 4px 8px;
     background-color: #f2f2f2;
@@ -199,16 +199,16 @@ div.uucss-on-board{
     text-align: center;
 }
 
-.uucss-on-board .connect.actions .analyze-result .stats .content span.value span {
+.rapidload-on-board .connect.actions .analyze-result .stats .content span.value span {
     font-size: 14px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats.stats-figures{
+.rapidload-on-board .connect.actions .analyze-result .stats.stats-figures{
     margin-bottom: 5px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .heading{
+.rapidload-on-board .connect.actions .analyze-result .stats .heading{
     margin-top: 15px;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .heading h2{
+.rapidload-on-board .connect.actions .analyze-result .stats .heading h2{
     line-height: 20px;
     font-weight: 600 !important;
     margin-bottom: 15px !important;
@@ -217,18 +217,18 @@ div.uucss-on-board{
     min-height: 20px !important;
     color: #575757;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .stat{
+.rapidload-on-board .connect.actions .analyze-result .stats .stat{
     display: flex;
     flex-direction: column;
     width: 40%;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .stat.green .value {
+.rapidload-on-board .connect.actions .analyze-result .stats .stat.green .value {
     color: #4CAF50;
 }
-.uucss-on-board .connect.actions .analyze-result .stats .stat.red .value {
+.rapidload-on-board .connect.actions .analyze-result .stats .stat.red .value {
     color: #F44336;
 }
-.uucss-on-board .card {
+.rapidload-on-board .card {
     max-width: 230px;
     margin: 15px auto 25px;
     padding: 20px 15px;
@@ -237,22 +237,22 @@ div.uucss-on-board{
     display: flex;
     border: none;
 }
-.uucss-on-board .card.analyze .analyze-form.actions p{
+.rapidload-on-board .card.analyze .analyze-form.actions p{
     height: auto;
 }
-.uucss-on-board .steps-wrap {
+.rapidload-on-board .steps-wrap {
     max-width: 230px;
     margin: 5px auto;
 }
-.uucss-on-board .actions {
+.rapidload-on-board .actions {
     text-align: center;
     position: relative;
 }
-.uucss-on-board .actions.done a{
+.rapidload-on-board .actions.done a{
     pointer-events: none;
     opacity: 0.6;
 }
-/*.uucss-on-board .actions h2 {
+/*.rapidload-on-board .actions h2 {
     font-size: 16px;
     color: #585858;
     font-weight: 400;
@@ -268,7 +268,7 @@ h2.card-heading {
 p.analyze-text {
     margin-bottom: 17px !important;
 }
-.uucss-on-board .actions p {
+.rapidload-on-board .actions p {
     font-size: 12px;
     line-height: 1.2;
     color: #585858;
@@ -277,22 +277,22 @@ p.analyze-text {
     /*min-height: 70px;*/
     height: 100%;
 }
-.uucss-on-board .actions .action-content{
+.rapidload-on-board .actions .action-content{
     min-height: 270px;
 }
-.uucss-on-board .actions .action-content.uucss-error{
+.rapidload-on-board .actions .action-content.uucss-error{
     display: none;
 }
-.uucss-on-board .actions .analyze-result.uucss-error .action-content{
+.rapidload-on-board .actions .analyze-result.uucss-error .action-content{
     display: none;
 }
-.uucss-on-board .actions .analyze-result.uucss-error .action-content.uucss-error{
+.rapidload-on-board .actions .analyze-result.uucss-error .action-content.uucss-error{
     display: block;
 }
-.uucss-on-board .analyze-form.actions .action-content{
+.rapidload-on-board .analyze-form.actions .action-content{
     min-height: 230px;
 }
-.uucss-on-board .act-button {
+.rapidload-on-board .act-button {
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -307,15 +307,15 @@ p.analyze-text {
     display: inline-block;
 }
 
-.uucss-on-board .act-button span.dashicons{
+.rapidload-on-board .act-button span.dashicons{
     display: none;
 }
 
-.uucss-on-board .actions.done .act-button span.dashicons {
+.rapidload-on-board .actions.done .act-button span.dashicons {
     display: inline-block;
 }
 
-.uucss-on-board .skip-analyze {
+.rapidload-on-board .skip-analyze {
     color: #c3c3c3;
     font-size: 12px;
     text-decoration: none;
@@ -324,27 +324,27 @@ p.analyze-text {
     top: -22px;
 }
 
-.uucss-on-board .skip-analyze:hover {
+.rapidload-on-board .skip-analyze:hover {
     color: #c3c3c3;
     text-decoration: underline;
 }
 
-.uucss-on-board .act-button:hover {
+.rapidload-on-board .act-button:hover {
     background-color: #8056b3;
     color: #fff;
 }
-.uucss-on-board .act-button:focus {
+.rapidload-on-board .act-button:focus {
     outline: none;
 }
-.uucss-on-board .skip-wrap {
+.rapidload-on-board .skip-wrap {
     text-align: center;
 }
 
-.uucss-on-board .skip-wrap a {
+.rapidload-on-board .skip-wrap a {
     color: #b0b0b0;
     font-size: 14px;
 }
-.uucss-on-board .slide-contents-wrap{
+.rapidload-on-board .slide-contents-wrap{
     max-width: 255px;
     width: 100%;
     float: none;
@@ -352,32 +352,32 @@ p.analyze-text {
     position: relative;
 }
 
-.uucss-on-board .slide-contents {
+.rapidload-on-board .slide-contents {
     width: 2000%;
 }
 
-.uucss-on-board .slide-content {
+.rapidload-on-board .slide-content {
     max-width: 223px;
     width: 100%;
     float: left;
     padding-bottom: 50px;
 }
 
-.uucss-on-board .slide-content .action-wrap {
+.rapidload-on-board .slide-content .action-wrap {
     position: absolute;
     left: 33.5px;
 }
 
-.uucss-on-board .logo-section {
+.rapidload-on-board .logo-section {
     width: 220px;
     margin: 30px auto 0;
 }
 
-.uucss-on-board .logo-section img {
+.rapidload-on-board .logo-section img {
     width: 100%;
 }
 
-.uucss-on-board span.previous, .uucss-on-board span.next  {
+.rapidload-on-board span.previous, .rapidload-on-board span.next  {
     width: 20px;
     height: 20px;
     display: block;
@@ -389,15 +389,15 @@ p.analyze-text {
     line-height: 20px;
     cursor: pointer;
 }
-.uucss-on-board span.previous {
+.rapidload-on-board span.previous {
     left: -30px;
 }
 
-.uucss-on-board span.next {
+.rapidload-on-board span.next {
     right: -30px;
 }
 
-.uucss-on-board.complete .steps-wrap {
+.rapidload-on-board.complete .steps-wrap {
     opacity: 0;
 }
 
@@ -406,7 +406,7 @@ p.analyze-text {
 }
 
 
-.uucss-on-board .card-complete{
+.rapidload-on-board .card-complete{
     position: fixed;
     width: 100%;
     height: 100%;
@@ -418,7 +418,7 @@ p.analyze-text {
     font-family: Roboto, Helvetica Neue”, Helvetica, Arial, sans-serif;
 }
 
-.uucss-on-board .card-complete .content {
+.rapidload-on-board .card-complete .content {
     max-width: 300px;
     background-color: white;
     width: 100%;
@@ -430,33 +430,33 @@ p.analyze-text {
     padding-bottom: 20px;
 }
 
-.uucss-on-board .card-complete .content img{
+.rapidload-on-board .card-complete .content img{
     margin: 0 auto;
     width: 230px;
 }
 
-.uucss-on-board .card-complete .content > p{
+.rapidload-on-board .card-complete .content > p{
     text-align: center;
     margin: 0;
     margin-bottom: 18px;
     font-style: italic;
 }
 
-.uucss-on-board .card-complete .content .action-wrap{
+.rapidload-on-board .card-complete .content .action-wrap{
     text-align: center;
     margin-top: 20px;
     margin-bottom: 15px;
 }
 
-.uucss-on-board .card-complete .content .action-wrap a{
+.rapidload-on-board .card-complete .content .action-wrap a{
     width: 100px !important;
 }
 
-.uucss-on-board .card-complete .content .action-wrap a.uucss-support{
+.rapidload-on-board .card-complete .content .action-wrap a.uucss-support{
     width: 120px !important;
 }
 
-.uucss-on-board .card-complete .content .title{
+.rapidload-on-board .card-complete .content .title{
     text-align: center;
     font-size: 24px;
     font-weight: 400;
@@ -465,43 +465,43 @@ p.analyze-text {
     color: #7f54b3;
 }
 
-.uucss-on-board .card-complete .content .title.error{
+.rapidload-on-board .card-complete .content .title.error{
     color: #f44336;
 }
 
-.uucss-on-board .card-complete .content .title.error,
-.uucss-on-board .card-complete .content .action-wrap a.uucss-support,
-.uucss-on-board .card-complete .content p.error{
+.rapidload-on-board .card-complete .content .title.error,
+.rapidload-on-board .card-complete .content .action-wrap a.uucss-support,
+.rapidload-on-board .card-complete .content p.error{
     display: none;
 }
 
-.uucss-on-board .card-complete.has-error .content .title.error,
-.uucss-on-board .card-complete.has-error .content p.error{
+.rapidload-on-board .card-complete.has-error .content .title.error,
+.rapidload-on-board .card-complete.has-error .content p.error{
     display: block;
 }
 
-.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-support{
+.rapidload-on-board .card-complete.has-error .content .action-wrap a.uucss-support{
     display: inline-block;
 }
 
-.uucss-on-board .card-complete.has-error .content .title.success,
-/*.uucss-on-board .card-complete.has-error .content .action-wrap a.uucss-settings,*/
-.uucss-on-board .card-complete.has-error .content p.success{
+.rapidload-on-board .card-complete.has-error .content .title.success,
+/*.rapidload-on-board .card-complete.has-error .content .action-wrap a.uucss-settings,*/
+.rapidload-on-board .card-complete.has-error .content p.success{
     display: none;
 }
 
-.uucss-on-board .card-complete .content .first-result{
+.rapidload-on-board .card-complete .content .first-result{
     align-items: center;
     max-width: 230px;
     margin: 0 auto;
     text-align: left;
 }
 
-.uucss-on-board.complete .plugin-steps{
+.rapidload-on-board.complete .plugin-steps{
     display: none;
 }
 
-.uucss-on-board .card-complete{
+.rapidload-on-board .card-complete{
     display: none;
     opacity: 0;
     animation-name: fadeIn;
@@ -509,7 +509,7 @@ p.analyze-text {
     animation-duration: 0.5s;
 }
 
-.uucss-on-board.complete .card-complete{
+.rapidload-on-board.complete .card-complete{
     display: flex;
     opacity: 1;
 }
@@ -519,7 +519,7 @@ p.analyze-text {
     100% { opacity: 1; transform: scale(1.0);}
 }
 
-.uucss-on-board.complete .card-complete .error-result{
+.rapidload-on-board.complete .card-complete .error-result{
     display: none;
     align-items: center;
     max-width: 235px;
@@ -529,40 +529,40 @@ p.analyze-text {
     padding: 10px 15px;
 }
 
-.uucss-on-board.complete .card-complete .error-result p{
+.rapidload-on-board.complete .card-complete .error-result p{
     margin: 0;
     line-height: 20px;
 }
 
-.uucss-on-board.complete .card-complete .content img.sad{
+.rapidload-on-board.complete .card-complete .content img.sad{
     display: none;
 }
 
-.uucss-on-board.complete .card-complete.has-error .content img.sad{
+.rapidload-on-board.complete .card-complete.has-error .content img.sad{
     display: block;
 }
 
-.uucss-on-board.complete .card-complete.has-error .content img.success{
+.rapidload-on-board.complete .card-complete.has-error .content img.success{
     display: none;
 }
 
-.uucss-on-board.complete .card-complete .content img.sad{
+.rapidload-on-board.complete .card-complete .content img.sad{
     display: none;
 }
 
-.uucss-on-board.complete .card-complete .error-result p.error-code{
+.rapidload-on-board.complete .card-complete .error-result p.error-code{
     font-size: 20px;
 }
 
-.uucss-on-board.complete .card-complete .error-result p.error-description{
+.rapidload-on-board.complete .card-complete .error-result p.error-description{
     font-size: 18px;
 }
 
-.uucss-on-board.complete .card-complete.has-error .error-result{
+.rapidload-on-board.complete .card-complete.has-error .error-result{
     display: block;
 }
 
-.uucss-on-board.complete .card-complete.has-error .first-result{
+.rapidload-on-board.complete .card-complete.has-error .first-result{
     display: none;
 }
 
@@ -830,7 +830,8 @@ p.analyze-text {
     margin-top: 8px;
 }
 
-body.settings_page_uucss-onboarding{
+body.settings_page_uucss-onboarding,
+body.settings_page_rapidload-onboarding{
     overflow: hidden;
 }
 
