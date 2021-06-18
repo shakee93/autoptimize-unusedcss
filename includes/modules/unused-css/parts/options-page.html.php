@@ -373,7 +373,7 @@
                                 </td>
                             </tr>
 
-
+                            <?php if($uucss->provider != 'rapidload') : ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Parse All CSS Files', 'uucss' ); ?></th>
                                 <td>
@@ -387,6 +387,7 @@
                                     </label>
                                 </td>
                             </tr>
+                            <?php endif; ?>
 
                             <tr>
                                 <th scope="row"><?php _e( 'Inline Small CSS Files', 'uucss' ); ?></th>
