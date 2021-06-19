@@ -842,3 +842,30 @@ body.settings_page_rapidload-onboarding{
 .featherlight{
     background: rgba(0, 0, 0, 0.8);
 }
+
+#wp-admin-bar-rapidload.bullet-green .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-green:focus .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-green:hover .ab-icon::before
+{
+    content: "\f226";
+    color: #02CA02;
+    font-size: 14px;
+}
+
+#wp-admin-bar-rapidload.bullet-red .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-red:focus .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-red:hover .ab-icon::before
+{
+    content: "\f226";
+    color: #f44337;
+    font-size: 14px;
+}
+
+#wp-admin-bar-rapidload.bullet-yellow .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-yellow:focus .ab-icon::before,
+#wp-admin-bar-rapidload.bullet-yellow:hover .ab-icon::before
+{
+    content: "\f226";
+    color: #ffc107;
+    font-size: 14px;
+}

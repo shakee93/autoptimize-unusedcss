@@ -48,6 +48,9 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
         }
 
+        add_filter('uucss/tool-bar-menu', function (){
+            return false;
+        });
     }
 
     public function addNotifications($notifications) {

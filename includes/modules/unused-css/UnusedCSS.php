@@ -324,7 +324,8 @@ abstract class UnusedCSS {
 		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
 		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
 		        'home_url' => home_url(),
-		        'api_url' => RapidLoad_Api::get_key()
+		        'api_url' => RapidLoad_Api::get_key(),
+                'nonce' => wp_create_nonce( 'uucss_nonce' ),
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );

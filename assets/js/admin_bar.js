@@ -63,6 +63,19 @@
                 $this.text('failed!')
             });
         });
+
+        $('.rapidload-clear-all').click(function (e) {
+            e.preventDefault();
+
+            wp.ajax.post('uucss_purge_url', {
+                clear: true,
+                nonce: window.uucss.nonce,
+                url: null,
+            }).done(function (d) {
+                window.location.reload();
+            })
+
+        });
     })
 
 })(jQuery)
