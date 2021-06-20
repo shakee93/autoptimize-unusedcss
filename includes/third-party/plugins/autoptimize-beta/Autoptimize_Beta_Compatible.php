@@ -25,7 +25,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
         add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
-        add_action( 'admin_bar_menu', function () {
+        add_action( 'uucss/ao/tool-bar-menu', function () {
 
             wp_enqueue_script( 'wp-util' );
 

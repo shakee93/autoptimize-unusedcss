@@ -13,7 +13,7 @@ abstract class CriticalCSS{
     {
         $this->file_system = new \RapidLoad_FileSystem();
 
-        self::$base_dir = apply_filters('cpcss/cache-base-dir', WP_CONTENT_DIR . '/cache/rapidload/') . 'cpcss';
+        self::$base_dir = \RapidLoad_Admin::$base . 'cpcss';
 
         if ( ! $this->initFileSystem() ) {
             self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );

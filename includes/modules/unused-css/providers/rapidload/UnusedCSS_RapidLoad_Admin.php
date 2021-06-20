@@ -30,6 +30,17 @@ class UnusedCSS_RapidLoad_Admin extends UnusedCSS_Admin {
         }
     }
 
+    public function get_node_text() {
+        ob_start();
+
+        include('parts/admin-node.html.php');
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $output;
+    }
+
     function add_uucss_admin_bar_menu($wp_admin_bar){
 
         if(apply_filters('uucss/tool-bar-menu',true)){

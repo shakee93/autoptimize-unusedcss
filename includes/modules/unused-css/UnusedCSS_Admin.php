@@ -42,6 +42,10 @@ abstract class UnusedCSS_Admin {
 
             add_action( 'admin_menu', array( $this, 'add_uucss_option_page' ) );
 
+            add_action( 'admin_bar_menu', function (){
+                do_action('uucss/ao/tool-bar-menu');
+            });
+
         }
 
 
