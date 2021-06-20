@@ -22,6 +22,8 @@ abstract class CriticalCSS{
         }
 
         add_filter('uucss/path/critical-css', [$this, 'get_path_critical_css'], 10, 2);
+
+        new CriticalCSS_Queue();
     }
 
     public function initFileSystem()

@@ -4,7 +4,6 @@ defined( 'ABSPATH' ) or die();
 
 class RapidLoad_Queue
 {
-
     use RapidLoad_Utils;
     public static $interval = 600;
     public static $job_count = 4;

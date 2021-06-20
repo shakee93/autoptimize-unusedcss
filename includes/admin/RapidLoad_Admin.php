@@ -20,6 +20,8 @@ class RapidLoad_Admin
         RapidLoad_DB::check_db_updates();
 
         self::$base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+
+        new RapidLoad_Queue();
     }
 
     function add_update_message(){
