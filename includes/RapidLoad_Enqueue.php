@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) or die();
 
-class RapidLoad_Enqueue {
+abstract class RapidLoad_Enqueue {
 
     use RapidLoad_Utils;
 
@@ -127,8 +127,6 @@ class RapidLoad_Enqueue {
     }
 
     public function enqueue_completed(){
-
-        global $uucss;
 
         $time_diff = 0;
 
@@ -332,6 +330,8 @@ class RapidLoad_Enqueue {
 
             $this->before_enqueue();
 
+            $this->enqueue_critical_css();
+
             $this->replace_stylesheets();
 
             $this->replace_inline_css();
@@ -344,6 +344,35 @@ class RapidLoad_Enqueue {
         }
 
         return $html;
+    }
+
+    private function enqueue_critical_css(){
+
+        if(!RapidLoad_Base::critical_css_enabled()){
+            return false;
+        }
+
+        if(!\RapidLoad\Service\CriticalCSS_DB::path_ccss_exist($this->link->url)){
+            return false;
+        }
+
+        $critical_css = new \RapidLoad\Service\CriticalCSS_Path([
+            'url' => $this->link->url
+        ]);
+
+        if($critical_css->status != 'success'){
+            return false;
+        }
+
+        $critical_css_content = $this->file_system->get_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $critical_css->critical_css );
+
+        $critical_css_content = '<style uucss-critical-css="' . $critical_css->critical_css . '" cpcss>' . $critical_css_content . '</style>';
+
+        $header_content = $this->dom->find( 'head' )[0]->outertext;
+        $header_content = str_replace('</head>','', $header_content);
+
+        $this->dom->find( 'head' )[0]->outertext = $header_content . $critical_css_content . '</head>';
+
     }
 
     private static function is_css( $el ) {

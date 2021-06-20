@@ -820,6 +820,9 @@ class UnusedCSS_DB extends RapidLoad_DB
         $data['meta']['warnings'] = isset($link->warnings) ? unserialize($link->warnings) : [];
 
         if($rule == 'path'){
+            if(RapidLoad_Base::critical_css_enabled()){
+                $data['critical_css'] = apply_filters('uucss/path/critical-css', null, $data['url']);
+            }
             $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
 
             if(isset($link->rule) && !empty($link->rule) && $data['rule_id'] != null){
@@ -930,9 +933,28 @@ class UnusedCSS_DB extends RapidLoad_DB
         return $urls;
     }
 
+    static function get_uucss_urls($where = "", $order_by = "ORDER BY id DESC"){
+
+        global $wpdb;
+
+        $urls = [];
+
+        if(self::$current_version < 1.2){
+            $urls = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_uucss_job " . $where . " " . $order_by);
+        }else{
+            $urls = $wpdb->get_results("SELECT url, rule FROM {$wpdb->prefix}rapidload_uucss_job " . $where . " " . $order_by);
+        }
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $urls;
+    }
+
     static function get_original_file_name($path){
 
-	    $orinal_file_name = null;
+        $orinal_file_name = null;
 
         global $wpdb;
 

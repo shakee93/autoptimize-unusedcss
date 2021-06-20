@@ -1,11 +1,12 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
 
 abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.2";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -35,8 +36,12 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $tableArray = [
+            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_rule",
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
+            $wpdb->prefix . "rapidload_cpcss_job",
+            $wpdb->prefix . "rapidload_cpcss_rule",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -54,8 +59,12 @@ abstract class RapidLoad_DB
     static function create_tables($blog_id = ''){
         global $wpdb;
 
+        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_rule = $wpdb->prefix . $blog_id . 'rapidload_rule';
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
+        $rapidload_cpcss_job = $wpdb->prefix . $blog_id . 'rapidload_cpcss_job';
+        $rapidload_cpcss_rule = $wpdb->prefix . $blog_id . 'rapidload_cpcss_rule';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -64,7 +73,23 @@ abstract class RapidLoad_DB
             $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $rapidload_uucss_job (
+        $sql = "CREATE TABLE $rapidload_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		rule longtext NULL,
+		url longtext NOT NULL,
+		rule_id INT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+        CREATE TABLE $rapidload_rule (
+		id INT NOT NULL AUTO_INCREMENT,
+		rule longtext NOT NULL,
+		url longtext NOT NULL,
+		regex longtext NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+        CREATE TABLE $rapidload_uucss_job (
 		id INT NOT NULL AUTO_INCREMENT,
 		job_id INT NULL,
 		rule longtext NULL,
@@ -98,6 +123,39 @@ abstract class RapidLoad_DB
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
+	) ; 
+	    CREATE TABLE $rapidload_cpcss_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NULL,
+		rule longtext NULL,
+		url longtext NOT NULL,
+		critical_css longtext NULL,
+		exceptional_css longtext NULL,
+		warnings longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL DEFAULT 0,
+		hits mediumint(3) NULL DEFAULT 0,
+		rule_id INT NULL,
+		rule_note longtext NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_cpcss_rule (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NULL,
+		rule longtext NOT NULL,
+		url longtext NOT NULL,
+		regex longtext NOT NULL,
+		critical_css longtext NULL,
+		exceptional_css longtext NULL,
+		warnings longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
 	) ;";
 
         dbDelta( $sql );
@@ -116,7 +174,7 @@ abstract class RapidLoad_DB
             $notice = [
                 'action'  => 'rapidload-db-update',
                 'title'   => 'RapidLoad Power Up',
-                'message' => 'Migrate your database to the latest version to enjoy optimized data handling.',
+                'message' => 'Migrate your database to the latest version to (' . self::$db_version . ') enjoy optimized data handling.',
 
                 'main_action' => [
                     'key'   => 'Update Database',

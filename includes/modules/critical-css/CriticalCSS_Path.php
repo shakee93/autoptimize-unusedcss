@@ -1,16 +1,14 @@
 <?php
 
-defined( 'ABSPATH' ) or die();
+namespace RapidLoad\Service;
 
-class UnusedCSS_Path extends UnusedCSS_Job {
-
-    use RapidLoad_Utils;
+class CriticalCSS_Path extends CriticalCSS_Job {
 
     public $rule_id;
     public $rule_note;
 
-    public function init($args){
-
+    public function init($args)
+    {
         global $wpdb;
 
         $this->type = 'Path';
@@ -18,7 +16,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
 
-        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'", OBJECT);
+        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $url . "'", OBJECT);
 
         if(isset($path_exist) && !empty($path_exist)){
 
@@ -26,10 +24,9 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             $this->url = $path_exist[0]->url;
             $this->rule = isset($path_exist[0]->rule) ? $path_exist[0]->rule : null;
             $this->job_id = $path_exist[0]->job_id;
-            $this->stats = $path_exist[0]->stats;
-            $this->files = $path_exist[0]->files;
+            $this->critical_css = $path_exist[0]->critical_css;
+            $this->exceptional_css = $path_exist[0]->exceptional_css;
             $this->warnings = isset($path_exist[0]->warnings) ? unserialize($path_exist[0]->warnings) : null;
-            $this->review = $path_exist[0]->review;
             $this->error = $path_exist[0]->error;
             $this->attempts = isset($path_exist[0]->attempts) ? $path_exist[0]->attempts : 0;
             $this->hits = isset($path_exist[0]->hits) ? $path_exist[0]->hits : 0;
@@ -50,21 +47,14 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
             $data = (array) $this;
 
-            if(RapidLoad_DB::$current_version < 1.2){
-                unset($data['rule']);
-                unset($data['hits']);
-                unset($data['rule_id']);
-                unset($data['rule_note']);
-            }
-
             unset($data['type']);
 
             $wpdb->insert(
-                $wpdb->prefix . 'rapidload_uucss_job',
+                $wpdb->prefix . 'rapidload_cpcss_job',
                 $data
             );
 
-            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $this->url . "'");
+            $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $this->url . "'");
 
             if(isset($id) && !empty($id)){
 
@@ -90,15 +80,8 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 $data['warnings'] = serialize($data['warnings']);
             }
 
-            if(RapidLoad_DB::$current_version < 1.2){
-                unset($data['rule']);
-                unset($data['hits']);
-                unset($data['rule_id']);
-                unset($data['rule_note']);
-            }
-
             $wpdb->update(
-                $wpdb->prefix . 'rapidload_uucss_job',
+                $wpdb->prefix . 'rapidload_cpcss_job',
                 $data,
                 [
                     'id' => $id
@@ -106,28 +89,5 @@ class UnusedCSS_Path extends UnusedCSS_Job {
             );
 
         }
-    }
-
-    public function attach_rule($rule_id = false , $rule = null){
-        $this->files = NULL;
-        $this->stats = NULL;
-        $this->warnings = null;
-        $this->error = NULL;
-        $this->hits = 0;
-        if(!$rule_id){
-            $this->rule_id = NULL;
-            $this->rule = NULL;
-            $this->rule_note = 'detached';
-            $this->status = 'queued';
-        }else{
-            $this->rule_id = $rule_id;
-            $this->rule = $rule;
-            $this->rule_note = NULL;
-            $this->status = 'rule-based';
-        }
-    }
-
-    public function clearFiles(){
-        rapidload()->uucss->remove_unused_files($this->url);
     }
 }

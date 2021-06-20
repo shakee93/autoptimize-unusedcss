@@ -326,6 +326,8 @@ abstract class UnusedCSS {
 		        'home_url' => home_url(),
 		        'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
+		        'api_url' => RapidLoad_Api::get_key(),
+                'api_key_verified' => UnusedCSS_Admin::is_api_key_verified(),
 	        );
 	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
 	        wp_enqueue_script( 'uucss_global_admin_script' );
@@ -626,7 +628,7 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new RapidLoad_Enqueue($data, $this->url);
+                    new UnusedCSS_Enqueue($data, $this->url);
 
                     $this->replace_css();
                 }

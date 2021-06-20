@@ -50,8 +50,7 @@ abstract class UnusedCSS_Admin {
 	    }
 
         add_action( 'current_screen', function () {
-
-            if ( get_current_screen() && get_current_screen()->base == 'settings_page_uucss' ) {
+            if ( get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' ) ) {
                 add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
             }
         } );
@@ -82,7 +81,6 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
             add_action( "wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
             add_action( "wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
-            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
             add_action( "wp_ajax_uucss_status", [ $this, 'uucss_status' ] );
             add_action( "wp_ajax_uucss_rule_stats", [ $this, 'uucss_rule_stats' ] );
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
@@ -115,8 +113,6 @@ abstract class UnusedCSS_Admin {
         $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
 
         $posts = null;
-
-        global $uucss;
 
         if(isset($list) && is_array($list) && !empty($list)){
 
@@ -185,11 +181,11 @@ abstract class UnusedCSS_Admin {
 
             $url = $this->transform_url($url);
 
-            if(!$uucss->is_valid_url($url)){
+            if(!rapidload()->uucss->is_valid_url($url)){
                 wp_send_json_error('url is not valid');
             }
 
-            if($url && !$uucss->is_url_allowed($url)){
+            if($url && !rapidload()->uucss->is_url_allowed($url)){
                 wp_send_json_error('url is excluded');
             }
 
@@ -257,7 +253,7 @@ abstract class UnusedCSS_Admin {
 
                 $url = $this->transform_url(get_the_permalink(get_the_ID()));
 
-                if($uucss->is_url_allowed($url)){
+                if(rapidload()->uucss->is_url_allowed($url)){
                     new UnusedCSS_Path([
                         'url' => $url
                     ]);
@@ -282,13 +278,11 @@ abstract class UnusedCSS_Admin {
         $site_map = new RapidLoad_Sitemap();
         $urls = $site_map->process_site_map($url);
 
-        global $uucss;
-
         if(isset($urls) && !empty($urls)){
 
             foreach ($urls as $url){
 
-                if($uucss->is_url_allowed($url)){
+                if(rapidload()->uucss->is_url_allowed($url)){
 
                     new UnusedCSS_Path([
                         'url' => $url
@@ -301,12 +295,12 @@ abstract class UnusedCSS_Admin {
 
     public function add_uucss_option_page() {
 
-        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+        add_submenu_page( 'options-general.php', 'Unused CSS', 'Unused CSS', 'manage_options', 'uucss', function () {
             wp_enqueue_script( 'post' );
 
             ?>
             <div class="wrap">
-                <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
+                <h1><?php _e( 'Unused CSS Settings', 'autoptimize' ); ?></h1>
                 <?php
                     do_action('uucss/options/before_render_form');
                 ?>
@@ -367,9 +361,7 @@ abstract class UnusedCSS_Admin {
 
         $url = $this->transform_url($url);
 
-        global $uucss;
-
-        if(!$uucss->is_url_allowed($url)){
+        if(!rapidload()->uucss->is_url_allowed($url)){
             wp_send_json_error('URL not allowed');
         }
 
@@ -639,6 +631,10 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
+        if(get_current_screen() && get_current_screen()->base == 'rapidload_page_rapidload'){
+            return;
+        }
+
         $job = RapidLoad_Settings::get_first_link();
 
         if ( $job && $job['status'] == 'success' ) : ?>
@@ -842,36 +838,12 @@ abstract class UnusedCSS_Admin {
 
     public function enqueueScripts() {
 
-        $deregister_scripts = apply_filters('uucss/scripts/deregister', ['select2']);
-
-        if(isset($deregister_scripts) && is_array($deregister_scripts)){
-            foreach ($deregister_scripts as $deregister_script){
-                wp_dequeue_script($deregister_script);
-                wp_deregister_script($deregister_script);
-            }
-        }
-
-        wp_enqueue_script( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.js', array( 'jquery' ) );
-
-        wp_enqueue_script( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.js', array(
-            'jquery',
-            'uucss_admin'
-        ) );
-        wp_enqueue_style( 'datatables', UUCSS_PLUGIN_URL . 'assets/libs/datatables/jquery.dataTables.min.css' );
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
         wp_register_script( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/js/uucss_admin.js', array(
             'jquery',
             'wp-util'
         ), UUCSS_VERSION );
-
-        wp_register_script( 'uucss_log', UUCSS_PLUGIN_URL . 'assets/js/uucss_log.js', array(
-            'jquery',
-            'wp-util'
-        ), UUCSS_VERSION );
-
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
-
-
 
         $data = array(
             'api' => RapidLoad_Api::get_key(),
@@ -886,14 +858,12 @@ abstract class UnusedCSS_Admin {
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $this->uucss->rules_enabled(),
+            'critical_css_enabled' => rapidload()->rapidload_module()->is_active('critical-css') && RapidLoad_DB::$current_version > 1.2,
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
 
         wp_enqueue_script( 'uucss_admin' );
-        wp_enqueue_script( 'uucss_log' );
-
-        wp_enqueue_style( 'select2', UUCSS_PLUGIN_URL . 'assets/libs/select2/select2.min.css' );
 
     }
 
@@ -992,8 +962,6 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_test_url(){
-
-        global $uucss;
 
         if(!isset($_REQUEST['url'])){
             wp_send_json_error('url required');
@@ -1274,32 +1242,6 @@ abstract class UnusedCSS_Admin {
 		}
 
 		return $data;
-	}
-
-	public function uucss_license() {
-
-		$api = new RapidLoad_Api();
-
-		$data = $api->get( 'license', [
-			'url' => $this->transform_url(get_site_url())
-		] );
-
-		if ( ! is_wp_error( $data ) ) {
-
-			if ( isset( $data->errors ) ) {
-				wp_send_json_error( $data->errors[0]->detail );
-			}
-
-			if ( gettype( $data ) === 'string' ) {
-				wp_send_json_error( $data );
-			}
-
-			do_action( 'uucss/license-verified' );
-
-			wp_send_json_success( $data->data );
-		}
-
-		wp_send_json_error( 'unknown error occurred' );
 	}
 
 	public function verify_api_key() {

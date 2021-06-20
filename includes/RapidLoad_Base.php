@@ -2,33 +2,12 @@
 
 defined( 'ABSPATH' ) or die();
 
-class RapidLoad_Base
-{
+class RapidLoad_Base{
+
     use RapidLoad_Utils;
 
     public static function init(){
 
-        add_action('init', function (){
-
-            global $uucss;
-
-            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class;
-
-            if(class_exists($provider_class)){
-
-                RapidLoad_ThirdParty::initialize();
-
-                $uucss = new $provider_class();
-
-            }
-
-        });
-
-        add_action('plugins_loaded', function (){
-
-            new RapidLoad_Buffer();
-
-        });
     }
 
     public static function fetch_options()
@@ -71,7 +50,13 @@ class RapidLoad_Base
             self::update_option('autoptimize_uucss_settings', $default_options);
         }
 
-        add_option( 'rapidload_do_activation_redirect', true );
+        add_option( 'uucss_do_activation_redirect', true );
+    }
+
+    public static function critical_css_enabled(){
+        $options = self::fetch_options();
+        return isset($options['cpcss_enable_critical_css']) &&
+            $options['cpcss_enable_critical_css'] == "1";
     }
 
     public static function activate() {

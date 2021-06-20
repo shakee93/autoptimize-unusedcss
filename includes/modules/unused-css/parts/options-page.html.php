@@ -4,7 +4,6 @@
 
 <?php
 
-    global $uucss;
     $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
@@ -32,48 +31,53 @@
                 </li>
 			<?php endif; ?>
 			<?php if ( $api_key_verified) : ?>
-                <li class="uucss-history uucss-job-history">
-                    <h2>
-                        Optimization Jobs
-                        <span class="multiple-selected-text">
-                            <span class="multiple-selected-value multiple-selected-value-job"></span>
-                            Selected
-                            <a href="#" id="js-uucss-clear-selection">clear</a>
-                        </span>
-                        <span class="uucss-add-menu uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
-                            <span class="dashicons dashicons-plus"></span>Add
-                        </span>
-                        <button class="uucss-sub-menu uucss-add-site-urls-submenu" aria-expanded="false">
-                            <span class="dashicons dashicons-ellipsis"></span>
-                        </button>
-                    </h2>
-                    <div class="content">
-                        <div class="spinner spinner-history"></div>
-                        <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
-                    </div>
-                </li>
-                <?php if($uucss->rules_enabled()) : ?>
-                <li class="uucss-history uucss-rule-history">
-                    <h2>
-                        Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500011459802-Rule-based-injection" style="font-size: 11px">Learn More</a>
-                        <span class="multiple-selected-text">
-                            <span class="multiple-selected-value multiple-selected-value-rule"></span>
-                            Selected
-                            <a href="#" id="js-uucss-clear-selection-rule">clear</a>
-                        </span>
-                        <span class="uucss-add-menu uucss-add-site-rule" data-featherlight="#add_rule_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-rule-model">
-                            <span class="dashicons dashicons-plus"></span>Add
-                        </span>
-                        <button class="uucss-sub-menu uucss-add-site-rule-submenu" aria-expanded="false">
-                            <span class="dashicons dashicons-ellipsis"></span>
-                        </button>
-                    </h2>
-                    <div class="content">
-                        <div class="spinner spinner-history"></div>
-                        <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
-                    </div>
-                </li>
+
+                <?php if (apply_filters('uucss/options/show-table', true)) : ?>
+                    <li class="uucss-history uucss-job-history">
+                        <h2>
+                            Optimization Jobs
+                            <span class="multiple-selected-text">
+                                <span class="multiple-selected-value multiple-selected-value-job"></span>
+                                Selected
+                                <a href="#" id="js-uucss-clear-selection">clear</a>
+                            </span>
+                            <span class="uucss-add-menu uucss-add-site-urls" data-featherlight="#add_url_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-url-model show-url">
+                                <span class="dashicons dashicons-plus"></span>Add
+                            </span>
+                            <button class="uucss-sub-menu uucss-add-site-urls-submenu" aria-expanded="false">
+                                <span class="dashicons dashicons-ellipsis"></span>
+                            </button>
+                        </h2>
+                        <div class="content">
+                            <div class="spinner spinner-history"></div>
+                            <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
+                        </div>
+                    </li>
+                    <?php if(rapidload()->uucss->rules_enabled()) : ?>
+                    <li class="uucss-history uucss-rule-history">
+                        <h2>
+                            Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500011459802-Rule-based-injection" style="font-size: 11px">Learn More</a>
+                            <span class="multiple-selected-text">
+                                <span class="multiple-selected-value multiple-selected-value-rule"></span>
+                                Selected
+                                <a href="#" id="js-uucss-clear-selection-rule">clear</a>
+                            </span>
+                            <span class="uucss-add-menu uucss-add-site-rule" data-featherlight="#add_rule_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-rule-model">
+                                <span class="dashicons dashicons-plus"></span>Add
+                            </span>
+                            <button class="uucss-sub-menu uucss-add-site-rule-submenu" aria-expanded="false">
+                                <span class="dashicons dashicons-ellipsis"></span>
+                            </button>
+                        </h2>
+                        <div class="content">
+                            <div class="spinner spinner-history"></div>
+                            <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
+                        </div>
+                    </li>
+                    <?php endif; ?>
+
                 <?php endif; ?>
+
                 <li>
                     <h2>
                         Advanced Settings
@@ -81,7 +85,7 @@
                     <span class="dashicons dashicons-arrow-up-alt2"></span>
                 </span>
                     </h2>
-                    <div class="content" style="display:none;">
+                    <div class="content" style="display:none">
                         <?php
                             do_action('uucss/options/before_option_table');
                         ?>
@@ -519,171 +523,175 @@
                     </div>
                 </li>
 
-                <li class="rapidload-status">
-                    <h2>RapidLoad Status
-                        <span class="uucss-toggle-section rotate">
-                    <span class="dashicons dashicons-arrow-up-alt2"></span>
-                </span>
-                    </h2>
-                    <div class="content" style="display:none;">
-                        <?php
-                        $total = UnusedCSS_DB::get_total_job_count();
-                        $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
-                        $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
-                        $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
-                        $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
-                        $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
-                        $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
-                        ?>
-                        <p>
-                            <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
-                        </p>
-                        <p>
-                            <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
-                        </p>
-                        <p class="style-sheet-count">
-                            <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
-                        </p>
-                        <p>
-                            <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
-                        </p>
-                        <p <?php if(!$hide_view_log) echo 'style="display:none"' ?>>
-                            <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
-                        </p>
-                        <p>
-                            <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
-                        </p>
-                        <p class="more-info-uucss-status">
-                            <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>
-                        </p>
-                        <div class="uucss-status-more-info" style="display: none">
+                <?php if (apply_filters('uucss/options/show-info', true)) : ?>
+
+                    <li class="rapidload-status">
+                        <h2>RapidLoad Status
+                            <span class="uucss-toggle-section rotate">
+                        <span class="dashicons dashicons-arrow-up-alt2"></span>
+                    </span>
+                        </h2>
+                        <div class="content" style="display:none;">
                             <?php
-                                $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
+                            $total = UnusedCSS_DB::get_total_job_count();
+                            $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
+                            $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
+                            $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
+                            $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
+                            $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
+                            $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
                             ?>
-                            <p class="status-hits-count">
-                                <strong>Hits</strong> : <span class="number"><?php echo $hits; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?></span>%
+                            <p>
+                                <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
                             </p>
-                            <p class="status-success-count">
-                                <strong>Success</strong> : <span class="number"><?php echo $success; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?></span>%
+                            <p>
+                                <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
                             </p>
-                            <?php
-                                if ( $uucss->rules_enabled() ) :
-                                $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
-                            ?>
-                            <p class="status-rule-based-count">
-                                <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%
+                            <p class="style-sheet-count">
+                                <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
                             </p>
-                            <?php
-                                endif;
-                            ?>
-                            <p class="status-queued-count">
-                                <strong>Queued</strong> : <span class="number"><?php echo $queued; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?></span>%
+                            <p>
+                                <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
                             </p>
-                            <p class="status-waiting-count">
-                                <strong>Waiting</strong> : <span class="number"><?php echo $waiting; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($waiting/$total*100, 0) : '0' ?></span>%
+                            <p <?php if(!$hide_view_log) echo 'style="display:none"' ?>>
+                                <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                             </p>
-                            <p class="status-processing-count">
-                                <strong>Processing</strong> : <span class="number"><?php echo $processing; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($processing/$total*100, 0) : '0' ?></span>%
+                            <p>
+                                <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                             </p>
-                            <p class="status-warnings-count">
-                                <strong>Warnings</strong> : <span class="number"><?php echo $warnings; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?></span>%
+                            <p class="more-info-uucss-status">
+                                <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>
                             </p>
-                            <p class="status-failed-count">
-                                <strong>Failed Jobs</strong> : <span class="number"><?php echo $failed; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?></span>%
-                            </p>
-                            <?php
-                                if(count($third_party_plugins) > 0):
-                                ?>
-                                    <p>
-                                        <strong>Support Plugins</strong> :
-                                    </p>
+                            <div class="uucss-status-more-info" style="display: none">
                                 <?php
-                                endif;
-                            ?>
-                            <ul>
-                                <?php
-                                    foreach ($third_party_plugins as $party_plugin){
-                                        echo '<li style="margin-bottom:0">' . (isset($party_plugin['plugin']) ? $party_plugin['plugin'] : '') . ' - ' . (isset($party_plugin['category']) ? $party_plugin['category'] : '') .'</li>';
-                                    }
+                                    $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
                                 ?>
-                            </ul>
+                                <p class="status-hits-count">
+                                    <strong>Hits</strong> : <span class="number"><?php echo $hits; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?></span>%
+                                </p>
+                                <p class="status-success-count">
+                                    <strong>Success</strong> : <span class="number"><?php echo $success; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?></span>%
+                                </p>
+                                <?php
+                                    if ( rapidload()->uucss->rules_enabled() ) :
+                                    $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
+                                ?>
+                                <p class="status-rule-based-count">
+                                    <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%
+                                </p>
+                                <?php
+                                    endif;
+                                ?>
+                                <p class="status-queued-count">
+                                    <strong>Queued</strong> : <span class="number"><?php echo $queued; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?></span>%
+                                </p>
+                                <p class="status-waiting-count">
+                                    <strong>Waiting</strong> : <span class="number"><?php echo $waiting; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($waiting/$total*100, 0) : '0' ?></span>%
+                                </p>
+                                <p class="status-processing-count">
+                                    <strong>Processing</strong> : <span class="number"><?php echo $processing; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($processing/$total*100, 0) : '0' ?></span>%
+                                </p>
+                                <p class="status-warnings-count">
+                                    <strong>Warnings</strong> : <span class="number"><?php echo $warnings; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($warnings/$total*100, 0) : '0' ?></span>%
+                                </p>
+                                <p class="status-failed-count">
+                                    <strong>Failed Jobs</strong> : <span class="number"><?php echo $failed; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?></span>%
+                                </p>
+                                <?php
+                                    if(count($third_party_plugins) > 0):
+                                    ?>
+                                        <p>
+                                            <strong>Support Plugins</strong> :
+                                        </p>
+                                    <?php
+                                    endif;
+                                ?>
+                                <ul>
+                                    <?php
+                                        foreach ($third_party_plugins as $party_plugin){
+                                            echo '<li style="margin-bottom:0">' . (isset($party_plugin['plugin']) ? $party_plugin['plugin'] : '') . ' - ' . (isset($party_plugin['category']) ? $party_plugin['category'] : '') .'</li>';
+                                        }
+                                    ?>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
 
-                <li>
-                    <h2>
-                        License Information
-                        <span<?php echo ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
-                        <span class="uucss-toggle-section rotate">
-                    <span class="dashicons dashicons-arrow-up-alt2"></span>
-                </span>
-                    </h2>
-                    <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>; ">
+                    <li>
+                        <h2>
+                            License Information
+                            <span<?php echo ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) ? ' class="valid">Valid' : ' class="invalid">Invalid' ?></span>
+                            <span class="uucss-toggle-section rotate">
+                        <span class="dashicons dashicons-arrow-up-alt2"></span>
+                    </span>
+                        </h2>
+                        <div class="content" style="display: <?php echo ( $api_key_verified ) ? 'none' : 'block' ?>; ">
 
-                        <div class="license-info">
-                            <span id="license-message" style="display: none"></span>
-                            <div class="spinner"></div>
-                            <ul style="display: none">
-                                <li><strong>Name : </strong> <span id="license-name"></span></li>
-                                <li><strong>Email : </strong> <span id="license-email"></span></li>
-                                <li><strong>Plan : </strong><span id="license-plan"></span></li>
-                                <li><strong>Next Billing : </strong><span id="license-next_billing"></span></li>
-                                <li><strong>Domain : </strong><span id="license-domain"></span></li>
-                            </ul>
+                            <div class="license-info">
+                                <span id="license-message" style="display: none"></span>
+                                <div class="spinner"></div>
+                                <ul style="display: none">
+                                    <li><strong>Name : </strong> <span id="license-name"></span></li>
+                                    <li><strong>Email : </strong> <span id="license-email"></span></li>
+                                    <li><strong>Plan : </strong><span id="license-plan"></span></li>
+                                    <li><strong>Next Billing : </strong><span id="license-next_billing"></span></li>
+                                    <li><strong>Domain : </strong><span id="license-domain"></span></li>
+                                </ul>
 
-                            <div>
-                                <input id='thirtd_part_cache_plugins' type='hidden'
-                                       value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
-                                    echo '1';
-                                } ?>">
-                                <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
-                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
-                                    echo '1';
-                                } ?>">
-                                <input id='uucss_dev_mode' type='hidden'
-                                       name='autoptimize_uucss_settings[uucss_dev_mode]'  value="<?php if ( ! empty( $options['uucss_dev_mode'] ) && '1' === $options['uucss_dev_mode'] ) {
-                                    echo '1';
-                                } ?>">
-                                <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
-                                       name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend_rule'] ) && '1' === $options['uucss_auto_refresh_frontend_rule'] ) {
-                                    echo '1';
-                                } ?>">
-                                <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
-                                       value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-									       echo $options['uucss_api_key_verified'] ?>">
-                                <input id='uucss_api_key' type='hidden'
-                                       name='autoptimize_uucss_settings[uucss_api_key]'
-                                       value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
-                                       size="40">
-                                <em id="verification_status"></em>
-								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
-                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
-                                       class="uucss-activate" id="my-account"> My Account
-                                    </a>
-                                    <a href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
-                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
-                                    </a>
-								<?php else : ?>
-                                    <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
-                                       class="uucss-activate" id="my-account"> My Account
-                                    </a>
-                                    <a style="margin-left: 5px"
-                                        href="<?php echo UnusedCSS::activation_url('authorize' ) ?>"
-                                       class="uucss-activate"> Reactivate License
-                                    </a>
+                                <div>
+                                    <input id='thirtd_part_cache_plugins' type='hidden'
+                                           value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
+                                        echo '1';
+                                    } ?>">
+                                    <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
+                                           name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
+                                        echo '1';
+                                    } ?>">
+                                    <input id='uucss_dev_mode' type='hidden'
+                                           name='autoptimize_uucss_settings[uucss_dev_mode]'  value="<?php if ( ! empty( $options['uucss_dev_mode'] ) && '1' === $options['uucss_dev_mode'] ) {
+                                        echo '1';
+                                    } ?>">
+                                    <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
+                                           name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend_rule'] ) && '1' === $options['uucss_auto_refresh_frontend_rule'] ) {
+                                        echo '1';
+                                    } ?>">
+                                    <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
+                                           value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
+                                               echo $options['uucss_api_key_verified'] ?>">
+                                    <input id='uucss_api_key' type='hidden'
+                                           name='autoptimize_uucss_settings[uucss_api_key]'
+                                           value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
+                                           size="40">
+                                    <em id="verification_status"></em>
+                                    <?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
+                                        <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                           class="uucss-activate" id="my-account"> My Account
+                                        </a>
+                                        <a href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
+                                           class="uucss-activate" id="uucss-deactivate"> Deactivate License
+                                        </a>
+                                    <?php else : ?>
+                                        <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
+                                           class="uucss-activate" id="my-account"> My Account
+                                        </a>
+                                        <a style="margin-left: 5px"
+                                            href="<?php echo UnusedCSS::activation_url('authorize' ) ?>"
+                                           class="uucss-activate"> Reactivate License
+                                        </a>
 
-                                    <a style="margin-left: 5px"
-                                       href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
-                                       class="uucss-activate" id="uucss-deactivate"> Deactivate License
-                                    </a>
-								<?php endif; ?>
+                                        <a style="margin-left: 5px"
+                                           href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
+                                           class="uucss-activate" id="uucss-deactivate"> Deactivate License
+                                        </a>
+                                    <?php endif; ?>
+
+                                </div>
 
                             </div>
-
                         </div>
-                    </div>
-                </li>
+                    </li>
+
+                <?php endif; ?>
 
                 <li class="submit">
 

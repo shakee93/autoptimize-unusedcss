@@ -114,7 +114,7 @@
         }
 
         // options page
-        window.tagBox.init();
+        //window.tagBox.init();
 
         var $input = $('#uucss_api_key')
         var $uucss_spinner = $('.uucss-history.uucss-job-history .spinner-history')
@@ -222,17 +222,21 @@
         });*/
 
         if(window.uucss.rules_enabled === ""){
-            $('#uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
+            $('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
             });
         }else{
-            $('#uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
+            $('body.settings_page_uucss #uucss-wrapper li:not(:nth-child(2),:nth-child(3)) h2').click(function () {
                 $(this).parent().find('.content').slideToggle('fast');
                 $(this).find('.uucss-toggle-section').toggleClass('rotate')
             });
         }
 
+        $('body.rapidload_page_rapidload #uucss-wrapper li h2').click(function () {
+            $(this).parent().find('.content').slideToggle('fast');
+            $(this).find('.uucss-toggle-section').toggleClass('rotate')
+        });
 
 
         var table = $('#uucss-history')
@@ -577,6 +581,16 @@
 
                         return '<a href="'+ decodeURI(data) +'" target="_blank">'+ decodeURI(data) +'</a>';
                     }
+                },
+                {
+                    "data": "critical_css",
+                    title: "Critical CSS",
+                    width: '150px',
+                    visible : window.uucss.critical_css_enabled === "1",
+                    className: 'dt-body-center dt-head-center css-file',
+                    render: function (data, type, row, meta) {
+                        return '<span class="">'+ (data ? data : '') +'</span>';
+                    },
                 },
                 {
                     "data": "rule",
@@ -1682,9 +1696,13 @@
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
                 $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
 
+                if(window.uucss && window.uucss.critical_css_enabled === "1"){
+                    $content.find('ul').append('<li class="regenerate-critical-css-all" data-action_name="regenerate_critical_css_all"><a data-action_name="regenerate_critical_css_all" href="#">Regenerate Critical CSS</a></li>');
+                }
+
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
+                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule_stats"><a data-action_name="rule_stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -1709,7 +1727,29 @@
                     var action = $this.data('action_name');
 
                     switch (action) {
-                        case 'rule-stats':{
+                        case 'regenerate_critical_css_all':{
+                            var requeue_url_list = [];
+                            if(table.rows('.selected').data().length){
+                                $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
+                                    requeue_url_list.push({
+                                        url : table_row_value.url,
+                                        rule : table_row_value.rule
+                                    })
+                                });
+                            }
+
+                            var data = {};
+                            if(requeue_url_list.length){
+                                data.url_list = requeue_url_list;
+                            }
+
+                            wp.ajax.post('cpcss_regenerate_critical_css', data).then(function (i){
+
+                                $.uucssAlert('Jobs added to queue to regenerate critical css');
+                            })
+                            break;
+                        }
+                        case 'rule_stats':{
                             wp.ajax.post('uucss_rule_stats').then(function (i) {
                                 if(i){
 
@@ -2378,7 +2418,7 @@
             container.removeClass('loading');
         }).fail(function (i) {
             $('.license-info ul').hide()
-            $('.license-info #license-message').show().html('Sorry, we couldn\'t collect license information of yours.')
+            $('.license-info #license-message').css('display','block').html('Sorry, we couldn\'t collect license information of yours.')
             container.removeClass('loading');
         })
 
