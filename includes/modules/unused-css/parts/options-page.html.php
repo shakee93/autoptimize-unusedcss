@@ -377,7 +377,7 @@
                                 </td>
                             </tr>
 
-                            <?php if($uucss->provider != 'rapidload') : ?>
+                            <?php if(rapidload()->uucss->provider != 'rapidload') : ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Parse All CSS Files', 'uucss' ); ?></th>
                                 <td>
@@ -548,7 +548,7 @@
                                 <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
                             </p>
                             <p class="style-sheet-count">
-                                <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                                <strong>CSS Stylesheets</strong> : <?php echo rapidload()->uucss->cache_file_count() . ' files, totalling ' . rapidload()->uucss->size(); ?>
                             </p>
                             <p>
                                 <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
@@ -557,7 +557,7 @@
                                 <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                             </p>
                             <p>
-                                <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                                <strong>Can We Write ?</strong> : <?php echo (rapidload()->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                             </p>
                             <p class="more-info-uucss-status">
                                 <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>

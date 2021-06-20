@@ -20,7 +20,7 @@ class RapidLoad_Module{
             'title' => 'Unused CSS',
             'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
             'status' => 'off',
-            'class' => defined('RAPIDLOAD_PROVIDER') && class_exists(RAPIDLOAD_PROVIDER) ? RAPIDLOAD_PROVIDER : UnusedCSS_Autoptimize::class,
+            'class' => defined('RAPIDLOAD_PROVIDER') && class_exists(RAPIDLOAD_PROVIDER) ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class,
             'global' => 'uucss'
         ];
 

@@ -297,43 +297,6 @@ abstract class UnusedCSS {
 
 
 	public static function enqueueGlobalScript() {
-		add_action( 'admin_enqueue_scripts', function () {
-
-            $deregister_scripts = apply_filters('uucss/scripts/global/deregister', ['popper']);
-
-            if(isset($deregister_scripts) && is_array($deregister_scripts)){
-                foreach ($deregister_scripts as $deregister_script){
-                    wp_dequeue_script($deregister_script);
-                    wp_deregister_script($deregister_script);
-                }
-            }
-
-			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-			wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
-			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
-			wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
-			wp_enqueue_style( 'noty-animate', UUCSS_PLUGIN_URL . 'assets/libs/noty/animate.css' );
-			wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
-			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
-            wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
-
-			wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
-			$data = array(
-		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
-		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
-		        'home_url' => home_url(),
-		        'api_url' => RapidLoad_Api::get_key(),
-                'nonce' => wp_create_nonce( 'uucss_nonce' ),
-		        'api_url' => RapidLoad_Api::get_key(),
-                'api_key_verified' => UnusedCSS_Admin::is_api_key_verified(),
-	        );
-	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
-	        wp_enqueue_script( 'uucss_global_admin_script' );
-	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
-
-        });
 
 		add_action('admin_bar_menu', function (){
 
