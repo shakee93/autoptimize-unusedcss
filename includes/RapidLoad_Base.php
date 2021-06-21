@@ -64,11 +64,26 @@ class RapidLoad_Base
     public static function uucss_activate() {
 
         $default_options = self::get_option('autoptimize_uucss_settings',[
-            'uucss_load_original' => "1"
+            'uucss_load_original' => "1",
         ]);
 
         if(!isset($default_options['uucss_api_key'])){
             self::update_option('autoptimize_uucss_settings', $default_options);
+        }
+
+        $cache_base = self::get_option('rapidload_cache_base', null);
+
+        $base = defined('UUCSS_CACHE_CHILD_DIR' ) ? trailingslashit(UUCSS_CACHE_CHILD_DIR) : '/cache/rapidload/';
+
+        if(!isset($cache_base)){
+
+            if(function_exists('autoptimize')) {
+
+                $base = defined('AUTOPTIMIZE_CACHE_CHILD_DIR' ) ? trailingslashit(AUTOPTIMIZE_CACHE_CHILD_DIR) : '/cache/autoptimize/';
+
+            }
+
+            self::update_option('rapidload_cache_base', $base);
         }
 
         add_option( 'rapidload_do_activation_redirect', true );
