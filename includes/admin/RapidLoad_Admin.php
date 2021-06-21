@@ -20,9 +20,7 @@ class RapidLoad_Admin
 
         RapidLoad_DB::check_db_updates();
 
-        self::$base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
-
-        self::$base_dir = WP_CONTENT_DIR . UUCSS_CACHE_CHILD_DIR;
+        $this->init_cache_dir();
 
         new RapidLoad_Queue();
 
@@ -248,6 +246,22 @@ class RapidLoad_Admin
         $options = RapidLoad_Base::fetch_options();
         $rapidload_modules = rapidload()->rapidload_module()->modules;
         include ('views/dashboard.html.php');
+    }
+
+    public function init_cache_dir(){
+
+        $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
+
+        if(!isset($cache_base_option)){
+            $cache_base_option = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+            RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
+        }
+
+        self::$base = $cache_base_option;
+
+        self::$base_dir = WP_CONTENT_DIR . UUCSS_CACHE_CHILD_DIR;
+
+        return $this->initFileSystem();
     }
 
     public function initFileSystem($base = '') {
