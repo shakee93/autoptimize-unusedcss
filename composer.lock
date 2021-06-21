@@ -4,8 +4,45 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b857cb7c7c6891dc9c5684e7f6903147",
+    "content-hash": "d53c3e460fda5bcee79031bead13c82e",
     "packages": [
+        {
+            "name": "collizo4sky/persist-admin-notices-dismissal",
+            "version": "1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/w3guy/persist-admin-notices-dismissal.git",
+                "reference": "900739eb6b0ec0210465f5983a6d4e0e420289e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/w3guy/persist-admin-notices-dismissal/zipball/900739eb6b0ec0210465f5983a6d4e0e420289e4",
+                "reference": "900739eb6b0ec0210465f5983a6d4e0e420289e4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "persist-admin-notices-dismissal.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Collins Agbonghama",
+                    "email": "me@w3guy.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "Simple library to persist dismissal of admin notices across pages in WordPress dashboard.",
+            "time": "2020-12-31T17:12:37+00:00"
+        },
         {
             "name": "simplehtmldom/simplehtmldom",
             "version": "dev-master",
@@ -85,6 +122,5 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": []
 }

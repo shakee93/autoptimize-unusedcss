@@ -18,6 +18,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
         'Nginx_Helper_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
         'Optimole_WP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
+        'PAnD' => __DIR__ . '/..' . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
         'RankMathSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
         'RapidLoad_Api' => __DIR__ . '/../..' . '/includes/RapidLoad_Api.php',
         'RapidLoad_Base' => __DIR__ . '/../..' . '/includes/RapidLoad_Base.php',

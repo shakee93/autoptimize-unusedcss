@@ -37,23 +37,26 @@ class Debug {
 	 *
 	 * @return bool True if debug mode is enabled, false otherwise.
 	 */
-	public static function isEnabled() {
+	public static function isEnabled()
+	{
 		return self::$enabled;
 	}
 
 	/**
 	 * Enables debug mode
 	 */
-	public static function enable() {
+	public static function enable()
+	{
 		self::$enabled = true;
-		self::log( 'Debug mode has been enabled' );
+		self::log('Debug mode has been enabled');
 	}
 
 	/**
 	 * Disables debug mode
 	 */
-	public static function disable() {
-		self::log( 'Debug mode has been disabled' );
+	public static function disable()
+	{
+		self::log('Debug mode has been disabled');
 		self::$enabled = false;
 	}
 
@@ -62,12 +65,11 @@ class Debug {
 	 *
 	 * `null`: error_log (default)
 	 */
-	public static function setDebugHandler( $function = null ) {
-		if ( $function === self::$debugHandler ) {
-			return;
-		}
+	public static function setDebugHandler($function = null)
+	{
+		if ($function === self::$debugHandler) return;
 
-		self::log( 'New debug handler registered' );
+		self::log('New debug handler registered');
 		self::$debugHandler = $function;
 	}
 
@@ -75,39 +77,41 @@ class Debug {
 	 * This is the actual log function. It allows to set a custom backtrace to
 	 * eliminate traces of this class.
 	 */
-	private static function log_trace( $message, $backtrace ) {
-		$idx          = 0;
+	private static function log_trace($message, $backtrace)
+	{
+		$idx = 0;
 		$debugmessage = '';
 
-		foreach ( $backtrace as $caller ) {
-			if ( ! isset( $caller['file'] ) && ! isset( $caller['line'] ) ) {
+		foreach($backtrace as $caller)
+		{
+			if (!isset($caller['file']) && !isset($caller['line'])) {
 				break; // Unknown caller
 			}
 
 			$debugmessage .= ' [' . $caller['file'] . ':' . $caller['line'];
 
-			if ( $idx > 1 ) { // Do not include the call to Debug::log
+			if ($idx > 1) { // Do not include the call to Debug::log
 				$debugmessage .= ' '
-				                 . $caller['class']
-				                 . $caller['type']
-				                 . $caller['function']
-				                 . '()';
+				. $caller['class']
+				. $caller['type']
+				. $caller['function']
+				. '()';
 			}
 
 			$debugmessage .= ']';
 
 			// Stop at the first caller that isn't part of simplehtmldom
-			if ( ! isset( $caller['class'] ) || strpos( $caller['class'], 'simplehtmldom\\' ) !== 0 ) {
+			if (!isset($caller['class']) || strpos($caller['class'], 'simplehtmldom\\') !== 0) {
 				break;
 			}
 		}
 
-		$output = '[DEBUG] ' . trim( $debugmessage ) . ' "' . $message . '"';
+		$output = '[DEBUG] ' . trim($debugmessage) . ' "' . $message . '"';
 
-		if ( is_null( self::$debugHandler ) ) {
-			error_log( $output );
+		if (is_null(self::$debugHandler)) {
+			error_log($output);
 		} else {
-			call_user_func_array( self::$debugHandler, array( $output ) );
+			call_user_func_array(self::$debugHandler, array($output));
 		}
 	}
 
@@ -117,13 +121,12 @@ class Debug {
 	 *
 	 * @param string $text The message to add to error_log
 	 */
-	public static function log( $message ) {
-		if ( ! self::isEnabled() ) {
-			return;
-		}
+	public static function log($message)
+	{
+		if (!self::isEnabled()) return;
 
-		$backtrace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT );
-		self::log_trace( $message, $backtrace );
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+		self::log_trace($message, $backtrace);
 	}
 
 	/**
@@ -132,18 +135,15 @@ class Debug {
 	 *
 	 * @param string $text The message to add to error_log
 	 */
-	public static function log_once( $message ) {
-		if ( ! self::isEnabled() ) {
-			return;
-		}
+	public static function log_once($message)
+	{
+		if (!self::isEnabled()) return;
 
 		// Keep track of caller (file & line)
-		$backtrace = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT );
-		if ( in_array( $backtrace[0], self::$callerLock, true ) ) {
-			return;
-		}
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+		if (in_array($backtrace[0], self::$callerLock, true)) return;
 
 		self::$callerLock[] = $backtrace[0];
-		self::log_trace( $message, $backtrace );
+		self::log_trace($message, $backtrace);
 	}
 }

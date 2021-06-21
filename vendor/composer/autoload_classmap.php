@@ -17,6 +17,7 @@ return array(
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
     'Optimole_WP_Compatible' => $baseDir . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
+    'PAnD' => $vendorDir . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
     'RankMathSEO_Compatible' => $baseDir . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
     'RapidLoad_Api' => $baseDir . '/includes/RapidLoad_Api.php',
     'RapidLoad_Base' => $baseDir . '/includes/RapidLoad_Base.php',
