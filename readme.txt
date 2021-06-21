@@ -85,6 +85,17 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.5.0 - 17/06/2021 =
+ * feat : Universal support for
+            - WP Rocket
+            - LIteSpeed Cache
+            - Cache Enabler
+            - W3 Total Cache
+            - Wp Super Cache
+            - WP Fastest Cache
+            - WP Optimize
+            - Proxy Cache Purge
+
 = 1.4.15 - 17/06/2021 =
  * feat : added Hummingbird plugin support
  * feat : added RapidLoad 404 error handler
