@@ -568,6 +568,12 @@ li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-opti
     top: 4px;
 }
 
+.uucss-history span.dashicons.dashicons-ellipsis {
+    position: absolute;
+    left: 6px;
+    top: 3px;
+}
+
 .uucss-history-table .action button span.dashicons.dashicons-ellipsis{
     transform: rotate(90deg) translateX(-1px);
     line-height: 20px;
