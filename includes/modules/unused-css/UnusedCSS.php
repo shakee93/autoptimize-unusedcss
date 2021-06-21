@@ -351,7 +351,12 @@ abstract class UnusedCSS {
 
         $option = RapidLoad_Base::get_option('rapidload_cache_base', null);
 
-        $this->base = isset($option) ? $option . 'uucss' : apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR) . 'uucss';
+        if(!isset($option)){
+            $option = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+            RapidLoad_Base::update_option('rapidload_cache_base', $option);
+        }
+
+        $this->base = $option . 'uucss';
 
 		if ( ! $this->file_system ) {
 			return false;

@@ -71,21 +71,6 @@ class RapidLoad_Base
             self::update_option('autoptimize_uucss_settings', $default_options);
         }
 
-        $cache_base = self::get_option('rapidload_cache_base', null);
-
-        $base = defined('UUCSS_CACHE_CHILD_DIR' ) ? trailingslashit(UUCSS_CACHE_CHILD_DIR) : '/cache/rapidload/';
-
-        if(!isset($cache_base)){
-
-            if(function_exists('autoptimize')) {
-
-                $base = defined('AUTOPTIMIZE_CACHE_CHILD_DIR' ) ? trailingslashit(AUTOPTIMIZE_CACHE_CHILD_DIR) : '/cache/autoptimize/';
-
-            }
-
-            self::update_option('rapidload_cache_base', $base);
-        }
-
         add_option( 'rapidload_do_activation_redirect', true );
     }
 
