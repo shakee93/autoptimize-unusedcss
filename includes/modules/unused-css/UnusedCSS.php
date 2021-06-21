@@ -20,8 +20,6 @@ abstract class UnusedCSS {
 	public $options = [];
 	public $async = true;
 
-	public $file_system;
-
 	public static $base_dir;
 
 
@@ -42,8 +40,6 @@ abstract class UnusedCSS {
     public function __construct()
     {
         register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
-
-        $this->file_system = new RapidLoad_FileSystem();
 
         $this->base = RapidLoad_Admin::$base . 'uucss';
 
@@ -236,10 +232,6 @@ abstract class UnusedCSS {
 
 
 	public function initFileSystem() {
-
-		if ( ! $this->file_system ) {
-			return false;
-		}
 
 		if ( ! $this->init_base_dir() ) {
 			return false;
@@ -769,14 +761,14 @@ abstract class UnusedCSS {
 
 		self::$base_dir = WP_CONTENT_DIR . $this->base;
 
-		if ( $this->file_system->exists( self::$base_dir ) ) {
+		if ( rapidload()->file_system()->exists( self::$base_dir ) ) {
 			return true;
 		}
 
 		// make dir if not exists
-		$created = $this->file_system->mkdir( self::$base_dir );
+		$created = rapidload()->file_system()->mkdir( self::$base_dir );
 
-		if (!$created || ! $this->file_system->is_writable( self::$base_dir ) || ! $this->file_system->is_readable( self::$base_dir ) ) {
+		if (!$created || ! rapidload()->file_system()->is_writable( self::$base_dir ) || ! rapidload()->file_system()->is_readable( self::$base_dir ) ) {
 			return false;
 		}
 
@@ -785,13 +777,13 @@ abstract class UnusedCSS {
 
 	public function init_log_dir(){
 
-        if ( $this->file_system->exists( UUCSS_LOG_DIR ) ) {
+        if ( rapidload()->file_system()->exists( UUCSS_LOG_DIR ) ) {
             return true;
         }
 
-        $created = $this->file_system->mkdir( UUCSS_LOG_DIR , 0755, !$this->file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+        $created = rapidload()->file_system()->mkdir( UUCSS_LOG_DIR , 0755, !rapidload()->file_system()->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
 
-        if (!$created || ! $this->file_system->is_writable( UUCSS_LOG_DIR ) || ! $this->file_system->is_readable( UUCSS_LOG_DIR ) ) {
+        if (!$created || ! rapidload()->file_system()->is_writable( UUCSS_LOG_DIR ) || ! rapidload()->file_system()->is_readable( UUCSS_LOG_DIR ) ) {
             return false;
         }
 
@@ -800,7 +792,7 @@ abstract class UnusedCSS {
 
 
     protected function cache_file_exists($file){
-        return $this->file_system->exists( self::$base_dir . '/' . $file );
+        return rapidload()->file_system()->exists( self::$base_dir . '/' . $file );
     }
 
 
@@ -839,7 +831,7 @@ abstract class UnusedCSS {
 
         }else{
 
-            $this->file_system->delete( self::$base_dir, true );
+            rapidload()->file_system()->delete( self::$base_dir, true );
 
             RapidLoad_Settings::clear_links( isset( $args['soft'] ) );
             UnusedCSS_DB::update_rule_status();
@@ -857,7 +849,7 @@ abstract class UnusedCSS {
 
         // remove unused files from filesystem
         foreach ( $unused_files as $unused_file ) {
-            $this->file_system->delete( self::$base_dir . '/' . $unused_file );
+            rapidload()->file_system()->delete( self::$base_dir . '/' . $unused_file );
         }
 
     }
@@ -920,13 +912,13 @@ abstract class UnusedCSS {
 
 	    $delete = self::$base_dir;
 
-	    if ( ! $this->file_system->exists( $delete ) ) {
+	    if ( ! rapidload()->file_system()->exists( $delete ) ) {
 		    return;
 	    }
 
 	    RapidLoad_Settings::clear_links();
 
-	    $this->file_system->delete( $delete, true );
+        rapidload()->file_system()->delete( $delete, true );
     }
 
     public function cache_file_count(){
@@ -977,8 +969,8 @@ abstract class UnusedCSS {
                 if ('.' === $file) continue;
                 if ('..' === $file) continue;
 
-                if(!in_array($file, $used_files) && $this->file_system->exists(UnusedCSS::$base_dir . '/' . $file)){
-                    $this->file_system->delete(UnusedCSS::$base_dir . '/' . $file);
+                if(!in_array($file, $used_files) && rapidload()->file_system()->exists(UnusedCSS::$base_dir . '/' . $file)){
+                    rapidload()->file_system()->delete(UnusedCSS::$base_dir . '/' . $file);
                 }
             }
             closedir($handle);

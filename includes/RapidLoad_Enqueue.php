@@ -6,8 +6,6 @@ abstract class RapidLoad_Enqueue {
 
     use RapidLoad_Utils;
 
-    private $file_system;
-
     private $inject;
     private $dom;
     private $data;
@@ -18,7 +16,6 @@ abstract class RapidLoad_Enqueue {
 
     function __construct($data, $url = '')
     {
-        $this->file_system = new RapidLoad_FileSystem();
 
         $this->link = new UnusedCSS_Path([
             'url' => $url
@@ -235,7 +232,7 @@ abstract class RapidLoad_Enqueue {
                 }
 
                 // check if we found a script index and the file exists
-                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
+                if ( is_numeric( $key ) && rapidload()->file_system()->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
                     $uucss_file = $this->files[ $key ]['uucss'];
 
                     array_push( $this->inject->found_css_cache_files, $link );
@@ -364,7 +361,7 @@ abstract class RapidLoad_Enqueue {
             return false;
         }
 
-        $critical_css_content = $this->file_system->get_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $critical_css->critical_css );
+        $critical_css_content = rapidload()->file_system()->get_contents(\RapidLoad\Service\CriticalCSS::$base_dir . '/' . $critical_css->critical_css );
 
         $critical_css_content = '<style uucss-critical-css="' . $critical_css->critical_css . '" cpcss>' . $critical_css_content . '</style>';
 
@@ -415,8 +412,8 @@ abstract class RapidLoad_Enqueue {
         ] );
 
         return [
-            'size'    => $this->file_system->size( $file ),
-            'content' => $this->file_system->get_contents( $file )
+            'size'    => rapidload()->file_system()->size( $file ),
+            'content' => rapidload()->file_system()->get_contents( $file )
         ];
     }
 }

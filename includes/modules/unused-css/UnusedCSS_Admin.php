@@ -679,11 +679,10 @@ abstract class UnusedCSS_Admin {
 
         $license_key = $_REQUEST['license_key'];
 
-        $uucss_api         = new RapidLoad_Api();
-        $uucss_api->apiKey = $license_key;
-        $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
+        rapidload()->api()->apiKey = $license_key;
+        $results = rapidload()->api()->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
 
-        if ( $uucss_api->is_error( $results ) ) {
+        if ( rapidload()->api()->is_error( $results ) ) {
             if(isset($results->errors) && isset($results->errors[0])){
                 wp_send_json_error($results->errors[0]->detail);
             }else{
@@ -707,10 +706,8 @@ abstract class UnusedCSS_Admin {
 
         $this->uucss->vanish();
 
-        $api = new RapidLoad_Api();
-
         // remove domain from authorized list
-        $api->post( 'deactivate', [
+        rapidload()->api()->post( 'deactivate', [
             'url' => site_url()
         ] );
 
@@ -735,15 +732,13 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        $uucss_api = new RapidLoad_Api();
-
         if ( ! isset( $options['uucss_api_key'] ) ) {
             return;
         }
 
-        $results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
+        $results = rapidload()->api()->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
 
-        if($uucss_api->is_error($results)){
+        if(rapidload()->api()->is_error($results)){
             $options['valid_domain'] = false;
             self::update_site_option('autoptimize_uucss_settings', $options);
             return;
@@ -912,11 +907,9 @@ abstract class UnusedCSS_Admin {
 
     public function get_public_notices(){
 
-        $api = new RapidLoad_Api();
+        $result = rapidload()->api()->get('notification');
 
-        $result = $api->get('notification');
-
-        $data = !$api->is_error($result) && isset($result->data) ? $result->data : [];
+        $data = !rapidload()->api()->is_error($result) && isset($result->data) ? $result->data : [];
 
         $data = array_filter($data, function ($notice){
             $notice_read = UnusedCSS_Admin::get_site_option('uucss_notice_' . $notice->id . '_read');
@@ -940,8 +933,6 @@ abstract class UnusedCSS_Admin {
 
     public function get_gpsi_test_result($link){
 
-        $uucss_api = new RapidLoad_Api();
-
         $cached_files = [];
         $original_files = [];
 
@@ -956,7 +947,7 @@ abstract class UnusedCSS_Admin {
             });
         }
 
-        return $uucss_api->post( 'test/wordpress',
+        return rapidload()->api()->post( 'test/wordpress',
             [
                 'url' => urldecode($link['url']),
                 'files' => !empty($cached_files) ? array_column($cached_files, 'uucss') : [],
@@ -982,13 +973,11 @@ abstract class UnusedCSS_Admin {
 
         }
 
-        $uucss_api = new RapidLoad_Api();
-
         $link = $type == 'path' ? UnusedCSS_DB::get_link($url) : UnusedCSS_DB::get_rule($_REQUEST['rule'],$_REQUEST['regex']);
 
         $result = $this->get_gpsi_test_result($link);
 
-        if ( $uucss_api->is_error( $result ) ) {
+        if ( rapidload()->api()->is_error( $result ) ) {
             if(isset($result->errors) && isset($result->errors[0])){
                 wp_send_json_error($result->errors[0]->detail);
             }else{
@@ -1007,9 +996,7 @@ abstract class UnusedCSS_Admin {
             return [];
         }
 
-        $api = new RapidLoad_Api();
-
-        $result = $api->get('faqs');
+        $result = rapidload()->api()->get('faqs');
 
         $default = [
             [
@@ -1034,29 +1021,26 @@ abstract class UnusedCSS_Admin {
             ]
         ];
 
-        return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
+        return !rapidload()->api()->is_error($result) && isset($result->data) ? $result->data : $default;
     }
 
     public function clear_uucss_logs(){
-        $file_system = new RapidLoad_FileSystem();
 
-        if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
+        if(!rapidload()->file_system()->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
             wp_send_json_success(true);
         }
 
-        $file_system->delete_folder(WP_CONTENT_DIR . '/uploads/rapidload/');
+        rapidload()->file_system()->delete_folder(WP_CONTENT_DIR . '/uploads/rapidload/');
         wp_send_json_success(true);
     }
 
     public function uucss_logs(){
 
-        $file_system = new RapidLoad_FileSystem();
-
-        if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
+        if(!rapidload()->file_system()->exists(UUCSS_LOG_DIR . 'debug.log')){
             wp_send_json_success([]);
         }
 
-        $data = $file_system->get_contents(UUCSS_LOG_DIR . 'debug.log');
+        $data = rapidload()->file_system()->get_contents(UUCSS_LOG_DIR . 'debug.log');
 
         if(empty($data)){
             wp_send_json_success([]);
@@ -1233,9 +1217,7 @@ abstract class UnusedCSS_Admin {
 			return $item;
 		}, array_keys( $plugins ), $plugins );
 
-		$api = new RapidLoad_Api();
-
-		$data = $api->post( 'whitelist-packs/wp-suggest', [
+		$data = rapidload()->api()->post( 'whitelist-packs/wp-suggest', [
 			'plugins' => $active_plugins,
 			'theme'   => get_template(),
 			'url'     => site_url()
@@ -1256,10 +1238,9 @@ abstract class UnusedCSS_Admin {
 			return;
 		}
 
-		$uucss_api         = new RapidLoad_Api();
-		$uucss_api->apiKey = sanitize_text_field( $_POST['api_key'] );
+        rapidload()->api()->apiKey = sanitize_text_field( $_POST['api_key'] );
 
-		$results = $uucss_api->get( 'verify' );
+		$results = rapidload()->api()->get( 'verify' );
 
 		if ( isset( $results->data ) ) {
 			wp_send_json_success( true );

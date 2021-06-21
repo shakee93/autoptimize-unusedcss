@@ -19,11 +19,6 @@ class RapidLoad_Store {
 
     public $options;
 
-    /**
-     * @var WP_Filesystem_Direct
-     */
-    public $file_system;
-
 
     /**
      * RapidLoad_Store constructor.
@@ -38,8 +33,6 @@ class RapidLoad_Store {
         $this->provider = $provider;
         $this->args = $args;
         $this->options = RapidLoad_Base::fetch_options();
-
-        $this->file_system = new RapidLoad_FileSystem();
 
         if(!$rule){
 
@@ -58,18 +51,16 @@ class RapidLoad_Store {
             'type' => 'store'
         ] );
 
-	    $uucss_api = new RapidLoad_Api();
-
         if(apply_filters('uucss/queue/redis', true) && !isset($this->args['first_job']) && apply_filters('uucss/queue/purger-enabled', false)){
 
-            $result = $uucss_api->post( 's/unusedcss',
+            $result = rapidload()->api()->post( 's/unusedcss',
                 array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
                     [ 'url' => $this->url, 'priority' => isset($this->args['priority']), 'wp_nonce' => wp_create_nonce('uucss_job_hook'), 'hook_end_point' => trailingslashit(get_site_url())]
                 ) );
 
-            if($uucss_api->is_error($result)){
+            if(rapidload()->api()->is_error($result)){
 
-                UnusedCSS_DB::update_failed($this->url, $uucss_api->extract_error( $result ));
+                UnusedCSS_DB::update_failed($this->url, rapidload()->api()->extract_error( $result ));
 
                 $this->log( [
                     'log' => 'fetched data stored status failed',
@@ -87,7 +78,7 @@ class RapidLoad_Store {
 
         }else{
 
-            $result = $uucss_api->post( 'purger',
+            $result = rapidload()->api()->post( 'purger',
                 array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
                     [ 'url' => $this->url, 'service' => true ]
                 ) );
@@ -104,7 +95,7 @@ class RapidLoad_Store {
                     'url' => $this->url
                 ]);
 
-                $path->mark_as_failed($uucss_api->extract_error( $result ));
+                $path->mark_as_failed(rapidload()->api()->extract_error( $result ));
                 $path->save();
 
                 $this->log( [
@@ -143,9 +134,7 @@ class RapidLoad_Store {
             'type' => 'store'
         ] );
 
-        $uucss_api = new RapidLoad_Api();
-
-        $result = $uucss_api->post( 'purger',
+        $result = rapidload()->api()->post( 'purger',
             array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
                 [ 'url' => $this->rule->url, 'service' => true ]
             ) );
@@ -158,7 +147,7 @@ class RapidLoad_Store {
 
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-            $this->rule->mark_as_failed($uucss_api->extract_error( $result ));
+            $this->rule->mark_as_failed(rapidload()->api()->extract_error( $result ));
             $this->rule->save();
 
             $this->log( [
@@ -226,7 +215,7 @@ class RapidLoad_Store {
 
                 $css .=  $file->css;
 
-                $this->file_system->put_contents( $file_location, $css );
+                rapidload()->file_system()->put_contents( $file_location, $css );
 
                 do_action( 'uucss/cache_file_created', $file_location, $file->css );
 
@@ -319,8 +308,8 @@ class RapidLoad_Store {
 
 	    $source_dir = UnusedCSS::$base_dir . '/' . $hash;
 
-	    if ( ! $this->file_system->exists( $source_dir ) ) {
-		    $this->file_system->mkdir( $source_dir );
+	    if ( ! rapidload()->file_system()->exists( $source_dir ) ) {
+            rapidload()->file_system()->mkdir( $source_dir );
 	    }
 
 	    return $source_dir;

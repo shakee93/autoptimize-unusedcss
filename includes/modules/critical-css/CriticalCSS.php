@@ -7,11 +7,9 @@ abstract class CriticalCSS{
     use \RapidLoad_Utils;
 
     public static $base_dir;
-    public $file_system;
 
     public function __construct()
     {
-        $this->file_system = new \RapidLoad_FileSystem();
 
         self::$base_dir = \RapidLoad_Admin::$base . 'cpcss';
 
@@ -28,9 +26,6 @@ abstract class CriticalCSS{
 
     public function initFileSystem()
     {
-        if ( ! $this->file_system ) {
-            return false;
-        }
 
         if ( ! $this->init_base_dir() ) {
             return false;
@@ -44,13 +39,13 @@ abstract class CriticalCSS{
     public function init_log_dir()
     {
 
-        if ( $this->file_system->exists( UUCSS_LOG_DIR ) ) {
+        if ( rapidload()->file_system()->exists( UUCSS_LOG_DIR ) ) {
             return true;
         }
 
-        $created = $this->file_system->mkdir( UUCSS_LOG_DIR , 0755, !$this->file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+        $created = rapidload()->file_system()->mkdir( UUCSS_LOG_DIR , 0755, !rapidload()->file_system()->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
 
-        if (!$created || ! $this->file_system->is_writable( UUCSS_LOG_DIR ) || ! $this->file_system->is_readable( UUCSS_LOG_DIR ) ) {
+        if (!$created || ! rapidload()->file_system()->is_writable( UUCSS_LOG_DIR ) || ! rapidload()->file_system()->is_readable( UUCSS_LOG_DIR ) ) {
             return false;
         }
 
@@ -59,14 +54,14 @@ abstract class CriticalCSS{
 
     public function init_base_dir() {
 
-        if ( $this->file_system->exists( self::$base_dir ) ) {
+        if ( rapidload()->file_system()->exists( self::$base_dir ) ) {
             return true;
         }
 
         // make dir if not exists
-        $created = $this->file_system->mkdir( self::$base_dir );
+        $created = rapidload()->file_system()->mkdir( self::$base_dir );
 
-        if (!$created || ! $this->file_system->is_writable( self::$base_dir ) || ! $this->file_system->is_readable( self::$base_dir ) ) {
+        if (!$created || ! rapidload()->file_system()->is_writable( self::$base_dir ) || ! rapidload()->file_system()->is_readable( self::$base_dir ) ) {
             return false;
         }
 

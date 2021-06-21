@@ -7,8 +7,6 @@ defined( 'ABSPATH' ) or die();
  */
 trait RapidLoad_Utils {
 
-    private static $log_file_system = null;
-
 	public function url_origin( $s, $use_forwarded_host = false ) {
 		$ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
 		$sp       = strtolower( $s['SERVER_PROTOCOL'] );
@@ -61,10 +59,7 @@ trait RapidLoad_Utils {
     }
 
     private static function get_log_instance(){
-	    if(!self::$log_file_system){
-	        return new RapidLoad_FileSystem();
-        }
-	    return self::$log_file_system;
+	    return rapidload()->file_system();
     }
 
     private static function get_log_option(){
@@ -431,9 +426,7 @@ trait RapidLoad_Utils {
 
     public function size() {
 
-	    $file_system = new RapidLoad_FileSystem();
-
-        if ( ! $file_system || ! $file_system->exists( UnusedCSS::$base_dir ) ) {
+        if ( ! rapidload()->file_system()->exists( UnusedCSS::$base_dir ) ) {
             return "0 KB";
         }
 

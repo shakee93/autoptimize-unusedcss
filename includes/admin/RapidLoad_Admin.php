@@ -158,9 +158,7 @@ class RapidLoad_Admin
 
     function uucss_license() {
 
-        $api = new RapidLoad_Api();
-
-        $data = $api->get( 'license', [
+        $data = rapidload()->api()->get( 'license', [
             'url' => $this->transform_url(get_site_url())
         ] );
 
