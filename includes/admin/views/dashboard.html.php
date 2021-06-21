@@ -143,18 +143,16 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                                                     </p>
                                                 <?php endif; ?>
                                                 <p>
-                                                    <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
+                                                    <strong>Cache Folder</strong> : <?php echo RapidLoad_Admin::$base_dir; ?>
                                                 </p>
                                                 <p <?php if (!$hide_view_log) echo 'style="display:none"' ?>>
                                                     <strong>Log File</strong>
                                                     : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a
                                                             id="status-view-uucss-log" href="#">View Logs</a>
                                                 </p>
-                                                <?php if(rapidload()->rapidload_module()->is_active('unused-css')) :?>
-                                                    <p>
-                                                        <strong>Can We Write ?</strong> : <?php echo (rapidload()->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
-                                                    </p>
-                                                <?php endif; ?>
+                                                <p>
+                                                    <strong>Can We Write ?</strong> : <?php echo (rapidload()->admin()->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                                                </p>
                                                 <p class="more-info-uucss-status">
                                                     <strong>Total Optimization Jobs</strong> : <span
                                                             class="total-jobs"><?php echo $total; ?></span>

@@ -43,7 +43,7 @@ abstract class UnusedCSS {
 
         $this->base = RapidLoad_Admin::$base . 'uucss';
 
-	    if ( ! $this->initFileSystem() ) {
+	    if ( ! rapidload()->admin()->initFileSystem('uucss') ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
 
 		    return;
@@ -230,18 +230,6 @@ abstract class UnusedCSS {
 
 	}
 
-
-	public function initFileSystem() {
-
-		if ( ! $this->init_base_dir() ) {
-			return false;
-		}
-
-        $this->init_log_dir();
-
-		return true;
-	}
-
     public function enabled() {
 
 	    if ( $this->is_doing_api_fetch() ) {
@@ -288,7 +276,6 @@ abstract class UnusedCSS {
 	    return apply_filters('uucss/enabled', true);
 
     }
-
 
     function enabled_frontend() {
 
@@ -676,12 +663,10 @@ abstract class UnusedCSS {
 	    return true;
     }
 
-
 	public function refresh( $url, $args = [] ) {
 		$this->clear_cache( $url );
 		$this->cache( $url, $args );
 	}
-
 
 	public function api_options( $post_id = false ) {
 
@@ -756,45 +741,9 @@ abstract class UnusedCSS {
 	           strpos( $user_agent, 'RapidLoad' ) !== false;
     }
 
-
-	public function init_base_dir() {
-
-		self::$base_dir = WP_CONTENT_DIR . $this->base;
-
-		if ( rapidload()->file_system()->exists( self::$base_dir ) ) {
-			return true;
-		}
-
-		// make dir if not exists
-		$created = rapidload()->file_system()->mkdir( self::$base_dir );
-
-		if (!$created || ! rapidload()->file_system()->is_writable( self::$base_dir ) || ! rapidload()->file_system()->is_readable( self::$base_dir ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public function init_log_dir(){
-
-        if ( rapidload()->file_system()->exists( UUCSS_LOG_DIR ) ) {
-            return true;
-        }
-
-        $created = rapidload()->file_system()->mkdir( UUCSS_LOG_DIR , 0755, !rapidload()->file_system()->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
-
-        if (!$created || ! rapidload()->file_system()->is_writable( UUCSS_LOG_DIR ) || ! rapidload()->file_system()->is_readable( UUCSS_LOG_DIR ) ) {
-            return false;
-        }
-
-        return true;
-    }
-
-
     protected function cache_file_exists($file){
         return rapidload()->file_system()->exists( self::$base_dir . '/' . $file );
     }
-
 
     public function clear_cache($url = null, $args = []) {
 
@@ -885,7 +834,6 @@ abstract class UnusedCSS {
 
     }
 
-
 	public function get_cached_file( $file_url, $cdn = null ) {
 
 		if ( ! $cdn || empty( $cdn ) ) {
@@ -906,7 +854,7 @@ abstract class UnusedCSS {
 	}
 
     public function vanish() {
-	    if ( ! $this->initFileSystem() ) {
+	    if ( ! rapidload()->admin()->initFileSystem() ) {
 		    return;
 	    }
 

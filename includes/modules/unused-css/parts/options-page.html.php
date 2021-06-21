@@ -557,7 +557,7 @@
                                 <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                             </p>
                             <p>
-                                <strong>Can We Write ?</strong> : <?php echo (rapidload()->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                                <strong>Can We Write ?</strong> : <?php echo (rapidload()->admin()->initFileSystem()) ? 'Yes' : 'No' ; ?>
                             </p>
                             <p class="more-info-uucss-status">
                                 <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>

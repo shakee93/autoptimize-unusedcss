@@ -13,7 +13,7 @@ abstract class CriticalCSS{
 
         self::$base_dir = \RapidLoad_Admin::$base . 'cpcss';
 
-        if ( ! $this->initFileSystem() ) {
+        if ( ! rapidload()->admin()->initFileSystem('cpcss') ) {
             self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
 
             return;
@@ -22,50 +22,6 @@ abstract class CriticalCSS{
         add_filter('uucss/path/critical-css', [$this, 'get_path_critical_css'], 10, 2);
 
         new CriticalCSS_Queue();
-    }
-
-    public function initFileSystem()
-    {
-
-        if ( ! $this->init_base_dir() ) {
-            return false;
-        }
-
-        $this->init_log_dir();
-
-        return true;
-    }
-
-    public function init_log_dir()
-    {
-
-        if ( rapidload()->file_system()->exists( UUCSS_LOG_DIR ) ) {
-            return true;
-        }
-
-        $created = rapidload()->file_system()->mkdir( UUCSS_LOG_DIR , 0755, !rapidload()->file_system()->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
-
-        if (!$created || ! rapidload()->file_system()->is_writable( UUCSS_LOG_DIR ) || ! rapidload()->file_system()->is_readable( UUCSS_LOG_DIR ) ) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function init_base_dir() {
-
-        if ( rapidload()->file_system()->exists( self::$base_dir ) ) {
-            return true;
-        }
-
-        // make dir if not exists
-        $created = rapidload()->file_system()->mkdir( self::$base_dir );
-
-        if (!$created || ! rapidload()->file_system()->is_writable( self::$base_dir ) || ! rapidload()->file_system()->is_readable( self::$base_dir ) ) {
-            return false;
-        }
-
-        return true;
     }
 
     public function get_path_critical_css($critical_css, $url){

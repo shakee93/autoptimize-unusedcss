@@ -6,6 +6,7 @@ class RapidLoad_Admin
     use RapidLoad_Utils;
 
     public static $base;
+    public static $base_dir;
 
     public function __construct()
     {
@@ -21,7 +22,10 @@ class RapidLoad_Admin
 
         self::$base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
+        self::$base_dir = WP_CONTENT_DIR . UUCSS_CACHE_CHILD_DIR;
+
         new RapidLoad_Queue();
+
     }
 
     function add_update_message(){
@@ -244,5 +248,47 @@ class RapidLoad_Admin
         $options = RapidLoad_Base::fetch_options();
         $rapidload_modules = rapidload()->rapidload_module()->modules;
         include ('views/dashboard.html.php');
+    }
+
+    public function initFileSystem($base = '') {
+
+        if ( ! $this->init_base_dir($base) ) {
+            return false;
+        }
+
+        $this->init_log_dir();
+
+        return true;
+    }
+
+    public function init_base_dir($base) {
+        self::uucss_log(self::$base_dir . $base);
+        if ( rapidload()->file_system()->exists( self::$base_dir . $base ) ) {
+            return true;
+        }
+
+        // make dir if not exists
+        $created = rapidload()->file_system()->mkdir( self::$base_dir . $base );
+
+        if (!$created || ! rapidload()->file_system()->is_writable( self::$base_dir . $base ) || ! rapidload()->file_system()->is_readable( self::$base_dir . $base ) ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function init_log_dir(){
+
+        if ( rapidload()->file_system()->exists( UUCSS_LOG_DIR ) ) {
+            return true;
+        }
+
+        $created = rapidload()->file_system()->mkdir( UUCSS_LOG_DIR , 0755, !rapidload()->file_system()->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+
+        if (!$created || ! rapidload()->file_system()->is_writable( UUCSS_LOG_DIR ) || ! rapidload()->file_system()->is_readable( UUCSS_LOG_DIR ) ) {
+            return false;
+        }
+
+        return true;
     }
 }
