@@ -90,4 +90,10 @@ class RapidLoad_Module{
         wp_send_json_success();
     }
 
+    function active_modules(){
+        return array_filter($this->modules, function ($value){
+           return isset($value['status']) && $value['status'] == "on";
+        });
+    }
+
 }

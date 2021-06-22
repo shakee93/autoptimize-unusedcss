@@ -57,15 +57,16 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
 
-	    add_action( 'wp_enqueue_scripts', function () {
+	    add_action( 'uucss/handle_job', function ($url, $rule) {
 
-		    $this->url = $this->get_current_url();
+		    $this->url = $url;
+		    $this->rule = $rule;
 
 		    if ( $this->enabled() ) {
 			    $this->purge_css();
 		    }
 
-	    }, 99);
+	    }, 99, 2);
 
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
@@ -395,8 +396,6 @@ abstract class UnusedCSS {
 	public function purge_css() {
 
 		$this->url = $this->transform_url( $this->url );
-
-        $this->rule = UnusedCSS_Rule::get_related_rule();
 
         if(isset($this->rule['rule'])){
 

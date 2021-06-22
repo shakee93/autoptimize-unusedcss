@@ -64,6 +64,77 @@
 
         }
 
+        var $input = $('#uucss_api_key')
+
+        var whitelist_pack_el = $('#whitelist_packs');
+        whitelist_pack_el.select2({
+            ajax: {
+                url: window.uucss.api + '/whitelist-packs',
+                data: function (params) {
+                    return {
+                        s: params.term,
+                        url: window.location.origin
+                    };
+                },
+                headers: {
+                    "Authorization": "Bearer " + $input.val(),
+                    "Content-Type": "application/json",
+                },
+                delay: 150,
+                cache: true,
+                processResults: function (data) {
+
+                    let d = data.data.map(function (item) {
+
+                        return {
+                            id: item.id + ":" + item.name,
+                            text: item.name
+                        }
+
+                    })
+                    return {
+                        results: d,
+                        pagination: {
+                            more: false
+                        }
+                    };
+                }
+            },
+            maximumSelectionLength: 5,
+            width: '100%',
+        })
+
+        $('#uucss-pack-suggest').click(function () {
+
+            var $button = $(this)
+            var oldText = $button.val()
+
+            $button.val('loading..')
+            wp.ajax.post('suggest_whitelist_packs').done(function (data) {
+
+                $button.val(oldText)
+
+                if (!data) {
+                    return;
+                }
+
+                data.forEach(function (item) {
+
+                    if ($("li[title='" + item.name + "']").length === 0) {
+                        var newOption = new Option(item.name, item.id + ':' + item.name, true, true);
+                        whitelist_pack_el.append(newOption).trigger('change');
+                    }
+
+                });
+
+            }).fail(function () {
+                $button.val('Load Recommended Packs');
+                $('#uucss-pack-suggest-error').text('error : something went wrong, please contact support')
+
+            });
+
+        });
+
         updateLicense();
     })
 

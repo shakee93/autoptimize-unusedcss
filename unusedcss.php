@@ -106,10 +106,10 @@ final class RapidLoad{
             $this->container['file_system'] = new RapidLoad_FileSystem();
             $this->container['rapidload_api'] = new RapidLoad_Api();
             $this->container['rapidload_admin'] = new RapidLoad_Admin();
+            $this->container['rapidload_base'] = new RapidLoad_Base();
             $this->container['rapidload_module'] = new RapidLoad_Module();
         });
-        
-        RapidLoad_Base::init();
+
     }
 
     public function admin(){
