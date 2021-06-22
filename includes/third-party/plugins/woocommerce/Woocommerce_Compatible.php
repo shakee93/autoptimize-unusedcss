@@ -30,6 +30,26 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
             ];
         }
 
+        if(function_exists('is_product_category')){
+            $args[] = [
+                'name' => 'product_category',
+                'rule' => 'is_product_category',
+                'category' => 'Woocommerce',
+                'priority' => 5,
+                'callback' => is_product_category(),
+            ];
+        }
+
+        if(function_exists('is_product_tag')){
+            $args[] = [
+                'name' => 'product_tag',
+                'rule' => 'is_product_tag',
+                'category' => 'Woocommerce',
+                'priority' => 5,
+                'callback' => is_product_tag(),
+            ];
+        }
+
         return $args;
     }
 
