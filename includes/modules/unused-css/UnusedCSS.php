@@ -43,7 +43,7 @@ abstract class UnusedCSS {
 
         $this->base = RapidLoad_Admin::$base . 'uucss';
 
-        self::$base_dir = WP_CONTENT_DIR . $this->base;
+        self::$base_dir = RapidLoad_Admin::$base_dir . 'uucss';
 
 	    if ( ! rapidload()->admin()->initFileSystem('uucss') ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
