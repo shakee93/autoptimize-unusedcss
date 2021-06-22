@@ -55,6 +55,10 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
 
     public function addNotifications($notifications) {
 
+        if(!class_exists('autoptimizeOptionWrapper')){
+            return $notifications;
+        }
+
         if (!(bool) autoptimizeOptionWrapper::get_option( 'autoptimize_cache_nogzip' )) {
             $notifications[] = [
                 "title" => "Incompatible Autoptimize option enabled",
