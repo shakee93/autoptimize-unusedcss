@@ -259,7 +259,7 @@ class RapidLoad_Admin
 
         self::$base = $cache_base_option;
 
-        self::$base_dir = WP_CONTENT_DIR . UUCSS_CACHE_CHILD_DIR;
+        self::$base_dir = WP_CONTENT_DIR . self::$base;
 
         return $this->initFileSystem();
     }
@@ -276,7 +276,7 @@ class RapidLoad_Admin
     }
 
     public function init_base_dir($base) {
-        self::uucss_log(self::$base_dir . $base);
+
         if ( rapidload()->file_system()->exists( self::$base_dir . $base ) ) {
             return true;
         }

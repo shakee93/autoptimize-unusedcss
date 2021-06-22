@@ -11,7 +11,7 @@ abstract class CriticalCSS{
     public function __construct()
     {
 
-        self::$base_dir = \RapidLoad_Admin::$base . 'cpcss';
+        self::$base_dir = \RapidLoad_Admin::$base_dir . 'cpcss';
 
         if ( ! rapidload()->admin()->initFileSystem('cpcss') ) {
             self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
