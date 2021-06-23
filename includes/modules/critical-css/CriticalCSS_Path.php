@@ -45,10 +45,10 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             if(\RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
-                unset($data['job']);
             }
 
             unset($data['type']);
+            unset($data['job']);
 
             $wpdb->insert(
                 $wpdb->prefix . 'rapidload_cpcss_job',
@@ -76,6 +76,7 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             unset($data['id']);
             unset($data['type']);
+            unset($data['job']);
 
             if(isset($data['warnings'])){
                 $data['warnings'] = serialize($data['warnings']);
@@ -83,7 +84,6 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             if(\RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
-                unset($data['job']);
             }
 
             $wpdb->update(
