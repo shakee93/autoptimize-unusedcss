@@ -272,13 +272,18 @@ trait RapidLoad_Utils {
 	    return $final_file_name;
     }
 
-	function str_contains( $string, $find ) {
-		if ( strpos( $string, $find ) !== false ) {
-			return true;
-		}
+    function str_contains( $string, $find ) {
 
-		return false;
-	}
+        if(empty($find)){
+            return false;
+        }
+
+        if ( strpos( $string, $find ) !== false ) {
+            return true;
+        }
+
+        return false;
+    }
 
 	function endsWith( $haystack, $needle ) {
 		$length = strlen( $needle );
@@ -355,7 +360,9 @@ trait RapidLoad_Utils {
 			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
 			    'site'   => trailingslashit(get_site_url()),
 			    'back'   => admin_url( $to ),
-			    'goto'   => UUCSS_ACTIVATION_URL
+                'goto'   => UUCSS_ACTIVATION_URL,
+                'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
+                'utm_medium' => 'plugin'
 		    ] );
     }
 
