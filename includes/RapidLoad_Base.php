@@ -7,7 +7,6 @@ class RapidLoad_Base{
     use RapidLoad_Utils;
 
     public $url;
-    public $rule;
 
     public function __construct()
     {
@@ -19,9 +18,8 @@ class RapidLoad_Base{
         add_action('wp_enqueue_scripts', function (){
 
             $this->url = $this->get_current_url();
-            $this->rule = $this->get_current_rule();
 
-            do_action('uucss/handle_job', $this->url, $this->rule );
+            do_action('rapidload/job/handle', $this->url );
 
         });
 

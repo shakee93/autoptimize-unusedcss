@@ -48,13 +48,18 @@ trait RapidLoad_Utils {
 	    return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
     }
 
-    public function get_current_rule(){
+    public function get_current_rule($user_defined_rules = []){
 
         $rules = self::get_defined_rules();
 
         $related_rule = false;
 
         foreach ($rules as $rule){
+
+            if(!isset($rule['rule']) || isset($rule['rule']) && !in_array($rule['rule'], $user_defined_rules)){
+
+                continue;
+            }
 
             if(isset($rule['callback']) && $rule['callback']){
 

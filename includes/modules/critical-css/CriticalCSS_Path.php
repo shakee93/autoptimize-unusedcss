@@ -6,12 +6,11 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
     public $rule_id;
     public $rule_note;
+    public $type = 'Path';
 
     public function init($args)
     {
         global $wpdb;
-
-        $this->type = 'Path';
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
@@ -47,6 +46,10 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             $data = (array) $this;
 
+            if(\RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
+            }
+
             unset($data['type']);
 
             $wpdb->insert(
@@ -78,6 +81,10 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             if(isset($data['warnings'])){
                 $data['warnings'] = serialize($data['warnings']);
+            }
+
+            if(\RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
             }
 
             $wpdb->update(

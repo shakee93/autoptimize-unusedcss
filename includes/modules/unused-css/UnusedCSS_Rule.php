@@ -7,12 +7,11 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
     use RapidLoad_Utils;
 
     public $regex;
+    public $type = 'Rule';
 
     public function init($args){
 
         global $wpdb;
-
-        $this->type = 'Rule';
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
@@ -49,6 +48,10 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             $data = (array) $this;
 
+            if(RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
+            }
+
             unset($data['type']);
 
             $wpdb->insert(
@@ -80,6 +83,10 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             if(isset($data['warnings'])){
                 $data['warnings'] = serialize($data['warnings']);
+            }
+
+            if(RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
             }
 
             $wpdb->update(

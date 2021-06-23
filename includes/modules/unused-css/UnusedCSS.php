@@ -57,10 +57,10 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
 
-	    add_action( 'uucss/handle_job', function ($url, $rule) {
+	    add_action( 'rapidload/job/handle', function ($url) {
 
 		    $this->url = $url;
-		    $this->rule = $rule;
+		    $this->rule = $this->get_current_rule(UnusedCSS_DB::get_rule_names());
 
 		    if ( $this->enabled() ) {
 			    $this->purge_css();

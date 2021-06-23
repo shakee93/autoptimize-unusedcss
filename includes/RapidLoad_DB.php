@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.3";
+    static $db_version = "1.5";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -36,7 +36,7 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $tableArray = [
-            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_path",
             $wpdb->prefix . "rapidload_rule",
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
@@ -59,7 +59,7 @@ abstract class RapidLoad_DB
     static function create_tables($blog_id = ''){
         global $wpdb;
 
-        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_path = $wpdb->prefix . $blog_id . 'rapidload_path';
         $rapidload_rule = $wpdb->prefix . $blog_id . 'rapidload_rule';
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
@@ -73,7 +73,7 @@ abstract class RapidLoad_DB
             $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $rapidload_job (
+        $sql = "CREATE TABLE $rapidload_path (
 		id INT NOT NULL AUTO_INCREMENT,
 		rule longtext NULL,
 		url longtext NOT NULL,
@@ -94,6 +94,7 @@ abstract class RapidLoad_DB
 		job_id INT NULL,
 		rule longtext NULL,
 		url longtext NOT NULL,
+		url_id INT NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
 		warnings longtext NULL,
@@ -112,6 +113,7 @@ abstract class RapidLoad_DB
 		job_id INT NULL,
 		rule longtext NOT NULL,
 		url longtext NOT NULL,
+		url_id INT NOT NULL,
 		regex longtext NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
@@ -129,6 +131,7 @@ abstract class RapidLoad_DB
 		job_id INT NULL,
 		rule longtext NULL,
 		url longtext NOT NULL,
+		url_id INT NOT NULL,
 		critical_css longtext NULL,
 		exceptional_css longtext NULL,
 		warnings longtext NULL,
@@ -146,6 +149,7 @@ abstract class RapidLoad_DB
 		job_id INT NULL,
 		rule longtext NOT NULL,
 		url longtext NOT NULL,
+		url_id INT NOT NULL,
 		regex longtext NOT NULL,
 		critical_css longtext NULL,
 		exceptional_css longtext NULL,

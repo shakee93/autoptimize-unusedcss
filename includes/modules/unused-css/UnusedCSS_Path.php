@@ -8,12 +8,11 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
     public $rule_id;
     public $rule_note;
+    public $type = 'Path';
 
     public function init($args){
 
         global $wpdb;
-
-        $this->type = 'Path';
 
         $rule = isset($args['rule']) ? $args['rule'] : null;
         $url = isset($args['url']) ? $args['url'] : null;
@@ -57,6 +56,10 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 unset($data['rule_note']);
             }
 
+            if(RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
+            }
+
             unset($data['type']);
 
             $wpdb->insert(
@@ -95,6 +98,10 @@ class UnusedCSS_Path extends UnusedCSS_Job {
                 unset($data['hits']);
                 unset($data['rule_id']);
                 unset($data['rule_note']);
+            }
+
+            if(RapidLoad_DB::$current_version < 1.3){
+                unset($data['url_id']);
             }
 
             $wpdb->update(

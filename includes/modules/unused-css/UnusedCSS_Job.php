@@ -12,6 +12,7 @@ abstract class UnusedCSS_Job
     public $id;
     public $job_id;
     public $url;
+    public $url_id;
     public $rule;
     public $stats;
     public $files;
@@ -25,7 +26,19 @@ abstract class UnusedCSS_Job
 
     public function __construct($args)
     {
+        $this->job_init($args);
         $this->init($args);
+    }
+
+    function job_init($args){
+        $job = new RapidLoad_Job([
+           'url' => isset($args['url']) ? $args['url'] : null,
+           'rule' => isset($args['rule']) ? $args['rule'] : null,
+           'regex' => isset($args['regex']) ? $args['regex'] : null
+        ], strtolower($this->type));
+
+        $job->save();
+        $this->url_id = $job->id;
     }
 
     abstract public function init($args);
