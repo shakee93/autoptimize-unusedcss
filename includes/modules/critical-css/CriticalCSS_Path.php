@@ -66,6 +66,8 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
     public function save(){
 
+        $this->job->save();
+
         if(isset($this->id)){
 
             global $wpdb;
@@ -96,4 +98,5 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
         }
     }
+
 }
