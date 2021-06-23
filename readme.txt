@@ -17,6 +17,9 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
+Works perfectly with :
+* WP Rocket, * LIteSpeed Cache, * Cache Enabler, * W3 Total Cache, * Wp Super Cache, * WP Fastest Cache, * WP Optimize, * Proxy Cache Purge
+
 **RapidLoad can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
 
 RapidLoad extends Autoptimize to automatically find CSS that’s not being used, then prevents it from loading on the page. By reducing the total CSS file size and page weight, RapidLoad can significantly reduce load times. It even improves the performance of other optimizing plugins and extensions, like CriticalCSS. RapidLoad for Autoptimize plugin integrates with the 3rd party service [rapidload.io API](https://rapidload.io) to remove unused CSS. (See [Pricing plans - https://rapidload.io/pricing](https://rapidload.io/pricing))
@@ -84,6 +87,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 4. RapidLoad options.
 
 == Changelog ==
+
+= 1.5.1 - 23/06/2021 =
+ * fix : warning strpos() empty needle
 
 = 1.5.0 - 17/06/2021 =
  * feat : Universal support for
