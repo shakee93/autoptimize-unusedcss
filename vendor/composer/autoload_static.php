@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0846b02cb01ca9de966b580779093b89
+class ComposerStaticInit25e0e247897c43d5947418ccb9c99614
 {
     public static $classMap = array (
         'Autoptimize_Beta_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
@@ -77,7 +77,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
+            $loader->classMap = ComposerStaticInit25e0e247897c43d5947418ccb9c99614::$classMap;
 
         }, null, ClassLoader::class);
     }
