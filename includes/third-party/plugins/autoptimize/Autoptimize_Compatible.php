@@ -21,7 +21,7 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
 
         add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
 
-        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 10, 1 );
+        add_filter( 'autoptimize_filter_settingsscreen_tabs', [$this, 'handle'], 20, 1 );
 
         add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
