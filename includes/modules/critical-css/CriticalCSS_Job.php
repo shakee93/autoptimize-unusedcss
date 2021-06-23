@@ -11,6 +11,7 @@ abstract class CriticalCSS_Job
     public $id;
     public $job_id;
     public $url;
+    public $url_id;
     public $rule;
     public $critical_css;
     public $exceptional_css;
