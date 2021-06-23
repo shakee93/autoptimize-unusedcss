@@ -337,8 +337,10 @@ trait RapidLoad_Utils {
 			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
 			    'site'   => trailingslashit(get_site_url()),
 			    'back'   => admin_url( $to ),
-			    'goto'   => UUCSS_ACTIVATION_URL
-		    ] );
+			    'goto'   => UUCSS_ACTIVATION_URL,
+                'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
+		        'utm_medium' => 'plugin'
+            ] );
     }
 
     public static function serialize($data){

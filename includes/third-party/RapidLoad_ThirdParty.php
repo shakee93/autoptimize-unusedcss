@@ -44,6 +44,15 @@ abstract class RapidLoad_ThirdParty
 
     }
 
+    public static function plugin_exists($plugin){
+        $third_party_lugins = apply_filters('uucss/third-party/plugins', []);
+        if(empty($third_party_lugins)){
+            return false;
+        }
+        $key = array_search($plugin, array_column($third_party_lugins, 'plugin'));
+        return isset($key) && is_numeric($key);
+    }
+
     public static function initialize(){
 
         $third_party_plugins_dir = plugin_dir_path(UUCSS_PLUGIN_FILE) . '/includes/third-party/plugins';
