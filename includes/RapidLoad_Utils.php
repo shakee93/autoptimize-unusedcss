@@ -255,6 +255,11 @@ trait RapidLoad_Utils {
     }
 
 	function str_contains( $string, $find ) {
+
+	    if(empty($find)){
+	        return false;
+        }
+
 		if ( strpos( $string, $find ) !== false ) {
 			return true;
 		}
