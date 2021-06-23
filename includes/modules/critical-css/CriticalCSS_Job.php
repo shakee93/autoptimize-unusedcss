@@ -21,6 +21,8 @@ abstract class CriticalCSS_Job
     public $status;
     public $created_at;
 
+    public $job;
+
     public function __construct($args)
     {
         $this->job_init($args);
@@ -33,14 +35,14 @@ abstract class CriticalCSS_Job
             return;
         }
 
-        $job = new \RapidLoad_Job([
+        $this->job = new \RapidLoad_Job([
             'url' => isset($args['url']) ? $args['url'] : null,
             'rule' => isset($args['rule']) ? $args['rule'] : null,
             'regex' => isset($args['regex']) ? $args['regex'] : null
         ], strtolower($this->type));
 
-        $job->save();
-        $this->url_id = $job->id;
+        $this->job->save();
+        $this->url_id = $this->job->id;
     }
 
     abstract public function init($args);

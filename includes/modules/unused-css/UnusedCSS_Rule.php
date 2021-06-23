@@ -13,18 +13,16 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         global $wpdb;
 
-        $rule = isset($args['rule']) ? $args['rule'] : null;
-        $url = isset($args['url']) ? $args['url'] : null;
-        $regex = isset($args['regex']) ? $args['regex'] : null;
+        $this->rule = isset($args['rule']) ? $args['rule'] : null;
+        $this->url = isset($args['url']) ? $args['url'] : null;
+        $this->regex = isset($args['regex']) ? $args['regex'] : null;
 
-        $rule_current = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule where rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+        $rule_current = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule where rule = '" . $this->rule . "' AND regex = '" . $this->regex . "'", OBJECT);
 
         if(isset($rule_current) && !empty($rule_current)){
 
             $this->id = $rule_current[0]->id;
             $this->url = $rule_current[0]->url;
-            $this->rule = $rule_current[0]->rule;
-            $this->regex = $rule_current[0]->regex;
             $this->job_id = $rule_current[0]->job_id;
             $this->stats = $rule_current[0]->stats;
             $this->files = $rule_current[0]->files;
@@ -38,9 +36,6 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         }else{
 
-            $this->url = $url;
-            $this->rule = $rule;
-            $this->regex = $regex;
             $this->status = isset($args['status']) ? $args['status'] : 'queued';
             $this->attempts = 0;
             $this->hits = 0;
@@ -50,6 +45,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             if(RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
+                unset($data['job']);
             }
 
             unset($data['type']);
@@ -87,6 +83,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             if(RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
+                unset($data['job']);
             }
 
             $wpdb->update(

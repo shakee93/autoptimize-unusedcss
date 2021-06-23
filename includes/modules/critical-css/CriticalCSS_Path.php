@@ -12,15 +12,14 @@ class CriticalCSS_Path extends CriticalCSS_Job {
     {
         global $wpdb;
 
-        $rule = isset($args['rule']) ? $args['rule'] : null;
-        $url = isset($args['url']) ? $args['url'] : null;
+        $this->url = isset($args['rule']) ? $args['rule'] : null;
+        $this->rule = isset($args['url']) ? $args['url'] : null;
 
-        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $url . "'", OBJECT);
+        $path_exist = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_cpcss_job WHERE url = '" . $this->url . "'", OBJECT);
 
         if(isset($path_exist) && !empty($path_exist)){
 
             $this->id = $path_exist[0]->id;
-            $this->url = $path_exist[0]->url;
             $this->rule = isset($path_exist[0]->rule) ? $path_exist[0]->rule : null;
             $this->job_id = $path_exist[0]->job_id;
             $this->critical_css = $path_exist[0]->critical_css;
@@ -36,8 +35,6 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
         }else{
 
-            $this->url = $url;
-            $this->rule = $rule;
             $this->status = isset($args['status']) ? $args['status'] : 'queued';
             $this->rule_id = isset($args['rule_id']) ? $args['rule_id'] : null;
             $this->attempts = 0;
@@ -48,6 +45,7 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             if(\RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
+                unset($data['job']);
             }
 
             unset($data['type']);
@@ -85,6 +83,7 @@ class CriticalCSS_Path extends CriticalCSS_Job {
 
             if(\RapidLoad_DB::$current_version < 1.3){
                 unset($data['url_id']);
+                unset($data['job']);
             }
 
             $wpdb->update(
