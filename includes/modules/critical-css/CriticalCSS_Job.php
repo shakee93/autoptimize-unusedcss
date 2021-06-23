@@ -27,6 +27,11 @@ abstract class CriticalCSS_Job
     }
 
     function job_init($args){
+
+        if(\RapidLoad_DB::$current_version < 1.3){
+            return;
+        }
+
         $job = new \RapidLoad_Job([
             'url' => isset($args['url']) ? $args['url'] : null,
             'rule' => isset($args['rule']) ? $args['rule'] : null,

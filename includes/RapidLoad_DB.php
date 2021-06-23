@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.5";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -205,6 +205,10 @@ abstract class RapidLoad_DB
                     ));
                 }
 
+                if(self::$current_version < 1.3){
+                    self::seed();
+                }
+
                 UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
 
                 wp_send_json_success([
@@ -216,6 +220,18 @@ abstract class RapidLoad_DB
             }
 
         }
+
+    }
+
+    static function seed(){
+
+        global $wpdb;
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_path (url, rule, rule_id, created_at) 
+        SELECT url, rule, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job");
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_rule (url, rule, regex, created_at) 
+        SELECT url, rule, regex, created_at FROM {$wpdb->prefix}rapidload_uucss_rule");
 
     }
 
