@@ -554,6 +554,17 @@ class UnusedCSS_DB extends RapidLoad_DB
         return $applied_rule;
     }
 
+    static function get_applied_rule_by_id($id){
+
+        $applied_rule = self::get_rules_where("WHERE id = " . $id, true);
+
+        if(isset($applied_rule) && !empty($applied_rule)){
+            return $applied_rule[0];
+        }
+
+        return false;
+    }
+
     static function detach_all_rules(){
 
         global $wpdb;
@@ -822,10 +833,9 @@ class UnusedCSS_DB extends RapidLoad_DB
         if($rule == 'path'){
             $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
 
-            if(isset($link->rule) && !empty($link->rule) && $data['rule_id'] != null){
+            if(isset($data['rule_id'])){
 
-                $appied_rule = self::get_applied_rule($link->rule, $link->url);
-
+                $appied_rule = self::get_applied_rule_by_id($data['rule_id']);
                 if($appied_rule){
                     $link = $appied_rule;
                     $data['rule'] = $link->rule ? $link->rule : null;
