@@ -948,6 +948,10 @@ abstract class UnusedCSS_Admin {
             });
         }
 
+        do_action( 'uucss/cached', [
+            'url' => $link['url']
+        ]);
+
         return rapidload()->api()->post( 'test/wordpress',
             [
                 'url' => urldecode($link['url']),
