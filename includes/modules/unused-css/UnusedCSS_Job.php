@@ -157,6 +157,12 @@ abstract class UnusedCSS_Job
         if(!isset($this->warnings)){
             $this->warnings = [];
         }
+        if(isset($warning['file'])){
+            $key = array_search($warning['file'],array_column($this->warnings, 'file'));
+            if(isset($key) && is_numeric($key)){
+                return;
+            }
+        }
         $this->warnings[] = $warning;
     }
 }
