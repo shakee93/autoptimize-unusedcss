@@ -6,8 +6,6 @@ class RapidLoad_Job{
 
     use RapidLoad_Utils;
 
-    public $type;
-
     public $id;
     public $url;
     public $rule;
@@ -15,9 +13,8 @@ class RapidLoad_Job{
     public $rule_id = null;
     public $created_at;
 
-    public function __construct($args = [], $type = 'path')
+    public function __construct($args = [])
     {
-        $this->type = $type;
 
         if(isset($args['url'])){
             $this->url = $args['url'];
@@ -25,10 +22,14 @@ class RapidLoad_Job{
 
         if(isset($args['rule'])){
             $this->rule = $args['rule'];
+        }else{
+            $this->rule = 'is_url';
         }
 
         if(isset($args['regex'])){
             $this->regex = $args['regex'];
+        }else{
+            $this->regex = '/';
         }
 
         $exist = $this->exist();
@@ -36,13 +37,11 @@ class RapidLoad_Job{
         if($exist){
 
             $this->id = $exist->id;
+            $this->url = $exist->url;
+            $this->rule = $exist->rule;
+            $this->regex = $exist->regex;
+            $this->rule_id = $exist->rule_id;
             $this->created_at = $exist->created_at;
-
-            if($this->is_type('rule')){
-                $this->url = $exist->url;
-            }else{
-                $this->rule_id = $exist->rule_id;
-            }
 
         }else{
 
@@ -51,19 +50,15 @@ class RapidLoad_Job{
 
     }
 
-    public function is_type($type = 'path'){
-        return $this->type == $type;
-    }
-
     public function exist(){
         global $wpdb;
 
         $exist = false;
 
-        if($this->is_type()){
-            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_{$this->type} WHERE url = '" . $this->url . "'", OBJECT);
+        if($this->rule == 'is_url'){
+            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE url = '" . $this->url . "'", OBJECT);
         }else{
-            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_{$this->type} WHERE rule = '" . $this->rule . "' AND regex = '" . $this->regex . "'", OBJECT);
+            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE rule = '" . $this->rule . "' AND regex = '" . $this->regex . "'", OBJECT);
         }
 
         return $exist;
@@ -74,19 +69,12 @@ class RapidLoad_Job{
         global $wpdb;
         $data = (array) $this;
 
-        unset($data['type']);
         unset($data['id']);
-
-        if($this->is_type()){
-            unset($data['regex']);
-        }else{
-            unset($data['rule_id']);
-        }
 
         if($this->exist()){
 
             $wpdb->update(
-                $wpdb->prefix . 'rapidload_' . $this->type,
+                $wpdb->prefix . 'rapidload_job',
                 $data,
                 [
                     'id' => $this->id
@@ -96,7 +84,7 @@ class RapidLoad_Job{
         }else{
 
             $wpdb->insert(
-                $wpdb->prefix . 'rapidload_' . $this->type,
+                $wpdb->prefix . 'rapidload_job',
                 $data
             );
 
@@ -110,10 +98,6 @@ class RapidLoad_Job{
 
         }
 
-
-
     }
-
-
 
 }

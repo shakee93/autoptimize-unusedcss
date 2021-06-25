@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.3";
+    static $db_version = "1.4";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -59,8 +59,7 @@ abstract class RapidLoad_DB
     static function create_tables($blog_id = ''){
         global $wpdb;
 
-        $rapidload_path = $wpdb->prefix . $blog_id . 'rapidload_path';
-        $rapidload_rule = $wpdb->prefix . $blog_id . 'rapidload_rule';
+        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
         $rapidload_cpcss_job = $wpdb->prefix . $blog_id . 'rapidload_cpcss_job';
@@ -73,19 +72,12 @@ abstract class RapidLoad_DB
             $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $rapidload_path (
+        $sql = "CREATE TABLE $rapidload_job (
 		id INT NOT NULL AUTO_INCREMENT,
-		rule longtext NULL,
 		url longtext NOT NULL,
-		rule_id INT NULL,
-		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id)
-	) ;
-        CREATE TABLE $rapidload_rule (
-		id INT NOT NULL AUTO_INCREMENT,
 		rule longtext NOT NULL,
-		url longtext NOT NULL,
 		regex longtext NOT NULL,
+		rule_id INT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
 	) ;
@@ -227,10 +219,10 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_path (url, rule, rule_id, created_at) 
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, rule_id, created_at) 
         SELECT url, rule, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job");
 
-        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_rule (url, rule, regex, created_at) 
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, created_at) 
         SELECT url, rule, regex, created_at FROM {$wpdb->prefix}rapidload_uucss_rule");
 
     }
