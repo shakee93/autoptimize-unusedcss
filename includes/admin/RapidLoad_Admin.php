@@ -257,7 +257,7 @@ class RapidLoad_Admin
             RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
         }
 
-        self::$base = $cache_base_option;
+        self::$base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option : UUCSS_CACHE_CHILD_DIR;
 
         self::$base_dir = WP_CONTENT_DIR . self::$base;
 
