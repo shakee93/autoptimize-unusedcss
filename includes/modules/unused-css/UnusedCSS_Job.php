@@ -42,7 +42,7 @@ abstract class UnusedCSS_Job
            'url' => isset($args['url']) ? $args['url'] : null,
            'rule' => isset($args['rule']) ? $args['rule'] : null,
            'regex' => isset($args['regex']) ? $args['regex'] : null
-        ], strtolower($this->type));
+        ]);
 
         $this->job->save();
         $this->url_id = $this->job->id;
