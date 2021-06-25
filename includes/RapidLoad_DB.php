@@ -219,11 +219,11 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, rule_id, created_at) 
-        SELECT url, rule, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job");
-
         $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, created_at) 
         SELECT url, rule, regex, created_at FROM {$wpdb->prefix}rapidload_uucss_rule");
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at) 
+        SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job");
 
     }
 
