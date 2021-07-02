@@ -250,14 +250,16 @@ class RapidLoad_Admin
 
     public function init_cache_dir(){
 
+        $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
 
         if(!isset($cache_base_option)){
-            $cache_base_option = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+            $cache_base_option = $cache_base;
             RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
         }
 
-        self::$base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option : UUCSS_CACHE_CHILD_DIR;
+        self::$base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option : $cache_base;
 
         self::$base_dir = WP_CONTENT_DIR . self::$base;
 
