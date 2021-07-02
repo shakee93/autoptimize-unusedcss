@@ -31,7 +31,7 @@ abstract class UnusedCSS {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
         add_filter( $buffer, function ( $html ) {
             return apply_filters('uucss/enqueue/content', $html);
-        }, 99 );
+        }, 10 );
     }
 
     /**
