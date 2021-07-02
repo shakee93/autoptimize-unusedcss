@@ -223,7 +223,7 @@ abstract class RapidLoad_DB
         SELECT url, rule, regex, created_at FROM {$wpdb->prefix}rapidload_uucss_rule");
 
         $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at) 
-        SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job");
+        SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN ('rule-based')");
 
     }
 
