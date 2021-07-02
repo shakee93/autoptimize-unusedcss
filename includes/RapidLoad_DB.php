@@ -36,12 +36,10 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $tableArray = [
-            $wpdb->prefix . "rapidload_path",
-            $wpdb->prefix . "rapidload_rule",
+            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_job_data",
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
-            $wpdb->prefix . "rapidload_cpcss_job",
-            $wpdb->prefix . "rapidload_cpcss_rule",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -60,10 +58,9 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_job_data = $wpdb->prefix . $blog_id . 'rapidload_job_data';
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
-        $rapidload_cpcss_job = $wpdb->prefix . $blog_id . 'rapidload_cpcss_job';
-        $rapidload_cpcss_rule = $wpdb->prefix . $blog_id . 'rapidload_cpcss_rule';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -72,21 +69,11 @@ abstract class RapidLoad_DB
             $wpdb->query( "ALTER TABLE `$rapidload_uucss_job` DROP INDEX `$index`" );
         }
 
-        $sql = "CREATE TABLE $rapidload_job (
-		id INT NOT NULL AUTO_INCREMENT,
-		url longtext NOT NULL,
-		rule longtext NOT NULL,
-		regex longtext NOT NULL,
-		rule_id INT NULL,
-		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id)
-	) ;
-        CREATE TABLE $rapidload_uucss_job (
+        $sql = "CREATE TABLE $rapidload_uucss_job (
 		id INT NOT NULL AUTO_INCREMENT,
 		job_id INT NULL,
 		rule longtext NULL,
 		url longtext NOT NULL,
-		url_id INT NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
 		warnings longtext NULL,
@@ -105,7 +92,6 @@ abstract class RapidLoad_DB
 		job_id INT NULL,
 		rule longtext NOT NULL,
 		url longtext NOT NULL,
-		url_id INT NOT NULL,
 		regex longtext NOT NULL,
 		stats longtext NULL,
 		files longtext NULL,
@@ -118,40 +104,30 @@ abstract class RapidLoad_DB
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
 	) ; 
-	    CREATE TABLE $rapidload_cpcss_job (
+        CREATE TABLE $rapidload_job (
 		id INT NOT NULL AUTO_INCREMENT,
-		job_id INT NULL,
-		rule longtext NULL,
 		url longtext NOT NULL,
-		url_id INT NOT NULL,
-		critical_css longtext NULL,
-		exceptional_css longtext NULL,
-		warnings longtext NULL,
-		error longtext NULL,
-		attempts mediumint(2) NULL DEFAULT 0,
-		hits mediumint(3) NULL DEFAULT 0,
+		rule longtext NOT NULL,
+		regex longtext NOT NULL,
 		rule_id INT NULL,
-		rule_note longtext NULL,
-		status varchar(15) NOT NULL,
+		status varchar(15) NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
 	) ;
-	    CREATE TABLE $rapidload_cpcss_rule (
+	    CREATE TABLE $rapidload_job_data (
 		id INT NOT NULL AUTO_INCREMENT,
-		job_id INT NULL,
-		rule longtext NOT NULL,
-		url longtext NOT NULL,
-		url_id INT NOT NULL,
-		regex longtext NOT NULL,
-		critical_css longtext NULL,
-		exceptional_css longtext NULL,
+		job_id INT NOT NULL,
+		job_type varchar(15) NOT NULL,
+		queue_job_id INT NULL,
+		data longtext NULL,
 		warnings longtext NULL,
 		error longtext NULL,
 		attempts mediumint(2) NULL,
 		hits mediumint(3) NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+        FOREIGN KEY (job_id) REFERENCES $rapidload_job(id)              
 	) ;";
 
         dbDelta( $sql );

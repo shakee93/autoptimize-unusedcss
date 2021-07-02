@@ -12,7 +12,6 @@ abstract class UnusedCSS_Job
     public $id;
     public $job_id;
     public $url;
-    public $url_id;
     public $rule;
     public $stats;
     public $files;
@@ -45,7 +44,6 @@ abstract class UnusedCSS_Job
         ]);
 
         $this->job->save();
-        $this->url_id = $this->job->id;
     }
 
     abstract public function init($args);

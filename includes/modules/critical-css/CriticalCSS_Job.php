@@ -11,7 +11,6 @@ abstract class CriticalCSS_Job
     public $id;
     public $job_id;
     public $url;
-    public $url_id;
     public $rule;
     public $critical_css;
     public $exceptional_css;
@@ -42,7 +41,6 @@ abstract class CriticalCSS_Job
         ], strtolower($this->type));
 
         $this->job->save();
-        $this->url_id = $this->job->id;
     }
 
     abstract public function init($args);

@@ -43,10 +43,6 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             $data = (array) $this;
 
-            if(RapidLoad_DB::$current_version < 1.3){
-                unset($data['url_id']);
-            }
-
             unset($data['type']);
             unset($data['job']);
 
@@ -80,10 +76,6 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
             if(isset($data['warnings'])){
                 $data['warnings'] = serialize($data['warnings']);
-            }
-
-            if(RapidLoad_DB::$current_version < 1.3){
-                unset($data['url_id']);
             }
 
             $wpdb->update(
