@@ -33,7 +33,7 @@ abstract class UnusedCSS {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
         add_filter( $buffer, function ( $html ) {
             return apply_filters('uucss/enqueue/content', $html);
-        }, 99 );
+        }, 10 );
     }
 
     /**
@@ -352,7 +352,7 @@ abstract class UnusedCSS {
         $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
-        
+
         if(!isset($cache_base_option)){
 
             $cache_base_option = $cache_base;
