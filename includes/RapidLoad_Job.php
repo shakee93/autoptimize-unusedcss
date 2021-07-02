@@ -10,6 +10,7 @@ class RapidLoad_Job{
     public $url;
     public $rule;
     public $regex;
+    public $status;
     public $rule_id = null;
     public $created_at;
 
@@ -40,6 +41,7 @@ class RapidLoad_Job{
             $this->url = $exist->url;
             $this->rule = $exist->rule;
             $this->regex = $exist->regex;
+            $this->status = $exist->status;
             $this->rule_id = $exist->rule_id;
             $this->created_at = $exist->created_at;
 
