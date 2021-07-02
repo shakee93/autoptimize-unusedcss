@@ -349,14 +349,17 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
-        $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
+        $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
+        $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
+        
         if(!isset($cache_base_option)){
-            $cache_base_option = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+
+            $cache_base_option = $cache_base;
             RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
         }
 
-        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : UUCSS_CACHE_CHILD_DIR . 'uucss';
+        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : $cache_base . 'uucss';
 
 		if ( ! $this->file_system ) {
 			return false;
