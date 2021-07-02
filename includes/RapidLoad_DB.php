@@ -265,4 +265,23 @@ abstract class RapidLoad_DB
 
         return apply_filters('rapidload/job', $data);
     }
+
+    static function get_rule_names(){
+
+        if(self::$current_version < 1.3){
+            return UnusedCSS_DB::get_rule_names();
+        }
+
+        global $wpdb;
+
+        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url')", ARRAY_A);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return array_column($names, 'rule');
+    }
 }

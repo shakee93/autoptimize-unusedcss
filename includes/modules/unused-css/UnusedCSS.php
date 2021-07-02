@@ -57,16 +57,16 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
 
-	    add_action( 'rapidload/job/handle', function ($url) {
+	    add_action( 'rapidload/job/handle', function ($url, $rule) {
 
 		    $this->url = $url;
-		    $this->rule = $this->get_current_rule(UnusedCSS_DB::get_rule_names());
+		    $this->rule = $rule;
 
 		    if ( $this->enabled() ) {
 			    $this->purge_css();
 		    }
 
-	    }, 99, 2);
+	    }, 10, 2);
 
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
