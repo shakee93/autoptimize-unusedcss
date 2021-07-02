@@ -112,7 +112,8 @@ abstract class RapidLoad_DB
 		rule_id INT NULL,
 		status varchar(15) NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+		FOREIGN KEY (rule_id) REFERENCES $rapidload_job(id) 
 	) ;
 	    CREATE TABLE $rapidload_job_data (
 		id INT NOT NULL AUTO_INCREMENT,
@@ -228,4 +229,40 @@ abstract class RapidLoad_DB
         UnusedCSS_Admin::delete_site_option(RapidLoad_Settings::$map_key );
     }
 
+    static function get_jobs($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
+
+        global $wpdb;
+
+        $jobs = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", ARRAY_A);
+
+        $jobs = array_map(function ($job){
+            return self::transform_job($job);
+        }, $jobs);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $jobs;
+    }
+
+    static function transform_job($link){
+
+        if(empty($link)){
+            return null;
+        }
+
+        $data = array();
+
+        $data['id'] = $link->id;
+        $data['url'] = $link->url;
+        $data['rule'] = $link->rule;
+        $data['regex'] = $link->regex;
+        $data['status'] = $link->status;
+        $data['rule_id'] = $link->rule_id;
+
+        return apply_filters('rapidload/job', $data);
+    }
 }
