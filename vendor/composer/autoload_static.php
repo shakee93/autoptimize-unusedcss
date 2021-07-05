@@ -37,6 +37,7 @@ class ComposerStaticInit25e0e247897c43d5947418ccb9c99614
         'RapidLoad_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/RapidLoad_Feedback.php',
         'RapidLoad_FileSystem' => __DIR__ . '/../..' . '/includes/RapidLoad_FileSystem.php',
         'RapidLoad_Job' => __DIR__ . '/../..' . '/includes/RapidLoad_Job.php',
+        'RapidLoad_Job_Data' => __DIR__ . '/../..' . '/includes/RapidLoad_Job_Data.php',
         'RapidLoad_Module' => __DIR__ . '/../..' . '/includes/modules/RapidLoad_Module.php',
         'RapidLoad_Queue' => __DIR__ . '/../..' . '/includes/RapidLoad_Queue.php',
         'RapidLoad_Settings' => __DIR__ . '/../..' . '/includes/RapidLoad_Settings.php',

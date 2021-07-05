@@ -144,6 +144,12 @@ class RapidLoad_Settings {
 
         if(RapidLoad_DB::migrated()){
 
+            if(self::v2()){
+
+                return RapidLoad_Job::find_by_url($link);
+
+            }
+
             return UnusedCSS_DB::link_exists($link);
 
         }

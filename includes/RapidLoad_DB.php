@@ -112,8 +112,7 @@ abstract class RapidLoad_DB
 		rule_id INT NULL,
 		status varchar(15) NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id),
-		FOREIGN KEY (rule_id) REFERENCES $rapidload_job(id) 
+		PRIMARY KEY  (id)
 	) ;
 	    CREATE TABLE $rapidload_job_data (
 		id INT NOT NULL AUTO_INCREMENT,
@@ -121,14 +120,14 @@ abstract class RapidLoad_DB
 		job_type varchar(15) NOT NULL,
 		queue_job_id INT NULL,
 		data longtext NULL,
+		stats longtext NULL,
 		warnings longtext NULL,
 		error longtext NULL,
 		attempts mediumint(2) NULL,
 		hits mediumint(3) NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id),
-        FOREIGN KEY (job_id) REFERENCES $rapidload_job(id)              
+		PRIMARY KEY  (id)            
 	) ;";
 
         dbDelta( $sql );
@@ -283,5 +282,62 @@ abstract class RapidLoad_DB
         }
 
         return array_column($names, 'rule');
+    }
+
+    static function get_applied_rule($rule, $url){
+
+        $rules = self::get_rules_where("WHERE rule = '" . $rule . "'", true);
+        $applied_rule = false;
+
+        foreach ($rules as $rule){
+            if(self::is_url_glob_matched($url,$rule->regex)){
+                $applied_rule = $rule;
+                break;
+            }
+        }
+
+        return $applied_rule;
+    }
+
+    static function get_rules_where($where = '', $object = false){
+
+        global $wpdb;
+
+        if(!empty($where)){
+            $where .= ' AND ';
+        }else{
+            $where = ' WHERE ';
+        }
+
+        $links = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} rule != 'is_url' ORDER BY id DESC ", OBJECT);
+
+        if(!$object){
+            $links = array_map(function ($link){
+                return self::transform_job($link);
+            }, $links);
+        }
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $links;
+    }
+
+    static function rule_exists_with_error($rule, $regex = '/'){
+
+        global $wpdb;
+
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return isset($result) && !empty($result);
     }
 }

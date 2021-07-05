@@ -497,4 +497,12 @@ trait RapidLoad_Utils {
         });
         return $rules_with_permalink;
     }
+
+    public static function v2(){
+	    return RapidLoad_DB::$current_version > 1.3;
+    }
+
+    public function is_valid_url($url){
+        return filter_var($url, FILTER_VALIDATE_URL);
+    }
 }

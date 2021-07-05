@@ -14,7 +14,8 @@ abstract class UnusedCSS {
 	public static $provider_path = null;
 
 	public $url = null;
-	public $rule = null;
+	public $args = null;
+	public $job = null;
 	public $css = [];
 	public $store = null;
 	public $options = [];
@@ -57,10 +58,10 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
 
-	    add_action( 'rapidload/job/handle', function ($url, $rule) {
+	    add_action( 'rapidload/job/handle', function ($job, $args) {
 
-		    $this->url = $url;
-		    $this->rule = $rule;
+		    $this->job = $job;
+		    $this->args = $args;
 
 		    if ( $this->enabled() ) {
 			    $this->purge_css();
@@ -244,9 +245,9 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    if ( ! $this->is_url_allowed() ) {
+	    /*if ( ! $this->is_url_allowed() ) {
 		    return false;
-	    }
+	    }*/
 
 	    if ( is_admin() ) {
 		    return false;
@@ -303,10 +304,6 @@ abstract class UnusedCSS {
     {
         $this->store = new RapidLoad_Store($provider, $url, $args);
         $this->store->purge_css();
-    }
-
-    public function is_valid_url($url){
-        return filter_var($url, FILTER_VALIDATE_URL);
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -395,28 +392,15 @@ abstract class UnusedCSS {
 
 	public function purge_css() {
 
-		$this->url = $this->transform_url( $this->url );
-
-        if(isset($this->rule['rule'])){
-
-            self::log([
-                'log' => 'rule identified : ' . $this->rule['rule'],
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
-
-        }
-
-        if (    !RapidLoad_Settings::link_exists( $this->url ) &&
-            (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
+        if ((!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
                 $this->options['uucss_disable_add_to_queue'] != "1"))
         {
-            $this->cache( $this->url , $this->rule);
+            $this->cache( $this->job , $this->args);
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
+		/*if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
 
 			$this->get_css();
 
@@ -499,31 +483,14 @@ abstract class UnusedCSS {
 
             }
 
-		}
+		}*/
 
 	}
 
-    public function cache($url = null, $args = []) {
-
-	    if ( ! $this->is_url_allowed( $url, $args ) ) {
-            self::log([
-                'log' => 'url not allowed to purge',
-                'url' => $url,
-                'type' => 'purging'
-            ]);
-		    return false;
-	    }
-
-	    if(isset( $args['rule'] )){
-            self::log([
-                'log' => 'url caching with ' . $args['rule'],
-                'url' => $url,
-                'type' => 'purging'
-            ]);
-        }
+    public function cache($job = null, $args = []) {
 
 	    if ( ! isset( $args['post_id'] )) {
-		    $args['post_id'] = url_to_postid($url);
+		    $args['post_id'] = url_to_postid($job->url);
 	    }
 
 	    if ( ! isset( $args['options'] ) ) {
@@ -533,85 +500,32 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $applicable_rule = false;
-        $rules_enabled = $this->rules_enabled();
+	    $job_data = new RapidLoad_Job_Data($job, 'uucss');
+        $job_data->save();
 
-        $path = null;
-
-	    if(isset($args['rule']) && $rules_enabled){
-
-            $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
-
-            if(!$applicable_rule){
-
-                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
-
-            }
-        }
-
-	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
-
-	        $path = new UnusedCSS_Rule([
-                'rule' => $applicable_rule->rule,
-                'regex' => $applicable_rule->regex
-            ]);
-
-            new UnusedCSS_Path([
-                'url' => $url,
-                'rule' => $applicable_rule->rule,
-                'status' => 'rule-based',
-                'rule_id' => $path->id
-            ]);
-
-        }else{
-
-            $path = new UnusedCSS_Path([
-                'url' => $url,
-                'rule' => isset($args['rule']) ? $args['rule'] : null,
-                'status' => 'queued'
-            ]);
-
-        }
-
-        if($path->status == 'failed' && $path->attempts > 2 && !isset($args['immediate'])){
+        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
-                'url' => $url,
+                'url' => $job->url,
                 'type' => 'purging'
             ]);
             return false;
         }
 
-        if($path->is_type('Path')){
-
-            $path->rule_id = NULL;
-            $path->requeue();
-            $path->save();
-
-        }else{
-
-            if($path->status == 'failed'){
-
-                $path->requeue();
-                $path->save();
-
-            }
-
+        if($job_data->status == "failed"){
+            $job_data->requeue();
+            $job_data->save();
         }
 
         $this->async = apply_filters('uucss/purge/async',true);
 
 	    if (! $this->async || isset($args['first_job'])) {
 
-            if($path->is_type('Path')){
-                $this->init_async_store($this->provider, $url, $args);
-            }else{
-                $this->init_async_store_rule($this->provider, $url, $args, $path);
-            }
+            $this->init_async_store($this->provider, $job_data, $args);
 
             self::log([
                 'log' => 'link purged',
-                'url' => $url,
+                'url' => $job->url,
                 'type' => 'queued'
             ]);
 
@@ -619,44 +533,30 @@ abstract class UnusedCSS {
 
             $spawned = false;
 
-            if($path->is_type('Path')){
-                $spawned = $this->schedule_cron('uucss_async_queue', [
-                    'provider' => $this->provider,
-                    'url'      => $url,
-                    'args'     => $args
-                ]);
-            }else{
+            $this->schedule_cron('uucss_async_queue', [
+                'provider' => $this->provider,
+                'url'      => $job->url,
+                'args'     => $args
+            ]);
 
-                $spawned = $this->schedule_cron('uucss_async_queue_rule', [
-                    'provider' => $this->provider,
-                    'url'      => $url,
-                    'args'     => $args,
-                    'rule'     => $path
-                ]);
-            }
-
-            $path->status = 'processing';
-            $path->save();
+            $job_data->status = 'processing';
+            $job_data->save();
 
 	    	if(!$spawned){
 
-                if($path->is_type('Path')){
-                    $this->init_async_store($this->provider, $url, $args);
-                }else{
-                    $this->init_async_store_rule($this->provider, $url, $args, $path);
-                }
+                $this->init_async_store($this->provider, $job_data->job->url, $args);
 
             }
 
             self::log([
                 'log' => 'cron spawned : ' . $spawned,
-                'url' => $url,
+                'url' => $job_data->job->url,
                 'type' => 'queued'
             ]);
 
             self::log([
                 'log' => 'link added to queue',
-                'url' => $url,
+                'url' => $job_data->job->url,
                 'type' => 'queued'
             ]);
 	    }

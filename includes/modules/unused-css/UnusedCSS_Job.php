@@ -39,8 +39,8 @@ abstract class UnusedCSS_Job
 
         $this->job = new RapidLoad_Job([
            'url' => isset($args['url']) ? $args['url'] : null,
-           'rule' => isset($args['rule']) ? $args['rule'] : null,
-           'regex' => isset($args['regex']) ? $args['regex'] : null
+           'rule' => isset($args['rule']) ? $args['rule'] : 'is_url',
+           'regex' => isset($args['regex']) ? $args['regex'] : '/'
         ]);
 
         $this->job->save();

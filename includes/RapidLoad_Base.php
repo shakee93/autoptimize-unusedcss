@@ -8,6 +8,13 @@ class RapidLoad_Base{
 
     public $url;
     public $rule;
+    public $options;
+
+    public static $page_options = [
+        'safelist',
+        'exclude',
+        'blocklist'
+    ];
 
     public function __construct()
     {
@@ -16,12 +23,52 @@ class RapidLoad_Base{
 
     public function init(){
 
+        $this->options = self::fetch_options();
+
         add_action('wp_enqueue_scripts', function (){
 
-            $this->url = $this->get_current_url();
+            $this->url = $this->transform_url($this->get_current_url());
             $this->rule = $this->get_current_rule(RapidLoad_DB::get_rule_names());
 
-            do_action('rapidload/job/handle', $this->url , $this->rule);
+            $this->rule['post_id'] = url_to_postid($this->url);
+
+            if ( ! $this->is_url_allowed( $this->url, $this->rule ) ) {
+                return;
+            }
+
+            $applicable_rule = false;
+
+            if(isset($this->rule['rule']) && $this->rules_enabled()){
+
+                $applicable_rule = RapidLoad_DB::get_applied_rule($this->rule['rule'], $this->url);
+
+                if(!$applicable_rule){
+
+                    $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $this->url);
+
+                }
+            }
+
+            $job = new RapidLoad_Job([
+                'url' => $this->url
+            ]);
+
+            if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+
+                $rule = new RapidLoad_Job([
+                    'url' => $this->url,
+                    'rule' => $applicable_rule->rule,
+                    'regex' => $applicable_rule->regex,
+                ]);
+
+                $job->rule_id = $rule->id;
+                $job->status = 'rule-based';
+                $job->parent = $rule;
+            }
+
+            $job->save();
+
+            do_action('rapidload/job/handle', $job, $this->rule);
 
         }, 99);
 
@@ -57,7 +104,7 @@ class RapidLoad_Base{
         return update_site_option( $name, $default );
     }
 
-    public static function uucss_activate() {
+    public static function rapidload_activate() {
 
         $default_options = self::get_option('autoptimize_uucss_settings',[
             'uucss_load_original' => "1"
@@ -119,5 +166,104 @@ class RapidLoad_Base{
         self::update_option( 'autoptimize_uucss_settings', $options );
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+    }
+
+    public function is_url_allowed($url = null, $args = null)
+    {
+
+        if ( ! $url ) {
+            $url = $this->url;
+        }
+
+        if(!$this->is_valid_url($url)){
+            return false;
+        }
+
+        // remove .css .js files from being analyzed
+        if ( preg_match( '/cache\/autoptimize/', $url ) ) {
+            return false;
+        }
+
+        if ( preg_match( '/cache\/rapidload/', $url ) ) {
+            return false;
+        }
+
+        global $post;
+
+        if ( isset( $args['post_id'] ) ) {
+            $post = get_post( $args['post_id'] );
+        }
+
+        if ( $post ) {
+            $page_options = self::get_page_options( $post->ID );
+            if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
+                return false;
+            }
+
+        }
+
+        if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
+            $exploded = explode( ',', $this->options['uucss_excluded_links'] );
+
+            foreach ( $exploded as $pattern ) {
+
+                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+
+                    $pattern = parse_url( $pattern );
+
+                    $path = $pattern['path'];
+                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+                    $pattern = $path . $query;
+
+                }
+
+                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }
+
+            }
+        }
+
+        $url_parts = parse_url( $url );
+
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        if(!apply_filters('uucss/url/exclude', $url)){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function get_page_options($post_id)
+    {
+        $options = [];
+
+        if($post_id){
+
+            foreach (self::$page_options as $option) {
+                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
+            }
+
+        }
+
+        return $options;
+    }
+
+    public function rules_enabled(){
+        return
+            isset($this->options['uucss_enable_rules']) &&
+            $this->options['uucss_enable_rules'] == "1" &&
+            RapidLoad_DB::$current_version > 1.1 &&
+            apply_filters('uucss/rules/enable', true);
     }
 }
