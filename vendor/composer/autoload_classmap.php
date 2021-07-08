@@ -39,6 +39,7 @@ return array(
     'UnusedCSS_Autoptimize_Admin' => $baseDir . '/includes/modules/unused-css/providers/autoptimize/UnusedCSS_Autoptimize_Admin.php',
     'UnusedCSS_Autoptimize_Onboard' => $baseDir . '/includes/modules/unused-css/providers/autoptimize/on-board/UnusedCSS_Autoptimize_Onboard.php',
     'UnusedCSS_DB' => $baseDir . '/includes/modules/unused-css/UnusedCSS_DB.php',
+    'UnusedCSS_Enqueue' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Enqueue.php',
     'UnusedCSS_Feedback' => $baseDir . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
     'UnusedCSS_Job' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Job.php',
     'UnusedCSS_Path' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Path.php',

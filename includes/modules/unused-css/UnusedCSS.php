@@ -632,7 +632,7 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new RapidLoad_Enqueue($data, $this->url);
+                    new UnusedCSS_Enqueue($data, $this->url);
 
                     $this->replace_css();
                 }

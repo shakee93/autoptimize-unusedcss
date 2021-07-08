@@ -34,6 +34,7 @@ class RapidLoad_Base
 
             new RapidLoad_Buffer();
             new RapidLoad_Queue();
+            new RapidLoad_Enqueue();
 
         });
     }

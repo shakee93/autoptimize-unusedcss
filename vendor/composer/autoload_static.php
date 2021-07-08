@@ -40,6 +40,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_Autoptimize_Admin' => __DIR__ . '/../..' . '/includes/modules/unused-css/providers/autoptimize/UnusedCSS_Autoptimize_Admin.php',
         'UnusedCSS_Autoptimize_Onboard' => __DIR__ . '/../..' . '/includes/modules/unused-css/providers/autoptimize/on-board/UnusedCSS_Autoptimize_Onboard.php',
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_DB.php',
+        'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Enqueue.php',
         'UnusedCSS_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/UnusedCSS_Feedback.php',
         'UnusedCSS_Job' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Job.php',
         'UnusedCSS_Path' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Path.php',
