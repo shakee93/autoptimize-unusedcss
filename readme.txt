@@ -88,6 +88,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.5.2 - 08/07/2021 =
+ * feat : requeue rules on warnings
+ * improve : lightspeed cache plugin
+
 = 1.5.1 - 23/06/2021 =
  * fix : warning strpos() empty needle
 
