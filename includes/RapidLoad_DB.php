@@ -5,7 +5,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.2";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
     static $current_version = "";
 
@@ -37,6 +37,8 @@ abstract class RapidLoad_DB
         $tableArray = [
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
+            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_job_data",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -56,6 +58,8 @@ abstract class RapidLoad_DB
 
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
+        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_job_data = $wpdb->prefix . $blog_id . 'rapidload_job_data';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -98,6 +102,32 @@ abstract class RapidLoad_DB
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		url longtext NOT NULL,
+		rule longtext NOT NULL,
+		regex longtext NOT NULL,
+		rule_id INT NULL,
+		rule_note longtext NULL,
+		status varchar(15) NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_job_data (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NOT NULL,
+		job_type varchar(15) NOT NULL,
+		queue_job_id INT NULL,
+		data longtext NULL,
+		stats longtext NULL,
+		warnings longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)            
 	) ;";
 
         dbDelta( $sql );

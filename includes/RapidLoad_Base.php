@@ -6,13 +6,21 @@ class RapidLoad_Base
 {
     use RapidLoad_Utils;
 
+    public $options = [];
+
+    public $url = null;
+    public $rule = null;
+
     public static $page_options = [
         'safelist',
         'exclude',
         'blocklist'
     ];
 
-    public static function init(){
+    public function __construct()
+    {
+
+        $this->options = self::fetch_options();
 
         add_action('init', function (){
 
