@@ -16,8 +16,11 @@ class RapidLoad_Enqueue {
 
         add_action('wp_enqueue_scripts', function (){
 
-            if($this->enabled()){
-                $this->handle_job();
+            $url = $this->get_current_url();
+            $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+
+            if($this->enabled($url, $args)){
+                $this->handle_job($url, $args);
             }
 
         });
@@ -170,7 +173,6 @@ class RapidLoad_Enqueue {
         return
             isset($this->options['uucss_enable_rules']) &&
             $this->options['uucss_enable_rules'] == "1" &&
-            RapidLoad_DB::$current_version > 1.1 &&
             apply_filters('uucss/rules/enable', true);
     }
 
@@ -184,7 +186,7 @@ class RapidLoad_Enqueue {
         $job->save();
     }
 
-    public function enabled() {
+    public function enabled($url, $args) {
 
         if ( $this->is_doing_api_fetch() ) {
             return false;
@@ -195,7 +197,7 @@ class RapidLoad_Enqueue {
             return false;
         }
 
-        if ( ! $this->is_url_allowed() ) {
+        if ( ! $this->is_url_allowed($url, $args) ) {
             return false;
         }
 
@@ -227,30 +229,29 @@ class RapidLoad_Enqueue {
             return false;
         }
 
+        if( RapidLoad_DB::$current_version < 1.3){
+            return false;
+        }
+
         return apply_filters('uucss/enabled', true);
 
     }
 
-    public function handle_job(){
+    public function handle_job($url, $args){
 
-        $url = $this->get_current_url();
-        $args = $this->get_current_rule(UnusedCSS_DB::get_rule_names());
-
-        $args['post_id'] = url_to_postid($url);
-
-        if ( ! $this->is_url_allowed( $url, $args ) ) {
-            return;
+        if(!isset($args['post_id'])){
+            $args['post_id'] = url_to_postid($url);
         }
 
         $applicable_rule = false;
 
         if(isset($args['rule']) && $this->rules_enabled()){
 
-            $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
+            $applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
 
             if(!$applicable_rule){
 
-                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
+                $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $url);
 
             }
         }
@@ -259,7 +260,7 @@ class RapidLoad_Enqueue {
             'url' => $url
         ]);
 
-        if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+        if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,

@@ -230,10 +230,6 @@ abstract class RapidLoad_DB
 
     static function get_rule_names(){
 
-        if(self::$current_version < 1.3){
-            return UnusedCSS_DB::get_rule_names();
-        }
-
         global $wpdb;
 
         $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url')", ARRAY_A);
@@ -245,5 +241,55 @@ abstract class RapidLoad_DB
         }
 
         return array_column($names, 'rule');
+    }
+
+    static function get_applied_rule($rule, $url){
+
+        $rules = self::get_rules_where("WHERE rule = '" . $rule . "'");
+        $applied_rule = false;
+
+        foreach ($rules as $rule){
+            if(self::is_url_glob_matched($url,$rule->regex)){
+                $applied_rule = $rule;
+                break;
+            }
+        }
+
+        return $applied_rule;
+    }
+
+    static function get_rules_where($where = ''){
+
+        global $wpdb;
+
+        if(!empty($where)){
+            $where .= " AND rule NOT IN ('is_url') ";
+        }else{
+            $where = " WHERE rule NOT IN ('is_url') ";
+        }
+
+        $rules = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY id DESC ", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $rules;
+    }
+
+    static function rule_exists_with_error($rule, $regex = '/'){
+        global $wpdb;
+
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return isset($result) && !empty($result);
     }
 }

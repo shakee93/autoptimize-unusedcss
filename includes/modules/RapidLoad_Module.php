@@ -22,14 +22,14 @@ class RapidLoad_Module
             'global' => 'uucss'
         ];
 
-        /*$this->modules['critical-css'] = [
+        $this->modules['critical-css'] = [
             'id' => 'critical-css',
             'title' => 'Critical CSS',
             'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
             'status' => 'off',
-            'class' => CriticalCSS_RapidLoad::class,
+            'class' => 'CriticalCSS_RapidLoad::class',
             'global' => 'cpcss'
-        ];*/
+        ];
 
         $stored_modules = get_option( 'rapidload_modules', ['unused-css' => 'on'] );
 
