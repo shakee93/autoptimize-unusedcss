@@ -6,8 +6,6 @@ class RapidLoad_Enqueue {
 
     use RapidLoad_Utils;
 
-    private $dom;
-    private $inject;
     private $options;
 
     public function __construct()
@@ -34,7 +32,7 @@ class RapidLoad_Enqueue {
             return $html;
         }
 
-        $this->dom = new \simplehtmldom\HtmlDocument(
+        $dom = new \simplehtmldom\HtmlDocument(
             null,
             false,
             false,
@@ -42,7 +40,7 @@ class RapidLoad_Enqueue {
             false
         );
 
-        $this->dom->load(
+        $dom->load(
             $html,
             false,
             false,
@@ -50,60 +48,50 @@ class RapidLoad_Enqueue {
             false
         );
 
-        if ( $this->dom ) {
+        if ( $dom ) {
 
-            $this->before_enqueue();
+            $inject = (object) [
+                "parsed_html"           => false,
+                "found_sheets"          => false,
+                "found_css_files"       => [],
+                "found_css_cache_files" => [],
+                "ao_optimized_css" => [],
+                "injected_css_files"    => [],
+                "successfully_injected"    => true,
+            ];
+
+            $inject->parsed_html = true;
+
+            $dom->find( 'html' )[0]->uucss = true;
 
             $state = apply_filters('uucss/enqueue/content/update',[
-                'dom' => $this->dom,
-                'inject' => $this->inject,
+                'dom' => $dom,
+                'inject' => $inject,
                 'options' => $this->options
             ]) ;
 
             if(isset($state['dom'])){
-                $this->dom = $state['dom'];
+                $dom = $state['dom'];
             }
 
             if(isset($state['inject'])){
-                $this->inject = $state['inject'];
+                $inject = $state['inject'];
             }
 
             if(isset($state['options'])){
                 $this->options = $state['options'];
             }
 
-            $this->after_enqueue();
+            if($inject->successfully_injected){
+                $dom->find( 'body' )[0]->uucss = true;
+            }
 
-            return $this->dom;
+            header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
+
+            return $dom;
         }
 
         return $html;
-    }
-
-    public function before_enqueue(){
-
-        $this->inject = (object) [
-            "parsed_html"           => false,
-            "found_sheets"          => false,
-            "found_css_files"       => [],
-            "found_css_cache_files" => [],
-            "ao_optimized_css" => [],
-            "injected_css_files"    => [],
-            "successfully_injected"    => true,
-        ];
-
-        $this->inject->parsed_html = true;
-
-        $this->dom->find( 'html' )[0]->uucss = true;
-    }
-
-    public function after_enqueue(){
-
-        if($this->inject->successfully_injected){
-            $this->dom->find( 'body' )[0]->uucss = true;
-        }
-
-        header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $this->inject->found_css_files ) . count( $this->inject->found_css_cache_files ) . count( $this->inject->injected_css_files ) . ']' );
     }
 
     public function is_url_allowed($url = null, $args = null)
