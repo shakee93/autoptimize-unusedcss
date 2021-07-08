@@ -26,6 +26,8 @@ return array(
     'RapidLoad_DB' => $baseDir . '/includes/RapidLoad_DB.php',
     'RapidLoad_Enqueue' => $baseDir . '/includes/RapidLoad_Enqueue.php',
     'RapidLoad_FileSystem' => $baseDir . '/includes/RapidLoad_FileSystem.php',
+    'RapidLoad_Job' => $baseDir . '/includes/RapidLoad_Job.php',
+    'RapidLoad_Job_Data' => $baseDir . '/includes/RapidLoad_Job_Data.php',
     'RapidLoad_Module' => $baseDir . '/includes/modules/RapidLoad_Module.php',
     'RapidLoad_Queue' => $baseDir . '/includes/RapidLoad_Queue.php',
     'RapidLoad_Settings' => $baseDir . '/includes/RapidLoad_Settings.php',

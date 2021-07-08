@@ -173,6 +173,10 @@ abstract class RapidLoad_DB
                     ));
                 }
 
+                if(self::$current_version < 1.3){
+                    self::seed();
+                }
+
                 UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
 
                 wp_send_json_success([
@@ -184,6 +188,18 @@ abstract class RapidLoad_DB
             }
 
         }
+
+    }
+
+    static function seed(){
+
+        global $wpdb;
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, created_at, status) 
+        SELECT url, rule, regex, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_rule");
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at, status) 
+        SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN ('rule-based')");
 
     }
 
@@ -212,4 +228,22 @@ abstract class RapidLoad_DB
         UnusedCSS_Admin::delete_site_option(RapidLoad_Settings::$map_key );
     }
 
+    static function get_rule_names(){
+
+        if(self::$current_version < 1.3){
+            return UnusedCSS_DB::get_rule_names();
+        }
+
+        global $wpdb;
+
+        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url')", ARRAY_A);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return array_column($names, 'rule');
+    }
 }

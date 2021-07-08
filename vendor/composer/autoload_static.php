@@ -27,6 +27,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_DB' => __DIR__ . '/../..' . '/includes/RapidLoad_DB.php',
         'RapidLoad_Enqueue' => __DIR__ . '/../..' . '/includes/RapidLoad_Enqueue.php',
         'RapidLoad_FileSystem' => __DIR__ . '/../..' . '/includes/RapidLoad_FileSystem.php',
+        'RapidLoad_Job' => __DIR__ . '/../..' . '/includes/RapidLoad_Job.php',
+        'RapidLoad_Job_Data' => __DIR__ . '/../..' . '/includes/RapidLoad_Job_Data.php',
         'RapidLoad_Module' => __DIR__ . '/../..' . '/includes/modules/RapidLoad_Module.php',
         'RapidLoad_Queue' => __DIR__ . '/../..' . '/includes/RapidLoad_Queue.php',
         'RapidLoad_Settings' => __DIR__ . '/../..' . '/includes/RapidLoad_Settings.php',

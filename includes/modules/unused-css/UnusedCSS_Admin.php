@@ -377,6 +377,8 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error('Invalid regex for the url');
         }
 
+        $ruleObject = false;
+
         if(isset($_REQUEST['old_rule']) && isset($_REQUEST['old_regex'])){
 
             if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['old_rule'], $_REQUEST['old_regex'])){
@@ -406,11 +408,13 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error('Rule already exist');
         }
 
-        new UnusedCSS_Rule([
+        $ruleObject = new UnusedCSS_Rule([
             'rule' => $rule,
             'url' => $url,
             'regex' => $regex,
         ]);
+
+        do_action('uucss/rule/saved', $ruleObject);
 
         /*$spawned = $this->schedule_cron('uucss_apply_rules', [] );
 
