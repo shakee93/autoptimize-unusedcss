@@ -84,7 +84,7 @@ abstract class UnusedCSS {
             $this->clear_cache(null, $args);
         });
 
-        new RapidLoad_Queue();
+        new UnusedCSS_Queue();
     }
 
     function uucss_rule_types($rules){

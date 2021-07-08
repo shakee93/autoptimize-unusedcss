@@ -27,6 +27,7 @@ class RapidLoad_Base
         add_action('plugins_loaded', function (){
 
             new RapidLoad_Buffer();
+            new RapidLoad_Queue();
 
         });
     }
