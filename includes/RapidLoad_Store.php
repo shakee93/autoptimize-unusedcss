@@ -267,6 +267,7 @@ class RapidLoad_Store {
 
         $this->rule->mark_as_success($files, $stats, $warnings);
         $this->rule->save();
+        UnusedCSS_DB::reset_rule_warnings($this->rule->id);
 
     }
 
