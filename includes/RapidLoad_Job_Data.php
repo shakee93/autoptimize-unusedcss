@@ -93,10 +93,6 @@ class RapidLoad_Job_Data{
 
     public function exist(){
 
-        if(!isset($this->id)){
-            return false;
-        }
-
         global $wpdb;
 
         return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $this->job_type ."' AND job_id = " . $this->job_id, OBJECT);
