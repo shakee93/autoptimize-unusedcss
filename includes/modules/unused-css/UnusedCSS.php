@@ -43,8 +43,6 @@ abstract class UnusedCSS {
     {
         register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
 
-        new UnusedCSS_Feedback();
-
         add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
         $this->add_update_message();

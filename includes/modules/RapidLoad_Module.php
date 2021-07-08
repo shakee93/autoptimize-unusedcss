@@ -26,12 +26,12 @@ class RapidLoad_Module
             'id' => 'critical-css',
             'title' => 'Critical CSS',
             'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
-            'status' => 'off',
-            'class' => 'CriticalCSS_RapidLoad::class',
+            'status' => 'on',
+            'class' => CriticalCSS::class,
             'global' => 'cpcss'
         ];
 
-        $stored_modules = get_option( 'rapidload_modules', ['unused-css' => 'on'] );
+        $stored_modules = get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] );
 
         foreach ($stored_modules as $key => $value){
             $this->modules[$key]['status'] = $value;
@@ -50,6 +50,7 @@ class RapidLoad_Module
                 if($module['global'] == 'uucss'){
                     $uucss = new $class_object();
                 }else{
+                    error_log($class_object);
                     new $class_object();
                 }
             }
