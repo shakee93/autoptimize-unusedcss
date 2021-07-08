@@ -381,7 +381,7 @@ trait RapidLoad_Utils {
 	public function is_uucss_file( $url = null ) {
 
 		if ( ! $url ) {
-			$url = $this->url;
+			return false;
 		}
 
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
