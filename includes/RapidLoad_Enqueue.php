@@ -151,30 +151,12 @@ class RapidLoad_Enqueue {
             ($this->data->attempts <= 2 || ($time_diff > 86400)) &&
             apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
-            if($this->data->is_type('Rule')){
-
-                //$this->link->attach_rule();
-
-            }else{
-
-                $this->data->requeue();
-
-            }
-
+            $this->data->requeue();
 
         }else{
 
-
-            if($this->data->is_type('Rule')){
-
-                //$this->link->attach_rule();
-
-            }else{
-
-                $this->data->set_warnings($this->warnings);
-                $this->data->reset_success_hits();
-
-            }
+            $this->data->set_warnings($this->warnings);
+            $this->data->reset_success_hits();
 
         }
 

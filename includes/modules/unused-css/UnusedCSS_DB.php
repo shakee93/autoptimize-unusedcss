@@ -965,4 +965,17 @@ class UnusedCSS_DB extends RapidLoad_DB
 
         return $orinal_file_name;
     }
+
+    static function reset_rule_warnings($rule_id){
+
+        if(self::$current_version < 1.2){
+            return false;
+        }
+
+        global $wpdb;
+
+        $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0, warnings = NULL WHERE rule_id = " . $rule_id );
+
+        return true;
+    }
 }
