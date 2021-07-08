@@ -8,24 +8,22 @@ class UnusedCSS_Queue {
 
     public function __construct()
     {
-        add_action('uucss/queue/task',[$this, 'fetch_path_job_id'], 10);
-        add_action('uucss/queue/task',[$this, 'fetch_rule_job_id'], 10);
-        add_action('uucss/queue/task',[$this, 'fetch_path_result'], 20);
-        add_action('uucss/queue/task',[$this, 'fetch_rule_result'], 20);
+        add_action('uucss/queue/task',[$this, 'fetch_job_id'], 10);
+        add_action('uucss/queue/task',[$this, 'fetch_result'], 20);
 
     }
 
-    function fetch_path_job_id(){
+    function fetch_job_id(){
 
-        $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
+        $current_waiting = UnusedCSS_DB::get_data_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
 
-        $links = UnusedCSS_DB::get_links_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
+        $data = UnusedCSS_DB::get_data_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
 
-        if(!empty($links)){
+        if(!empty($data)){
 
-            foreach ($links as $link){
+            foreach ($data as $value){
 
-                $this->cache_path($link->url);
+                $this->cache($value->job_id);
 
             }
 
@@ -33,14 +31,18 @@ class UnusedCSS_Queue {
 
     }
 
-    function cache_path($url){
+    function cache($id){
+
+        $job = RapidLoad_Job::find_or_fail($id);
+
+        $job_data = new RapidLoad_Job_Data($job, 'uucss');
+
+        $url = isset($job->parent) ? $job->parent->url : $job->url;
 
         $post_id = url_to_postid($url);
 
-        UnusedCSS_DB::update_meta([
-            'status' => 'waiting',
-            'job_id' => null
-        ], $url);
+        $job_data->status = "waiting";
+        $job_data->save();
 
         self::log([
             'log' => 'fetching job id',
@@ -55,7 +57,7 @@ class UnusedCSS_Queue {
 
         if(rapidload()->api()->is_error($result)){
 
-            UnusedCSS_DB::update_failed($url, rapidload()->api()->extract_error( $result ));
+            $job_data->mark_as_failed(rapidload()->api()->extract_error( $result ));
 
             $this->log( [
                 'log' => 'fetched data stored status failed',
@@ -68,83 +70,21 @@ class UnusedCSS_Queue {
 
         if(isset($result->id)){
 
-            UnusedCSS_DB::update_meta(['job_id' => $result->id ], $url);
+            $job_data->queue_job_id = $result->id;
+            $job_data->save();
         }
 
     }
 
-    function fetch_rule_job_id(){
+    function fetch_result(){
 
-        $current_waiting = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
+        $data = UnusedCSS_DB::get_data_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'queue_job_id');
 
-        $rules = UnusedCSS_DB::get_rules_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
+        if(!empty($data)){
 
-        if(!empty($rules)){
+            foreach ($data as $value){
 
-            foreach ($rules as $rule){
-
-                $this->cache_rule($rule);
-            }
-
-        }
-
-    }
-
-    function cache_rule($rule){
-
-        $post_id = url_to_postid($rule->url);
-
-        $rule = new UnusedCSS_Rule([
-            'rule' => $rule->rule,
-            'regex' => $rule->regex
-        ]);
-
-        $rule->status = 'waiting';
-        $rule->job_id = null;
-        $rule->save();
-
-        self::log([
-            'log' => 'fetching job id',
-            'url' => $rule->url,
-            'type' => 'uucss-cron'
-        ]);
-
-        $result = rapidload()->api()->post( 's/unusedcss',
-            array_merge( rapidload()->uucss->api_options($post_id),
-                [ 'url' => $rule->url ]
-            ));
-
-        if(rapidload()->api()->is_error($result)){
-
-            $rule->mark_as_failed(rapidload()->api()->extract_error( $result ));
-            $rule->save();
-
-            $this->log( [
-                'log' => 'fetched data stored status failed',
-                'url' => $rule->url,
-                'type' => 'uucss-cron'
-            ] );
-
-            return;
-        }
-
-        if(isset($result->id)){
-
-            $rule->job_id = $result->id;
-            $rule->save();
-        }
-
-    }
-
-    function fetch_path_result(){
-
-        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'job_id');
-
-        if(!empty($links)){
-
-            foreach ($links as $link){
-
-                $this->update_path_result($link->url, $link->job_id);
+                $this->update_result($value->job_id, $value->queue_job_id);
 
             }
 
@@ -152,19 +92,25 @@ class UnusedCSS_Queue {
 
     }
 
-    function update_path_result($url, $job_id){
+    function update_result($job_id, $queue_job_id){
 
-        if(!$job_id){
+        if(!$queue_job_id || $job_id){
             return;
         }
+
+        $job = RapidLoad_Job::find_or_fail($job_id);
+
+        $job_data = new RapidLoad_Job_Data($job, 'uucss');
+
+        $url = isset($job->parent) ? $job->parent->url : $job->url;
 
         $this->log( [
-            'log' => 'fetching data for job ' . $job_id,
+            'log' => 'fetching data for job ' . $queue_job_id,
             'url' => $url,
             'type' => 'store'
         ] );
 
-        $result = rapidload()->api()->get( 's/unusedcss/' . $job_id);
+        $result = rapidload()->api()->get( 's/unusedcss/' . $queue_job_id);
 
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
@@ -172,9 +118,8 @@ class UnusedCSS_Queue {
 
             if(isset($error['message']) && $error['message'] == 'Job processing failed in queue'){
 
-                UnusedCSS_DB::requeue_urls([
-                    $url
-                ]);
+                $job_data->status = "queued";
+                $job_data->save();
 
                 $this->log( [
                     'log' => 're-queued due to allowed errors',
@@ -185,7 +130,8 @@ class UnusedCSS_Queue {
                 return;
             }
 
-            UnusedCSS_DB::update_failed($url, $error);
+            $job_data->mark_as_failed($error);
+            $job_data->save();
             do_action( 'uucss/cache_cleared', [
                 'url' => $url
             ]);
@@ -201,25 +147,23 @@ class UnusedCSS_Queue {
 
         if(isset($result->state) && $result->state == 'failed'){
 
-            UnusedCSS_DB::update_failed($url, 'Unknown error occurred');
+            $job_data->mark_as_failed('Unknown error occurred');
             do_action( 'uucss/cache_cleared', [
                 'url' => $url
             ]);
             return;
         }
 
-        $uucss_store = new RapidLoad_Store(null, $url,null);
+        $uucss_store = new RapidLoad_Store(null, $job_data,null);
 
         if(isset($result->state)){
 
             if($result->state == 'waiting' || $result->state == 'delayed' || $result->state == 'created' || $result->state == 'stalling'){
-                UnusedCSS_DB::update_meta([
-                    'status' => 'waiting'
-                ], $url);
+                $job_data->status = "waiting";
+                $job_data->save();
             }else if($result->state == 'active'){
-                UnusedCSS_DB::update_meta([
-                    'status' => 'processing'
-                ], $url);
+                $job_data->status = "processing";
+                $job_data->save();
             }
 
         }
@@ -235,68 +179,5 @@ class UnusedCSS_Queue {
             $uucss_store->add_link(null, $result);
         }
 
-    }
-
-    function fetch_rule_result(){
-
-        $rules = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'job_id');
-
-        if(!empty($rules)){
-
-            foreach ($rules as $rule){
-
-                $this->update_rule_result($rule);
-
-            }
-
-        }
-
-    }
-
-    function update_rule_result($uucss_rule){
-
-        $rule = new UnusedCSS_Rule([
-            'rule' => $uucss_rule->rule,
-            'regex' => $uucss_rule->regex
-        ]);
-
-        if(!$rule->job_id){
-            return;
-        }
-
-        $this->log( [
-            'log' => 'fetching data for job ' . $rule->job_id,
-            'url' => $rule->url,
-            'type' => 'store'
-        ] );
-
-        $result = rapidload()->api()->get( 's/unusedcss/' . $rule->job_id);
-
-        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
-
-            $rule->mark_as_failed(rapidload()->api()->extract_error( $result ));
-            $rule->save();
-
-            $this->log( [
-                'log' => 'fetched data stored status failed',
-                'url' => $rule->url,
-                'type' => 'uucss-cron'
-            ] );
-
-            return;
-        }
-
-        $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
-
-        if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
-
-            $files = $uucss_store->cache_files($result->data);
-            $uucss_store->add_rule($files, $result);
-            $uucss_store->uucss_cached();
-
-        }else if(isset($result->completed) && $result->completed){
-
-            $uucss_store->add_rule(null, $result);
-        }
     }
 }

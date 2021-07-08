@@ -49,7 +49,14 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                                 Dashboard
                             </h2>
                         </div>
-                        <div class="rapidload-page-row">
+
+                        <?php if(!$api_key_verified) : ?>
+
+                            <?php include_once 'intro.html.php' ?>
+
+                        <?php  else : ?>
+
+                            <div class="rapidload-page-row">
                             <div class="rapidload-page-col">
                                 <div class="rapidload-option-header">
                                     <h3 class="rapidload-title2">License Information</h3>
@@ -240,6 +247,9 @@ $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_de
                                 </div>
                             </div>
                         </div>
+
+                        <?php  endif; ?>
+
                     </div>
                     <div id="modules" class="rapidload-page rapidload-page-modules" style="display:none">
                         <div class="rapidload-section-header">

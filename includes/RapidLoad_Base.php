@@ -9,6 +9,7 @@ class RapidLoad_Base{
     public $url;
     public $rule;
     public $options;
+    public static $deactivating;
 
     public static $page_options = [
         'safelist',
@@ -25,50 +26,59 @@ class RapidLoad_Base{
 
         $this->options = self::fetch_options();
 
+        if(is_admin()){
+            $this->activate();
+            $this->deactivate();
+        }
+
         add_action('wp_enqueue_scripts', function (){
 
-            $this->url = $this->transform_url($this->get_current_url());
-            $this->rule = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+            if($this->enabled()){
 
-            $this->rule['post_id'] = url_to_postid($this->url);
+                $this->url = $this->transform_url($this->get_current_url());
+                $this->rule = $this->get_current_rule(RapidLoad_DB::get_rule_names());
 
-            if ( ! $this->is_url_allowed( $this->url, $this->rule ) ) {
-                return;
-            }
+                $this->rule['post_id'] = url_to_postid($this->url);
 
-            $applicable_rule = false;
-
-            if(isset($this->rule['rule']) && $this->rules_enabled()){
-
-                $applicable_rule = RapidLoad_DB::get_applied_rule($this->rule['rule'], $this->url);
-
-                if(!$applicable_rule){
-
-                    $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $this->url);
-
+                if ( ! $this->is_url_allowed( $this->url, $this->rule ) ) {
+                    return;
                 }
-            }
 
-            $job = new RapidLoad_Job([
-                'url' => $this->url
-            ]);
+                $applicable_rule = false;
 
-            if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+                if(isset($this->rule['rule']) && $this->rules_enabled()){
 
-                $rule = new RapidLoad_Job([
-                    'url' => $this->url,
-                    'rule' => $applicable_rule->rule,
-                    'regex' => $applicable_rule->regex,
+                    $applicable_rule = RapidLoad_DB::get_applied_rule($this->rule['rule'], $this->url);
+
+                    if(!$applicable_rule){
+
+                        $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $this->url);
+
+                    }
+                }
+
+                $job = new RapidLoad_Job([
+                    'url' => $this->url
                 ]);
 
-                $job->rule_id = $rule->id;
-                $job->status = 'rule-based';
-                $job->parent = $rule;
+                if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+
+                    $rule = new RapidLoad_Job([
+                        'url' => $this->url,
+                        'rule' => $applicable_rule->rule,
+                        'regex' => $applicable_rule->regex,
+                    ]);
+
+                    $job->rule_id = $rule->id;
+                    $job->status = 'rule-based';
+                    $job->parent = $rule;
+                }
+
+                $job->save();
+
+                do_action('rapidload/job/handle', $job, $this->rule);
+
             }
-
-            $job->save();
-
-            do_action('rapidload/job/handle', $job, $this->rule);
 
         }, 99);
 
@@ -104,6 +114,16 @@ class RapidLoad_Base{
         return update_site_option( $name, $default );
     }
 
+    public static function delete_option($name)
+    {
+        if(is_multisite()){
+
+            return delete_blog_option(get_current_blog_id(), $name);
+
+        }
+        return delete_site_option( $name);
+    }
+
     public static function rapidload_activate() {
 
         $default_options = self::get_option('autoptimize_uucss_settings',[
@@ -123,7 +143,7 @@ class RapidLoad_Base{
             $options['cpcss_enable_critical_css'] == "1";
     }
 
-    public static function activate() {
+    public function activate() {
 
         if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {
             return;
@@ -166,6 +186,47 @@ class RapidLoad_Base{
         self::update_option( 'autoptimize_uucss_settings', $options );
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+    }
+
+    public function deactivate() {
+
+        if ( ! isset( $_REQUEST['deactivated'] ) || empty( $_REQUEST['deactivated'] ) ) {
+            return;
+        }
+
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
+            self::add_admin_notice( 'RapidLoad : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
+
+            return;
+        }
+
+        $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' , []);
+
+        unset( $options['uucss_api_key_verified'] );
+        unset( $options['uucss_api_key'] );
+        unset( $options['whitelist_packs'] );
+
+        RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
+        $cache_key = 'pand-' . md5( 'first-uucss-job' );
+        RapidLoad_Base::delete_option( $cache_key );
+
+        //$this->uucss->vanish();
+
+        self::$deactivating = true;
+
+        $notice = [
+            'action'      => 'activate',
+            'message'     => 'RapidLoad : Deactivated your license for this site.',
+            'main_action' => [
+                'key'   => 'Reactivate',
+                'value' => self::activation_url( 'authorize' )
+            ],
+            'type'        => 'success'
+        ];
+        self::add_advanced_admin_notice( $notice );
+
+        return;
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -257,6 +318,74 @@ class RapidLoad_Base{
         }
 
         return $options;
+    }
+
+    protected function is_doing_api_fetch(){
+
+        $user_agent = '';
+        $headers    = [];
+
+        if ( function_exists( 'getallheaders' ) ) {
+            $headers = getallheaders();
+        }
+
+        if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        if ( isset( $headers['User-Agent'] ) ) {
+            $user_agent = $headers['User-Agent'];
+        }
+
+        return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
+            strpos( $user_agent, 'RapidLoad' ) !== false;
+    }
+
+    public function enabled() {
+
+        if ( $this->is_doing_api_fetch() ) {
+            return false;
+        }
+
+        // fix for uucss fallback css files being purged as url's
+        if ( $this->is_uucss_file() ) {
+            return false;
+        }
+
+        /*if ( ! $this->is_url_allowed() ) {
+            return false;
+        }*/
+
+        if ( is_admin() ) {
+            return false;
+        }
+
+        if ( wp_doing_ajax() ) {
+            return false;
+        }
+
+        if ( is_404() ) {
+            return false;
+        }
+
+        if ( is_preview() ) {
+            return false;
+        }
+
+        if ( $this->is_cli() ) {
+            return false;
+        }
+
+        if ( is_search() ) {
+            return false;
+        }
+
+        if ( defined( 'DOING_CRON' ) ) {
+            return false;
+        }
+
+        return apply_filters('uucss/enabled', true);
+
     }
 
     public function rules_enabled(){

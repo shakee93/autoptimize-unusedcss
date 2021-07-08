@@ -56,8 +56,6 @@ abstract class UnusedCSS {
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 2, 3);
 
-        add_action('uucss_async_queue_rule', [$this, 'init_async_store_rule'], 2, 4);
-
 	    add_action( 'rapidload/job/handle', function ($job, $args) {
 
 		    $this->job = $job;
@@ -294,15 +292,9 @@ abstract class UnusedCSS {
 	    return apply_filters('uucss/frontend/enabled', true);
     }
 
-    public function init_async_store_rule($provider, $url, $args, $rule)
+    public function init_async_store($provider, $job_data, $args)
     {
-        $this->store = new RapidLoad_Store($provider, $url, $args, $rule);
-        $this->store->purge_rule();
-    }
-
-    public function init_async_store($provider, $url, $args)
-    {
-        $this->store = new RapidLoad_Store($provider, $url, $args);
+        $this->store = new RapidLoad_Store($provider, $job_data, $args);
         $this->store->purge_css();
     }
 
@@ -489,6 +481,10 @@ abstract class UnusedCSS {
 
     public function cache($job = null, $args = []) {
 
+        if(!$job){
+            return;
+        }
+
 	    if ( ! isset( $args['post_id'] )) {
 		    $args['post_id'] = url_to_postid($job->url);
 	    }
@@ -544,19 +540,19 @@ abstract class UnusedCSS {
 
 	    	if(!$spawned){
 
-                $this->init_async_store($this->provider, $job_data->job->url, $args);
+                $this->init_async_store($this->provider, $job_data, $args);
 
             }
 
             self::log([
                 'log' => 'cron spawned : ' . $spawned,
-                'url' => $job_data->job->url,
+                'url' => $job->url,
                 'type' => 'queued'
             ]);
 
             self::log([
                 'log' => 'link added to queue',
-                'url' => $job_data->job->url,
+                'url' => $job->url,
                 'type' => 'queued'
             ]);
 	    }

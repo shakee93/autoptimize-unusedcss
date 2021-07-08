@@ -7,20 +7,41 @@ class RapidLoad_Admin
 
     public static $base;
     public static $base_dir;
+    public static $enabled = true;
 
     public function __construct()
     {
-        $this->hooks();
-
         new RapidLoad_Feedback();
 
+        $this->init_cache_dir();
+
+        if(is_admin()){
+
+            add_action( 'admin_menu', [ $this, 'add_menu' ] );
+            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
+            add_action('admin_enqueue_scripts', [$this, 'enqueue_global_scripts']);
+
+        }
+
+        if (!self::$enabled) {
+            return;
+        }
+
+        add_action( 'current_screen', function (){
+            if(get_current_screen() && ( get_current_screen()->base == 'settings_page_rapidload' || get_current_screen()->base == 'settings_page_uucss')){
+                add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts']);
+            }
+        });
+
         add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+        if(is_admin()){
+            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+        }
 
         $this->add_update_message();
 
         RapidLoad_DB::check_db_updates();
-
-        $this->init_cache_dir();
 
         new RapidLoad_Queue();
 
@@ -75,22 +96,6 @@ class RapidLoad_Admin
             $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
         }
         return $plugin_meta;
-    }
-
-    function hooks(){
-
-        if(is_admin()){
-            add_action( 'admin_menu', [ $this, 'add_menu' ] );
-            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
-            add_action('admin_enqueue_scripts', [$this, 'enqueue_global_scripts']);
-            add_action( 'current_screen', function (){
-                if(get_current_screen() && ( get_current_screen()->base == 'settings_page_rapidload' || get_current_screen()->base == 'settings_page_uucss')){
-                    add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts']);
-                }
-            });
-            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
-        }
-
     }
 
     function enqueue_global_scripts(){

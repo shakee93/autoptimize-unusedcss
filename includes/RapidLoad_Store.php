@@ -11,8 +11,8 @@ class RapidLoad_Store {
 
 	public $provider;
 
+    public $job_data;
     public $url;
-    public $rule;
     public $args;
     public $purged_files = [];
 	public $result;
@@ -23,24 +23,18 @@ class RapidLoad_Store {
     /**
      * RapidLoad_Store constructor.
      * @param $provider
-     * @param $url
+     * @param $job_data
      * @param $args
      * @param $rule
      */
-    public function __construct($provider, $url, $args = [], $rule = false)
+    public function __construct($provider, $job_data, $args = [])
     {
 
         $this->provider = $provider;
         $this->args = $args;
         $this->options = RapidLoad_Base::fetch_options();
-
-        if(!$rule){
-
-            $this->url = $url;
-        }else{
-
-            $this->rule = $rule;
-        }
+        $this->job_data = $job_data;
+        $this->url = isset($this->job_data->job->parent) ? $this->job_data->job->parent->url : $this->job_data->job->url;
     }
 
     public function purge_css() {
@@ -60,7 +54,7 @@ class RapidLoad_Store {
 
             if(rapidload()->api()->is_error($result)){
 
-                UnusedCSS_DB::update_failed($this->url, rapidload()->api()->extract_error( $result ));
+                $this->job_data->mark_as_failed(rapidload()->api()->extract_error( $result ));
 
                 $this->log( [
                     'log' => 'fetched data stored status failed',
@@ -73,7 +67,8 @@ class RapidLoad_Store {
 
             if(isset($result->id)){
 
-                UnusedCSS_DB::update_meta(['job_id' => $result->id ], $this->url);
+                $this->job_data->queue_job_id = $result->id;
+                $this->job_data->save();
             }
 
         }else{
@@ -91,12 +86,8 @@ class RapidLoad_Store {
 
             if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
-                $path = new UnusedCSS_Path([
-                    'url' => $this->url
-                ]);
-
-                $path->mark_as_failed(rapidload()->api()->extract_error( $result ));
-                $path->save();
+                $this->job_data->mark_as_failed(rapidload()->api()->extract_error( $result ));
+                $this->job_data->save();
 
                 $this->log( [
                     'log' => 'fetched data stored status failed',
@@ -123,54 +114,6 @@ class RapidLoad_Store {
 
         }
 
-
-    }
-
-    public function purge_rule() {
-
-        $this->log( [
-            'log' => 'fetching data',
-            'url' => $this->rule->url,
-            'type' => 'store'
-        ] );
-
-        $result = rapidload()->api()->post( 'purger',
-            array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
-                [ 'url' => $this->rule->url, 'service' => true ]
-            ) );
-
-        $this->log( [
-            'log' => 'data fetched',
-            'url' => $this->rule->url,
-            'type' => 'store'
-        ] );
-
-        if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
-
-            $this->rule->mark_as_failed(rapidload()->api()->extract_error( $result ));
-            $this->rule->save();
-
-            $this->log( [
-                'log' => 'fetched data stored status failed',
-                'url' => $this->rule->url,
-                'type' => 'store'
-            ] );
-
-            return;
-        }
-
-        $this->result       = $result;
-        $this->purged_files = $result->data;
-        $files              = false;
-
-        if ( $this->purged_files && count( $this->purged_files ) > 0 ) {
-
-            $files = $this->cache_files($this->purged_files);
-        }
-
-        $this->add_rule($files, $result);
-
-        $this->uucss_cached();
 
     }
 
@@ -232,33 +175,6 @@ class RapidLoad_Store {
 	    return $files;
     }
 
-    public function add_rule($files, $result = false){
-
-        if($result){
-            $this->result = $result;
-        }
-
-        $warnings = isset($this->result) && isset($this->result->meta) ? $this->result->meta->warnings : null;
-
-        if(isset($this->result->meta->stats) && isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)){
-
-            $warnings[] = [
-                "message" => "Clear your page cache"
-            ];
-        }
-
-        $stats = isset($this->result->meta->stats) ? $this->result->meta->stats : null;
-
-        if(isset($this->result) && isset($this->result->meta) && isset($this->result->meta->options) && isset($this->result->meta->options->redirectUrls)){
-
-            $stats->redirectUrls = $this->result->meta->options->redirectUrls;
-        }
-
-        $this->rule->mark_as_success($files, $stats, $warnings);
-        $this->rule->save();
-
-    }
-
     public function add_link($files, $result = false){
 
         if($result){
@@ -287,12 +203,8 @@ class RapidLoad_Store {
             $stats->redirectUrls = $this->result->meta->options->redirectUrls;
         }
 
-        $path = new UnusedCSS_Path([
-           'url' => $this->url
-        ]);
-
-        $path->mark_as_success($files, $stats, $warnings);
-        $path->save();
+        $this->job_data->mark_as_success($files, $stats, $warnings);
+        $this->job_data->save();
 
         $this->log( [
             'log' => 'fetched data stored status success',
@@ -300,7 +212,6 @@ class RapidLoad_Store {
             'type' => 'store'
         ] );
     }
-
 
     protected function get_cache_page_dir()
     {
@@ -314,7 +225,6 @@ class RapidLoad_Store {
 
 	    return $source_dir;
     }
-
 
 	protected function append_cache_file_dir( $file, $content ) {
 		return UnusedCSS::$base_dir . '/' . $this->hashed_file_name( $file, $content );

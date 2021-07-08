@@ -99,6 +99,29 @@ class RapidLoad_Job_Data{
 
     }
 
+    static function find_or_fail($id){
+
+        global $wpdb;
+
+        $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE id = '" . $id . "'", OBJECT);
+
+        if(!$exist){
+            return null;
+        }
+
+        if($exist->rule == 'is_url'){
+            return new RapidLoad_Job_Data([
+                'url' => $exist->url
+            ]);
+        }else{
+            return new RapidLoad_Job([
+                'rule' => $exist->rule,
+                'regex' => $exist->regex
+            ]);
+        }
+
+    }
+
     public function requeue(){
         $this->status = 'queued';
         $this->attempts++;
@@ -113,5 +136,22 @@ class RapidLoad_Job_Data{
 
     public function clearFiles(){
 
+    }
+
+    public function mark_as_failed($error){
+        $this->data = null;
+        $this->status = 'failed';
+        $this->error = serialize($error);
+        $this->hits = 0;
+        $this->clearFiles();
+    }
+
+    public function mark_as_success($files, $stats, $warnings){
+        $this->data = isset($files) ? serialize($files) : null;
+        $this->status = 'success';
+        $this->hits = 0;
+        $this->stats = isset($stats) ? serialize($stats) : null;
+        $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
+        $this->error = null;
     }
 }

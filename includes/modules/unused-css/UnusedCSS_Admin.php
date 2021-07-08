@@ -73,8 +73,6 @@ abstract class UnusedCSS_Admin {
 
         if(is_admin()){
 
-            $this->deactivate();
-
             add_action('current_screen', [$this, 'validate_domain']);
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
             add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
@@ -586,47 +584,6 @@ abstract class UnusedCSS_Admin {
             }
         }
 
-    }
-
-    public function deactivate() {
-
-        if ( ! isset( $_REQUEST['deactivated'] ) || empty( $_REQUEST['deactivated'] ) ) {
-            return;
-        }
-
-        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_activation' ) ) {
-            self::add_admin_notice( 'RapidLoad : Request verification failed for Activation. Contact support if the problem persists.', 'error' );
-
-            return;
-        }
-
-        $options = self::get_site_option( 'autoptimize_uucss_settings' );
-
-        unset( $options['uucss_api_key_verified'] );
-        unset( $options['uucss_api_key'] );
-        unset( $options['whitelist_packs'] );
-
-        self::update_site_option( 'autoptimize_uucss_settings', $options );
-
-        $cache_key = 'pand-' . md5( 'first-uucss-job' );
-        self::delete_site_option( $cache_key );
-
-        $this->uucss->vanish();
-
-        self::$deactivating = true;
-
-        $notice = [
-            'action'      => 'activate',
-            'message'     => 'RapidLoad : Deactivated your license for this site.',
-            'main_action' => [
-                'key'   => 'Reactivate',
-                'value' => self::activation_url( 'authorize' )
-            ],
-            'type'        => 'success'
-        ];
-        self::add_advanced_admin_notice( $notice );
-
-        return;
     }
 
     public function first_uucss_job() {
