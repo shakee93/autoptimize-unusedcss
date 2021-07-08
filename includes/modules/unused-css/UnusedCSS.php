@@ -447,10 +447,6 @@ abstract class UnusedCSS {
         $this->store->purge_css();
     }
 
-    public function is_valid_url($url){
-        return filter_var($url, FILTER_VALIDATE_URL);
-    }
-
     public function is_url_allowed($url = null, $args = null)
     {
 
@@ -478,7 +474,7 @@ abstract class UnusedCSS {
 	    }
 
 	    if ( $post ) {
-		    $page_options = UnusedCSS_Admin::get_page_options( $post->ID );
+		    $page_options = RapidLoad_Base::get_page_options( $post->ID );
 		    if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
 			    return false;
 		    }
@@ -830,7 +826,7 @@ abstract class UnusedCSS {
 
 	    }
 
-		$post_options = $post_id ? UnusedCSS_Admin::get_page_options( $post_id ) : [];
+		$post_options = $post_id ? RapidLoad_Base::get_page_options( $post_id ) : [];
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
@@ -866,28 +862,6 @@ abstract class UnusedCSS {
             "cacheBusting"          => $cacheBusting,
 		]);
     }
-
-    protected function is_doing_api_fetch(){
-
-	    $user_agent = '';
-	    $headers    = [];
-
-	    if ( function_exists( 'getallheaders' ) ) {
-		    $headers = getallheaders();
-	    }
-
-	    if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-		    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-	    }
-
-	    if ( isset( $headers['User-Agent'] ) ) {
-		    $user_agent = $headers['User-Agent'];
-	    }
-
-	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
-	           strpos( $user_agent, 'RapidLoad' ) !== false;
-    }
-
 
 	public function init_base_dir() {
 

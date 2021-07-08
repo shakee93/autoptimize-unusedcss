@@ -1209,24 +1209,9 @@ abstract class UnusedCSS_Admin {
 
     public function meta_box( $post ) {
 
-        $options = $this->get_page_options($post->ID);
+        $options = RapidLoad_Base::get_page_options($post->ID);
 
         include('parts/admin-post.html.php');
-    }
-
-    public static function get_page_options($post_id)
-    {
-        $options = [];
-
-        if($post_id){
-
-            foreach (self::$page_options as $option) {
-                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
-            }
-
-        }
-
-        return $options;
     }
 
     public function save_meta_box_options($post_id, $post)

@@ -6,21 +6,19 @@ class RapidLoad_Base
 {
     use RapidLoad_Utils;
 
+    public static $page_options = [
+        'safelist',
+        'exclude',
+        'blocklist'
+    ];
+
     public static function init(){
 
         add_action('init', function (){
 
-            global $uucss;
+            RapidLoad_ThirdParty::initialize();
 
-            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class;
-
-            if(class_exists($provider_class)){
-
-                RapidLoad_ThirdParty::initialize();
-
-                $uucss = new $provider_class();
-
-            }
+            new RapidLoad_Module();
 
         });
 
@@ -52,6 +50,21 @@ class RapidLoad_Base
         return get_site_option( $name, $default );
     }
 
+    public static function get_page_options($post_id)
+    {
+        $options = [];
+
+        if($post_id){
+
+            foreach (self::$page_options as $option) {
+                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
+            }
+
+        }
+
+        return $options;
+    }
+
     public static function update_option($name, $default)
     {
         if(is_multisite()){
@@ -60,6 +73,16 @@ class RapidLoad_Base
 
         }
         return update_site_option( $name, $default );
+    }
+
+    public static function delete_option($name, $default)
+    {
+        if(is_multisite()){
+
+            return delete_blog_option(get_current_blog_id(), $name);
+
+        }
+        return delete_site_option( $name );
     }
 
     public static function uucss_activate() {
@@ -119,4 +142,5 @@ class RapidLoad_Base
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }
+
 }
