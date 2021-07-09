@@ -70,7 +70,7 @@ class CriticalCSS_Enqueue
 
             $parent = $sheet->parent();
 
-            if(isset($parent) && $parent->tag == 'noscript'){
+            if(isset($parent) && $parent->tag == 'noscript' || !self::is_css($sheet)){
                 continue;
             }
 
@@ -78,10 +78,6 @@ class CriticalCSS_Enqueue
             $sheet->media = 'none';
             $sheet->onload = 'this.onload=null;this.media="all";';
             $sheet->outertext = '<noscript id="rapidload-noscript">' . $outer_text . '</noscript>' . $sheet->outertext;
-            //$sheet->rel = null;
-            //$sheet_outer = $sheet->outertext;
-
-            //$this->dom->find( 'link' )[$key]->outertext = '<noscript id="cpcss-noscript">' . $sheet_outer . '</noscript>';
 
         }
     }
@@ -97,5 +93,9 @@ class CriticalCSS_Enqueue
 
             $this->dom->find( 'head' )[0]->outertext = '<head>' . $critical_css_content . $header_content  . '</head>';
 
+    }
+
+    private static function is_css( $el ) {
+        return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
     }
 }
