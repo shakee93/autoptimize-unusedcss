@@ -37,14 +37,18 @@ class CriticalCSS
             return false;
         }
 
+        $job_data->requeue();
+        $job_data->save();
+
         $this->async = apply_filters('uucss/purge/async',true);
 
         if (! $this->async ) {
 
-        }
+            $this->init_async_store($job_data, $args);
 
-        $job_data->requeue();
-        $job_data->save();
+        }else if(isset( $args['immediate'] )){
+
+        }
     }
 
     public function initFileSystem() {
@@ -88,5 +92,11 @@ class CriticalCSS
         }
 
         return true;
+    }
+
+    public function init_async_store($job_data, $args)
+    {
+        $store = new CriticalCSS_Store($job_data, $args);
+        $store->purge_css();
     }
 }

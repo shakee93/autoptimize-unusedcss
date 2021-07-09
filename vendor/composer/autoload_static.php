@@ -13,6 +13,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Cloudflare_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
         'Cookie_Notice_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
         'CriticalCSS' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS.php',
+        'CriticalCSS_Store' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Store.php',
         'Elementor_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
         'GoogleModPageSpeedCompatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
         'Kinsta_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',

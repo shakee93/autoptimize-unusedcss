@@ -12,6 +12,7 @@ return array(
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
     'CriticalCSS' => $baseDir . '/includes/modules/critical-css/CriticalCSS.php',
+    'CriticalCSS_Store' => $baseDir . '/includes/modules/critical-css/CriticalCSS_Store.php',
     'Elementor_Compatible' => $baseDir . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
     'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
