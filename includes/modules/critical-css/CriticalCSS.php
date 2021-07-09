@@ -158,4 +158,5 @@ class CriticalCSS
         $store = new CriticalCSS_Store($job_data, $args);
         $store->purge_css();
     }
+
 }
