@@ -29,6 +29,12 @@ class CriticalCSS_Enqueue
 
     function update_content($state){
 
+        if(!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)) {
+            $this->job_data->requeue();
+            $this->job_data->save();
+            return $state;
+        }
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -43,14 +49,9 @@ class CriticalCSS_Enqueue
 
         if($this->dom && $this->inject){
 
-            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+            $this->update_noscript();
 
-            $critical_css_content = '<style id="' . str_replace('.css','', $this->data) . '" cpcss>' . $critical_css_content . '</style>';
-
-            $header_content = $this->dom->find( 'head' )[0]->innertext;
-            //$header_content = str_replace('</head>','', $header_content);
-
-            $this->dom->find( 'head' )[0]->outertext = '<head>' . $critical_css_content . $header_content  . '</head>';
+            $this->enqueue_cpcss();
 
             return [
                 'dom' => $this->dom,
@@ -60,6 +61,41 @@ class CriticalCSS_Enqueue
         }
 
         return $state;
+
+    }
+
+    function update_noscript(){
+
+        foreach ( $this->dom->find( 'link' ) as $key => $sheet ) {
+
+            $parent = $sheet->parent();
+
+            if(isset($parent) && $parent->tag == 'noscript'){
+                continue;
+            }
+
+            $outer_text = $sheet->outertext;
+            $sheet->media = 'none';
+            $sheet->onload = 'this.onload=null;this.media="all";';
+            $sheet->outertext = '<noscript id="rapidload-noscript">' . $outer_text . '</noscript>' . $sheet->outertext;
+            //$sheet->rel = null;
+            //$sheet_outer = $sheet->outertext;
+
+            //$this->dom->find( 'link' )[$key]->outertext = '<noscript id="cpcss-noscript">' . $sheet_outer . '</noscript>';
+
+        }
+    }
+
+    function enqueue_cpcss(){
+
+            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+
+            $critical_css_content = '<style id="' . str_replace('.css','', $this->data) . '" cpcss>' . $critical_css_content . '</style>';
+
+            $header_content = $this->dom->find( 'head' )[0]->innertext;
+            //$header_content = str_replace('</head>','', $header_content);
+
+            $this->dom->find( 'head' )[0]->outertext = '<head>' . $critical_css_content . $header_content  . '</head>';
 
     }
 }

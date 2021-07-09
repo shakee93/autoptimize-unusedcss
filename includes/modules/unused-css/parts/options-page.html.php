@@ -87,6 +87,19 @@
                         ?>
                         <table class="form-table" id="uucss-options">
                             <tr>
+                                <th scope="row"><?php _e( 'Enable Critical CSS', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_enable_cpcss' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_enable_cpcss]' <?php if ( ! empty( $options['uucss_enable_cpcss'] ) && '1' === $options['uucss_enable_cpcss'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable Critical Path CSS
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="css-whitelist has-tooltip"
                                           data-message="Safelist Selectors (regex supported)">

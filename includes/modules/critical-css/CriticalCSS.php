@@ -7,6 +7,7 @@ class CriticalCSS
 
     public $base;
     public $file_system;
+    public $options = [];
 
     public $async = true;
 
@@ -14,6 +15,12 @@ class CriticalCSS
 
     public function __construct()
     {
+        $this->options = RapidLoad_Base::fetch_options();
+
+        if(!isset($this->options['uucss_enable_cpcss'])){
+            return;
+        }
+
         $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){

@@ -16,7 +16,7 @@ class RapidLoad_Enqueue {
 
         add_action('wp_enqueue_scripts', function (){
 
-            $url = $this->get_current_url();
+            $url = $this->transform_url($this->get_current_url());
             $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
 
             if($this->enabled($url, $args)){
