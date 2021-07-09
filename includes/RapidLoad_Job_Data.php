@@ -124,6 +124,7 @@ class RapidLoad_Job_Data{
 
     public function requeue(){
         $this->status = 'queued';
+        $this->queue_job_id = null;
         $this->attempts++;
         $this->data = null;
         $this->hits = 0;
@@ -146,8 +147,8 @@ class RapidLoad_Job_Data{
         $this->clearFiles();
     }
 
-    public function mark_as_success($files, $stats, $warnings){
-        $this->data = isset($files) ? serialize($files) : null;
+    public function mark_as_success($data, $stats, $warnings){
+        $this->data = isset($data) ? is_string($data) ? $data : serialize($data) : null;
         $this->status = 'success';
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;

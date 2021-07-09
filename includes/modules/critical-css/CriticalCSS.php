@@ -21,6 +21,10 @@ class CriticalCSS
         }
 
         add_action('rapidload/job/handle', [$this, 'handle_job'], 30, 2);
+
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
+
+        new CriticalCSS_Queue();
     }
 
     function handle_job($job, $args){
@@ -37,8 +41,10 @@ class CriticalCSS
             return false;
         }
 
-        $job_data->requeue();
-        $job_data->save();
+        if(!in_array($job_data->status, ['success', 'waiting', 'processing'])){
+            $job_data->requeue();
+            $job_data->save();
+        }
 
         $this->async = apply_filters('uucss/purge/async',true);
 
@@ -48,7 +54,22 @@ class CriticalCSS
 
         }else if(isset( $args['immediate'] )){
 
+            $spawned = false;
+
+            $spawned = $this->schedule_cron('cpcss_async_queue', [
+                'job_data' => $job_data,
+                'args'     => $args
+            ]);
+
+            $job_data->status = 'processing';
+            $job_data->save();
+
+            if(!$spawned){
+                $this->init_async_store($job_data, $args);
+            }
         }
+
+        return true;
     }
 
     public function initFileSystem() {

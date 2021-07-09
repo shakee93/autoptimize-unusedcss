@@ -50,7 +50,6 @@ class RapidLoad_Module
                 if($module['global'] == 'uucss'){
                     $uucss = new $class_object();
                 }else{
-                    error_log($class_object);
                     new $class_object();
                 }
             }
