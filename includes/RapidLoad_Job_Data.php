@@ -155,4 +155,11 @@ class RapidLoad_Job_Data{
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
         $this->error = null;
     }
+
+    public function get_warnings(){
+        if(isset($this->warnings)){
+            return $this->warnings;
+        }
+        return [];
+    }
 }

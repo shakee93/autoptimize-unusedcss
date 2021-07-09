@@ -20,14 +20,16 @@ class CriticalCSS
             return;
         }
 
-        add_action('rapidload/job/handle', [$this, 'handle_job'], 30, 2);
+        add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
+
+        add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         new CriticalCSS_Queue();
     }
 
-    function handle_job($job, $args){
+    function cache_cpcss($job, $args){
 
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
@@ -70,6 +72,35 @@ class CriticalCSS
         }
 
         return true;
+    }
+
+    function enqueue_cpcss($job, $args){
+
+        if($this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+
+            $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+            if($job_data->exist() && $job_data->status == 'success'){
+
+                new CriticalCSS_Enqueue($job_data);
+
+            }
+
+        }
+
+    }
+
+    function enabled_frontend() {
+
+        if ( is_user_logged_in() ) {
+            return false;
+        }
+
+        if ( is_admin() ) {
+            return false;
+        }
+
+        return apply_filters('uucss/frontend/enabled', true);
     }
 
     public function initFileSystem() {

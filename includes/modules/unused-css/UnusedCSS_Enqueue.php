@@ -29,7 +29,7 @@ class UnusedCSS_Enqueue {
         $this->files = $this->data->get_files();
         $this->warnings = $this->data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'the_content']);
+        add_filter('uucss/enqueue/content/update', [$this, 'the_content'], 10);
     }
 
     public function replace_inline_css(){

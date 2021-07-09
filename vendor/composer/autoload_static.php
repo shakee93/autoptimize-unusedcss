@@ -14,6 +14,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Cookie_Notice_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
         'CriticalCSS' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS.php',
+        'CriticalCSS_Enqueue' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Enqueue.php',
         'CriticalCSS_Queue' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Queue.php',
         'CriticalCSS_Store' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Store.php',
         'Elementor_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',

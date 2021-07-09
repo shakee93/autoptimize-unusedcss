@@ -13,6 +13,7 @@ return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
     'CriticalCSS' => $baseDir . '/includes/modules/critical-css/CriticalCSS.php',
+    'CriticalCSS_Enqueue' => $baseDir . '/includes/modules/critical-css/CriticalCSS_Enqueue.php',
     'CriticalCSS_Queue' => $baseDir . '/includes/modules/critical-css/CriticalCSS_Queue.php',
     'CriticalCSS_Store' => $baseDir . '/includes/modules/critical-css/CriticalCSS_Store.php',
     'Elementor_Compatible' => $baseDir . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
