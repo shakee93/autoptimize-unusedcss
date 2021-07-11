@@ -83,31 +83,14 @@ class CriticalCSS
 
     function enqueue_cpcss($job, $args){
 
-        if($this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-            $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        if($job_data->exist() && $job_data->status == 'success'){
 
-            if($job_data->exist() && $job_data->status == 'success'){
-
-                new CriticalCSS_Enqueue($job_data);
-
-            }
+            new CriticalCSS_Enqueue($job_data);
 
         }
 
-    }
-
-    function enabled_frontend() {
-
-        if ( is_user_logged_in() ) {
-            return false;
-        }
-
-        if ( is_admin() ) {
-            return false;
-        }
-
-        return apply_filters('uucss/frontend/enabled', true);
     }
 
     public function initFileSystem() {

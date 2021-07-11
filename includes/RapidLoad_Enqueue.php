@@ -285,6 +285,23 @@ class RapidLoad_Enqueue {
 
         do_action('rapidload/job/handle', $job, $args);
 
-        $this->replace_css();
+        if($this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+            $this->replace_css();
+        }
+
     }
+
+    function enabled_frontend() {
+
+        if ( is_user_logged_in() ) {
+            return false;
+        }
+
+        if ( is_admin() ) {
+            return false;
+        }
+
+        return apply_filters('uucss/frontend/enabled', true);
+    }
+
 }

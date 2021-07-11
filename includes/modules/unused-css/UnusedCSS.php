@@ -231,6 +231,7 @@ abstract class UnusedCSS {
 
 	public function initFileSystem() {
 
+        $this->file_system = new RapidLoad_FileSystem();
         $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
@@ -438,7 +439,7 @@ abstract class UnusedCSS {
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
+		if ( $this->is_url_allowed( $this->url, [] ) ) {
 
 			$this->get_css();
 

@@ -323,7 +323,7 @@ abstract class UnusedCSS_Admin {
     }
 
     public function render_form() {
-        $options = RapidLoad_Base::fetch_options();
+        $options = RapidLoad_Base::fetch_options();error_log($this->uucss->cache_file_count());
 
         include('parts/options-page.html.php');
     }
