@@ -7,7 +7,7 @@ abstract class RapidLoad_DB
 
     static $db_version = "1.3";
     static $db_option = "rapidload_migration";
-    static $current_version = "";
+    static $current_version = "1.3";
 
     static function initialize_site($new_site, $args){
 

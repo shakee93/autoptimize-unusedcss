@@ -27,25 +27,13 @@ abstract class UnusedCSS {
 
 	abstract public function get_css();
 
-
-    public function replace_css()
-    {
-        $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
-        add_filter( $buffer, function ( $html ) {
-            return apply_filters('uucss/enqueue/content', $html);
-        }, 10 );
-    }
-
     /**
      * UnusedCSS constructor.
      */
     public function __construct()
     {
-        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
 
-        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-        $this->add_update_message();
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         self::enqueueGlobalScript();
 
@@ -226,57 +214,6 @@ abstract class UnusedCSS {
         ];
 
         return $rules;
-    }
-
-    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
-    {
-        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
-        }
-        return $plugin_meta;
-    }
-
-    function add_update_message(){
-
-        global $pagenow;
-
-        if ( 'plugins.php' === $pagenow )
-        {
-            $file   = basename( UUCSS_PLUGIN_FILE );
-            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
-            $hook = "in_plugin_update_message-{$folder}/{$file}";
-            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
-        }
-
-    }
-
-    function render_update_message($plugin_data, $r ){
-
-        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
-
-        $changelog  = stristr( $data, '== Changelog ==' );
-
-        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
-
-        if(isset($changelog[1])){
-
-            $changelog = explode('*', $changelog[1]);
-
-            array_shift($changelog);
-
-            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
-
-            foreach ($changelog as $index => $log){
-                if($index == 3){
-                    break;
-                }
-                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
-            }
-
-            echo '</ol></div><p style="display: none" class="empty">';
-
-        }
     }
 
 	public function frontend_scripts( $data ) {
@@ -632,7 +569,6 @@ abstract class UnusedCSS {
 
                     new UnusedCSS_Enqueue($data, $this->url);
 
-                    $this->replace_css();
                 }
 
             }

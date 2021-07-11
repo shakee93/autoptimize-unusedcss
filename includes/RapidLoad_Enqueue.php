@@ -28,6 +28,14 @@ class RapidLoad_Enqueue {
         add_action('uucss/rule/saved', [$this, 'handle_uucss_rule']);
     }
 
+    public function replace_css()
+    {
+        $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
+        add_filter( $buffer, function ( $html ) {
+            return apply_filters('uucss/enqueue/content', $html);
+        }, 10 );
+    }
+
     public function the_content($html){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
@@ -277,5 +285,6 @@ class RapidLoad_Enqueue {
 
         do_action('rapidload/job/handle', $job, $args);
 
+        $this->replace_css();
     }
 }
