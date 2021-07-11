@@ -445,6 +445,14 @@ table.dataTable thead th, table.dataTable thead td {
     text-overflow: ellipsis;
 }
 
+#uucss-options tr th.sub-heading {
+    padding: 10px 0 0 0;
+}
+
+#uucss-options tr th.sub-heading h4{
+    margin: 0;
+}
+
 .uucss-history-table {
     table-layout: fixed;
 }
