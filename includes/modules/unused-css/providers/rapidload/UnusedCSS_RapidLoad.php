@@ -22,6 +22,10 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         $this->options = RapidLoad_Base::fetch_options();
 
+        /*if(!isset($this->options['uucss_enable_uucss'])){
+            return;
+        }*/
+
         parent::__construct();
 
         add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );

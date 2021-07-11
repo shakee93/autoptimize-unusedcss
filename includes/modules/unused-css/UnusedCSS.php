@@ -32,12 +32,6 @@ abstract class UnusedCSS {
      */
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
-
-        if(!isset($this->options['uucss_enable_uucss'])){
-            return;
-        }
-
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->file_system = new RapidLoad_FileSystem();
