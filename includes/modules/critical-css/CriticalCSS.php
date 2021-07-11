@@ -37,7 +37,7 @@ class CriticalCSS
     }
 
     function cache_cpcss($job, $args){
-        error_log('cache_cpcss');
+
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
         if(!$job_data->exist()){
