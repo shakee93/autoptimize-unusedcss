@@ -258,7 +258,7 @@
                             </tr>
                             <?php if(RapidLoad_DB::$current_version > 1.1): ?>
                                 <tr>
-                                    <th scope="row"><?php _e( 'Rule Based Injection (Beta)', 'uucss' ); ?></th>
+                                    <th scope="row"><?php _e( 'Rule Based Injection', 'uucss' ); ?></th>
                                     <td>
                                         <label for="uucss_enable_rules"><input id='uucss_enable_rules' type='checkbox'
                                                                                name='autoptimize_uucss_settings[uucss_enable_rules]' <?php if ( ! empty( $options['uucss_enable_rules'] ) && '1' === $options['uucss_enable_rules'] ) {
@@ -474,18 +474,6 @@
                                                     echo 'checked="checked"' ?>
                                                    value='1'>
                                             Cache Busting <em>-- Enable RapidLoad crawler to view pages with a random query string</em>
-                                        </label>
-                                    </p>
-
-                                    <p>
-                                        <label for="uucss_analyze_javascript">
-                                            <input id='uucss_analyze_javascript' type='checkbox'
-                                                   name='autoptimize_uucss_settings[uucss_analyze_javascript]' <?php if ( ! empty( $options['uucss_analyze_javascript'] ) && '1' === $options['uucss_analyze_javascript'] ) {
-                                                echo 'checked="checked"';
-                                            } ?> value='1'>
-                                            Analyze JavaScript <strong>(highly experimental)</strong> <em>-- Analyze
-                                                JavaScript and Remove unused CSS which are
-                                                not used in JS</em>
                                         </label>
                                     </p>
                                 </td>
