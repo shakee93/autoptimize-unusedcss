@@ -6,6 +6,7 @@
 
     global $uucss;
     global $rapidload;
+
     $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
