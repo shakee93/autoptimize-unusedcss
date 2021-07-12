@@ -445,6 +445,12 @@ table.dataTable thead th, table.dataTable thead td {
     text-overflow: ellipsis;
 }
 
+.uucss-history-table tr td.hide-text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #uucss-options tr th.sub-heading {
     padding: 10px 0 0 0;
 }
@@ -528,7 +534,7 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .uucss-history-table .tippy-content .uucss-option-list, .uucss-sub-menu .tippy-content .uucss-submenu-option-list{
-    width: 125px;
+    width: 150px;
     margin-right: -10px;
     margin-left: -10px;
 }

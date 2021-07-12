@@ -790,6 +790,10 @@
 
                         if(data.status !== 'queued' && data.status !== 'rule-based'){
                             $content.find('ul').append('<li data-action_name="requeue_url"><a data-action_name="requeue_url" href="#">Requeue</a></li>')
+
+                            if(window.uucss && window.uucss.cpcss_enabled === "1"){
+                                $content.find('ul').append('<li data-action_name="regenerate_cpcss"><a data-action_name="regenerate_cpcss" href="#">Regenerate Critical CSS</a></li>')
+                            }
                         }
 
                         if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -851,6 +855,19 @@
                             switch (action) {
                                 case 'requeue_url':{
                                     requeue('url', {url : data.url})
+                                    break;
+                                }
+                                case 'regenerate_cpcss':{
+
+                                    wp.ajax.post('cpcss_purge_url',{ url : data.url }).then(function (i) {
+
+                                        $.uucssAlert(i, 'success')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'error')
+                                    });
+
                                     break;
                                 }
                                 case 'attach_to_rule':{
@@ -1384,6 +1401,9 @@
 
                         if(data.status !== 'queued'){
                             $content.find('ul').append('<li data-action_name="requeue_rule"><a data-action_name="requeue_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Requeue</a></li>');
+                            if(window.uucss && window.uucss.cpcss_enabled === "1"){
+                                $content.find('ul').append('<li data-action_name="regenerate_cpcss"><a data-action_name="regenerate_cpcss" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Regenerate Critical CSS</a></li>')
+                            }
                         }
 
                         if(data.status === 'success'){
@@ -1448,6 +1468,19 @@
                                         rule : rule,
                                         regex : regex
                                     }, null, 'rule');
+                                    break;
+                                }
+                                case 'regenerate_cpcss':{
+
+                                    wp.ajax.post('cpcss_purge_url',{ url : url }).then(function (i) {
+
+                                        $.uucssAlert(i, 'success')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'error')
+                                    });
+
                                     break;
                                 }
                                 case 'duplicate_rule':{

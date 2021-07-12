@@ -281,4 +281,11 @@ class RapidLoad_Base
             RapidLoad_DB::$current_version > 1.1 &&
             apply_filters('uucss/rules/enable', true);
     }
+
+    public function critical_css_enabled(){
+        return
+            isset($this->options['uucss_enable_cpcss']) &&
+            $this->options['uucss_enable_cpcss'] == "1" &&
+            RapidLoad_DB::$current_version > 1.2;
+    }
 }

@@ -33,7 +33,60 @@ class CriticalCSS
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
+        add_filter('uucss/link', [$this, 'update_link']);
+
+        if(is_admin()){
+
+            add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
+
+        }
+
         new CriticalCSS_Queue();
+    }
+
+    function cpcss_purge_url(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $job = new RapidLoad_Job([
+            'url' => $_REQUEST['url']
+        ]);
+
+        if(!$job->exist()){
+            wp_send_json_error('job not found');
+        }
+
+        $this->cache_cpcss($job, [
+            'immediate' => true
+        ]);
+
+        wp_send_json_success('Successfully purged');
+    }
+
+    function update_link($link){
+
+        if(isset($link['url'])){
+
+            $job = new RapidLoad_Job([
+               'url' => $link['url']
+            ]);
+
+            if($job->exist()){
+
+                $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+                if($job_data->exist() && $job_data->status = "success"){
+
+                    $link['cpcss'] = $job_data->data;
+
+                }
+
+            }
+        }
+
+        return $link;
     }
 
     function cache_cpcss($job, $args){
