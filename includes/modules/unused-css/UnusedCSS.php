@@ -27,31 +27,12 @@ abstract class UnusedCSS {
 
 	abstract public function get_css();
 
-
-    public function replace_css()
-    {
-        $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
-        add_filter( $buffer, function ( $html ) {
-            return apply_filters('uucss/enqueue/content', $html);
-        }, 10 );
-    }
-
     /**
      * UnusedCSS constructor.
      */
     public function __construct()
     {
-        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
-
-        new UnusedCSS_Feedback();
-
-        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-        $this->add_update_message();
-
-        self::enqueueGlobalScript();
-
-        RapidLoad_DB::check_db_updates();
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->file_system = new RapidLoad_FileSystem();
 
@@ -230,57 +211,6 @@ abstract class UnusedCSS {
         return $rules;
     }
 
-    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
-    {
-        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
-        }
-        return $plugin_meta;
-    }
-
-    function add_update_message(){
-
-        global $pagenow;
-
-        if ( 'plugins.php' === $pagenow )
-        {
-            $file   = basename( UUCSS_PLUGIN_FILE );
-            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
-            $hook = "in_plugin_update_message-{$folder}/{$file}";
-            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
-        }
-
-    }
-
-    function render_update_message($plugin_data, $r ){
-
-        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
-
-        $changelog  = stristr( $data, '== Changelog ==' );
-
-        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
-
-        if(isset($changelog[1])){
-
-            $changelog = explode('*', $changelog[1]);
-
-            array_shift($changelog);
-
-            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
-
-            foreach ($changelog as $index => $log){
-                if($index == 3){
-                    break;
-                }
-                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
-            }
-
-            echo '</ol></div><p style="display: none" class="empty">';
-
-        }
-    }
-
 	public function frontend_scripts( $data ) {
 
 		if ( ! isset( $this->options['uucss_load_original'] ) ) {
@@ -293,62 +223,9 @@ abstract class UnusedCSS {
 
 	}
 
-
-	public static function enqueueGlobalScript() {
-		add_action( 'admin_enqueue_scripts', function () {
-
-            $deregister_scripts = apply_filters('uucss/scripts/global/deregister', ['popper']);
-
-            if(isset($deregister_scripts) && is_array($deregister_scripts)){
-                foreach ($deregister_scripts as $deregister_script){
-                    wp_dequeue_script($deregister_script);
-                    wp_deregister_script($deregister_script);
-                }
-            }
-
-			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-			wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
-			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
-			wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
-			wp_enqueue_style( 'noty-animate', UUCSS_PLUGIN_URL . 'assets/libs/noty/animate.css' );
-			wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
-			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
-            wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
-
-			wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
-			$data = array(
-		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
-		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
-		        'home_url' => home_url(),
-		        'api_url' => RapidLoad_Api::get_key(),
-                'nonce' => wp_create_nonce( 'uucss_nonce' ),
-	        );
-	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
-	        wp_enqueue_script( 'uucss_global_admin_script' );
-	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
-
-        });
-
-		add_action('admin_bar_menu', function (){
-
-			global $post;
-
-			$data = array(
-				'post_id'         => ($post) ? $post->ID : null,
-				'post_link'       => ($post) ? get_permalink($post) : null,
-			);
-
-			wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
-			wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
-			wp_enqueue_script( 'uucss_admin_bar_script' );
-		});
-    }
-
-
 	public function initFileSystem() {
 
+        $this->file_system = new RapidLoad_FileSystem();
         $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
@@ -447,10 +324,6 @@ abstract class UnusedCSS {
         $this->store->purge_css();
     }
 
-    public function is_valid_url($url){
-        return filter_var($url, FILTER_VALIDATE_URL);
-    }
-
     public function is_url_allowed($url = null, $args = null)
     {
 
@@ -478,7 +351,7 @@ abstract class UnusedCSS {
 	    }
 
 	    if ( $post ) {
-		    $page_options = UnusedCSS_Admin::get_page_options( $post->ID );
+		    $page_options = RapidLoad_Base::get_page_options( $post->ID );
 		    if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
 			    return false;
 		    }
@@ -560,7 +433,7 @@ abstract class UnusedCSS {
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
+		if ( $this->is_url_allowed( $this->url, [] ) ) {
 
 			$this->get_css();
 
@@ -636,9 +509,8 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new RapidLoad_Enqueue($data, $this->url);
+                    new UnusedCSS_Enqueue($data, $this->url);
 
-                    $this->replace_css();
                 }
 
             }
@@ -830,7 +702,7 @@ abstract class UnusedCSS {
 
 	    }
 
-		$post_options = $post_id ? UnusedCSS_Admin::get_page_options( $post_id ) : [];
+		$post_options = $post_id ? RapidLoad_Base::get_page_options( $post_id ) : [];
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
@@ -866,28 +738,6 @@ abstract class UnusedCSS {
             "cacheBusting"          => $cacheBusting,
 		]);
     }
-
-    protected function is_doing_api_fetch(){
-
-	    $user_agent = '';
-	    $headers    = [];
-
-	    if ( function_exists( 'getallheaders' ) ) {
-		    $headers = getallheaders();
-	    }
-
-	    if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-		    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-	    }
-
-	    if ( isset( $headers['User-Agent'] ) ) {
-		    $user_agent = $headers['User-Agent'];
-	    }
-
-	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
-	           strpos( $user_agent, 'RapidLoad' ) !== false;
-    }
-
 
 	public function init_base_dir() {
 

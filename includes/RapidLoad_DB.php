@@ -5,9 +5,9 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.2";
+    static $db_version = "1.3";
     static $db_option = "rapidload_migration";
-    static $current_version = "";
+    static $current_version = "1.3";
 
     static function initialize_site($new_site, $args){
 
@@ -37,6 +37,8 @@ abstract class RapidLoad_DB
         $tableArray = [
             $wpdb->prefix . "rapidload_uucss_job",
             $wpdb->prefix . "rapidload_uucss_rule",
+            $wpdb->prefix . "rapidload_job",
+            $wpdb->prefix . "rapidload_job_data",
         ];
 
         foreach ($tableArray as $tablename) {
@@ -56,6 +58,8 @@ abstract class RapidLoad_DB
 
         $rapidload_uucss_job = $wpdb->prefix . $blog_id . 'rapidload_uucss_job';
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
+        $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
+        $rapidload_job_data = $wpdb->prefix . $blog_id . 'rapidload_job_data';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -98,6 +102,32 @@ abstract class RapidLoad_DB
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_job (
+		id INT NOT NULL AUTO_INCREMENT,
+		url longtext NOT NULL,
+		rule longtext NOT NULL,
+		regex longtext NOT NULL,
+		rule_id INT NULL,
+		rule_note longtext NULL,
+		status varchar(15) NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)
+	) ;
+	    CREATE TABLE $rapidload_job_data (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NOT NULL,
+		job_type varchar(15) NOT NULL,
+		queue_job_id INT NULL,
+		data longtext NULL,
+		stats longtext NULL,
+		warnings longtext NULL,
+		error longtext NULL,
+		attempts mediumint(2) NULL,
+		hits mediumint(3) NULL,
+		status varchar(15) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id)            
 	) ;";
 
         dbDelta( $sql );
@@ -143,6 +173,10 @@ abstract class RapidLoad_DB
                     ));
                 }
 
+                if(self::$current_version < 1.3){
+                    self::seed();
+                }
+
                 UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
 
                 wp_send_json_success([
@@ -154,6 +188,18 @@ abstract class RapidLoad_DB
             }
 
         }
+
+    }
+
+    static function seed(){
+
+        global $wpdb;
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, created_at, status) 
+        SELECT url, rule, regex, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_rule");
+
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at, status) 
+        SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN ('rule-based')");
 
     }
 
@@ -182,4 +228,99 @@ abstract class RapidLoad_DB
         UnusedCSS_Admin::delete_site_option(RapidLoad_Settings::$map_key );
     }
 
+    static function get_rule_names(){
+
+        global $wpdb;
+
+        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url')", ARRAY_A);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return array_column($names, 'rule');
+    }
+
+    static function get_applied_rule($rule, $url){
+
+        $rules = self::get_rules_where("WHERE rule = '" . $rule . "'");
+        $applied_rule = false;
+
+        foreach ($rules as $rule){
+            if(self::is_url_glob_matched($url,$rule->regex)){
+                $applied_rule = $rule;
+                break;
+            }
+        }
+
+        return $applied_rule;
+    }
+
+    static function get_rules_where($where = ''){
+
+        global $wpdb;
+
+        if(!empty($where)){
+            $where .= " AND rule NOT IN ('is_url') ";
+        }else{
+            $where = " WHERE rule NOT IN ('is_url') ";
+        }
+
+        $rules = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY id DESC ", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $rules;
+    }
+
+    static function rule_exists_with_error($rule, $regex = '/'){
+        global $wpdb;
+
+        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return isset($result) && !empty($result);
+    }
+
+    static function get_data_by_status($status, $limit = 1, $order_by = 'id DESC'){
+
+        global $wpdb;
+
+        $status = implode(",", $status);
+
+        $status = str_replace('"', '', $status);
+
+        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        $transformed_links = array();
+
+        if(!empty($data)){
+
+            foreach ($data as $value){
+
+                array_push($transformed_links, $value);
+
+            }
+
+        }
+
+        return $transformed_links;
+    }
 }

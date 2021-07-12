@@ -6,21 +6,37 @@ class RapidLoad_Base
 {
     use RapidLoad_Utils;
 
-    public static function init(){
+    public $options = [];
+
+    public $url = null;
+    public $rule = null;
+
+    public static $page_options = [
+        'safelist',
+        'exclude',
+        'blocklist'
+    ];
+
+    public function __construct()
+    {
+
+        $this->options = self::fetch_options();
 
         add_action('init', function (){
 
-            global $uucss;
+            RapidLoad_ThirdParty::initialize();
 
-            $provider_class = defined('RAPIDLOAD_PROVIDER') ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class;
+            register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
 
-            if(class_exists($provider_class)){
+            add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
-                RapidLoad_ThirdParty::initialize();
+            $this->add_plugin_update_message();
 
-                $uucss = new $provider_class();
+            RapidLoad_DB::check_db_updates();
 
-            }
+            self::enqueueGlobalScript();
+
+            new RapidLoad_Module();
 
         });
 
@@ -28,10 +44,121 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
+            new RapidLoad_Feedback();
             new RapidLoad_Buffer();
             new RapidLoad_Queue();
+            new RapidLoad_Enqueue();
 
         });
+    }
+
+    public static function enqueueGlobalScript() {
+        add_action( 'admin_enqueue_scripts', function () {
+
+            $deregister_scripts = apply_filters('uucss/scripts/global/deregister', ['popper']);
+
+            if(isset($deregister_scripts) && is_array($deregister_scripts)){
+                foreach ($deregister_scripts as $deregister_script){
+                    wp_dequeue_script($deregister_script);
+                    wp_deregister_script($deregister_script);
+                }
+            }
+
+            wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
+            wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
+            wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
+            wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
+            wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
+            wp_enqueue_style( 'noty-animate', UUCSS_PLUGIN_URL . 'assets/libs/noty/animate.css' );
+            wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
+            wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
+            wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
+
+            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
+            $data = array(
+                'ajax_url'          => admin_url( 'admin-ajax.php' ),
+                'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+                'on_board_complete' => apply_filters('uucss/on-board/complete', false),
+                'home_url' => home_url(),
+                'api_url' => RapidLoad_Api::get_key(),
+                'nonce' => wp_create_nonce( 'uucss_nonce' ),
+            );
+            wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
+            wp_enqueue_script( 'uucss_global_admin_script' );
+            wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
+
+        });
+
+        add_action('admin_bar_menu', function (){
+
+            global $post;
+
+            $data = array(
+                'post_id'         => ($post) ? $post->ID : null,
+                'post_link'       => ($post) ? get_permalink($post) : null,
+            );
+
+            wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
+            wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
+            wp_enqueue_script( 'uucss_admin_bar_script' );
+        });
+    }
+
+    function add_plugin_update_message(){
+
+        global $pagenow;
+
+        if ( 'plugins.php' === $pagenow )
+        {
+            $file   = basename( UUCSS_PLUGIN_FILE );
+            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
+            $hook = "in_plugin_update_message-{$folder}/{$file}";
+            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
+        }
+
+    }
+
+    function render_update_message($plugin_data, $r ){
+
+        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+
+        $changelog  = stristr( $data, '== Changelog ==' );
+
+        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
+
+        if(isset($changelog[1])){
+
+            $changelog = explode('*', $changelog[1]);
+
+            array_shift($changelog);
+
+            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+
+            foreach ($changelog as $index => $log){
+                if($index == 3){
+                    break;
+                }
+                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
+            }
+
+            echo '</ol></div><p style="display: none" class="empty">';
+
+        }
+    }
+
+    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
+    {
+        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
+        }
+        return $plugin_meta;
+    }
+
+    public function vanish(){
+
+        do_action('rapidload/vanish');
+
     }
 
     public static function fetch_options()
@@ -54,6 +181,21 @@ class RapidLoad_Base
         return get_site_option( $name, $default );
     }
 
+    public static function get_page_options($post_id)
+    {
+        $options = [];
+
+        if($post_id){
+
+            foreach (self::$page_options as $option) {
+                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
+            }
+
+        }
+
+        return $options;
+    }
+
     public static function update_option($name, $default)
     {
         if(is_multisite()){
@@ -62,6 +204,16 @@ class RapidLoad_Base
 
         }
         return update_site_option( $name, $default );
+    }
+
+    public static function delete_option($name, $default)
+    {
+        if(is_multisite()){
+
+            return delete_blog_option(get_current_blog_id(), $name);
+
+        }
+        return delete_site_option( $name );
     }
 
     public static function uucss_activate() {
@@ -121,4 +273,5 @@ class RapidLoad_Base
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }
+
 }

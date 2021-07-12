@@ -6,285 +6,34 @@ class RapidLoad_Enqueue {
 
     use RapidLoad_Utils;
 
-    private $file_system;
-
-    private $inject;
-    private $dom;
-    private $data;
     private $options;
-    private $files;
-    private $warnings;
-    private $link;
 
-    function __construct($data, $url = '')
+    public function __construct()
     {
-        $this->file_system = new RapidLoad_FileSystem();
-
-        $this->link = new UnusedCSS_Path([
-            'url' => $url
-        ]);
-
-        $this->data = $data;
-        $this->files = $this->data->get_files();
-        $this->warnings = $this->data->get_warnings();
-
         $this->options = RapidLoad_Base::fetch_options();
 
         add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
+
+        add_action('wp_enqueue_scripts', function (){
+
+            $url = $this->transform_url($this->get_current_url());
+            $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+
+            if($this->enabled($url, $args)){
+                $this->handle_job($url, $args);
+            }
+
+        });
+
+        add_action('uucss/rule/saved', [$this, 'handle_uucss_rule']);
     }
 
-    public function replace_inline_css(){
-
-        $inline_styles = $this->dom->find('style');
-
-        if(isset($this->options['uucss_include_inline_css']) &&
-            $this->options['uucss_include_inline_css'] == '1' &&
-            apply_filters('uucss/inline-css-enabled', true) &&
-            isset($this->files) && !empty($this->files)){
-
-            $inline_style_content = '';
-
-            foreach ($inline_styles as $style){
-
-                $parent = $style->parent();
-
-                if(isset($parent) && $parent->tag == 'noscript'){
-                    continue;
-                }
-
-                $exclude_ids = apply_filters('uucss/enqueue/inline-exclude-id',[]);
-
-                if(in_array($style->id, $exclude_ids)){
-                    continue;
-                }
-
-                $search = '//inline-style@' . md5(self::remove_white_space($style->innertext));
-
-                $file_key = array_search( $search, array_column( $this->files, 'original' ) );
-
-                if(is_numeric( $file_key ) && $file_key){
-
-                    $style->outertext = '';
-                    $inline_style_content .= $this->files[$file_key]['uucss'];
-
-                }else{
-
-                    $this->inject->successfully_injected = false;
-
-                    if(!in_array($search, array_column($this->warnings, 'file'))){
-
-                        $warning = [
-                            "file" => $search,
-                            "message" => "RapidLoad optimized version for the inline style missing."
-                        ];
-
-                        if($this->data->is_type('Rule')){
-
-                            $this->link->add_warning($warning);
-
-                        }else{
-
-                            $this->warnings[] = $warning;
-
-                        }
-
-                    }
-
-                }
-            }
-
-            if(!empty($inline_style_content)){
-
-                $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data->url) . '" uucss>' . $inline_style_content . '</style>';
-
-                $header_content = $this->dom->find( 'head' )[0]->outertext;
-                $header_content = str_replace('</head>','', $header_content);
-
-                $this->dom->find( 'head' )[0]->outertext = $header_content . $inline_style_content . '</head>';
-
-            }
-
-        }
-
-        return $this->dom;
-    }
-
-    public function before_enqueue(){
-
-        $this->inject = (object) [
-            "parsed_html"           => false,
-            "found_sheets"          => false,
-            "found_css_files"       => [],
-            "found_css_cache_files" => [],
-            "ao_optimized_css" => [],
-            "injected_css_files"    => [],
-            "successfully_injected"    => true,
-        ];
-
-        $this->inject->parsed_html = true;
-
-        $this->dom->find( 'html' )[0]->uucss = true;
-    }
-
-    public function enqueue_completed(){
-
-        global $uucss;
-
-        $time_diff = 0;
-
-        if(isset($this->data->created_at)){
-            $time_diff = time() - strtotime($this->data->created_at);
-        }
-
-        if($this->inject->successfully_injected){
-
-            $this->dom->find( 'body' )[0]->uucss = true;
-            $this->data->mark_as_successful_hit();
-            if($this->data->is_type('Rule')){
-
-                $this->link->mark_as_successful_hit();
-            }
-
-        }else if(
-            !isset($this->options['uucss_disable_add_to_re_queue']) &&
-            !$this->inject->successfully_injected &&
-            ($this->data->attempts <= 2 || ($time_diff > 86400)) &&
-            apply_filters('uucss/enqueue/re-queue-on-fail', true)){
-
-            $this->data->requeue();
-
-        }else{
-
-            $this->data->set_warnings($this->warnings);
-            $this->data->reset_success_hits();
-
-        }
-
-        $this->data->save();
-        if($this->data->is_type('Rule')){
-
-            $this->link->save();
-        }
-        $this->log_action(json_encode($this->inject));
-    }
-
-    public function replace_stylesheets(){
-
-        $sheets = $this->dom->find( 'link' );
-
-        foreach ( $sheets as $sheet ) {
-
-            $parent = $sheet->parent();
-
-            if(isset($parent) && $parent->tag == 'noscript'){
-                continue;
-            }
-
-            $link = $sheet->href;
-
-            $this->inject->found_sheets = true;
-
-            if ( self::is_css( $sheet ) ) {
-
-                array_push( $this->inject->found_css_files, $link );
-
-                $key = false;
-
-                if(apply_filters('uucss/enqueue/path-based-search', true) && self::endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
-
-                    $url_parts = parse_url( $link );
-
-                    if(isset($url_parts['path'])){
-
-                        $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
-
-                        $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
-
-                        $key = isset($result) && !empty($result) ? key($result) : null;
-                    }
-
-                }else{
-
-                    $link = apply_filters('uucss/enqueue/cdn-url', $link);
-
-                    $file = array_search( $link, array_column( $this->files, 'original' ) );
-
-                    if ( ! $file ) {
-                        // Retry to see if file can be found with CDN url
-                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->files, 'original' ) );
-                    }
-
-                    $key = isset($this->files) ? $file : null;
-
-                }
-
-                // check if we found a script index and the file exists
-                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
-                    $uucss_file = $this->files[ $key ]['uucss'];
-
-                    array_push( $this->inject->found_css_cache_files, $link );
-
-                    $newLink = apply_filters('uucss/enqueue/cache-file-url', $uucss_file);
-
-                    // check the file is processed via AO
-                    $is_ao_css = apply_filters('uucss/enqueue/provider-handled-file', false, $link);
-
-                    if($is_ao_css){
-
-                        array_push($this->inject->ao_optimized_css, $link);
-
-                    }
-
-                    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
-
-                        $sheet->uucss = true;
-                        $sheet->href  = $newLink;
-
-                        $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'</a><br><br>for <a href="' . $link . '" target="_blank">'. $link . '</a>');
-
-                        if ( isset( $this->options['uucss_inline_css'] ) ) {
-
-                            $this->inline_sheet($sheet, $uucss_file);
-                        }
-
-                        array_push( $this->inject->injected_css_files, $newLink );
-
-                    }
-
-                }
-                else {
-
-                    if(!$sheet->uucss && !$this->is_file_excluded($this->options, $link)){
-
-                        $this->inject->successfully_injected = false;
-
-                        if(!in_array($link, array_column($this->warnings, 'file'))){
-
-                            $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
-
-                            $warning = [
-                                "file" => $link,
-                                "message" => "RapidLoad optimized version for the file missing."
-                            ];
-
-                            if($this->data->is_type('Rule')){
-
-                                $this->link->add_warning($warning);
-
-                            }else{
-
-                                $this->warnings[] = $warning;
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            }
-
-        }
+    public function replace_css()
+    {
+        $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
+        add_filter( $buffer, function ( $html ) {
+            return apply_filters('uucss/enqueue/content', $html);
+        }, 10 );
     }
 
     public function the_content($html){
@@ -294,7 +43,7 @@ class RapidLoad_Enqueue {
             return $html;
         }
 
-        $this->dom = new \simplehtmldom\HtmlDocument(
+        $dom = new \simplehtmldom\HtmlDocument(
             null,
             false,
             false,
@@ -302,7 +51,7 @@ class RapidLoad_Enqueue {
             false
         );
 
-        $this->dom->load(
+        $dom->load(
             $html,
             false,
             false,
@@ -310,66 +59,249 @@ class RapidLoad_Enqueue {
             false
         );
 
-        if ( $this->dom ) {
+        if ( $dom ) {
 
-            $this->before_enqueue();
+            $inject = (object) [
+                "parsed_html"           => false,
+                "found_sheets"          => false,
+                "found_css_files"       => [],
+                "found_css_cache_files" => [],
+                "ao_optimized_css" => [],
+                "injected_css_files"    => [],
+                "successfully_injected"    => true,
+            ];
 
-            $this->replace_stylesheets();
+            $inject->parsed_html = true;
 
-            $this->replace_inline_css();
+            $dom->find( 'html' )[0]->uucss = true;
 
-            $this->enqueue_completed();
+            $state = apply_filters('uucss/enqueue/content/update',[
+                'dom' => $dom,
+                'inject' => $inject,
+                'options' => $this->options
+            ]) ;
 
-            header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $this->inject->found_css_files ) . count( $this->inject->found_css_cache_files ) . count( $this->inject->injected_css_files ) . ']' );
+            if(isset($state['dom'])){
+                $dom = $state['dom'];
+            }
 
-            return $this->dom;
+            if(isset($state['inject'])){
+                $inject = $state['inject'];
+            }
+
+            if(isset($state['options'])){
+                $this->options = $state['options'];
+            }
+
+            if($inject->successfully_injected){
+                $dom->find( 'body' )[0]->uucss = true;
+            }
+
+            header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
+
+            return $dom;
         }
 
         return $html;
     }
 
-    private static function is_css( $el ) {
-        return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
-    }
+    public function is_url_allowed($url = null, $args = null)
+    {
 
-    private static function endsWith( $haystack, $needle ) {
-        $length = strlen( $needle );
-        if( !$length ) {
-            return true;
+        if(!$this->is_valid_url($url)){
+            return false;
         }
-        return substr( $haystack, -$length ) === $needle;
+
+        // remove .css .js files from being analyzed
+        if ( preg_match( '/cache\/autoptimize/', $url ) ) {
+            return false;
+        }
+
+        if ( preg_match( '/cache\/rapidload/', $url ) ) {
+            return false;
+        }
+
+        global $post;
+
+        if ( isset( $args['post_id'] ) ) {
+            $post = get_post( $args['post_id'] );
+        }
+
+        if ( $post ) {
+            $page_options = RapidLoad_Base::get_page_options( $post->ID );
+            if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
+                return false;
+            }
+
+        }
+
+        if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
+            $exploded = explode( ',', $this->options['uucss_excluded_links'] );
+
+            foreach ( $exploded as $pattern ) {
+
+                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+
+                    $pattern = parse_url( $pattern );
+
+                    $path = $pattern['path'];
+                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+                    $pattern = $path . $query;
+
+                }
+
+                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }
+
+            }
+        }
+
+        $url_parts = parse_url( $url );
+
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        if(!apply_filters('uucss/url/exclude', $url)){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        return true;
     }
 
-    private function log_action($message){
-        self::log([
-            'log' => $message,
-            'url' => $this->data->url,
-            'type' => 'injection'
+    public function rules_enabled(){
+        return
+            isset($this->options['uucss_enable_rules']) &&
+            $this->options['uucss_enable_rules'] == "1" &&
+            apply_filters('uucss/rules/enable', true);
+    }
+
+    public function handle_uucss_rule($args){
+
+        $job = new RapidLoad_Job([
+           'url' => $args->url,
+           'rule' => $args->rule,
+           'regex' => $args->regex,
         ]);
+        $job->save();
     }
 
-    private function inline_sheet( $sheet, $link ) {
+    public function enabled($url, $args) {
 
-        $inline = $this->get_inline_content( $link );
-
-        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 1000 ) ) {
-            return;
+        if ( $this->is_doing_api_fetch() ) {
+            return false;
         }
 
-        $sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
+        // fix for uucss fallback css files being purged as url's
+        if ( $this->is_uucss_file() ) {
+            return false;
+        }
+
+        if ( ! $this->is_url_allowed($url, $args) ) {
+            return false;
+        }
+
+        if ( is_admin() ) {
+            return false;
+        }
+
+        if ( wp_doing_ajax() ) {
+            return false;
+        }
+
+        if ( is_404() ) {
+            return false;
+        }
+
+        if ( is_preview() ) {
+            return false;
+        }
+
+        if ( $this->is_cli() ) {
+            return false;
+        }
+
+        if ( is_search() ) {
+            return false;
+        }
+
+        if ( defined( 'DOING_CRON' ) ) {
+            return false;
+        }
+
+        if( RapidLoad_DB::$current_version < 1.3){
+            return false;
+        }
+
+        return apply_filters('uucss/enabled', true);
 
     }
 
-    private function get_inline_content( $file_name ) {
+    public function handle_job($url, $args){
 
-        $file = implode( '/', [
-            UnusedCSS::$base_dir,
-            $file_name
-        ] );
+        if(!isset($args['post_id'])){
+            $args['post_id'] = url_to_postid($url);
+        }
 
-        return [
-            'size'    => $this->file_system->size( $file ),
-            'content' => $this->file_system->get_contents( $file )
-        ];
+        $applicable_rule = false;
+
+        if(isset($args['rule']) && $this->rules_enabled()){
+
+            $applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
+
+            if(!$applicable_rule){
+
+                $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $url);
+
+            }
+        }
+
+        $job = new RapidLoad_Job([
+            'url' => $url
+        ]);
+
+        if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+
+            $rule = new RapidLoad_Job([
+                'url' => $url,
+                'rule' => $applicable_rule->rule,
+                'regex' => $applicable_rule->regex,
+            ]);
+
+            $job->rule_id = $rule->id;
+            $job->status = 'rule-based';
+            $job->parent = $rule;
+        }
+
+        $job->save();
+
+        do_action('rapidload/job/handle', $job, $args);
+
+        if($this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+            $this->replace_css();
+        }
+
     }
+
+    function enabled_frontend() {
+
+        if ( is_user_logged_in() ) {
+            return false;
+        }
+
+        if ( is_admin() ) {
+            return false;
+        }
+
+        return apply_filters('uucss/frontend/enabled', true);
+    }
+
 }

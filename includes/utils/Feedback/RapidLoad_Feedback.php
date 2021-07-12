@@ -1,7 +1,7 @@
 <?php
 
 
-class UnusedCSS_Feedback {
+class RapidLoad_Feedback {
 
 	function __construct() {
 
