@@ -24,6 +24,8 @@ class RapidLoad_Base
 
         });
 
+        add_action( 'admin_init', array( 'PAnD', 'init' ) );
+
         add_action('plugins_loaded', function (){
 
             new RapidLoad_Buffer();
