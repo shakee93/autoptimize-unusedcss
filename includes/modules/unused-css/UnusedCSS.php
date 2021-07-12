@@ -400,15 +400,9 @@ abstract class UnusedCSS {
 	    return true;
     }
 
-    public function rules_enabled(){
-        return
-            isset($this->options['uucss_enable_rules']) &&
-            $this->options['uucss_enable_rules'] == "1" &&
-            RapidLoad_DB::$current_version > 1.1 &&
-            apply_filters('uucss/rules/enable', true);
-    }
-
 	public function purge_css() {
+
+        global $rapidload;
 
 		$this->url = $this->transform_url( $this->url );
 
@@ -439,7 +433,7 @@ abstract class UnusedCSS {
 
             $data = null;
 
-            if( !$this->rules_enabled() &&
+            if( !$rapidload->rules_enabled() &&
                 RapidLoad_Settings::link_exists( $this->url )
             ){
 
@@ -455,7 +449,7 @@ abstract class UnusedCSS {
                 ]);
 
             }
-            else if($this->rules_enabled() &&
+            else if($rapidload->rules_enabled() &&
                 RapidLoad_Settings::link_exists( $this->url )){
 
                 self::log([
@@ -521,6 +515,8 @@ abstract class UnusedCSS {
 
     public function cache($url = null, $args = []) {
 
+        global $rapidload;
+
 	    if ( ! $this->is_url_allowed( $url, $args ) ) {
             self::log([
                 'log' => 'url not allowed to purge',
@@ -550,11 +546,10 @@ abstract class UnusedCSS {
 	    }
 
         $applicable_rule = false;
-        $rules_enabled = $this->rules_enabled();
 
         $path = null;
 
-	    if(isset($args['rule']) && $rules_enabled){
+	    if(isset($args['rule']) && $rapidload->rules_enabled()){
 
             $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 

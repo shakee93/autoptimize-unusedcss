@@ -5,6 +5,7 @@
 <?php
 
     global $uucss;
+    global $rapidload;
     $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
     $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
         return isset($plugin['category']) && $plugin['category'] == 'cache';
@@ -52,7 +53,7 @@
                         <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
-                <?php if($uucss->rules_enabled()) : ?>
+                <?php if($rapidload->rules_enabled()) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
                         Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500011459802-Rule-based-injection" style="font-size: 11px">Learn More</a>
@@ -588,7 +589,7 @@
                                 <strong>Success</strong> : <span class="number"><?php echo $success; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?></span>%
                             </p>
                             <?php
-                                if ( $uucss->rules_enabled() ) :
+                                if ( $rapidload->rules_enabled() ) :
                                 $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
                             ?>
                             <p class="status-rule-based-count">

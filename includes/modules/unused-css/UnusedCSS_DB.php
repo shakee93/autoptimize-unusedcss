@@ -866,7 +866,7 @@ class UnusedCSS_DB extends RapidLoad_DB
         $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
         $data['rule'] = isset( $link->rule ) ? $link->rule : null;
 
-        return $data;
+        return apply_filters('uucss/link', $data);
 
     }
 

@@ -274,4 +274,11 @@ class RapidLoad_Base
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }
 
+    public function rules_enabled(){
+        return
+            isset($this->options['uucss_enable_rules']) &&
+            $this->options['uucss_enable_rules'] == "1" &&
+            RapidLoad_DB::$current_version > 1.1 &&
+            apply_filters('uucss/rules/enable', true);
+    }
 }

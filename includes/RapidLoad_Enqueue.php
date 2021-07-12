@@ -177,13 +177,6 @@ class RapidLoad_Enqueue {
         return true;
     }
 
-    public function rules_enabled(){
-        return
-            isset($this->options['uucss_enable_rules']) &&
-            $this->options['uucss_enable_rules'] == "1" &&
-            apply_filters('uucss/rules/enable', true);
-    }
-
     public function handle_uucss_rule($args){
 
         $job = new RapidLoad_Job([
@@ -247,13 +240,15 @@ class RapidLoad_Enqueue {
 
     public function handle_job($url, $args){
 
+        global $rapidload;
+
         if(!isset($args['post_id'])){
             $args['post_id'] = url_to_postid($url);
         }
 
         $applicable_rule = false;
 
-        if(isset($args['rule']) && $this->rules_enabled()){
+        if(isset($args['rule']) && $rapidload->rules_enabled()){
 
             $applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
 

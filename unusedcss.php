@@ -37,7 +37,9 @@ register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
  * @type $uucss UnusedCSS_Autoptimize
  */
 
-new RapidLoad_Base();
+global $rapidload;
+
+$rapidload = new RapidLoad_Base();
 
 
 

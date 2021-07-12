@@ -875,7 +875,7 @@ abstract class UnusedCSS_Admin {
 
         wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
-
+        global $rapidload;
 
         $data = array(
             'api' => RapidLoad_Api::get_key(),
@@ -889,7 +889,7 @@ abstract class UnusedCSS_Admin {
             'faqs' => $this->get_faqs(),
             'public_notices' => $this->get_public_notices(),
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
-            'rules_enabled' => $this->uucss->rules_enabled(),
+            'rules_enabled' => $rapidload->rules_enabled(),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
