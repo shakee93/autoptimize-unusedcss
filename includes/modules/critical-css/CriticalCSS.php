@@ -58,9 +58,7 @@ class CriticalCSS
             wp_send_json_error('job not found');
         }
 
-        $this->cache_cpcss($job, [
-            'immediate' => true
-        ]);
+        $this->cache_cpcss($job, []);
 
         wp_send_json_success('Successfully purged');
     }
