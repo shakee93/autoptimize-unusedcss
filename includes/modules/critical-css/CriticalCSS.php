@@ -58,7 +58,7 @@ class CriticalCSS
             wp_send_json_error('job not found');
         }
 
-        $this->cache_cpcss($job, []);
+        $this->cache_cpcss($job, ['ajax_immediate' => true]);
 
         wp_send_json_success('Successfully purged');
     }
@@ -101,7 +101,7 @@ class CriticalCSS
             return false;
         }
 
-        if(!in_array($job_data->status, ['success', 'waiting', 'processing'])){
+        if(!in_array($job_data->status, ['success', 'waiting', 'processing']) || isset( $args['ajax_immediate'])){
             $job_data->requeue();
             $job_data->save();
         }
