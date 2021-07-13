@@ -44,9 +44,9 @@ class CriticalCSS
 
     public function cache_trigger_hooks() {
         add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
-        /*add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
+        add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
         add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
-        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);*/
+        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
     }
 
     public function vanish() {
