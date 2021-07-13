@@ -290,6 +290,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php _e( 'Additional CSS', 'uucss' ); ?></th>
+                                <td>
+                                    <textarea style="max-width: 390px; width: 100%; height: 150px" id="uucss_additional_css"
+                                              name="autoptimize_uucss_settings[uucss_additional_css]"><?php echo empty( $options['uucss_additional_css'] ) ? '' : $options['uucss_additional_css'] ?></textarea>
+
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="css-whitelist has-tooltip"
                                           data-message="Safelist Selectors (regex supported)">
