@@ -23,6 +23,8 @@ class CriticalCSS
 
         $this->file_system = new RapidLoad_FileSystem();
 
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
+
         if( ! $this->initFileSystem() ){
             return;
         }
@@ -42,6 +44,59 @@ class CriticalCSS
         }
 
         new CriticalCSS_Queue();
+    }
+
+    public function vanish() {
+
+        if ( ! $this->initFileSystem() ) {
+            return;
+        }
+
+        $delete = self::$base_dir;
+
+        if ( ! $this->file_system->exists( $delete ) ) {
+            return;
+        }
+
+        CriticalCSS_DB::clear_data();
+
+        $this->file_system->delete( $delete, true );
+    }
+
+    public function refresh( $url, $args = [] ) {
+
+        $job = null;
+
+        if(isset($url)){
+
+            $job = new RapidLoad_Job([
+               'url' => $url
+            ]);
+
+        }
+
+        $this->clear_cache( $job );
+        $this->cache_cpcss( $job, $args );
+    }
+
+    function clear_cache($job = null, $args = []){
+
+        if(isset($job)){
+
+            $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+            if($job_data->exist()){
+
+                $job_data->requeue();
+                $job_data->save();
+            }
+
+        }else{
+
+            CriticalCSS_DB::clear_data(isset($args['soft']));
+
+        }
+
     }
 
     function cpcss_purge_url(){
@@ -88,6 +143,10 @@ class CriticalCSS
     }
 
     function cache_cpcss($job, $args){
+
+        if(!$job){
+            return false;
+        }
 
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 

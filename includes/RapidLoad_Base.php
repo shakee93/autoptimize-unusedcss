@@ -159,6 +159,14 @@ class RapidLoad_Base
 
         do_action('rapidload/vanish');
 
+        $this->clear_jobs();
+
+    }
+
+    public function clear_jobs(){
+
+        RapidLoad_DB::clear_jobs();
+
     }
 
     public static function fetch_options()

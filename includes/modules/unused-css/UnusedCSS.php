@@ -883,6 +883,7 @@ abstract class UnusedCSS {
 	}
 
     public function vanish() {
+
 	    if ( ! $this->initFileSystem() ) {
 		    return;
 	    }

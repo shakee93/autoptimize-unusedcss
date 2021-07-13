@@ -323,4 +323,18 @@ abstract class RapidLoad_DB
 
         return $transformed_links;
     }
+
+    static function clear_jobs(){
+
+        global $wpdb;
+
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job ");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+    }
 }
