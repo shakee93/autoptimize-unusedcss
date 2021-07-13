@@ -31,7 +31,7 @@ class CriticalCSS
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
 
-        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
+        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         add_filter('uucss/link', [$this, 'update_link']);
 
