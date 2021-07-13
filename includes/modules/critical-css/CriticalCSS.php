@@ -44,9 +44,9 @@ class CriticalCSS
 
     public function cache_trigger_hooks() {
         add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
-        add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
+        /*add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
         add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
-        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
+        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);*/
     }
 
     public function vanish() {
@@ -112,7 +112,7 @@ class CriticalCSS
                 'url' => get_permalink( $post )
             ]);
 
-            if($job->exist()){
+            if(!$job->exist()){
 
                 $job->save();
 
@@ -125,7 +125,7 @@ class CriticalCSS
 
     function clear_cache($job = null, $args = []){
 
-        if(isset($job)){
+        if($job){
 
             $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
@@ -147,7 +147,7 @@ class CriticalCSS
 
     function clear_files($job_data = null){
 
-        if(isset($job_data)){
+        if($job_data && !empty($job_data->data)){
 
             $count = CriticalCSS_DB::data_used_elsewhere($job_data->id, $job_data->data);
 
