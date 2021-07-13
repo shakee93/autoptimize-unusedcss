@@ -21,4 +21,18 @@ class CriticalCSS_DB extends RapidLoad_DB{
         }
     }
 
+    static function data_used_elsewhere( $id , $data){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE data = '" . $data . "' AND id !=" . $id);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $count;
+    }
 }

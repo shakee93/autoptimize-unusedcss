@@ -29,6 +29,8 @@ class CriticalCSS
             return;
         }
 
+        $this->cache_trigger_hooks();
+
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
@@ -37,13 +39,14 @@ class CriticalCSS
 
         add_filter('uucss/link', [$this, 'update_link']);
 
-        if(is_admin()){
-
-            add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
-
-        }
-
         new CriticalCSS_Queue();
+    }
+
+    public function cache_trigger_hooks() {
+        add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
+        add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
+        add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
+        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
     }
 
     public function vanish() {
@@ -79,6 +82,47 @@ class CriticalCSS
         $this->cache_cpcss( $job, $args );
     }
 
+    public function clear_on_actions($post_ID)
+    {
+        $link = get_permalink($post_ID);
+
+        if($link){
+
+            $job = new RapidLoad_Job([
+               'url' => $link
+            ]);
+
+            if($job->exist()){
+
+                $this->clear_cache($job);
+
+            }
+        }
+    }
+
+    public function cache_on_actions($post_id, $post = null, $update = null)
+    {
+        $post = get_post($post_id);
+
+        if($post->post_status == "publish") {
+
+            $this->clear_on_actions( $post->ID );
+
+            $job = new RapidLoad_Job([
+                'url' => get_permalink( $post )
+            ]);
+
+            if($job->exist()){
+
+                $job->save();
+
+            }
+
+            $this->cache_cpcss($job);
+
+        }
+    }
+
     function clear_cache($job = null, $args = []){
 
         if(isset($job)){
@@ -89,11 +133,33 @@ class CriticalCSS
 
                 $job_data->requeue();
                 $job_data->save();
+                $this->clear_files($job_data);
             }
 
         }else{
 
             CriticalCSS_DB::clear_data(isset($args['soft']));
+            $this->clear_files();
+
+        }
+
+    }
+
+    function clear_files($job_data = null){
+
+        if(isset($job_data)){
+
+            $count = CriticalCSS_DB::data_used_elsewhere($job_data->id, $job_data->data);
+
+            if($count == 0){
+
+                $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+
+            }
+
+        }else{
+
+            $this->file_system->delete( self::$base_dir );
 
         }
 
@@ -130,9 +196,9 @@ class CriticalCSS
 
                 $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-                if($job_data->exist() && $job_data->status = "success"){
+                if($job_data->exist()){
 
-                    $link['cpcss'] = $job_data->data;
+                    $link['cpcss'] = (array) $job_data;
 
                 }
 
@@ -142,7 +208,7 @@ class CriticalCSS
         return $link;
     }
 
-    function cache_cpcss($job, $args){
+    function cache_cpcss($job, $args = []){
 
         if(!$job){
             return false;
@@ -156,7 +222,7 @@ class CriticalCSS
 
         }
 
-        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate'])){
+        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate']) && !isset($args['ajax_immediate'])){
             return false;
         }
 
