@@ -183,20 +183,29 @@ class CriticalCSS
 
             $this->cache_cpcss($job, ['ajax_immediate' => true]);
 
-            wp_send_json_success('Successfully purged');
         }
 
-        $jobs = RapidLoad_DB::get_jobs_where();
+        if(isset($_REQUEST['post_type']))
 
-        foreach ($jobs as $job){
+            switch ($_REQUEST['post_type']){
 
-            $_job = RapidLoad_Job::find_or_fail($job->id);
-
-            if($_job->exist()){
-                $this->cache_cpcss($_job, ['ajax_immediate' => true]);
+                case 'warnings':{
+                    CriticalCSS_DB::requeue_where(" WHERE status ='success' AND warnings IS NOT NULL ");
+                    break;
+                }
+                case 'failed':{
+                    CriticalCSS_DB::requeue_where(" WHERE status ='failed' ");
+                    break;
+                }
+                case 'processing':{
+                    CriticalCSS_DB::requeue_where(" WHERE status ='processing' ");
+                    break;
+                }
+                default:{
+                    CriticalCSS_DB::requeue_where();
+                    break;
+                }
             }
-
-        }
 
         wp_send_json_success('Successfully purged');
     }

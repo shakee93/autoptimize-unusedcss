@@ -1675,6 +1675,7 @@
         });
 
         function requeue(post_type, data = {}, list = [], type = 'path'){
+
             wp.ajax.post('uucss_queue',{
                 url_list : list,
                 url : data.url,
@@ -1691,6 +1692,17 @@
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
+
+            if(post_type !== 'url'){
+
+                wp.ajax.post('cpcss_purge_url',{ post_type : post_type }).then(function (i) {
+
+                }).fail(function (i) {
+
+                });
+
+            }
+
         }
 
         tippy($('button.uucss-add-site-urls-submenu')[0], {
