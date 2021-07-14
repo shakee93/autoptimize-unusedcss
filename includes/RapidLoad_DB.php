@@ -201,6 +201,8 @@ abstract class RapidLoad_DB
         $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at, status) 
         SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN ('rule-based')");
 
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job_data (job_id, job_type, created_at, status) 
+        SELECT id, 'cpcss' as job_type, created_at, 'queued' AS status FROM {$wpdb->prefix}rapidload_job");
     }
 
     static function migrated(){
