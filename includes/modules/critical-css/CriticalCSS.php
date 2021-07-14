@@ -169,15 +169,16 @@ class CriticalCSS
 
     }
 
-    function cpcss_purge_url(){
+    function cpcss_purge_url()
+    {
 
-        if(isset($_REQUEST['url'])){
+        if (isset($_REQUEST['url']) && !empty($_REQUEST['url'])) {
 
             $job = new RapidLoad_Job([
                 'url' => $_REQUEST['url']
             ]);
 
-            if(!$job->exist()){
+            if (!$job->exist()) {
                 wp_send_json_error('job not found');
             }
 
@@ -185,27 +186,38 @@ class CriticalCSS
 
         }
 
-        if(isset($_REQUEST['post_type']))
+        if (isset($_REQUEST['post_type'])){
 
-            switch ($_REQUEST['post_type']){
+            switch ($_REQUEST['post_type']) {
 
-                case 'warnings':{
+                case 'warnings':
+                {
                     CriticalCSS_DB::requeue_where(" WHERE status ='success' AND warnings IS NOT NULL ");
                     break;
                 }
-                case 'failed':{
+                case 'failed':
+                {
                     CriticalCSS_DB::requeue_where(" WHERE status ='failed' ");
                     break;
                 }
-                case 'processing':{
+                case 'processing':
+                {
                     CriticalCSS_DB::requeue_where(" WHERE status ='processing' ");
                     break;
                 }
-                default:{
+                default:
+                {
                     CriticalCSS_DB::requeue_where();
                     break;
                 }
             }
+        }
+
+        if ( isset( $_REQUEST['clear'] ) && boolval($_REQUEST['clear'] == 'true') ) {
+
+            $this->clear_cache();
+
+        }
 
         $this->cleanCacheFiles();
 

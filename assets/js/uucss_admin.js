@@ -1857,6 +1857,11 @@
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
+                            wp.ajax.post('cpcss_purge_url',data).then(function (i) {
+
+                            }).done(function(){
+
+                            });
                             break;
                         }
                         case 'clear_warnings_cache':{
