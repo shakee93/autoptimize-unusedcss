@@ -110,15 +110,15 @@ class CriticalCSS_Store
 
             $this->job_data->mark_as_success($file_name, null, $warnings);
             $this->job_data->save();
-            $this->cpcss_cached();
+            $this->cpcss_cached($this->job_data->jb->url);
 
         }
 
     }
 
-    public function cpcss_cached(){
+    public function cpcss_cached($url){
         do_action( 'uucss/cached', [
-            'url' => $this->url
+            'url' => $url
         ]);
     }
 
