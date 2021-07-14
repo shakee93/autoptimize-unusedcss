@@ -201,8 +201,8 @@ abstract class RapidLoad_DB
         $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job (url, rule, regex, rule_id, created_at, status) 
         SELECT url, 'is_url' as rule, '/' as regex, rule_id, created_at, 'processing' AS status FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN ('rule-based')");
 
-        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job_data (job_id, job_type, created_at, status) 
-        SELECT id, 'cpcss' as job_type, created_at, 'queued' AS status FROM {$wpdb->prefix}rapidload_job");
+        $wpdb->query("INSERT INTO {$wpdb->prefix}rapidload_job_data (job_id, job_type, attempts, hits, status, created_at) 
+        SELECT id, 'cpcss' as job_type, 1 as attempts, 0 as hits, 'queued' AS status, created_at  FROM {$wpdb->prefix}rapidload_job");
     }
 
     static function migrated(){
@@ -293,37 +293,6 @@ abstract class RapidLoad_DB
         }
 
         return isset($result) && !empty($result);
-    }
-
-    static function get_data_by_status($status, $limit = 1, $order_by = 'id DESC'){
-
-        global $wpdb;
-
-        $status = implode(",", $status);
-
-        $status = str_replace('"', '', $status);
-
-        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE status IN(" . $status . ") ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
-
-        $error = $wpdb->last_error;
-
-        if(!empty($error)){
-            self::show_db_error($error);
-        }
-
-        $transformed_links = array();
-
-        if(!empty($data)){
-
-            foreach ($data as $value){
-
-                array_push($transformed_links, $value);
-
-            }
-
-        }
-
-        return $transformed_links;
     }
 
     static function clear_jobs(){
