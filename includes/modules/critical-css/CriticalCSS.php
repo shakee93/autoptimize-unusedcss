@@ -207,6 +207,8 @@ class CriticalCSS
                 }
             }
 
+        $this->cleanCacheFiles();
+
         wp_send_json_success('Successfully purged');
     }
 
@@ -344,4 +346,28 @@ class CriticalCSS
         $store->purge_css();
     }
 
+    public function cleanCacheFiles(){
+
+        $data = CriticalCSS_DB::get_data_where(" WHERE status = 'success' ");
+
+        $used_files = [];
+
+        foreach ($data as $value){
+            if(!empty($value->data)){
+                array_push($used_files,$value->data);
+            }
+        }
+
+        if ($handle = opendir(CriticalCSS::$base_dir)) {
+            while (false !== ($file = readdir($handle))) {
+                if ('.' === $file) continue;
+                if ('..' === $file) continue;
+
+                if(!in_array($file, $used_files) && $this->file_system->exists(CriticalCSS::$base_dir . '/' . $file)){
+                    $this->file_system->delete(CriticalCSS::$base_dir . '/' . $file);
+                }
+            }
+            closedir($handle);
+        }
+    }
 }
