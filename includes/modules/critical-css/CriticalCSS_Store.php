@@ -135,7 +135,7 @@ class CriticalCSS_Store
 
             $error = $uucss_api->extract_error( $result );
 
-            if(isset($error['message']) && $error['message'] == 'Job processing failed in queue'){
+            if(isset($error['message']) && ($error['message'] == 'Job processing failed in queue' || $error['message'] == 'Error')){
 
                 $this->job_data->requeue();
                 $this->job_data->save();
