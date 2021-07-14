@@ -110,7 +110,7 @@ class CriticalCSS_Store
 
             $this->job_data->mark_as_success($file_name, null, $warnings);
             $this->job_data->save();
-            $this->cpcss_cached($this->job_data->jb->url);
+            $this->cpcss_cached($this->job_data->job->url);
 
         }
 
