@@ -131,9 +131,10 @@ class CriticalCSS
 
             if($job_data->exist()){
 
+                $this->clear_files($job_data);
                 $job_data->requeue();
                 $job_data->save();
-                $this->clear_files($job_data);
+
             }
 
         }else{
