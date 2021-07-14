@@ -156,6 +156,12 @@ class RapidLoad_Job_Data{
         $this->error = null;
     }
 
+    public function mark_as_successful_hit(){
+        $this->attempts = 0;
+        $this->hits++;
+        $this->error = NULL;
+    }
+
     public function get_warnings(){
         if(isset($this->warnings)){
             return $this->warnings;

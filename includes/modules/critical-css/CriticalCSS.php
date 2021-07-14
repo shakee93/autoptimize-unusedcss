@@ -147,14 +147,17 @@ class CriticalCSS
 
     function clear_files($job_data = null){
 
-        if($job_data && !empty($job_data->data)){
+        if($job_data){
 
-            $count = CriticalCSS_DB::data_used_elsewhere($job_data->id, $job_data->data);
+            if(!empty($job_data->data)){
 
-            if($count == 0){
+                $count = CriticalCSS_DB::data_used_elsewhere($job_data->id, $job_data->data);
 
-                $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+                if($count == 0){
 
+                    $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+
+                }
             }
 
         }else{

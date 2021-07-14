@@ -87,7 +87,9 @@ class CriticalCSS_Enqueue
             $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
 
             if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
+
                 $critical_css_content .= $this->options['uucss_additional_css'];
+
             }
 
             $critical_css_content = '<style id="' . str_replace('.css','', $this->data) . '" cpcss>' . $critical_css_content . '</style>';
@@ -96,6 +98,9 @@ class CriticalCSS_Enqueue
             //$header_content = str_replace('</head>','', $header_content);
 
             $this->dom->find( 'head' )[0]->outertext = '<head>' . $critical_css_content . $header_content  . '</head>';
+
+            $this->job_data->mark_as_successful_hit();
+            $this->job_data->save();
 
     }
 
