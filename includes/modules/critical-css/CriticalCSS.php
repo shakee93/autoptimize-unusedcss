@@ -171,19 +171,32 @@ class CriticalCSS
 
     function cpcss_purge_url(){
 
-        if(!isset($_REQUEST['url'])){
-            wp_send_json_error('url required');
+        if(isset($_REQUEST['url'])){
+
+            $job = new RapidLoad_Job([
+                'url' => $_REQUEST['url']
+            ]);
+
+            if(!$job->exist()){
+                wp_send_json_error('job not found');
+            }
+
+            $this->cache_cpcss($job, ['ajax_immediate' => true]);
+
+            wp_send_json_success('Successfully purged');
         }
 
-        $job = new RapidLoad_Job([
-            'url' => $_REQUEST['url']
-        ]);
+        $jobs = RapidLoad_DB::get_jobs_where();
 
-        if(!$job->exist()){
-            wp_send_json_error('job not found');
+        foreach ($jobs as $job){
+
+            $_job = RapidLoad_Job::find_or_fail($job->id);
+
+            if($_job->exist()){
+                $this->cache_cpcss($_job, ['ajax_immediate' => true]);
+            }
+
         }
-
-        $this->cache_cpcss($job, ['ajax_immediate' => true]);
 
         wp_send_json_success('Successfully purged');
     }

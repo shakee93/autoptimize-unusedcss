@@ -337,4 +337,19 @@ abstract class RapidLoad_DB
         }
 
     }
+
+    static function get_jobs_where($where = ''){
+
+        global $wpdb;
+
+        $jobs = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY id DESC ", OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $jobs;
+    }
 }
