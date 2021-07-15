@@ -189,6 +189,13 @@ class CriticalCSS
 
             switch ($_REQUEST['post_type']) {
 
+                case 'url':
+                case 'post':
+                case 'page':
+                case 'site_map':
+                {
+                    break;
+                }
                 case 'warnings':
                 {
                     CriticalCSS_DB::requeue_where(" WHERE status ='success' AND warnings IS NOT NULL ");

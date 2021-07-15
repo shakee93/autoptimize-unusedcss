@@ -1707,15 +1707,7 @@
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
 
-            if(post_type !== 'url'){
-
-                wp.ajax.post('cpcss_purge_url',{ post_type : post_type }).then(function (i) {
-
-                }).fail(function (i) {
-
-                });
-
-            }
+            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
 
         }
 
@@ -2350,6 +2342,8 @@
             }).done(function () {
                 table.ajax.reload(null, false);
             })
+
+            wp.ajax.post('cpcss_purge_url',{ url : $model_content.find('input.site-map-url').val(), post_type : $model_content.find('#model-requeue-post-type').val() });
         });
 
         $('p.more-info-uucss-status').click(function (e) {
