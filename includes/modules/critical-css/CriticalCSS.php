@@ -247,6 +247,10 @@ class CriticalCSS
             return false;
         }
 
+        if(!$this->is_url_allowed($job->url, $args, $this->options)){
+            return false;
+        }
+
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
         if(!$job_data->exist()){

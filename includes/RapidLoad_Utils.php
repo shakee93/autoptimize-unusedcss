@@ -529,4 +529,80 @@ trait RapidLoad_Utils {
     public function is_valid_url($url){
         return filter_var($url, FILTER_VALIDATE_URL);
     }
+
+    public function is_url_allowed($url = null, $args = null, $options = [])
+    {
+
+        if ( ! $url ) {
+            $url = $this->url;
+        }
+
+        if(!$this->is_valid_url($url)){
+            return false;
+        }
+
+        // remove .css .js files from being analyzed
+        if ( preg_match( '/cache\/autoptimize/', $url ) ) {
+            return false;
+        }
+
+        if ( preg_match( '/cache\/rapidload/', $url ) ) {
+            return false;
+        }
+
+        global $post;
+
+        if ( isset( $args['post_id'] ) ) {
+            $post = get_post( $args['post_id'] );
+        }
+
+        if ( $post ) {
+            $page_options = RapidLoad_Base::get_page_options( $post->ID );
+            if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
+                return false;
+            }
+
+        }
+
+        if ( isset( $options['uucss_excluded_links'] ) && ! empty( $options['uucss_excluded_links'] ) ) {
+            $exploded = explode( ',', $options['uucss_excluded_links'] );
+
+            foreach ( $exploded as $pattern ) {
+
+                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+
+                    $pattern = parse_url( $pattern );
+
+                    $path = $pattern['path'];
+                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+                    $pattern = $path . $query;
+
+                }
+
+                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }
+
+            }
+        }
+
+        $url_parts = parse_url( $url );
+
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        if(!apply_filters('uucss/url/exclude', $url)){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        return true;
+    }
 }
