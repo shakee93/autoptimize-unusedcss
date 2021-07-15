@@ -57,13 +57,12 @@ class CriticalCSS
 
         $delete = self::$base_dir;
 
-        if ( ! $this->file_system->exists( $delete ) ) {
-            return;
-        }
-
         CriticalCSS_DB::clear_data();
 
-        $this->file_system->delete( $delete, true );
+        if ( $this->file_system->exists( $delete ) ){
+            $this->file_system->delete( $delete, true );
+        }
+
     }
 
     public function refresh( $url, $args = [] ) {
