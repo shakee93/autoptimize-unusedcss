@@ -664,8 +664,8 @@
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
-                                    $warnings_html.wrap('<div></div>').parent().html() +
                                     $cpcss_html.wrap('<div class="cpcss-result"></div>').parent().html() +
+                                    $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
                                     '   <p class="val uucss-show-job-details">Created at ' +
                                     new Date(rowData.time * 1000).toLocaleDateString() + ' ' + new Date(rowData.time * 1000).toLocaleTimeString() +
@@ -1238,6 +1238,19 @@
 
                         var $warnings_html = $('<div class="uucss-warnings"></div>');
 
+                        var $cpcss_html = $('<div class="cpcss-status cpcss-status-' + (rowData.cpcss ? rowData.cpcss.status : '') + '"></div>');
+
+                        if (rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) {
+
+                            if(rowData.cpcss){
+                                if(rowData.cpcss.status === 'success'){
+                                    $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                }
+                            }
+
+                        }
+
                         if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
@@ -1278,6 +1291,7 @@
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
+                                    $cpcss_html.wrap('<div class="cpcss-result"></div>').parent().html() +
                                     $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
                                     '   <p class="val uucss-show-job-details">Created at ' +
