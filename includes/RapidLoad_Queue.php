@@ -17,6 +17,8 @@ class RapidLoad_Queue
 
     function init(){
 
+        global $rapidload;
+
         $options = RapidLoad_Base::fetch_options();
 
         if(isset($options['uucss_queue_interval'])){
@@ -25,6 +27,10 @@ class RapidLoad_Queue
 
         if(isset($options['uucss_jobs_per_queue'])){
             self::$job_count = defined('UUCSS_JOB_COUNT_PER_QUEUE') ? UUCSS_JOB_COUNT_PER_QUEUE : (int) $options['uucss_jobs_per_queue'];
+
+            if(self::$job_count > 8){
+                self::$job_count = self::$job_count / count($rapidload->modules()->active_modules());
+            }
         }
 
         add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);

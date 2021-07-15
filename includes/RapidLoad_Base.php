@@ -11,6 +11,8 @@ class RapidLoad_Base
     public $url = null;
     public $rule = null;
 
+    private $container = [];
+
     public static $page_options = [
         'safelist',
         'exclude',
@@ -36,7 +38,7 @@ class RapidLoad_Base
 
             self::enqueueGlobalScript();
 
-            new RapidLoad_Module();
+            $this->container['modules'] = new RapidLoad_Module();
 
         });
 
@@ -44,12 +46,16 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
-            new RapidLoad_Feedback();
-            new RapidLoad_Buffer();
-            new RapidLoad_Queue();
-            new RapidLoad_Enqueue();
+            $this->container['feedback'] = new RapidLoad_Feedback();
+            $this->container['buffer'] = new RapidLoad_Buffer();
+            $this->container['queue'] = new RapidLoad_Queue();
+            $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function modules(){
+        return isset($this->container['modules']) ? $this->container['modules'] : null;
     }
 
     public static function enqueueGlobalScript() {
