@@ -167,8 +167,14 @@ class CriticalCSS
 
         if (isset($_REQUEST['url']) && !empty($_REQUEST['url'])) {
 
+            $url = $_REQUEST['url'];
+
+            if(!$this->is_url_allowed($url)){
+                wp_send_json_error('url not allowed');
+            }
+
             $job = new RapidLoad_Job([
-                'url' => $_REQUEST['url']
+                'url' => $this->transform_url($url)
             ]);
 
             if (!$job->exist()) {
@@ -247,7 +253,7 @@ class CriticalCSS
             return false;
         }
 
-        if(!$this->is_url_allowed($job->url, $args, $this->options)){
+        if(!$this->is_url_allowed($job->url, $args)){
             return false;
         }
 

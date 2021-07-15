@@ -530,7 +530,7 @@ trait RapidLoad_Utils {
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 
-    public function is_url_allowed($url = null, $args = null, $options = [])
+    public function is_url_allowed($url = null, $args = null)
     {
 
         if ( ! $url ) {
@@ -563,6 +563,8 @@ trait RapidLoad_Utils {
             }
 
         }
+
+        $options = RapidLoad_Base::fetch_options();
 
         if ( isset( $options['uucss_excluded_links'] ) && ! empty( $options['uucss_excluded_links'] ) ) {
             $exploded = explode( ',', $options['uucss_excluded_links'] );

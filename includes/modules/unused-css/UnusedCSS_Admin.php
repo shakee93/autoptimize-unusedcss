@@ -185,11 +185,7 @@ abstract class UnusedCSS_Admin {
 
             $url = $this->transform_url($url);
 
-            if(!$this->is_valid_url($url)){
-                wp_send_json_error('url is not valid');
-            }
-
-            if($url && !$this->is_url_allowed($url, [], $uucss->options)){
+            if($url && !$this->is_url_allowed($url)){
                 wp_send_json_error('url is excluded');
             }
 
@@ -257,7 +253,7 @@ abstract class UnusedCSS_Admin {
 
                 $url = $this->transform_url(get_the_permalink(get_the_ID()));
 
-                if($this->is_url_allowed($url, [], $uucss->options)){
+                if($this->is_url_allowed($url)){
                     new UnusedCSS_Path([
                         'url' => $url
                     ]);
@@ -288,7 +284,7 @@ abstract class UnusedCSS_Admin {
 
             foreach ($urls as $url){
 
-                if($this->is_url_allowed($url, [], $uucss->options)){
+                if($this->is_url_allowed($this->transform_url($url))){
 
                     new UnusedCSS_Path([
                         'url' => $url
@@ -369,7 +365,7 @@ abstract class UnusedCSS_Admin {
 
         global $uucss;
 
-        if(!$this->is_url_allowed($url, [], $uucss->options)){
+        if(!$this->is_url_allowed($url)){
             wp_send_json_error('URL not allowed');
         }
 

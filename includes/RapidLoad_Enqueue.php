@@ -242,6 +242,8 @@ class RapidLoad_Enqueue {
 
         global $rapidload;
 
+        $url = $this->transform_url($url);
+
         if(!isset($args['post_id'])){
             $args['post_id'] = url_to_postid($url);
         }
