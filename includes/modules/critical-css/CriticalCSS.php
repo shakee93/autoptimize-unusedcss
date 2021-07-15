@@ -23,11 +23,11 @@ class CriticalCSS
 
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_action('rapidload/vanish', [ $this, 'vanish' ]);
-
         if( ! $this->initFileSystem() ){
             return;
         }
+
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->cache_trigger_hooks();
 
@@ -51,16 +51,10 @@ class CriticalCSS
 
     public function vanish() {
 
-        if ( ! $this->initFileSystem() ) {
-            return;
-        }
-
-        $delete = self::$base_dir;
-
         CriticalCSS_DB::clear_data();
 
-        if ( $this->file_system->exists( $delete ) ){
-            $this->file_system->delete( $delete, true );
+        if ( $this->file_system->exists( self::$base_dir ) ){
+            $this->file_system->delete( self::$base_dir, true );
         }
 
     }
