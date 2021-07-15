@@ -181,7 +181,7 @@ class CriticalCSS
                 $job->save();
             }
 
-            $this->cache_cpcss($job, ['ajax_immediate' => true]);
+            $this->cache_cpcss($job, ['immediate' => true]);
 
         }
 
@@ -272,11 +272,11 @@ class CriticalCSS
 
         }
 
-        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate']) && !isset($args['ajax_immediate'])){
+        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate'])){
             return false;
         }
 
-        if(!in_array($job_data->status, ['success', 'waiting', 'processing']) || isset( $args['ajax_immediate'])){
+        if(!in_array($job_data->status, ['success', 'waiting', 'processing']) || isset( $args['immediate'])){
             $job_data->requeue();
             $job_data->save();
         }

@@ -49,7 +49,7 @@ class CriticalCSS_Store
             $this->purged_css = $result->data;
 
             $this->cache_file($this->purged_css);
-            $this->cpcss_cached();
+            $this->cpcss_cached($this->job_data->job->url);
 
         }else{
 
