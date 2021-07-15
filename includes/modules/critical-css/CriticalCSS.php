@@ -178,7 +178,7 @@ class CriticalCSS
             ]);
 
             if (!$job->exist()) {
-                wp_send_json_error('job not found');
+                $job->save();
             }
 
             $this->cache_cpcss($job, ['ajax_immediate' => true]);
@@ -373,16 +373,18 @@ class CriticalCSS
             }
         }
 
-        if ($handle = opendir(CriticalCSS::$base_dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ('.' === $file) continue;
-                if ('..' === $file) continue;
+        if($this->file_system->exists(CriticalCSS::$base_dir)){
+            if ($handle = opendir(CriticalCSS::$base_dir)) {
+                while (false !== ($file = readdir($handle))) {
+                    if ('.' === $file) continue;
+                    if ('..' === $file) continue;
 
-                if(!in_array($file, $used_files) && $this->file_system->exists(CriticalCSS::$base_dir . '/' . $file)){
-                    $this->file_system->delete(CriticalCSS::$base_dir . '/' . $file);
+                    if(!in_array($file, $used_files) && $this->file_system->exists(CriticalCSS::$base_dir . '/' . $file)){
+                        $this->file_system->delete(CriticalCSS::$base_dir . '/' . $file);
+                    }
                 }
+                closedir($handle);
             }
-            closedir($handle);
         }
     }
 }
