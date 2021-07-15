@@ -39,6 +39,7 @@ class RapidLoad_Base
             self::enqueueGlobalScript();
 
             $this->container['modules'] = new RapidLoad_Module();
+            $this->container['queue'] = new RapidLoad_Queue();
 
         });
 
@@ -48,7 +49,6 @@ class RapidLoad_Base
 
             $this->container['feedback'] = new RapidLoad_Feedback();
             $this->container['buffer'] = new RapidLoad_Buffer();
-            $this->container['queue'] = new RapidLoad_Queue();
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
