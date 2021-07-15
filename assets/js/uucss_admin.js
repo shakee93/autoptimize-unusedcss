@@ -618,7 +618,7 @@
                             if(rowData.cpcss){
                                 if(rowData.cpcss.status === 'success'){
                                     $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical CSS</span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
                                 }
                             }
 
