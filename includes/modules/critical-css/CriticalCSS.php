@@ -234,8 +234,10 @@ class CriticalCSS
 
         if(isset($link['url'])){
 
+            $url = isset($link['base']) ? $link['base'] : $link['url'];
+
             $job = new RapidLoad_Job([
-               'url' => $link['url']
+               'url' => $url
             ]);
 
             if($job->exist()){
