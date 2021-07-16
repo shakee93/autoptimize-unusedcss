@@ -74,6 +74,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if($sheet->tag != 'link'){
+                continue;
+            }
+
             $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
