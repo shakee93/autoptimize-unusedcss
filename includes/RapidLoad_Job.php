@@ -65,7 +65,15 @@ class RapidLoad_Job{
     public function exist(){
         global $wpdb;
 
-        return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE url = '" . $this->url . "'", OBJECT);
+        $exist = null;
+
+        if($this->rule == 'is_url'){
+            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE url = '" . $this->url . "'", OBJECT);
+        }else{
+            $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job WHERE rule = '" . $this->rule . "' AND regex = '" . $this->regex . "'", OBJECT);
+        }
+
+        return $exist;
     }
 
     public function save(){
