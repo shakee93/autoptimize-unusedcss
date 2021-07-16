@@ -100,12 +100,15 @@ class CriticalCSS_Enqueue
 
             }
 
-            $critical_css_content = '<style id="' . str_replace('.css','', $this->data) . '" cpcss>' . $critical_css_content . '</style>';
+            $critical_css_content = '<style id="rapidload-critical-css">' . $critical_css_content . '</style>';
 
-            $header_content = $this->dom->find( 'head' )[0]->innertext;
-            //$header_content = str_replace('</head>','', $header_content);
+            if(isset($this->dom->find( 'title' )[0])){
 
-            $this->dom->find( 'head' )[0]->outertext = '<head>' . $critical_css_content . $header_content  . '</head>';
+                $title_content = $this->dom->find( 'title' )[0]->outertext;
+
+                $this->dom->find( 'title' )[0]->outertext = $title_content . $critical_css_content;
+
+            }
 
             $this->job_data->mark_as_successful_hit();
             $this->job_data->save();
