@@ -84,7 +84,11 @@ class CriticalCSS_Enqueue
 
     function enqueue_cpcss(){
 
-            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+            $critical_css_content = '';
+
+            if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
+                $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+            }
 
             if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
 
