@@ -26,8 +26,13 @@ class UnusedCSS_Enqueue {
         ]);
 
         $this->data = $data;
-        $this->files = $this->data->get_files();
-        $this->warnings = $this->data->get_warnings();
+
+        if(isset($this->data)){
+
+            $this->files = $this->data->get_files();
+            $this->warnings = $this->data->get_warnings();
+
+        }
 
         add_filter('uucss/enqueue/content/update', [$this, 'the_content'], 10);
     }
@@ -280,6 +285,16 @@ class UnusedCSS_Enqueue {
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(!isset($this->data) || isset($this->data) && $this->data->status != 'success'){
+            $this->inject->successfully_injected = false;
+            $this->inject->rapidload = false;
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options
+            ];
         }
 
         if($this->dom && $this->inject){

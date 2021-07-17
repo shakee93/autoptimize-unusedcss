@@ -313,11 +313,7 @@ class CriticalCSS
 
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-        if($job_data->exist() && $job_data->status == 'success'){
-
-            new CriticalCSS_Enqueue($job_data);
-
-        }
+        new CriticalCSS_Enqueue($job_data);
 
     }
 

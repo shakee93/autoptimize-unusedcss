@@ -69,11 +69,10 @@ class RapidLoad_Enqueue {
                 "ao_optimized_css" => [],
                 "injected_css_files"    => [],
                 "successfully_injected"    => true,
+                "rapidload"    => true,
             ];
 
             $inject->parsed_html = true;
-
-            $dom->find( 'html' )[0]->uucss = true;
 
             $state = apply_filters('uucss/enqueue/content/update',[
                 'dom' => $dom,
@@ -91,6 +90,10 @@ class RapidLoad_Enqueue {
 
             if(isset($state['options'])){
                 $this->options = $state['options'];
+            }
+
+            if($inject->rapidload){
+                $dom->find( 'html' )[0]->uucss = true;
             }
 
             if($inject->successfully_injected){

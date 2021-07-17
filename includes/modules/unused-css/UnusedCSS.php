@@ -262,7 +262,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    if ( ! $this->is_url_allowed($this->url, [], $this->options) ) {
+	    if ( ! $this->is_url_allowed($this->url) ) {
 		    return false;
 	    }
 
@@ -332,6 +332,8 @@ abstract class UnusedCSS {
 
         $this->rule = UnusedCSS_Rule::get_related_rule();
 
+        $data = null;
+
         if(isset($this->rule['rule'])){
 
             self::log([
@@ -347,15 +349,14 @@ abstract class UnusedCSS {
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
                 $this->options['uucss_disable_add_to_queue'] != "1"))
         {
+
             $this->cache( $this->url , $this->rule);
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->is_url_allowed( $this->url, [] , $this->options) ) {
+		if ( $this->is_url_allowed( $this->url) ) {
 
 			$this->get_css();
-
-            $data = null;
 
             if( !$rapidload->rules_enabled() &&
                 RapidLoad_Settings::link_exists( $this->url )
@@ -427,13 +428,13 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new UnusedCSS_Enqueue($data, $this->url);
-
                 }
 
             }
 
 		}
+
+        new UnusedCSS_Enqueue($data, $this->url);
 
 	}
 
@@ -441,7 +442,7 @@ abstract class UnusedCSS {
 
         global $rapidload;
 
-	    if ( ! $this->is_url_allowed( $url, $args , $this->options) ) {
+	    if ( ! $this->is_url_allowed( $url, $args) ) {
             self::log([
                 'log' => 'url not allowed to purge',
                 'url' => $url,

@@ -29,12 +29,6 @@ class CriticalCSS_Enqueue
 
     function update_content($state){
 
-        if(!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)) {
-            $this->job_data->requeue();
-            $this->job_data->save();
-            return $state;
-        }
-
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -45,6 +39,27 @@ class CriticalCSS_Enqueue
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(!$this->job_data->exist() || $this->job_data->status != 'success'){
+            //$this->inject->rapidload = false;
+            //$this->inject->successfully_injected = false;
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options
+            ];
+        }
+
+        if(!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)) {
+            $this->job_data->requeue();
+            $this->job_data->save();
+            //$this->inject->successfully_injected = false;
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options
+            ];
         }
 
         if($this->dom && $this->inject){
