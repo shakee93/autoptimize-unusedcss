@@ -281,7 +281,12 @@ class RapidLoad_Enqueue {
             $job->parent = $rule;
         }
 
-        $job->save();
+        if ( !isset( $this->options['uucss_disable_add_to_queue'] ) ||
+                isset( $this->options['uucss_disable_add_to_queue'] ) &&
+                $this->options['uucss_disable_add_to_queue'] != "1")
+        {
+            $job->save();
+        }
 
         do_action('rapidload/job/handle', $job, $args);
 

@@ -434,7 +434,9 @@ abstract class UnusedCSS {
 
 		}
 
-        new UnusedCSS_Enqueue($data, $this->url);
+        if(RapidLoad_Settings::link_exists( $this->url )){
+            new UnusedCSS_Enqueue($data, $this->url);
+        }
 
 	}
 

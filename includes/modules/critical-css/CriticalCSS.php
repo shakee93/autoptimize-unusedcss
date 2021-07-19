@@ -258,7 +258,7 @@ class CriticalCSS
 
     function cache_cpcss($job, $args = []){
 
-        if(!$job){
+        if(!$job || !$job->exist()){
             return false;
         }
 
@@ -308,6 +308,10 @@ class CriticalCSS
     }
 
     function enqueue_cpcss($job, $args){
+
+        if(!$job || !$job->exist()){
+            return false;
+        }
 
         $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
