@@ -77,6 +77,9 @@
     function showPublicNotices() {
         if (window.uucss && window.uucss.public_notices.length) {
             window.uucss.public_notices.forEach(function(value){
+                if(window.uucss && window.uucss.cpcss_enabled == "1" && value.id === 3){ // skip public notice if critical css enabled
+                    return;
+                }
                 showNotification(value.title, value.message, value.type + ' public-notice public-notice-' + value.id, true, value.id);
             })
         }
