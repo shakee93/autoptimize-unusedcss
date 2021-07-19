@@ -88,6 +88,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.1 - 19/07/2021 =
+ * improve : critical css feature
+
 = 1.6.0 - 16/07/2021 =
  * feat : added critical css feature to eliminate render-blocking
 
