@@ -334,20 +334,24 @@ abstract class UnusedCSS {
 
         $data = null;
 
-        if(isset($this->rule['rule'])){
+        $applicable_rule = null;
 
-            self::log([
-                'log' => 'rule identified : ' . $this->rule['rule'],
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
+        if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
+
+            $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+
+            if(!$applicable_rule){
+
+                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $this->url);
+
+            }
 
         }
 
         if (    !RapidLoad_Settings::link_exists( $this->url ) &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1"))
+                $this->options['uucss_disable_add_to_queue'] != "1") || $applicable_rule)
         {
 
             $this->cache( $this->url , $this->rule);
@@ -434,7 +438,7 @@ abstract class UnusedCSS {
 
 		}
 
-        if(RapidLoad_Settings::link_exists( $this->url )){
+        if(RapidLoad_Settings::link_exists( $this->url ) || isset($this->rule) && UnusedCSS_DB::rule_exists($this)){
             new UnusedCSS_Enqueue($data, $this->url);
         }
 
