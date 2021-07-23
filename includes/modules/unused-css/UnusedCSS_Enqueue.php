@@ -130,6 +130,7 @@ class UnusedCSS_Enqueue {
 
                 $this->link->mark_as_successful_hit();
             }
+            $this->dom->find( 'body' )[0]->uucss = true;
 
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
@@ -298,6 +299,8 @@ class UnusedCSS_Enqueue {
         }
 
         if($this->dom && $this->inject){
+
+            $this->dom->find( 'html' )[0]->uucss = true;
 
             $this->replace_stylesheets();
 

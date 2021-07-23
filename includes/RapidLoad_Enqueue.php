@@ -69,7 +69,6 @@ class RapidLoad_Enqueue {
                 "ao_optimized_css" => [],
                 "injected_css_files"    => [],
                 "successfully_injected"    => true,
-                "rapidload"    => true,
             ];
 
             $inject->parsed_html = true;
@@ -90,14 +89,6 @@ class RapidLoad_Enqueue {
 
             if(isset($state['options'])){
                 $this->options = $state['options'];
-            }
-
-            if($inject->rapidload){
-                $dom->find( 'html' )[0]->uucss = true;
-            }
-
-            if($inject->successfully_injected){
-                $dom->find( 'body' )[0]->uucss = true;
             }
 
             header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
