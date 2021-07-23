@@ -334,7 +334,7 @@ abstract class UnusedCSS {
 
         $data = null;
 
-        $applicable_rule = null;
+        $applicable_rule = false;
 
         if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
 
@@ -354,7 +354,7 @@ abstract class UnusedCSS {
                 $this->options['uucss_disable_add_to_queue'] != "1") || $applicable_rule)
         {
 
-            $this->cache( $this->url , $this->rule);
+            $this->cache( $this->url , $this->rule, $applicable_rule);
         }
 
 		// disabled exceptions only for frontend
@@ -438,13 +438,13 @@ abstract class UnusedCSS {
 
 		}
 
-        if(RapidLoad_Settings::link_exists( $this->url ) || isset($this->rule) && UnusedCSS_DB::rule_exists($this)){
+        if(RapidLoad_Settings::link_exists( $this->url )){
             new UnusedCSS_Enqueue($data, $this->url);
         }
 
 	}
 
-    public function cache($url = null, $args = []) {
+    public function cache($url = null, $args = [], $applicable_rule = false) {
 
         global $rapidload;
 
@@ -476,19 +476,21 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $applicable_rule = false;
-
         $path = null;
 
-	    if(isset($args['rule']) && $rapidload->rules_enabled()){
+	    if(!$applicable_rule){
 
-            $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
+            if(isset($args['rule']) && $rapidload->rules_enabled()){
 
-            if(!$applicable_rule){
+                $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
-                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
+                if(!$applicable_rule){
 
+                    $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
+
+                }
             }
+
         }
 
 	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
