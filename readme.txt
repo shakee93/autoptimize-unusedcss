@@ -88,6 +88,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.2 - 23/07/2021 =
+ * fix : disable auto queue option not working
+
 = 1.6.1 - 19/07/2021 =
  * improve : critical css feature
 
