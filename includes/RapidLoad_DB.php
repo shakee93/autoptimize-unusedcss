@@ -295,11 +295,92 @@ abstract class RapidLoad_DB
         return isset($result) && !empty($result);
     }
 
-    static function clear_jobs(){
+    static function clear_jobs( $type = 'all', $args = []){
 
         global $wpdb;
 
-        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job ");
+        switch ($type){
+
+            case 'all':{
+                $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job ");
+                break;
+            }
+
+            case 'url':{
+                if(isset($args['url'])){
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE url ='" . $args['url'] . "'");
+                }else{
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE rule ='is_url'");
+                }
+                break;
+            }
+
+            case 'rule':{
+                if(isset($args['rule']) && isset($args['regex'])){
+                    $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule ='" . $args['rule'] . "' AND regex ='" . $args['regex'] . "' LIMIT 1");
+                    if(!empty($id)){
+                        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job SET regex = '/', rule_id = NULL, status = 'processing' WHERE rule='is_url' AND  rule_id = " . $id );
+                    }
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE rule ='" . $args['rule'] . "' AND regex ='" . $args['regex'] . "'");
+                }else{
+                    $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job SET regex = '/', rule_id = NULL, status = 'processing' WHERE status = 'rule-based'");
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url')");
+                }
+
+                break;
+            }
+
+        }
+
+
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+    }
+
+    static function clear_job_data( $type = 'all', $args = []){
+
+        global $wpdb;
+
+        switch ($type){
+
+            case 'all':{
+                $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data ");
+                break;
+            }
+
+            case 'url':{
+                if(isset($args['url'])){
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id IN(SELECT id FROM {$wpdb->prefix}rapidload_job WHERE url  = '" . $args['url'] . "')");
+                }else{
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id IN(SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule  = 'is_url')");
+                }
+                break;
+            }
+
+            case 'rule':{
+                if(isset($args['rule']) && isset($args['regex'])){
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id IN(SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule  = '" . $args['rule'] . "' AND regex ='" . $args['regex'] . "')");
+                }else{
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id IN(SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule NOT IN('is_url'))");
+                }
+                break;
+            }
+
+            case 'uucss':{
+                $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = 'uucss'");
+                break;
+            }
+
+            case 'cpcss':{
+                $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = 'cpcss'");
+                break;
+            }
+        }
 
         $error = $wpdb->last_error;
 

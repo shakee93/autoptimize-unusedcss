@@ -947,6 +947,15 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    wp.ajax.post('rapidload_purge_all',{
+                                        job_type : 'url',
+                                        url : data.url,
+                                        clear : true
+                                    }).then(function (i) {
+
+                                    }).done(function(){
+
+                                    });
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1541,6 +1550,16 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
+                                    wp.ajax.post('rapidload_purge_all',{
+                                        job_type : 'rule',
+                                        rule : rule,
+                                        regex : regex,
+                                        clear : true
+                                    }).then(function (i) {
+
+                                    }).done(function(){
+
+                                    });
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1857,6 +1876,7 @@
                             var data = {
                                 url : '',
                                 clear : true,
+                                job_type: 'url',
                                 nonce: uucss.nonce
                             }
 
@@ -1881,6 +1901,11 @@
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             wp.ajax.post('cpcss_purge_url',data).then(function (i) {
+
+                            }).done(function(){
+
+                            });
+                            wp.ajax.post('rapidload_purge_all',data).then(function (i) {
 
                             }).done(function(){
 
@@ -2001,6 +2026,7 @@
                                 url : '',
                                 clear : true,
                                 nonce: uucss.nonce,
+                                job_type: 'rule',
                                 args: {
                                     type : 'rule'
                                 }
@@ -2029,6 +2055,11 @@
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
+                            });
+                            wp.ajax.post('rapidload_purge_all',data).then(function (i) {
+
+                            }).done(function(){
+
                             });
                             break;
                         }
