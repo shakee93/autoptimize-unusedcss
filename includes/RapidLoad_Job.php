@@ -51,7 +51,7 @@ class RapidLoad_Job{
             $this->rule_note = $exist->rule_note;
             $this->created_at = $exist->created_at;
 
-            if(isset($this->rule_id) && $this->rule_id != $this->id){
+            if(isset($this->rule_id) && $this->rule_id != $this->id && $this->rule == 'is_url'){
                 $this->parent = RapidLoad_Job::find_or_fail($this->rule_id);
             }
 
