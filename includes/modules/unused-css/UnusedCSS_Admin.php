@@ -374,14 +374,18 @@ abstract class UnusedCSS_Admin {
         }
 
         $ruleObject = false;
+        $update_mode = 'create';
 
         if(isset($_REQUEST['old_rule']) && isset($_REQUEST['old_regex'])){
 
-            if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['old_rule'], $_REQUEST['old_regex'])){
+            $old_rule = $_REQUEST['old_rule'];
+            $old_regex = $_REQUEST['old_regex'];
+
+            if(UnusedCSS_DB::rule_exists_with_error( $old_rule, $old_regex)){
 
                 $ruleObject = new UnusedCSS_Rule([
-                   'rule' => $_REQUEST['old_rule'],
-                   'regex' => $_REQUEST['old_regex']
+                   'rule' => $old_rule,
+                   'regex' => $old_regex
                 ]);
 
                 if(isset($_REQUEST['old_url']) && $_REQUEST['old_url'] != $url ||
@@ -394,6 +398,12 @@ abstract class UnusedCSS_Admin {
                 $ruleObject->rule = $rule;
                 $ruleObject->regex = $regex;
                 $ruleObject->save();
+                $update_mode = 'update';
+
+                do_action('uucss/rule/saved', $ruleObject, [
+                    'rule' => $old_rule,
+                    'regex' => $old_regex
+                ]);
 
                 wp_send_json_success('Rule updated successfully');
             }
@@ -410,7 +420,7 @@ abstract class UnusedCSS_Admin {
             'regex' => $regex,
         ]);
 
-        do_action('uucss/rule/saved', $ruleObject);
+        do_action('uucss/rule/saved', $ruleObject, false);
 
         /*$spawned = $this->schedule_cron('uucss_apply_rules', [] );
 

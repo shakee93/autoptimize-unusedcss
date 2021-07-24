@@ -24,8 +24,6 @@ class RapidLoad_Enqueue {
             }
 
         });
-
-        add_action('uucss/rule/saved', [$this, 'handle_uucss_rule']);
     }
 
     public function replace_css()
@@ -169,16 +167,6 @@ class RapidLoad_Enqueue {
         }
 
         return true;
-    }
-
-    public function handle_uucss_rule($args){
-
-        $job = new RapidLoad_Job([
-           'url' => $args->url,
-           'rule' => $args->rule,
-           'regex' => $args->regex,
-        ]);
-        $job->save();
     }
 
     public function enabled($url, $args) {

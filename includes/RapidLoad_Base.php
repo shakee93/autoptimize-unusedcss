@@ -41,6 +41,8 @@ class RapidLoad_Base
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
 
+            add_action('uucss/rule/saved', [$this, 'handle_uucss_rule'], 10, 2);
+
         });
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
@@ -52,6 +54,35 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function handle_uucss_rule($args, $old){
+
+        if($old && isset($old['rule']) && isset($old['regex'])){
+
+            $job = new RapidLoad_Job([
+                'rule' => $old['rule'],
+                'regex' => $old['regex'],
+            ]);
+
+            $job->url = $args->url;
+            $job->rule = $args->rule;
+            $job->regex = $args->regex;
+
+            $job->save();
+
+        }else{
+
+            $job = new RapidLoad_Job([
+                'url' => $args->url,
+                'rule' => $args->rule,
+                'regex' => $args->regex,
+            ]);
+
+            $job->save();
+
+        }
+
     }
 
     public function modules(){
