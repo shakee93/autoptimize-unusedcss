@@ -108,8 +108,6 @@ class RapidLoad_Base
 
             }else{
 
-
-
                 if($rule && $regex){
                     RapidLoad_DB::clear_job_data($job_type, [
                         'rule' => $rule,
