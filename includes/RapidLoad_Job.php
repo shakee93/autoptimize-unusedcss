@@ -118,6 +118,7 @@ class RapidLoad_Job{
 
         }
 
+        do_action('rapidload/job/updated', $this);
     }
 
     static function find_or_fail($id){

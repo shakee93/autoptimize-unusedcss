@@ -39,7 +39,21 @@ class CriticalCSS
 
         add_filter('uucss/link', [$this, 'update_link']);
 
+        add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 1);
+
         new CriticalCSS_Queue();
+    }
+
+    public function handle_job_updated($job){
+
+        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+        if(!$job_data->exist()){
+
+            $job_data->save();
+
+        }
+
     }
 
     public function cache_trigger_hooks() {

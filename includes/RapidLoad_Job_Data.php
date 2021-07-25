@@ -26,7 +26,7 @@ class RapidLoad_Job_Data{
         $this->job = $job;
         $this->job_type = $type;
 
-        $this->job_id = isset($this->job->parent) ? $this->job->parent->id : $this->job->id;
+        $this->job_id = isset($this->job->parent) && $this->job->parent ? $this->job->parent->id : $this->job->id;
 
         $exist = $this->exist();
 
@@ -92,6 +92,10 @@ class RapidLoad_Job_Data{
     }
 
     public function exist(){
+
+        if(!isset($this->id)){
+            return false;
+        }
 
         global $wpdb;
 

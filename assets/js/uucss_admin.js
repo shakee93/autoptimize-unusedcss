@@ -1726,14 +1726,17 @@
 
         function requeue(post_type, data = {}, list = [], type = 'path'){
 
-            wp.ajax.post('uucss_queue',{
+            var data_ = {
                 url_list : list,
                 url : data.url,
                 rule : data.rule,
                 regex : data.regex,
                 post_type : post_type,
                 type : type,
-            }).then(function (i) {
+                job_type : type,
+            }
+
+            wp.ajax.post('uucss_queue',data_).then(function (i) {
                 if(table && type === 'path'){
                     table.ajax.reload(null, false);
                 }else if(rule_table && type === 'rule'){
@@ -1741,6 +1744,12 @@
                 }
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
+            });
+
+            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
+
+            }).done(function(){
+
             });
 
             wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
@@ -2374,10 +2383,13 @@
             $target.attr('disabled', true);
             $target.val('Please wait....');
 
-            wp.ajax.post('uucss_queue',{
+            var data_ = {
                 post_type : $model_content.find('#model-requeue-post-type').val(),
+                job_type : $model_content.find('#model-requeue-post-type').val(),
                 url : $model_content.find('input.site-map-url').val()
-            }).then(function (i) {
+            }
+
+            wp.ajax.post('uucss_queue',data_).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();
                 if(currentFeather) currentFeather.close();
@@ -2391,7 +2403,13 @@
                 table.ajax.reload(null, false);
             })
 
-            wp.ajax.post('cpcss_purge_url',{ url : $model_content.find('input.site-map-url').val(), post_type : $model_content.find('#model-requeue-post-type').val() });
+            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
+
+            }).done(function(){
+
+            });
+
+            //wp.ajax.post('cpcss_purge_url',{ url : $model_content.find('input.site-map-url').val(), post_type : $model_content.find('#model-requeue-post-type').val() });
         });
 
         $('p.more-info-uucss-status').click(function (e) {

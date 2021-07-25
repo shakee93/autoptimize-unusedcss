@@ -40,7 +40,9 @@ class RapidLoad_Base
 
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
-            $this->container['admin'] = new RapidLoad_Admin();
+            if(RapidLoad_DB::$current_version > 1.2){
+                $this->container['admin'] = new RapidLoad_Admin();
+            }
 
         });
 

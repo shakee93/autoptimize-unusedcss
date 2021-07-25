@@ -4,14 +4,18 @@ defined( 'ABSPATH' ) or die();
 
 class RapidLoad_Admin
 {
+    use RapidLoad_Utils;
+
     public function __construct()
     {
         if(is_admin()){
 
-            add_action('uucss/rule/saved', [$this, 'handle_uucss_rule'], 10, 2);
+            add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
             add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
 
         }
+
+        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
     }
 
     public function rapidload_purge_all(){
@@ -85,10 +89,107 @@ class RapidLoad_Admin
             }
 
         }
+        else{
 
+            switch ($job_type){
+
+                case 'url':{
+
+                    if($url){
+
+                        $url = $this->transform_url($url);
+
+                        if($url && $this->is_url_allowed($url)){
+
+                            $job = new RapidLoad_Job(['url' => $url]);
+                            $job->save();
+
+                        }
+                    }
+                    break;
+                }
+                case 'rule':{
+
+                    if($url && $rule && $regex){
+
+                        $this->update_rule((object)[
+                            'url' => $url,
+                            'rule' => $rule,
+                            'regex' => $regex
+                        ]);
+                    }
+                    break;
+                }
+                case 'site_map':{
+
+                    if($url){
+
+                        $spawned = $this->schedule_cron('add_sitemap_to_jobs',[
+                            'url' => $url
+                        ]);
+                    }
+                    break;
+                }
+                default:{
+
+                    $posts = new WP_Query(array(
+                        'post_type'=> $job_type,
+                        'posts_per_page' => -1
+                    ));
+
+                    if($posts && $posts->have_posts()){
+
+                        while ($posts->have_posts()){
+
+                            $posts->the_post();
+
+                            $url = $this->transform_url(get_the_permalink(get_the_ID()));
+
+                            if($this->is_url_allowed($url)){
+
+                                $job = new RapidLoad_Job(['url' => $url]);
+                                $job->save();
+                            }
+                        }
+                    }
+
+                    wp_reset_query();
+
+                    break;
+                }
+            }
+        }
     }
 
-    public function handle_uucss_rule($args, $old){
+    function add_sitemap_to_jobs($url = false){
+
+        if(!$url){
+
+            $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
+        }
+
+        $site_map = new RapidLoad_Sitemap();
+        $urls = $site_map->process_site_map($url);
+
+        if(isset($urls) && !empty($urls)){
+
+            foreach ($urls as $value){
+
+                $_url = $this->transform_url($value);
+
+                if($this->is_url_allowed($_url)){
+
+                    $job = new RapidLoad_Job([
+                       'url' => $_url
+                    ]);
+                    $job->save();
+                }
+
+            }
+        }
+    }
+
+    public function update_rule($args, $old = false){
 
         if($old && isset($old['rule']) && isset($old['regex'])){
 
