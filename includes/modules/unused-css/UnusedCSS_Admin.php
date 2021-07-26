@@ -183,8 +183,6 @@ abstract class UnusedCSS_Admin {
 
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
 
-            $url = $this->transform_url($url);
-
             if($url && !$this->is_url_allowed($url)){
                 wp_send_json_error('url is excluded');
             }

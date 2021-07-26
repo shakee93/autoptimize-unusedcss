@@ -97,8 +97,6 @@ class RapidLoad_Admin
 
                     if($url){
 
-                        $url = $this->transform_url($url);
-
                         if($url && $this->is_url_allowed($url)){
 
                             $job = new RapidLoad_Job(['url' => $url]);
