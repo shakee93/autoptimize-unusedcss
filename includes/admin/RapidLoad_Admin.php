@@ -182,7 +182,7 @@ class RapidLoad_Admin
                     $job = new RapidLoad_Job([
                        'url' => $_url
                     ]);
-                    $job->save();
+                    $job->save(true);
                 }
 
             }

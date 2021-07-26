@@ -83,7 +83,7 @@ class RapidLoad_Job{
         return $exist;
     }
 
-    public function save(){
+    public function save($notify = false){
 
         global $wpdb;
         $data = (array) $this;
@@ -101,6 +101,10 @@ class RapidLoad_Job{
                 ]
             );
 
+            if($notify){
+                do_action('rapidload/job/updated', $this, false);
+            }
+
         }else{
 
             $wpdb->insert(
@@ -114,11 +118,12 @@ class RapidLoad_Job{
 
                 $this->id = $exist->id;
 
+                if($notify){
+                    do_action('rapidload/job/updated', $this, true);
+                }
             }
 
         }
-
-        do_action('rapidload/job/updated', $this);
     }
 
     static function find_or_fail($id){
