@@ -96,6 +96,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.3 - 27/07/2021 =
+ * feat : tested upto wordpress version 5.8
+ * improve : critical css feature
+
 = 1.6.2 - 23/07/2021 =
  * fix : disable auto queue option not working
 
