@@ -100,7 +100,7 @@ class RapidLoad_Admin
                         if($url && $this->is_url_allowed($url)){
 
                             $job = new RapidLoad_Job(['url' => $url]);
-                            $job->save();
+                            $job->save(true);
 
                         }
                     }
@@ -146,7 +146,7 @@ class RapidLoad_Admin
                             if($this->is_url_allowed($url)){
 
                                 $job = new RapidLoad_Job(['url' => $url]);
-                                $job->save();
+                                $job->save(true);
                             }
                         }
                     }
