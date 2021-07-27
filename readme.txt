@@ -1,9 +1,9 @@
-=== RapidLoad Power-Up for Autoptimize ===
+=== RapidLoad for Autoptimize ( Unused CSS + Critical CSS ) ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, unused css, autoptimize, rapidload
+Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
 Requires at least: 4.0
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
@@ -13,12 +13,20 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated unused CSS removal for WordPress [PAID PREMIUM PLUGIN]**
+**Automated unused CSS removal + critical CSS generation for WordPress [PAID PREMIUM PLUGIN]**
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
 
-Works perfectly with :
-* WP Rocket, * LIteSpeed Cache, * Cache Enabler, * W3 Total Cache, * Wp Super Cache, * WP Fastest Cache, * WP Optimize, * Proxy Cache Purge
+**Works perfectly with**
+
+- WP Rocket
+- LIteSpeed Cache
+- Cache Enabler
+- W3 Total Cache
+- Wp Super Cache
+- WP Fastest Cache
+- WP Optimize
+- Proxy Cache Purge
 
 **RapidLoad can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
 

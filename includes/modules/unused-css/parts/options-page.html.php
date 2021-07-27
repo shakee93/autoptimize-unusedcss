@@ -284,7 +284,7 @@
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
-                                            Enable to eliminate render-blocking CSS on your web site and load stylesheets asynchronously
+                                            Enable to eliminate render-blocking CSS on your website and load stylesheets asynchronously
                                         </i>
                                     </label>
                                 </td>
