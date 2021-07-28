@@ -89,16 +89,17 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-
-
             if($sheet->tag != 'link'){
                 continue;
-            }self::uucss_log($sheet->href);
+            }
 
-            $outer_text = $sheet->outertext;
+            $noscript_element = new \DiDom\Element('noscript');
+            $noscript_element->appendChild($sheet);
+
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
-            $sheet->outertext = '<noscript id="rapidload-noscript">' . $outer_text . '</noscript>' . $sheet->outertext;
+
+            $this->dom->first('head')->insertAfter($noscript_element, $sheet);
 
         }
     }
@@ -117,13 +118,12 @@ class CriticalCSS_Enqueue
 
             }
 
-            $critical_css_content = '<style id="rapidload-critical-css">' . $critical_css_content . '</style>';
+            $critical_css_content = new \DiDom\Element('style', $critical_css_content);
+            $critical_css_content->id = 'rapidload-critical-css';
 
             if(isset($this->dom->find( 'title' )[0])){
 
-                $title_content = $this->dom->find( 'title' )[0]->outertext;
-
-                $this->dom->find( 'title' )[0]->outertext = $title_content . $critical_css_content;
+                $this->dom->first('head')->insertAfter($critical_css_content, $this->dom->first('title'));
 
             }
 

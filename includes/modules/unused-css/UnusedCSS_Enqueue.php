@@ -54,22 +54,26 @@ class UnusedCSS_Enqueue {
                     continue;
                 }
 
+                if(isset($style->uucss)){
+                    continue;
+                }
+
                 $exclude_ids = apply_filters('uucss/enqueue/inline-exclude-id',[]);
 
                 if(in_array($style->id, $exclude_ids)){
                     continue;
                 }
 
-                $search = '//inline-style@' . md5(self::remove_white_space($style->innertext));
+                $search = '//inline-style@' . md5(self::remove_white_space($style->text()));
 
                 $file_key = array_search( $search, array_column( $this->files, 'original' ) );
 
                 if(is_numeric( $file_key ) && $file_key){
 
-                    $style->outertext = '';
+                    $style->remove();
                     $inline_style_content .= $this->files[$file_key]['uucss'];
 
-                }else{
+                }else {
 
                     $this->inject->successfully_injected = false;
 
@@ -97,12 +101,11 @@ class UnusedCSS_Enqueue {
 
             if(!empty($inline_style_content)){
 
-                $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data->url) . '" uucss>' . $inline_style_content . '</style>';
+                $inline_style_content = new \DiDom\Element('style', $inline_style_content);
+                $inline_style_content->{'inlined-uucss'} = "uucss-inline-" . md5($this->data->url);
+                $inline_style_content->uucss = '';
 
-                $header_content = $this->dom->find( 'head' )[0]->outertext;
-                $header_content = str_replace('</head>','', $header_content);
-
-                $this->dom->find( 'head' )[0]->outertext = $header_content . $inline_style_content . '</head>';
+                $this->dom->find( 'head' )[0]->appendChild($inline_style_content);
 
             }
 
@@ -128,7 +131,7 @@ class UnusedCSS_Enqueue {
 
                 $this->link->mark_as_successful_hit();
             }
-            $this->dom->find( 'body' )[0]->uucss = true;
+            $this->dom->find( 'body' )[0]->uucss = '';
 
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
@@ -205,6 +208,7 @@ class UnusedCSS_Enqueue {
 
                 // check if we found a script index and the file exists
                 if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
+
                     $uucss_file = $this->files[ $key ]['uucss'];
 
                     array_push( $this->inject->found_css_cache_files, $link );
@@ -222,7 +226,7 @@ class UnusedCSS_Enqueue {
 
                     if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
-                        $sheet->uucss = true;
+                        $sheet->uucss = '';
                         $sheet->href  = $newLink;
 
                         $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'</a><br><br>for <a href="' . $link . '" target="_blank">'. $link . '</a>');
@@ -298,7 +302,7 @@ class UnusedCSS_Enqueue {
 
         if($this->dom && $this->inject){
 
-            $this->dom->find( 'html' )[0]->uucss = true;
+            $this->dom->find( 'html' )[0]->uucss = '';
 
             $this->replace_stylesheets();
 
@@ -344,7 +348,11 @@ class UnusedCSS_Enqueue {
             return;
         }
 
-        $sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
+        $inline_element = new \DiDom\Element('style',$inline['content']);
+        $inline_element->{'inlined-uucss'} = basename( $link );
+        $inline_element->uucss = '';
+
+        $sheet->replace($inline_element);
 
     }
 

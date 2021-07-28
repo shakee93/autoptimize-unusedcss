@@ -41,21 +41,9 @@ class RapidLoad_Enqueue {
             return $html;
         }
 
-        $dom = new \simplehtmldom\HtmlDocument(
-            null,
-            false,
-            false,
-            \simplehtmldom\DEFAULT_TARGET_CHARSET,
-            false
-        );
+        $dom = new \DiDom\Document();
 
-        $dom->load(
-            $html,
-            false,
-            false,
-            \simplehtmldom\DEFAULT_TARGET_CHARSET,
-            false
-        );
+        $dom->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_SCHEMA_CREATE);
 
         if ( $dom ) {
 
