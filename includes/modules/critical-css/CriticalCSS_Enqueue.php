@@ -41,7 +41,7 @@ class CriticalCSS_Enqueue
             $this->options = $state['options'];
         }
 
-        if(!$this->job_data->exist() || $this->job_data->status != 'success'){
+        if(!isset($this->job_data->id) || $this->job_data->status != 'success'){
             //$this->inject->rapidload = false;
             //$this->inject->successfully_injected = false;
             return [

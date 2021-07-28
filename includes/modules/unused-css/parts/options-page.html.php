@@ -746,7 +746,7 @@
             </label>
             <select id="model-uucss-rules">
                 <?php
-                $rules = UnusedCSS_Rule::get_defined_rules();
+                $rules = RapidLoad_Base::get()->get_pre_defined_rules();
 
                 if(isset($rules) && !empty($rules)){
 

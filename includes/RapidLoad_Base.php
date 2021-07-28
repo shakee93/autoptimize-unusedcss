@@ -11,6 +11,18 @@ class RapidLoad_Base
     public $url = null;
     public $rule = null;
 
+    public $applicable_rule = false;
+    public $defined_rules = false;
+
+    private static $base_instance = null;
+
+    public static function get(){
+        if(!self::$base_instance){
+            self::$base_instance = new RapidLoad_Base();
+        }
+        return self::$base_instance;
+    }
+
     private $container = [];
 
     public static $page_options = [
@@ -304,5 +316,36 @@ class RapidLoad_Base
             isset($this->options['uucss_enable_cpcss']) &&
             $this->options['uucss_enable_cpcss'] == "1" &&
             RapidLoad_DB::$current_version > 1.2;
+    }
+
+    public function get_applicable_rule($url, $args = []){
+
+        if(!$this->applicable_rule){
+
+            if(isset($args['rule']) && self::get()->rules_enabled()){
+
+                $this->applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
+
+                if(!$this->applicable_rule){
+
+                    $this->applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $url);
+
+                }
+
+            }
+
+        }
+
+        return $this->applicable_rule;
+    }
+
+    public function get_pre_defined_rules(){
+
+        if(!$this->defined_rules){
+
+            $this->defined_rules = self::get_defined_rules();
+        }
+
+        return $this->defined_rules;
     }
 }

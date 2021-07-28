@@ -17,13 +17,11 @@ class UnusedCSS_Enqueue {
     private $warnings;
     private $link;
 
-    function __construct($data, $url = '')
+    function __construct($data, $url = '', $link = null)
     {
         $this->file_system = new RapidLoad_FileSystem();
 
-        $this->link = new UnusedCSS_Path([
-            'url' => $url
-        ]);
+        $this->link = $link;
 
         $this->data = $data;
 

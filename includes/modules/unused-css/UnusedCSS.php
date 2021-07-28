@@ -15,6 +15,8 @@ abstract class UnusedCSS {
 
 	public $url = null;
 	public $rule = null;
+	public $applicable_rule = null;
+	public $existing_link = null;
 	public $css = [];
 	public $store = null;
 	public $options = [];
@@ -333,28 +335,29 @@ abstract class UnusedCSS {
         $this->rule = UnusedCSS_Rule::get_related_rule();
 
         $data = null;
+        $link = null;
 
-        $applicable_rule = false;
+        $this->existing_link = RapidLoad_Settings::link_exists( $this->url );
 
         if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
 
-            $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
 
-            if(!$applicable_rule){
+            if(!$this->applicable_rule){
 
-                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $this->url);
+                $this->applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $this->url);
 
             }
 
         }
 
-        if (    !RapidLoad_Settings::link_exists( $this->url ) &&
+        if (    !$this->existing_link &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1") || $applicable_rule)
+                $this->options['uucss_disable_add_to_queue'] != "1") || $this->applicable_rule)
         {
 
-            $this->cache( $this->url , $this->rule, $applicable_rule);
+            $this->cache( $this->url , $this->rule);
         }
 
 		// disabled exceptions only for frontend
@@ -363,7 +366,7 @@ abstract class UnusedCSS {
 			$this->get_css();
 
             if( !$rapidload->rules_enabled() &&
-                RapidLoad_Settings::link_exists( $this->url )
+                $this->existing_link
             ){
 
                 self::log([
@@ -378,7 +381,7 @@ abstract class UnusedCSS {
 
             }
             else if($rapidload->rules_enabled() &&
-                RapidLoad_Settings::link_exists( $this->url )){
+                $this->existing_link){
 
                 self::log([
                     'log' => 'success link exist with rules ',
@@ -398,22 +401,22 @@ abstract class UnusedCSS {
 
                     if($applicable_rule){
 
+                        $link = $data;
                         $data = $applicable_rule;
 
                     }
 
                 }elseif (isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
 
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+                    if($this->applicable_rule){
 
-                    if($applicable_rule){
-
-                        $data->attach_rule($applicable_rule->id, $applicable_rule->rule);
+                        $data->attach_rule($this->applicable_rule->id, $this->applicable_rule->rule);
                         $data->save();
 
+                        $link = $data;
                         $data = new UnusedCSS_Rule([
-                           'rule' => $applicable_rule->rule,
-                           'regex' => $applicable_rule->regex,
+                           'rule' => $this->applicable_rule->rule,
+                           'regex' => $this->applicable_rule->regex,
                         ]);
                     }
 
@@ -437,13 +440,13 @@ abstract class UnusedCSS {
 
 		}
 
-        if(RapidLoad_Settings::link_exists( $this->url )){
-            new UnusedCSS_Enqueue($data, $this->url);
+        if($this->existing_link){
+            new UnusedCSS_Enqueue($data, $this->url, $link);
         }
 
 	}
 
-    public function cache($url = null, $args = [], $applicable_rule = false) {
+    public function cache($url = null, $args = []) {
 
         global $rapidload;
 
@@ -475,47 +478,36 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $path = null;
+	    if(!$this->applicable_rule){
 
-	    if(!$applicable_rule){
-
-            if(isset($args['rule']) && $rapidload->rules_enabled()){
-
-                $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
-
-                if(!$applicable_rule){
-
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
-
-                }
-            }
+            $this->applicable_rule = $rapidload->get_applicable_rule($url, $args);
 
         }
 
-	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
+	    if($this->applicable_rule && UnusedCSS_DB::rule_exists_with_error($this->applicable_rule->rule, $this->applicable_rule->regex)){
 
-	        $path = new UnusedCSS_Rule([
-                'rule' => $applicable_rule->rule,
-                'regex' => $applicable_rule->regex
+            $this->existing_link = new UnusedCSS_Rule([
+                'rule' => $this->applicable_rule->rule,
+                'regex' => $this->applicable_rule->regex
             ]);
 
             new UnusedCSS_Path([
                 'url' => $url,
-                'rule' => $applicable_rule->rule,
+                'rule' => $this->applicable_rule->rule,
                 'status' => 'rule-based',
-                'rule_id' => $path->id
+                'rule_id' => $this->existing_link->id
             ]);
 
         }else{
 
-            $path = new UnusedCSS_Path([
+            $this->existing_link = new UnusedCSS_Path([
                 'url' => $url,
                 'status' => 'queued'
             ]);
 
         }
 
-        if($path->status == 'failed' && $path->attempts > 2 && !isset($args['immediate'])){
+        if($this->existing_link->status == 'failed' && $this->existing_link->attempts > 2 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
                 'url' => $url,
@@ -524,18 +516,18 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if($path->is_type('Path')){
+        if($this->existing_link->is_type('Path')){
 
-            $path->rule_id = NULL;
-            $path->requeue();
-            $path->save();
+            $this->existing_link->rule_id = NULL;
+            $this->existing_link->requeue();
+            $this->existing_link->save();
 
         }else{
 
-            if($path->status == 'failed'){
+            if($this->existing_link->status == 'failed'){
 
-                $path->requeue();
-                $path->save();
+                $this->existing_link->requeue();
+                $this->existing_link->save();
 
             }
 
@@ -545,10 +537,10 @@ abstract class UnusedCSS {
 
 	    if (! $this->async || isset($args['first_job'])) {
 
-            if($path->is_type('Path')){
+            if($this->existing_link->is_type('Path')){
                 $this->init_async_store($this->provider, $url, $args);
             }else{
-                $this->init_async_store_rule($this->provider, $url, $args, $path);
+                $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
             }
 
             self::log([
@@ -561,7 +553,7 @@ abstract class UnusedCSS {
 
             $spawned = false;
 
-            if($path->is_type('Path')){
+            if($this->existing_link->is_type('Path')){
                 $spawned = $this->schedule_cron('uucss_async_queue', [
                     'provider' => $this->provider,
                     'url'      => $url,
@@ -573,19 +565,19 @@ abstract class UnusedCSS {
                     'provider' => $this->provider,
                     'url'      => $url,
                     'args'     => $args,
-                    'rule'     => $path
+                    'rule'     => $this->existing_link
                 ]);
             }
 
-            $path->status = 'processing';
-            $path->save();
+            $this->existing_link->status = 'processing';
+            $this->existing_link->save();
 
 	    	if(!$spawned){
 
-                if($path->is_type('Path')){
+                if($this->existing_link->is_type('Path')){
                     $this->init_async_store($this->provider, $url, $args);
                 }else{
-                    $this->init_async_store_rule($this->provider, $url, $args, $path);
+                    $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
                 }
 
             }

@@ -95,7 +95,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
     public static function get_related_rule(){
 
-        $rules = self::get_defined_rules();
+        $rules = RapidLoad_Base::get()->get_pre_defined_rules();
 
         $rule_names = UnusedCSS_DB::get_rule_names();
 

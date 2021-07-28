@@ -52,7 +52,7 @@ trait RapidLoad_Utils {
 
     public function get_current_rule($user_defined_rules = []){
 
-        $rules = self::get_defined_rules();
+        $rules = RapidLoad_Base::get()->get_pre_defined_rules();
 
         $related_rule = false;
 

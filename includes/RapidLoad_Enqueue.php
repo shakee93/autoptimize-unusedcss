@@ -230,18 +230,7 @@ class RapidLoad_Enqueue {
             $args['post_id'] = url_to_postid($url);
         }
 
-        $applicable_rule = false;
-
-        if(isset($args['rule']) && $rapidload->rules_enabled()){
-
-            $applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
-
-            if(!$applicable_rule){
-
-                $applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $url);
-
-            }
-        }
+        $applicable_rule = $rapidload->get_applicable_rule($url, $args);
 
         $job = new RapidLoad_Job([
             'url' => $url

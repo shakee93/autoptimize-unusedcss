@@ -39,7 +39,7 @@ register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
 
 global $rapidload;
 
-$rapidload = new RapidLoad_Base();
+$rapidload = RapidLoad_Base::get();
 
 
 

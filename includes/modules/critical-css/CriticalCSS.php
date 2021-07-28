@@ -13,6 +13,8 @@ class CriticalCSS
 
     public static $base_dir;
 
+    public $job_data = null;
+
     public function __construct()
     {
         $this->options = RapidLoad_Base::fetch_options();
@@ -281,7 +283,7 @@ class CriticalCSS
 
     function cache_cpcss($job, $args = []){
 
-        if(!$job || !$job->exist()){
+        if(!$job || !isset($job->id)){
             return false;
         }
 
@@ -289,41 +291,41 @@ class CriticalCSS
             return false;
         }
 
-        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        $this->job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-        if(!$job_data->exist()){
+        if(!isset($job_data->id)){
 
-            $job_data->save();
+            $this->job_data->save();
 
         }
 
-        if($job_data->status == 'failed' && $job_data->attempts > 2 && !isset($args['immediate'])){
+        if($this->job_data->status == 'failed' && $this->job_data->attempts > 2 && !isset($args['immediate'])){
             return false;
         }
 
-        if(!in_array($job_data->status, ['success', 'waiting', 'processing']) || isset( $args['immediate'])){
-            $job_data->requeue();
-            $job_data->save();
+        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing']) || isset( $args['immediate'])){
+            $this->job_data->requeue();
+            $this->job_data->save();
         }
 
         $this->async = apply_filters('uucss/purge/async',true);
 
         if (! $this->async ) {
 
-            $this->init_async_store($job_data, $args);
+            $this->init_async_store($this->job_data, $args);
 
         }else if(isset( $args['immediate'] )){
 
-            $job_data->requeue();
-            $job_data->save();
+            $this->job_data->requeue();
+            $this->job_data->save();
 
             $spawned = $this->schedule_cron('cpcss_async_queue', [
-                'job_data' => $job_data,
+                'job_data' => $this->job_data,
                 'args'     => $args
             ]);
 
             if(!$spawned){
-                $this->init_async_store($job_data, $args);
+                $this->init_async_store($this->job_data, $args);
             }
 
         }
@@ -337,9 +339,11 @@ class CriticalCSS
             return false;
         }
 
-        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        if(!$this->job_data){
+            $this->job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        }
 
-        new CriticalCSS_Enqueue($job_data);
+        new CriticalCSS_Enqueue($this->job_data);
 
     }
 

@@ -91,7 +91,7 @@ class RapidLoad_Job{
         unset($data['id']);
         unset($data['parent']);
 
-        if($this->exist()){
+        if(isset($this->id)){
 
             $wpdb->update(
                 $wpdb->prefix . 'rapidload_job',
