@@ -64,7 +64,7 @@ class CriticalCSS_Enqueue
 
         if($this->dom && $this->inject){
 
-            $this->update_noscript();
+            //$this->update_noscript();
 
             $this->enqueue_cpcss();
 
