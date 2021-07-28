@@ -64,7 +64,7 @@ class CriticalCSS_Enqueue
 
         if($this->dom && $this->inject){
 
-            //$this->update_noscript();
+            $this->update_noscript();
 
             $this->enqueue_cpcss();
 
@@ -99,7 +99,7 @@ class CriticalCSS_Enqueue
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
 
-            $this->dom->first('head')->insertAfter($noscript_element, $sheet);
+            //$this->dom->first('head')->insertBefore($noscript_element, $sheet);
 
         }
     }
