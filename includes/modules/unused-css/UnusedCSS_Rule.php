@@ -108,7 +108,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
                 continue;
             }
 
-            if(isset($rule['callback']) && $rule['callback']){
+            if(isset($rule['callback']) && is_callable($rule['callback']) && $rule['callback']()){
 
                 $related_rule = $rule;
                 break;

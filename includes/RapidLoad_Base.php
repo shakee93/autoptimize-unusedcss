@@ -339,11 +339,11 @@ class RapidLoad_Base
         return $this->applicable_rule;
     }
 
-    public function get_pre_defined_rules(){
+    public function get_pre_defined_rules($with_permalink = false){
 
         if(!$this->defined_rules){
 
-            $this->defined_rules = self::get_defined_rules();
+            $this->defined_rules = self::get_defined_rules($with_permalink);
         }
 
         return $this->defined_rules;

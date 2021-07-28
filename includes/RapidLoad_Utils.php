@@ -73,7 +73,7 @@ trait RapidLoad_Utils {
         return $related_rule;
     }
 
-    public static function get_defined_rules(){
+    public static function get_defined_rules( $with_permalink = false){
 
         $rules = apply_filters('uucss/rules', []);
 
@@ -89,7 +89,7 @@ trait RapidLoad_Utils {
 
         $rules_with_permalink = [];
         foreach ($rules as $rule){
-            if(!isset($rule['permalink']) && isset($rule['name'])){
+            if(!isset($rule['permalink']) && isset($rule['name']) && isset($rule['custom_post']) && $with_permalink){
                 $posts = get_posts([
                     'posts_per_page' => 1,
                     'post_type' => $rule['name']

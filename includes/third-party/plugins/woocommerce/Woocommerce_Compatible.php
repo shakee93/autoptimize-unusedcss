@@ -26,7 +26,9 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                 'rule' => 'is_product',
                 'category' => 'Woocommerce',
                 'priority' => 5,
-                'callback' => is_product(),
+                'callback' => function(){
+                    return is_product();
+                },
             ];
         }
 
@@ -36,7 +38,9 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                 'rule' => 'is_product_category',
                 'category' => 'Woocommerce',
                 'priority' => 5,
-                'callback' => is_product_category(),
+                'callback' => function(){
+                    return is_product_category();
+                },
             ];
         }
 
@@ -46,7 +50,9 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                 'rule' => 'is_product_tag',
                 'category' => 'Woocommerce',
                 'priority' => 5,
-                'callback' => is_product_tag(),
+                'callback' => function(){
+                    return is_product_tag();
+                },
             ];
         }
 

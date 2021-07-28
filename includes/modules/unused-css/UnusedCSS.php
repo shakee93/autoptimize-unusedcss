@@ -90,7 +90,9 @@ abstract class UnusedCSS {
             'rule' => 'is_front_page',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_front_page(),
+            'callback' => function(){
+                return is_front_page();
+            },
         ];
 
         $rules[] = [
@@ -98,7 +100,9 @@ abstract class UnusedCSS {
             'rule' => 'is_404',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_404(),
+            'callback' => function(){
+                return is_404();
+            },
         ];
 
         $rules[] = [
@@ -106,7 +110,9 @@ abstract class UnusedCSS {
             'rule' => 'is_archive',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_archive(),
+            'callback' => function(){
+                return is_archive();
+            },
         ];
 
         foreach ($custom_posts as $key => $value){
@@ -120,7 +126,9 @@ abstract class UnusedCSS {
                     'rule' => 'is_' . $value,
                     'category' => 'Custom Post Types',
                     'priority' => 5,
-                    'callback' => get_post_type( get_the_ID() ) == $value
+                    'callback' => function() use($value){
+                        return get_post_type( get_the_ID() ) == $value;
+                    }
                 ];
             }
         }
@@ -133,7 +141,9 @@ abstract class UnusedCSS {
                     'rule' => 'is_' . $value,
                     'category' => 'Taxonomies',
                     'priority' => 5,
-                    'callback' => is_tax($value),
+                    'callback' => function() use($value){
+                        return is_tax($value);
+                    },
                 ];
             }
         }
@@ -143,7 +153,9 @@ abstract class UnusedCSS {
             'rule' => 'is_author',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_author(),
+            'callback' => function(){
+                return is_author();
+            },
         ];
 
         $rules[] = [
@@ -151,7 +163,9 @@ abstract class UnusedCSS {
             'rule' => 'is_home',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_home(),
+            'callback' => function(){
+                return is_home();
+            },
         ];
 
         $rules[] = [
@@ -159,7 +173,9 @@ abstract class UnusedCSS {
             'rule' => 'is_page',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_page(),
+            'callback' => function(){
+                return is_page();
+            },
         ];
 
         $rules[] = [
@@ -167,7 +183,9 @@ abstract class UnusedCSS {
             'rule' => 'is_post',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_singular(),
+            'callback' => function(){
+                return is_singular();
+            },
         ];
 
         $rules[] = [
@@ -175,7 +193,9 @@ abstract class UnusedCSS {
             'rule' => 'is_search',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_search(),
+            'callback' => function(){
+                return is_search();
+            },
         ];
 
         $rules[] = [
@@ -183,7 +203,9 @@ abstract class UnusedCSS {
             'rule' => 'is_attachment',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_attachment(),
+            'callback' => function(){
+                return is_attachment();
+            },
         ];
 
         $rules[] = [
@@ -191,7 +213,9 @@ abstract class UnusedCSS {
             'rule' => 'is_single',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_single(),
+            'callback' => function(){
+                return is_single();
+            },
         ];
 
         $rules[] = [
@@ -199,7 +223,9 @@ abstract class UnusedCSS {
             'rule' => 'is_sticky',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_sticky(),
+            'callback' => function(){
+                return is_sticky();
+            },
         ];
 
         $rules[] = [
@@ -207,7 +233,9 @@ abstract class UnusedCSS {
             'rule' => 'is_paged',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_paged(),
+            'callback' => function(){
+                return is_paged();
+            },
         ];
 
         return $rules;
