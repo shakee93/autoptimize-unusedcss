@@ -95,11 +95,12 @@ class CriticalCSS_Enqueue
 
             $noscript_element = new \DiDom\Element('noscript');
             $noscript_element->appendChild($sheet->cloneNode(true));
+            $noscript_element->id = 'rapidload-no-script';
 
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
 
-            //$this->dom->first('head')->insertAfter($noscript_element, $sheet);
+            $this->dom->first('head')->appendChild($noscript_element, $sheet);
 
         }
     }
