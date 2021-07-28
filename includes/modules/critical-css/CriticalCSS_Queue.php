@@ -23,10 +23,18 @@ class CriticalCSS_Queue
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
-                $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+                if($job){
 
-                $store = new CriticalCSS_Store($job_data, []);
-                $store->purge_css();
+                    $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+                    $store = new CriticalCSS_Store($job_data, []);
+                    $store->purge_css();
+
+                }else{
+
+                    CriticalCSS_DB::delete_by_job_id($link->job_id);
+
+                }
 
             }
 
@@ -44,10 +52,18 @@ class CriticalCSS_Queue
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
-                $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+                if($job){
 
-                $store = new CriticalCSS_Store($job_data, []);
-                $store->update_css();
+                    $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+
+                    $store = new CriticalCSS_Store($job_data, []);
+                    $store->update_css();
+
+                }else{
+
+                    CriticalCSS_DB::delete_by_job_id($link->job_id);
+
+                }
 
             }
 

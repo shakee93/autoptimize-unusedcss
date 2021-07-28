@@ -95,30 +95,7 @@ class RapidLoad_Job_Data{
 
         global $wpdb;
 
-        return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $this->job_type ."' AND job_id = " . $this->job_id, OBJECT);
-
-    }
-
-    static function find_or_fail($id){
-
-        global $wpdb;
-
-        $exist = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE id = '" . $id . "'", OBJECT);
-
-        if(!$exist){
-            return null;
-        }
-
-        if($exist->rule == 'is_url'){
-            return new RapidLoad_Job_Data([
-                'url' => $exist->url
-            ]);
-        }else{
-            return new RapidLoad_Job([
-                'rule' => $exist->rule,
-                'regex' => $exist->regex
-            ]);
-        }
+        return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $this->job_type ."' AND job_id = '" . $this->job_id . "'", OBJECT);
 
     }
 

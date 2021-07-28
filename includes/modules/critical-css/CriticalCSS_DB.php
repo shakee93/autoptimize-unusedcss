@@ -107,4 +107,19 @@ class CriticalCSS_DB extends RapidLoad_DB{
 
         return $transformed_links;
     }
+
+    static function delete_by_job_id($id){
+
+        if(!$id){
+            return;
+        }
+
+        global $wpdb;
+
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type='cpcss' AND job_id = " . $id);
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
 }
