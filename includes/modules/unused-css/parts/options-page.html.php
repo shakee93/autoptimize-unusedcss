@@ -12,6 +12,7 @@
         return isset($plugin['category']) && $plugin['category'] == 'cache';
     });
 
+    $job_counts = UnusedCSS_DB::get_job_counts();
 ?>
 
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
@@ -546,13 +547,13 @@
                     </h2>
                     <div class="content" style="display:none;">
                         <?php
-                        $total = UnusedCSS_DB::get_total_job_count();
-                        $success = UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL ');
-                        $queued = UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" ');
-                        $processing = UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" ');
-                        $waiting = UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" ');
-                        $warnings = UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL ');
-                        $failed = UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" ');
+                        $total = $job_counts->hits;
+                        $success = $job_counts->success;
+                        $queued = $job_counts->queued;
+                        $processing = $job_counts->processing;
+                        $waiting = $job_counts->waiting;
+                        $warnings = $job_counts->warnings;
+                        $failed = $job_counts->failed;
                         ?>
                         <p>
                             <strong>Version</strong> : <?php echo UUCSS_VERSION ?>
@@ -577,7 +578,7 @@
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <?php
-                                $hits = UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 ');
+                                $hits = $job_counts->hits;
                             ?>
                             <p class="status-hits-count">
                                 <strong>Hits</strong> : <span class="number"><?php echo $hits; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?></span>%
@@ -587,7 +588,7 @@
                             </p>
                             <?php
                                 if ( $rapidload->rules_enabled() ) :
-                                $rule_based = UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'");
+                                $rule_based = $job_counts->rule_based;
                             ?>
                             <p class="status-rule-based-count">
                                 <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%

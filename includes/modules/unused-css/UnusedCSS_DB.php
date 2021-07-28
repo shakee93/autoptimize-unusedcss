@@ -113,6 +113,39 @@ class UnusedCSS_DB extends RapidLoad_DB
         return $transformed_links;
     }
 
+    static function get_job_counts(){
+
+        global $wpdb;
+
+        $counts = $wpdb->get_results(
+            "SELECT 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE hits > 0) as hits,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'success' AND warnings IS NULL) as success,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'rule-based') as rule_based,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'waiting') as waiting, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'queued') as queued,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'processing') as processing, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE warnings IS NOT NULL) as warnings,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'failed') as failed,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job) as total", OBJECT);
+
+        if(!empty($counts)){
+            return $counts[0];
+        }
+
+        return (object)[
+            'hits' => 0,
+            'success' => 0,
+            'rule_based' => 0,
+            'waiting' => 0,
+            'queued' => 0,
+            'processing' => 0,
+            'warnings' => 0,
+            'failed' => 0,
+            'total' => 0,
+        ];
+    }
+
     static function get_total_job_count($where = ''){
 
         if(self::$current_version < 1.2 && strpos( $where, 'hits' ) !== false){

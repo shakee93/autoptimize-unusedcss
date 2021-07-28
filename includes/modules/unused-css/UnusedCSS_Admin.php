@@ -332,18 +332,20 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_status(){
 
+        $job_counts = UnusedCSS_DB::get_job_counts();
+
         wp_send_json_success([
             'cssStyleSheetsCount' => $this->uucss->cache_file_count(),
             'cssStyleSheetsSize' => $this->uucss->size(),
-            'hits' => UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 '),
-            'success' => UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL '),
-            'ruleBased' => UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'"),
-            'queued' => UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" '),
-            'waiting' => UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" '),
-            'processing' => UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" '),
-            'warnings' => UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL '),
-            'failed' => UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" '),
-            'total' => UnusedCSS_DB::get_total_job_count(),
+            'hits' => $job_counts->hits,
+            'success' => $job_counts->success,
+            'ruleBased' => $job_counts->rule_based,
+            'queued' => $job_counts->queued,
+            'waiting' => $job_counts->waiting,
+            'processing' => $job_counts->processing,
+            'warnings' => $job_counts->warnings,
+            'failed' => $job_counts->failed,
+            'total' => $job_counts->total,
         ]);
     }
 
