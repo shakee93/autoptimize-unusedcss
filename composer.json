@@ -1,7 +1,8 @@
 {
     "require": {
         "simplehtmldom/simplehtmldom": "@dev",
-        "collizo4sky/persist-admin-notices-dismissal": "^1.4"
+        "collizo4sky/persist-admin-notices-dismissal": "^1.4",
+        "imangazaliev/didom": "^1.18"
     },
     "autoload": {
         "classmap": [

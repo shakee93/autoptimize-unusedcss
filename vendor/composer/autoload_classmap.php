@@ -10,6 +10,7 @@ return array(
     'Autoptimize_Compatible' => $baseDir . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
     'Cloudflare_Compatible' => $baseDir . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Cookie_Notice_Compatible' => $baseDir . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
     'CriticalCSS' => $baseDir . '/includes/modules/critical-css/CriticalCSS.php',
     'CriticalCSS_DB' => $baseDir . '/includes/modules/critical-css/CriticalCSS_DB.php',

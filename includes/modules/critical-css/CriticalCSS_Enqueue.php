@@ -89,9 +89,11 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+
+
             if($sheet->tag != 'link'){
                 continue;
-            }
+            }self::uucss_log($sheet->href);
 
             $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';

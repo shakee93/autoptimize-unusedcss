@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d53c3e460fda5bcee79031bead13c82e",
+    "content-hash": "3e72d5f203a5cb307c773625ce7343da",
     "packages": [
         {
             "name": "collizo4sky/persist-admin-notices-dismissal",
@@ -42,6 +42,58 @@
             ],
             "description": "Simple library to persist dismissal of admin notices across pages in WordPress dashboard.",
             "time": "2020-12-31T17:12:37+00:00"
+        },
+        {
+            "name": "imangazaliev/didom",
+            "version": "1.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Imangazaliev/DiDOM.git",
+                "reference": "346db1ea94a0f6ead225c2358af770bf33659cf7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Imangazaliev/DiDOM/zipball/346db1ea94a0f6ead225c2358af770bf33659cf7",
+                "reference": "346db1ea94a0f6ead225c2358af770bf33659cf7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-iconv": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DiDom\\": "src/DiDom/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Imangazaliev Muhammad",
+                    "email": "imangazalievm@gmail.com"
+                }
+            ],
+            "description": "Simple and fast HTML parser",
+            "homepage": "https://github.com/Imangazaliev/DiDOM",
+            "keywords": [
+                "didom",
+                "html",
+                "parser",
+                "xml"
+            ],
+            "support": {
+                "issues": "https://github.com/Imangazaliev/DiDOM/issues",
+                "source": "https://github.com/Imangazaliev/DiDOM/tree/1.18"
+            },
+            "time": "2021-07-27T18:50:53+00:00"
         },
         {
             "name": "simplehtmldom/simplehtmldom",
@@ -122,5 +174,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
 }

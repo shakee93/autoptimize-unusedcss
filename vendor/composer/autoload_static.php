@@ -6,11 +6,26 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
+    public static $prefixLengthsPsr4 = array (
+        'D' => 
+        array (
+            'DiDom\\' => 6,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'DiDom\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/imangazaliev/didom/src/DiDom',
+        ),
+    );
+
     public static $classMap = array (
         'Autoptimize_Beta_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
         'Autoptimize_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
         'Cloudflare_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cloudflare/Cloudflare_Compatible.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Cookie_Notice_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cookie-notice/Cookie_Notice_Compatible.php',
         'CriticalCSS' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS.php',
         'CriticalCSS_DB' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_DB.php',
@@ -75,6 +90,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
 
         }, null, ClassLoader::class);
