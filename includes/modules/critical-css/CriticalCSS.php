@@ -197,6 +197,12 @@ class CriticalCSS
                 $job->save();
             }
 
+            self::log([
+                'type' => 'purging',
+                'url' => '',
+                'log' => ' job : ' . json_encode((array)$job)
+            ]);
+
             $this->cache_cpcss($job, ['immediate' => true]);
 
         }
@@ -256,11 +262,15 @@ class CriticalCSS
 
             $job = new RapidLoad_Job([
                 'url' => $url,
-                'rule' => $rule,
-                'regex' => $regex
             ]);
 
-            if($job->exist()){
+            if(!$job->exist()){
+
+                $job->rule = $rule;
+                $job->regex = $regex;
+                $job->save();
+
+            }else{
 
                 $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
@@ -269,8 +279,8 @@ class CriticalCSS
                     $link['cpcss'] = (array) $job_data;
 
                 }
-
             }
+
         }
 
         return $link;
