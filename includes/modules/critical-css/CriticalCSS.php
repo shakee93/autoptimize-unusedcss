@@ -257,20 +257,12 @@ class CriticalCSS
         if(isset($link['url'])){
 
             $url = isset($link['base']) ? $link['base'] : $link['url'];
-            $rule = isset($link['rule']) ? $link['rule'] : 'is_url';
-            $regex = isset($link['regex']) ? $link['regex'] : '/';
 
             $job = new RapidLoad_Job([
                 'url' => $url,
             ]);
 
-            if(!$job->exist()){
-
-                $job->rule = $rule;
-                $job->regex = $regex;
-                $job->save();
-
-            }else{
+            if($job->exist()){
 
                 $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
@@ -279,6 +271,7 @@ class CriticalCSS
                     $link['cpcss'] = (array) $job_data;
 
                 }
+
             }
 
         }

@@ -793,6 +793,10 @@ abstract class UnusedCSS_Admin {
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
             }
 
+        }else{
+
+            $filters[] = " status NOT IN ('rule-based') ";
+
         }
 
         $url_filter = isset($_REQUEST['columns']) &&

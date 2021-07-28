@@ -373,8 +373,7 @@ abstract class UnusedCSS {
                 ]);
 
                 $data = new UnusedCSS_Path([
-                    'url' => $this->url,
-                    'rule' => isset($this->rule['rule']) ? $this->rule['rule'] : null
+                    'url' => $this->url
                 ]);
 
             }
@@ -511,7 +510,6 @@ abstract class UnusedCSS {
 
             $path = new UnusedCSS_Path([
                 'url' => $url,
-                'rule' => isset($args['rule']) ? $args['rule'] : null,
                 'status' => 'queued'
             ]);
 
