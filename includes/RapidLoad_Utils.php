@@ -77,16 +77,6 @@ trait RapidLoad_Utils {
 
         $rules = apply_filters('uucss/rules', []);
 
-        if(apply_filters('uucss/rules/path', false)){
-            $rules[] = [
-                'name' => 'path',
-                'rule' => 'is_path',
-                'category' => 'Path Based',
-                'priority' => 20,
-                'callback' => false
-            ];
-        }
-
         $rules_with_permalink = [];
         foreach ($rules as $rule){
             if(!isset($rule['permalink']) && isset($rule['name']) && isset($rule['custom_post']) && $with_permalink){

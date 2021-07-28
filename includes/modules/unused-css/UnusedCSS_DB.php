@@ -207,7 +207,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function link_exists($url){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
+        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -541,8 +541,15 @@ class UnusedCSS_DB extends RapidLoad_DB
 
     static function get_applied_rule($rule, $url){
 
-        $rules = self::get_rules_where("WHERE rule = '" . $rule . "'", true);
+        global $wpdb;
+
+        $rules = $wpdb->get_results("SELECT id, rule, regex FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' ORDER BY id DESC ", OBJECT);
+
         $applied_rule = false;
+
+        if(empty($rules)){
+            return $rules;
+        }
 
         foreach ($rules as $rule){
             if(self::is_url_glob_matched($url,$rule->regex)){
@@ -601,7 +608,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function rule_exists_with_error($rule, $regex = '/'){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
 
         $error = $wpdb->last_error;
 

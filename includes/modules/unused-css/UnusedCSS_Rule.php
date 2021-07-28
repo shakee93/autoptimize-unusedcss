@@ -126,7 +126,7 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         global $wpdb;
 
-        $rule_current = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule where id = " . $rule_id, OBJECT);
+        $rule_current = $wpdb->get_results("SELECT rule, regex FROM {$wpdb->prefix}rapidload_uucss_rule where id = " . $rule_id, OBJECT);
 
         if(isset($rule_current) && !empty($rule_current)){
             return new UnusedCSS_Rule([

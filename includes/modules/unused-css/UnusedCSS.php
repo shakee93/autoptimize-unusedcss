@@ -371,12 +371,6 @@ abstract class UnusedCSS {
 
             $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
 
-            if(!$this->applicable_rule){
-
-                $this->applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $this->url);
-
-            }
-
         }
 
         if (    !$this->existing_link &&
@@ -476,8 +470,6 @@ abstract class UnusedCSS {
 
     public function cache($url = null, $args = []) {
 
-        global $rapidload;
-
 	    if ( ! $this->is_url_allowed( $url, $args) ) {
             self::log([
                 'log' => 'url not allowed to purge',
@@ -506,13 +498,13 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-	    if(!$this->applicable_rule){
+	    if(!$this->applicable_rule && isset($args['rule'])){
 
-            $this->applicable_rule = $rapidload->get_applicable_rule($url, $args);
+            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
         }
 
-	    if($this->applicable_rule && UnusedCSS_DB::rule_exists_with_error($this->applicable_rule->rule, $this->applicable_rule->regex)){
+	    if($this->applicable_rule){
 
             $this->existing_link = new UnusedCSS_Rule([
                 'rule' => $this->applicable_rule->rule,
