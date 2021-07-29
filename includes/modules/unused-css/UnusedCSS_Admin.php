@@ -92,11 +92,21 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
             add_action( 'wp_ajax_uucss_queue', [$this, 'queue_posts']);
+            add_action( 'wp_ajax_rapidload_notifications', [$this, 'rapidload_notifications']);
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
         add_action( 'uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
+
+    }
+
+    function rapidload_notifications(){
+
+        wp_send_json_success([
+            'faqs' => $this->get_faqs(),
+            'notifications' => $this->get_public_notices()
+        ]);
 
     }
 
@@ -896,8 +906,8 @@ abstract class UnusedCSS_Admin {
             'on_board_complete' => apply_filters('uucss/on-board/complete', false),
             'api_key_verified' => self::is_api_key_verified(),
             'notifications' => $this->getNotifications(),
-            'faqs' => $this->get_faqs(),
-            'public_notices' => $this->get_public_notices(),
+            'faqs' => [],
+            'public_notices' => [],
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $rapidload->rules_enabled(),
             'cpcss_enabled' => $rapidload->critical_css_enabled(),

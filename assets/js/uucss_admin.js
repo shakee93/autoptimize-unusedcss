@@ -2435,8 +2435,7 @@
             $('#uucss-wrapper li.uucss-history.uucss-rule-history').removeClass('multi-select');
         });
 
-        showPublicNotices();
-        showFaqs();
+        updateNotices();
 
         var $updateRuleForm = $('#add_rule_featherlight_content');
 
@@ -2478,6 +2477,17 @@
 
         setInterval(updateRapidLoadStatus, 60000);
     });
+
+    function updateNotices() {
+        wp.ajax.post('rapidload_notifications', {}).then(function (response) {
+            if(response){
+                window.uucss.faqs = response.faqs;
+                window.uucss.public_notices = response.notifications;
+            }
+            showFaqs();
+            showPublicNotices();
+        });
+    }
 
 
     function updateLicense() {
