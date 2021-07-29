@@ -6,7 +6,7 @@ class RapidLoad_Base
 {
     use RapidLoad_Utils;
 
-    public $options = [];
+    public static $options;
 
     public $url = null;
     public $rule = null;
@@ -34,7 +34,7 @@ class RapidLoad_Base
     public function __construct()
     {
 
-        $this->options = self::fetch_options();
+        self::$options = self::fetch_options();
 
         add_action('init', function (){
 
@@ -192,6 +192,11 @@ class RapidLoad_Base
 
     public static function fetch_options()
     {
+
+        if(isset(self::$options)){
+            return self::$options;
+        }
+
         if(is_multisite()){
 
             return get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
@@ -305,16 +310,16 @@ class RapidLoad_Base
 
     public function rules_enabled(){
         return
-            isset($this->options['uucss_enable_rules']) &&
-            $this->options['uucss_enable_rules'] == "1" &&
+            isset(self::$options['uucss_enable_rules']) &&
+            self::$options['uucss_enable_rules'] == "1" &&
             RapidLoad_DB::$current_version > 1.1 &&
             apply_filters('uucss/rules/enable', true);
     }
 
     public function critical_css_enabled(){
         return
-            isset($this->options['uucss_enable_cpcss']) &&
-            $this->options['uucss_enable_cpcss'] == "1" &&
+            isset(self::$options['uucss_enable_cpcss']) &&
+            self::$options['uucss_enable_cpcss'] == "1" &&
             RapidLoad_DB::$current_version > 1.2;
     }
 
