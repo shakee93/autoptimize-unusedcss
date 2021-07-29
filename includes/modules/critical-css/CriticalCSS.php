@@ -294,9 +294,7 @@ class CriticalCSS
         $this->job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
         if(!isset($this->job_data->id)){
-            error_log('cpcss');
             $this->job_data->save();
-
         }
 
         if($this->job_data->status == 'failed' && $this->job_data->attempts > 2 && !isset($args['immediate'])){
