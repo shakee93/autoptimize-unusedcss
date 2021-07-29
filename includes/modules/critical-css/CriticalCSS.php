@@ -93,9 +93,13 @@ class CriticalCSS
         $this->cache_cpcss( $job, $args );
     }
 
-    public function clear_on_actions($post_ID)
+    public function clear_on_actions($post_id)
     {
-        $link = get_permalink($post_ID);
+        if(!$post_id){
+            return;
+        }
+
+        $link = get_permalink($post_id);
 
         if($link){
 
@@ -113,6 +117,10 @@ class CriticalCSS
 
     public function cache_on_actions($post_id, $post = null, $update = null)
     {
+        if(!$post_id){
+            return;
+        }
+
         $post = get_post($post_id);
 
         if($post->post_status == "publish") {

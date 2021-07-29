@@ -524,7 +524,7 @@ trait RapidLoad_Utils {
     {
 
         if ( ! $url ) {
-            $url = $this->url;
+            return false;
         }
 
         if(!$this->is_valid_url($url)){
@@ -542,7 +542,7 @@ trait RapidLoad_Utils {
 
         global $post;
 
-        if ( isset( $args['post_id'] ) ) {
+        if ( !$post && isset( $args['post_id'] )) {
             $post = get_post( $args['post_id'] );
         }
 

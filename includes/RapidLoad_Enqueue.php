@@ -105,7 +105,7 @@ class RapidLoad_Enqueue {
 
         global $post;
 
-        if ( isset( $args['post_id'] ) ) {
+        if ( !$post && isset( $args['post_id'] ) ) {
             $post = get_post( $args['post_id'] );
         }
 
