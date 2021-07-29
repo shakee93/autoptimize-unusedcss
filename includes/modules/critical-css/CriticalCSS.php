@@ -360,7 +360,7 @@ class CriticalCSS
 
         $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'cpcss' : $cache_base . 'cpcss';*/
 
-        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR) . 'cpcss';
 
         if ( ! $this->file_system ) {
             return false;

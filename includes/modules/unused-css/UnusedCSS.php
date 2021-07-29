@@ -270,7 +270,7 @@ abstract class UnusedCSS {
 
         $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : $cache_base . 'uucss';*/
 
-        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss';
 
 		if ( ! $this->file_system ) {
 			return false;
