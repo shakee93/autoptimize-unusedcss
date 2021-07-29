@@ -52,7 +52,7 @@ class CriticalCSS
 
             $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-            if(!$job_data->exist()){
+            if(!isset($job_data->id)){
 
                 $job_data->save();
 
@@ -103,7 +103,7 @@ class CriticalCSS
                'url' => $link
             ]);
 
-            if($job->exist()){
+            if(isset($job->id)){
 
                 $this->clear_cache($job);
 
@@ -123,7 +123,7 @@ class CriticalCSS
                 'url' => get_permalink( $post )
             ]);
 
-            if(!$job->exist()){
+            if(!isset($job->id)){
 
                 $job->save();
 
@@ -140,7 +140,7 @@ class CriticalCSS
 
             $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-            if($job_data->exist()){
+            if(isset($job_data->id)){
 
                 $this->clear_files($job_data);
                 $job_data->requeue();
@@ -195,7 +195,7 @@ class CriticalCSS
                 'url' => $this->transform_url($url)
             ]);
 
-            if (!$job->exist()) {
+            if (!isset($job->id)) {
                 $job->save();
             }
 
@@ -264,11 +264,11 @@ class CriticalCSS
                 'url' => $url,
             ]);
 
-            if($job->exist()){
+            if(isset($job->id)){
 
                 $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-                if($job_data->exist()){
+                if(isset($job_data->id)){
 
                     $link['cpcss'] = (array) $job_data;
 
@@ -335,7 +335,7 @@ class CriticalCSS
 
     function enqueue_cpcss($job, $args){
 
-        if(!$job || !$job->exist()){
+        if(!$job || !isset($job->id)){
             return false;
         }
 
