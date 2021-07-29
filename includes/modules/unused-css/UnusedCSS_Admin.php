@@ -608,6 +608,8 @@ abstract class UnusedCSS_Admin {
                     'soft' => true
                 ] );
             }
+
+            RapidLoad_Base::fetch_options(false);
         }
 
     }

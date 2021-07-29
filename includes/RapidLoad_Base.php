@@ -33,8 +33,7 @@ class RapidLoad_Base
 
     public function __construct()
     {
-
-        self::$options = self::fetch_options();
+        self::fetch_options();
 
         add_action('init', function (){
 
@@ -190,19 +189,23 @@ class RapidLoad_Base
 
     }
 
-    public static function fetch_options()
+    public static function fetch_options($cache = true)
     {
 
-        if(isset(self::$options)){
+        if(isset(self::$options) && $cache){
             return self::$options;
         }
 
         if(is_multisite()){
 
-            return get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
+            self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
 
+        }else{
+
+            self::$options = get_site_option( 'autoptimize_uucss_settings', false );
         }
-        return get_site_option( 'autoptimize_uucss_settings', false );
+
+        return self::$options;
     }
 
     public static function get_option($name, $default)
@@ -304,6 +307,8 @@ class RapidLoad_Base
         }
 
         self::update_option( 'autoptimize_uucss_settings', $options );
+
+        self::$options = self::fetch_options(false);
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }

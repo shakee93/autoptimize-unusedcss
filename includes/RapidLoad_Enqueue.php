@@ -17,9 +17,11 @@ class RapidLoad_Enqueue {
         add_action('wp_enqueue_scripts', function (){
 
             $url = $this->transform_url($this->get_current_url());
-            $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
 
-            if($this->enabled($url, $args)){
+            if($this->enabled($url)){
+
+                $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+
                 $this->handle_job($url, $args);
             }
 
@@ -157,7 +159,7 @@ class RapidLoad_Enqueue {
         return true;
     }
 
-    public function enabled($url, $args) {
+    public function enabled($url) {
 
         if ( $this->is_doing_api_fetch() ) {
             return false;
@@ -168,7 +170,7 @@ class RapidLoad_Enqueue {
             return false;
         }
 
-        if ( ! $this->is_url_allowed($url, $args) ) {
+        if ( ! $this->is_url_allowed($url) ) {
             return false;
         }
 
