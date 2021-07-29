@@ -98,6 +98,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 = 1.6.5 - 29/07/2021 =
  * feat : optimized database queries for better performance (phase 2)
+ * feat : updated HTML parser
 
 = 1.6.4 - 28/07/2021 =
  * feat : optimized database queries for better performance
