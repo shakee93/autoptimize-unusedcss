@@ -30,7 +30,9 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
 
-        new UnusedCSS_RapidLoad_Onboard( $this );
+        if(is_admin()){
+            new UnusedCSS_RapidLoad_Onboard( $this );
+        }
 
         $this->check_dependencies();
 

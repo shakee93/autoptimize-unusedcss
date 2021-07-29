@@ -293,8 +293,8 @@ class CriticalCSS
 
         $this->job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-        if(!isset($job_data->id)){
-
+        if(!isset($this->job_data->id)){
+            error_log('cpcss');
             $this->job_data->save();
 
         }
@@ -349,7 +349,8 @@ class CriticalCSS
 
     public function initFileSystem() {
 
-        $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+        // Todo cache base setup
+        /*$cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
 
@@ -359,7 +360,9 @@ class CriticalCSS
             RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
         }
 
-        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'cpcss' : $cache_base . 'cpcss';
+        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'cpcss' : $cache_base . 'cpcss';*/
+
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         if ( ! $this->file_system ) {
             return false;

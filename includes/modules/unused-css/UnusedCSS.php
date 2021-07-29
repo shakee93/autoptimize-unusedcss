@@ -256,7 +256,9 @@ abstract class UnusedCSS {
 	public function initFileSystem() {
 
         $this->file_system = new RapidLoad_FileSystem();
-        $cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+
+        // Todo cache base setup
+        /*$cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
         $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
 
@@ -266,7 +268,9 @@ abstract class UnusedCSS {
             RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
         }
 
-        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : $cache_base . 'uucss';
+        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : $cache_base . 'uucss';*/
+
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
 
 		if ( ! $this->file_system ) {
 			return false;

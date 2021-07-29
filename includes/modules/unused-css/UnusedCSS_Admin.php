@@ -809,7 +809,7 @@ abstract class UnusedCSS_Admin {
 
         }else{
 
-            $filters[] = " status NOT IN ('rule-based') ";
+            $filters[] = " status != 'rule-based' ";
 
         }
 

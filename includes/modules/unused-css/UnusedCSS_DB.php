@@ -222,7 +222,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function get_first_link(){
         global $wpdb;
 
-        $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN('rule-based') LIMIT 1", OBJECT );
+        $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status != 'rule-based' LIMIT 1", OBJECT );
 
         $error = $wpdb->last_error;
 
@@ -495,7 +495,7 @@ class UnusedCSS_DB extends RapidLoad_DB
 
         global $wpdb;
 
-        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
+        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
 
         $error = $wpdb->last_error;
 
@@ -503,7 +503,7 @@ class UnusedCSS_DB extends RapidLoad_DB
             self::show_db_error($error);
         }
 
-        return array_column($names, 'rule');
+        return array_unique(array_column($names, 'rule'));
     }
 
     static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){

@@ -45,7 +45,9 @@ class RapidLoad_Base
 
             $this->add_plugin_update_message();
 
-            RapidLoad_DB::check_db_updates();
+            if(is_admin()){
+                RapidLoad_DB::check_db_updates();
+            }
 
             self::enqueueGlobalScript();
 

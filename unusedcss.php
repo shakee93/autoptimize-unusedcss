@@ -27,11 +27,15 @@ if ( is_multisite() ) {
 
 require __DIR__ . '/vendor/autoload.php';
 
-register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Base::uucss_activate' );
+if(is_admin()){
 
-register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_DB::initialize' );
+    register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Base::uucss_activate' );
 
-register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
+    register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_DB::initialize' );
+
+    register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
+
+}
 
 /**
  * @type $uucss UnusedCSS_Autoptimize

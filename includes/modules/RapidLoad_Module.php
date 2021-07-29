@@ -31,7 +31,8 @@ class RapidLoad_Module
             'global' => 'cpcss'
         ];
 
-        $stored_modules = get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] );
+        // Todo get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] )
+        $stored_modules = ['unused-css' => 'on', 'critical-css' => 'on'];
 
         foreach ($stored_modules as $key => $value){
             $this->modules[$key]['status'] = $value;

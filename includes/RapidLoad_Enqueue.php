@@ -222,11 +222,13 @@ class RapidLoad_Enqueue {
 
         $applicable_rule = $rapidload->get_applicable_rule($url, $args);
 
+        self::uucss_log($applicable_rule);
+
         $job = new RapidLoad_Job([
             'url' => $url
         ]);
 
-        if($applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+        if(!isset($job->rule_id) && $applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
@@ -237,13 +239,16 @@ class RapidLoad_Enqueue {
             $job->rule_id = $rule->id;
             $job->status = 'rule-based';
             $job->parent = $rule;
+            $job->save();
         }
 
         if ( !isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
                 $this->options['uucss_disable_add_to_queue'] != "1" || $applicable_rule)
         {
-            $job->save();
+            if(!isset($job->id)){
+                $job->save();
+            }
         }
 
         do_action('rapidload/job/handle', $job, $args);
