@@ -77,6 +77,27 @@ class CriticalCSS_DB extends RapidLoad_DB{
         return $data;
     }
 
+    static function get_data($select = ' * ' , $where = '', $limit = 1, $order_by = 'id DESC')
+    {
+        global $wpdb;
+
+        if(empty($where)){
+            $where = " WHERE job_type='cpcss' ";
+        }else{
+            $where .= " AND job_type='cpcss' ";
+        }
+
+        $data = $wpdb->get_results( "SELECT {$select} FROM {$wpdb->prefix}rapidload_job_data {$where} ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $data;
+    }
+
     static function get_data_by_status($status, $limit = 1, $order_by = 'id DESC'){
 
         global $wpdb;
@@ -121,5 +142,20 @@ class CriticalCSS_DB extends RapidLoad_DB{
         if(!empty($error)){
             self::show_db_error($error);
         }
+    }
+
+    static function get_task_count($where = ''){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
     }
 }

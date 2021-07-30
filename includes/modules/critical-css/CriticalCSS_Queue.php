@@ -13,9 +13,13 @@ class CriticalCSS_Queue
 
     function fetch_job_id(){
 
-        $current_waiting = CriticalCSS_DB::get_data_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
+        $current_waiting = CriticalCSS_DB::get_task_count(" WHERE status = 'processing' OR status = 'waiting' " );
 
-        $links = CriticalCSS_DB::get_data_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
+        if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){
+            return;
+        }
+
+        $links = CriticalCSS_DB::get_data(' job_id ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
 
         if(!empty($links)){
 
@@ -44,7 +48,7 @@ class CriticalCSS_Queue
 
     function fetch_result(){
 
-        $links = CriticalCSS_DB::get_data_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'queue_job_id');
+        $links = CriticalCSS_DB::get_data(' job_id ', " WHERE status = 'processing' OR status = 'waiting' ", RapidLoad_Queue::$job_count, 'queue_job_id');
 
         if(!empty($links)){
 
