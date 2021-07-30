@@ -222,8 +222,6 @@ class RapidLoad_Enqueue {
 
         $applicable_rule = $rapidload->get_applicable_rule($url, $args);
 
-        self::uucss_log($applicable_rule);
-
         $job = new RapidLoad_Job([
             'url' => $url
         ]);
