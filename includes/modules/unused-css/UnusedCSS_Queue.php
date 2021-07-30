@@ -15,11 +15,13 @@ class UnusedCSS_Queue
 
     function fetch_path_job_id(){
 
-        global $uucss;
+        $current_waiting = UnusedCSS_DB::get_task_count("job"," WHERE status = 'processing' OR status = 'waiting' " );
 
-        $current_waiting = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
+        if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){
+            return;
+        }
 
-        $links = UnusedCSS_DB::get_links_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
+        $links = UnusedCSS_DB::get_data("job",' url ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
 
         if(!empty($links)){
 
@@ -35,9 +37,13 @@ class UnusedCSS_Queue
 
     function fetch_rule_job_id(){
 
-        $current_waiting = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count);
+        $current_waiting = UnusedCSS_DB::get_task_count("rule"," WHERE status = 'processing' OR status = 'waiting' " );
 
-        $rules = UnusedCSS_DB::get_rules_by_status(["'queued'"], (RapidLoad_Queue::$job_count - count($current_waiting)));
+        if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){
+            return;
+        }
+
+        $rules = UnusedCSS_DB::get_data("rule",' url, rule, regex ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
 
         if(!empty($rules)){
 
@@ -151,7 +157,7 @@ class UnusedCSS_Queue
 
     function fetch_path_result(){
 
-        $links = UnusedCSS_DB::get_links_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'job_id');
+        $links = UnusedCSS_DB::get_data("job",' url, job_id ', " WHERE status = 'processing' OR status = 'waiting' ", RapidLoad_Queue::$job_count, 'job_id');
 
         if(!empty($links)){
 
@@ -167,7 +173,7 @@ class UnusedCSS_Queue
 
     function fetch_rule_result(){
 
-        $rules = UnusedCSS_DB::get_rules_by_status(["'processing'","'waiting'"], RapidLoad_Queue::$job_count, 'job_id');
+        $rules = UnusedCSS_DB::get_data("rule",' url, job_id, rule, regex ', " WHERE status = 'processing' OR status = 'waiting' ", RapidLoad_Queue::$job_count, 'job_id');
 
         if(!empty($rules)){
 

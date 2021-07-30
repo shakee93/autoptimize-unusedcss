@@ -83,6 +83,36 @@ class UnusedCSS_DB extends RapidLoad_DB
 	    }
     }
 
+    static function get_task_count($job, $where = ''){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_{$job} {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
+
+    static function get_data($job, $select = ' * ' , $where = '', $limit = 1, $order_by = 'id DESC')
+    {
+        global $wpdb;
+
+        $data = $wpdb->get_results( "SELECT {$select} FROM {$wpdb->prefix}rapidload_uucss_{$job} {$where} ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $data;
+    }
+
     static function get_links_by_status($status, $limit = 1, $order_by = 'id DESC'){
         global $wpdb;
 

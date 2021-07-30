@@ -148,7 +148,7 @@ class CriticalCSS_DB extends RapidLoad_DB{
 
         global $wpdb;
 
-        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data {$where}");
+        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data {$where} ");
 
         $error = $wpdb->last_error;
 

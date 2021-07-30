@@ -13,7 +13,7 @@ class CriticalCSS_Queue
 
     function fetch_job_id(){
 
-        $current_waiting = CriticalCSS_DB::get_task_count(" WHERE status = 'processing' OR status = 'waiting' " );
+        $current_waiting = CriticalCSS_DB::get_task_count(" WHERE status = 'processing' OR status = 'waiting' AND job_type = 'cpcss'" );
 
         if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){
             return;
