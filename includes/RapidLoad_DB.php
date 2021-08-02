@@ -5,7 +5,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.3";
+    static $db_version = "1.4";
     static $db_option = "rapidload_migration";
     static $current_version = "1.3";
 
@@ -127,7 +127,9 @@ abstract class RapidLoad_DB
 		hits mediumint(3) NULL,
 		status varchar(15) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-		PRIMARY KEY  (id)            
+		PRIMARY KEY  (id),
+		KEY idx_rapidload_job_data_job_id (job_id),       
+		KEY idx_rapidload_job_data_job_type (job_type)            
 	) ;";
 
         dbDelta( $sql );
