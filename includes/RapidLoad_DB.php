@@ -7,7 +7,7 @@ abstract class RapidLoad_DB
 
     static $db_version = "1.4";
     static $db_option = "rapidload_migration";
-    static $current_version = "1.3";
+    static $current_version = "1.4";
 
     static function initialize_site($new_site, $args){
 
@@ -138,7 +138,7 @@ abstract class RapidLoad_DB
 
     static function check_db_updates(){
 
-        self::$current_version = UnusedCSS_Admin::get_site_option( self::$db_option );
+        self::$current_version = RapidLoad_Base::get_option( self::$db_option , self::$db_version);
 
         add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
 

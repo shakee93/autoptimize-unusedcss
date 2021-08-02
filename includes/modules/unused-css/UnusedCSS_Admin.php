@@ -1296,7 +1296,10 @@ abstract class UnusedCSS_Admin {
 		$api = new RapidLoad_Api();
 
 		$data = $api->get( 'license', [
-			'url' => $this->transform_url(get_site_url())
+			'url' => $this->transform_url(get_site_url()),
+            'version' => UUCSS_VERSION,
+            'db_version' => RapidLoad_DB::$db_version,
+            'db_version_exist' => RapidLoad_DB::$current_version
 		] );
 
 		if ( ! is_wp_error( $data ) ) {
