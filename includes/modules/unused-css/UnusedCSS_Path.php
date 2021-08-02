@@ -70,6 +70,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
                 $this->id = $id;
             }
+            error_log('created for : ' . $url);
         }
     }
 
