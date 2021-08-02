@@ -26,7 +26,7 @@ class UnusedCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
-
+                error_log($link->url);
                 $this->cache_path($link->url);
 
             }
