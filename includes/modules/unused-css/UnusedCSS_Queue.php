@@ -21,18 +21,32 @@ class UnusedCSS_Queue
             return;
         }
 
-        $links = UnusedCSS_DB::get_data("job",' url ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
+        $links = UnusedCSS_DB::get_data("job",' id, url ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
 
         if(!empty($links)){
 
             foreach ($links as $link){
-                error_log($link->url);
+
+                $url = $link->url;
+
+                if($this->is_url_validation_failed($url)){
+                    UnusedCSS_DB::delete_link_by_id($link->id);
+                    continue;
+                }
+
                 $this->cache_path($link->url);
 
             }
 
         }
 
+    }
+
+    function is_url_validation_failed($url){
+        if($this->str_contains($url, "/'||/'")) {
+            return true;
+        }
+        return false;
     }
 
     function fetch_rule_job_id(){

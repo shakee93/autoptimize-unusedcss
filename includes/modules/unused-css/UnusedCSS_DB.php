@@ -307,6 +307,18 @@ class UnusedCSS_DB extends RapidLoad_DB
         }
     }
 
+    static function delete_link_by_id($id){
+        global $wpdb;
+
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . $id . "" );
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
     static function update_status($status = 'queued', $link = false){
         global $wpdb;
 
