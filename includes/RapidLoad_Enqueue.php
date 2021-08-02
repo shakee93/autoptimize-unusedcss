@@ -226,7 +226,7 @@ class RapidLoad_Enqueue {
             'url' => $url
         ]);
 
-        if(!isset($job->rule_id) && $applicable_rule && RapidLoad_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)) {
+        if(!isset($job->rule_id) && $applicable_rule) {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
