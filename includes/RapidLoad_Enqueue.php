@@ -226,6 +226,12 @@ class RapidLoad_Enqueue {
             'url' => $url
         ]);
 
+        self::log([
+            'log' => 'applicable rule for ',
+            'url' => $url,
+            'type' => 'genereal : ' . json_encode($applicable_rule)
+        ]);
+
         if(!isset($job->rule_id) && $applicable_rule) {
 
             $rule = new RapidLoad_Job([
