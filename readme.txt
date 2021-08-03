@@ -96,6 +96,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.7 - 03/08/2021 =
+ * feat : optimized database queries for better performance (phase 3)
+ * feat : add support for Advanced Custom Fields Plugin
+ * improve : improve elementor plugin support
+ * improve : add index to rapidload data tables
+
 = 1.6.6 - 29/07/2021 =
  * fix : Elementor editor not loading for several users
 
