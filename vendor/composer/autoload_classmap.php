@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AdvancedCustomFields_Compatible' => $baseDir . '/includes/third-party/plugins/advanced-custom-fields/AdvancedCustomFields_Compatible.php',
     'Autoptimize_Beta_Compatible' => $baseDir . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
     'Autoptimize_Compatible' => $baseDir . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',
     'Cache_Enabler_Compatible' => $baseDir . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',

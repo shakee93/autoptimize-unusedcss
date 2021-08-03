@@ -2,13 +2,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Elementor_Compatible extends RapidLoad_ThirdParty{
+class AdvancedCustomFields_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
-        $this->plugin = 'elementor/elementor.php';
-        $this->catgeory = 'theme-builder';
-        $this->name = 'elementor';
+        $this->plugin = 'advanced-custom-fields/acf.php';
+        $this->catgeory = 'custom-fields';
+        $this->name = 'advanced-custom-fields';
 
         parent::__construct();
     }
@@ -23,9 +23,7 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
         $url_parts = parse_url( $args );
 
         if(isset($url_parts['query']) &&
-            ( $this->str_contains($url_parts['query'], 'elementor-preview') ||
-                $this->str_contains($url_parts['query'], 'preview_id') ||
-                $this->str_contains($url_parts['query'], 'elementor_library'))
+            ( $this->str_contains($url_parts['query'], 'post_type=acf_field') )
         ){
             return false;
         }

@@ -21,6 +21,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     );
 
     public static $classMap = array (
+        'AdvancedCustomFields_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/advanced-custom-fields/AdvancedCustomFields_Compatible.php',
         'Autoptimize_Beta_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
         'Autoptimize_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',
         'Cache_Enabler_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/cache-enabler/Cache_Enabler_Compatible.php',
