@@ -64,8 +64,6 @@ class CriticalCSS_Enqueue
 
         if($this->dom && $this->inject){
 
-            $this->update_noscript();
-
             $this->enqueue_cpcss();
 
             return [
@@ -119,14 +117,21 @@ class CriticalCSS_Enqueue
 
             }
 
+            if(empty($critical_css_content)){
+                return;
+            }
+
             $critical_css_content = new \DiDom\Element('style', $critical_css_content);
             $critical_css_content->id = 'rapidload-critical-css';
 
             if(isset($this->dom->find( 'title' )[0])){
 
                 $this->dom->first('head')->insertAfter($critical_css_content, $this->dom->first('title'));
+                $this->update_noscript();
 
             }
+
+
 
             $this->job_data->mark_as_successful_hit();
             $this->job_data->save();
