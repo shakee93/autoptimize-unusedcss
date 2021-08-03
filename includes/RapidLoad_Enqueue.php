@@ -257,7 +257,7 @@ class RapidLoad_Enqueue {
 
         do_action('rapidload/job/handle', $job, $args);
 
-        if($this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+        if(isset($job->id) && $this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
             $this->replace_css();
         }
 
