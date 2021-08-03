@@ -1159,6 +1159,8 @@ abstract class UnusedCSS_Admin {
     public function clear_page_cache(){
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
 
         $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
 
@@ -1173,6 +1175,17 @@ abstract class UnusedCSS_Admin {
         }
 
         $links = false;
+
+        if($rule && $regex){
+
+            $rule = UnusedCSS_DB::get_rule($rule, $regex);
+
+            if(isset($rule['id'])){
+
+                $links = UnusedCSS_DB::get_links_where(" WHERE rule_id = " . $rule['id']);
+
+            }
+        }
 
         if($status){
 
@@ -1195,7 +1208,7 @@ abstract class UnusedCSS_Admin {
             foreach ($links as $link){
 
                 if(isset($link['url'])){
-
+                    self::uucss_log($link['url']);
                     do_action( 'uucss/cached', [
                         'url' => $link['url']
                     ] );

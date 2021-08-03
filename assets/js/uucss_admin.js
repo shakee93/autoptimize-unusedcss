@@ -1564,7 +1564,7 @@
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
