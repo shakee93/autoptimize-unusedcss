@@ -20,7 +20,7 @@ class RapidLoad_Enqueue {
 
             if($this->enabled($url)){
 
-                $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+                $args = RapidLoad_Base::get()->rules_enabled() ? $this->get_current_rule(RapidLoad_DB::get_rule_names()) : [];
 
                 $this->handle_job($url, $args);
             }
