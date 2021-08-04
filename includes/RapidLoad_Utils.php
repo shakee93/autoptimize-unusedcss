@@ -541,13 +541,14 @@ trait RapidLoad_Utils {
         }
 
         global $post;
+        $_post = $post;
 
-        if ( !$post && isset( $args['post_id'] )) {
-            $post = get_post( $args['post_id'] );
+        if ( !$_post && isset( $args['post_id'] )) {
+            $_post = get_post( $args['post_id'] );
         }
 
-        if ( $post ) {
-            $page_options = RapidLoad_Base::get_page_options( $post->ID );
+        if ( $_post ) {
+            $page_options = RapidLoad_Base::get_page_options( $_post->ID );
             if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
                 return false;
             }
