@@ -1301,7 +1301,7 @@ abstract class UnusedCSS_Admin {
 			wp_send_json_success( $data->data );
 		}
 
-		return isset($data) ? $data : [];
+		return isset($data) && is_array($data) ? $data : [];
 	}
 
 	public function uucss_license() {
