@@ -1,4 +1,4 @@
-=== RapidLoad for Autoptimize ( Unused CSS + Critical CSS ) ===
+=== RapidLoad power-up for Autoptimize ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
