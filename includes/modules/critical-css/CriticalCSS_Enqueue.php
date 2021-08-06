@@ -91,14 +91,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            $noscript_element = new \DiDom\Element('noscript');
-            $noscript_element->appendChild($sheet->cloneNode(true));
-            $noscript_element->id = 'rapidload-no-script';
-
+            $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
-
-            $this->dom->first('head')->appendChild($noscript_element, $sheet);
+            $sheet->outertext = '<noscript id="rapidload-noscript">' . $outer_text . '</noscript>' . $sheet->outertext;
 
         }
     }
@@ -121,17 +117,17 @@ class CriticalCSS_Enqueue
                 return;
             }
 
-            $critical_css_content = new \DiDom\Element('style', $critical_css_content);
-            $critical_css_content->id = 'rapidload-critical-css';
+            $critical_css_content = '<style id="rapidload-critical-css">' . $critical_css_content . '</style>';
 
             if(isset($this->dom->find( 'title' )[0])){
 
-                $this->dom->first('head')->insertAfter($critical_css_content, $this->dom->first('title'));
+                $title_content = $this->dom->find( 'title' )[0]->outertext;
+
+                $this->dom->find( 'title' )[0]->outertext = $title_content . $critical_css_content;
+
                 $this->update_noscript();
 
             }
-
-
 
             $this->job_data->mark_as_successful_hit();
             $this->job_data->save();
