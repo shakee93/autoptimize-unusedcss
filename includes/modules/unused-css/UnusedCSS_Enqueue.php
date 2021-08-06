@@ -103,10 +103,9 @@ class UnusedCSS_Enqueue {
 
                 $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data->url) . '" uucss>' . $inline_style_content . '</style>';
 
-                $header_content = $this->dom->find( 'head' )[0]->outertext;
-                $header_content = str_replace('</head>','', $header_content);
+                $title_content = $this->dom->find( 'title' )[0]->outertext;
 
-                $this->dom->find( 'head' )[0]->outertext = $header_content . $inline_style_content . '</head>';
+                $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
 
             }
 

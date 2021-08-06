@@ -91,6 +91,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if(is_numeric(strpos($sheet->outertext,'<style'))){
+                continue;
+            }
+
             $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'none';
