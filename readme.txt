@@ -96,6 +96,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.8 - 06/08/2021 =
+ * fix : rollback to simplehtmldom parser
+ * fix : fix global post override
+
 = 1.6.7 - 03/08/2021 =
  * feat : optimized database queries for better performance (phase 3)
  * feat : add support for Advanced Custom Fields Plugin
