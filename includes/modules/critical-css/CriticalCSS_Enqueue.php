@@ -96,8 +96,11 @@ class CriticalCSS_Enqueue
             }
 
             $outer_text = $sheet->outertext;
-            $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
-            $sheet->media = 'none';
+            if($sheet->media){
+                $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
+                $sheet->media = 'none';
+            }
+
             $sheet->outertext = '<noscript id="rapidload-noscript">' . $outer_text . '</noscript>' . $sheet->outertext;
 
         }
