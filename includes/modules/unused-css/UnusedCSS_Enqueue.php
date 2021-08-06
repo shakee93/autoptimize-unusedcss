@@ -302,7 +302,7 @@ class UnusedCSS_Enqueue {
 
         if($this->dom && $this->inject){
 
-            $this->dom->find( 'html' )[0]->uucss = '';
+            $this->dom->find( 'html' )[0]->uucss = true;
 
             $this->replace_stylesheets();
 
