@@ -32,8 +32,10 @@ class CriticalCSS_Store
 
         if(isset($this->args['immediate'])){
 
+            $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+
             $result = $uucss_api->post( 'purger/cpcss',
-                array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+                array_merge( $cpcss_config,
                     [ 'url' => $this->job_data->job->url, 'service' => true ]
                 ) );
 
@@ -53,8 +55,10 @@ class CriticalCSS_Store
 
         }else{
 
+            $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+
             $result = $uucss_api->post( 's/criticalcss',
-                array_merge( ( isset( $this->args['options'] ) ) ? $this->args['options'] : [],
+                array_merge( $cpcss_config,
                     [ 'url' => $this->job_data->job->url, 'priority' => isset($this->args['priority']), 'wp_nonce' => wp_create_nonce('uucss_job_hook'), 'hook_end_point' => trailingslashit(get_site_url())]
                 ) );
 
