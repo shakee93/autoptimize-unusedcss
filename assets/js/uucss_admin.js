@@ -2389,8 +2389,8 @@
                 url : $model_content.find('input.site-map-url').val()
             }
 
-            wp.ajax.post('uucss_queue',data_).then(function (i) {
-                $.uucssAlert(i);
+            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
+                $.uucssAlert('Sitemap links scheduled to be added to the queue.');
                 var currentFeather = $.featherlight.current();
                 if(currentFeather) currentFeather.close();
                 $target.attr('disabled', false);
@@ -2402,12 +2402,6 @@
             }).done(function () {
                 table.ajax.reload(null, false);
             })
-
-            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
-
-            }).done(function(){
-
-            });
 
             //wp.ajax.post('cpcss_purge_url',{ url : $model_content.find('input.site-map-url').val(), post_type : $model_content.find('#model-requeue-post-type').val() });
         });

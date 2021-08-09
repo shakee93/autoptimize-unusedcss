@@ -157,7 +157,8 @@ class RapidLoad_Admin
                 }
             }
         }
-    }
+        wp_send_json_success('Successfully purged');
+   }
 
     function add_sitemap_to_jobs($url = false){
 

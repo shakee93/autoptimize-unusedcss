@@ -67,6 +67,16 @@ abstract class UnusedCSS {
             $this->clear_cache(null, $args);
         });
 
+        add_action('rapidload/job/updated', function ($job, $status){
+
+            if($status && $job && isset($job->id)){
+                new UnusedCSS_Path([
+                   'url' => $job->url
+                ]);
+            }
+
+        }, 10 , 2);
+
         new UnusedCSS_Queue();
     }
 
