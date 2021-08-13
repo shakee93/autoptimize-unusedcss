@@ -411,9 +411,13 @@ abstract class UnusedCSS {
                     'type' => 'purging'
                 ]);
 
-                $data = new UnusedCSS_Path([
-                    'url' => $this->url
-                ]);
+                if(gettype($this->existing_link) == "boolean"){
+                    $data = new UnusedCSS_Path([
+                        'url' => $this->url
+                    ]);
+                }else{
+                    $data = $this->existing_link;
+                }
 
             }
             else if($rapidload->rules_enabled() &&
@@ -433,14 +437,13 @@ abstract class UnusedCSS {
 
                 if(isset($data->rule_id)) {
 
-                    $applicable_rule = UnusedCSS_Rule::get_rule_from_id($data->rule_id);
-
-                    if($applicable_rule){
-
-                        $link = $data;
-                        $data = $applicable_rule;
-
+                    $link = $data;
+                    if(gettype($this->existing_link) == "boolean"){
+                        $data = UnusedCSS_Rule::get_rule_from_id($data->rule_id);
+                    }else{
+                        $data = $this->existing_link;
                     }
+
 
                 }elseif (isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
 
@@ -450,10 +453,16 @@ abstract class UnusedCSS {
                         $data->save();
 
                         $link = $data;
-                        $data = new UnusedCSS_Rule([
-                           'rule' => $this->applicable_rule->rule,
-                           'regex' => $this->applicable_rule->regex,
-                        ]);
+
+                        if(gettype($this->existing_link) == "boolean"){
+                            $data = new UnusedCSS_Rule([
+                                'rule' => $this->applicable_rule->rule,
+                                'regex' => $this->applicable_rule->regex,
+                            ]);
+                        }else{
+                            $data = $this->existing_link;
+                        }
+
                     }
 
                 }

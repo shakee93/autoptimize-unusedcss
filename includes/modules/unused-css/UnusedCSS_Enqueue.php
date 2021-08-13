@@ -84,7 +84,7 @@ class UnusedCSS_Enqueue {
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
 
-                        if($this->data->is_type('Rule')){
+                        if($this->data->is_type('Rule') && $this->link){
 
                             $this->link->add_warning($warning);
 
@@ -127,7 +127,7 @@ class UnusedCSS_Enqueue {
         if($this->inject->successfully_injected){
 
             $this->data->mark_as_successful_hit();
-            if($this->data->is_type('Rule')){
+            if($this->data->is_type('Rule') && $this->link){
 
                 $this->link->mark_as_successful_hit();
             }
@@ -149,7 +149,7 @@ class UnusedCSS_Enqueue {
         }
 
         $this->data->save();
-        if($this->data->is_type('Rule')){
+        if($this->data->is_type('Rule') && $this->link){
 
             $this->link->save();
         }
@@ -256,7 +256,7 @@ class UnusedCSS_Enqueue {
                                 "message" => "RapidLoad optimized version for the file missing."
                             ];
 
-                            if($this->data->is_type('Rule')){
+                            if($this->data->is_type('Rule') && $this->link){
 
                                 $this->link->add_warning($warning);
 
@@ -290,7 +290,7 @@ class UnusedCSS_Enqueue {
             $this->options = $state['options'];
         }
 
-        if(!isset($this->data) || isset($this->data) && $this->data->status != 'success'){
+        if(!$this->data || !isset($this->data) || isset($this->data) && $this->data->status != 'success'){
             $this->inject->successfully_injected = false;
             $this->inject->rapidload = false;
             return [
