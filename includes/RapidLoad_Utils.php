@@ -91,7 +91,10 @@ trait RapidLoad_Utils {
             array_push($rules_with_permalink, $rule);
         }
         usort($rules_with_permalink, function ($a, $b){
-            return $a['priority'] > $b['priority'];
+            if ($a['priority'] == $b['priority']) {
+                return 0;
+            }
+            return ($a['priority'] < $b['priority']) ? -1 : 1;
         });
         return $rules_with_permalink;
     }
