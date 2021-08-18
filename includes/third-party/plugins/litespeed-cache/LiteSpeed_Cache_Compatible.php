@@ -33,7 +33,7 @@ class LiteSpeed_Cache_Compatible  extends RapidLoad_ThirdParty{
 
             if($url){
 
-                \LiteSpeed\Purge::purge_url($url);
+                \LiteSpeed\Purge::cls()->purge_url($url);
                 self::log([
                     'url' => $url,
                     'log' => 'LS Cache url page cache cleared',
