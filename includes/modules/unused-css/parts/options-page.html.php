@@ -57,7 +57,7 @@
                 <?php if($rapidload->rules_enabled()) : ?>
                 <li class="uucss-history uucss-rule-history">
                     <h2>
-                        Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500011459802-Rule-based-injection" style="font-size: 11px">Learn More</a>
+                        Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/4404081180179-Rule-Based-Injection" style="font-size: 11px">Learn More</a>
                         <span class="multiple-selected-text">
                             <span class="multiple-selected-value multiple-selected-value-rule"></span>
                             Selected
@@ -284,8 +284,9 @@
                                             echo 'checked="checked"';
                                         } ?> value='1'>
                                         <i>
-                                            Enable to eliminate render-blocking CSS on your website and load stylesheets asynchronously
+                                            Enable to eliminate render-blocking CSS on your website and load stylesheets asynchronously.
                                         </i>
+                                        <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/4404507967635-Critical-CSS" style="">learn more</a>
                                     </label>
                                 </td>
                             </tr>
