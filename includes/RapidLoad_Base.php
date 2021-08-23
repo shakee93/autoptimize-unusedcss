@@ -309,7 +309,7 @@ class RapidLoad_Base
         self::update_option( 'autoptimize_uucss_settings', $options );
 
         $data        = UnusedCSS_Admin::suggest_whitelist_packs();
-        $white_packs = $data->data;
+        $white_packs = isset($data->data) ? $data->data : [];
 
         $options['whitelist_packs'] = array();
         foreach ( $white_packs as $white_pack ) {
