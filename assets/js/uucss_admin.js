@@ -104,6 +104,21 @@
         container.hide()
     }
 
+    function trailingslashit(str){
+        return str.replace(/\/$/, '') + "/";
+    }
+
+    function updateSitemapUrl(){
+
+        var $sitemap_input = $('input.site-map-url');
+
+        wp.ajax.post('get_robots_text').done(function (data){
+            if(data && data.sitemap){
+                $sitemap_input.data('sitemap_url', data.sitemap);
+            }
+        })
+    }
+
     $(document).ready(function () {
 
         $.fn.dataTable.ext.errMode = 'none';
@@ -2470,6 +2485,8 @@
         }
 
         setInterval(updateRapidLoadStatus, 60000);
+
+        updateSitemapUrl();
     });
 
     function updateNotices() {

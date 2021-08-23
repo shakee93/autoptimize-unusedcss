@@ -12,10 +12,53 @@ class RapidLoad_Admin
 
             add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
             add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
+            add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
 
         }
 
         add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+    }
+
+    public function get_robots_text(){
+
+        $robotsUrl = trailingslashit(get_site_url()) . "robots.txt";
+
+        $robot = new stdClass();
+        $robot->disAllow = [];
+        $robot->allow = [];
+
+        try {
+
+            $fh = wp_remote_get($robotsUrl);
+
+            if(!is_wp_error($fh) && isset($fh['body'])){
+
+                foreach(preg_split("/((\r?\n)|(\r\n?))/", $fh['body']) as $line){
+
+                    if (preg_match("/user-agent.*/i", $line) ){
+                        $robot->userAgent = trim(explode(':', $line, 2)[1]);
+                    }
+                    else if (preg_match("/disallow.*/i", $line)){
+                        array_push($robot->disAllow, trim(explode(':', $line, 2)[1]));
+                    }
+                    else if (preg_match("/^allow.*/i", $line)){
+                        array_push($robot->allow, trim(explode(':', $line, 2)[1]));
+                    }
+                    else if(preg_match("/sitemap.*/i", $line)){
+                        $robot->sitemap = trim(explode(':', $line, 2)[1]);
+                    }
+
+                }
+
+            }
+
+            wp_send_json_success($robot);
+
+        }catch (Exception $ex){
+
+            wp_send_json_error();
+        }
+
     }
 
     public function rapidload_purge_all(){

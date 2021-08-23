@@ -1491,46 +1491,4 @@ abstract class UnusedCSS_Admin {
     public static function first_job_done(){
         return (RapidLoad_Settings::get_first_link() ? true :  false);
     }
-
-    public static function get_robots_text($url){
-
-        $robotsUrl = $url . "/robots.txt";
-
-        $robot = new stdClass();
-        $robot->disAllow = [];
-        $robot->allow = [];
-
-        try {
-
-            $fh = wp_remote_get($robotsUrl);
-
-            if(!is_wp_error($fh) && isset($fh['body'])){
-
-                foreach(preg_split("/((\r?\n)|(\r\n?))/", $fh['body']) as $line){
-
-                    if (preg_match("/user-agent.*/i", $line) ){
-                        $robot->userAgent = trim(explode(':', $line, 2)[1]);
-                    }
-                    else if (preg_match("/disallow.*/i", $line)){
-                        array_push($robot->disAllow, trim(explode(':', $line, 2)[1]));
-                    }
-                    else if (preg_match("/^allow.*/i", $line)){
-                        array_push($robot->allow, trim(explode(':', $line, 2)[1]));
-                    }
-                    else if(preg_match("/sitemap.*/i", $line)){
-                        $robot->sitemap = trim(explode(':', $line, 2)[1]);
-                    }
-
-                }
-
-            }
-
-            return $robot;
-
-        }catch (Exception $ex){
-
-            return false;
-        }
-
-    }
 }
