@@ -1,12 +1,12 @@
 <?php
 
-class WpForms_Compatible extends RapidLoad_ThirdParty{
+class WpForms_Lite_Compatible extends RapidLoad_ThirdParty{
 
     function __construct(){
 
         $this->plugin = 'wpforms-lite/wpforms.php';
         $this->catgeory = 'form-builder';
-        $this->name = 'wpforms';
+        $this->name = 'wpforms-lite';
 
         parent::__construct();
     }
