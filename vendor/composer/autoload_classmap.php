@@ -66,6 +66,7 @@ return array(
     'WP_Rocket_Compatible' => $baseDir . '/includes/third-party/plugins/wp-rocket/WP_Rocket_Compatible.php',
     'WP_Super_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/wp-super-cache/WP_Super_Cache_Compatible.php',
     'Woocommerce_Compatible' => $baseDir . '/includes/third-party/plugins/woocommerce/Woocommerce_Compatible.php',
+    'WpForms_Compatible' => $baseDir . '/includes/third-party/plugins/wpforms-lite/WpForms_Compatible.php',
     'YoastSEO_Compatible' => $baseDir . '/includes/third-party/plugins/wordpress-seo/YoastSEO_Compatible.php',
     'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
     'simplehtmldom\\HtmlDocument' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
