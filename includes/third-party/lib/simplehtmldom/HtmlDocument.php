@@ -286,29 +286,38 @@ class HtmlDocument
 
 	protected function decode()
 	{
+	    $parser_decodable = apply_filters('uucss/enqueue/content/decode_html', true);
 		foreach($this->nodes as $node) {
 			if (isset($node->_[HtmlNode::HDOM_INFO_TEXT])) {
-				$node->_[HtmlNode::HDOM_INFO_TEXT] = html_entity_decode(
-					$this->restore_noise($node->_[HtmlNode::HDOM_INFO_TEXT]),
-					ENT_QUOTES | ENT_HTML5,
-					$this->_target_charset
-				);
+			    if($parser_decodable){
+                    $node->_[HtmlNode::HDOM_INFO_TEXT] = html_entity_decode(
+                        $this->restore_noise($node->_[HtmlNode::HDOM_INFO_TEXT]),
+                        ENT_QUOTES | ENT_HTML5,
+                        $this->_target_charset
+                    );
+                }else{
+                    $node->_[HtmlNode::HDOM_INFO_TEXT] = $this->restore_noise($node->_[HtmlNode::HDOM_INFO_TEXT]);
+                }
 			}
 			if (isset($node->_[HtmlNode::HDOM_INFO_INNER])) {
-				$node->_[HtmlNode::HDOM_INFO_INNER] = html_entity_decode(
-					$this->restore_noise($node->_[HtmlNode::HDOM_INFO_INNER]),
-                    ENT_HTML5 ,
-					$this->_target_charset
-				);
+				if($parser_decodable){
+                    $node->_[HtmlNode::HDOM_INFO_INNER] = html_entity_decode(
+                        $this->restore_noise($node->_[HtmlNode::HDOM_INFO_INNER]),
+                        ENT_QUOTES | ENT_HTML5,
+                        $this->_target_charset
+                    );
+                }else{
+                    $node->_[HtmlNode::HDOM_INFO_INNER] = $this->restore_noise($node->_[HtmlNode::HDOM_INFO_INNER]);
+                }
 			}
 			if (isset($node->attr) && is_array($node->attr)) {
 				foreach($node->attr as $a => $v) {
 					if ($v === true) continue;
-					$node->attr[$a] = html_entity_decode(
-						$v,
-						ENT_QUOTES | ENT_HTML5,
-						$this->_target_charset
-					);
+                    $node->attr[$a] = html_entity_decode(
+                        $v,
+                        ENT_QUOTES | ENT_HTML5,
+                        $this->_target_charset
+                    );
 				}
 			}
 		}
