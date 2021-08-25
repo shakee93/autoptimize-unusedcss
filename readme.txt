@@ -96,11 +96,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.6.9 - 06/08/2021 =
- * feat : add support to wpforms plugin
+= 1.6.9 - 25/08/2021 =
+ * feat : added wpforms plugin support
  * feat : update sitemap url from robots.txt file
- * fix : html_entity_decode in simplehtmldom parser
- * fix : Cannor read property aoData of undefined
+ * fix : special chars being encoded in scripts (&amp, &quote)
+ * fix : Can not read property aoData of undefined
  * fix : usort(): Returning bool from comparison function is deprecated
 
 = 1.6.8 - 06/08/2021 =
