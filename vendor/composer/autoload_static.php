@@ -6,20 +6,6 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
-    public static $prefixLengthsPsr4 = array (
-        'D' => 
-        array (
-            'DiDom\\' => 6,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'DiDom\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/imangazaliev/didom/src/DiDom',
-        ),
-    );
-
     public static $classMap = array (
         'AdvancedCustomFields_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/advanced-custom-fields/AdvancedCustomFields_Compatible.php',
         'Autoptimize_Beta_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
@@ -84,17 +70,15 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'WpForms_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wpforms/WpForms_Compatible.php',
         'WpForms_Lite_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wpforms-lite/WpFormsLite_Compatible.php',
         'YoastSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/wordpress-seo/YoastSEO_Compatible.php',
-        'simplehtmldom\\Debug' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/Debug.php',
-        'simplehtmldom\\HtmlDocument' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
-        'simplehtmldom\\HtmlNode' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlNode.php',
-        'simplehtmldom\\HtmlWeb' => __DIR__ . '/..' . '/simplehtmldom/simplehtmldom/HtmlWeb.php',
+        'simplehtmldom\\Debug' => __DIR__ . '/../..' . '/includes/third-party/lib/simplehtmldom/Debug.php',
+        'simplehtmldom\\HtmlDocument' => __DIR__ . '/../..' . '/includes/third-party/lib/simplehtmldom/HtmlDocument.php',
+        'simplehtmldom\\HtmlNode' => __DIR__ . '/../..' . '/includes/third-party/lib/simplehtmldom/HtmlNode.php',
+        'simplehtmldom\\HtmlWeb' => __DIR__ . '/../..' . '/includes/third-party/lib/simplehtmldom/HtmlWeb.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
 
         }, null, ClassLoader::class);

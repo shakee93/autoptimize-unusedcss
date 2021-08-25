@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e72d5f203a5cb307c773625ce7343da",
+    "content-hash": "c7835049a1679de286f7a9cb1e8389d5",
     "packages": [
         {
             "name": "collizo4sky/persist-admin-notices-dismissal",
@@ -41,136 +41,17 @@
                 }
             ],
             "description": "Simple library to persist dismissal of admin notices across pages in WordPress dashboard.",
-            "time": "2020-12-31T17:12:37+00:00"
-        },
-        {
-            "name": "imangazaliev/didom",
-            "version": "1.18",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Imangazaliev/DiDOM.git",
-                "reference": "346db1ea94a0f6ead225c2358af770bf33659cf7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Imangazaliev/DiDOM/zipball/346db1ea94a0f6ead225c2358af770bf33659cf7",
-                "reference": "346db1ea94a0f6ead225c2358af770bf33659cf7",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-iconv": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DiDom\\": "src/DiDom/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Imangazaliev Muhammad",
-                    "email": "imangazalievm@gmail.com"
-                }
-            ],
-            "description": "Simple and fast HTML parser",
-            "homepage": "https://github.com/Imangazaliev/DiDOM",
-            "keywords": [
-                "didom",
-                "html",
-                "parser",
-                "xml"
-            ],
             "support": {
-                "issues": "https://github.com/Imangazaliev/DiDOM/issues",
-                "source": "https://github.com/Imangazaliev/DiDOM/tree/1.18"
+                "issues": "https://github.com/w3guy/persist-admin-notices-dismissal/issues",
+                "source": "https://github.com/w3guy/persist-admin-notices-dismissal"
             },
-            "time": "2021-07-27T18:50:53+00:00"
-        },
-        {
-            "name": "simplehtmldom/simplehtmldom",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/simplehtmldom/simplehtmldom.git",
-                "reference": "31ce157e7ba0c6ca35f94faedf031a945c3f6427"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/simplehtmldom/simplehtmldom/zipball/31ce157e7ba0c6ca35f94faedf031a945c3f6427",
-                "reference": "31ce157e7ba0c6ca35f94faedf031a945c3f6427",
-                "shasum": ""
-            },
-            "require": {
-                "ext-iconv": "*",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6 || ^7"
-            },
-            "suggest": {
-                "ext-curl": "Needed to support cURL downloads in class HtmlWeb",
-                "ext-mbstring": "Allows better decoding for multi-byte documents",
-                "ext-openssl": "Allows loading HTTPS pages when using cURL"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "./"
-                ],
-                "exclude-from-classmap": [
-                    "/example/",
-                    "/manual/",
-                    "/testcase/",
-                    "/tests/",
-                    "simple_html_dom.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "S.C. Chen",
-                    "role": "Developer"
-                },
-                {
-                    "name": "John Schlick",
-                    "role": "Developer"
-                },
-                {
-                    "name": "logmanoriginal",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A fast, simple and reliable HTML document parser for PHP.",
-            "homepage": "https://simplehtmldom.sourceforge.io/",
-            "keywords": [
-                "Simple",
-                "dom",
-                "html",
-                "parser",
-                "php",
-                "simplehtmldom"
-            ],
-            "time": "2019-12-06T18:20:19+00:00"
+            "time": "2020-12-31T17:12:37+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "simplehtmldom/simplehtmldom": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

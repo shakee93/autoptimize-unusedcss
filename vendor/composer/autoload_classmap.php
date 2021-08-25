@@ -69,8 +69,8 @@ return array(
     'WpForms_Compatible' => $baseDir . '/includes/third-party/plugins/wpforms/WpForms_Compatible.php',
     'WpForms_Lite_Compatible' => $baseDir . '/includes/third-party/plugins/wpforms-lite/WpFormsLite_Compatible.php',
     'YoastSEO_Compatible' => $baseDir . '/includes/third-party/plugins/wordpress-seo/YoastSEO_Compatible.php',
-    'simplehtmldom\\Debug' => $vendorDir . '/simplehtmldom/simplehtmldom/Debug.php',
-    'simplehtmldom\\HtmlDocument' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlDocument.php',
-    'simplehtmldom\\HtmlNode' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlNode.php',
-    'simplehtmldom\\HtmlWeb' => $vendorDir . '/simplehtmldom/simplehtmldom/HtmlWeb.php',
+    'simplehtmldom\\Debug' => $baseDir . '/includes/third-party/lib/simplehtmldom/Debug.php',
+    'simplehtmldom\\HtmlDocument' => $baseDir . '/includes/third-party/lib/simplehtmldom/HtmlDocument.php',
+    'simplehtmldom\\HtmlNode' => $baseDir . '/includes/third-party/lib/simplehtmldom/HtmlNode.php',
+    'simplehtmldom\\HtmlWeb' => $baseDir . '/includes/third-party/lib/simplehtmldom/HtmlWeb.php',
 );

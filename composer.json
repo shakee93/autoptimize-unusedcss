@@ -1,6 +1,5 @@
 {
     "require": {
-        "simplehtmldom/simplehtmldom": "@dev",
         "collizo4sky/persist-admin-notices-dismissal": "^1.4"
     },
     "autoload": {

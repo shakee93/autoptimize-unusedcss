@@ -297,7 +297,7 @@ class HtmlDocument
 			if (isset($node->_[HtmlNode::HDOM_INFO_INNER])) {
 				$node->_[HtmlNode::HDOM_INFO_INNER] = html_entity_decode(
 					$this->restore_noise($node->_[HtmlNode::HDOM_INFO_INNER]),
-					ENT_QUOTES | ENT_HTML5,
+                    ENT_HTML5 ,
 					$this->_target_charset
 				);
 			}
