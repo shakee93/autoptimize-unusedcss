@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: RapidLoad power-up for Autoptimize
+Plugin Name: RapidLoad Power-Up for Autoptimize
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
 Version:     1.6.8

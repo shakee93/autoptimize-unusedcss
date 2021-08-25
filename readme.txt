@@ -1,4 +1,4 @@
-=== RapidLoad power-up for Autoptimize ===
+=== RapidLoad Power-Up for Autoptimize ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
@@ -95,6 +95,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 4. RapidLoad options.
 
 == Changelog ==
+
+= 1.6.9 - 06/08/2021 =
+ * feat : add support to wpforms plugin
+ * feat : update sitemap url from robots.txt file
+ * fix : html_entity_decode in simplehtmldom parser
+ * fix : Cannor read property aoData of undefined
+ * fix : usort(): Returning bool from comparison function is deprecated
 
 = 1.6.8 - 06/08/2021 =
  * fix : rollback to simplehtmldom parser
