@@ -2130,13 +2130,13 @@
 
         function uucss_purge_url(url , isClear, row, index, data, args = {}) {
 
-            var _row = args.rule === undefined ? table.row(index) : rule_table.row(index);
+            var _row = !args.rule ? table.row(index) : rule_table.row(index);
 
             var $row  = $(row);
 
             $row.addClass('loading');
 
-            if(args.rule === undefined){
+            if(!args.rule){
                 $uucss_spinner.addClass('loading');
             }else{
                 $uucss_rule_spinner.addClass('loading');
@@ -2157,7 +2157,7 @@
                 },
                 success : function(response){
 
-                    if(args.rule === undefined){
+                    if(!args.rule){
                         $uucss_spinner.removeClass('loading')
                     }else{
                         $uucss_rule_spinner.removeClass('loading');
