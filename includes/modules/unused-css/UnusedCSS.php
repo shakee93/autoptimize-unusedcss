@@ -15,6 +15,8 @@ abstract class UnusedCSS {
 
 	public $url = null;
 	public $rule = null;
+	public $applicable_rule = null;
+	public $existing_link = null;
 	public $css = [];
 	public $store = null;
 	public $options = [];
@@ -27,30 +29,14 @@ abstract class UnusedCSS {
 
 	abstract public function get_css();
 
-
-    abstract public function replace_css();
-
-
     /**
      * UnusedCSS constructor.
      */
     public function __construct()
     {
-        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
-
-        new UnusedCSS_Feedback();
-
-        add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-        $this->add_update_message();
-
-        self::enqueueGlobalScript();
-
-        RapidLoad_DB::check_db_updates();
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->file_system = new RapidLoad_FileSystem();
-
-        $this->base = apply_filters('uucss/cache-base-dir','/cache/rapidload/') . 'uucss';
 
 	    if ( ! $this->initFileSystem() ) {
 		    self::add_admin_notice( 'RapidLoad : couldn\'t access wordpress cache directory <b>(' . self::$base_dir . ')</b>. check for file permission issues in your site.' );
@@ -76,7 +62,22 @@ abstract class UnusedCSS {
 
         add_filter('uucss/rules', [$this, 'uucss_rule_types'], 90 , 1);
 
-        new RapidLoad_Queue();
+        add_action('uucss/clear', function (){
+            $args['soft'] = true;
+            $this->clear_cache(null, $args);
+        });
+
+        add_action('rapidload/job/updated', function ($job, $status){
+
+            if($status && $job && isset($job->id)){
+                new UnusedCSS_Path([
+                   'url' => $job->url
+                ]);
+            }
+
+        }, 10 , 2);
+
+        new UnusedCSS_Queue();
     }
 
     function uucss_rule_types($rules){
@@ -99,7 +100,9 @@ abstract class UnusedCSS {
             'rule' => 'is_front_page',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_front_page(),
+            'callback' => function(){
+                return is_front_page();
+            },
         ];
 
         $rules[] = [
@@ -107,7 +110,9 @@ abstract class UnusedCSS {
             'rule' => 'is_404',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_404(),
+            'callback' => function(){
+                return is_404();
+            },
         ];
 
         $rules[] = [
@@ -115,7 +120,9 @@ abstract class UnusedCSS {
             'rule' => 'is_archive',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_archive(),
+            'callback' => function(){
+                return is_archive();
+            },
         ];
 
         foreach ($custom_posts as $key => $value){
@@ -129,7 +136,9 @@ abstract class UnusedCSS {
                     'rule' => 'is_' . $value,
                     'category' => 'Custom Post Types',
                     'priority' => 5,
-                    'callback' => get_post_type( get_the_ID() ) == $value
+                    'callback' => function() use($value){
+                        return get_post_type( get_the_ID() ) == $value;
+                    }
                 ];
             }
         }
@@ -142,7 +151,9 @@ abstract class UnusedCSS {
                     'rule' => 'is_' . $value,
                     'category' => 'Taxonomies',
                     'priority' => 5,
-                    'callback' => is_tax($value),
+                    'callback' => function() use($value){
+                        return is_tax($value);
+                    },
                 ];
             }
         }
@@ -152,7 +163,9 @@ abstract class UnusedCSS {
             'rule' => 'is_author',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_author(),
+            'callback' => function(){
+                return is_author();
+            },
         ];
 
         $rules[] = [
@@ -160,7 +173,9 @@ abstract class UnusedCSS {
             'rule' => 'is_home',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_home(),
+            'callback' => function(){
+                return is_home();
+            },
         ];
 
         $rules[] = [
@@ -168,7 +183,9 @@ abstract class UnusedCSS {
             'rule' => 'is_page',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_page(),
+            'callback' => function(){
+                return is_page();
+            },
         ];
 
         $rules[] = [
@@ -176,7 +193,9 @@ abstract class UnusedCSS {
             'rule' => 'is_post',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_singular(),
+            'callback' => function(){
+                return is_singular();
+            },
         ];
 
         $rules[] = [
@@ -184,7 +203,9 @@ abstract class UnusedCSS {
             'rule' => 'is_search',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_search(),
+            'callback' => function(){
+                return is_search();
+            },
         ];
 
         $rules[] = [
@@ -192,7 +213,9 @@ abstract class UnusedCSS {
             'rule' => 'is_attachment',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_attachment(),
+            'callback' => function(){
+                return is_attachment();
+            },
         ];
 
         $rules[] = [
@@ -200,7 +223,9 @@ abstract class UnusedCSS {
             'rule' => 'is_single',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_single(),
+            'callback' => function(){
+                return is_single();
+            },
         ];
 
         $rules[] = [
@@ -208,7 +233,9 @@ abstract class UnusedCSS {
             'rule' => 'is_sticky',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_sticky(),
+            'callback' => function(){
+                return is_sticky();
+            },
         ];
 
         $rules[] = [
@@ -216,61 +243,12 @@ abstract class UnusedCSS {
             'rule' => 'is_paged',
             'category' => 'Standard Conditional Tags',
             'priority' => 10,
-            'callback' => is_paged(),
+            'callback' => function(){
+                return is_paged();
+            },
         ];
 
         return $rules;
-    }
-
-    function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
-    {
-        if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
-        }
-        return $plugin_meta;
-    }
-
-    function add_update_message(){
-
-        global $pagenow;
-
-        if ( 'plugins.php' === $pagenow )
-        {
-            $file   = basename( UUCSS_PLUGIN_FILE );
-            $folder = basename( dirname( UUCSS_PLUGIN_FILE ) );
-            $hook = "in_plugin_update_message-{$folder}/{$file}";
-            add_action( $hook, [$this, 'render_update_message'], 20, 2 );
-        }
-
-    }
-
-    function render_update_message($plugin_data, $r ){
-
-        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
-
-        $changelog  = stristr( $data, '== Changelog ==' );
-
-        $changelog = preg_split("/\=(.*?)\=/", str_replace('== Changelog ==','',$changelog));
-
-        if(isset($changelog[1])){
-
-            $changelog = explode('*', $changelog[1]);
-
-            array_shift($changelog);
-
-            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
-
-            foreach ($changelog as $index => $log){
-                if($index == 3){
-                    break;
-                }
-                echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
-            }
-
-            echo '</ol></div><p style="display: none" class="empty">';
-
-        }
     }
 
 	public function frontend_scripts( $data ) {
@@ -285,60 +263,24 @@ abstract class UnusedCSS {
 
 	}
 
-
-	public static function enqueueGlobalScript() {
-		add_action( 'admin_enqueue_scripts', function () {
-
-            $deregister_scripts = apply_filters('uucss/scripts/global/deregister', ['popper']);
-
-            if(isset($deregister_scripts) && is_array($deregister_scripts)){
-                foreach ($deregister_scripts as $deregister_script){
-                    wp_dequeue_script($deregister_script);
-                    wp_deregister_script($deregister_script);
-                }
-            }
-
-			wp_enqueue_script( 'popper', UUCSS_PLUGIN_URL . 'assets/libs/tippy/popper.min.js', array( 'jquery' ) );
-			wp_enqueue_script( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.js', array( 'jquery' ) );
-			wp_enqueue_script( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy-bundle.umd.min.js', array( 'jquery' ) );
-			wp_enqueue_style( 'tippy', UUCSS_PLUGIN_URL . 'assets/libs/tippy/tippy.css' );
-			wp_enqueue_style( 'noty', UUCSS_PLUGIN_URL . 'assets/libs/noty/noty.css' );
-			wp_enqueue_style( 'noty-animate', UUCSS_PLUGIN_URL . 'assets/libs/noty/animate.css' );
-			wp_enqueue_style( 'noty-theme', UUCSS_PLUGIN_URL . 'assets/libs/noty/themes/mint.css' );
-			wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
-            wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
-
-			wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
-			$data = array(
-		        'ajax_url'          => admin_url( 'admin-ajax.php' ),
-		        'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
-		        'on_board_complete' => apply_filters('uucss/on-board/complete', false),
-		        'home_url' => home_url(),
-		        'api_url' => RapidLoad_Api::get_key()
-	        );
-	        wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
-	        wp_enqueue_script( 'uucss_global_admin_script' );
-	        wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
-
-        });
-
-		add_action('admin_bar_menu', function (){
-
-			global $post;
-
-			$data = array(
-				'post_id'         => ($post) ? $post->ID : null,
-				'post_link'       => ($post) ? get_permalink($post) : null,
-			);
-
-			wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
-			wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
-			wp_enqueue_script( 'uucss_admin_bar_script' );
-		});
-    }
-
-
 	public function initFileSystem() {
+
+        $this->file_system = new RapidLoad_FileSystem();
+
+        // Todo cache base setup
+        /*$cache_base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR);
+
+        $cache_base_option = RapidLoad_Base::get_option('rapidload_cache_base', null);
+
+        if(!isset($cache_base_option)){
+
+            $cache_base_option = $cache_base;
+            RapidLoad_Base::update_option('rapidload_cache_base', $cache_base_option);
+        }
+
+        $this->base = RapidLoad_ThirdParty::plugin_exists('autoptimize') ? $cache_base_option . 'uucss' : $cache_base . 'uucss';*/
+
+        $this->base = apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss';
 
 		if ( ! $this->file_system ) {
 			return false;
@@ -364,7 +306,7 @@ abstract class UnusedCSS {
 		    return false;
 	    }
 
-	    if ( ! $this->is_url_allowed() ) {
+	    if ( ! $this->is_url_allowed($this->url) ) {
 		    return false;
 	    }
 
@@ -426,123 +368,41 @@ abstract class UnusedCSS {
         $this->store->purge_css();
     }
 
-    public function is_valid_url($url){
-        return filter_var($url, FILTER_VALIDATE_URL);
-    }
-
-    public function is_url_allowed($url = null, $args = null)
-    {
-
-        if ( ! $url ) {
-            $url = $this->url;
-        }
-
-        if(!$this->is_valid_url($url)){
-            return false;
-        }
-
-	    // remove .css .js files from being analyzed
-	    if ( preg_match( '/cache\/autoptimize/', $url ) ) {
-		    return false;
-	    }
-
-	    global $post;
-
-	    if ( isset( $args['post_id'] ) ) {
-		    $post = get_post( $args['post_id'] );
-	    }
-
-	    if ( $post ) {
-		    $page_options = UnusedCSS_Admin::get_page_options( $post->ID );
-		    if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
-			    return false;
-		    }
-
-	    }
-
-        if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
-            $exploded = explode( ',', $this->options['uucss_excluded_links'] );
-
-            foreach ( $exploded as $pattern ) {
-
-                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
-
-                    $pattern = parse_url( $pattern );
-
-                    $path = $pattern['path'];
-                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
-
-                    $pattern = $path . $query;
-
-                }
-
-                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
-                    $this->log( 'skipped : ' . $url );
-                    return false;
-                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
-                    $this->log( 'skipped : ' . $url );
-                    return false;
-                }
-
-            }
-        }
-
-        $url_parts = parse_url( $url );
-
-        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
-            $this->log( 'skipped : ' . $url );
-            return false;
-        }
-
-        if(!apply_filters('uucss/url/exclude', $url)){
-            $this->log( 'skipped : ' . $url );
-            return false;
-        }
-
-	    return true;
-    }
-
-    public function rules_enabled(){
-        return
-            isset($this->options['uucss_enable_rules']) &&
-            $this->options['uucss_enable_rules'] == "1" &&
-            RapidLoad_DB::$current_version > 1.1 &&
-            apply_filters('uucss/rules/enable', true);
-    }
-
 	public function purge_css() {
+
+        global $rapidload;
 
 		$this->url = $this->transform_url( $this->url );
 
         $this->rule = UnusedCSS_Rule::get_related_rule();
 
-        if(isset($this->rule['rule'])){
+        $data = null;
+        $link = null;
 
-            self::log([
-                'log' => 'rule identified : ' . $this->rule['rule'],
-                'url' => $this->url,
-                'type' => 'purging'
-            ]);
+        $this->existing_link = RapidLoad_Settings::link_exists( $this->url );
+
+        if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
+
+            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
 
         }
 
-        if (    !RapidLoad_Settings::link_exists( $this->url ) &&
+        if (    !$this->existing_link &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1"))
+                $this->options['uucss_disable_add_to_queue'] != "1") || $this->applicable_rule)
         {
+
             $this->cache( $this->url , $this->rule);
         }
 
 		// disabled exceptions only for frontend
-		if ( $this->enabled_frontend() && $this->is_url_allowed( $this->url, [] ) && !isset( $_REQUEST['no_uucss'] )) {
+		if ( $this->is_url_allowed( $this->url) ) {
 
 			$this->get_css();
 
-            $data = null;
-
-            if( !$this->rules_enabled() &&
-                RapidLoad_Settings::link_exists( $this->url )
+            if( !$rapidload->rules_enabled() &&
+                $this->existing_link
             ){
 
                 self::log([
@@ -551,14 +411,17 @@ abstract class UnusedCSS {
                     'type' => 'purging'
                 ]);
 
-                $data = new UnusedCSS_Path([
-                    'url' => $this->url,
-                    'rule' => isset($this->rule['rule']) ? $this->rule['rule'] : null
-                ]);
+                if(gettype($this->existing_link) == "boolean"){
+                    $data = new UnusedCSS_Path([
+                        'url' => $this->url
+                    ]);
+                }else{
+                    $data = $this->existing_link;
+                }
 
             }
-            else if($this->rules_enabled() &&
-                RapidLoad_Settings::link_exists( $this->url )){
+            else if($rapidload->rules_enabled() &&
+                $this->existing_link){
 
                 self::log([
                     'log' => 'success link exist with rules ',
@@ -574,27 +437,32 @@ abstract class UnusedCSS {
 
                 if(isset($data->rule_id)) {
 
-                    $applicable_rule = UnusedCSS_Rule::get_rule_from_id($data->rule_id);
-
-                    if($applicable_rule){
-
-                        $data = $applicable_rule;
-
+                    $link = $data;
+                    if(gettype($this->existing_link) == "boolean"){
+                        $data = UnusedCSS_Rule::get_rule_from_id($data->rule_id);
+                    }else{
+                        $data = $this->existing_link;
                     }
+
 
                 }elseif (isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
 
-                    $applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+                    if($this->applicable_rule){
 
-                    if($applicable_rule){
-
-                        $data->attach_rule($applicable_rule->id, $applicable_rule->rule);
+                        $data->attach_rule($this->applicable_rule->id, $this->applicable_rule->rule);
                         $data->save();
 
-                        $data = new UnusedCSS_Rule([
-                           'rule' => $applicable_rule->rule,
-                           'regex' => $applicable_rule->regex,
-                        ]);
+                        $link = $data;
+
+                        if(gettype($this->existing_link) == "boolean"){
+                            $data = new UnusedCSS_Rule([
+                                'rule' => $this->applicable_rule->rule,
+                                'regex' => $this->applicable_rule->regex,
+                            ]);
+                        }else{
+                            $data = $this->existing_link;
+                        }
+
                     }
 
                 }
@@ -611,20 +479,21 @@ abstract class UnusedCSS {
                         'files' => $files
                     ]);
 
-                    new RapidLoad_Enqueue($data, $this->url);
-
-                    $this->replace_css();
                 }
 
             }
 
 		}
 
+        if($this->existing_link){
+            new UnusedCSS_Enqueue($data, $this->url, $link);
+        }
+
 	}
 
     public function cache($url = null, $args = []) {
 
-	    if ( ! $this->is_url_allowed( $url, $args ) ) {
+	    if ( ! $this->is_url_allowed( $url, $args) ) {
             self::log([
                 'log' => 'url not allowed to purge',
                 'url' => $url,
@@ -652,47 +521,36 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-        $applicable_rule = false;
-        $rules_enabled = $this->rules_enabled();
+	    if(!$this->applicable_rule && isset($args['rule'])){
 
-        $path = null;
+            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
 
-	    if(isset($args['rule']) && $rules_enabled){
-
-            $applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
-
-            if(!$applicable_rule){
-
-                $applicable_rule = UnusedCSS_DB::get_applied_rule('is_path', $url);
-
-            }
         }
 
-	    if($applicable_rule && UnusedCSS_DB::rule_exists_with_error($applicable_rule->rule, $applicable_rule->regex)){
+	    if($this->applicable_rule){
 
-	        $path = new UnusedCSS_Rule([
-                'rule' => $applicable_rule->rule,
-                'regex' => $applicable_rule->regex
+            $this->existing_link = new UnusedCSS_Rule([
+                'rule' => $this->applicable_rule->rule,
+                'regex' => $this->applicable_rule->regex
             ]);
 
             new UnusedCSS_Path([
                 'url' => $url,
-                'rule' => $applicable_rule->rule,
+                'rule' => $this->applicable_rule->rule,
                 'status' => 'rule-based',
-                'rule_id' => $path->id
+                'rule_id' => $this->existing_link->id
             ]);
 
         }else{
 
-            $path = new UnusedCSS_Path([
+            $this->existing_link = new UnusedCSS_Path([
                 'url' => $url,
-                'rule' => isset($args['rule']) ? $args['rule'] : null,
                 'status' => 'queued'
             ]);
 
         }
 
-        if($path->status == 'failed' && $path->attempts > 2 && !isset($args['immediate'])){
+        if($this->existing_link->status == 'failed' && $this->existing_link->attempts > 2 && !isset($args['immediate'])){
             self::log([
                 'log' => 'url not purged due to failed attempts exceeded',
                 'url' => $url,
@@ -701,18 +559,18 @@ abstract class UnusedCSS {
             return false;
         }
 
-        if($path->is_type('Path')){
+        if($this->existing_link->is_type('Path')){
 
-            $path->rule_id = NULL;
-            $path->requeue();
-            $path->save();
+            $this->existing_link->rule_id = NULL;
+            $this->existing_link->requeue();
+            $this->existing_link->save();
 
         }else{
 
-            if($path->status == 'failed'){
+            if($this->existing_link->status == 'failed'){
 
-                $path->requeue();
-                $path->save();
+                $this->existing_link->requeue();
+                $this->existing_link->save();
 
             }
 
@@ -722,10 +580,10 @@ abstract class UnusedCSS {
 
 	    if (! $this->async || isset($args['first_job'])) {
 
-            if($path->is_type('Path')){
+            if($this->existing_link->is_type('Path')){
                 $this->init_async_store($this->provider, $url, $args);
             }else{
-                $this->init_async_store_rule($this->provider, $url, $args, $path);
+                $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
             }
 
             self::log([
@@ -738,7 +596,7 @@ abstract class UnusedCSS {
 
             $spawned = false;
 
-            if($path->is_type('Path')){
+            if($this->existing_link->is_type('Path')){
                 $spawned = $this->schedule_cron('uucss_async_queue', [
                     'provider' => $this->provider,
                     'url'      => $url,
@@ -750,19 +608,19 @@ abstract class UnusedCSS {
                     'provider' => $this->provider,
                     'url'      => $url,
                     'args'     => $args,
-                    'rule'     => $path
+                    'rule'     => $this->existing_link
                 ]);
             }
 
-            $path->status = 'processing';
-            $path->save();
+            $this->existing_link->status = 'processing';
+            $this->existing_link->save();
 
 	    	if(!$spawned){
 
-                if($path->is_type('Path')){
+                if($this->existing_link->is_type('Path')){
                     $this->init_async_store($this->provider, $url, $args);
                 }else{
-                    $this->init_async_store_rule($this->provider, $url, $args, $path);
+                    $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
                 }
 
             }
@@ -805,7 +663,7 @@ abstract class UnusedCSS {
 
 	    }
 
-		$post_options = $post_id ? UnusedCSS_Admin::get_page_options( $post_id ) : [];
+		$post_options = $post_id ? RapidLoad_Base::get_page_options( $post_id ) : [];
 
 		$safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
 
@@ -841,28 +699,6 @@ abstract class UnusedCSS {
             "cacheBusting"          => $cacheBusting,
 		]);
     }
-
-    protected function is_doing_api_fetch(){
-
-	    $user_agent = '';
-	    $headers    = [];
-
-	    if ( function_exists( 'getallheaders' ) ) {
-		    $headers = getallheaders();
-	    }
-
-	    if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-		    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-	    }
-
-	    if ( isset( $headers['User-Agent'] ) ) {
-		    $user_agent = $headers['User-Agent'];
-	    }
-
-	    return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
-	           strpos( $user_agent, 'RapidLoad' ) !== false;
-    }
-
 
 	public function init_base_dir() {
 
@@ -992,17 +828,6 @@ abstract class UnusedCSS {
 
     }
 
-    public function size() {
-
-	    if ( ! $this->file_system || ! $this->file_system->exists( self::$base_dir ) ) {
-		    return "0 KB";
-	    }
-
-	    $size = $this->dirSize( self::$base_dir );
-
-	    return $this->human_file_size( $size );
-    }
-
 
 	public function get_cached_file( $file_url, $cdn = null ) {
 
@@ -1024,6 +849,7 @@ abstract class UnusedCSS {
 	}
 
     public function vanish() {
+
 	    if ( ! $this->initFileSystem() ) {
 		    return;
 	    }
@@ -1051,5 +877,47 @@ abstract class UnusedCSS {
         $file = ABSPATH . PLUGINDIR . '/' . self::$provider_path;
 
         return file_exists( $file );
+    }
+
+    public function cleanCacheFiles(){
+
+        $links = UnusedCSS_DB::get_links_where(" WHERE status = 'success' ");
+        $rules = UnusedCSS_DB::get_rules_where(" WHERE status = 'success' ");
+
+        $used_files = [];
+
+        foreach ($links as $link){
+
+            if(isset($link['files']) && !empty($link['files'])){
+                $uucss_files = array_column($link['files'],'uucss');
+                if(isset($uucss_files) && !empty($uucss_files)){
+                    $used_files = array_merge($used_files, $uucss_files);
+                }
+            }
+
+        }
+
+        foreach ($rules as $rule){
+
+            if(isset($rule['files']) && !empty($rule['files'])){
+                $uucss_files = array_column($rule['files'],'uucss');
+                if(isset($uucss_files) && !empty($uucss_files)){
+                    $used_files = array_merge($used_files, $uucss_files);
+                }
+            }
+
+        }
+
+        if ($handle = opendir(UnusedCSS::$base_dir)) {
+            while (false !== ($file = readdir($handle))) {
+                if ('.' === $file) continue;
+                if ('..' === $file) continue;
+
+                if(!in_array($file, $used_files) && $this->file_system->exists(UnusedCSS::$base_dir . '/' . $file)){
+                    $this->file_system->delete(UnusedCSS::$base_dir . '/' . $file);
+                }
+            }
+            closedir($handle);
+        }
     }
 }

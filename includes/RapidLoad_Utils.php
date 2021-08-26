@@ -50,6 +50,55 @@ trait RapidLoad_Utils {
 	    return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
     }
 
+    public function get_current_rule($user_defined_rules = []){
+
+        $rules = RapidLoad_Base::get()->get_pre_defined_rules();
+
+        $related_rule = false;
+
+        foreach ($rules as $rule){
+
+            if(!isset($rule['rule']) || isset($rule['rule']) && !in_array($rule['rule'], $user_defined_rules)){
+
+                continue;
+            }
+
+            if(isset($rule['callback']) && is_callable($rule['callback']) && $rule['callback']()){
+
+                $related_rule = $rule;
+                break;
+            }
+        }
+
+        return $related_rule;
+    }
+
+    public static function get_defined_rules( $with_permalink = false){
+
+        $rules = apply_filters('uucss/rules', []);
+
+        $rules_with_permalink = [];
+        foreach ($rules as $rule){
+            if(!isset($rule['permalink']) && isset($rule['name']) && isset($rule['custom_post']) && $with_permalink){
+                $posts = get_posts([
+                    'posts_per_page' => 1,
+                    'post_type' => $rule['name']
+                ]);
+                $rule['permalink'] = !empty($posts) ? get_permalink($posts[0]->ID) : trailingslashit(get_site_url());
+            }else{
+                $rule['permalink'] = trailingslashit(get_site_url());
+            }
+            array_push($rules_with_permalink, $rule);
+        }
+        usort($rules_with_permalink, function ($a, $b){
+            if ($a['priority'] == $b['priority']) {
+                return 0;
+            }
+            return ($a['priority'] < $b['priority']) ? -1 : 1;
+        });
+        return $rules_with_permalink;
+    }
+
     public function is_cli(){
 
         if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -144,10 +193,6 @@ trait RapidLoad_Utils {
     }
 
     public static function add_advanced_admin_notice($notice) {
-
-        if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
-            return;
-        }
 
         if(!isset($notice)){
             return;
@@ -259,6 +304,11 @@ trait RapidLoad_Utils {
     }
 
 	function str_contains( $string, $find ) {
+
+	    if(empty($find)){
+	        return false;
+        }
+
 		if ( strpos( $string, $find ) !== false ) {
 			return true;
 		}
@@ -324,7 +374,7 @@ trait RapidLoad_Utils {
 	public function is_uucss_file( $url = null ) {
 
 		if ( ! $url ) {
-			$url = $this->url;
+			return false;
 		}
 
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
@@ -341,8 +391,10 @@ trait RapidLoad_Utils {
 			    'nonce'  => wp_create_nonce( 'uucss_activation' ),
 			    'site'   => trailingslashit(get_site_url()),
 			    'back'   => admin_url( $to ),
-			    'goto'   => UUCSS_ACTIVATION_URL
-		    ] );
+			    'goto'   => UUCSS_ACTIVATION_URL,
+                'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
+		        'utm_medium' => 'plugin'
+            ] );
     }
 
     public static function serialize($data){
@@ -431,5 +483,122 @@ trait RapidLoad_Utils {
 
     public function schedule_cron($hook_name, $args){
         return wp_schedule_single_event( time() + 5, $hook_name, $args);
+    }
+
+    public function size() {
+
+	    $file_system = new RapidLoad_FileSystem();
+
+        if ( ! $file_system || ! $file_system->exists( UnusedCSS::$base_dir ) ) {
+            return "0 KB";
+        }
+
+        $size = $this->dirSize( UnusedCSS::$base_dir );
+
+        return $this->human_file_size( $size );
+    }
+
+    protected function is_doing_api_fetch(){
+
+        $user_agent = '';
+        $headers    = [];
+
+        if ( function_exists( 'getallheaders' ) ) {
+            $headers = getallheaders();
+        }
+
+        if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        if ( isset( $headers['User-Agent'] ) ) {
+            $user_agent = $headers['User-Agent'];
+        }
+
+        return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
+            strpos( $user_agent, 'RapidLoad' ) !== false;
+    }
+
+    public function is_valid_url($url){
+        return filter_var($url, FILTER_VALIDATE_URL);
+    }
+
+    public function is_url_allowed($url = null, $args = null)
+    {
+
+        if ( ! $url ) {
+            return false;
+        }
+
+        if(!$this->is_valid_url($url)){
+            return false;
+        }
+
+        // remove .css .js files from being analyzed
+        if ( preg_match( '/cache\/autoptimize/', $url ) ) {
+            return false;
+        }
+
+        if ( preg_match( '/cache\/rapidload/', $url ) ) {
+            return false;
+        }
+
+        global $post;
+        $_post = $post;
+
+        if ( !$_post && isset( $args['post_id'] )) {
+            $_post = get_post( $args['post_id'] );
+        }
+
+        if ( $_post ) {
+            $page_options = RapidLoad_Base::get_page_options( $_post->ID );
+            if ( isset( $page_options['exclude'] ) && $page_options['exclude'] == "on" ) {
+                return false;
+            }
+
+        }
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if ( isset( $options['uucss_excluded_links'] ) && ! empty( $options['uucss_excluded_links'] ) ) {
+            $exploded = explode( ',', $options['uucss_excluded_links'] );
+
+            foreach ( $exploded as $pattern ) {
+
+                if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
+
+                    $pattern = parse_url( $pattern );
+
+                    $path = $pattern['path'];
+                    $query = isset($pattern['query']) ? '?' . $pattern['query'] : '';
+
+                    $pattern = $path . $query;
+
+                }
+
+                if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }else if ( self::str_contains( urldecode($url), $pattern ) ) {
+                    $this->log( 'skipped : ' . $url );
+                    return false;
+                }
+
+            }
+        }
+
+        $url_parts = parse_url( $url );
+
+        if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        if(!apply_filters('uucss/url/exclude', $url)){
+            $this->log( 'skipped : ' . $url );
+            return false;
+        }
+
+        return true;
     }
 }

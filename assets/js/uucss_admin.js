@@ -77,6 +77,9 @@
     function showPublicNotices() {
         if (window.uucss && window.uucss.public_notices.length) {
             window.uucss.public_notices.forEach(function(value){
+                if(window.uucss && window.uucss.cpcss_enabled == "1" && value.id === 3){ // skip public notice if critical css enabled
+                    return;
+                }
                 showNotification(value.title, value.message, value.type + ' public-notice public-notice-' + value.id, true, value.id);
             })
         }
@@ -99,6 +102,21 @@
     function hideNotification() {
         var container = $('.uucss-notification');
         container.hide()
+    }
+
+    function trailingslashit(str){
+        return str.replace(/\/$/, '') + "/";
+    }
+
+    function updateSitemapUrl(){
+
+        var $sitemap_input = $('input.site-map-url');
+
+        wp.ajax.post('get_robots_text').done(function (data){
+            if(data && data.sitemap){
+                $sitemap_input.data('sitemap_url', data.sitemap);
+            }
+        })
     }
 
     $(document).ready(function () {
@@ -611,7 +629,20 @@
 
                         var $warnings_html = $('<div class="uucss-warnings"></div>');
 
-                        if(rowData.meta.warnings && rowData.meta.warnings.length){
+                        var $cpcss_html = $('<div class="cpcss-status cpcss-status-' + (rowData.cpcss ? rowData.cpcss.status : '') + '"></div>');
+
+                        if (rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) {
+
+                            if(rowData.cpcss){
+                                if(rowData.cpcss.status === 'success'){
+                                    $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                }
+                            }
+
+                        }
+
+                            if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
@@ -651,6 +682,7 @@
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
+                                    $cpcss_html.wrap('<div class="cpcss-result"></div>').parent().html() +
                                     $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
                                     '   <p class="val uucss-show-job-details">Created at ' +
@@ -790,6 +822,10 @@
 
                         if(data.status !== 'queued' && data.status !== 'rule-based'){
                             $content.find('ul').append('<li data-action_name="requeue_url"><a data-action_name="requeue_url" href="#">Requeue</a></li>')
+
+                            if(window.uucss && window.uucss.cpcss_enabled === "1"){
+                                $content.find('ul').append('<li data-action_name="regenerate_cpcss"><a data-action_name="regenerate_cpcss" href="#">Regenerate Critical CSS</a></li>')
+                            }
                         }
 
                         if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -853,6 +889,19 @@
                                     requeue('url', {url : data.url})
                                     break;
                                 }
+                                case 'regenerate_cpcss':{
+
+                                    wp.ajax.post('cpcss_purge_url',{ url : data.url }).then(function (i) {
+
+                                        $.uucssAlert(i, 'success')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'error')
+                                    });
+
+                                    break;
+                                }
                                 case 'attach_to_rule':{
 
                                     var $attach_rule_content = $('<div class="action-content"><div><select class="rule-items" id="attach-rule-item"></select></div><div><p>Base URL : <a class="base-url" target="_blank" href=""></a></p></div><div class="add-action-wrap"></div></div>');
@@ -913,6 +962,15 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
+                                    wp.ajax.post('rapidload_purge_all',{
+                                        job_type : 'url',
+                                        url : data.url,
+                                        clear : true
+                                    }).then(function (i) {
+
+                                    }).done(function(){
+
+                                    });
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1170,7 +1228,7 @@
                     "data": "regex",
                     title: "pattern",
                     width: '200px',
-                    className: 'dt-body-center dt-head-center',
+                    className: 'dt-body-center dt-head-center pattern',
                     render: function (data, type, row, meta) {
                         return '<span class="">'+ (data ? data : '') +'</span>';
                     },
@@ -1206,6 +1264,19 @@
                         var stat = $(td).wrapInner($('<span></span>'));
 
                         var $warnings_html = $('<div class="uucss-warnings"></div>');
+
+                        var $cpcss_html = $('<div class="cpcss-status cpcss-status-' + (rowData.cpcss ? rowData.cpcss.status : '') + '"></div>');
+
+                        if (rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) {
+
+                            if(rowData.cpcss){
+                                if(rowData.cpcss.status === 'success'){
+                                    $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                }
+                            }
+
+                        }
 
                         if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
@@ -1247,6 +1318,7 @@
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
+                                    $cpcss_html.wrap('<div class="cpcss-result"></div>').parent().html() +
                                     $warnings_html.wrap('<div></div>').parent().html() +
                                     '<div class="time">' +
                                     '   <p class="val uucss-show-job-details">Created at ' +
@@ -1384,6 +1456,9 @@
 
                         if(data.status !== 'queued'){
                             $content.find('ul').append('<li data-action_name="requeue_rule"><a data-action_name="requeue_rule" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Requeue</a></li>');
+                            if(window.uucss && window.uucss.cpcss_enabled === "1"){
+                                $content.find('ul').append('<li data-action_name="regenerate_cpcss"><a data-action_name="regenerate_cpcss" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Regenerate Critical CSS</a></li>')
+                            }
                         }
 
                         if(data.status === 'success'){
@@ -1450,6 +1525,19 @@
                                     }, null, 'rule');
                                     break;
                                 }
+                                case 'regenerate_cpcss':{
+
+                                    wp.ajax.post('cpcss_purge_url',{ url : url }).then(function (i) {
+
+                                        $.uucssAlert(i, 'success')
+
+                                    }).fail(function (i) {
+
+                                        $.uucssAlert(i, 'error')
+                                    });
+
+                                    break;
+                                }
                                 case 'duplicate_rule':{
                                     $.featherlight($('#add_rule_featherlight_content'),{
                                         variant : 'add-site-rule-model',
@@ -1477,11 +1565,21 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
+                                    wp.ajax.post('rapidload_purge_all',{
+                                        job_type : 'rule',
+                                        rule : rule,
+                                        regex : regex,
+                                        clear : true
+                                    }).then(function (i) {
+
+                                    }).done(function(){
+
+                                    });
                                     break;
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1642,14 +1740,18 @@
         });
 
         function requeue(post_type, data = {}, list = [], type = 'path'){
-            wp.ajax.post('uucss_queue',{
+
+            var data_ = {
                 url_list : list,
                 url : data.url,
                 rule : data.rule,
                 regex : data.regex,
                 post_type : post_type,
                 type : type,
-            }).then(function (i) {
+                job_type : type,
+            }
+
+            wp.ajax.post('uucss_queue',data_).then(function (i) {
                 if(table && type === 'path'){
                     table.ajax.reload(null, false);
                 }else if(rule_table && type === 'rule'){
@@ -1658,6 +1760,15 @@
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
+
+            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
+
+            }).done(function(){
+
+            });
+
+            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
+
         }
 
         tippy($('button.uucss-add-site-urls-submenu')[0], {
@@ -1789,6 +1900,7 @@
                             var data = {
                                 url : '',
                                 clear : true,
+                                job_type: 'url',
                                 nonce: uucss.nonce
                             }
 
@@ -1811,6 +1923,16 @@
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
+                            });
+                            wp.ajax.post('cpcss_purge_url',data).then(function (i) {
+
+                            }).done(function(){
+
+                            });
+                            wp.ajax.post('rapidload_purge_all',data).then(function (i) {
+
+                            }).done(function(){
+
                             });
                             break;
                         }
@@ -1928,6 +2050,7 @@
                                 url : '',
                                 clear : true,
                                 nonce: uucss.nonce,
+                                job_type: 'rule',
                                 args: {
                                     type : 'rule'
                                 }
@@ -1956,6 +2079,11 @@
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
+                            });
+                            wp.ajax.post('rapidload_purge_all',data).then(function (i) {
+
+                            }).done(function(){
+
                             });
                             break;
                         }
@@ -2002,13 +2130,13 @@
 
         function uucss_purge_url(url , isClear, row, index, data, args = {}) {
 
-            var _row = args.rule === undefined ? table.row(index) : rule_table.row(index);
+            var _row = !args.rule ? table.row(index) : rule_table.row(index);
 
             var $row  = $(row);
 
             $row.addClass('loading');
 
-            if(args.rule === undefined){
+            if(!args.rule){
                 $uucss_spinner.addClass('loading');
             }else{
                 $uucss_rule_spinner.addClass('loading');
@@ -2029,7 +2157,7 @@
                 },
                 success : function(response){
 
-                    if(args.rule === undefined){
+                    if(!args.rule){
                         $uucss_spinner.removeClass('loading')
                     }else{
                         $uucss_rule_spinner.removeClass('loading');
@@ -2270,11 +2398,14 @@
             $target.attr('disabled', true);
             $target.val('Please wait....');
 
-            wp.ajax.post('uucss_queue',{
+            var data_ = {
                 post_type : $model_content.find('#model-requeue-post-type').val(),
+                job_type : $model_content.find('#model-requeue-post-type').val(),
                 url : $model_content.find('input.site-map-url').val()
-            }).then(function (i) {
-                $.uucssAlert(i);
+            }
+
+            wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
+                $.uucssAlert('Sitemap links scheduled to be added to the queue.');
                 var currentFeather = $.featherlight.current();
                 if(currentFeather) currentFeather.close();
                 $target.attr('disabled', false);
@@ -2286,6 +2417,8 @@
             }).done(function () {
                 table.ajax.reload(null, false);
             })
+
+            //wp.ajax.post('cpcss_purge_url',{ url : $model_content.find('input.site-map-url').val(), post_type : $model_content.find('#model-requeue-post-type').val() });
         });
 
         $('p.more-info-uucss-status').click(function (e) {
@@ -2311,8 +2444,7 @@
             $('#uucss-wrapper li.uucss-history.uucss-rule-history').removeClass('multi-select');
         });
 
-        showPublicNotices();
-        showFaqs();
+        updateNotices();
 
         var $updateRuleForm = $('#add_rule_featherlight_content');
 
@@ -2353,7 +2485,20 @@
         }
 
         setInterval(updateRapidLoadStatus, 60000);
+
+        updateSitemapUrl();
     });
+
+    function updateNotices() {
+        wp.ajax.post('rapidload_notifications', {}).then(function (response) {
+            if(response){
+                window.uucss.faqs = response.faqs;
+                window.uucss.public_notices = response.notifications;
+            }
+            showFaqs();
+            showPublicNotices();
+        });
+    }
 
 
     function updateLicense() {

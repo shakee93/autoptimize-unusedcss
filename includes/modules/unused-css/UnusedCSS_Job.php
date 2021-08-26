@@ -98,7 +98,9 @@ abstract class UnusedCSS_Job
 
         foreach ($this->warnings as $warning){
 
-            if(isset($warning['message']) && $warning['message'] == 'RapidLoad optimized version for the file missing.'){
+            $war = (array)$warning;
+
+            if(isset($war['message']) && $war['message'] == 'RapidLoad optimized version for the file missing.'){
                 continue;
             }
 
@@ -154,6 +156,12 @@ abstract class UnusedCSS_Job
     public function add_warning($warning){
         if(!isset($this->warnings)){
             $this->warnings = [];
+        }
+        if(isset($warning['file'])){
+            $key = array_search($warning['file'],array_column($this->warnings, 'file'));
+            if(isset($key) && is_numeric($key)){
+                return;
+            }
         }
         $this->warnings[] = $warning;
     }

@@ -83,6 +83,36 @@ class UnusedCSS_DB extends RapidLoad_DB
 	    }
     }
 
+    static function get_task_count($job, $where = ''){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_{$job} {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
+
+    static function get_data($job, $select = ' * ' , $where = '', $limit = 1, $order_by = 'id DESC')
+    {
+        global $wpdb;
+
+        $data = $wpdb->get_results( "SELECT {$select} FROM {$wpdb->prefix}rapidload_uucss_{$job} {$where} ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return $data;
+    }
+
     static function get_links_by_status($status, $limit = 1, $order_by = 'id DESC'){
         global $wpdb;
 
@@ -111,6 +141,39 @@ class UnusedCSS_DB extends RapidLoad_DB
         }
 
         return $transformed_links;
+    }
+
+    static function get_job_counts(){
+
+        global $wpdb;
+
+        $counts = $wpdb->get_results(
+            "SELECT 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE hits > 0) as hits,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'success' AND warnings IS NULL) as success,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'rule-based') as rule_based,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'waiting') as waiting, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'queued') as queued,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'processing') as processing, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE warnings IS NOT NULL) as warnings,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job WHERE status = 'failed') as failed,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_uucss_job) as total", OBJECT);
+
+        if(!empty($counts)){
+            return $counts[0];
+        }
+
+        return (object)[
+            'hits' => 0,
+            'success' => 0,
+            'rule_based' => 0,
+            'waiting' => 0,
+            'queued' => 0,
+            'processing' => 0,
+            'warnings' => 0,
+            'failed' => 0,
+            'total' => 0,
+        ];
     }
 
     static function get_total_job_count($where = ''){
@@ -189,7 +252,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function get_first_link(){
         global $wpdb;
 
-        $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status NOT IN('rule-based') LIMIT 1", OBJECT );
+        $link = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE status != 'rule-based' LIMIT 1", OBJECT );
 
         $error = $wpdb->last_error;
 
@@ -207,7 +270,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function link_exists($url){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
+        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -236,6 +299,18 @@ class UnusedCSS_DB extends RapidLoad_DB
         global $wpdb;
 
         $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "'" );
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+    }
+
+    static function delete_link_by_id($id){
+        global $wpdb;
+
+        $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_uucss_job WHERE id = " . $id . "" );
 
         $error = $wpdb->last_error;
 
@@ -462,7 +537,7 @@ class UnusedCSS_DB extends RapidLoad_DB
 
         global $wpdb;
 
-        $names = $wpdb->get_results("SELECT DISTINCT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
+        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
 
         $error = $wpdb->last_error;
 
@@ -470,7 +545,7 @@ class UnusedCSS_DB extends RapidLoad_DB
             self::show_db_error($error);
         }
 
-        return array_column($names, 'rule');
+        return array_unique(array_column($names, 'rule'));
     }
 
     static function get_rules($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
@@ -541,8 +616,15 @@ class UnusedCSS_DB extends RapidLoad_DB
 
     static function get_applied_rule($rule, $url){
 
-        $rules = self::get_rules_where("WHERE rule = '" . $rule . "'", true);
+        global $wpdb;
+
+        $rules = $wpdb->get_results("SELECT id, rule, regex FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' ORDER BY id DESC ", OBJECT);
+
         $applied_rule = false;
+
+        if(empty($rules)){
+            return $rules;
+        }
 
         foreach ($rules as $rule){
             if(self::is_url_glob_matched($url,$rule->regex)){
@@ -552,6 +634,17 @@ class UnusedCSS_DB extends RapidLoad_DB
         }
 
         return $applied_rule;
+    }
+
+    static function get_applied_rule_by_id($id){
+
+        $applied_rule = self::get_rules_where("WHERE id = " . $id, true);
+
+        if(isset($applied_rule) && !empty($applied_rule)){
+            return $applied_rule[0];
+        }
+
+        return false;
     }
 
     static function detach_all_rules(){
@@ -590,7 +683,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function rule_exists_with_error($rule, $regex = '/'){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
+        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $rule . "' AND regex = '" . $regex . "'", OBJECT);
 
         $error = $wpdb->last_error;
 
@@ -822,10 +915,9 @@ class UnusedCSS_DB extends RapidLoad_DB
         if($rule == 'path'){
             $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
 
-            if(isset($link->rule) && !empty($link->rule) && $data['rule_id'] != null){
+            if(isset($data['rule_id'])){
 
-                $appied_rule = self::get_applied_rule($link->rule, $link->url);
-
+                $appied_rule = self::get_applied_rule_by_id($data['rule_id']);
                 if($appied_rule){
                     $link = $appied_rule;
                     $data['rule'] = $link->rule ? $link->rule : null;
@@ -856,7 +948,7 @@ class UnusedCSS_DB extends RapidLoad_DB
         $data['attempts'] = isset( $link->attempts ) ? $link->attempts : null;
         $data['rule'] = isset( $link->rule ) ? $link->rule : null;
 
-        return $data;
+        return apply_filters('uucss/link', $data);
 
     }
 
@@ -930,4 +1022,42 @@ class UnusedCSS_DB extends RapidLoad_DB
         return $urls;
     }
 
+    static function get_original_file_name($path){
+
+	    $orinal_file_name = null;
+
+        global $wpdb;
+
+        $files_list = $wpdb->get_col("SELECT files FROM {$wpdb->prefix}rapidload_uucss_job WHERE files IS NOT NULL UNION ALL SELECT files FROM {$wpdb->prefix}rapidload_uucss_rule WHERE files IS NOT NULL");
+
+        foreach ($files_list as $value){
+
+            $files = isset($value) ? unserialize($value) : [];
+
+            foreach ($files as $file){
+
+                if($file['uucss'] == basename($path)){
+                    $orinal_file_name = $file['original'];
+                    break;
+                }
+
+            }
+
+        }
+
+        return $orinal_file_name;
+    }
+
+    static function reset_rule_warnings($rule_id){
+
+        if(self::$current_version < 1.2){
+            return false;
+        }
+
+        global $wpdb;
+
+        $wpdb->query("UPDATE {$wpdb->prefix}rapidload_uucss_job SET hits = 0, warnings = NULL WHERE rule_id = " . $rule_id );
+
+        return true;
+    }
 }

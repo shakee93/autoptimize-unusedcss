@@ -267,6 +267,7 @@ class RapidLoad_Store {
 
         $this->rule->mark_as_success($files, $stats, $warnings);
         $this->rule->save();
+        UnusedCSS_DB::reset_rule_warnings($this->rule->id);
 
     }
 
@@ -312,7 +313,6 @@ class RapidLoad_Store {
         ] );
     }
 
-
     protected function get_cache_page_dir()
     {
         $hash = $this->encode($this->url);
@@ -325,7 +325,6 @@ class RapidLoad_Store {
 
 	    return $source_dir;
     }
-
 
 	protected function append_cache_file_dir( $file, $content ) {
 		return UnusedCSS::$base_dir . '/' . $this->hashed_file_name( $file, $content );

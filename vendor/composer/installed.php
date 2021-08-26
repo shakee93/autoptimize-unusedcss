@@ -1,33 +1,32 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => '3b96f91f4adb1f98fb2c7ae76002aa9b1d9fe722',
+        'name' => '__root__',
+        'dev' => true,
     ),
-    'reference' => '29391c8f9a70ddfa60fa859fac8ea4a8cffd6c91',
-    'name' => '__root__',
-  ),
-  'versions' => 
-  array (
-    '__root__' => 
-    array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '29391c8f9a70ddfa60fa859fac8ea4a8cffd6c91',
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '3b96f91f4adb1f98fb2c7ae76002aa9b1d9fe722',
+            'dev_requirement' => false,
+        ),
+        'collizo4sky/persist-admin-notices-dismissal' => array(
+            'pretty_version' => '1.4.4',
+            'version' => '1.4.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../collizo4sky/persist-admin-notices-dismissal',
+            'aliases' => array(),
+            'reference' => '900739eb6b0ec0210465f5983a6d4e0e420289e4',
+            'dev_requirement' => false,
+        ),
     ),
-    'simplehtmldom/simplehtmldom' => 
-    array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '31ce157e7ba0c6ca35f94faedf031a945c3f6427',
-    ),
-  ),
 );

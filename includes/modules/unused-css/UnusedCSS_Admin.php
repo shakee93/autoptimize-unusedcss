@@ -38,6 +38,12 @@ abstract class UnusedCSS_Admin {
 
         $this->uucss = $uucss;
 
+        if(is_admin()){
+
+            add_action( 'admin_menu', array( $this, 'add_uucss_option_page' ) );
+
+        }
+
 
 	    if (!self::$enabled) {
 		    return;
@@ -85,10 +91,245 @@ abstract class UnusedCSS_Admin {
             add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
             add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
+            add_action( 'wp_ajax_uucss_queue', [$this, 'queue_posts']);
+            add_action( 'wp_ajax_rapidload_notifications', [$this, 'rapidload_notifications']);
             add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
         }
 
+        add_action( 'uucss_sitemap_queue', [$this, 'queue_sitemap'], 10, 1);
+
+    }
+
+    function rapidload_notifications(){
+
+        wp_send_json_success([
+            'faqs' => $this->get_faqs(),
+            'notifications' => $this->get_public_notices()
+        ]);
+
+    }
+
+    function queue_posts(){
+
+        if(!isset($_REQUEST['post_type'])) {
+            wp_send_json_error('post type not found');
+        }
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
+
+        $post_type = sanitize_text_field($_REQUEST['post_type']);
+
+        $list = isset($_POST['url_list']) ? $_POST['url_list'] : null;
+
+        $posts = null;
+
+        global $uucss;
+
+        if(isset($list) && is_array($list) && !empty($list)){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_urls($list);
+            }else{
+                UnusedCSS_DB::requeue_rules($list);
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+        }else if($post_type == 'current'){
+
+            if($type == 'path'){
+                RapidLoad_Settings::clear_links(true);
+            }else{
+                UnusedCSS_DB::clear_rules(true);
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'processing'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('processing');
+                UnusedCSS_DB::requeue_jobs('waiting');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('processing');
+                UnusedCSS_DB::requeue_rule_jobs('waiting');
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'warnings'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs('warnings');
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs('warnings');
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'failed'){
+
+            if($type == 'path'){
+                UnusedCSS_DB::requeue_jobs();
+            }else{
+                UnusedCSS_DB::requeue_rule_jobs();
+            }
+
+            $this->uucss->cleanCacheFiles();
+
+            wp_send_json_success('successfully links added to the queue');
+
+        }else if($post_type == 'url'){
+
+            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+            if($url && !$this->is_url_allowed($url)){
+                wp_send_json_error('url is excluded');
+            }
+
+            $url_object = false;
+
+            if($type == 'path'){
+
+                $url_object = new UnusedCSS_Path([
+                    'url' => $url
+                ]);
+
+            }else{
+
+                $url_object = new UnusedCSS_Rule([
+                    'rule' => $rule,
+                    'regex' => $regex
+                ]);
+
+            }
+
+            if(!$url_object){
+
+                wp_send_json_error('Invalid URL');
+
+            }
+
+            $url_object->requeue();
+            $url_object->save();
+
+            wp_send_json_success('successfully link added to the queue');
+
+        }else if($post_type == 'site_map'){
+
+            $sitemap = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+
+            if(!$sitemap){
+
+                wp_send_json_error('site map url required');
+            }
+
+            $spawned = $this->schedule_cron('uucss_sitemap_queue',[
+                'url' => $sitemap
+            ]);
+
+            self::log([
+                'log' => 'cron spawned : ' . $spawned,
+                'url' => $sitemap,
+                'type' => 'queued'
+            ]);
+
+            wp_send_json_success('Sitemap links scheduled to be added to the queue.');
+
+        }else{
+
+            $posts = new WP_Query(array(
+                'post_type'=> $post_type,
+                'posts_per_page' => -1
+            ));
+
+        }
+
+        if($posts && $posts->have_posts()){
+            while ($posts->have_posts()){
+                $posts->the_post();
+
+                $url = $this->transform_url(get_the_permalink(get_the_ID()));
+
+                if($this->is_url_allowed($url)){
+                    new UnusedCSS_Path([
+                        'url' => $url
+                    ]);
+                }
+
+            }
+        }
+
+        wp_reset_query();
+
+        wp_send_json_success('successfully links added to the queue');
+
+    }
+
+    function queue_sitemap($url = false){
+
+        if(!$url){
+
+            $url = apply_filters('uucss/sitemap/default', stripslashes(get_site_url(get_current_blog_id())) . '/sitemap_index.xml');
+        }
+
+        $site_map = new RapidLoad_Sitemap();
+        $urls = $site_map->process_site_map($url);
+
+        global $uucss;
+
+        if(isset($urls) && !empty($urls)){
+
+            foreach ($urls as $url){
+
+                if($this->is_url_allowed($this->transform_url($url))){
+
+                    new UnusedCSS_Path([
+                        'url' => $url
+                    ]);
+                }
+
+            }
+        }
+    }
+
+    public function add_uucss_option_page() {
+
+        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+            wp_enqueue_script( 'post' );
+
+            ?>
+            <div class="wrap">
+                <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
+                <?php
+                    do_action('uucss/options/before_render_form');
+                ?>
+                <div>
+                    <?php $this->render_form() ?>
+                </div>
+            </div>
+
+            <?php
+        });
+
+        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+
+    }
+
+    public function render_form() {
+        $options = RapidLoad_Base::fetch_options();
+
+        include('parts/options-page.html.php');
     }
 
     public function uucss_rule_stats(){
@@ -101,18 +342,20 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_status(){
 
+        $job_counts = UnusedCSS_DB::get_job_counts();
+
         wp_send_json_success([
             'cssStyleSheetsCount' => $this->uucss->cache_file_count(),
             'cssStyleSheetsSize' => $this->uucss->size(),
-            'hits' => UnusedCSS_DB::get_total_job_count(' WHERE hits > 0 '),
-            'success' => UnusedCSS_DB::get_total_job_count(' WHERE status = "success" AND warnings IS NULL '),
-            'ruleBased' => UnusedCSS_DB::get_total_job_count(" WHERE status = 'rule-based'"),
-            'queued' => UnusedCSS_DB::get_total_job_count(' WHERE status = "queued" '),
-            'waiting' => UnusedCSS_DB::get_total_job_count(' WHERE status = "waiting" '),
-            'processing' => UnusedCSS_DB::get_total_job_count(' WHERE status = "processing" '),
-            'warnings' => UnusedCSS_DB::get_total_job_count(' WHERE warnings IS NOT NULL '),
-            'failed' => UnusedCSS_DB::get_total_job_count(' WHERE status = "failed" '),
-            'total' => UnusedCSS_DB::get_total_job_count(),
+            'hits' => $job_counts->hits,
+            'success' => $job_counts->success,
+            'ruleBased' => $job_counts->rule_based,
+            'queued' => $job_counts->queued,
+            'waiting' => $job_counts->waiting,
+            'processing' => $job_counts->processing,
+            'warnings' => $job_counts->warnings,
+            'failed' => $job_counts->failed,
+            'total' => $job_counts->total,
         ]);
     }
 
@@ -132,7 +375,7 @@ abstract class UnusedCSS_Admin {
 
         global $uucss;
 
-        if(!$uucss->is_url_allowed($url)){
+        if(!$this->is_url_allowed($url)){
             wp_send_json_error('URL not allowed');
         }
 
@@ -140,13 +383,19 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error('Invalid regex for the url');
         }
 
+        $ruleObject = false;
+        $update_mode = 'create';
+
         if(isset($_REQUEST['old_rule']) && isset($_REQUEST['old_regex'])){
 
-            if(UnusedCSS_DB::rule_exists_with_error($_REQUEST['old_rule'], $_REQUEST['old_regex'])){
+            $old_rule = $_REQUEST['old_rule'];
+            $old_regex = $_REQUEST['old_regex'];
+
+            if(UnusedCSS_DB::rule_exists_with_error( $old_rule, $old_regex)){
 
                 $ruleObject = new UnusedCSS_Rule([
-                   'rule' => $_REQUEST['old_rule'],
-                   'regex' => $_REQUEST['old_regex']
+                   'rule' => $old_rule,
+                   'regex' => $old_regex
                 ]);
 
                 if(isset($_REQUEST['old_url']) && $_REQUEST['old_url'] != $url ||
@@ -159,6 +408,12 @@ abstract class UnusedCSS_Admin {
                 $ruleObject->rule = $rule;
                 $ruleObject->regex = $regex;
                 $ruleObject->save();
+                $update_mode = 'update';
+
+                do_action('uucss/rule/saved', $ruleObject, [
+                    'rule' => $old_rule,
+                    'regex' => $old_regex
+                ]);
 
                 wp_send_json_success('Rule updated successfully');
             }
@@ -169,11 +424,13 @@ abstract class UnusedCSS_Admin {
             wp_send_json_error('Rule already exist');
         }
 
-        new UnusedCSS_Rule([
+        $ruleObject = new UnusedCSS_Rule([
             'rule' => $rule,
             'url' => $url,
             'regex' => $regex,
         ]);
+
+        do_action('uucss/rule/saved', $ruleObject, false);
 
         /*$spawned = $this->schedule_cron('uucss_apply_rules', [] );
 
@@ -351,6 +608,8 @@ abstract class UnusedCSS_Admin {
                     'soft' => true
                 ] );
             }
+
+            RapidLoad_Base::fetch_options(false);
         }
 
     }
@@ -398,7 +657,7 @@ abstract class UnusedCSS_Admin {
 
     public function first_uucss_job() {
 
-        if ( ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+        if ( class_exists('PAnD') && ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
             return;
         }
 
@@ -552,6 +811,10 @@ abstract class UnusedCSS_Admin {
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
             }
 
+        }else{
+
+            $filters[] = " status != 'rule-based' ";
+
         }
 
         $url_filter = isset($_REQUEST['columns']) &&
@@ -638,7 +901,7 @@ abstract class UnusedCSS_Admin {
 
         wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
-
+        global $rapidload;
 
         $data = array(
             'api' => RapidLoad_Api::get_key(),
@@ -649,10 +912,11 @@ abstract class UnusedCSS_Admin {
             'on_board_complete' => apply_filters('uucss/on-board/complete', false),
             'api_key_verified' => self::is_api_key_verified(),
             'notifications' => $this->getNotifications(),
-            'faqs' => $this->get_faqs(),
-            'public_notices' => $this->get_public_notices(),
+            'faqs' => [],
+            'public_notices' => [],
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
-            'rules_enabled' => $this->uucss->rules_enabled(),
+            'rules_enabled' => $rapidload->rules_enabled(),
+            'cpcss_enabled' => $rapidload->critical_css_enabled(),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
@@ -748,6 +1012,10 @@ abstract class UnusedCSS_Admin {
                 return !$this->str_contains($file['original'], '//inline-style@');
             });
         }
+
+        do_action( 'uucss/cached', [
+            'url' => $link['url']
+        ]);
 
         return $uucss_api->post( 'test/wordpress',
             [
@@ -895,6 +1163,8 @@ abstract class UnusedCSS_Admin {
     public function clear_page_cache(){
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
 
         $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
 
@@ -909,6 +1179,17 @@ abstract class UnusedCSS_Admin {
         }
 
         $links = false;
+
+        if($rule && $regex){
+
+            $rule = UnusedCSS_DB::get_rule($rule, $regex);
+
+            if(isset($rule['id'])){
+
+                $links = UnusedCSS_DB::get_links_where(" WHERE rule_id = " . $rule['id']);
+
+            }
+        }
 
         if($status){
 
@@ -931,7 +1212,7 @@ abstract class UnusedCSS_Admin {
             foreach ($links as $link){
 
                 if(isset($link['url'])){
-
+                    self::uucss_log($link['url']);
                     do_action( 'uucss/cached', [
                         'url' => $link['url']
                     ] );
@@ -972,24 +1253,9 @@ abstract class UnusedCSS_Admin {
 
     public function meta_box( $post ) {
 
-        $options = $this->get_page_options($post->ID);
+        $options = RapidLoad_Base::get_page_options($post->ID);
 
         include('parts/admin-post.html.php');
-    }
-
-    public static function get_page_options($post_id)
-    {
-        $options = [];
-
-        if($post_id){
-
-            foreach (self::$page_options as $option) {
-                $options[$option] = get_post_meta( $post_id, '_uucss_' . $option, true );
-            }
-
-        }
-
-        return $options;
     }
 
     public function save_meta_box_options($post_id, $post)
@@ -1011,7 +1277,6 @@ abstract class UnusedCSS_Admin {
 		add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
 		add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
 		add_action( "wp_ajax_uucss_purge_url", [ $this, 'ajax_purge_url' ] );
-
 	}
 
 	public static function suggest_whitelist_packs() {
@@ -1040,7 +1305,7 @@ abstract class UnusedCSS_Admin {
 			wp_send_json_success( $data->data );
 		}
 
-		return $data;
+		return isset($data) && is_array($data) ? $data : [];
 	}
 
 	public function uucss_license() {
@@ -1048,7 +1313,10 @@ abstract class UnusedCSS_Admin {
 		$api = new RapidLoad_Api();
 
 		$data = $api->get( 'license', [
-			'url' => $this->transform_url(get_site_url())
+			'url' => $this->transform_url(get_site_url()),
+            'version' => UUCSS_VERSION,
+            'db_version' => RapidLoad_DB::$db_version,
+            'db_version_exist' => RapidLoad_DB::$current_version
 		] );
 
 		if ( ! is_wp_error( $data ) ) {

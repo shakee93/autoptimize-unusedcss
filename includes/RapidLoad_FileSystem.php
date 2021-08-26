@@ -19,7 +19,12 @@ class RapidLoad_FileSystem
         if($this->exists($dir)) {
             return true;
         }
-        return mkdir($dir, $mode, $recursive);
+        try{
+            return mkdir($dir, $mode, $recursive);
+        }catch(Exception $exception){
+            error_log(json_encode($dir));
+            return false;
+        }
     }
 
     public function is_writable( $dir ){

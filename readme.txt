@@ -1,9 +1,9 @@
 === RapidLoad Power-Up for Autoptimize ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, unused css, autoptimize, rapidload
+Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
 Requires at least: 4.0
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
@@ -13,9 +13,20 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated unused CSS removal for WordPress [PAID PREMIUM PLUGIN]**
+**Automated unused CSS removal + critical CSS generation for WordPress [PAID PREMIUM PLUGIN]**
 
 Many Wordpress themes and plugins load all of their CSS **everywhere** by default - not just the places you need it. This slows down your website & damages the user experience… directly impacting your bottom line.
+
+**Works perfectly with**
+
+- WP Rocket
+- LIteSpeed Cache
+- Cache Enabler
+- W3 Total Cache
+- Wp Super Cache
+- WP Fastest Cache
+- WP Optimize
+- Proxy Cache Purge
 
 **RapidLoad can reduce CSS file sizes up to 95%**. It’s automatic too - which means it will continue removing UnusedCSS when users view your pages.
 
@@ -84,6 +95,82 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 4. RapidLoad options.
 
 == Changelog ==
+
+= 1.6.9 - 25/08/2021 =
+ * feat : added wpforms plugin support
+ * feat : update sitemap url from robots.txt file
+ * fix : special chars being encoded in scripts (&amp, &quote)
+ * fix : Can not read property aoData of undefined
+ * fix : usort(): Returning bool from comparison function is deprecated
+
+= 1.6.8 - 06/08/2021 =
+ * fix : rollback to simplehtmldom parser
+ * fix : fix global post override
+
+= 1.6.7 - 03/08/2021 =
+ * feat : optimized database queries for better performance (phase 3)
+ * feat : add support for Advanced Custom Fields Plugin
+ * improve : improve elementor plugin support
+ * improve : add index to rapidload data tables
+
+= 1.6.6 - 29/07/2021 =
+ * fix : Elementor editor not loading for several users
+
+= 1.6.5 - 29/07/2021 =
+ * feat : optimized database queries for better performance (phase 2)
+ * feat : updated HTML parser
+
+= 1.6.4 - 28/07/2021 =
+ * feat : optimized database queries for better performance
+
+= 1.6.3 - 27/07/2021 =
+ * feat : tested upto wordpress version 5.8
+ * improve : critical css feature
+
+= 1.6.2 - 23/07/2021 =
+ * fix : disable auto queue option not working
+
+= 1.6.1 - 19/07/2021 =
+ * improve : critical css feature
+
+= 1.6.0 - 16/07/2021 =
+ * feat : added critical css feature to eliminate render-blocking
+
+= 1.5.2 - 08/07/2021 =
+ * feat : requeue rules on warnings
+ * improve : lightspeed cache plugin
+
+= 1.5.1 - 23/06/2021 =
+ * fix : warning strpos() empty needle
+
+= 1.5.0 - 17/06/2021 =
+ * feat : Universal support for
+            - WP Rocket
+            - LIteSpeed Cache
+            - Cache Enabler
+            - W3 Total Cache
+            - Wp Super Cache
+            - WP Fastest Cache
+            - WP Optimize
+            - Proxy Cache Purge
+
+= 1.4.15 - 17/06/2021 =
+ * feat : added Hummingbird plugin support
+ * feat : added RapidLoad 404 error handler
+ * fix: Fatal Error Cannot use object of type stdClass as array
+
+= 1.4.14 - 14/06/2021 =
+ * improve: set default sitemap url from robots.txt
+
+= 1.4.13 - 14/06/2021 =
+ * feat: add Proxy Cache Purge plugin support
+ * fix: options cleared on deactivation
+
+= 1.4.12 - 10/06/2021 =
+ * improve: Load original CSS as default option to prevent layout breaks
+ * improve: rule based injection with regex pattern
+ * fix: undefined is_product function in Woocommerce rule based injection
+ * improve: add Cloudflare cache busting query param to RapidLoad
 
 = 1.4.11 - 20/05/2021 =
  * feat: (beta) rule based injection

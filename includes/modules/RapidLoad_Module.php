@@ -1,15 +1,13 @@
 <?php
 
-defined( 'ABSPATH' ) or die();
 
-class RapidLoad_Module{
-
+class RapidLoad_Module
+{
     public $modules = [];
 
     public function __construct()
     {
         $this->init();
-        $this->hooks();
         $this->load_modules();
     }
 
@@ -18,40 +16,53 @@ class RapidLoad_Module{
         $this->modules['unused-css'] = [
             'id' => 'unused-css',
             'title' => 'Unused CSS',
+            'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
             'status' => 'off',
-            'class' => 'UnusedCSS_Module',
+            'class' => defined('RAPIDLOAD_PROVIDER') && class_exists(RAPIDLOAD_PROVIDER) ? RAPIDLOAD_PROVIDER : UnusedCSS_RapidLoad::class,
             'global' => 'uucss'
         ];
 
-        $stored_modules = get_option( 'rapidload_modules', [] );
+        $this->modules['critical-css'] = [
+            'id' => 'critical-css',
+            'title' => 'Critical CSS',
+            'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
+            'status' => 'on',
+            'class' => CriticalCSS::class,
+            'global' => 'cpcss'
+        ];
+
+        // Todo get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] )
+        $stored_modules = ['unused-css' => 'on', 'critical-css' => 'on'];
 
         foreach ($stored_modules as $key => $value){
             $this->modules[$key]['status'] = $value;
         }
-
-    }
-
-    function hooks(){
-
-        if(is_admin()){
-
-            add_action( 'wp_ajax_rapidload_module_activation', [ $this, 'activate_module' ] );
-
-        }
-
     }
 
     function load_modules(){
+
+        global $uucss;
 
         foreach ($this->modules as $module){
 
             $class_object = $module['class'];
 
             if(class_exists($class_object) && $module['status'] == 'on'){
-                rapidload()->get()->{$module['global']} = new $class_object();
+                if($module['global'] == 'uucss'){
+                    $uucss = new $class_object();
+                }else{
+                    new $class_object();
+                }
             }
 
         }
+
+    }
+
+    function is_active($module){
+
+        return isset($this->modules) && isset($this->modules[$module]) &&
+            isset($this->modules[$module]['status']) && $this->modules[$module]['status'] == "on";
 
     }
 
@@ -64,13 +75,19 @@ class RapidLoad_Module{
             wp_send_json_error('Rapidload module required');
         }
 
-        $stored = get_option( 'rapidload_modules', [] );
+        $stored = get_option( 'rapidload_modules', ['unused-css'] );
 
         $stored[$module] = $active;
 
         update_option( 'rapidload_modules', $stored );
 
         wp_send_json_success();
+    }
+
+    public function active_modules(){
+        return array_filter($this->modules, function ($value){
+            return isset($value['status']) && $value['status'] == "on";
+        });
     }
 
 }
