@@ -102,7 +102,7 @@ class UnusedCSS_Enqueue {
             if(!empty($inline_style_content)){
 
                 $file_name = 'id="uucss-inline-' . md5($this->data->url) . '"';
-                $uucss_tag = RapidLoad_Base::$frontend_debug ? 'uucss' : '';
+                $uucss_tag = RapidLoad_Enqueue::$frontend_debug ? 'uucss' : '';
                 $inline_style_content = sprintf('<style %s %s>' . $inline_style_content . '</style>', $file_name, $uucss_tag);
 
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
@@ -133,7 +133,7 @@ class UnusedCSS_Enqueue {
 
                 $this->link->mark_as_successful_hit();
             }
-            if(RapidLoad_Base::$frontend_debug){
+            if(RapidLoad_Enqueue::$frontend_debug){
                 $this->dom->find( 'body' )[0]->uucss = true;
             }
 
@@ -230,7 +230,7 @@ class UnusedCSS_Enqueue {
 
                     if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
-                        if(RapidLoad_Base::$frontend_debug){
+                        if(RapidLoad_Enqueue::$frontend_debug){
                             $sheet->uucss = true;
                         }
                         $sheet->href  = $newLink;
@@ -308,7 +308,7 @@ class UnusedCSS_Enqueue {
 
         if($this->dom && $this->inject){
 
-            if(RapidLoad_Base::$frontend_debug){
+            if(RapidLoad_Enqueue::$frontend_debug){
                 $this->dom->find( 'html' )[0]->uucss = true;
             }
 
@@ -357,7 +357,7 @@ class UnusedCSS_Enqueue {
         }
 
         $file_name = 'id="' . basename( $link ) . '"';
-        $tag_name = RapidLoad_Base::$frontend_debug ? 'uucss': '';
+        $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
 
         $sheet->outertext = sprintf('<style %s %s>%s</style>', $file_name, $tag_name, $inline['content']);
 

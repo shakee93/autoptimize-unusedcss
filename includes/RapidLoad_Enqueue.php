@@ -8,9 +8,15 @@ class RapidLoad_Enqueue {
 
     private $options;
 
+    public static $frontend_debug = false;
+
     public function __construct()
     {
         $this->options = RapidLoad_Base::fetch_options();
+
+        if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1"){
+            self::$frontend_debug = true;
+        }
 
         add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
 

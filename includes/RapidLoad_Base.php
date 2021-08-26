@@ -14,8 +14,6 @@ class RapidLoad_Base
     public $applicable_rule = false;
     public $defined_rules = false;
 
-    public static $frontend_debug = false;
-
     private static $base_instance = null;
 
     public static function get(){
@@ -38,10 +36,6 @@ class RapidLoad_Base
         self::fetch_options();
 
         add_action('init', function (){
-
-            if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1"){
-                self::$frontend_debug = true;
-            }
 
             if(!wp_doing_ajax() && !wp_doing_cron()){
                 self::log([
