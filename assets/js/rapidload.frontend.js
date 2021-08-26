@@ -5,7 +5,7 @@
         var fired = false
 
         var load_css = function (uucss) {
-            var files = document.querySelectorAll('link[uucss]')
+            var files = document.querySelectorAll('link[href*="uucss/uucss-"]')
 
             if (!files.length || fired) {
                 return;
@@ -25,8 +25,10 @@
 
                 let link = file.cloneNode()
                 link.href = original.original
-                link.removeAttribute('uucss')
-                link.setAttribute('uucss-reverted', '')
+                if(window.rapidload && window.rapidload.frontend_debug === "1"){
+                    link.removeAttribute('uucss')
+                    link.setAttribute('uucss-reverted', '')
+                }
                 link.prev = file
 
                 link.addEventListener('load',function (e) {
@@ -41,14 +43,14 @@
 
         this.add_events = function () {
 
-            if (!window.rapidload || !window.rapidload.length) {
+            if (!window.rapidload || !window.rapidload.files || !window.rapidload.files.length) {
                 return;
             }
 
             ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
 
                 var listener = function () {
-                    load_css(window.rapidload)
+                    load_css(window.rapidload.files)
                     removeEventListener(event, listener);
                 }
                 addEventListener(event, listener);

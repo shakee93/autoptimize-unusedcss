@@ -101,7 +101,9 @@ class UnusedCSS_Enqueue {
 
             if(!empty($inline_style_content)){
 
-                $inline_style_content = '<style inlined-uucss="uucss-inline-' . md5($this->data->url) . '" uucss>' . $inline_style_content . '</style>';
+                $file_name = 'id="uucss-inline-' . md5($this->data->url) . '"';
+                $uucss_tag = RapidLoad_Base::$frontend_debug ? 'uucss' : '';
+                $inline_style_content = sprintf('<style %s %s>' . $inline_style_content . '</style>', $file_name, $uucss_tag);
 
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
 
@@ -131,7 +133,9 @@ class UnusedCSS_Enqueue {
 
                 $this->link->mark_as_successful_hit();
             }
-            $this->dom->find( 'body' )[0]->uucss = true;
+            if(RapidLoad_Base::$frontend_debug){
+                $this->dom->find( 'body' )[0]->uucss = true;
+            }
 
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
@@ -226,7 +230,9 @@ class UnusedCSS_Enqueue {
 
                     if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
 
-                        $sheet->uucss = true;
+                        if(RapidLoad_Base::$frontend_debug){
+                            $sheet->uucss = true;
+                        }
                         $sheet->href  = $newLink;
 
                         $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'</a><br><br>for <a href="' . $link . '" target="_blank">'. $link . '</a>');
@@ -302,7 +308,9 @@ class UnusedCSS_Enqueue {
 
         if($this->dom && $this->inject){
 
-            $this->dom->find( 'html' )[0]->uucss = true;
+            if(RapidLoad_Base::$frontend_debug){
+                $this->dom->find( 'html' )[0]->uucss = true;
+            }
 
             $this->replace_stylesheets();
 
@@ -348,7 +356,10 @@ class UnusedCSS_Enqueue {
             return;
         }
 
-        $sheet->outertext = '<style inlined-uucss="' . basename( $link ) . '">' . $inline['content'] . '</style>';
+        $file_name = 'id="' . basename( $link ) . '"';
+        $tag_name = RapidLoad_Base::$frontend_debug ? 'uucss': '';
+
+        $sheet->outertext = sprintf('<style %s %s>%s</style>', $file_name, $tag_name, $inline['content']);
 
     }
 
