@@ -60,6 +60,7 @@ return array(
     'UnusedCSS_Rule' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Rule.php',
     'Varnish_Http_Purge_Compatible' => $baseDir . '/includes/third-party/plugins/varnish-http-purge/Varnish_Http_Purge_Compatible.php',
     'W3_Total_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/w3-total-cache/W3_Total_Cache_Compatible.php',
+    'WP_Asset_Clean_Up_Compatible' => $baseDir . '/includes/third-party/plugins/wp-asset-clean-up/WP_Asset_Clean_Up_Compatible.php',
     'WP_Asset_Clean_Up_Pro_Compatible' => $baseDir . '/includes/third-party/plugins/wp-asset-clean-up-pro/WP_Asset_Clean_Up_Pro_Compatible.php',
     'WP_Engine_Common_Compatible' => $baseDir . '/includes/third-party/plugins/wpengine-common/WP_Engine_Common_Compatible.php',
     'WP_Fastest_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/wp-fastest-cache/WP_Fastest_Cache_Compatible.php',
