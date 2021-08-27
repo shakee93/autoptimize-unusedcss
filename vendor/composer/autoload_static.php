@@ -52,7 +52,6 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_DB.php',
         'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Enqueue.php',
         'UnusedCSS_Job' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Job.php',
-        'UnusedCSS_Module' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Module.php',
         'UnusedCSS_Path' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Path.php',
         'UnusedCSS_Queue' => __DIR__ . '/../..' . '/includes/modules/unused-css/UnusedCSS_Queue.php',
         'UnusedCSS_RapidLoad' => __DIR__ . '/../..' . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad.php',

@@ -51,7 +51,6 @@ return array(
     'UnusedCSS_DB' => $baseDir . '/includes/modules/unused-css/UnusedCSS_DB.php',
     'UnusedCSS_Enqueue' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Enqueue.php',
     'UnusedCSS_Job' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Job.php',
-    'UnusedCSS_Module' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Module.php',
     'UnusedCSS_Path' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Path.php',
     'UnusedCSS_Queue' => $baseDir . '/includes/modules/unused-css/UnusedCSS_Queue.php',
     'UnusedCSS_RapidLoad' => $baseDir . '/includes/modules/unused-css/providers/rapidload/UnusedCSS_RapidLoad.php',
