@@ -96,6 +96,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.10 - 30/08/2021 =
+ * feat : added asset clean up plugin support
+ * fix: W3C validation errors thrown by RapidLoad
+
 = 1.6.9 - 25/08/2021 =
  * feat : added wpforms plugin support
  * feat : update sitemap url from robots.txt file
