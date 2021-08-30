@@ -53,6 +53,8 @@ class RapidLoad_Base
 
             $this->add_plugin_update_message();
 
+            RapidLoad_DB::update_db_version();
+
             if(is_admin()){
                 RapidLoad_DB::check_db_updates();
             }

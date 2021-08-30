@@ -7,6 +7,10 @@ class CriticalCSS_Queue
 
     public function __construct()
     {
+        if(RapidLoad_DB::$current_version < 1.3){
+            return;
+        }
+
         add_action('uucss/queue/task',[$this, 'fetch_job_id'], 10);
         add_action('uucss/queue/task',[$this, 'fetch_result'], 20);
     }
