@@ -137,9 +137,11 @@ abstract class RapidLoad_DB
         return $wpdb->last_error;
     }
 
-    static function check_db_updates(){
-
+    static function update_db_version(){
         self::$current_version = RapidLoad_Base::get_option( self::$db_option , self::$db_version);
+    }
+
+    static function check_db_updates(){
 
         add_action( 'wp_initialize_site', [get_called_class(), 'initialize_site'] , 10 , 2);
 
