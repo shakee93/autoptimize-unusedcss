@@ -37,14 +37,6 @@ class RapidLoad_Base
 
         add_action('init', function (){
 
-            if(!wp_doing_ajax() && !wp_doing_cron()){
-                self::log([
-                    'log' => 'rapidload base init',
-                    'url' => null,
-                    'type' => 'purging'
-                ]);
-            }
-
             RapidLoad_ThirdParty::initialize();
 
             register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
