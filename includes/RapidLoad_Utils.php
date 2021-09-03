@@ -117,13 +117,7 @@ trait RapidLoad_Utils {
     }
 
     private static function get_log_option(){
-        if(is_multisite()){
-
-            $option = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
-            return isset($option['uucss_enable_debug']);
-        }
-
-        $option = get_site_option( 'autoptimize_uucss_settings', false );
+	    $option = RapidLoad_Base::fetch_options();
         return  isset($option['uucss_enable_debug']);
     }
 
