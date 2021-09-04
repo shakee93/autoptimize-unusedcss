@@ -343,7 +343,7 @@ class UnusedCSS_Enqueue {
     private function log_action($message){
         self::log([
             'log' => $message,
-            'url' => $this->data->url,
+            'url' => $this->data->is_type('Rule') && $this->link ? $this->link->url : $this->data->url,
             'type' => 'injection'
         ]);
     }
