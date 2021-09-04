@@ -96,6 +96,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.11 - 04/09/2021 =
+ * fix: removed frontend logging function making db calls on debugging mode
+ * fix: W3C validation errors thrown by RapidLoad (removed rapidload headers)
+
 = 1.6.10 - 30/08/2021 =
  * feat : added asset clean up plugin support
  * fix: W3C validation errors thrown by RapidLoad
