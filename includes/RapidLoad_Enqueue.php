@@ -26,7 +26,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:before_transform',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -34,7 +34,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:after_transform',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -42,7 +42,7 @@ class RapidLoad_Enqueue {
 
                 self::log([
                     'log' => 'RapidLoad_Enqueue->enabled',
-                    'type' => 'purging' ,
+                    'type' => 'injection' ,
                     'url' => $url
                 ]);
 
@@ -54,7 +54,7 @@ class RapidLoad_Enqueue {
 
                 self::log([
                     'log' => 'RapidLoad_Enqueue->enabled:failed',
-                    'type' => 'purging' ,
+                    'type' => 'injection' ,
                     'url' => $url
                 ]);
 
@@ -68,13 +68,13 @@ class RapidLoad_Enqueue {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
         self::log([
             'log' => 'RapidLoad_Enqueue->replace_css:'. $buffer,
-            'type' => 'purging' ,
+            'type' => 'injection' ,
             'url' => $url
         ]);
         add_filter( $buffer, function ( $html ) use($url){
             self::log([
                 'log' => 'RapidLoad_Enqueue->replace_css:apply_filter-uucss/enqueue/content',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
             return apply_filters('uucss/enqueue/content', $html, $url);
@@ -86,7 +86,7 @@ class RapidLoad_Enqueue {
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:dom_parser_not_found',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
             return $html;
@@ -112,7 +112,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:dom_parsed',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -130,7 +130,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:apply_filter-uucss/enqueue/content/update',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -158,7 +158,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:return_buffer',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -321,7 +321,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -329,7 +329,7 @@ class RapidLoad_Enqueue {
 
             self::log([
                 'log' => 'RapidLoad_Enqueue->handle_job:url_exist',
-                'type' => 'purging' ,
+                'type' => 'injection' ,
                 'url' => $url
             ]);
 
@@ -343,7 +343,7 @@ class RapidLoad_Enqueue {
                 $job->save();
                 self::log([
                     'log' => 'RapidLoad_Enqueue->handle_job:added_url',
-                    'type' => 'purging' ,
+                    'type' => 'injection' ,
                     'url' => $url
                 ]);
             }

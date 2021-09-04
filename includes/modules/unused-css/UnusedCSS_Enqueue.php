@@ -19,11 +19,14 @@ class UnusedCSS_Enqueue {
 
     function __construct($data, $url = '', $link = null)
     {
+
         $this->file_system = new RapidLoad_FileSystem();
 
         $this->link = $link;
 
         $this->data = $data;
+
+        $this->log_action('UnusedCSS_Enqueue->__construct');
 
         if(isset($this->data)){
 
@@ -33,6 +36,8 @@ class UnusedCSS_Enqueue {
         }
 
         add_filter('uucss/enqueue/content/update', [$this, 'the_content'], 10);
+
+        $this->log_action('UnusedCSS_Enqueue->__construct:add_filter-uucss/enqueue/content/update');
     }
 
     public function replace_inline_css(){
@@ -137,6 +142,8 @@ class UnusedCSS_Enqueue {
                 $this->dom->find( 'body' )[0]->uucss = true;
             }
 
+            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:successfully_injected');
+
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
             !$this->inject->successfully_injected &&
@@ -145,10 +152,14 @@ class UnusedCSS_Enqueue {
 
             $this->data->requeue();
 
+            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:requeue');
+
         }else{
 
             $this->data->set_warnings($this->warnings);
             $this->data->reset_success_hits();
+
+            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:set_warnings');
 
         }
 
@@ -297,6 +308,9 @@ class UnusedCSS_Enqueue {
         if(!$this->data || !isset($this->data) || isset($this->data) && $this->data->status != 'success'){
             $this->inject->successfully_injected = false;
             $this->inject->rapidload = false;
+
+            $this->log_action('UnusedCSS_Enqueue->the_content:inject-failed');
+
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
@@ -310,11 +324,23 @@ class UnusedCSS_Enqueue {
                 $this->dom->find( 'html' )[0]->uucss = true;
             }
 
+            $this->log_action('UnusedCSS_Enqueue->the_content:before_replace_stylesheets');
+
             $this->replace_stylesheets();
+
+            $this->log_action('UnusedCSS_Enqueue->the_content:after_replace_stylesheets');
+
+            $this->log_action('UnusedCSS_Enqueue->the_content:before_replace_inline_css');
 
             $this->replace_inline_css();
 
+            $this->log_action('UnusedCSS_Enqueue->the_content:after_replace_inline_css');
+
+            $this->log_action('UnusedCSS_Enqueue->the_content:before_enqueue_completed');
+
             $this->enqueue_completed();
+
+            $this->log_action('UnusedCSS_Enqueue->the_content:after_enqueue_completed');
 
             return [
                 'dom' => $this->dom,

@@ -54,9 +54,30 @@ abstract class UnusedCSS {
 
 		    $this->url = $this->get_current_url();
 
+            self::log([
+                'log' => 'UnusedCSS->wp_enqueue_scripts:before_transform',
+                'type' => 'purging' ,
+                'url' => $this->url
+            ]);
+
 		    if ( $this->enabled() ) {
+
+                self::log([
+                    'log' => 'UnusedCSS->enabled',
+                    'type' => 'purging' ,
+                    'url' => $this->url
+                ]);
+
 			    $this->purge_css();
-		    }
+		    }else{
+
+                self::log([
+                    'log' => 'UnusedCSS->enabled:failed',
+                    'type' => 'purging' ,
+                    'url' => $this->url
+                ]);
+
+            }
 
 	    }, 99);
 
@@ -375,6 +396,12 @@ abstract class UnusedCSS {
 
 		$this->url = $this->transform_url( $this->url );
 
+        self::log([
+            'log' => 'UnusedCSS->purge_css:after_transform',
+            'type' => 'purging' ,
+            'url' => $this->url
+        ]);
+
         $this->rule = UnusedCSS_Rule::get_related_rule();
 
         $data = null;
@@ -383,6 +410,12 @@ abstract class UnusedCSS {
         $this->existing_link = RapidLoad_Settings::link_exists( $this->url );
 
         if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
+
+            self::log([
+                'log' => 'UnusedCSS->purge_css:rules_enabled',
+                'type' => 'purging' ,
+                'url' => $this->url
+            ]);
 
             $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
 
@@ -394,6 +427,11 @@ abstract class UnusedCSS {
                 $this->options['uucss_disable_add_to_queue'] != "1") || $this->applicable_rule)
         {
 
+            self::log([
+                'log' => 'UnusedCSS->purge_css:url_not_exist',
+                'type' => 'purging' ,
+                'url' => $this->url
+            ]);
             $this->cache( $this->url , $this->rule);
         }
 
@@ -401,6 +439,12 @@ abstract class UnusedCSS {
 		if ( $this->is_url_allowed( $this->url) ) {
 
 			$this->get_css();
+
+            self::log([
+                'log' => 'UnusedCSS->purge_css:is_url_allowed',
+                'type' => 'purging' ,
+                'url' => $this->url
+            ]);
 
             if( !$rapidload->rules_enabled() &&
                 $this->existing_link
@@ -413,6 +457,12 @@ abstract class UnusedCSS {
                 }else{
                     $data = $this->existing_link;
                 }
+
+                self::log([
+                    'log' => 'UnusedCSS->purge_css:url_exist',
+                    'type' => 'purging' ,
+                    'url' => $this->url
+                ]);
 
             }
             else if($rapidload->rules_enabled() &&
@@ -456,6 +506,12 @@ abstract class UnusedCSS {
 
                 }
 
+                self::log([
+                    'log' => 'UnusedCSS->purge_css:url_exist',
+                    'type' => 'purging' ,
+                    'url' => $this->url
+                ]);
+
             }
 
 			if(isset($data) && $data->status === 'success'){
@@ -476,6 +532,7 @@ abstract class UnusedCSS {
 
         if($this->existing_link){
             new UnusedCSS_Enqueue($data, $this->url, $link);
+
         }
 
 	}
@@ -517,6 +574,12 @@ abstract class UnusedCSS {
                 'rule_id' => $this->existing_link->id
             ]);
 
+            self::log([
+                'log' => 'UnusedCSS->cache:get_url_for_rule',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
         }else{
 
             $this->existing_link = new UnusedCSS_Path([
@@ -524,9 +587,20 @@ abstract class UnusedCSS {
                 'status' => 'queued'
             ]);
 
+            self::log([
+                'log' => 'UnusedCSS->cache:get_url',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
         }
 
         if($this->existing_link->status == 'failed' && $this->existing_link->attempts > 2 && !isset($args['immediate'])){
+
+            self::log([
+                'log' => 'UnusedCSS->cache:url_failed_attempts',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
             return false;
         }
 
@@ -536,12 +610,24 @@ abstract class UnusedCSS {
             $this->existing_link->requeue();
             $this->existing_link->save();
 
+            self::log([
+                'log' => 'UnusedCSS->cache:url_status_updated-queued',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
         }else{
 
             if($this->existing_link->status == 'failed'){
 
                 $this->existing_link->requeue();
                 $this->existing_link->save();
+
+                self::log([
+                    'log' => 'UnusedCSS->cache:rule_status_updated-queued',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
 
             }
 
@@ -553,8 +639,18 @@ abstract class UnusedCSS {
 
             if($this->existing_link->is_type('Path')){
                 $this->init_async_store($this->provider, $url, $args);
+                self::log([
+                    'log' => 'UnusedCSS->cache:init_async_store',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
             }else{
                 $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
+                self::log([
+                    'log' => 'UnusedCSS->cache:init_async_store_rule',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
             }
 
         }else if ( isset( $args['immediate'] ) ) {
@@ -567,6 +663,11 @@ abstract class UnusedCSS {
                     'url'      => $url,
                     'args'     => $args
                 ]);
+                self::log([
+                    'log' => 'UnusedCSS->cache:schedule_cron-uucss_async_queue-' . $spawned,
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
             }else{
 
                 $spawned = $this->schedule_cron('uucss_async_queue_rule', [
@@ -575,17 +676,38 @@ abstract class UnusedCSS {
                     'args'     => $args,
                     'rule'     => $this->existing_link
                 ]);
+                self::log([
+                    'log' => 'UnusedCSS->cache:schedule_cron-uucss_async_queue_rule-' . $spawned,
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
             }
 
             $this->existing_link->status = 'processing';
             $this->existing_link->save();
 
+            self::log([
+                'log' => 'UnusedCSS->cache:url_status_updated-processing',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
 	    	if(!$spawned){
 
                 if($this->existing_link->is_type('Path')){
                     $this->init_async_store($this->provider, $url, $args);
+                    self::log([
+                        'log' => 'UnusedCSS->cache:init_async_store',
+                        'type' => 'purging' ,
+                        'url' => $url
+                    ]);
                 }else{
                     $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
+                    self::log([
+                        'log' => 'UnusedCSS->cache:init_async_store_rule',
+                        'type' => 'purging' ,
+                        'url' => $url
+                    ]);
                 }
 
             }
