@@ -18,33 +18,77 @@ class RapidLoad_Enqueue {
             self::$frontend_debug = true;
         }
 
-        add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 1);
+        add_filter('uucss/enqueue/content', [$this, 'the_content'], 10, 2);
 
         add_action('wp_enqueue_scripts', function (){
 
-            $url = $this->transform_url($this->get_current_url());
+            $url = $this->get_current_url();
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:before_transform',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
+            $url = $this->transform_url($url);
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:after_transform',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
 
             if($this->enabled($url)){
+
+                self::log([
+                    'log' => 'RapidLoad_Enqueue->enabled',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
 
                 $args = RapidLoad_Base::get()->rules_enabled() ? $this->get_current_rule(RapidLoad_DB::get_rule_names()) : [];
 
                 $this->handle_job($url, $args);
+
+            }else{
+
+                self::log([
+                    'log' => 'RapidLoad_Enqueue->enabled:failed',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
+
             }
 
         });
     }
 
-    public function replace_css()
+    public function replace_css($url)
     {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
-        add_filter( $buffer, function ( $html ) {
-            return apply_filters('uucss/enqueue/content', $html);
+        self::log([
+            'log' => 'RapidLoad_Enqueue->replace_css:'. $buffer,
+            'type' => 'purging' ,
+            'url' => $url
+        ]);
+        add_filter( $buffer, function ( $html ) use($url){
+            self::log([
+                'log' => 'RapidLoad_Enqueue->replace_css:apply_filter-uucss/enqueue/content',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+            return apply_filters('uucss/enqueue/content', $html, $url);
         }, 10 );
     }
 
-    public function the_content($html){
+    public function the_content($html, $url){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
+            self::log([
+                'log' => 'RapidLoad_Enqueue->the_content:dom_parser_not_found',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
             return $html;
         }
 
@@ -66,6 +110,12 @@ class RapidLoad_Enqueue {
 
         if ( $dom ) {
 
+            self::log([
+                'log' => 'RapidLoad_Enqueue->the_content:dom_parsed',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
             $inject = (object) [
                 "parsed_html"           => false,
                 "found_sheets"          => false,
@@ -77,6 +127,12 @@ class RapidLoad_Enqueue {
             ];
 
             $inject->parsed_html = true;
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->the_content:apply_filter-uucss/enqueue/content/update',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
 
             $state = apply_filters('uucss/enqueue/content/update',[
                 'dom' => $dom,
@@ -99,6 +155,12 @@ class RapidLoad_Enqueue {
             if(self::$frontend_debug){
                 header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
             }
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->the_content:return_buffer',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
 
             return $dom;
         }
@@ -234,8 +296,6 @@ class RapidLoad_Enqueue {
 
         global $rapidload;
 
-        $url = $this->transform_url($url);
-
         if(!isset($args['post_id'])){
             $args['post_id'] = url_to_postid($url);
         }
@@ -258,6 +318,21 @@ class RapidLoad_Enqueue {
             $job->status = 'rule-based';
             $job->parent = $rule;
             $job->save();
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
+        }else{
+
+            self::log([
+                'log' => 'RapidLoad_Enqueue->handle_job:url_exist',
+                'type' => 'purging' ,
+                'url' => $url
+            ]);
+
         }
 
         if ( !isset( $this->options['uucss_disable_add_to_queue'] ) ||
@@ -266,13 +341,18 @@ class RapidLoad_Enqueue {
         {
             if(!isset($job->id)){
                 $job->save();
+                self::log([
+                    'log' => 'RapidLoad_Enqueue->handle_job:added_url',
+                    'type' => 'purging' ,
+                    'url' => $url
+                ]);
             }
         }
 
         do_action('rapidload/job/handle', $job, $args);
 
         if(isset($job->id) && $this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
-            $this->replace_css();
+            $this->replace_css($url);
         }
 
     }

@@ -204,12 +204,6 @@ class UnusedCSS_Queue
             return;
         }
 
-        $this->log( [
-            'log' => 'fetching data for job ' . $job_id,
-            'url' => $url,
-            'type' => 'store'
-        ] );
-
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->get( 's/unusedcss/' . $job_id);
@@ -295,12 +289,6 @@ class UnusedCSS_Queue
         if(!$rule->job_id){
             return;
         }
-
-        $this->log( [
-            'log' => 'fetching data for job ' . $rule->job_id,
-            'url' => $rule->url,
-            'type' => 'store'
-        ] );
 
         $uucss_api = new RapidLoad_Api();
 
