@@ -406,12 +406,6 @@ abstract class UnusedCSS {
                 $this->existing_link
             ){
 
-                self::log([
-                    'log' => 'success link exist',
-                    'url' => $this->url,
-                    'type' => 'purging'
-                ]);
-
                 if(gettype($this->existing_link) == "boolean"){
                     $data = new UnusedCSS_Path([
                         'url' => $this->url
@@ -423,12 +417,6 @@ abstract class UnusedCSS {
             }
             else if($rapidload->rules_enabled() &&
                 $this->existing_link){
-
-                self::log([
-                    'log' => 'success link exist with rules ',
-                    'url' => $this->url,
-                    'type' => 'purging'
-                ]);
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
@@ -495,21 +483,8 @@ abstract class UnusedCSS {
     public function cache($url = null, $args = []) {
 
 	    if ( ! $this->is_url_allowed( $url, $args) ) {
-            self::log([
-                'log' => 'url not allowed to purge',
-                'url' => $url,
-                'type' => 'purging'
-            ]);
 		    return false;
 	    }
-
-	    if(isset( $args['rule'] )){
-            self::log([
-                'log' => 'url caching with ' . $args['rule'],
-                'url' => $url,
-                'type' => 'purging'
-            ]);
-        }
 
 	    if ( ! isset( $args['post_id'] )) {
 		    $args['post_id'] = url_to_postid($url);
@@ -552,11 +527,6 @@ abstract class UnusedCSS {
         }
 
         if($this->existing_link->status == 'failed' && $this->existing_link->attempts > 2 && !isset($args['immediate'])){
-            self::log([
-                'log' => 'url not purged due to failed attempts exceeded',
-                'url' => $url,
-                'type' => 'purging'
-            ]);
             return false;
         }
 
@@ -586,12 +556,6 @@ abstract class UnusedCSS {
             }else{
                 $this->init_async_store_rule($this->provider, $url, $args, $this->existing_link);
             }
-
-            self::log([
-                'log' => 'link purged',
-                'url' => $url,
-                'type' => 'queued'
-            ]);
 
         }else if ( isset( $args['immediate'] ) ) {
 
@@ -625,18 +589,6 @@ abstract class UnusedCSS {
                 }
 
             }
-
-            self::log([
-                'log' => 'cron spawned : ' . $spawned,
-                'url' => $url,
-                'type' => 'queued'
-            ]);
-
-            self::log([
-                'log' => 'link added to queue',
-                'url' => $url,
-                'type' => 'queued'
-            ]);
 	    }
 
 	    return true;
@@ -745,12 +697,6 @@ abstract class UnusedCSS {
 	    $args['url'] = $url;
 	    $rule = isset($args['rule']) ? $args['rule'] : false;
 	    $regex = isset($args['regex']) ? $args['regex'] : false;
-
-	    self::log( [
-	        'log' => 'cleared',
-	        'url' => $url,
-            'type' => 'store'
-        ] );
 
 	    if ( $url && RapidLoad_Settings::link_exists_with_error( $url ) || $rule && $regex && UnusedCSS_DB::rule_exists_with_error($rule, $regex)) {
 

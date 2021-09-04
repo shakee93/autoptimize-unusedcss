@@ -35,11 +35,6 @@ class WP_Fastest_Cache_Compatible extends RapidLoad_ThirdParty{
 
                 $wpfc = new WpFastestCache();
                 $wpfc->singleDeleteCache(false, $post_id);
-                self::log([
-                    'url' => $url,
-                    'log' => 'WP Fastest Cache post cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
 

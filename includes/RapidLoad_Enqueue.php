@@ -45,7 +45,6 @@ class RapidLoad_Enqueue {
     public function the_content($html){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
-            self::log( 'Dom parser not loaded' );
             return $html;
         }
 
@@ -245,12 +244,6 @@ class RapidLoad_Enqueue {
 
         $job = new RapidLoad_Job([
             'url' => $url
-        ]);
-
-        self::log([
-            'log' => 'applicable rule for :' . json_encode($applicable_rule),
-            'url' => $url,
-            'type' => 'genereal'
         ]);
 
         if(!isset($job->rule_id) && $applicable_rule) {

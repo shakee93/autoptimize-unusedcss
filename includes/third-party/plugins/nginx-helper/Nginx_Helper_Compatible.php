@@ -34,11 +34,6 @@ class Nginx_Helper_Compatible extends RapidLoad_ThirdParty {
             if($url){
 
                 $nginx_purger->purge_url( $url );
-                self::log([
-                    'url' => $url,
-                    'log' => 'Nginx Helper url page cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
         }

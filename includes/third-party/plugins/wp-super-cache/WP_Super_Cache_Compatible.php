@@ -34,11 +34,6 @@ class WP_Super_Cache_Compatible extends RapidLoad_ThirdParty {
             if ( $url ) {
 
                 wpsc_delete_url_cache($url);
-                self::log([
-                    'url' => $url,
-                    'log' => 'wp-super-cache post url page cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
 

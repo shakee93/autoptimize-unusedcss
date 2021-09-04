@@ -40,10 +40,6 @@ class RapidLoad_Queue
         $uucss_cron = $this->cron_exist();
 
         if ( ! wp_next_scheduled( 'cron_uucss_process_queue' ) && !$uucss_cron) {
-            self::log([
-                'log' => 'job cron scheduled',
-                'type' => 'uucss-cron'
-            ]);
             wp_schedule_event( time(), 'uucss_cron_interval', 'cron_uucss_process_queue');
         }
 

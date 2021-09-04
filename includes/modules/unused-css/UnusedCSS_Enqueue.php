@@ -235,8 +235,6 @@ class UnusedCSS_Enqueue {
                         }
                         $sheet->href  = $newLink;
 
-                        $this->log_action('file replaced <a href="' . $sheet->href . '" target="_blank">'. $sheet->href .'</a><br><br>for <a href="' . $link . '" target="_blank">'. $link . '</a>');
-
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
                             $this->inline_sheet($sheet, $uucss_file);

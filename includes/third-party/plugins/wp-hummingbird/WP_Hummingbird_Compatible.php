@@ -38,12 +38,6 @@ class WP_Hummingbird_Compatible extends RapidLoad_ThirdParty{
 
                     $pc_module->clear_cache($url);
 
-                    self::log([
-                        'url' => $url,
-                        'log' => 'hummingbird url page cache cleared',
-                        'type' => 'purging'
-                    ]);
-
                 }
 
             }

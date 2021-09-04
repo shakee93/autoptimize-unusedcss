@@ -44,11 +44,6 @@ class Varnish_Http_Purge_Compatible extends RapidLoad_ThirdParty {
             if ( $url ) {
 
                 VarnishPurger::purge_url($url);
-                self::log([
-                    'url' => $url,
-                    'log' => 'varnish-http-purge post url page cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
 

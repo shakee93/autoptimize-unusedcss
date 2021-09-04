@@ -93,12 +93,6 @@ class UnusedCSS_Queue
         $path->job_id = null;
         $path->save();
 
-        self::log([
-            'log' => 'fetching job id',
-            'url' => $url,
-            'type' => 'uucss-cron'
-        ]);
-
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->post( 's/unusedcss',
@@ -142,12 +136,6 @@ class UnusedCSS_Queue
         $rule->status = 'waiting';
         $rule->job_id = null;
         $rule->save();
-
-        self::log([
-            'log' => 'fetching job id',
-            'url' => $rule->url,
-            'type' => 'uucss-cron'
-        ]);
 
         $uucss_api = new RapidLoad_Api();
 

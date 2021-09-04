@@ -207,12 +207,6 @@ class CriticalCSS
                 $job->save();
             }
 
-            self::log([
-                'type' => 'purging',
-                'url' => '',
-                'log' => ' job : ' . json_encode((array)$job)
-            ]);
-
             $this->cache_cpcss($job, ['immediate' => true]);
 
         }

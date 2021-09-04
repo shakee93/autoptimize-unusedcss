@@ -29,13 +29,6 @@ class RapidLoad_Sitemap
         $sitemap = wp_remote_get( esc_url_raw( $sitemap_url ), $args );
 
         if ( is_wp_error( $sitemap ) ) {
-
-            self::log([
-                'type' => 'purging',
-                'url' => $sitemap_url,
-                'log' => $sitemap->get_error_message()
-            ]);
-
             return $urls;
         }
 
@@ -43,22 +36,12 @@ class RapidLoad_Sitemap
 
         if ( 200 !== $response_code ) {
 
-            self::log([
-                'type' => 'purging',
-                'log' => $response_code . ' something went wrong for the url ' . $sitemap_url
-            ]);
-
             return $urls;
         }
 
         $xml_data = wp_remote_retrieve_body( $sitemap );
 
         if ( empty( $xml_data ) ) {
-
-            self::log([
-                'type' => 'purging',
-                'log' => 'could not collect links from url ' . $sitemap_url
-            ]);
 
             return $urls;
         }
@@ -71,11 +54,6 @@ class RapidLoad_Sitemap
         $xml = simplexml_load_string( $xml_data );
 
         if(!$xml){
-
-            self::log([
-                'type' => 'purging',
-                'log' => 'could not collect links from url ' . $sitemap_url
-            ]);
 
             return $urls;
         }
@@ -92,12 +70,6 @@ class RapidLoad_Sitemap
                 if ( ! $url ) {
                     continue;
                 }
-
-                self::log([
-                    'url' => $url,
-                    'type' => 'purging',
-                    'log' => 'fetched from site map'
-                ]);
 
                 array_push($urls, $this->transform_url($url));
             }

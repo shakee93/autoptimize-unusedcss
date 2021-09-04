@@ -32,11 +32,6 @@ class W3_Total_Cache_Compatible extends RapidLoad_ThirdParty {
             if($url){
 
                 w3tc_flush_url( $url );
-                self::log([
-                    'url' => $url,
-                    'log' => 'W3 Total Cache url page cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
 

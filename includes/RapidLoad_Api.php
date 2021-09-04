@@ -80,24 +80,8 @@ class RapidLoad_Api
 				return json_decode( $body );
 			}
 
-			$this->log([
-			    'log' => 'api request failed',
-                'type' => 'store',
-                'url' => isset($data) && isset($data['url']) ? $data['url'] : '',
-                'request_body' => $data,
-                'response_body' => $response['body']
-            ]);
-
 			return json_decode( $response['body'] );
 		} else {
-
-            $this->log([
-                'log' => 'api request failed',
-                'type' => 'store',
-                'url' => isset($data) && isset($data['url']) ? $data['url'] : '',
-                'request_body' => $data,
-                'response_body' => $response->get_error_message()
-            ]);
 
 			return $response->get_error_message();
 		}

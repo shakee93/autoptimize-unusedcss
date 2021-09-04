@@ -33,11 +33,6 @@ class WP_Optimize_Compatible  extends RapidLoad_ThirdParty{
             if($url){
 
                 WPO_Page_Cache::delete_cache_by_url($url);
-                self::log([
-                    'url' => $url,
-                    'log' => 'WP Optimize page cache cleared',
-                    'type' => 'purging'
-                ]);
 
             }
 

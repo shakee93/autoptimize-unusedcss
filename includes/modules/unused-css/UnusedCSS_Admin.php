@@ -238,12 +238,6 @@ abstract class UnusedCSS_Admin {
                 'url' => $sitemap
             ]);
 
-            self::log([
-                'log' => 'cron spawned : ' . $spawned,
-                'url' => $sitemap,
-                'type' => 'queued'
-            ]);
-
             wp_send_json_success('Sitemap links scheduled to be added to the queue.');
 
         }else{
@@ -432,16 +426,6 @@ abstract class UnusedCSS_Admin {
 
         do_action('uucss/rule/saved', $ruleObject, false);
 
-        /*$spawned = $this->schedule_cron('uucss_apply_rules', [] );
-
-        if($spawned){
-            self::log([
-                'log' => 'apply rules initiated',
-                'url' => $url,
-                'type' => 'uucss-cron'
-            ]);
-        }*/
-
         wp_send_json_success('Rule updated successfully');
     }
 
@@ -488,12 +472,6 @@ abstract class UnusedCSS_Admin {
                     ]);
 
                 }
-
-                self::log([
-                    'log' => 'rule validated : ' . $rule,
-                    'url' => $link['url'],
-                    'type' => 'uucss-cron'
-                ]);
 
             }
 
