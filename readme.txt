@@ -97,8 +97,8 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.12 - 06/09/2021 =
+ * feat: generate separate critical css for mobile
  * feat: removed critical css style element on user interaction if load original css enabled
- * feat: add critical css for mobile and desktop separately
 
 = 1.6.11 - 04/09/2021 =
  * fix: removed frontend logging function making db calls on debugging mode
