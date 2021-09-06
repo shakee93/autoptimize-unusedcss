@@ -43,7 +43,9 @@
 
         var removeCriticalCSS = function (){
             let element = document.getElementById('rapidload-critical-css')
-            element.remove();
+            if(element){
+                element.remove();
+            }
         }
 
         this.add_events = function () {
