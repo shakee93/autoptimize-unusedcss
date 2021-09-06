@@ -107,7 +107,9 @@ class CriticalCSS_Enqueue
 
             $critical_css_content = '';
 
-            if($this->is_mobile()){
+            $is_mobile = $this->is_mobile();
+
+            if($is_mobile){
                 $this->data = str_replace(".css","-mobile.css", $this->data);
                 self::log([
                    'type' => 'injection',
@@ -136,7 +138,7 @@ class CriticalCSS_Enqueue
                 return;
             }
 
-            $critical_css_content = '<style id="rapidload-critical-css">' . $critical_css_content . '</style>';
+            $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
 
             if(isset($this->dom->find( 'title' )[0])){
 
