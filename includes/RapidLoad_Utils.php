@@ -494,7 +494,21 @@ trait RapidLoad_Utils {
 
     protected function is_doing_api_fetch(){
 
-        $user_agent = '';
+        $user_agent = $this->get_user_agent();
+
+        return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
+            strpos( $user_agent, 'RapidLoad' ) !== false;
+    }
+
+    protected function is_mobile(){
+
+        $user_agent = $this->get_user_agent();
+
+        return function_exists('wp_is_mobile') && wp_is_mobile();
+    }
+
+    protected function get_user_agent(){
+
         $headers    = [];
 
         if ( function_exists( 'getallheaders' ) ) {
@@ -502,15 +516,14 @@ trait RapidLoad_Utils {
         }
 
         if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+            return $_SERVER['HTTP_USER_AGENT'];
         }
 
         if ( isset( $headers['User-Agent'] ) ) {
-            $user_agent = $headers['User-Agent'];
+            return $headers['User-Agent'];
         }
 
-        return strpos( $user_agent, 'UnusedCSS_bot' ) !== false ||
-            strpos( $user_agent, 'RapidLoad' ) !== false;
+        return '';
     }
 
     public function is_valid_url($url){

@@ -50,7 +50,7 @@ class CriticalCSS_Store
             $this->result       = $result;
             $this->purged_css = $result->data;
 
-            $this->cache_file($this->purged_css);
+            $this->cache_file($this->purged_css, $result->data_mobile);
             $this->cpcss_cached($this->job_data->job->url);
 
         }else{
@@ -86,7 +86,7 @@ class CriticalCSS_Store
         }
     }
 
-    function cache_file($purged_css, $result = false){
+    function cache_file($purged_css, $purged_mobile = false, $result = false){
 
         if($result){
             $this->result = $result;
@@ -102,11 +102,19 @@ class CriticalCSS_Store
         }
 
         $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
+        $file_name_mobile = 'cpcss-' . $this->encode($purged_css) . '-mobile.css';
 
         if(!empty($purged_css)){
 
             if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name)){
                 $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name, $purged_css);
+            }
+        }
+
+        if($purged_mobile && !empty($purged_mobile)){
+
+            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name_mobile)){
+                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name_mobile, $purged_mobile);
             }
         }
 
@@ -184,7 +192,7 @@ class CriticalCSS_Store
 
         if(isset($result->completed) && $result->completed && isset($result->data)){
 
-            $this->cache_file($result->data, $result);
+            $this->cache_file($result->data, $result->data_mobile, $result);
 
         }
     }

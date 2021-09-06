@@ -107,6 +107,21 @@ class CriticalCSS_Enqueue
 
             $critical_css_content = '';
 
+            if($this->is_mobile()){
+                $this->data = str_replace(".css","-mobile.css", $this->data);
+                self::log([
+                   'type' => 'injection',
+                   'url' => $this->job_data->job->url,
+                   'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-mobile'
+                ]);
+            }else{
+                self::log([
+                    'type' => 'injection',
+                    'url' => $this->job_data->job->url,
+                    'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-desktop'
+                ]);
+            }
+
             if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
                 $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
             }
