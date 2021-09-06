@@ -3,7 +3,7 @@
 Plugin Name: RapidLoad Power-Up for Autoptimize
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     1.6.11
+Version:     1.6.12
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'UUCSS_VERSION', '1.6.11.1' );
+define( 'UUCSS_VERSION', '1.6.12' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
