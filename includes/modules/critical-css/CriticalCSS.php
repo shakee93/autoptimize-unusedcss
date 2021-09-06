@@ -335,7 +335,7 @@ class CriticalCSS
 
     function enqueue_cpcss($job, $args){
 
-        if(!$job || !isset($job->id)){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_cpcss'] )){
             return false;
         }
 
