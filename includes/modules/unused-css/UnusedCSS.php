@@ -90,7 +90,7 @@ abstract class UnusedCSS {
 
         add_action('rapidload/job/updated', function ($job, $status){
 
-            if($status && $job && isset($job->id)){
+            if($job && isset($job->id)){
                 new UnusedCSS_Path([
                    'url' => $job->url
                 ]);
