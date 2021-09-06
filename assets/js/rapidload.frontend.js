@@ -41,6 +41,11 @@
             }
         }
 
+        var removeCriticalCSS = function (){
+            let element = document.getElementById('rapidload-critical-css')
+            element.remove();
+        }
+
         this.add_events = function () {
 
             if (!window.rapidload || !window.rapidload.files || !window.rapidload.files.length) {
@@ -51,6 +56,7 @@
 
                 var listener = function () {
                     load_css(window.rapidload.files)
+                    removeCriticalCSS();
                     removeEventListener(event, listener);
                 }
                 addEventListener(event, listener);
