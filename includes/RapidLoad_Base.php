@@ -261,6 +261,7 @@ class RapidLoad_Base
 
         $default_options = self::get_option('autoptimize_uucss_settings',[
             'uucss_load_original' => "1",
+            'uucss_enable_rules' => "1",
         ]);
 
         if(!isset($default_options['uucss_api_key'])){
