@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if(isset($_REQUEST['no_rapidload'])){
+if(isset($_REQUEST['no_rapidload']) || apply_filters('disable_rapidload', false)){
     return;
 }
 
