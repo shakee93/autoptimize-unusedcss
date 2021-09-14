@@ -12,6 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if(isset($_REQUEST['no_rapidload'])){
+    return;
+}
+
 define( 'UUCSS_VERSION', '1.6.12' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
