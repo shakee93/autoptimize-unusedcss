@@ -108,7 +108,7 @@ class UnusedCSS_Enqueue {
 
                 $file_name = 'id="uucss-inline-' . md5($this->data->url) . '"';
                 $uucss_tag = RapidLoad_Enqueue::$frontend_debug ? 'uucss' : '';
-                $inline_style_content = sprintf('<style %s %s>' . $inline_style_content . '</style>', $file_name, $uucss_tag);
+                $inline_style_content = sprintf('<style %s %s>%s</style>', $file_name, $uucss_tag, $inline_style_content);
 
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
 
