@@ -13,10 +13,45 @@ class RapidLoad_Admin
             add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
             add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
             add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
+            add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
+            add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
 
         }
 
         add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+    }
+
+    public function upload_rules(){
+
+        if(!isset($_REQUEST['rules'])){
+            wp_send_json_error('rules required');
+        }
+
+        error_log(stripslashes($_REQUEST['rules']));
+
+        $rules = json_decode(stripslashes($_REQUEST['rules']));
+
+        if(!$rules){
+            wp_send_json_error('rules required');
+        }
+
+        foreach ($rules as $rule){
+
+            $rule_job = new RapidLoad_Job([
+               'url' => $rule->url,
+               'rule' => $rule->rule,
+               'regex' => $rule->regex
+            ]);
+            $rule_job->save(true);
+        }
+
+        wp_send_json_success('success');
+    }
+
+    public function get_all_rules(){
+
+        wp_send_json_success(RapidLoad_Job::all());
+
     }
 
     public function get_robots_text(){

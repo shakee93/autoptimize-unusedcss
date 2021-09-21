@@ -1998,6 +1998,8 @@
                 $content.find('ul').append('<li class="simple-menu" data-action_name="remove_all"><a data-action_name="remove_all" href="#">Remove All</a></li>');
                 $content.find('ul').append('<li class="multi-select-menu" data-action_name="remove_selected"><a data-action_name="remove_selected" href="#">Remove Selected</a></li>');
                 $content.find('ul').append('<li class="select-all" data-action_name="select_all"><a data-action_name="select_all" href="#">Select All</a></li>');
+                $content.find('ul').append('<li class="export-all" data-action_name="export_all"><a data-action_name="export_all" href="#">Export</a></li>');
+                $content.find('ul').append('<li class="import-all" data-action_name="import_all"><a data-action_name="import_all" href="#">Import</a></li>');
 
                 return $content.wrap('<div></div>').parent().html();
             },
@@ -2117,6 +2119,41 @@
                             $container.find('table tbody tr').addClass('selected')
                             $container.addClass('multi-select');
                             $container.find('.multiple-selected-text .multiple-selected-value').text('(' + $container.find('table tbody tr.selected').length + ') URLs');
+                            break;
+                        }
+                        case 'export_all':{
+
+                            wp.ajax.post('get_all_rules',{}).then(function (i) {
+                                if(i){
+                                    var exportLink = document.createElement('a');
+                                    exportLink.download = 'rapidload-rules-' + Date.now();
+                                    exportLink.href = 'data:text/plain;charset=utf-8,' + JSON.stringify(i) ;
+                                    exportLink.style.display = "none";
+                                    exportLink.click()
+                                }
+                            }).fail(function (i) {
+
+                            });
+                            break;
+                        }
+                        case 'import_all':{
+
+                            var importInput = document.createElement('input');
+                            importInput.type = 'file';
+                            importInput.addEventListener('change', function (e){
+                                var fileReader = new FileReader();
+                                fileReader.onload = function(){
+                                    wp.ajax.post('upload_rules',{
+                                        rules : fileReader.result
+                                    }).then(function (i) {
+                                        $.uucssAlert(i)
+                                    }).fail(function (i) {
+                                        $.uucssAlert(i, 'Error')
+                                    });
+                                }
+                                fileReader.readAsText(this.files[0]);
+                            })
+                            importInput.click();
                             break;
                         }
                         default:{
