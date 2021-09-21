@@ -27,8 +27,6 @@ class RapidLoad_Admin
             wp_send_json_error('rules required');
         }
 
-        error_log(stripslashes($_REQUEST['rules']));
-
         $rules = json_decode(stripslashes($_REQUEST['rules']));
 
         if(!$rules){
