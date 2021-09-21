@@ -24,19 +24,7 @@ class RapidLoad_Enqueue {
 
             $url = $this->get_current_url();
 
-            self::log([
-                'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:before_transform',
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
-
             $url = $this->transform_url($url);
-
-            self::log([
-                'log' => 'RapidLoad_Enqueue->wp_enqueue_scripts:after_transform',
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
 
             if($this->enabled($url)){
 

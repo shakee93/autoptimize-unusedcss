@@ -142,7 +142,7 @@ class UnusedCSS_Enqueue {
                 $this->dom->find( 'body' )[0]->uucss = true;
             }
 
-            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:successfully_injected');
+            $this->log_action(' 🟢 UnusedCSS_Enqueue->enqueue_completed:successfully_injected');
 
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
