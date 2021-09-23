@@ -14,8 +14,7 @@
 
             ?>
                 <p style="color: #f44336"> <span style="line-height: 20px" class="dashicons dashicons-info-outline"></span>CSS render-blocking is currently activated in
-                    <strong><?php echo CriticalCSS::$cpcss_other_plugins[0]?></strong>.
-                    If you want to use RapidLaod render-blocking, disable option in <strong> <?php echo CriticalCSS::$cpcss_other_plugins[0]?></strong>.
+                    <strong><?php echo CriticalCSS::$cpcss_other_plugins[0]?></strong> critical css enabled. Disable option in <strong><?php echo CriticalCSS::$cpcss_other_plugins[0]?></strong> to use RapidLoad critical css.
                 </p>
             <?php endif; ?>
         </label>
