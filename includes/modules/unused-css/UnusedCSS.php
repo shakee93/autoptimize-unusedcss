@@ -277,6 +277,16 @@ abstract class UnusedCSS {
             },
         ];
 
+        $rules[] = [
+            'name' => 'path',
+            'rule' => 'is_path',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return true;
+            },
+        ];
+
         return $rules;
     }
 
