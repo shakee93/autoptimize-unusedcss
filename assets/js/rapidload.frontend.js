@@ -2,33 +2,6 @@
 
     var RapidLoad = function () {
 
-        var valid_url = function (str) {
-            var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-                '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-            return !!pattern.test(str);
-        }
-
-        var links = document.querySelectorAll('a');
-
-        for (var i = 0; i < links.length; i++){
-
-            var link = links[i];
-
-            link.addEventListener('mouseover', function (e){
-
-                if( e.target && e.target.href && valid_url(e.target.href)){
-                    var req = new XMLHttpRequest();
-                    req.open('GET', e.target.href, false);
-                    req.send(null);
-                }
-
-            })
-        }
-
         var fired = false
 
         var load_css = function (uucss) {
