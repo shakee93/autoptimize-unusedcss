@@ -19,6 +19,15 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
         add_action( 'uucss/cached', [$this, 'handle'], 10, 2 );
         add_action( 'uucss/cache_cleared', [$this, 'handle'], 10, 2 );
 
+        add_filter('cpcss/other-plugins', function ($args){
+            if(function_exists('get_rocket_option')){
+                if(get_rocket_option('async_css') === 1){
+                    $args[] = 'WpRocket';
+                }
+            }
+            return $args;
+        });
+
     }
 
     public function add_cache_busting_params($cacheBusting){
