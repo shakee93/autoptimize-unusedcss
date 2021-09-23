@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.14 - 23/09/2021 =
+ * fix: W3C validation errors thrown by RapidLoad
+
 = 1.6.13 - 22/09/2021 =
  * feat: added export/import option for rules
  * fix: PHP 8.0 - Fatal error Uncaught ArgumentCountError: 99 arguments are required, 3 given
