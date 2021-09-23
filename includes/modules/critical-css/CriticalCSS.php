@@ -15,11 +15,17 @@ class CriticalCSS
 
     public $job_data = null;
 
+    public static $cpcss_other_plugins;
+
     public function __construct()
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_cpcss'])){
+        add_action('uucss/options/css', [$this, 'render_options']);
+
+        self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
+
+        if(!isset($this->options['uucss_enable_cpcss']) || !empty(self::$cpcss_other_plugins)){
             return;
         }
 
@@ -44,6 +50,12 @@ class CriticalCSS
         add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 2);
 
         new CriticalCSS_Queue();
+    }
+
+    public function render_options(){
+
+        include_once 'parts/options.html.php';
+
     }
 
     public function handle_job_updated($job, $new){

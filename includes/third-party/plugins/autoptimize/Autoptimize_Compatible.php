@@ -51,6 +51,14 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
         add_filter('uucss/tool-bar-menu', function (){
             return false;
         });
+
+        add_filter('cpcss/other-plugins', function ($args){
+            $ao_render_blocking = autoptimizeOptionWrapper::get_option( 'autoptimize_css_defer' );
+            if(isset($ao_render_blocking) && $ao_render_blocking == "on"){
+                $args[] = 'Autoptimize';
+            }
+            return $args;
+        });
     }
 
     public function addNotifications($notifications) {

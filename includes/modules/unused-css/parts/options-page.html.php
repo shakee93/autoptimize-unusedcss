@@ -276,28 +276,9 @@
                                     <h4>CSS Optimization</h4>
                                 </th>
                             </tr>
-                            <tr>
-                                <th scope="row"><?php _e( 'Enable Critical CSS', 'uucss' ); ?></th>
-                                <td>
-                                    <label><input id='uucss_enable_cpcss' type='checkbox'
-                                                  name='autoptimize_uucss_settings[uucss_enable_cpcss]' <?php if ( ! empty( $options['uucss_enable_cpcss'] ) && '1' === $options['uucss_enable_cpcss'] ) {
-                                            echo 'checked="checked"';
-                                        } ?> value='1'>
-                                        <i>
-                                            Enable to eliminate render-blocking CSS on your website and load stylesheets asynchronously.
-                                        </i>
-                                        <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/4404507967635-Critical-CSS" style="">learn more</a>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><?php _e( 'Additional CSS', 'uucss' ); ?></th>
-                                <td>
-                                    <textarea style="max-width: 390px; width: 100%; height: 150px" id="uucss_additional_css"
-                                              name="autoptimize_uucss_settings[uucss_additional_css]"><?php echo empty( $options['uucss_additional_css'] ) ? '' : $options['uucss_additional_css'] ?></textarea>
-
-                                </td>
-                            </tr>
+                            <?php
+                                do_action('uucss/options/css');
+                            ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="css-whitelist has-tooltip"
