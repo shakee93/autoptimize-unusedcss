@@ -34,7 +34,21 @@ class RapidLoad_Enqueue {
                     'url' => $url
                 ]);
 
-                $args = RapidLoad_Base::get()->rules_enabled() ? $this->get_current_rule(RapidLoad_DB::get_rule_names()) : [];
+                $args = [];
+
+                if(RapidLoad_Base::get()->rules_enabled()){
+
+                    $rule_names = RapidLoad_DB::get_rule_names();
+
+                    self::log([
+                        'log' => 'RapidLoad_Enqueue->rules_enabled-' . json_encode($rule_names),
+                        'type' => 'injection' ,
+                        'url' => $url
+                    ]);
+
+                    $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
+
+                }
 
                 $this->handle_job($url, $args);
 
@@ -308,7 +322,7 @@ class RapidLoad_Enqueue {
             $job->save();
 
             self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule',
+                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule-' . $applicable_rule->rule,
                 'type' => 'injection' ,
                 'url' => $url
             ]);

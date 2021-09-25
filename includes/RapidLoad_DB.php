@@ -238,7 +238,7 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url'", ARRAY_A);
+        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url' ORDER BY id", ARRAY_A);
 
         $error = $wpdb->last_error;
 

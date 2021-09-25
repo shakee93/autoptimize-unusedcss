@@ -537,7 +537,7 @@ class UnusedCSS_DB extends RapidLoad_DB
 
         global $wpdb;
 
-        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_uucss_rule", ARRAY_A);
+        $names = $wpdb->get_results("SELECT rule FROM {$wpdb->prefix}rapidload_uucss_rule ORDER BY id", ARRAY_A);
 
         $error = $wpdb->last_error;
 

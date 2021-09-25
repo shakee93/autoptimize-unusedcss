@@ -101,18 +101,28 @@ class UnusedCSS_Rule extends UnusedCSS_Job {
 
         $related_rule = false;
 
-        foreach ($rules as $rule){
+        foreach ($rule_names as $rule){
 
-            if(!isset($rule['rule']) || isset($rule['rule']) && !in_array($rule['rule'], $rule_names)){
+            self::log([
+                'log' => 'UnusedCSS_Rule->get_related_rule-' . $rule,
+                'type' => 'injection' ,
+                'url' => null
+            ]);
 
-                continue;
-            }
+            $key = array_search($rule, array_column($rules, 'rule'));
 
-            if(isset($rule['callback']) && is_callable($rule['callback']) && $rule['callback']()){
+            if(is_numeric($key) && isset($rules[$key]) && isset($rules[$key]['callback']) && is_callable($rules[$key]['callback']) && $rules[$key]['callback']()){
 
-                $related_rule = $rule;
+                self::log([
+                    'log' => 'UnusedCSS_Rule->get_related_rule-' . $rule . '-validated',
+                    'type' => 'injection' ,
+                    'url' => null
+                ]);
+                $related_rule = $rules[$key];
                 break;
+
             }
+
         }
 
         return $related_rule;
