@@ -384,6 +384,7 @@ abstract class UnusedCSS_Admin {
 
             $old_rule = $_REQUEST['old_rule'];
             $old_regex = $_REQUEST['old_regex'];
+            $old_url = $_REQUEST['old_url'];
 
             if(UnusedCSS_DB::rule_exists_with_error( $old_rule, $old_regex)){
 
@@ -404,9 +405,12 @@ abstract class UnusedCSS_Admin {
                 $ruleObject->save();
                 $update_mode = 'update';
 
+
+
                 do_action('uucss/rule/saved', $ruleObject, [
                     'rule' => $old_rule,
-                    'regex' => $old_regex
+                    'regex' => $old_regex,
+                    'url' => $old_url
                 ]);
 
                 wp_send_json_success('Rule updated successfully');

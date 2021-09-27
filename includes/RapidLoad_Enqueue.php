@@ -48,6 +48,12 @@ class RapidLoad_Enqueue {
 
                     $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
 
+                    self::log([
+                        'log' => 'RapidLoad_Enqueue->get_current_rule-' . json_encode($args),
+                        'type' => 'injection' ,
+                        'url' => $url
+                    ]);
+
                 }
 
                 $this->handle_job($url, $args);

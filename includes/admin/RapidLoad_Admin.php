@@ -266,11 +266,10 @@ class RapidLoad_Admin
 
     public function update_rule($args, $old = false){
 
-        if($old && isset($old['rule']) && isset($old['regex'])){
+        if($old && isset($old['url'])){
 
             $job = new RapidLoad_Job([
-                'rule' => $old['rule'],
-                'regex' => $old['regex'],
+                'url' => $old['url']
             ]);
 
             $job->url = $args->url;
