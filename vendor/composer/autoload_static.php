@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
     public static $classMap = array (
+        'AMP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/amp/AMP_Compatible.php',
         'AdvancedCustomFields_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/advanced-custom-fields/AdvancedCustomFields_Compatible.php',
         'Autoptimize_Beta_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize-beta/Autoptimize_Beta_Compatible.php',
         'Autoptimize_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/autoptimize/Autoptimize_Compatible.php',

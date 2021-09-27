@@ -54,12 +54,6 @@ abstract class UnusedCSS {
 
 		    $this->url = $this->get_current_url();
 
-            self::log([
-                'log' => 'UnusedCSS->wp_enqueue_scripts:before_transform',
-                'type' => 'purging' ,
-                'url' => $this->url
-            ]);
-
 		    if ( $this->enabled() ) {
 
                 self::log([
