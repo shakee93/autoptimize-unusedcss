@@ -7,8 +7,8 @@ class AMP_Compatible extends RapidLoad_ThirdParty{
     function __construct(){
 
         $this->plugin = 'amp/amp.php';
-        $this->catgeory = 'cache-bust';
-        $this->name = 'performance';
+        $this->catgeory = 'performance';
+        $this->name = 'amp';
 
         parent::__construct();
     }
