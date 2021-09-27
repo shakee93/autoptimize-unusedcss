@@ -58,21 +58,10 @@ trait RapidLoad_Utils {
 
         foreach ($user_defined_rules as $rule){
 
-            self::log([
-                'log' => 'RapidLoad_Utils->pre_defined_rules-' . $rule,
-                'type' => 'injection' ,
-                'url' => null
-            ]);
-
             $key = array_search($rule, array_column($rules, 'rule'));
 
             if(is_numeric($key) && isset($rules[$key]) && isset($rules[$key]['callback']) && is_callable($rules[$key]['callback']) && $rules[$key]['callback']()){
 
-                self::log([
-                    'log' => 'RapidLoad_Utils->pre_defined_rules-' . $rule . '-validated',
-                    'type' => 'injection' ,
-                    'url' => null
-                ]);
                 $related_rule = $rules[$key];
                 break;
 
