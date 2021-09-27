@@ -296,8 +296,6 @@ class RapidLoad_Enqueue {
             return false;
         }
 
-        error_log(is_amp_endpoint());
-
         return apply_filters('uucss/enabled', true);
 
     }
