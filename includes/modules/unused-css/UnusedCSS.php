@@ -430,12 +430,18 @@ abstract class UnusedCSS {
         if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
 
             self::log([
-                'log' => 'UnusedCSS->purge_css:rules_enabled',
+                'log' => 'UnusedCSS->purge_css:rules_enabled-'. json_encode($this->rule),
                 'type' => 'purging' ,
                 'url' => $this->url
             ]);
 
             $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
+
+            self::log([
+                'log' => 'UnusedCSS->applicable_rule-' . json_encode($this->applicable_rule),
+                'type' => 'injection' ,
+                'url' => $this->url
+            ]);
 
         }
 
