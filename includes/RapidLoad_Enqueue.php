@@ -333,34 +333,52 @@ class RapidLoad_Enqueue {
                 'url' => $url
             ]);
 
-        }else{
+        }else if($applicable_rule){
 
             self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:url_exist',
+                'log' => 'RapidLoad_Enqueue->handle_job:url_exist_for_rule_' . $applicable_rule->rule,
                 'type' => 'injection' ,
                 'url' => $url
             ]);
 
         }
 
-        if ( !isset( $this->options['uucss_disable_add_to_queue'] ) ||
-                isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1" || $applicable_rule)
+        $front_end_enabled = [];
+        $front_end_enabled['add_queue_enabled'] = !isset( $this->options['uucss_disable_add_to_queue'] ) ||
+            isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] != "1";
+
+        if ( $front_end_enabled['add_queue_enabled'] || $applicable_rule)
         {
             if(!isset($job->id)){
-                $job->save();
                 self::log([
-                    'log' => 'RapidLoad_Enqueue->handle_job:added_url',
+                    'log' => 'RapidLoad_Enqueue->handle_job:save_url',
                     'type' => 'injection' ,
                     'url' => $url
                 ]);
+                $job->save();
             }
         }
 
         do_action('rapidload/job/handle', $job, $args);
 
-        if(isset($job->id) && $this->enabled_frontend() && !isset( $_REQUEST['no_uucss'] )){
+
+        $front_end_enabled['job_id_set'] = isset($job->id);
+        $front_end_enabled['enabled'] = $this->enabled_frontend();
+        $front_end_enabled['no_uucss'] = !isset( $_REQUEST['no_uucss'] );
+
+        if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled'] && $front_end_enabled['no_uucss']){
+            self::log([
+                'log' => 'RapidLoad_Enqueue->replace_css:called-' . json_encode($job),
+                'type' => 'injection' ,
+                'url' => $url
+            ]);
             $this->replace_css($url);
+        }else{
+            self::log([
+                'log' => 'RapidLoad_Enqueue->replace_css:not-called-' . json_encode($front_end_enabled),
+                'type' => 'injection' ,
+                'url' => $url
+            ]);
         }
 
     }
