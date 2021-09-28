@@ -351,7 +351,7 @@ class RapidLoad_Enqueue {
         {
             if(!isset($job->id)){
                 self::log([
-                    'log' => 'RapidLoad_Enqueue->handle_job:save_url',
+                    'log' => 'RapidLoad_Enqueue->handle_job:save_job-' . json_encode($job),
                     'type' => 'injection' ,
                     'url' => $url
                 ]);
