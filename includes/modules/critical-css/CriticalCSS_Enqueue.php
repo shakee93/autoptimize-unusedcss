@@ -14,6 +14,7 @@ class CriticalCSS_Enqueue
     private $job_data;
     private $data;
     private $warnings;
+    private $is_mobile;
 
     public function __construct($job_data)
     {
@@ -51,7 +52,27 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        if(!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)) {
+        $this->is_mobile = $this->is_mobile();
+
+        if($this->is_mobile){
+            $this->data = str_replace(".css","-mobile.css", $this->data);
+            self::log([
+                'type' => 'injection',
+                'url' => $this->job_data->job->url,
+                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-mobile'
+            ]);
+        }else{
+            self::log([
+                'type' => 'injection',
+                'url' => $this->job_data->job->url,
+                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-desktop'
+            ]);
+        }
+
+        $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data);
+
+        if(!$file_exist &&
+            $this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400) {
             $this->job_data->requeue();
             $this->job_data->save();
             //$this->inject->successfully_injected = false;
@@ -62,7 +83,7 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        if($this->dom && $this->inject){
+        if($file_exist && $this->dom && $this->inject){
 
             $this->enqueue_cpcss();
 
@@ -107,23 +128,6 @@ class CriticalCSS_Enqueue
 
             $critical_css_content = '';
 
-            $is_mobile = $this->is_mobile();
-
-            if($is_mobile){
-                $this->data = str_replace(".css","-mobile.css", $this->data);
-                self::log([
-                   'type' => 'injection',
-                   'url' => $this->job_data->job->url,
-                   'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-mobile'
-                ]);
-            }else{
-                self::log([
-                    'type' => 'injection',
-                    'url' => $this->job_data->job->url,
-                    'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-desktop'
-                ]);
-            }
-
             if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
                 $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
             }
@@ -138,7 +142,7 @@ class CriticalCSS_Enqueue
                 return;
             }
 
-            $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
+            $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
 
             if(isset($this->dom->find( 'title' )[0])){
 
