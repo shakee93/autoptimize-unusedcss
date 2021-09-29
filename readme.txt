@@ -96,6 +96,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.15 - 29/09/2021 =
+ * feat: add option to enable mobile version of critical css
+ * feat: exclude RapidLoad from amp pages
+ * improve: disable critical css if render blocking option enabled in wprocket or autoptimize
+ * improve: exclude post types [shop_coupon, shop_order] from optimization
+
 = 1.6.14 - 23/09/2021 =
  * fix: W3C validation errors thrown by RapidLoad
 
