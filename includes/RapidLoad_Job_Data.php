@@ -134,7 +134,6 @@ class RapidLoad_Job_Data{
     }
 
     public function mark_as_successful_hit(){
-        $this->attempts = 0;
         $this->hits++;
         $this->error = NULL;
     }

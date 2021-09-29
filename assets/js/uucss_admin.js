@@ -661,12 +661,12 @@
 
                         var attemptsString = '';
 
-                        if(Number(rowData.attempts) !== 0){
-                            attemptsString = 'Attempts : ' + rowData.attempts
-                        }else if(Number(rowData.attempts) === 0 && (rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
+                        if((rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
                             attemptsString = 'Hits : ' + rowData.success_count
-                        }else if(Number(rowData.attempts) === 0 && rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
+                        }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                        }else if(Number(rowData.attempts) !== 0) {
+                            attemptsString = 'Attempts : ' + rowData.attempts
                         }
 
                         var tippyOptions;
@@ -1297,12 +1297,12 @@
 
                         var attemptsString = '';
 
-                        if(Number(rowData.attempts) !== 0){
-                            attemptsString = 'Attempts : ' + rowData.attempts
-                        }else if(Number(rowData.attempts) === 0 && rowData.success_count > 0){
+                        if(rowData.success_count > 0){
                             attemptsString = 'Hits : ' + rowData.success_count
-                        }else if(Number(rowData.attempts) === 0 && rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
+                        }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                        }else if(Number(rowData.attempts) !== 0){
+                            attemptsString = 'Attempts : ' + rowData.attempts
                         }
 
                         var tippyOptions;

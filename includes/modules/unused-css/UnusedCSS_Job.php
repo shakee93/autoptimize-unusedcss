@@ -116,7 +116,6 @@ abstract class UnusedCSS_Job
     }
 
     public function mark_as_successful_hit(){
-        $this->attempts = 0;
         $this->hits++;
         $this->remove_file_missing_warnings();
         $this->error = NULL;
