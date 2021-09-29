@@ -625,7 +625,7 @@ abstract class UnusedCSS {
         if($this->existing_link->is_type('Path')){
 
             $this->existing_link->rule_id = NULL;
-            $this->existing_link->requeue();
+            $this->existing_link->requeue(isset($args['immediate']) ? 0 : -1);
             $this->existing_link->save();
 
             self::log([
@@ -638,7 +638,7 @@ abstract class UnusedCSS {
 
             if($this->existing_link->status == 'failed'){
 
-                $this->existing_link->requeue();
+                $this->existing_link->requeue(isset($args['immediate']) ? 0 : -1);
                 $this->existing_link->save();
 
                 self::log([

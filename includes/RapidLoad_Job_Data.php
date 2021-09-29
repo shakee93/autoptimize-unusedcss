@@ -99,7 +99,7 @@ class RapidLoad_Job_Data{
 
     }
 
-    public function requeue($attempts = false){
+    public function requeue($attempts = -1){
         $this->status = 'queued';
         $this->queue_job_id = null;
         $this->attempts = $attempts >= 0 ? $attempts : $this->attempts + 1;
