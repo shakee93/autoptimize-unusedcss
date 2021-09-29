@@ -58,7 +58,7 @@
 
                 var listener = function () {
                     load_css(window.rapidload.files)
-                    removeCriticalCSS();
+                    setTimeout(removeCriticalCSS, 200);
                     removeEventListener(event, listener);
                 }
                 addEventListener(event, listener);
