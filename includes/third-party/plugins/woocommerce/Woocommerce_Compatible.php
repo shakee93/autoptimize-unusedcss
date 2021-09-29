@@ -16,6 +16,7 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
     public function init_hooks()
     {
         add_filter('uucss/rules', [$this, 'handle'], 50, 1);
+        add_filter('uucss/url/exclude', [$this, 'exclude']);
     }
 
     public function handle($args)
@@ -54,6 +55,20 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                     return is_product_tag();
                 },
             ];
+        }
+
+        return $args;
+    }
+
+    public function exclude($args){
+        $url_parts = parse_url( $args );
+
+        if(isset($url_parts['query']) &&
+            ( $this->str_contains($url_parts['query'], 'post_type=shop_coupon') ||
+                $this->str_contains($url_parts['query'], 'post_type=shop_order')
+            )
+        ){
+            return false;
         }
 
         return $args;
