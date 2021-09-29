@@ -710,7 +710,7 @@
             <br>
             We are here to help, take a look at our knowledge base or feel free to open a ticket.
         </div>
-        <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us"><span class="dashicons dashicons-sos"></span>
+        <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500000568821-FAQ"><span class="dashicons dashicons-sos"></span>
             Help</a>
     </div>
 
