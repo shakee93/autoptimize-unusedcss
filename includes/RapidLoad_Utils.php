@@ -501,8 +501,6 @@ trait RapidLoad_Utils {
 
     protected function is_mobile(){
 
-        $user_agent = $this->get_user_agent();
-
         return function_exists('wp_is_mobile') && wp_is_mobile();
     }
 

@@ -22,6 +22,19 @@
     </td>
 </tr>
 <tr>
+    <th scope="row"><?php _e( 'Mobile Critical CSS', 'uucss' ); ?></th>
+    <td>
+        <label><input id='uucss_enable_cpcss_mobile' type='checkbox'
+                      name='autoptimize_uucss_settings[uucss_enable_cpcss_mobile]' <?php if ( ! empty( $options['uucss_enable_cpcss_mobile'] ) && '1' === $options['uucss_enable_cpcss_mobile'] ) {
+                echo 'checked="checked"';
+            } ?> value='1' <?php if(!empty(CriticalCSS::$cpcss_other_plugins)) { echo 'disabled'; } ?>>
+            <i>
+                Generate separate mobile version of critical css.
+            </i>
+        </label>
+    </td>
+</tr>
+<tr>
     <th scope="row"><?php _e( 'Additional CSS', 'uucss' ); ?></th>
     <td>
                                     <textarea style="max-width: 390px; width: 100%; height: 150px" id="uucss_additional_css"

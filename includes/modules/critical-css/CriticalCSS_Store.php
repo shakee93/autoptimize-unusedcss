@@ -36,7 +36,7 @@ class CriticalCSS_Store
 
             $result = $uucss_api->post( 'purger/cpcss',
                 array_merge( $cpcss_config,
-                    [ 'url' => $this->job_data->job->url, 'service' => true ]
+                    [ 'url' => $this->job_data->job->url, 'service' => true, 'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1" ]
                 ) );
 
             if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {

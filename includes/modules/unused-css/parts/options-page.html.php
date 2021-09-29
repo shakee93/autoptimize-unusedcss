@@ -277,7 +277,7 @@
                                 </th>
                             </tr>
                             <?php
-                                do_action('uucss/options/css');
+                                do_action('uucss/options/css', $options);
                             ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>

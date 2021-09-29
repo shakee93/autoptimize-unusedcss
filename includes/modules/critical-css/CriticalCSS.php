@@ -52,8 +52,8 @@ class CriticalCSS
         new CriticalCSS_Queue();
     }
 
-    public function render_options(){
-
+    public function render_options($args){
+        $options = $args;
         include_once 'parts/options.html.php';
 
     }
