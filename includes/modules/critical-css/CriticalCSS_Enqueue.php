@@ -103,7 +103,6 @@ class CriticalCSS_Enqueue
         foreach ( $this->dom->find( 'link' ) as $key => $sheet ) {
 
             $parent = $sheet->parent();
-            $preload = "";
 
             if(isset($parent) && $parent->tag == 'noscript' || !self::is_css($sheet)){
                 continue;
@@ -113,10 +112,6 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if($this->str_contains($sheet->href, "fonts.googleapis.com")){
-                $preload = '<link rel="preload" href="'. $sheet->href .'" as="style">';
-            }
-
             if(is_numeric(strpos($sheet->outertext,'<style'))){
                 continue;
             }
@@ -124,7 +119,7 @@ class CriticalCSS_Enqueue
             $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'print';
-            $sheet->outertext = '<noscript>' . $outer_text . '</noscript>' . $sheet->outertext . $preload;
+            $sheet->outertext = '<noscript>' . $outer_text . '</noscript>' . $sheet->outertext;
 
         }
     }
