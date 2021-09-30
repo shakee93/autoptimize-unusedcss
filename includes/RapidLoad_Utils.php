@@ -38,28 +38,6 @@ trait RapidLoad_Utils {
 	    return null;
     }
 
-    public function get_current_rule($user_defined_rules = []){
-
-        $rules = RapidLoad_Base::get()->get_pre_defined_rules();
-
-        $related_rule = false;
-
-        foreach ($user_defined_rules as $rule){
-
-            $key = array_search($rule, array_column($rules, 'rule'));
-
-            if(is_numeric($key) && isset($rules[$key]) && isset($rules[$key]['callback']) && is_callable($rules[$key]['callback']) && $rules[$key]['callback']()){
-
-                $related_rule = $rules[$key];
-                break;
-
-            }
-
-        }
-
-        return $related_rule;
-    }
-
     public static function get_defined_rules( $with_permalink = false){
 
         $rules = apply_filters('uucss/rules', []);

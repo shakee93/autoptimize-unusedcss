@@ -15,7 +15,6 @@ abstract class UnusedCSS {
 
 	public $url = null;
 	public $rule = null;
-	public $applicable_rule = null;
 	public $existing_link = null;
 	public $css = [];
 	public $store = null;
@@ -53,6 +52,8 @@ abstract class UnusedCSS {
 	    add_action( 'wp_enqueue_scripts', function () {
 
 		    $this->url = $this->get_current_url();
+
+		    $this->rule = $this->get_current_rule($this->url);
 
 		    if ( $this->enabled() ) {
 
@@ -101,6 +102,34 @@ abstract class UnusedCSS {
         }, 10 , 2);
 
         new UnusedCSS_Queue();
+    }
+
+    function get_current_rule($url)
+    {
+        $rules = RapidLoad_Base::get()->get_pre_defined_rules();
+        $user_defined_rules = UnusedCSS_DB::get_rule_names();
+
+        $related_rule = false;
+
+        foreach ($user_defined_rules as $rule_name){
+
+            $key = array_search($rule_name, array_column($rules, 'rule'));
+
+            if(is_numeric($key) && isset($rules[$key]) &&
+                isset($rules[$key]['callback']) && is_callable($rules[$key]['callback']) && $rules[$key]['callback']() ){
+
+                $_related_rule = UnusedCSS_DB::get_applied_rule($rules[$key]['rule'], $url);
+
+                if($_related_rule){
+
+                    $related_rule = $_related_rule;
+                    break;
+                }
+
+            }
+        }
+
+        return $related_rule;
     }
 
     function uucss_rule_types($rules){
@@ -414,26 +443,16 @@ abstract class UnusedCSS {
             'url' => $this->url
         ]);
 
-        $this->rule = UnusedCSS_Rule::get_related_rule();
-
         $data = null;
         $link = null;
 
         $this->existing_link = RapidLoad_Settings::link_exists( $this->url );
 
-        if(isset($this->rule['rule']) && $rapidload->rules_enabled()){
+        if($rapidload->rules_enabled() && $this->rule){
 
             self::log([
                 'log' => 'UnusedCSS->purge_css:rules_enabled-'. json_encode($this->rule),
                 'type' => 'purging' ,
-                'url' => $this->url
-            ]);
-
-            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($this->rule['rule'], $this->url);
-
-            self::log([
-                'log' => 'UnusedCSS->applicable_rule-' . json_encode($this->applicable_rule),
-                'type' => 'injection' ,
                 'url' => $this->url
             ]);
 
@@ -442,7 +461,7 @@ abstract class UnusedCSS {
         if (    !$this->existing_link &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
-                $this->options['uucss_disable_add_to_queue'] != "1") || $this->applicable_rule)
+                $this->options['uucss_disable_add_to_queue'] != "1") || $this->rule)
         {
 
             self::log([
@@ -450,7 +469,7 @@ abstract class UnusedCSS {
                 'type' => 'purging' ,
                 'url' => $this->url
             ]);
-            $this->cache( $this->url , $this->rule);
+            $this->cache( $this->url , []);
         }
 
 		// disabled exceptions only for frontend
@@ -488,8 +507,8 @@ abstract class UnusedCSS {
 
                 $data = new UnusedCSS_Path([
                     'url' => $this->url,
-                    'rule' => isset($this->rule['rule']) ? $this->rule['rule'] : null,
-                    'status' => isset($this->rule['rule']) ? 'rule-based' : 'queued'
+                    'rule' => $this->rule ? $this->rule->rule : null,
+                    'status' => $this->rule ? 'rule-based' : 'queued'
                 ]);
 
                 if(isset($data->rule_id)) {
@@ -502,24 +521,20 @@ abstract class UnusedCSS {
                     }
 
 
-                }elseif (isset($this->rule['rule']) && $data->is_type('Path') && $data->rule_note != 'detached'){
+                }elseif ($this->rule && $data->is_type('Path') && $data->rule_note != 'detached'){
 
-                    if($this->applicable_rule){
+                    $data->attach_rule($this->rule->id, $this->rule->rule);
+                    $data->save();
 
-                        $data->attach_rule($this->applicable_rule->id, $this->applicable_rule->rule);
-                        $data->save();
+                    $link = $data;
 
-                        $link = $data;
-
-                        if(gettype($this->existing_link) == "boolean"){
-                            $data = new UnusedCSS_Rule([
-                                'rule' => $this->applicable_rule->rule,
-                                'regex' => $this->applicable_rule->regex,
-                            ]);
-                        }else{
-                            $data = $this->existing_link;
-                        }
-
+                    if(gettype($this->existing_link) == "boolean"){
+                        $data = new UnusedCSS_Rule([
+                            'rule' => $this->rule->rule,
+                            'regex' => $this->rule->regex,
+                        ]);
+                    }else{
+                        $data = $this->existing_link;
                     }
 
                 }
@@ -572,22 +587,22 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-	    if(!$this->applicable_rule && isset($args['rule'])){
+	    if(!$this->rule && $url){
 
-            $this->applicable_rule = UnusedCSS_DB::get_applied_rule($args['rule'], $url);
+            $this->rule = $this->get_current_rule($url);
 
         }
 
-	    if($this->applicable_rule){
+	    if($this->rule){
 
             $this->existing_link = new UnusedCSS_Rule([
-                'rule' => $this->applicable_rule->rule,
-                'regex' => $this->applicable_rule->regex
+                'rule' => $this->rule->rule,
+                'regex' => $this->rule->regex
             ]);
 
             new UnusedCSS_Path([
                 'url' => $url,
-                'rule' => $this->applicable_rule->rule,
+                'rule' => $this->existing_link->rule,
                 'status' => 'rule-based',
                 'rule_id' => $this->existing_link->id
             ]);
