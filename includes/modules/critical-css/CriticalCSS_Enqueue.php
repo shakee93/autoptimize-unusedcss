@@ -113,7 +113,7 @@ class CriticalCSS_Enqueue
             }
 
             if($this->str_contains($sheet->href,'fonts.googleapis.com')){
-                continue;
+                //continue;
             }
 
             if(is_numeric(strpos($sheet->outertext,'<style'))){
@@ -121,8 +121,9 @@ class CriticalCSS_Enqueue
             }
 
             $outer_text = $sheet->outertext;
-            $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
+            $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";this.rel="' . $sheet->rel . '";';
             $sheet->media = 'print';
+            $sheet->rel = 'preload';
             $sheet->outertext = '<noscript>' . $outer_text . '</noscript>' . $sheet->outertext;
 
         }
