@@ -112,6 +112,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if($this->str_contains($sheet->href,'fonts.googleapis.com')){
+                continue;
+            }
+
             if(is_numeric(strpos($sheet->outertext,'<style'))){
                 continue;
             }
