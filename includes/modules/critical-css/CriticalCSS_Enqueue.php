@@ -121,7 +121,7 @@ class CriticalCSS_Enqueue
             }
 
             $outer_text = $sheet->outertext;
-            $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";this.rel="' . $sheet->rel . '";';
+            $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";this.rel="stylesheet";';
             $sheet->media = 'print';
             $sheet->rel = 'preload';
             $sheet->outertext = '<noscript>' . $outer_text . '</noscript>' . $sheet->outertext;
