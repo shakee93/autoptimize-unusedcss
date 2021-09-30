@@ -52,6 +52,9 @@ class UnusedCSS_Queue
         if($this->str_contains($url, "\'||\'/")) {
             return true;
         }
+        if($this->str_contains($url, "\'||\'")) {
+            return true;
+        }
         if($this->str_contains($url, "\'")) {
             return true;
         }
