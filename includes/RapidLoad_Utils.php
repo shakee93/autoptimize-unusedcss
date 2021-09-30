@@ -31,23 +31,11 @@ trait RapidLoad_Utils {
 
 	    if ( $wp ) {
 
-		    $query = ( isset( $_SERVER['QUERY_STRING'] ) && ! empty( $_SERVER['QUERY_STRING'] ) ) ? '?' . $_SERVER['QUERY_STRING'] : '';
-		    $url   = home_url( $wp->request );
-
-		    if ( ! empty( $url ) && substr( $url, - 1 ) !== '/' ) {
-			    $url = $url . '/';
-		    }
-
-		    $url = $url . $query;
-
-		    if ( ! empty( $url ) ) {
-			    return $url;
-		    }
-
+            return home_url(add_query_arg(array($_GET), $wp->request));
 
 	    }
 
-	    return $this->url_origin( $_SERVER, false ) . $_SERVER['REQUEST_URI'];
+	    return null;
     }
 
     public function get_current_rule($user_defined_rules = []){
@@ -327,25 +315,19 @@ trait RapidLoad_Utils {
 			return $url;
 		}
 
-		if ( ! isset( $options['uucss_query_string'] ) || empty( $options['uucss_query_string'] ) ) {
-			$path = ( isset( $url_parts['path'] ) ) ? $url_parts['path'] : '';
-			$url  = $url_parts['scheme'] . '://' . $url_parts['host'] . $path;
+        $path = ( isset( $url_parts['path'] ) ) ? $url_parts['path'] : '';
 
-            if(apply_filters('uucss/url/trailingslash', true)){
-                $url = trailingslashit($url);
-            }else{
-                $url = rtrim($url,'/');
-            }
+        $url  = $url_parts['scheme'] . '://' . $url_parts['host'] . $path;
 
-		}elseif (!isset($url_parts['query']) || empty($url_parts['query'])){
-
-            if(apply_filters('uucss/url/trailingslash', true)){
-                $url = trailingslashit($url);
-            }else{
-                $url = rtrim($url,'/');
-            }
-
+        if(apply_filters('uucss/url/trailingslash', true)){
+            $url = trailingslashit($url);
+        }else{
+            $url = rtrim($url,'/');
         }
+
+		if ( isset( $options['uucss_query_string'] ) && $options['uucss_query_string'] == "1" && isset($url_parts['query']) && !empty($url_parts['query']) ) {
+            $url .= "?" .$url_parts['query'];
+		}
 
 		return apply_filters('uucss/url', $url);
 	}
