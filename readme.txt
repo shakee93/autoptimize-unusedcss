@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.16 - 30/09/2021 =
+ * fix: critical job duplication error
+
 = 1.6.15 - 29/09/2021 =
  * feat: add option to enable mobile version of critical css
  * feat: exclude RapidLoad from amp pages
