@@ -113,6 +113,7 @@ class CriticalCSS_Enqueue
             }
 
             if($this->str_contains($sheet->href,'fonts.googleapis.com')){
+                $sheet->rel = "preload";
                 continue;
             }
 
