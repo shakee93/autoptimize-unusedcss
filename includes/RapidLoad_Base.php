@@ -341,12 +341,6 @@ class RapidLoad_Base
 
                 $this->applicable_rule = RapidLoad_DB::get_applied_rule($args['rule'], $url);
 
-                if(!$this->applicable_rule){
-
-                    $this->applicable_rule = RapidLoad_DB::get_applied_rule('is_path', $url);
-
-                }
-
             }
 
         }

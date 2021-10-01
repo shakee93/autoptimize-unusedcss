@@ -7,6 +7,8 @@ class RapidLoad_Enqueue {
     use RapidLoad_Utils;
 
     private $options;
+    private $url;
+    private $rule;
 
     public static $frontend_debug = false;
 
@@ -22,48 +24,34 @@ class RapidLoad_Enqueue {
 
         add_action('wp_enqueue_scripts', function (){
 
-            $url = $this->get_current_url();
+            $this->url = $this->get_current_url();
 
-            $url = $this->transform_url($url);
+            $this->url = $this->transform_url($this->url);
 
-            if($this->enabled($url)){
+            if($this->enabled($this->url)){
 
                 self::log([
                     'log' => 'RapidLoad_Enqueue->enabled',
                     'type' => 'injection' ,
-                    'url' => $url
+                    'url' => $this->url
                 ]);
 
                 $args = [];
 
                 if(RapidLoad_Base::get()->rules_enabled()){
 
-                    $rule_names = RapidLoad_DB::get_rule_names();
-
-                    self::log([
-                        'log' => 'RapidLoad_Enqueue->rules_enabled-' . json_encode($rule_names),
-                        'type' => 'injection' ,
-                        'url' => $url
-                    ]);
-
-                    $args = $this->get_current_rule(RapidLoad_DB::get_rule_names());
-
-                    self::log([
-                        'log' => 'RapidLoad_Enqueue->get_current_rule-' . json_encode($args),
-                        'type' => 'injection' ,
-                        'url' => $url
-                    ]);
+                    $this->rule = $this->get_current_rule();
 
                 }
 
-                $this->handle_job($url, $args);
+                $this->handle_job($this->url, $args);
 
             }else{
 
                 self::log([
                     'log' => 'RapidLoad_Enqueue->enabled:failed',
                     'type' => 'injection' ,
-                    'url' => $url
+                    'url' => $this->url
                 ]);
 
             }
@@ -308,18 +296,22 @@ class RapidLoad_Enqueue {
             $args['post_id'] = url_to_postid($url);
         }
 
-        $applicable_rule = $rapidload->get_applicable_rule($url, $args);
+        if(!$this->rule){
+
+            $this->rule = $this->get_current_rule();
+
+        }
 
         $job = new RapidLoad_Job([
             'url' => $url
         ]);
 
-        if(!isset($job->rule_id) && $applicable_rule) {
+        if(!isset($job->rule_id) && $this->rule) {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
-                'rule' => $applicable_rule->rule,
-                'regex' => $applicable_rule->regex,
+                'rule' => $this->rule->rule,
+                'regex' => $this->rule->regex,
             ]);
 
             $job->rule_id = $rule->id;
@@ -328,15 +320,15 @@ class RapidLoad_Enqueue {
             $job->save();
 
             self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule-' . $applicable_rule->rule,
+                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule-' . $this->rule->rule,
                 'type' => 'injection' ,
                 'url' => $url
             ]);
 
-        }else if($applicable_rule){
+        }else if($this->rule){
 
             self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:url_exist_for_rule_' . $applicable_rule->rule,
+                'log' => 'RapidLoad_Enqueue->handle_job:url_exist_for_rule_' . $this->rule->rule,
                 'type' => 'injection' ,
                 'url' => $url
             ]);
@@ -347,7 +339,7 @@ class RapidLoad_Enqueue {
         $front_end_enabled['add_queue_enabled'] = !isset( $this->options['uucss_disable_add_to_queue'] ) ||
             isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] != "1";
 
-        if ( $front_end_enabled['add_queue_enabled'] || $applicable_rule)
+        if ( $front_end_enabled['add_queue_enabled'] || $this->rule)
         {
             if(!isset($job->id)){
                 self::log([
@@ -383,9 +375,10 @@ class RapidLoad_Enqueue {
 
     }
 
-    function get_current_rule($user_defined_rules = []){
+    function get_current_rule(){
 
         $rules = RapidLoad_Base::get()->get_pre_defined_rules();
+        $user_defined_rules = RapidLoad_DB::get_rule_names();
 
         $related_rule = false;
 
@@ -395,8 +388,11 @@ class RapidLoad_Enqueue {
 
             if(is_numeric($key) && isset($rules[$key]) && isset($rules[$key]['callback']) && is_callable($rules[$key]['callback']) && $rules[$key]['callback']()){
 
-                $related_rule = $rules[$key];
-                break;
+                $related_rule = RapidLoad_Base::get()->get_applicable_rule($this->url, $rules[$key]);
+
+                if($related_rule){
+                    break;
+                }
 
             }
 

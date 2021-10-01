@@ -53,9 +53,11 @@ abstract class UnusedCSS {
 
 		    $this->url = $this->get_current_url();
 
-		    $this->rule = $this->get_current_rule($this->url);
-
 		    if ( $this->enabled() ) {
+
+                if(RapidLoad_Base::get()->rules_enabled()){
+                    $this->rule = $this->get_current_rule($this->url);
+                }
 
                 self::log([
                     'log' => 'UnusedCSS->enabled',
