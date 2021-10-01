@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.17 - 01/10/2021 =
+ * improve: rule based injection
+
 = 1.6.16 - 30/09/2021 =
  * fix: critical job duplication error
 
