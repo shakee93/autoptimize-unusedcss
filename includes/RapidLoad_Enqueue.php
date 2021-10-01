@@ -36,15 +36,19 @@ class RapidLoad_Enqueue {
                     'url' => $this->url
                 ]);
 
-                $args = [];
-
                 if(RapidLoad_Base::get()->rules_enabled()){
 
                     $this->rule = $this->get_current_rule();
 
+                    self::log([
+                        'log' => 'RapidLoad_Enqueue->rules_enabled-' . json_encode($this->rule),
+                        'type' => 'injection' ,
+                        'url' => $this->url
+                    ]);
+
                 }
 
-                $this->handle_job($this->url, $args);
+                $this->handle_job($this->url, []);
 
             }else{
 
@@ -59,31 +63,31 @@ class RapidLoad_Enqueue {
         });
     }
 
-    public function replace_css($url)
+    public function replace_css($job)
     {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
         self::log([
             'log' => 'RapidLoad_Enqueue->replace_css:'. $buffer,
             'type' => 'injection' ,
-            'url' => $url
+            'url' => $job->url
         ]);
-        add_filter( $buffer, function ( $html ) use($url){
+        add_filter( $buffer, function ( $html ) use($job){
             self::log([
                 'log' => 'RapidLoad_Enqueue->replace_css:apply_filter-uucss/enqueue/content',
                 'type' => 'injection' ,
-                'url' => $url
+                'url' => $job->url
             ]);
-            return apply_filters('uucss/enqueue/content', $html, $url);
+            return apply_filters('uucss/enqueue/content', $html, $job);
         }, 10 );
     }
 
-    public function the_content($html, $url){
+    public function the_content($html, $job){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:dom_parser_not_found',
                 'type' => 'injection' ,
-                'url' => $url
+                'url' => $job->url
             ]);
             return $html;
         }
@@ -109,7 +113,7 @@ class RapidLoad_Enqueue {
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:dom_parsed',
                 'type' => 'injection' ,
-                'url' => $url
+                'url' => $job->url
             ]);
 
             $inject = (object) [
@@ -127,13 +131,14 @@ class RapidLoad_Enqueue {
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:apply_filter-uucss/enqueue/content/update',
                 'type' => 'injection' ,
-                'url' => $url
+                'url' => $job->url
             ]);
 
             $state = apply_filters('uucss/enqueue/content/update',[
                 'dom' => $dom,
                 'inject' => $inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'job' => $job
             ]) ;
 
             if(isset($state['dom'])){
@@ -155,7 +160,7 @@ class RapidLoad_Enqueue {
             self::log([
                 'log' => 'RapidLoad_Enqueue->the_content:return_buffer',
                 'type' => 'injection' ,
-                'url' => $url
+                'url' => $job->url
             ]);
 
             return $dom;
@@ -296,17 +301,22 @@ class RapidLoad_Enqueue {
             $args['post_id'] = url_to_postid($url);
         }
 
-        if(!$this->rule){
+        if(RapidLoad_Base::get()->rules_enabled() && !$this->rule){
 
             $this->rule = $this->get_current_rule();
 
+            self::log([
+                'log' => 'RapidLoad_Enqueue->handle_job-' . json_encode($this->rule),
+                'type' => 'injection' ,
+                'url' => $url
+            ]);
         }
 
         $job = new RapidLoad_Job([
             'url' => $url
         ]);
 
-        if(!isset($job->rule_id) && $this->rule) {
+        if(!isset($job->rule_id) && $this->rule && $job->rule_note != "detached") {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
@@ -342,17 +352,17 @@ class RapidLoad_Enqueue {
         if ( $front_end_enabled['add_queue_enabled'] || $this->rule)
         {
             if(!isset($job->id)){
+
+                $job->save();
                 self::log([
-                    'log' => 'RapidLoad_Enqueue->handle_job:save_job-' . json_encode($job),
+                    'log' => 'RapidLoad_Enqueue->handle_job:job_saved-' . json_encode($job),
                     'type' => 'injection' ,
                     'url' => $url
                 ]);
-                $job->save();
             }
         }
 
         do_action('rapidload/job/handle', $job, $args);
-
 
         $front_end_enabled['job_id_set'] = isset($job->id);
         $front_end_enabled['enabled'] = $this->enabled_frontend();
@@ -364,7 +374,7 @@ class RapidLoad_Enqueue {
                 'type' => 'injection' ,
                 'url' => $url
             ]);
-            $this->replace_css($url);
+            $this->replace_css($job);
         }else{
             self::log([
                 'log' => 'RapidLoad_Enqueue->replace_css:not-called-' . json_encode($front_end_enabled),
