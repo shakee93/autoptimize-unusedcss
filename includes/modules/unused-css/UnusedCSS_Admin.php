@@ -1363,6 +1363,10 @@ abstract class UnusedCSS_Admin {
      */
     public function cache_on_actions($post_id, $post = null, $update = null)
     {
+        if(RapidLoad_Base::get()->rules_enabled()){
+            return;
+        }
+
         $post = get_post($post_id);
         if($post->post_status == "publish") {
 	        $this->clear_on_actions( $post->ID );
