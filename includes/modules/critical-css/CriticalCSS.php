@@ -328,9 +328,6 @@ class CriticalCSS
 
         }else if(isset( $args['immediate'] )){
 
-            /*$this->job_data->requeue();
-            $this->job_data->save();*/
-
             $spawned = $this->schedule_cron('cpcss_async_queue', [
                 'job_data' => $this->job_data,
                 'args'     => $args

@@ -56,7 +56,14 @@ abstract class UnusedCSS {
 		    if ( $this->enabled() ) {
 
                 if(RapidLoad_Base::get()->rules_enabled()){
+
                     $this->rule = $this->get_current_rule($this->url);
+
+                    self::log([
+                        'log' => 'UnusedCSS->rules_enabled-'. json_encode($this->rule),
+                        'type' => 'purging' ,
+                        'url' => $this->url
+                    ]);
                 }
 
                 self::log([
@@ -450,16 +457,6 @@ abstract class UnusedCSS {
 
         $this->existing_link = RapidLoad_Settings::link_exists( $this->url );
 
-        if($rapidload->rules_enabled() && $this->rule){
-
-            self::log([
-                'log' => 'UnusedCSS->purge_css:rules_enabled-'. json_encode($this->rule),
-                'type' => 'purging' ,
-                'url' => $this->url
-            ]);
-
-        }
-
         if (    !$this->existing_link &&
             (!isset( $this->options['uucss_disable_add_to_queue'] ) ||
                 isset( $this->options['uucss_disable_add_to_queue'] ) &&
@@ -471,6 +468,7 @@ abstract class UnusedCSS {
                 'type' => 'purging' ,
                 'url' => $this->url
             ]);
+
             $this->cache( $this->url , []);
         }
 
