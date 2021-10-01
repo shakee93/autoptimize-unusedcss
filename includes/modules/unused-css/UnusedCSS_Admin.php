@@ -1317,6 +1317,7 @@ abstract class UnusedCSS_Admin {
             if($rule){
                 $url = $rule->url;
                 $args['rule'] = $rule->rule;
+                $args['regex'] = $rule->regex;
             }
         }
 

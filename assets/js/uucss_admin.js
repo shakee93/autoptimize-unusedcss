@@ -1109,6 +1109,7 @@
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
                     var rule_id = $(this).data('rule_id');
+                    console.log(rule, rule_id);
 
                     uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
 
@@ -1428,7 +1429,7 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule + '" data-regex="'+ row.regex + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="'+ row.rule + '" data-rule_id="'+ row.id + '" data-regex="'+ row.regex + '"><span class="dashicons dashicons-update"></span></button>'
 
                         _render += '<button data-uucss-options data-url="' + data + '" data-rule="'+ row.rule + '" data-regex="'+ row.regex + '"><span class="dashicons dashicons-ellipsis"></span></button>';
 
@@ -1715,8 +1716,9 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
+                    var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
 
                 });
 

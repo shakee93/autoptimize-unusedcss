@@ -587,9 +587,9 @@ abstract class UnusedCSS {
 		    $args['options'] = $this->api_options($post_id);
 	    }
 
-	    if(!$this->rule && $url){
+	    if(RapidLoad_Base::get()->rules_enabled() && !$this->rule && isset($args['rule_id'])){
 
-            $this->rule = $this->get_current_rule($url);
+            $this->rule = UnusedCSS_Rule::get_rule_from_id($args['rule_id']);
 
         }
 
