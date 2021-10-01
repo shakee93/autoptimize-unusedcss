@@ -406,7 +406,7 @@
 
             var lengthChange = '<div class="dataTables_length" id="uucss-rule-history_length"><label>Show ' +
                 '<select name="uucss-rule-history_length" aria-controls="uucss-rule-history" class="">' +
-                '<option value="10" selected>10</option>' +
+                '<option value="15" selected>15</option>' +
                 '<option value="25">25</option>' +
                 '<option value="50">50</option>' +
                 '<option value="100">100</option>' +
