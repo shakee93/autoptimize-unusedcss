@@ -143,13 +143,9 @@ class CriticalCSS
                 'url' => get_permalink( $post )
             ]);
 
-            if(isset($job->id)){
+            if(isset($job->id) || !RapidLoad_Base::get()->rules_enabled()){
 
                 $this->cache_cpcss($job);
-
-            }else if(!RapidLoad_Base::get()->rules_enabled()){
-
-                $job->save();
 
             }
 
