@@ -133,10 +133,6 @@ class CriticalCSS
             return;
         }
 
-        if(RapidLoad_Base::get()->rules_enabled()){
-            return;
-        }
-
         $post = get_post($post_id);
 
         if($post->post_status == "publish") {
@@ -147,13 +143,15 @@ class CriticalCSS
                 'url' => get_permalink( $post )
             ]);
 
-            if(!isset($job->id)){
+            if(isset($job->id)){
+
+                $this->cache_cpcss($job);
+
+            }else if(!RapidLoad_Base::get()->rules_enabled()){
 
                 $job->save();
 
             }
-
-            $this->cache_cpcss($job);
 
         }
     }
