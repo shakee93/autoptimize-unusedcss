@@ -71,6 +71,30 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
             return false;
         }
 
+        $excludable_urls = [];
+
+        if(class_exists('WC_Order')){
+
+            $order = new WC_Order();
+
+            $excludable_urls[] = parse_url($order->get_checkout_payment_url(), PHP_URL_PATH);
+            $excludable_urls[] = parse_url($order->get_checkout_order_received_url(), PHP_URL_PATH);
+            $excludable_urls[] = parse_url($order->get_view_order_url(), PHP_URL_PATH);
+
+            foreach ($excludable_urls as $key => $excludable_url){
+
+                if(!$this->str_contains($args, rtrim($excludable_url,"/"))){
+                    unset($excludable_urls[$key]);
+                }
+
+            }
+
+        }
+
+        if(!empty($excludable_urls)){
+            return false;
+        }
+
         return $args;
     }
 
