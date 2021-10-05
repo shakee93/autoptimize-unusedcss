@@ -53,6 +53,8 @@ abstract class UnusedCSS {
 
 		    $this->url = $this->get_current_url();
 
+            $this->url = $this->transform_url( $this->url );
+
 		    if ( $this->enabled() ) {
 
                 if(RapidLoad_Base::get()->rules_enabled()){
@@ -443,8 +445,6 @@ abstract class UnusedCSS {
 	public function purge_css() {
 
         global $rapidload;
-
-		$this->url = $this->transform_url( $this->url );
 
         self::log([
             'log' => 'UnusedCSS->purge_css:after_transform',
