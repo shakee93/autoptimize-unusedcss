@@ -2379,6 +2379,7 @@
             var $rule = $model_content.find('#model-uucss-rules')
             var $url = $model_content.find('.rule-base-url')
             var $regex = $model_content.find('.rule-url-regex')
+            var $regenerate = $model_content.find('#force-requeue-rule')
 
             if($rule.val() === "" || $url.val() === "" || $regex.val() === ""){
                 $.uucssAlert('Required fields missing', 'error');
@@ -2401,7 +2402,8 @@
                 regex : $regex.val(),
                 old_rule : $model_content.data('old_rule'),
                 old_url : $model_content.data('old_base_url'),
-                old_regex : $model_content.data('old_rule_regex')
+                old_regex : $model_content.data('old_rule_regex'),
+                requeue : $regenerate.is(':checked') ? "1" : "0"
             }).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();
@@ -2487,7 +2489,7 @@
 
         var $updateRuleForm = $('#add_rule_featherlight_content');
 
-        $updateRuleForm.find('select').change(function(){
+        /*$updateRuleForm.find('select').change(function(){
             var permalink = $updateRuleForm.find('option[data-type="'+ $(this).val() + '"]').data('permalink')
             if(permalink){
                 $('#add_rule_featherlight_content input.rule-base-url').focus().val('').val(permalink);
@@ -2495,7 +2497,7 @@
         })
 
         $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
-
+*/
         function updateRapidLoadStatus(){
             wp.ajax.post('uucss_status').then(function(res){
                 if(res){

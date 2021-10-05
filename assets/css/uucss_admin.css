@@ -1315,13 +1315,20 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
 }
 
 .featherlight.add-site-rule-model .featherlight-content div.action-content div label{
-    width: 75px;
+    width: 110px;
 }
 
 .featherlight.add-site-rule-model .featherlight-content{
-    height: 205px;
+    height: 230px;
     width: 400px;
     padding: 20px 20px;
+}
+
+.featherlight.add-site-rule-model .featherlight-content #force-requeue-rule{
+    width: 18px;
+    line-height: 35px;
+    margin-left: -25px;
+    height: 20px;
 }
 
 .featherlight.add-site-url-model.show-url .featherlight-content{

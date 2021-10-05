@@ -781,6 +781,12 @@
             <input type="text" class="rule-url-regex"
                    placeholder="*/slug/*" value="/">
         </div>
+        <div>
+            <label for="orce-requeue-rule">
+                <strong>Regenerate</strong>
+            </label>
+            <input type="checkbox" id="force-requeue-rule" style="width:20px">
+        </div>
         <div class="add-action-wrap">
             <input id="model-update-rule" type="button" class="button button-primary" value="Update Rule">
         </div>

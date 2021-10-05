@@ -394,8 +394,11 @@ abstract class UnusedCSS_Admin {
 
                 if(isset($_REQUEST['old_url']) && $_REQUEST['old_url'] != $url ||
                     $_REQUEST['old_rule'] != $rule || $_REQUEST['old_regex'] != $regex){
-                    $ruleObject->requeue();
-                    $ruleObject->releaseRule();
+                    if(isset($_REQUEST['requeue']) && $_REQUEST['requeue'] == "1"){
+                        error_log($_REQUEST['requeue']);
+                        $ruleObject->requeue();
+                        $ruleObject->releaseRule();
+                    }
                 }
 
                 $ruleObject->url = $url;
