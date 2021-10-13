@@ -834,7 +834,11 @@ abstract class UnusedCSS_Admin {
             'wp-util'
         ), UUCSS_VERSION );
 
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
+        $dependant_styles = apply_filters('uucss/styles/deregister',[
+            'stm-admin-vmc-style'
+        ]);
+
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', $dependant_styles, UUCSS_VERSION );
 
         global $rapidload;
 
