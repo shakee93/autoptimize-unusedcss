@@ -834,11 +834,15 @@ abstract class UnusedCSS_Admin {
             'wp-util'
         ), UUCSS_VERSION );
 
-        $dependant_styles = apply_filters('uucss/styles/deregister',[
-            'stm-admin-vmc-style'
-        ]);
+        $deregister_styles = apply_filters('uucss/styles/deregister',[]);
 
-        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', $dependant_styles, UUCSS_VERSION );
+        if(isset($deregister_styles) && is_array($deregister_styles)){
+            foreach ($deregister_styles as $deregister_style){
+                wp_dequeue_style($deregister_style);
+            }
+        }
+
+        wp_enqueue_style( 'uucss_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_admin.css', [], UUCSS_VERSION );
 
         global $rapidload;
 

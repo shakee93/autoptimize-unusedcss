@@ -61,7 +61,7 @@ abstract class UnusedCSS_Job
 
     public function requeue($attempts = -1){
         $this->status = 'queued';
-        $this->attempts = $attempts >=0 ? $attempts : $this->attempts++;
+        $this->attempts = $attempts >=0 ? $attempts : $this->attempts + 1;
         $this->files = null;
         $this->hits = 0;
         $this->stats = null;
