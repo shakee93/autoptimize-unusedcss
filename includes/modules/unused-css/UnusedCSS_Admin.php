@@ -596,7 +596,7 @@ abstract class UnusedCSS_Admin {
             return;
         }
 
-        if(get_current_screen() && get_current_screen()->base == 'rapidload_page_rapidload'){
+        if(get_current_screen() && get_current_screen()->base == 'settings_page_uucss'){
             return;
         }
 

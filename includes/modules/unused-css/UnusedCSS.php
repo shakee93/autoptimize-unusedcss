@@ -828,6 +828,10 @@ abstract class UnusedCSS {
 
 	public function init_log_dir(){
 
+        if(!self::get_log_option()){
+            return false;
+        }
+
         if ( $this->file_system->exists( UUCSS_LOG_DIR ) ) {
             return true;
         }
