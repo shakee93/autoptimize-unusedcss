@@ -162,6 +162,8 @@ class CriticalCSS_Enqueue
                 return;
             }
 
+            $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content);
+
             $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
 
             if(isset($this->dom->find( 'title' )[0])){

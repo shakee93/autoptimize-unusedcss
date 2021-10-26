@@ -96,6 +96,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.19 - 26/10/2021 =
+ * feat: add filter to deregister backend styles
+ * fix: disable requeue on warnings not working
+ * fix: creating empty folders for debug logs
+ * fix: Fatal error:  Uncaught TypeError: count()
+
 = 1.6.18 - 05/10/2021 =
  * feat: add Ninja Forms plugin support
  * improve: exclude woocommerce dynamic pages

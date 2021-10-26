@@ -59,6 +59,15 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
             }
             return $args;
         });
+
+        add_filter('rapidload/cpcss/minify', function ($css){
+
+            if(class_exists('autoptimizeCSSmin')){
+                return autoptimizeCSSmin::minify($css);
+            }
+
+            return $css;
+        });
     }
 
     public function addNotifications($notifications) {

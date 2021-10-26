@@ -551,7 +551,7 @@ abstract class UnusedCSS {
 
                 $files = $data->get_files();
 
-                if (count($files) > 0 ) {
+                if (is_array($files) && count($files) > 0 ) {
 
                     $this->frontend_scripts([
                         'files' => $files
