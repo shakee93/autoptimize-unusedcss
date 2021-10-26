@@ -97,6 +97,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.19 - 26/10/2021 =
+ * feat: minify additional critical css defined
  * feat: add filter to deregister backend styles
  * fix: disable requeue on warnings not working
  * fix: creating empty folders for debug logs
