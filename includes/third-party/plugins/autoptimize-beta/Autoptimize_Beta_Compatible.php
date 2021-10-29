@@ -63,7 +63,11 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
         add_filter('rapidload/cpcss/minify', function ($css){
 
             if(class_exists('autoptimizeCSSmin')){
-                return autoptimizeCSSmin::minify($css);
+                $css = autoptimizeCSSmin::minify($css);
+            }
+
+            if(class_exists('autoptimizeImages') && autoptimizeImages::instance()->should_lazyload()){
+                $css = str_replace(".lazyload{display:none}","", $css);
             }
 
             return $css;
