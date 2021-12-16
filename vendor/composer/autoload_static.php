@@ -22,6 +22,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'CriticalCSS_Store' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Store.php',
         'Elementor_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
         'GoogleModPageSpeedCompatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
+        'HideMyWP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/hide-my-wp/HideMyWP_Compatible.php',
         'Kinsta_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
         'LiteSpeed_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
         'Nginx_Helper_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',

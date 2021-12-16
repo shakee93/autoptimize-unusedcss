@@ -21,6 +21,7 @@ return array(
     'CriticalCSS_Store' => $baseDir . '/includes/modules/critical-css/CriticalCSS_Store.php',
     'Elementor_Compatible' => $baseDir . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
     'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
+    'HideMyWP_Compatible' => $baseDir . '/includes/third-party/plugins/hide-my-wp/HideMyWP_Compatible.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',

@@ -244,7 +244,8 @@ class UnusedCSS_Enqueue {
                         if(RapidLoad_Enqueue::$frontend_debug){
                             $sheet->uucss = true;
                         }
-                        $sheet->href  = $newLink;
+
+                        $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
