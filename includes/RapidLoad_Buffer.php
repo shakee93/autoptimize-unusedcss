@@ -18,7 +18,7 @@ class RapidLoad_Buffer
 
         do_action( 'rapidload_before_maybe_process_buffer', $buffer );
 
-        if ( ! $this->is_html( $buffer ) ) {
+        if ( ! $this->is_html( $buffer ) && apply_filters('rapidload_buffer_is_html', true) ) {
             return $buffer;
         }
 
