@@ -97,7 +97,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.20 - 26/10/2021 =
- * fix: rapidload table's not creating in multi site setup
+ * fix: rapidload table's not creating in wordpress multi site setup
 
 = 1.6.19 - 26/10/2021 =
  * feat: minify additional critical css
