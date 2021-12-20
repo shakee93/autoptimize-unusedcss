@@ -138,7 +138,7 @@ abstract class RapidLoad_DB
     }
 
     static function update_db_version(){
-        self::$current_version = RapidLoad_Base::get_option( self::$db_option , self::$db_version);
+        self::$current_version = RapidLoad_Base::get_option( self::$db_option , "0");
     }
 
     static function check_db_updates(){
