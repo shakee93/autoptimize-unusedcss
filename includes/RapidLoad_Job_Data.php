@@ -95,7 +95,7 @@ class RapidLoad_Job_Data{
 
         global $wpdb;
 
-        return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $this->job_type ."' AND job_id = '" . $this->job_id . "'", OBJECT);
+        return $wpdb->get_row("SELECT * FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $this->job_type ."' AND job_id = '" . $this->job_id . "' ORDER BY id LIMIT 1", OBJECT);
 
     }
 

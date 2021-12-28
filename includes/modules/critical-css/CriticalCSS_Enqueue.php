@@ -71,6 +71,14 @@ class CriticalCSS_Enqueue
 
         $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data);
 
+        if(!$file_exist){
+            self::log([
+                'type' => 'injection',
+                'url' => $this->job_data->job->url,
+                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-failed-file-not-exist'
+            ]);
+        }
+
         if(!$file_exist &&
             $this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400) {
             $this->job_data->requeue();

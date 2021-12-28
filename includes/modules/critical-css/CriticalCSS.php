@@ -313,7 +313,7 @@ class CriticalCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing']) || isset( $args['immediate'])){
+        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate'])){
             $this->job_data->requeue(isset( $args['immediate']) ? 0 : -1);
             $this->job_data->save();
         }
