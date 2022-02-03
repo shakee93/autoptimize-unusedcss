@@ -31,6 +31,11 @@ class UnusedCSS_Enqueue {
         if(isset($this->data)){
 
             $this->files = $this->data->get_files();
+
+            if(!isset($this->files) || !$this->files){
+                $this->files = [];
+            }
+
             $this->warnings = $this->data->get_warnings();
 
         }
