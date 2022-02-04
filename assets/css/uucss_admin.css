@@ -684,7 +684,7 @@ li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-opti
 }
 
 .tippy-box[data-theme~=light] {
-
+    opacity: 1;
 }
 
 .tippy-box[data-theme~=light] > .tippy-content {
