@@ -96,7 +96,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.6.22 - 03/02/2021 =
+= 1.6.22 - 26/10/2021 =
+ * feat : tested upto wordpress version 5.9
+ * fix : PHP Warning - array_column() expects parameter 1 to be array, bool given
+
+= 1.6.21 - 26/10/2021 =
  * feat : tested upto wordpress version 5.9
  * fix : PHP Warning - array_column() expects parameter 1 to be array, bool given
 
