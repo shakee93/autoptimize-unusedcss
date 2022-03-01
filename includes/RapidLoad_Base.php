@@ -113,7 +113,11 @@ class RapidLoad_Base
 
         });
 
-        add_action('admin_bar_menu', function (){
+        add_action('init', function (){
+
+            if(!is_admin()){
+                return;
+            }
 
             global $post;
 
