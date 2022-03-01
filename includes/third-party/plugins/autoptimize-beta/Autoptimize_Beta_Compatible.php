@@ -72,6 +72,10 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
             return $css;
         });
+
+        add_filter('uucss/enqueue/cache-file-url/cdn', function ($default){
+            return autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
+        }, 10 , 1);
     }
 
     public function addNotifications($notifications) {

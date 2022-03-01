@@ -41,7 +41,7 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         },10,2);
 
         add_filter('uucss/enqueue/cache-file-url', function ($uucss_file){
-            return $this->get_cached_file($uucss_file, null);
+            return $this->get_cached_file($uucss_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
         new UnusedCSS_RapidLoad_Admin( $this );
