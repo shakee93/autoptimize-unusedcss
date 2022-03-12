@@ -137,6 +137,16 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if(isset($sheet->href) && apply_filters('rapidload/cpcss/noscript/disable', false)){
+                continue;
+            }
+
+            $data_norapidload = "data-norapidload";
+
+            if(isset($sheet->$data_norapidload)){
+                continue;
+            }
+
             $outer_text = $sheet->outertext;
             $sheet->onload = 'this.onload=null;this.media="' . $sheet->media . '";';
             $sheet->media = 'print';
