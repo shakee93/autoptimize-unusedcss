@@ -137,7 +137,7 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if(isset($sheet->href) && apply_filters('rapidload/cpcss/noscript/disable', false)){
+            if(isset($sheet->href) && apply_filters('rapidload/cpcss/noscript/disable', false, $sheet->href)){
                 continue;
             }
 

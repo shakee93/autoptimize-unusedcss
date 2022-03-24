@@ -43,6 +43,26 @@ class RapidLoad_Base
 
             add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
+            add_filter('uucss/cache-base-dir', function ($dir){
+
+                if(function_exists('is_multisite') && is_multisite()){
+
+                    $excludes = ["http://","https://"];
+
+                    $url = get_site_url();
+
+                    foreach ($excludes as $exclude){
+                        $url = str_replace($exclude, "", $url);
+                    }
+
+                    return $dir . $url . "/";
+
+                }
+
+                return $dir;
+
+            }, 10 , 1);
+
             $this->add_plugin_update_message();
 
             RapidLoad_DB::update_db_version();
