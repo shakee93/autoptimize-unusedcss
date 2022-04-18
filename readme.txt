@@ -98,7 +98,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 = 1.6.23 - 18/04/2022 =
  * feat : tested upto wordpress version 5.9
- * feat : improve support for multi sites environment
+ * improve : support for multi sites environment
 
 = 1.6.22 - 03/02/2022 =
  * feat : tested upto wordpress version 5.9
