@@ -28,7 +28,9 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
 
         parent::__construct();
 
-        add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
+        if(apply_filters('uucss/enable/notfound_fallback', true)){
+            add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
+        }
 
         if(is_admin()){
             new UnusedCSS_RapidLoad_Onboard( $this );
@@ -50,8 +52,12 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
     public function uucss_notfound_fallback() {
 
         $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
+        $original_path = WP_CONTENT_DIR . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' . "/" . basename($original_request);
 
-        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . UUCSS_CACHE_CHILD_DIR ) !== false && is_404() ) {
+        $options = RapidLoad_Base::fetch_options(false);
+
+        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
+            && !file_exists($original_path) && isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1") {
 
             global $wp_query;
             $wp_query->is_404 = false;
