@@ -25,7 +25,7 @@ class CriticalCSS_Queue
 
         global $wpdb;
 
-        $links = CriticalCSS_DB::get_data(' job_id ', " WHERE status = 'queued' AND job_id NOT IN (SELECT id from {$wpdb->prefix}rapidload_job WHERE rule = 'is_url' AND status = 'rule-based' ) ", RapidLoad_Queue::$job_count - $current_waiting);
+        $links = CriticalCSS_DB::get_data(' job_id ', " WHERE status = 'queued' ", RapidLoad_Queue::$job_count - $current_waiting);
 
         if(!empty($links)){
 

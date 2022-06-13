@@ -312,7 +312,7 @@ abstract class RapidLoad_DB
 
             case 'url':{
                 if(isset($args['url'])){
-                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE url ='" . $args['url'] . "'");
+                    $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE url ='" . $args['url'] . "' and rule = 'is_url'");
                 }else{
                     $wpdb->query( "DELETE FROM {$wpdb->prefix}rapidload_job WHERE rule ='is_url'");
                 }
