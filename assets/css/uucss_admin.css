@@ -1501,3 +1501,7 @@ table#uucss-options tbody tr td{
     width: 100%;
     background: #7f54b3;
 }
+
+.uucss-banner .banner-footer a:hover{
+    background: #674399;
+}
