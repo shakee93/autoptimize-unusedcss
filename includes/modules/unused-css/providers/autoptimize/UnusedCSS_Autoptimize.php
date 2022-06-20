@@ -68,6 +68,13 @@ class UnusedCSS_Autoptimize extends UnusedCSS {
             if(file_exists(ABSPATH . PLUGINDIR . '/autoptimize-beta/autoptimize.php')){
                 return;
             }
+
+            $url = $this->get_current_url();
+
+            if(strpos($url, 'page=uucss') !== false ){
+                return;
+            }
+
             $notice = [
 	            'action'  => 'on-board',
 	            'title'   => 'RapidLoad Power Up',

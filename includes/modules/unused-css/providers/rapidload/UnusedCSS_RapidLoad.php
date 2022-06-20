@@ -84,6 +84,13 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         if(UnusedCSS_Admin::is_api_key_verified()) {
             $this->deps_available = true;
         }else {
+
+            $url = $this->get_current_url();
+
+            if(strpos($url, 'page=uucss') !== false ){
+                return;
+            }
+
             $notice = [
                 'action'  => 'on-board',
                 'title'   => 'RapidLoad Power Up',

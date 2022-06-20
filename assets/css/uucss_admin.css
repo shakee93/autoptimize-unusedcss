@@ -1465,3 +1465,39 @@ table#uucss-options tbody tr td{
 .featherlight.uucss-rule-stats .rule-stats-cont .duplicate-file-item div .tippy-box{
     max-width: 500px!important;
 }
+
+.uucss-banner-section{
+
+}
+
+.uucss-banner{
+    max-width: 200px;
+    width: 100%;
+    padding: 12px 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 13px;
+    margin-left: 20px;
+}
+
+.uucss-banner .banner-title{
+    text-align: center;
+}
+
+.uucss-banner .banner-image{
+    text-align: center;
+}
+
+.uucss-banner .banner-content{
+    text-align: center;
+}
+
+.uucss-banner .banner-footer{
+    text-align: center;
+}
+
+.uucss-banner .banner-footer a{
+    display: block;
+    width: 100%;
+    background: #7f54b3;
+}

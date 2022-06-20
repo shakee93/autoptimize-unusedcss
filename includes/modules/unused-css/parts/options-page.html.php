@@ -22,7 +22,7 @@
     $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_debug_mode);
 
 	?>
-    <div>
+    <div style="display: flex">
         <ul id="uucss-wrapper">
             <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
@@ -702,6 +702,42 @@
 			<?php endif; ?>
 
         </ul>
+        <div class="uucss-banner-section">
+            <div class="uucss-banner">
+                <div class="banner-title">
+                    <?php if(!$api_key_verified): ?>
+
+                        <h2>Get RapidLoad free for a month</h2>
+
+                    <?php else: ?>
+
+                        <h2>Get a $60 in cash back</h2>
+
+                    <?php endif; ?>
+                </div>
+                <div class="banner-image">
+                    <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/referral.svg' ?>" alt="" width="120px">
+                </div>
+                <div class="banner-content">
+                    <?php if(!$api_key_verified): ?>
+
+                        <p>refer-a-friend and give 10% off to your friend, get RapidLoad free for a month.</p>
+                        <p><a href="https://rapidload.io/referral-program-free-month" target="_blank">Learn More</a></p>
+
+                    <?php else: ?>
+
+                        <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
+                        <p><a href="https://rapidload.io/referral-program" target="_blank">Learn More</a></p>
+
+                    <?php endif; ?>
+
+
+                </div>
+                <div class="banner-footer">
+                    <a href="https://app.rapidload.io" class="button button-primary" target="_blank"> Invite</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="uucss-support">
