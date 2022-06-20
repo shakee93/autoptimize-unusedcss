@@ -23,7 +23,11 @@
             <li uucss-option-id="3">
                 <input type="radio" name="uucss-deactivate-option" id="uucss_feedback3">
                 <label for="uucss_feedback3">
-                    I am not willing to pay for this plugin </label>
+                    I am not willing to pay for this plugin<br>
+                    <a href="https://rapidload.io" target="_blank" style="font-size: 10px" id="rapidload-free-month-link">
+                        Get a <strong style="display: inline;font-size: 11px">FREE</strong> month of <strong style="display: inline;font-size: 11px">RapidLoad</strong>
+                    </a>
+                </label>
             <li uucss-option-id="999">
                 <input type="radio" name="uucss-deactivate-option" id="uucss_feedback999">
                 <label for="uucss_feedback999">

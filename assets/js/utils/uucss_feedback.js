@@ -89,5 +89,9 @@
                 }
             });
         });
+
+        $('#rapidload-free-month-link').click(function (){
+            window.open($(this).attr('href'), '_blank').focus();
+        })
     });
 })(jQuery);
