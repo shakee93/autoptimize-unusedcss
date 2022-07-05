@@ -15,10 +15,141 @@ class RapidLoad_Admin
             add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
             add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
             add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
+            add_action('wp_ajax_update_cloudflare_settings', [$this, 'update_cloudflare_settings']);
+            add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
 
         }
 
         add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+        add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
+    }
+
+    public function inject_cloudflare_settings($data){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(isset($options['cf_email']) && isset($options['cf_token']) && isset($options['cf_zone_id'])){
+            $data['cloudflare'] = [
+              'auth_email' => $options['cf_email'],
+              'zone_id' => $options['cf_zone_id'],
+              'token' => $options['cf_token'],
+            ];
+        }
+
+        return $data;
+
+    }
+
+    public function update_cloudflare_settings(){
+
+        if(!isset($_REQUEST['token']) || !isset($_REQUEST['email']) || !isset($_REQUEST['zone_id']) ||
+            empty($_REQUEST['token']) || empty($_REQUEST['email']) || empty($_REQUEST['zone_id'])){
+
+            wp_send_json_error([
+                'message' => 'required field missing'
+            ]);
+
+        }
+
+        if(strlen($_REQUEST['token']) != 37 && strlen($_REQUEST['token']) != 40){
+
+            wp_send_json_error([
+                'message' => 'invalid token'
+            ]);
+        }
+
+        $options = RapidLoad_Base::fetch_options();
+
+        $options['cf_email'] = $_REQUEST['email'];
+        $options['cf_token'] = $_REQUEST['token'];
+        $options['cf_zone_id'] = $_REQUEST['zone_id'];
+        $options['cf_is_dev_mode'] = isset($_REQUEST['is_dev_mode']) && $_REQUEST['is_dev_mode'] == "1" ? $_REQUEST['is_dev_mode'] : null;
+
+        $uucss_api = new RapidLoad_Api();
+
+        $response = $uucss_api->post('cloudflare-credentials',[
+            'email' => $options['cf_email'],
+            'token' => $options['cf_token'],
+            'zone_id' => $options['cf_zone_id'],
+            'is_dev_mode' => $options['cf_is_dev_mode'],
+        ]);
+
+        if($uucss_api->is_error($response)){
+            wp_send_json_error($uucss_api->extract_error($response));
+        }
+
+        wp_remote_request('https://api.cloudflare.com/client/v4/zones/'. $options['cf_zone_id'] .'/settings/development_mode',[
+            'method'     => 'PATCH',
+            'headers' => [
+                'X-Auth-Email' => $options['cf_email'],
+                'Authorization' => 'Bearer ' . $options['cf_token'],
+                'Content-Type' => 'application/json'
+            ],
+            'body' => json_encode((object)[
+                'value' => $options['cf_is_dev_mode'] ? 'on' : 'off'
+            ])
+        ]);
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
+
+        wp_send_json_success(true);
+    }
+
+    public function render_cloudflare_settings(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        ?>
+
+        <li>
+            <h2>
+                Cloudflare Settings
+                <span class="uucss-toggle-section rotate">
+                    <span class="dashicons dashicons-arrow-up-alt2"></span>
+                </span>
+            </h2>
+            <div class="content" style="display: none; ">
+                <table class="cf-table">
+                    <tr>
+                        <td style="width: 150px">
+                            <label for="cloudflare-api-key">Api Token</label>
+                        </td>
+                        <td>
+                            <input type="text" name="cloudflare-api-key" id="cloudflare-api-key" style="width: 450px" value="<?php if(isset($options['cf_token'])) : echo $options['cf_token']; endif; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="cloudflare-account-email" >Account Email</label>
+                        </td>
+                        <td>
+                            <input type="text" name="cloudflare-account-email" id="cloudflare-account-email" style="width: 350px" value="<?php if(isset($options['cf_email'])) : echo $options['cf_email']; endif; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="cloudflare-zone-id">Zone ID</label>
+                        </td>
+                        <td>
+                            <input type="text" name="cloudflare-zone-id" id="cloudflare-zone-id" style="width: 350px" value="<?php if(isset($options['cf_zone_id'])) : echo $options['cf_zone_id']; endif; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="cloudflare-dev-mode">Development Mode</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="cloudflare-dev-mode" id="cloudflare-dev-mode" value="1" <?php if(isset($options['cf_is_dev_mode']) && $options['cf_is_dev_mode'] == "1") : echo 'checked'; endif; ?>>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <input class="button button-primary" type="button" value="Update" id="cloudflare-settings-update">
+                </div>
+            </div>
+        </li>
+
+        <?php
     }
 
     public function upload_rules(){

@@ -223,6 +223,34 @@
                 }
             })
         })
+
+        $('#cloudflare-settings-update').click(function (e){
+
+            var data = {
+                action : 'update_cloudflare_settings',
+                email : $('#cloudflare-account-email').val(),
+                token : $('#cloudflare-api-key').val(),
+                zone_id : $('#cloudflare-zone-id').val(),
+            }
+
+            if($('#cloudflare-dev-mode').is(':checked')){
+                data.is_dev_mode = "1"
+            }
+
+
+            $.ajax({
+                url : uucss.ajax_url,
+                method : 'POST',
+                data : data,
+                success : function(response){
+                    if(response.success){
+                        $.uucssAlert("Successfully updated", 'success')
+                    }else{
+                        $.uucssAlert(response?.data?.message, 'error')
+                    }
+                }
+            })
+        });
     });
 
 }(jQuery))

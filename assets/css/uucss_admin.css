@@ -1505,3 +1505,11 @@ table#uucss-options tbody tr td{
 .uucss-banner .banner-footer a:hover{
     background: #674399;
 }
+
+.cf-table{
+    margin-bottom: 20px;
+ }
+
+.cf-table td{
+    padding: 5px;
+}

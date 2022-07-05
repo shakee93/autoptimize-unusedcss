@@ -520,6 +520,8 @@
                     </div>
                 </li>
 
+                <?php do_action('uucss/options/after_settings_section'); ?>
+
                 <li class="rapidload-status">
                     <h2>RapidLoad Status
                         <span class="uucss-toggle-section rotate">
@@ -711,7 +713,7 @@
 
                     <?php else: ?>
 
-                        <h2>Get a $60 in cash back</h2>
+                        <h2>Get up to $60 in cash back</h2>
 
                     <?php endif; ?>
                 </div>
@@ -722,19 +724,28 @@
                     <?php if(!$api_key_verified): ?>
 
                         <p>refer-a-friend and give 10% off to your friend, get RapidLoad free for a month.</p>
-                        <p><a href="https://rapidload.io/referral-program-free-month" target="_blank">Learn More</a></p>
+                        <p><a href="https://rapidload.io/referral-free-month" target="_blank">Learn More</a></p>
 
                     <?php else: ?>
 
                         <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
-                        <p><a href="https://rapidload.io/referral-program" target="_blank">Learn More</a></p>
+                        <p><a href="https://rapidload.io/referral" target="_blank">Learn More</a></p>
 
                     <?php endif; ?>
 
 
                 </div>
                 <div class="banner-footer">
-                    <a href="https://app.rapidload.io" class="button button-primary" target="_blank"> Invite</a>
+                    <?php if(!$api_key_verified): ?>
+
+                        <a href="https://app.rapidload.io/on-board/?referral=1" class="button button-primary" target="_blank">Invite</a>
+
+                    <?php else: ?>
+
+                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.preview.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
+
+                    <?php endif; ?>
+
                 </div>
             </div>
         </div>
