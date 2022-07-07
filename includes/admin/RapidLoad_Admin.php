@@ -15,7 +15,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
             add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
             add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
-            add_action('wp_ajax_update_cloudflare_settings', [$this, 'update_cloudflare_settings']);
+            add_action('updated_option', [$this, 'update_cloudflare_settings'], 10, 3 );
             add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
 
         }
@@ -28,74 +28,51 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
-        if(isset($options['cf_email']) && isset($options['cf_token']) && isset($options['cf_zone_id'])){
-            $data['cloudflare'] = [
-              'auth_email' => $options['cf_email'],
-              'zone_id' => $options['cf_zone_id'],
-              'token' => $options['cf_token'],
-            ];
+        if(isset($options['cf_bot_toggle_mode']) && $options['cf_bot_toggle_mode'] == "1"){
+
+            if(isset($options['cf_email']) && isset($options['cf_token']) && isset($options['cf_zone_id'])){
+                $data['cloudflare'] = [
+                    'auth_email' => $options['cf_email'],
+                    'zone_id' => $options['cf_zone_id'],
+                    'token' => $options['cf_token'],
+                ];
+            }
+
         }
 
         return $data;
 
     }
 
-    public function update_cloudflare_settings(){
+    public function update_cloudflare_settings( $option, $old_value, $value ){
 
-        if(!isset($_REQUEST['token']) || !isset($_REQUEST['email']) || !isset($_REQUEST['zone_id']) ||
-            empty($_REQUEST['token']) || empty($_REQUEST['email']) || empty($_REQUEST['zone_id'])){
+        if ( $option != 'autoptimize_uucss_settings' ) {
+            return;
+        }
 
-            wp_send_json_error([
-                'message' => 'required field missing'
+        if(isset($value['cf_token']) && isset($value['cf_email']) && isset($value['cf_zone_id'])){
+
+            wp_remote_request('https://api.cloudflare.com/client/v4/zones/'. $value['cf_zone_id'] .'/settings/development_mode',[
+                'method'     => 'PATCH',
+                'headers' => [
+                    'X-Auth-Email' => $value['cf_email'],
+                    'Authorization' => 'Bearer ' . $value['cf_token'],
+                    'Content-Type' => 'application/json'
+                ],
+                'body' => json_encode((object)[
+                    'value' => isset($value['cf_is_dev_mode']) && $value['cf_is_dev_mode'] == "1" ? 'on' : 'off'
+                ])
             ]);
 
         }
 
-        if(strlen($_REQUEST['token']) != 37 && strlen($_REQUEST['token']) != 40){
-
-            wp_send_json_error([
-                'message' => 'invalid token'
-            ]);
-        }
-
-        $options = RapidLoad_Base::fetch_options();
-
-        $options['cf_email'] = $_REQUEST['email'];
-        $options['cf_token'] = $_REQUEST['token'];
-        $options['cf_zone_id'] = $_REQUEST['zone_id'];
-        $options['cf_is_dev_mode'] = isset($_REQUEST['is_dev_mode']) && $_REQUEST['is_dev_mode'] == "1" ? $_REQUEST['is_dev_mode'] : null;
-
-        $uucss_api = new RapidLoad_Api();
-
-        $response = $uucss_api->post('cloudflare-credentials',[
-            'email' => $options['cf_email'],
-            'token' => $options['cf_token'],
-            'zone_id' => $options['cf_zone_id'],
-            'is_dev_mode' => $options['cf_is_dev_mode'],
-        ]);
-
-        if($uucss_api->is_error($response)){
-            wp_send_json_error($uucss_api->extract_error($response));
-        }
-
-        wp_remote_request('https://api.cloudflare.com/client/v4/zones/'. $options['cf_zone_id'] .'/settings/development_mode',[
-            'method'     => 'PATCH',
-            'headers' => [
-                'X-Auth-Email' => $options['cf_email'],
-                'Authorization' => 'Bearer ' . $options['cf_token'],
-                'Content-Type' => 'application/json'
-            ],
-            'body' => json_encode((object)[
-                'value' => $options['cf_is_dev_mode'] ? 'on' : 'off'
-            ])
-        ]);
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
-
-        wp_send_json_success(true);
     }
 
     public function render_cloudflare_settings(){
+
+        if(apply_filters('rapidload/cloudflare/bot-fight-mode/disable', true)){
+            return;
+        }
 
         $options = RapidLoad_Base::fetch_options();
 
@@ -111,11 +88,19 @@ class RapidLoad_Admin
             <div class="content" style="display: none; ">
                 <table class="cf-table">
                     <tr>
+                        <td>
+                            <label for="cloudflare-dev-mode">Enable Bot toggle mode</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="autoptimize_uucss_settings[cf_bot_toggle_mode]" id="cf_bot_toggle_mode" value="1" <?php if(isset($options['cf_bot_toggle_mode']) && $options['cf_bot_toggle_mode'] == "1") : echo 'checked'; endif; ?>>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="width: 150px">
                             <label for="cloudflare-api-key">Api Token</label>
                         </td>
                         <td>
-                            <input type="text" name="cloudflare-api-key" id="cloudflare-api-key" style="width: 450px" value="<?php if(isset($options['cf_token'])) : echo $options['cf_token']; endif; ?>">
+                            <input type="text" name='autoptimize_uucss_settings[cf_token]' id="cf_token" style="width: 450px" value="<?php if(isset($options['cf_token'])) : echo $options['cf_token']; endif; ?>">
                         </td>
                     </tr>
                     <tr>
@@ -123,7 +108,7 @@ class RapidLoad_Admin
                             <label for="cloudflare-account-email" >Account Email</label>
                         </td>
                         <td>
-                            <input type="text" name="cloudflare-account-email" id="cloudflare-account-email" style="width: 350px" value="<?php if(isset($options['cf_email'])) : echo $options['cf_email']; endif; ?>">
+                            <input type="text" name="autoptimize_uucss_settings[cf_email]" id="cf_email" style="width: 350px" value="<?php if(isset($options['cf_email'])) : echo $options['cf_email']; endif; ?>">
                         </td>
                     </tr>
                     <tr>
@@ -131,7 +116,7 @@ class RapidLoad_Admin
                             <label for="cloudflare-zone-id">Zone ID</label>
                         </td>
                         <td>
-                            <input type="text" name="cloudflare-zone-id" id="cloudflare-zone-id" style="width: 350px" value="<?php if(isset($options['cf_zone_id'])) : echo $options['cf_zone_id']; endif; ?>">
+                            <input type="text" name="autoptimize_uucss_settings[cf_zone_id]" id="cf_zone_id" style="width: 350px" value="<?php if(isset($options['cf_zone_id'])) : echo $options['cf_zone_id']; endif; ?>">
                         </td>
                     </tr>
                     <tr>
@@ -139,13 +124,10 @@ class RapidLoad_Admin
                             <label for="cloudflare-dev-mode">Development Mode</label>
                         </td>
                         <td>
-                            <input type="checkbox" name="cloudflare-dev-mode" id="cloudflare-dev-mode" value="1" <?php if(isset($options['cf_is_dev_mode']) && $options['cf_is_dev_mode'] == "1") : echo 'checked'; endif; ?>>
+                            <input type="checkbox" name="autoptimize_uucss_settings[cf_is_dev_mode]" id="cf_is_dev_mode" value="1" <?php if(isset($options['cf_is_dev_mode']) && $options['cf_is_dev_mode'] == "1") : echo 'checked'; endif; ?>>
                         </td>
                     </tr>
                 </table>
-                <div>
-                    <input class="button button-primary" type="button" value="Update" id="cloudflare-settings-update">
-                </div>
             </div>
         </li>
 
