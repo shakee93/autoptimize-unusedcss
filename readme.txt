@@ -3,7 +3,7 @@ Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
 Requires at least: 4.0
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
@@ -95,6 +95,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 4. RapidLoad options.
 
 == Changelog ==
+
+= 1.6.24 - 12/07/2022 =
+ * feat : tested upto wordpress version 6.0
+ * fix : CSS (410 Gone)
+ * fix :
+ * improve : critical css
 
 = 1.6.23 - 18/04/2022 =
  * feat : tested upto wordpress version 5.9

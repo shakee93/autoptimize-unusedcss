@@ -741,7 +741,7 @@
 
                     <?php else: ?>
 
-                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.preview.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
+                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
 
                     <?php endif; ?>
 
