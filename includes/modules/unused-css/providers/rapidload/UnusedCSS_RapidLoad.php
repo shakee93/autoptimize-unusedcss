@@ -57,7 +57,9 @@ class UnusedCSS_RapidLoad extends UnusedCSS {
         $options = RapidLoad_Base::fetch_options(false);
 
         if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
-            && !file_exists($original_path) && isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1") {
+            && !file_exists($original_path)
+            //&& isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1"
+        ) {
 
             global $wp_query;
             $wp_query->is_404 = false;
