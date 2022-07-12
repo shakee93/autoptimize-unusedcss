@@ -728,7 +728,7 @@
                     <?php else: ?>
 
                         <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
-                        <p><a href="https://rapidload.io/referral" target="_blank">Learn More</a></p>
+                        <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
 
                     <?php endif; ?>
 
@@ -737,7 +737,7 @@
                 <div class="banner-footer">
                     <?php if(!$api_key_verified): ?>
 
-                        <a href="https://rapidload.io/referral-free-month" class="button button-primary free-month-link" target="_blank">Invite</a>
+                        <a href="https://rapidload.io/referral-free-month/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" class="button button-primary free-month-link" target="_blank">Invite</a>
 
                     <?php else: ?>
 
