@@ -97,10 +97,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.24 - 12/07/2022 =
- * feat : tested upto wordpress version 6.0
- * fix : CSS (410 Gone)
- * fix :
- * improve : critical css
+ * feat : tested up-to Wordpress version 6.0
+ * feat : don't clear inlined critical CSS on user-interaction
+ * feat: added referral program
+ * fix : throws 410 gone when unused css file cannot find the original css file on some cases
+ * fix : rules gets deleted when jobs gets deleted
 
 = 1.6.23 - 18/04/2022 =
  * feat : tested upto wordpress version 5.9
