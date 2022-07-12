@@ -724,7 +724,6 @@
                     <?php if(!$api_key_verified): ?>
 
                         <p>refer-a-friend and give 10% off to your friend, get RapidLoad free for a month.</p>
-                        <p><a href="https://rapidload.io/referral-free-month" target="_blank">Learn More</a></p>
 
                     <?php else: ?>
 
@@ -738,7 +737,7 @@
                 <div class="banner-footer">
                     <?php if(!$api_key_verified): ?>
 
-                        <a href="https://app.rapidload.io/on-board/?referral=1" class="button button-primary" target="_blank">Invite</a>
+                        <a href="https://rapidload.io/referral-free-month" class="button button-primary free-month-link" target="_blank">Invite</a>
 
                     <?php else: ?>
 

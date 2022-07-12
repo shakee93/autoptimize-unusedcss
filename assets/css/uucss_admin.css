@@ -1500,10 +1500,19 @@ table#uucss-options tbody tr td{
     display: block;
     width: 100%;
     background: #7f54b3;
+    border-color: #674399;
+    box-shadow: none;
 }
 
-.uucss-banner .banner-footer a:hover{
+.uucss-banner .banner-footer a.free-month-link{
+    margin-top: 45px;
+}
+
+.uucss-banner .banner-footer a:hover, .uucss-banner .banner-footer a:active, .uucss-banner .banner-footer a:focus{
     background: #674399;
+    border-color: #674399;
+    box-shadow: none;
+
 }
 
 .cf-table{
