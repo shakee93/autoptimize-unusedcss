@@ -192,6 +192,40 @@
             updateInput();
         }
 
+        wp.ajax.post('uucss_license').then(function (i) {
+
+            var seconds = Math.floor((new Date(i.next_billing * 1000) - new Date() ) / 1000);
+
+            var interval = seconds / 86400;
+
+            if(interval < 0){
+
+                var content = `<div class="uucss-notice-action notice notice-action notice-action-on-board notice-info">
+                                  <div class="notice-action-inner">
+                                    <div class="notice-icon">
+                                        <div class="logo-wrapper">
+                                            <img src="http://dev.rapidload.local/wp-content/plugins/autoptimize-unusedcss/assets/images/logo-icon.svg" width="40" alt="RapidLoad logo">
+                                        </div>
+                                    </div>
+                                    <div class="notice-icon-content">
+                                       <h2 class="uucss-notice-title">You are missing out RapidLoad benefits</h2>
+                                        <p>RapidLoad is not working on your site anymore, which means you will have larger CSS files, overall a larger page size and lower page-speed scores. </p>
+                                    </div>
+                                        <div class="notice-main-action">
+                                        <p>
+                                            <a target="_blank" class="button button-primary" href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/subscription">Activate</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`
+
+                $('#wpbody-content .wrap').prepend(content)
+            }
+
+        }).fail(function (i) {
+
+        })
+
         $('.notice-action-rapidload-db-update .notice-main-action a.button').click(function (e) {
             var $target = $(this);
 
