@@ -192,15 +192,35 @@
             updateInput();
         }
 
-        wp.ajax.post('uucss_license').then(function (i) {
+        function updateLicenseInfo() {
 
-            var seconds = Math.floor((new Date(i.next_billing * 1000) - new Date() ) / 1000);
+            if(uucss.api_key_verified === ""){
+                return;
+            }
 
-            var interval = seconds / 86400;
+            var container = $('.license-info')
 
-            if(interval < 0){
+            if(container.length){
+                container.addClass('loading');
+            }
 
-                var content = `<div class="uucss-notice-action notice notice-action notice-action-on-board notice-info">
+            wp.ajax.post('uucss_license').then(function (i) {
+                if(container.length){
+                    $('.license-info ul').show();
+
+                    $('#license-name').text(i.name)
+                    $('#license-email').text(i.email)
+                    $('#license-next_billing').text(new Date(i.next_billing * 1000).toLocaleDateString())
+                    $('#license-plan').text(i.plan)
+                    $('#license-domain').text(i.siteUrl)
+
+                    container.removeClass('loading');
+                }
+
+                var seconds = Math.floor((new Date(i.next_billing * 1000) - new Date() ) / 1000);
+                var interval = seconds / 86400;
+                if(interval < 0){
+                    var content = `<div class="uucss-notice-action notice notice-action notice-action-on-board notice-info">
                                   <div class="notice-action-inner">
                                     <div class="notice-icon">
                                         <div class="logo-wrapper">
@@ -219,12 +239,34 @@
                                 </div>
                             </div>`
 
-                $('#wpbody-content .wrap').prepend(content)
-            }
+                    var $wrap = $('#wpbody-content .wrap');
 
-        }).fail(function (i) {
+                    if($wrap.length){
+                        $wrap.prepend(content)
+                    }
+                }
+            }).fail(function (i) {
+                if(container.length){
+                    $('.license-info ul').hide()
+                    $('.license-info #license-message').show().html('Sorry, we couldn\'t collect license information of yours.')
+                    container.removeClass('loading');
+                }
+            })
 
-        })
+            tippy('.uucss-support a', {
+                allowHTML: true,
+                arrow: false,
+                appendTo: 'parent',
+                animation: 'shift-toward',
+                placement: 'top-end',
+                content: function () {
+                    var el = document.getElementById('uucss-support-tooltip');
+                    el.style.display = 'inline-block';
+                    return el
+                }
+            });
+
+        }
 
         $('.notice-action-rapidload-db-update .notice-main-action a.button').click(function (e) {
             var $target = $(this);
@@ -258,6 +300,7 @@
             })
         })
 
+        updateLicenseInfo();
     });
 
 }(jQuery))
