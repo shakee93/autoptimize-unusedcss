@@ -207,13 +207,13 @@ class RapidLoad_Base
 
         do_action('rapidload/vanish');
 
-        $this->clear_jobs();
+        $this->clear_jobs('url');
 
     }
 
-    public function clear_jobs(){
+    public function clear_jobs($type = 'all'){
 
-        RapidLoad_DB::clear_jobs();
+        RapidLoad_DB::clear_jobs($type);
 
     }
 
