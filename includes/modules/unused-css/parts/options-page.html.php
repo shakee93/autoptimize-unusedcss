@@ -704,50 +704,25 @@
 			<?php endif; ?>
 
         </ul>
+        <?php if($api_key_verified): ?>
         <div class="uucss-banner-section">
             <div class="uucss-banner">
                 <div class="banner-title">
-                    <?php if(!$api_key_verified): ?>
-
-                        <h2>Get RapidLoad free for a month</h2>
-
-                    <?php else: ?>
-
-                        <h2>Get up to $60 in cash back</h2>
-
-                    <?php endif; ?>
+                    <h2>Get up to $60 in cash back</h2>
                 </div>
                 <div class="banner-image">
                     <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/referral.svg' ?>" alt="" width="120px">
                 </div>
                 <div class="banner-content">
-                    <?php if(!$api_key_verified): ?>
-
-                        <p>refer-a-friend and give 10% off to your friend, get RapidLoad free for a month.</p>
-
-                    <?php else: ?>
-
-                        <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
-                        <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
-
-                    <?php endif; ?>
-
-
+                    <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
+                    <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
                 </div>
                 <div class="banner-footer">
-                    <?php if(!$api_key_verified): ?>
-
-                        <a href="https://rapidload.io/referral-free-month/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" class="button button-primary free-month-link" target="_blank">Invite</a>
-
-                    <?php else: ?>
-
-                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
-
-                    <?php endif; ?>
-
+                    <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 
     <div class="uucss-support">
