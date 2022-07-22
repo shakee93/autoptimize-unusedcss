@@ -860,6 +860,7 @@ abstract class UnusedCSS_Admin {
             'dev_mode' => apply_filters('uucss/dev_mode', isset($this->uucss->options['uucss_dev_mode'])) && $this->uucss->options['uucss_dev_mode'] == "1",
             'rules_enabled' => $rapidload->rules_enabled(),
             'cpcss_enabled' => $rapidload->critical_css_enabled(),
+            'home_url' => home_url(),
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );

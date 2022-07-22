@@ -127,11 +127,11 @@ class RapidLoad_Base
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
             );
-            wp_localize_script( 'uucss_global_admin_script', 'uucss', $data );
+            wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
             wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
 
-        });
+        },100);
 
         add_action('init', function (){
 

@@ -168,7 +168,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'rapidload_configured',
@@ -197,7 +197,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'run_first_job',
@@ -254,7 +254,7 @@
                 url: uucss.api_url + '/preview',
                 method: 'POST',
                 data: {
-                    url: uucss.home_url
+                    url: uucss_global.home_url
                 },
                 error(response){
 

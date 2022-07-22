@@ -21,7 +21,7 @@
         }
 
         $.ajax({
-            url : uucss.ajax_url,
+            url : uucss_global.ajax_url,
             method : 'POST',
             data : {
                 action : 'frontend_logs',
@@ -279,7 +279,7 @@
             $target.text('Updating...');
             $target.removeAttr('href');
             $.ajax({
-                url : uucss.ajax_url,
+                url : uucss_global.ajax_url,
                 method : 'POST',
                 data : {
                     action : 'rapidload_db_update'

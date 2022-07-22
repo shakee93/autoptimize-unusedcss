@@ -66,7 +66,7 @@
             }
 
             var data = {
-                'url': uucss.home_url,
+                'url': uucss_global.home_url,
                 'reason': reason,
                 'type': 'wordpress',
                 'version' : $('#uucss_plugin_version').text().trim(),

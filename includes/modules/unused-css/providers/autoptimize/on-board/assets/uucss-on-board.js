@@ -223,7 +223,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
@@ -262,7 +262,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
@@ -295,7 +295,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
@@ -326,7 +326,7 @@
             }
 
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
@@ -344,7 +344,7 @@
                 return;
             }
             $.ajax({
-                url: uucss.ajax_url,
+                url: uucss_global.ajax_url,
                 type: 'GET',
                 data: {
                     action: 'run_first_job',
@@ -424,7 +424,7 @@
                 url: uucss.api_url + '/preview',
                 method: 'POST',
                 data: {
-                    url: uucss.home_url
+                    url: uucss_global.home_url
                 },
                 error(response){
                     console.log(response.status)
