@@ -23,7 +23,7 @@
 
 	?>
     <div style="display: flex">
-        <ul style="width: 75%" id="uucss-wrapper">
+        <ul style="width: 78%" id="uucss-wrapper">
             <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
@@ -705,7 +705,7 @@
 
         </ul>
         <?php if($api_key_verified): ?>
-        <div style="width: 25%" class="uucss-banner-section">
+        <div style="width: 22%" class="uucss-banner-section">
             <div class="uucss-banner">
                 <div class="banner-title">
                     <h2>Get up to $60 in cash back</h2>
