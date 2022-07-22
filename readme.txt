@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.25 - 22/07/2022 =
+ * fix : known bugs to smooth user experience
+
 = 1.6.24 - 12/07/2022 =
  * feat : tested up-to Wordpress version 6.0
  * feat : don't clear inlined critical CSS on user-interaction
