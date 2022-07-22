@@ -110,7 +110,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info input[type="search"],
     margin-bottom: 10px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
-    max-width: 1165px;
+    /*max-width: 1165px;*/
 }
 
 #uucss-wrapper .form-table th {
@@ -714,7 +714,7 @@ li.uucss-history.multi-select .uucss-sub-menu .tippy-content .uucss-submenu-opti
 }
 
 table.uucss-history-table{
-    max-width: 1165px;
+    /*max-width: 1165px;*/
 }
 
 .uucss-history-table td span span.dashicons {
