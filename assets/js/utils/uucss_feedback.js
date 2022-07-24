@@ -73,7 +73,7 @@
             };
             $.ajax({
                 type: 'POST',
-                url: uucss.api_url + '/feedback',
+                url: uucss_global.api_url + '/feedback',
                 data: data,
                 complete() {
                     $('body').removeClass('uucss-feedback-open');

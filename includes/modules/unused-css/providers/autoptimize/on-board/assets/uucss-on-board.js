@@ -421,7 +421,7 @@
 
             var $parent = $('.uucss-on-board .card .connect.actions');
             $.ajax({
-                url: uucss.api_url + '/preview',
+                url: uucss_global.api_url + '/preview',
                 method: 'POST',
                 data: {
                     url: uucss_global.home_url
