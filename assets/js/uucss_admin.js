@@ -122,8 +122,6 @@
     $(document).ready(function () {
 
         $.fn.dataTable.ext.errMode = 'none';
-
-        console.log(window.uucss)
         
         if (window.uucss && window.uucss.notifications.length) {
             window.uucss.notifications.forEach(function (i) {
