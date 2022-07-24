@@ -194,7 +194,7 @@
 
         function updateLicenseInfo() {
 
-            if(uucss.api_key_verified === ""){
+            if(window.uucss && uucss.api_key_verified === ""){
                 return;
             }
 

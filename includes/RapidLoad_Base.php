@@ -131,7 +131,7 @@ class RapidLoad_Base
             wp_enqueue_script( 'uucss_global_admin_script' );
             wp_enqueue_style( 'uucss_global_admin', UUCSS_PLUGIN_URL . 'assets/css/uucss_global.css', [], UUCSS_VERSION );
 
-        },100);
+        }, apply_filters('uucss/scripts/global/priority', 90));
 
         add_action('init', function (){
 
