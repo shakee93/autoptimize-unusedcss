@@ -25,7 +25,7 @@ class Nitropack_Compatible extends RapidLoad_ThirdParty {
             $url = $this->transform_url( $args['url'] );
 
             if($url){
-                do_action('nitropack_integration_purge_url', $url);
+                do_action("nitropack_execute_purge_url", $url);
             }
         }
     }
