@@ -343,7 +343,7 @@ span.uucss-toggle-section.rotate {
     box-shadow: none;
     text-align: right;
     padding: 0;
-    max-width: 1165px;
+    max-width: 100%;
 }
 
 #uucss-wrapper > li.submit p.submit {
