@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.26 - 26/07/2022 =
+ * feat : added nitropack plugin support
+
 = 1.6.25 - 22/07/2022 =
  * fix : known bugs to smooth user experience
 
