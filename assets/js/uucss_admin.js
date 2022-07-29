@@ -431,7 +431,6 @@
 
             $('#uucss-rule-history_info select.status').on('change', function(){
                 status_filter_rule = $(this).val();
-                console.log(status_filter_rule);
                 rule_table.column(4).search( status_filter_rule ? '^'+ status_filter_rule +'$' : '', true, false )
                     .draw();
             });
@@ -1109,7 +1108,6 @@
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
                     var rule_id = $(this).data('rule_id');
-                    console.log(rule, rule_id);
 
                     uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
 

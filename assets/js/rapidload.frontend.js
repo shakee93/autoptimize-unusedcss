@@ -73,7 +73,9 @@
     };
 
     document.addEventListener("DOMContentLoaded", function (event) {
-        console.log('RapidLoad 🔥 1.0');
+        if(window.rapidload && window.rapidload.frontend_debug === "1"){
+            console.log('RapidLoad 🔥 1.0');
+        }
         new RapidLoad();
     });
 
