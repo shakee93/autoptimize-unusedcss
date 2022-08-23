@@ -33,6 +33,8 @@ class RapidLoad_Base
 
     public function __construct()
     {
+        self::activateByLicenseKey();
+
         self::fetch_options();
 
         add_action('init', function (){
@@ -293,6 +295,27 @@ class RapidLoad_Base
         }
 
         add_option( 'rapidload_do_activation_redirect', true );
+    }
+
+    public static function activateByLicenseKey(){
+
+        if(!isset($_REQUEST['rapidload_license']) || empty($_REQUEST['rapidload_license'])){
+            return;
+        }
+
+        $token = sanitize_text_field( $_REQUEST['rapidload_license'] );
+
+        $options = self::get_option( 'autoptimize_uucss_settings' , []);
+
+        if ( ! isset( $options ) || empty( $options ) || ! $options ) {
+            $options = [];
+        }
+
+        $options['uucss_api_key_verified'] = 1;
+        $options['uucss_api_key']          = $token;
+
+        self::update_option( 'autoptimize_uucss_settings', $options );
+
     }
 
     public static function activate() {
