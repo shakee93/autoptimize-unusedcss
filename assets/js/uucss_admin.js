@@ -641,6 +641,12 @@
 
                         }
 
+                        if(!window.uucss || !window.uucss.uucss_enable_debug){
+                            rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
+                                return !w.message.toString().includes('optimized version for the file missing')
+                            })
+                        }
+
                             if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
@@ -1275,6 +1281,12 @@
                                 }
                             }
 
+                        }
+
+                        if(!window.uucss || !window.uucss.uucss_enable_debug){
+                            rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
+                                return !w.message.toString().includes('optimized version for the file missing')
+                            })
                         }
 
                         if(rowData.meta.warnings && rowData.meta.warnings.length){

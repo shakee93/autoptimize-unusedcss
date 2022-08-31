@@ -861,6 +861,7 @@ abstract class UnusedCSS_Admin {
             'rules_enabled' => $rapidload->rules_enabled(),
             'cpcss_enabled' => $rapidload->critical_css_enabled(),
             'home_url' => home_url(),
+            'uucss_enable_debug' => ! empty( $this->uucss->options['uucss_enable_debug'] ) && '1' === $this->uucss->options['uucss_enable_debug'],
         );
 
         wp_localize_script( 'uucss_admin', 'uucss', $data );
