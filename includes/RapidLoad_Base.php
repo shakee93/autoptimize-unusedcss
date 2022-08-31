@@ -311,10 +311,20 @@ class RapidLoad_Base
             $options = [];
         }
 
-        $options['uucss_api_key_verified'] = 1;
-        $options['uucss_api_key']          = $token;
+        $uucss_api         = new RapidLoad_Api();
+        $uucss_api->apiKey = $token;
+        $results           = $uucss_api->post( 'connect', [ 'url' => trailingslashit(home_url()), 'type' => 'wordpress' ] );
 
-        self::update_option( 'autoptimize_uucss_settings', $options );
+        if ( !$uucss_api->is_error( $results ) ) {
+
+            $options['uucss_api_key_verified'] = 1;
+            $options['uucss_api_key']          = $token;
+
+            self::update_option( 'autoptimize_uucss_settings', $options );
+
+            header( 'Location: ' . admin_url( 'options-general.php?page=uucss') );
+            exit;
+        }
 
     }
 
