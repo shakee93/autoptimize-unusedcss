@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.28 - 12/09/2022 =
+ * fix :  URL too long issue on DataTable in the jobs table
+
 = 1.6.27 - 08/09/2022 =
  * improve :  handle jobs hanging in processing status
 
