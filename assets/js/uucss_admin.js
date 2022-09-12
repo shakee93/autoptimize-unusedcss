@@ -529,6 +529,7 @@
                     !$uucss_spinner.hasClass('loading') && $uucss_spinner.addClass('loading');
                 },
                 url: wp.ajax.settings.url + '?action=uucss_data',
+                type : 'POST',
                 data: function (d) {
 
                     if(status_filter !== "" && status_filter !== undefined){
@@ -1142,6 +1143,7 @@
                     !$uucss_rule_spinner.hasClass('loading') && $uucss_rule_spinner.addClass('loading');
                 },
                 url: wp.ajax.settings.url + '?action=uucss_data',
+                type : 'POST',
                 data: function (d) {
 
                     if(status_filter_rule !== "" && status_filter_rule !== undefined){
