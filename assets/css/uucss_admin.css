@@ -257,8 +257,16 @@ span.uucss-toggle-section.rotate {
     background: #674399;
 }
 
+.connect-action-buttons{
+    padding: 0 12px;
+}
+
+.connect-action-buttons a{
+    text-decoration: none;
+}
+
 #uucss-wrapper a.connect-with-license {
-    margin-left: 100px;
+    margin-left: 125px;
     text-decoration: none;
     margin-bottom: 10px;
     width: 150px;
