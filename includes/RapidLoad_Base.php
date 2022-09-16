@@ -182,7 +182,9 @@ class RapidLoad_Base
 
             array_shift($changelog);
 
-            echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+            if(count($changelog) > 0){
+                echo '<div style="margin-bottom: 1em"><strong style="padding-left: 25px;">What\'s New ?</strong><ol style="list-style-type: disc;margin: 5px 50px">';
+            }
 
             foreach ($changelog as $index => $log){
                 if($index == 3){
@@ -191,7 +193,9 @@ class RapidLoad_Base
                 echo '<li style="margin-bottom: 0">' . preg_replace("/\r|\n/","",$log) . '</li>';
             }
 
-            echo '</ol></div><p style="display: none" class="empty">';
+            if(count($changelog) > 0){
+                echo '</ol></div><p style="display: none" class="empty">';
+            }
 
         }
     }
