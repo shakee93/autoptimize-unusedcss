@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.30 - 19/09/2022 =
+ * fix : known bugs to smooth user experience
+
 = 1.6.29 - 15/09/2022 =
 
 = 1.6.28 - 12/09/2022 =
