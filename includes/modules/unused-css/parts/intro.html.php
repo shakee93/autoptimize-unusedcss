@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="uucss-row flex-direction-column">
-        <a href="https://rapidload.io/?utm_source=rapidload_plugin&utm_medium=plugin_onboard" class="uucss-activate">Get RapidLoad</a>
+        <a href="https://rapidload.io/?utm_source=rapidload_plugin&utm_medium=plugin_onboard" class="uucss-activate" target="_blank">Get RapidLoad</a>
         <div class="connect-action-buttons">
             <a href="<?php echo UnusedCSS_Autoptimize_Admin::activation_url( 'authorize' ) ?>" class="connect">Connect</a>
             <a href="#" class="connect-with-license">Connect with License Key</a>
