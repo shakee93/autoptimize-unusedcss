@@ -102,7 +102,7 @@ class CriticalCSS_Store
         }
 
         $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
-        $file_name_mobile = 'cpcss-' . $this->encode($purged_css) . '-mobile.css';
+        $file_name_mobile = str_replace(".css","-mobile.css",$file_name);
 
         if(!empty($purged_css)){
 
