@@ -80,6 +80,7 @@
                     '<option value="queued" ' + (status_filter === 'queued'? 'selected' : '') + '>Queue</option>' +
                     '<option value="store" ' + (status_filter === 'store'? 'selected' : '') + '>Store</option>' +
                     '<option value="frontend" ' + (status_filter === 'frontend'? 'selected' : '') + '>Frontend</option>' +
+                    '<option value="debug" ' + (status_filter === 'debug'? 'selected' : '') + '>Debug</option>' +
                     '</select>');
 
                 $(select).prependTo($('#uucss-logs-table_info'));
