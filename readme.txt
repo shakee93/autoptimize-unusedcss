@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.32 - 14/10/2022 =
+ * fix : mobile critical-css files getting deleted when clearing cache files
+
 = 1.6.31 - 23/09/2022 =
  * fix : known bugs to smooth user experience
 
