@@ -111,7 +111,7 @@ class CriticalCSS_Store
             }
         }
 
-        if($purged_mobile && !empty($purged_mobile)){
+        if(!empty($purged_mobile)){
 
             if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name_mobile)){
                 $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name_mobile, $purged_mobile);

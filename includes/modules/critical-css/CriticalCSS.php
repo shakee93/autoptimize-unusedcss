@@ -421,6 +421,9 @@ class CriticalCSS
         foreach ($data as $value){
             if(!empty($value->data)){
                 array_push($used_files,$value->data);
+                if(isset($this->options['uucss_enable_cpcss_mobile'])){
+                    array_push($used_files,str_replace(".css", "-mobile.css", $value->data));
+                }
             }
         }
 
