@@ -36,7 +36,11 @@ class CriticalCSS_Store
 
             $result = $uucss_api->post( 'purger/cpcss',
                 array_merge( $cpcss_config,
-                    [ 'url' => $this->job_data->job->url, 'service' => true, 'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1" ]
+                    [
+                        'url' => $this->job_data->job->url,
+                        'service' => true,
+                        'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1"
+                    ]
                 ) );
 
             if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
@@ -59,7 +63,12 @@ class CriticalCSS_Store
 
             $result = $uucss_api->post( 's/criticalcss',
                 array_merge( $cpcss_config,
-                    [ 'url' => $this->job_data->job->url, 'priority' => isset($this->args['priority']), 'wp_nonce' => wp_create_nonce('uucss_job_hook'), 'hook_end_point' => trailingslashit(get_site_url())]
+                    [
+                        'url' => $this->job_data->job->url,
+                        'priority' => isset($this->args['priority']),
+                        'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1",
+                        'wp_nonce' => wp_create_nonce('uucss_job_hook'),
+                        'hook_end_point' => trailingslashit(get_site_url())]
                 ) );
 
             if($uucss_api->is_error($result)){
