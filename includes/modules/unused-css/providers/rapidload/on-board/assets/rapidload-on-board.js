@@ -294,6 +294,8 @@
 
                     if(response.data){
 
+                        $(document).data('rapidload_data', response.data)
+
                         $parent.find('.analyze-result').find('.reduction').text(response.data.stats.reduction + '%');
 
                         var $sizeContent = $parent.find('.stats-figures .content');
@@ -320,7 +322,22 @@
                         $('.js-uucss-connect').click(function (e) {
                             e.preventDefault();
 
-                            child_open($(this).data('activation_url'));
+                            var data = $(document).data('rapidload_data')
+
+                            var query = "";
+
+                            if(data){
+                                var analyze_domain = data.url;
+                                var analyze_before = data.stats.before;
+                                var analyze_before_bytes = data.stats.beforeBytes;
+                                var analyze_after = data.stats.after;
+                                var analyze_after_bytes = data.stats.afterBytes;
+                                var analyze_reduction = data.stats.reduction;
+
+                                query = `&analyze_domain=${analyze_domain}&analyze_before=${analyze_before}&analyze_before_bytes=${analyze_before_bytes}&analyze_after=${analyze_after}&analyze_after_bytes=${analyze_after_bytes}&analyze_reduction=${analyze_reduction}`
+                            }
+
+                            child_open($(this).data('activation_url') + query);
                             clearInterval(progress_check);
                             progress_check = setInterval(checkRapidLoadConfigured, 1000);
                         });
