@@ -10,20 +10,34 @@ class RapidLoad_Admin_Frontend
     {
 
         add_action('admin_menu', [$this, 'menu_item']);
-        $this->load_scripts();
 
 
-        // TODO: temporary should be removed so it supports all the browsers
-        add_filter('script_loader_tag', function ($tag, $handle) {
+        if ($this->is_rapidload_page()) {
 
-            if ( 'rapidload_admin_frontend' !== $handle )
-                return $tag;
+            $this->load_scripts();
 
-            return str_replace( ' src', ' type="module" src', $tag );
 
-        }, 10, 2);
+            // TODO: temporary should be removed so it supports all the browsers
+            add_filter('script_loader_tag', function ($tag, $handle) {
+
+                if ( 'rapidload_admin_frontend' !== $handle )
+                    return $tag;
+
+                return str_replace( ' src', ' type="module" src', $tag );
+
+            }, 10, 2);
+
+        }
+
+
 
     }
+
+    public function is_rapidload_page()
+    {
+        return isset($_GET['page']) && $_GET['page'] === 'rapidload';
+    }
+
 
     public function load_scripts()
     {
@@ -41,6 +55,7 @@ class RapidLoad_Admin_Frontend
 
     }
 
+
     public function menu_item()
     {
 
@@ -55,13 +70,11 @@ class RapidLoad_Admin_Frontend
 
     }
 
+
     public function page()
     {
 
-        ?>
-
-        <div id="rapidload-app"> RapidLoad loading... </div>
-<?php
+        ?><div id="rapidload-app"> RapidLoad loading... </div><?php
 
     }
 }
