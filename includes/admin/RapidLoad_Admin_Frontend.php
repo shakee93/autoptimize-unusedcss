@@ -42,6 +42,8 @@ class RapidLoad_Admin_Frontend
     public function load_scripts()
     {
 
+        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css');
+
         wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js');
 
         $data = array(
@@ -51,6 +53,7 @@ class RapidLoad_Admin_Frontend
         wp_localize_script( 'rapidload_admin_frontend', 'rapidload_admin', $data );
 
         wp_enqueue_script( 'rapidload_admin_frontend' );
+
 
 
     }
