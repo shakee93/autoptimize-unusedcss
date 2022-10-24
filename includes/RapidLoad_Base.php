@@ -37,6 +37,8 @@ class RapidLoad_Base
 
         self::fetch_options();
 
+        new RapidLoad_Admin_Frontend();
+
         add_action('init', function (){
 
             RapidLoad_ThirdParty::initialize();
