@@ -204,7 +204,8 @@
                 container.addClass('loading');
             }
 
-            wp.ajax.post('uucss_license').then(function (i) {
+            // TODO fix this
+            wp.ajax?.post('uucss_license').then(function (i) {
                 if(container.length){
                     $('.license-info ul').show();
 

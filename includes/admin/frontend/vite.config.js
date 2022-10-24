@@ -7,7 +7,9 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [
       vue(),
-    dynamicBase({ /* options */ }),
+    dynamicBase({
+      publicPath : 'window.rapidload_admin.frontend_base'
+    }),
   ],
   base: "/__dynamic_base__/",
   mode: 'es2015',
