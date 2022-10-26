@@ -5,3 +5,6 @@
 @tailwind utilities;
 
 
+body {
+    background: #f0f0f1;
+}
