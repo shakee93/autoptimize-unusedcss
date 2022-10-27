@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '83acd12c00e493eaf54aa81ad79b6e10e7fcfcba',
+        'reference' => 'b1349e43085d45104311b8ab8c039e9979ab6540',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '83acd12c00e493eaf54aa81ad79b6e10e7fcfcba',
+            'reference' => 'b1349e43085d45104311b8ab8c039e9979ab6540',
             'dev_requirement' => false,
         ),
         'collizo4sky/persist-admin-notices-dismissal' => array(
