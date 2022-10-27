@@ -41,6 +41,8 @@ class RapidLoad_Base
 
         add_action('init', function (){
 
+            $this->init_log_dir();
+
             RapidLoad_ThirdParty::initialize();
 
             register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
@@ -94,6 +96,31 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function init_log_dir(){
+
+        if(!self::get_log_option()){
+            return false;
+        }
+
+        $file_system = self::get_log_instance();
+
+        if ( $file_system->exists( UUCSS_LOG_DIR ) ) {
+            return true;
+        }
+
+        if( $file_system->is_writable( UUCSS_LOG_DIR ) ){
+            return false;
+        }
+
+        $created = $file_system->mkdir( UUCSS_LOG_DIR , 0755, !$file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+
+        if (!$created || ! $file_system->is_writable( UUCSS_LOG_DIR ) || ! $file_system->is_readable( UUCSS_LOG_DIR ) ) {
+            return false;
+        }
+
+        return true;
     }
 
     public function modules(){
@@ -244,7 +271,7 @@ class RapidLoad_Base
         return self::$options;
     }
 
-    public static function get_option($name, $default)
+    public static function get_option($name, $default = null)
     {
         if(is_multisite()){
 
@@ -279,7 +306,7 @@ class RapidLoad_Base
         return update_site_option( $name, $default );
     }
 
-    public static function delete_option($name, $default)
+    public static function delete_option($name)
     {
         if(is_multisite()){
 
@@ -366,7 +393,7 @@ class RapidLoad_Base
 
         self::update_option( 'autoptimize_uucss_settings', $options );
 
-        $data        = UnusedCSS_Admin::suggest_whitelist_packs();
+        $data        = self::suggest_whitelist_packs();
         $white_packs = isset($data->data) ? $data->data : [];
 
         $options['whitelist_packs'] = array();
@@ -379,6 +406,35 @@ class RapidLoad_Base
         self::$options = self::fetch_options(false);
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+    }
+
+    public static function suggest_whitelist_packs() {
+
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $plugins        = get_plugins();
+        $active_plugins = array_map( function ( $key, $item ) {
+
+            $item['slug'] = $key;
+
+            return $item;
+        }, array_keys( $plugins ), $plugins );
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->post( 'whitelist-packs/wp-suggest', [
+            'plugins' => $active_plugins,
+            'theme'   => get_template(),
+            'url'     => site_url()
+        ] );
+
+        if ( wp_doing_ajax() ) {
+            wp_send_json_success( $data->data );
+        }
+
+        return isset($data) && is_array($data) ? $data : [];
     }
 
     public function rules_enabled(){

@@ -2,8 +2,8 @@
 
 defined( 'ABSPATH' ) or die();
 
-class UnusedCSS_Enqueue {
-
+class UnusedCSS_Enqueue
+{
     use RapidLoad_Utils;
 
     private $file_system;
@@ -12,37 +12,179 @@ class UnusedCSS_Enqueue {
     private $inject;
     private $options;
 
-    private $data;
+    private $job_data;
     private $files;
     private $warnings;
-    private $link;
+    private $is_mobile;
 
-    function __construct($data, $url = '', $link = null)
+    public function __construct($job_data)
     {
-
         $this->file_system = new RapidLoad_FileSystem();
 
-        $this->link = $link;
+        $this->job_data = $job_data;
 
-        $this->data = $data;
+        $this->files = isset($job_data->data) ? unserialize($job_data->data) : [];
+        $this->warnings = $this->job_data->get_warnings();
 
-        $this->log_action('UnusedCSS_Enqueue->__construct');
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+    }
 
-        if(isset($this->data)){
+    function update_content($state){
 
-            $this->files = $this->data->get_files();
+        if(isset($state['dom'])){
+            $this->dom = $state['dom'];
+        }
 
-            if(!isset($this->files) || !$this->files){
-                $this->files = [];
+        if(isset($state['inject'])){
+            $this->inject = $state['inject'];
+        }
+
+        if(isset($state['options'])){
+            $this->options = $state['options'];
+        }
+
+        if(!isset($this->job_data->id) || $this->job_data->status != 'success'){
+            //$this->inject->rapidload = false;
+            //$this->inject->successfully_injected = false;
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options
+            ];
+        }
+
+        if($this->dom && $this->inject){
+
+            if(RapidLoad_Enqueue::$frontend_debug){
+                $this->dom->find( 'html' )[0]->uucss = true;
             }
 
-            $this->warnings = $this->data->get_warnings();
+            $this->replace_stylesheets();
+
+            $this->replace_inline_css();
+
+            $this->enqueue_completed();
+
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options
+            ];
 
         }
 
-        add_filter('uucss/enqueue/content/update', [$this, 'the_content'], 10);
+        return $state;
 
-        $this->log_action('UnusedCSS_Enqueue->__construct:add_filter-uucss/enqueue/content/update');
+    }
+
+    public function replace_stylesheets(){
+
+        $sheets = $this->dom->find( 'link' );
+
+        foreach ( $sheets as $sheet ) {
+
+            $parent = $sheet->parent();
+
+            if(isset($parent) && $parent->tag == 'noscript'){
+                continue;
+            }
+
+            $link = $sheet->href;
+
+            $this->inject->found_sheets = true;
+
+            if ( self::is_css( $sheet ) ) {
+
+                array_push( $this->inject->found_css_files, $link );
+
+                $key = false;
+
+                if(apply_filters('uucss/enqueue/path-based-search', true) && self::endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
+
+                    $url_parts = parse_url( $link );
+
+                    if(isset($url_parts['path'])){
+
+                        $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
+
+                        $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
+
+                        $key = isset($result) && !empty($result) ? key($result) : null;
+
+                    }
+
+                }else{
+
+                    $link = apply_filters('uucss/enqueue/cdn-url', $link);
+
+                    $file = array_search( $link, array_column( $this->files, 'original' ) );
+
+                    if ( ! $file ) {
+                        // Retry to see if file can be found with CDN url
+                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->files, 'original' ) );
+                    }
+
+                    $key = isset($this->files) ? $file : null;
+
+                }
+
+                // check if we found a script index and the file exists
+                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
+
+                    $uucss_file = $this->files[ $key ]['uucss'];
+
+                    array_push( $this->inject->found_css_cache_files, $link );
+
+                    $newLink = apply_filters('uucss/enqueue/cache-file-url', $uucss_file);
+
+                    // check the file is processed via AO
+                    $is_ao_css = apply_filters('uucss/enqueue/provider-handled-file', false, $link);
+
+                    if($is_ao_css){
+
+                        array_push($this->inject->ao_optimized_css, $link);
+
+                    }
+
+                    if(RapidLoad_Enqueue::$frontend_debug){
+                        $sheet->uucss = true;
+                    }
+
+                    $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
+
+                    if ( isset( $this->options['uucss_inline_css'] ) ) {
+
+                        $this->inline_sheet($sheet, $uucss_file);
+                    }
+
+                    array_push( $this->inject->injected_css_files, $newLink );
+
+                }
+                else {
+
+                    if(!$sheet->uucss && !$this->is_file_excluded($this->options, $link)){
+
+                        $this->inject->successfully_injected = false;
+
+                        if(!in_array($link, array_column($this->warnings, 'file'))){
+
+                            $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
+
+                            $warning = [
+                                "file" => $link,
+                                "message" => "RapidLoad optimized version for the file missing."
+                            ];
+
+                            $this->warnings[] = $warning;
+
+                        }
+
+                    }
+
+                }
+            }
+
+        }
     }
 
     public function replace_inline_css(){
@@ -94,15 +236,7 @@ class UnusedCSS_Enqueue {
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
 
-                        if($this->data->is_type('Rule') && $this->link){
-
-                            $this->link->add_warning($warning);
-
-                        }else{
-
-                            $this->warnings[] = $warning;
-
-                        }
+                        $this->warnings[] = $warning;
 
                     }
 
@@ -132,17 +266,14 @@ class UnusedCSS_Enqueue {
 
         $time_diff = 0;
 
-        if(isset($this->data->created_at)){
-            $time_diff = time() - strtotime($this->data->created_at);
+        if(isset($this->job_data->created_at)){
+            $time_diff = time() - strtotime($this->job_data->created_at);
         }
 
         if($this->inject->successfully_injected){
 
-            $this->data->mark_as_successful_hit();
-            if($this->data->is_type('Rule') && $this->link){
+            $this->job_data->mark_as_successful_hit();
 
-                $this->link->mark_as_successful_hit();
-            }
             if(RapidLoad_Enqueue::$frontend_debug){
                 $this->dom->find( 'body' )[0]->uucss = true;
             }
@@ -152,230 +283,23 @@ class UnusedCSS_Enqueue {
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
             !$this->inject->successfully_injected &&
-            ($this->data->attempts <= 2 || ($time_diff > 86400)) &&
+            ($this->job_data->attempts <= 2 || ($time_diff > 86400)) &&
             apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
-            $this->data->requeue();
+            $this->job_data->requeue();
 
             $this->log_action('UnusedCSS_Enqueue->enqueue_completed:requeue');
 
         }else{
 
-            $this->data->set_warnings($this->warnings);
-            $this->data->reset_success_hits();
+            $this->job_data->set_warnings($this->warnings);
 
             $this->log_action('UnusedCSS_Enqueue->enqueue_completed:set_warnings');
 
         }
 
-        $this->data->save();
-        if($this->data->is_type('Rule') && $this->link){
+        $this->job_data->save();
 
-            $this->link->save();
-        }
-
-    }
-
-    public function replace_stylesheets(){
-
-        $sheets = $this->dom->find( 'link' );
-
-        foreach ( $sheets as $sheet ) {
-
-            $parent = $sheet->parent();
-
-            if(isset($parent) && $parent->tag == 'noscript'){
-                continue;
-            }
-
-            $link = $sheet->href;
-
-            $this->inject->found_sheets = true;
-
-            if ( self::is_css( $sheet ) ) {
-
-                array_push( $this->inject->found_css_files, $link );
-
-                $key = false;
-
-                if(apply_filters('uucss/enqueue/path-based-search', true) && self::endsWith(basename(preg_replace('/\?.*/', '', $link)),'.css')){
-
-                    $url_parts = parse_url( $link );
-
-                    if(isset($url_parts['path'])){
-
-                        $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
-
-                        $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
-
-                        $key = isset($result) && !empty($result) ? key($result) : null;
-                    }
-
-                }else{
-
-                    $link = apply_filters('uucss/enqueue/cdn-url', $link);
-
-                    $file = array_search( $link, array_column( $this->files, 'original' ) );
-
-                    if ( ! $file ) {
-                        // Retry to see if file can be found with CDN url
-                        $file = array_search( apply_filters('uucss/enqueue/provider-cdn-url',$link), array_column( $this->files, 'original' ) );
-                    }
-
-                    $key = isset($this->files) ? $file : null;
-
-                }
-
-                // check if we found a script index and the file exists
-                if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
-
-                    $uucss_file = $this->files[ $key ]['uucss'];
-
-                    array_push( $this->inject->found_css_cache_files, $link );
-
-                    $newLink = apply_filters('uucss/enqueue/cache-file-url', $uucss_file);
-
-                    // check the file is processed via AO
-                    $is_ao_css = apply_filters('uucss/enqueue/provider-handled-file', false, $link);
-
-                    if($is_ao_css){
-
-                        array_push($this->inject->ao_optimized_css, $link);
-
-                    }
-
-                    if ( $is_ao_css || isset( $this->options['autoptimize_uucss_include_all_files'] ) ) {
-
-                        if(RapidLoad_Enqueue::$frontend_debug){
-                            $sheet->uucss = true;
-                        }
-
-                        $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
-
-                        if ( isset( $this->options['uucss_inline_css'] ) ) {
-
-                            $this->inline_sheet($sheet, $uucss_file);
-                        }
-
-                        array_push( $this->inject->injected_css_files, $newLink );
-
-                    }
-
-                }
-                else {
-
-                    if(!$sheet->uucss && !$this->is_file_excluded($this->options, $link)){
-
-                        $this->inject->successfully_injected = false;
-
-                        if(!in_array($link, array_column($this->warnings, 'file'))){
-
-                            $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
-
-                            $warning = [
-                                "file" => $link,
-                                "message" => "RapidLoad optimized version for the file missing."
-                            ];
-
-                            if($this->data->is_type('Rule') && $this->link){
-
-                                $this->link->add_warning($warning);
-
-                            }else{
-
-                                $this->warnings[] = $warning;
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            }
-
-        }
-    }
-
-    public function the_content($state){
-
-        if(isset($state['dom'])){
-            $this->dom = $state['dom'];
-        }
-
-        if(isset($state['inject'])){
-            $this->inject = $state['inject'];
-        }
-
-        if(isset($state['options'])){
-            $this->options = $state['options'];
-        }
-
-        if(!$this->data || !isset($this->data) || isset($this->data) && $this->data->status != 'success'){
-            $this->inject->successfully_injected = false;
-            $this->inject->rapidload = false;
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:inject-failed');
-
-            return [
-                'dom' => $this->dom,
-                'inject' => $this->inject,
-                'options' => $this->options
-            ];
-        }
-
-        if($this->dom && $this->inject){
-
-            if(RapidLoad_Enqueue::$frontend_debug){
-                $this->dom->find( 'html' )[0]->uucss = true;
-            }
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:before_replace_stylesheets');
-
-            $this->replace_stylesheets();
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:after_replace_stylesheets');
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:before_replace_inline_css');
-
-            $this->replace_inline_css();
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:after_replace_inline_css');
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:before_enqueue_completed');
-
-            $this->enqueue_completed();
-
-            $this->log_action('UnusedCSS_Enqueue->the_content:after_enqueue_completed');
-
-            return [
-                'dom' => $this->dom,
-                'inject' => $this->inject,
-                'options' => $this->options
-            ];
-        }
-
-        return $state;
-    }
-
-    private static function is_css( $el ) {
-        return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
-    }
-
-    private static function endsWith( $haystack, $needle ) {
-        $length = strlen( $needle );
-        if( !$length ) {
-            return true;
-        }
-        return substr( $haystack, -$length ) === $needle;
-    }
-
-    private function log_action($message){
-        self::log([
-            'log' => $message,
-            'url' => $this->data->is_type('Rule') && $this->link ? $this->link->url : $this->data->url,
-            'type' => 'injection'
-        ]);
     }
 
     private function inline_sheet( $sheet, $link ) {
@@ -404,5 +328,17 @@ class UnusedCSS_Enqueue {
             'size'    => $this->file_system->size( $file ),
             'content' => $this->file_system->get_contents( $file )
         ];
+    }
+
+    private static function is_css( $el ) {
+        return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
+    }
+
+    private function log_action($message){
+        self::log([
+            'log' => $message,
+            'url' => $this->job_data->job->url,
+            'type' => 'injection'
+        ]);
     }
 }
