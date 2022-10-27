@@ -304,7 +304,20 @@ class UnusedCSS
 
             if(!empty($job_data->data)){
 
-                // delete unused files
+                $files = isset($job_data->data) && !empty($job_data->data) ? unserialize($job_data->data) : [];
+
+                $used_files = UnusedCSS_DB::get_used_files_exclude($job_data->id);
+
+                foreach ($files as $file){
+
+                    $key = array_search($file['uucss'], $used_files);
+
+                    if ( !isset($key) || empty($key)){
+
+                        $this->file_system->delete( self::$base_dir . '/' . $file['uucss'] );
+
+                    }
+                }
             }
 
         }else{

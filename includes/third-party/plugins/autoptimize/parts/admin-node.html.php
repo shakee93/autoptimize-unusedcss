@@ -65,7 +65,7 @@ global $post;
 
         window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
     </script>
-    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">RapidLoad</a>
+    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=rapidload' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Size: <?php echo $this->size(); ?></span>
     </div>

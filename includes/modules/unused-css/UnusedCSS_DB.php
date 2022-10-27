@@ -112,4 +112,34 @@ class UnusedCSS_DB extends RapidLoad_DB{
             self::show_db_error($error);
         }
     }
+
+    static function get_used_files_exclude($id){
+
+        if(!$id){
+            return [];
+        }
+
+        $used_files = [];
+
+        global $wpdb;
+
+        $result = $wpdb->get_results( "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE job_type='uucss' AND status = 'success' AND job_id != " . $id, ARRAY_A);
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        foreach ($result as $res){
+
+            $used = isset($res) && !empty($res) ? unserialize($res) : [];
+
+            $used_files = array_merge($used_files, $used);
+        }
+
+        if(!empty($used_files)){
+            return array_unique(array_column($used_files, 'uucss'));
+        }
+
+        return $used_files;
+    }
 }
