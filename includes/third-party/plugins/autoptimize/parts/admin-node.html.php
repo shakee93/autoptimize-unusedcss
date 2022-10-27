@@ -71,13 +71,16 @@ global $post;
     </div>
     <div class="uucss-stats__actions">
 
-		<?php if ( $post ) {
-			$exists = RapidLoad_Settings::link_exists( get_permalink( $post ) );?>
-            <div id="button-uucss-clear" <?php if ( ! $exists ) echo 'class="hidden"' ?> title="clear page cache">remove
+        <?php if ( $post ) {
+            $exists =  new RapidLoad_Job([
+                'url' => get_permalink( $post )
+            ]);
+            ?>
+            <div id="button-uucss-clear" <?php if ( ! isset($exists->id) ) echo 'class="hidden"' ?> title="clear page cache">remove
             </div>
-            <div id="button-uucss-purge" <?php if ( $exists ) echo 'class="hidden"' ?> title="generate page cache">optimize
+            <div id="button-uucss-purge" <?php if ( isset($exists->id) ) echo 'class="hidden"' ?> title="generate page cache">optimize
             </div>
-		<?php } ?>
+        <?php } ?>
         <div id="button-uucss-clear-all" title="remove all RapidLoad optimizations">remove all</div>
     </div>
 

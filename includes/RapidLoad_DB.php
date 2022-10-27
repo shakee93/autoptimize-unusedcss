@@ -9,6 +9,7 @@ abstract class RapidLoad_DB
     static $db_version = "1.4";
     static $db_option = "rapidload_migration";
     static $current_version = "1.4";
+    static $map_key = 'uucss_map';
 
     static function initialize_site($new_site, $args){
 
@@ -19,7 +20,7 @@ abstract class RapidLoad_DB
         $error = self::create_tables($new_site->blog_id . '_');
 
         if(empty($error)){
-            UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
+            RapidLoad_Base::update_option( self::$db_option, self::$db_version );
         }
     }
 
@@ -48,7 +49,7 @@ abstract class RapidLoad_DB
 
         if(empty($wpdb->last_error)){
 
-            UnusedCSS_Admin::delete_site_option(self::$db_option);
+            RapidLoad_Base::delete_option(self::$db_option);
 
         }
 
@@ -182,7 +183,7 @@ abstract class RapidLoad_DB
                     self::seed();
                 }
 
-                UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
+                RapidLoad_Base::update_option( self::$db_option, self::$db_version );
 
                 wp_send_json_success([
                     'db_updated' => true
@@ -230,8 +231,8 @@ abstract class RapidLoad_DB
             return;
         }
 
-        UnusedCSS_Admin::update_site_option( self::$db_option, self::$db_version );
-        UnusedCSS_Admin::delete_site_option(RapidLoad_Settings::$map_key );
+        RapidLoad_Base::update_option( self::$db_option, self::$db_version );
+        RapidLoad_Base::delete_option(self::$map_key );
     }
 
     static function get_rule_names(){
