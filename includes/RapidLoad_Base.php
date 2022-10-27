@@ -37,9 +37,9 @@ class RapidLoad_Base
 
         self::fetch_options();
 
-        new RapidLoad_Admin_Frontend();
-
         add_action('init', function (){
+
+            new RapidLoad_Admin_Frontend();
 
             $this->init_log_dir();
 
@@ -475,5 +475,25 @@ class RapidLoad_Base
         }
 
         return $this->defined_rules;
+    }
+
+    public static function cache_file_count(){
+        $uucss_files = scandir(UnusedCSS::$base_dir);
+        $uucss_files = array_filter($uucss_files, function ($file){
+            return false !== strpos($file, '.css');
+        });
+        $cpcss_files = scandir(CriticalCSS::$base_dir);
+        $cpcss_files = array_filter($cpcss_files, function ($file){
+            return false !== strpos($file, '.css');
+        });
+        return count($uucss_files) + count($cpcss_files);
+    }
+
+    public static function is_api_key_verified() {
+
+        $api_key_status = isset( self::$options['uucss_api_key_verified'] ) ? self::$options['uucss_api_key_verified'] : '';
+
+        return $api_key_status == '1';
+
     }
 }

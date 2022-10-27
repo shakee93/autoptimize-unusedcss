@@ -441,14 +441,18 @@ trait RapidLoad_Utils {
     public function size() {
 
 	    $file_system = new RapidLoad_FileSystem();
+        $uucss_size = 0;
+        $cpcss_size = 0;
 
-        if ( ! $file_system || ! $file_system->exists( UnusedCSS::$base_dir ) ) {
-            return "0 KB";
+        if ( $file_system->exists( UnusedCSS::$base_dir ) ) {
+            $uucss_size = $this->dirSize( UnusedCSS::$base_dir );
         }
 
-        $size = $this->dirSize( UnusedCSS::$base_dir );
+        if ( $file_system->exists( CriticalCSS::$base_dir ) ) {
+            $cpcss_size = $this->dirSize( CriticalCSS::$base_dir );
+        }
 
-        return $this->human_file_size( $size );
+        return $this->human_file_size( $uucss_size + $cpcss_size );
     }
 
     protected function is_doing_api_fetch(){

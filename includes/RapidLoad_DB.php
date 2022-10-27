@@ -409,4 +409,19 @@ abstract class RapidLoad_DB
 
         return $jobs;
     }
+
+    static function get_total_job_count($where = ''){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job_data {$where}");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
 }
