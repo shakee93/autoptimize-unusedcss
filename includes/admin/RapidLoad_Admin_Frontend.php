@@ -18,6 +18,7 @@ class RapidLoad_Admin_Frontend
         if($this->is_rapidload_legacy_page()){
 
             $this->load_legacy_scripts();
+            $this->load_legacy_ajax();
 
         }
 
@@ -40,6 +41,192 @@ class RapidLoad_Admin_Frontend
         if(is_admin()){
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
         }
+
+    }
+
+    public function load_legacy_ajax(){
+
+        if(is_admin()){
+
+            add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
+            add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
+            add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
+            add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
+
+        }
+
+    }
+
+    public function rapidload_purge_all(){
+
+        $job_type = isset($_REQUEST['job_type']) ? $_REQUEST['job_type'] : 'all';
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
+        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
+        $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
+
+        if($clear){
+
+            if(!empty($url_list)){
+
+                if($job_type == 'url'){
+
+                    foreach ($url_list as $value){
+
+                        RapidLoad_DB::clear_job_data($job_type, [
+                            'url' => $value
+                        ]);
+                        RapidLoad_DB::clear_jobs($job_type, [
+                            'url' => $value
+                        ]);
+
+                    }
+
+                }else{
+
+                    foreach ($url_list as $value){
+
+                        if(isset($value['rule']) && isset($value['regex'])){
+                            RapidLoad_DB::clear_job_data($job_type, [
+                                'rule' => $value['rule'],
+                                'regex' => $value['regex']
+                            ]);
+                            RapidLoad_DB::clear_jobs($job_type, [
+                                'rule' => $value['rule'],
+                                'regex' => $value['regex']
+                            ]);
+                        }
+
+                    }
+
+                }
+
+            }else{
+
+                if($rule && $regex){
+                    RapidLoad_DB::clear_job_data($job_type, [
+                        'rule' => $rule,
+                        'regex' => $regex
+                    ]);
+                    RapidLoad_DB::clear_jobs($job_type, [
+                        'rule' => $rule,
+                        'regex' => $regex
+                    ]);
+                }elseif ($url){
+                    RapidLoad_DB::clear_job_data($job_type, [
+                        'url' => $url
+                    ]);
+                    RapidLoad_DB::clear_jobs($job_type, [
+                        'url' => $url
+                    ]);
+                }else{
+                    RapidLoad_DB::clear_job_data($job_type);
+                    RapidLoad_DB::clear_jobs($job_type);
+                }
+
+            }
+
+        }
+        else{
+
+            switch ($job_type){
+
+                case 'url':{
+
+                    if($url){
+
+                        if($url && $this->is_url_allowed($url)){
+
+                            $job = new RapidLoad_Job(['url' => $url]);
+                            $job->save(true);
+
+                        }
+                    }
+                    break;
+                }
+                case 'rule':{
+
+                    if($url && $rule && $regex){
+
+                        $this->update_rule((object)[
+                            'url' => $url,
+                            'rule' => $rule,
+                            'regex' => $regex
+                        ]);
+                    }
+                    break;
+                }
+                case 'site_map':{
+
+                    if($url){
+
+                        $spawned = $this->schedule_cron('add_sitemap_to_jobs',[
+                            'url' => $url
+                        ]);
+                    }
+                    break;
+                }
+                default:{
+
+                    $posts = new WP_Query(array(
+                        'post_type'=> $job_type,
+                        'posts_per_page' => -1
+                    ));
+
+                    if($posts && $posts->have_posts()){
+
+                        while ($posts->have_posts()){
+
+                            $posts->the_post();
+
+                            $url = $this->transform_url(get_the_permalink(get_the_ID()));
+
+                            if($this->is_url_allowed($url)){
+
+                                $job = new RapidLoad_Job(['url' => $url]);
+                                $job->save(true);
+                            }
+                        }
+                    }
+
+                    wp_reset_query();
+
+                    break;
+                }
+            }
+        }
+        wp_send_json_success('Successfully purged');
+    }
+
+    public function upload_rules(){
+
+        if(!isset($_REQUEST['rules'])){
+            wp_send_json_error('rules required');
+        }
+
+        $rules = json_decode(stripslashes($_REQUEST['rules']));
+
+        if(!$rules){
+            wp_send_json_error('rules required');
+        }
+
+        foreach ($rules as $rule){
+
+            $rule_job = new RapidLoad_Job([
+                'url' => $rule->url,
+                'rule' => $rule->rule,
+                'regex' => $rule->regex
+            ]);
+            $rule_job->save(true);
+        }
+
+        wp_send_json_success('success');
+    }
+
+    public function get_all_rules(){
+
+        wp_send_json_success(RapidLoad_Job::all());
 
     }
 
@@ -188,6 +375,33 @@ class RapidLoad_Admin_Frontend
 
     }
 
+    public function update_rule($args, $old = false){
+
+        if($old && isset($old['url'])){
+
+            $job = new RapidLoad_Job([
+                'url' => $old['url']
+            ]);
+
+            $job->url = $args->url;
+            $job->rule = $args->rule;
+            $job->regex = $args->regex;
+
+            $job->save();
+
+        }else{
+
+            $job = new RapidLoad_Job([
+                'url' => $args->url
+            ]);
+            $job->rule = $args->rule;
+            $job->regex = $args->regex;
+
+            $job->save();
+
+        }
+
+    }
 
     public function page()
     {
