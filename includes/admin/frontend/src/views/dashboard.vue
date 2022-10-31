@@ -63,28 +63,28 @@ export default {
           name: "Image Delivery",
           description : 'Reduce your CSS file size by remove unused CSS from your pages',
           image : 'image-delivery.svg',
-          link: '/critical-css',
+          link: '/image-delivery',
           enable: true
         },
         {
-          name: "Speed Montoring",
+          name: "Speed Monitoring",
           description : 'Reduce your CSS file size by remove unused CSS from your pages',
-          image : 'speed-montoring.svg',
-          link: '/critical-css',
+          image : 'speed-monitoring.svg',
+          link: '/speed-monitoring',
           enable: true
         },
         {
           name: "Asset Manager",
           description : 'Reduce your CSS file size by remove unused CSS from your pages',
           image : 'asset-manager.svg',
-          link: '/critical-css',
+          link: '/asset-manager',
           enable: false
         },
         {
           name: "Font Optimization",
           description : 'Reduce your CSS file size by remove unused CSS from your pages',
           image : 'font-optimization.svg',
-          link: '/critical-css',
+          link: '/font-optimization',
           enable: false
         },
 
