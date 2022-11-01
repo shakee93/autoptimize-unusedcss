@@ -8,3 +8,9 @@
 body {
     background: #f0f0f1;
 }
+
+@layer base {
+    html {
+        font-family: Lexend, system-ui,Helvetica;
+    }
+}
