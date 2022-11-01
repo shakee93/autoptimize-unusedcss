@@ -25,6 +25,7 @@ module.exports = {
       'dark-gray-font': '#424242',
       'purple-back-font': '#202020',
     },
+
   },
   plugins: [],
 }
