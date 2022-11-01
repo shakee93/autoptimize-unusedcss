@@ -116,6 +116,7 @@ class UnusedCSS_Store
         }
 
         $warnings = isset($this->result) && isset($this->result->meta) ? $this->result->meta->warnings : null;
+        $stats = isset($this->result) && isset($this->result->meta) ? $this->result->meta->stats : null;
 
         if(isset($this->result->meta->stats) && isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)){
 
@@ -170,7 +171,7 @@ class UnusedCSS_Store
 
         if($this->job_data){
 
-            $this->job_data->mark_as_success($files, null, $warnings);
+            $this->job_data->mark_as_success($files, $stats, $warnings);
             $this->job_data->save();
             $this->uucss_cached($this->job_data->job->url);
 

@@ -467,6 +467,11 @@ class RapidLoad_Base
         return $this->applicable_rule;
     }
 
+    public static function is_domain_verified(){
+        $options = self::fetch_options();
+        return  $options['valid_domain'];
+    }
+
     public function get_pre_defined_rules($with_permalink = false){
 
         if(!$this->defined_rules){

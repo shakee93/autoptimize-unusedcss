@@ -17,8 +17,250 @@ class RapidLoad_Admin
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
         }
 
-        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
+        add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
+        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+        add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+    }
+
+    function rapidload_rule_types($rules){
+
+        $custom_posts = get_post_types(
+            array(
+                'public'   => true,
+                '_builtin' => false,
+            ),
+            'names',
+            'and'
+        );
+
+        $taxonomies = get_taxonomies([
+            'public' => true
+        ]);
+
+        $rules[] = [
+            'name' => 'front_page',
+            'rule' => 'is_front_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_front_page();
+            },
+        ];
+
+        $rules[] = [
+            'name' => '404',
+            'rule' => 'is_404',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_404();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'archive',
+            'rule' => 'is_archive',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_archive();
+            },
+        ];
+
+        foreach ($custom_posts as $key => $value){
+            if($value == 'page' || $value == 'post' || $value == 'product'){
+                continue;
+            }
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'category' => 'Custom Post Types',
+                    'priority' => 5,
+                    'callback' => function() use($value){
+                        return get_post_type( get_the_ID() ) == $value;
+                    }
+                ];
+            }
+        }
+
+        foreach ($taxonomies as $key => $value){
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'category' => 'Taxonomies',
+                    'priority' => 5,
+                    'callback' => function() use($value){
+                        return is_tax($value);
+                    },
+                ];
+            }
+        }
+
+        $rules[] = [
+            'name' => 'author',
+            'rule' => 'is_author',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_author();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'home',
+            'rule' => 'is_home',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_home();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'page',
+            'rule' => 'is_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_page();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'post',
+            'rule' => 'is_post',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_singular();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'search',
+            'rule' => 'is_search',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_search();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'attachment',
+            'rule' => 'is_attachment',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_attachment();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'single',
+            'rule' => 'is_single',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_single();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'sticky',
+            'rule' => 'is_sticky',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_sticky();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'paged',
+            'rule' => 'is_paged',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_paged();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'path',
+            'rule' => 'is_path',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return true;
+            },
+        ];
+
+        return $rules;
+    }
+
+
+    public function clear_cache_on_option_update( $option, $old_value, $value ) {
+
+        if ( $option == 'autoptimize_uucss_settings' ) {
+
+            $needs_to_cleared = false;
+
+            $diffs = [];
+            $diffs_invert = [];
+
+            if ( $old_value && $value ) {
+                $diffs        = array_diff_key( $old_value, $value );
+                $diffs_invert = array_diff_key( $value, $old_value );
+            }
+
+            if ( isset( $diffs_invert['valid_domain'] ) ) {
+                unset( $diffs_invert['valid_domain'] );
+            }
+            if ( isset( $diffs['valid_domain'] ) ) {
+                unset( $diffs['valid_domain'] );
+            }
+
+            $diffs = array_merge( $diffs, $diffs_invert );
+
+            // if these settings are changed cache will be cleared
+            if ( isset( $diffs['uucss_minify'] ) ||
+                isset( $diffs['uucss_keyframes'] ) ||
+                isset( $diffs['uucss_fontface'] ) ||
+                isset( $diffs['uucss_analyze_javascript'] ) ||
+                isset( $diffs['uucss_safelist'] ) ||
+                isset( $diffs['whitelist_packs'] ) ||
+                isset( $diffs['uucss_blocklist'] ) ||
+                isset( $diffs['uucss_variables'] ) ) {
+                $needs_to_cleared = true;
+            }
+
+            foreach ( [ 'whitelist_packs', 'uucss_safelist', 'uucss_blocklist' ] as $compare_value ) {
+                if ( isset( $value[ $compare_value ] ) && isset( $old_value[ $compare_value ] ) && $old_value[ $compare_value ] !== $value[ $compare_value ] ) {
+                    $needs_to_cleared = true;
+                    break;
+                }
+            }
+
+            if(isset( $diffs['uucss_enable_rules'] )){
+                RapidLoad_DB::detach_all_rules();
+            }
+
+            if ( $needs_to_cleared ) {
+
+                /*$this->uucss->clear_cache( null, [
+                    'soft' => true
+                ] );*/
+            }
+
+            RapidLoad_Base::fetch_options(false);
+        }
+
     }
 
     public function uucss_license() {

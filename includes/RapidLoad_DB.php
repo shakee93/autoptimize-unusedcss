@@ -424,4 +424,111 @@ abstract class RapidLoad_DB
 
         return (int)$count;
     }
+
+    static function get_job_counts(){
+
+        global $wpdb;
+
+        $counts = $wpdb->get_results(
+            "SELECT 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE hits > 0 and job_type = 'uucss') as hits,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND warnings IS NULL) as success,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job WHERE status = 'rule-based') as rule_based,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'waiting') as waiting, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'queued') as queued,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'processing') as processing, 
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE warnings IS NOT NULL) as warnings,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'failed') as failed,
+            (SELECT COUNT(id) FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = 'uucss') as total", OBJECT);
+
+        if(!empty($counts)){
+            return $counts[0];
+        }
+
+        return (object)[
+            'hits' => 0,
+            'success' => 0,
+            'rule_based' => 0,
+            'waiting' => 0,
+            'queued' => 0,
+            'processing' => 0,
+            'warnings' => 0,
+            'failed' => 0,
+            'total' => 0,
+        ];
+    }
+
+    static function get_merged_data($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
+
+        global $wpdb;
+
+        $data = $wpdb->get_results("select * from (select 
+        job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, uucss.status, 
+        cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
+        
+        from {$wpdb->prefix}rapidload_job as job
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
+
+        $data = array_map(function ($job){
+            return self::transform_link($job);
+        }, $data);
+
+        return $data;
+    }
+
+    static function transform_link($link, $rule = 'path'){
+
+        if(empty($link)){
+            return null;
+        }
+
+        $data = array();
+
+        $data['id'] = isset($link->id) ? $link->id : null;
+        $data['url'] = isset( $link->url ) ? $link->url : null;
+        $data['regex'] = isset( $link->regex ) ? $link->regex : null;
+        $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
+        $data['job_status'] = isset( $link->job_status ) ? $link->job_status : null;
+        $data['created_at'] = isset( $link->job_created_at ) ? $link->job_created_at : null;
+
+        if(isset($data['rule_id'])){
+            $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
+            $data['rule'] = $job_url->rule;
+            $data['base'] = $job_url->url;
+            $data['rule_status'] = 'success'; // TBC
+            $data['rule_hits'] = 0; // TBC
+        }
+
+        return apply_filters('uucss/link', $data);
+
+    }
+
+    static function detach_all_rules(){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job SET rule = 'is_url' , regex = null , status = 'processing'");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+    }
+
+    static function requeueJob($id){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = 'queued' WHERE job_id = " . $id);
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
 }

@@ -40,6 +40,8 @@ class UnusedCSS
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
+        add_filter('uucss/link', [$this, 'update_link']);
+
         add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 2);
 
         add_filter('uucss/enqueue/cache-file-url', function ($uucss_file){
@@ -47,6 +49,43 @@ class UnusedCSS
         },10,1);
 
         new UnusedCSS_Queue();
+    }
+
+    function update_link($link){
+
+        if(isset($link['url'])){
+
+            $url = isset($link['base']) ? $link['base'] : $link['url'];
+
+            $job = new RapidLoad_Job([
+                'url' => $url,
+            ]);
+
+            if(isset($job->id)){
+
+                $job_data = new RapidLoad_Job_Data($job, 'uucss');
+
+                if(isset($job_data->id)){
+
+                    $link['status'] = $job_data->status;
+                    $link['success_count'] = $job_data->hits;
+                    $link['files'] = $job_data->get_files();
+                    $link['job_id'] = $job_data->queue_job_id;
+                    $link['meta']['id'] = $job_data->queue_job_id;
+                    $link['meta']['warnings'] = $job_data->get_warnings();
+                    $link['meta']['stats'] = isset($job_data->stats) ? unserialize($job_data->stats) : null;
+                    $link['meta']['error'] = isset($job_data->error) ? unserialize($job_data->error) : null;
+                    $link['meta']['status'] = isset( $job_data->status ) ? $job_data->status : null;
+                    $link['time'] = isset( $job_data->created_at ) ? strtotime( $job_data->created_at ) : null;
+                    $link['attempts'] = isset( $job_data->attempts ) ? $job_data->attempts : null;
+                    $link['rule'] = $job_data->job->rule;
+                }
+
+            }
+
+        }
+
+        return $link;
     }
 
     public function get_cached_file( $file_url, $cdn = null ) {

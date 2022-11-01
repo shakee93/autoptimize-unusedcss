@@ -18,9 +18,10 @@ class RapidLoad_Admin_Frontend
         if($this->is_rapidload_legacy_page()){
 
             $this->load_legacy_scripts();
-            $this->load_legacy_ajax();
 
         }
+
+        $this->load_legacy_ajax();
 
         if ($this->is_rapidload_page()) {
 
@@ -39,8 +40,14 @@ class RapidLoad_Admin_Frontend
         }
 
         if(is_admin()){
+
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
+            add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
+
         }
+
+        add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
+
 
     }
 
@@ -48,12 +55,395 @@ class RapidLoad_Admin_Frontend
 
         if(is_admin()){
 
-            add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
-            add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
-            add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
-            add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
+            add_action("wp_ajax_uucss_run_gpsi_status_check_for_all", [ $this, 'run_gpsi_status_check_for_all' ] );
+            add_action("wp_ajax_get_all_rules", [$this, 'get_all_rules']);
+            add_action("wp_ajax_upload_rules", [$this, 'upload_rules']);
+            add_action("wp_ajax_rapidload_purge_all", [$this, 'rapidload_purge_all']);
+            add_action("wp_ajax_uucss_test_url", [ $this, 'uucss_test_url' ] );
+            add_action("wp_ajax_uucss_data", [ $this, 'uucss_data' ] );
+            add_action('wp_ajax_uucss_status', [ $this, 'uucss_status' ] );
+            add_action( 'wp_ajax_rapidload_notifications', [$this, 'rapidload_notifications']);
+            add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
+        }
+
+    }
+
+    public function uucss_update_rule(){
+
+        if( !isset($_REQUEST['rule']) || empty($_REQUEST['rule']) ||
+            !isset($_REQUEST['url']) || empty($_REQUEST['url'])
+        ){
+            wp_send_json_error('Required fields missing');
+        }
+
+        $rule = $_REQUEST['rule'];
+        $url = $_REQUEST['url'];
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : '/';
+
+        $url = $this->transform_url($url);
+
+        global $uucss;
+
+        if(!$this->is_url_allowed($url)){
+            wp_send_json_error('URL not allowed');
+        }
+
+        if(!self::is_url_glob_matched($url, $regex)){
+            wp_send_json_error('Invalid regex for the url');
+        }
+
+        if(isset($_REQUEST['old_rule']) && isset($_REQUEST['old_regex'])){
+
+            $old_rule = $_REQUEST['old_rule'];
+            $old_regex = $_REQUEST['old_regex'];
+
+            $rule_exist = new RapidLoad_Job([
+                'rule' => $old_rule,
+                'regex' => $old_regex
+            ]);
+
+            $new_rule = new RapidLoad_Job([
+                'url' => $url
+            ]);
+
+            if(isset($new_rule->id) && $new_rule->rule == "is_url"){
+               $new_rule->delete();
+            }
+
+            if(isset($rule_exist->id)){
+
+                $rule_exist->url = $url;
+                $rule_exist->rule = $rule;
+                $rule_exist->regex = $regex;
+                $rule_exist->save(true);
+
+                if(isset($_REQUEST['old_url']) && $_REQUEST['old_url'] != $url ||
+                    $_REQUEST['old_rule'] != $rule || $_REQUEST['old_regex'] != $regex){
+                    if(isset($_REQUEST['requeue']) && $_REQUEST['requeue'] == "1"){
+                        RapidLoad_DB::requeueJob($rule_exist->id);
+                    }
+                }
+
+                wp_send_json_success('Rule updated successfully');
+            }
 
         }
+
+        $new_rule = new RapidLoad_Job([
+            'url' => $url
+        ]);
+
+        if(isset($new_rule->id) && $new_rule->rule == "is_url"){
+            $new_rule->delete();
+        }
+
+        $rule = new RapidLoad_Job([
+            'rule' => $rule,
+            'regex' => $regex
+        ]);
+
+        if(isset($rule->id)){
+            wp_send_json_error('Rule already exist');
+        }
+
+        $rule->url = $url;
+        $rule->save(true);
+
+        wp_send_json_success('Rule updated successfully');
+    }
+
+    function rapidload_notifications(){
+
+        wp_send_json_success([
+            'faqs' => $this->get_faqs(),
+            'notifications' => $this->get_public_notices()
+        ]);
+
+    }
+
+    public function get_public_notices(){
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->get('notification');
+
+        $data = !$api->is_error($result) && isset($result->data) ? $result->data : [];
+
+        $data = array_filter($data, function ($notice){
+            $notice_read = RapidLoad_Base::get_option('uucss_notice_' . $notice->id . '_read');
+            return empty($notice_read);
+        });
+
+        $keys = array_keys($data);
+
+        if(empty($keys)){
+            return $data;
+        }
+
+        $notices = [];
+
+        foreach ($data as $key => $notice){
+            array_push($notices, $notice);
+        }
+
+        return $notices;
+    }
+
+    public function get_faqs(){
+
+        $rapidload_faqs_read = RapidLoad_Base::get_option('rapidload_faqs_read');
+
+        if(!empty($rapidload_faqs_read)){
+            return [];
+        }
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->get('faqs');
+
+        $default = [
+            [
+                "title" => "I enabled RapidLoad and now my site is broken. What do I do?",
+                "message" => "If you are encountering layout or styling issues on a RapidLoad optimized page, try enabling the “Load Original CSS Files” option or <a href='https://rapidload.zendesk.com/hc/en-us/articles/360063292673-Sitewide-Safelists-Blocklists'>adding safelist rules</a> for affected elements in the plugin Advanced Settings. Always remember to requeue affected pages after making plugin changes. Need more help? Head over to the RapidLoad docs for more information or to submit a Support request: <a href='https://rapidload.zendesk.com/hc/en-us'>https://rapidload.zendesk.com/hc/en-us</a>",
+            ],
+            [
+                "title" => "Why am I still seeing the “Removed unused CSS” flag in Google Page Speed Insights?",
+                "message" => "It’s possible that the RapidLoad optimized version of the page is not yet being served. Try clearing your page cache and running the GPSI test again.",
+            ],
+            [
+                "title" => "Will this plugin work with other caching plugins?",
+                "message" => "RapidLoad works with all major caching plugins. If you are using a little known caching plugin and are experiencing issues with RapidLoad, please submit your issue and caching plugin name to our support team and we will review.",
+            ],
+            [
+                "title" => "Do I need to run this every time I make a change?",
+                "message" => "No! RapidLoad works in the background, so any new stylesheets that are added will be analyzed and optimized on the fly. Just set it and forget it!",
+            ],
+            [
+                "title" => "Do you offer support if I need it?",
+                "message" => "Yes, our team is standing by to assist you! Submit a support ticket any time from the Support tab in the plugin and we’ll be happy to help.",
+            ]
+        ];
+
+        return !$api->is_error($result) && isset($result->data) ? $result->data : $default;
+    }
+
+
+    public function uucss_test_url(){
+
+        global $uucss;
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+
+        if($type == 'rule'){
+
+            if(!isset($_REQUEST['rule']) || !isset($_REQUEST['regex'])){
+                wp_send_json_error('rule and regex required');
+            }
+
+        }
+
+        $uucss_api = new RapidLoad_Api();
+
+        $link = $type == 'path' ? new RapidLoad_Job(['url' => $_REQUEST['url']]) : new RapidLoad_Job(['rule' => $_REQUEST['rule'], 'regex' => $_REQUEST['regex']]);
+
+        $result = $this->get_gpsi_test_result(new RapidLoad_Job_Data($link, 'uucss'));
+
+        if ( $uucss_api->is_error( $result ) ) {
+            if(isset($result->errors) && isset($result->errors[0])){
+                wp_send_json_error($result->errors[0]->detail);
+            }else{
+                wp_send_json_error($result);
+            }
+        }
+
+        wp_send_json_success($result);
+    }
+
+    public function uucss_data(){
+
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
+            wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
+        }
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
+
+        $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+        $length = isset($_REQUEST['length']) ? $_REQUEST['length'] : 10;
+        $draw = isset($_REQUEST['draw']) ? $_REQUEST['draw'] : 1;
+
+        $status_filter = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][0]) &&
+        isset($_REQUEST['columns'][0]['search']) &&
+        isset($_REQUEST['columns'][0]['search']['value']) ?
+            $_REQUEST['columns'][0]['search']['value'] : false;
+
+        $filters = [];
+
+        if($status_filter){
+
+            if($status_filter == 'warning'){
+
+                $filters[] = " warnings IS NOT NULL ";
+            }else{
+
+                $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
+            }
+
+        }else{
+
+            $filters[] = " status != 'rule-based' ";
+
+        }
+
+        $url_filter = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][1]) &&
+        isset($_REQUEST['columns'][1]['search']) &&
+        isset($_REQUEST['columns'][1]['search']['value']) ?
+            $_REQUEST['columns'][1]['search']['value'] : false;
+
+        $url_regex = isset($_REQUEST['columns']) &&
+        isset($_REQUEST['columns'][1]) &&
+        isset($_REQUEST['columns'][1]['search']) &&
+        isset($_REQUEST['columns'][1]['search']['regex']) ?
+            $_REQUEST['columns'][1]['search']['regex'] : false;
+
+        if($type != 'rule'){
+
+            $filters[] = " rule = 'is_url' ";
+
+        }else{
+
+            $filters[] = " rule != 'is_url' ";
+
+        }
+
+        if($url_regex == 'true' && $url_filter){
+
+            $filters[] = " url = '". $url_filter . "' ";
+
+        }
+
+        if($url_regex == 'false' && $url_filter){
+
+            $filters[] = " url LIKE '%". $url_filter . "%' ";
+
+        }
+
+        $where_clause = '';
+
+        foreach ($filters as $key => $filter){
+
+            if($key == 0){
+
+                $where_clause = ' WHERE ';
+                $where_clause .= $filter;
+            }else{
+
+                $where_clause .= ' AND ';
+                $where_clause .= $filter;
+            }
+
+        }
+
+        $data  = RapidLoad_DB::get_merged_data($start, $length, $where_clause);
+
+        wp_send_json([
+            'data' => $data,
+            "draw" => (int)$draw,
+            "recordsTotal" => RapidLoad_DB::get_total_job_count(),
+            "recordsFiltered" => RapidLoad_DB::get_total_job_count(),
+            "success" => true
+        ]);
+
+    }
+
+    public function uucss_status(){
+
+        $job_counts = RapidLoad_DB::get_job_counts();
+
+        wp_send_json_success([
+            'cssStyleSheetsCount' => RapidLoad_Base::cache_file_count(),
+            'cssStyleSheetsSize' => $this->size(),
+            'hits' => $job_counts->hits,
+            'success' => $job_counts->success,
+            'ruleBased' => $job_counts->rule_based,
+            'queued' => $job_counts->queued,
+            'waiting' => $job_counts->waiting,
+            'processing' => $job_counts->processing,
+            'warnings' => $job_counts->warnings,
+            'failed' => $job_counts->failed,
+            'total' => $job_counts->total,
+        ]);
+    }
+
+    public function run_gpsi_test_for_all(){
+
+        $links = UnusedCSS_DB::get_data("id, hits"," WHERE status IN('success','rule-based') ");
+
+        if(!empty($links)){
+
+            foreach ($links as $link){
+
+                if($link->hits > 0){
+                    continue;
+                }
+
+                $this->get_gpsi_test_result(RapidLoad_Job_Data::find_or_fail($link->id, 'uucss'));
+
+            }
+
+        }
+
+    }
+
+    public function run_gpsi_status_check_for_all(){
+
+        $spawned = wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
+
+        wp_send_json_success([
+            'spawned' => $spawned
+        ]);
+    }
+
+    public function get_gpsi_test_result($job_data){
+
+        if(!$job_data){
+            return null;
+        }
+
+        $uucss_api = new RapidLoad_Api();
+
+        $cached_files = [];
+        $original_files = [];
+
+        $files = $job_data->get_files();
+
+        if(isset($files) && !empty($files)){
+
+            $cached_files = array_filter($files, function ($file){
+                return !$this->str_contains($file['original'], '//inline-style@');
+            });
+
+            $original_files = array_filter($files, function ($file){
+                return !$this->str_contains($file['original'], '//inline-style@');
+            });
+        }
+
+        do_action( 'uucss/cached', [
+            'url' => $job_data->job->url
+        ]);
+
+        return $uucss_api->post( 'test/wordpress',
+            [
+                'url' => urldecode($job_data->job->url),
+                'files' => !empty($cached_files) ? array_values(array_column($cached_files, 'uucss')) : [],
+                'aoFiles' => !empty($original_files) ? array_values(array_column($original_files, 'original')) : []
+            ]);
 
     }
 
@@ -136,7 +526,7 @@ class RapidLoad_Admin_Frontend
 
                     if($url){
 
-                        if($url && $this->is_url_allowed($url)){
+                        if($this->is_url_allowed($url)){
 
                             $job = new RapidLoad_Job(['url' => $url]);
                             $job->save(true);
