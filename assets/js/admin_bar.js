@@ -7,7 +7,7 @@
             var $this = $(this);
 
             $this.text('loading...');
-            wp.ajax.post('uucss_purge_url', {
+            wp.ajax.post('rapidload_purge_all', {
                 clear: true,
                 nonce: window.uucss.nonce,
                 url: null,
@@ -26,7 +26,7 @@
             var $this = $(this);
 
             $this.text('loading...');
-            wp.ajax.post('uucss_purge_url', {
+            wp.ajax.post('rapidload_purge_all', {
                 clear: true,
                 url: uucss_admin_bar.post_link,
                 nonce: window.uucss.nonce,
@@ -55,7 +55,7 @@
                 }
             }
 
-            wp.ajax.post('uucss_purge_url', data).done(function (d) {
+            wp.ajax.post('rapidload_purge_all', data).done(function (d) {
                 $this.text('optimize')
                 $this.hide();
                 $('#button-uucss-clear').css('display', 'inline-block')
@@ -67,7 +67,7 @@
         $('.rapidload-clear-all').click(function (e) {
             e.preventDefault();
 
-            wp.ajax.post('uucss_purge_url', {
+            wp.ajax.post('rapidload_purge_all', {
                 clear: true,
                 nonce: window.uucss.nonce,
                 url: null,
