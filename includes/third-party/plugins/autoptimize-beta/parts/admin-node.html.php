@@ -65,17 +65,20 @@ global $post;
 
         window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
     </script>
-    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">RapidLoad</a>
+    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=rapidload' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Size: <?php echo $this->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
 
 		<?php if ( $post ) {
-			$exists = RapidLoad_Settings::link_exists( get_permalink( $post ) );?>
-            <div id="button-uucss-clear" <?php if ( ! $exists ) echo 'class="hidden"' ?> title="clear page cache">remove
+			$exists =  new RapidLoad_Job([
+                'url' => get_permalink( $post )
+            ]);
+            ?>
+            <div id="button-uucss-clear" <?php if ( ! isset($exists->id) ) echo 'class="hidden"' ?> title="clear page cache">remove
             </div>
-            <div id="button-uucss-purge" <?php if ( $exists ) echo 'class="hidden"' ?> title="generate page cache">optimize
+            <div id="button-uucss-purge" <?php if ( isset($exists->id) ) echo 'class="hidden"' ?> title="generate page cache">optimize
             </div>
 		<?php } ?>
         <div id="button-uucss-clear-all" title="remove all RapidLoad optimizations">remove all</div>

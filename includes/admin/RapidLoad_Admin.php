@@ -10,18 +10,387 @@ class RapidLoad_Admin
     {
         if(is_admin()){
 
-            add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
-            add_action('wp_ajax_rapidload_purge_all', [$this, 'rapidload_purge_all']);
+            add_action('current_screen', [$this, 'validate_domain']);
             add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
-            add_action('wp_ajax_get_all_rules', [$this, 'get_all_rules']);
-            add_action('wp_ajax_upload_rules', [$this, 'upload_rules']);
             add_action('updated_option', [$this, 'update_cloudflare_settings'], 10, 3 );
             add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
-
+            add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
+            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+            add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
+            add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
         }
 
-        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
+        add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
+        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+        add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+    }
+
+    public function uucss_connect(){
+
+        if ( ! isset( $_REQUEST['license_key'] ) || empty( $_REQUEST['license_key'] ) ) {
+            wp_send_json_error( 'License Key required' );
+        }
+
+        $license_key = $_REQUEST['license_key'];
+
+        $uucss_api         = new RapidLoad_Api();
+        $uucss_api->apiKey = $license_key;
+        $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
+
+        if ( $uucss_api->is_error( $results ) ) {
+            if(isset($results->errors) && isset($results->errors[0])){
+                wp_send_json_error($results->errors[0]->detail);
+            }else{
+                wp_send_json_error('License Key verification fail');
+            }
+        }
+
+        wp_send_json_success([
+            'success' => true,
+            'message' => 'License Key verification success',
+            'activation_nonce' => wp_create_nonce( 'uucss_activation' ),
+        ]);
+    }
+
+
+    public function validate_domain() {
+
+        if ( get_current_screen() && get_current_screen()->base != 'settings_page_uucss' ) {
+            return;
+        }
+
+        $options   = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
+
+        if(!isset( $options['uucss_api_key_verified'] ) || $options['uucss_api_key_verified'] != '1'){
+            return;
+        }
+
+        $uucss_api = new RapidLoad_Api();
+
+        if ( ! isset( $options['uucss_api_key'] ) ) {
+            return;
+        }
+
+        $results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
+
+        if($uucss_api->is_error($results)){
+            $options['valid_domain'] = false;
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+            return;
+        }
+
+        if(!isset($options['valid_domain']) || !$options['valid_domain']){
+            $options['valid_domain'] = true;
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+        }
+    }
+
+    public function ajax_deactivate() {
+
+        $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
+
+        $cache_key = 'pand-' . md5( 'first-uucss-job' );
+        RapidLoad_Base::delete_option( $cache_key );
+
+        do_action('rapidload/vanish');
+
+        $api = new RapidLoad_Api();
+
+        // remove domain from authorized list
+        $api->post( 'deactivate', [
+            'url' => site_url()
+        ] );
+
+        unset( $options['uucss_api_key_verified'] );
+        unset( $options['uucss_api_key'] );
+        unset( $options['whitelist_packs'] );
+
+        RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
+        wp_send_json_success( true );
+    }
+
+    function rapidload_rule_types($rules){
+
+        $custom_posts = get_post_types(
+            array(
+                'public'   => true,
+                '_builtin' => false,
+            ),
+            'names',
+            'and'
+        );
+
+        $taxonomies = get_taxonomies([
+            'public' => true
+        ]);
+
+        $rules[] = [
+            'name' => 'front_page',
+            'rule' => 'is_front_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_front_page();
+            },
+        ];
+
+        $rules[] = [
+            'name' => '404',
+            'rule' => 'is_404',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_404();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'archive',
+            'rule' => 'is_archive',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_archive();
+            },
+        ];
+
+        foreach ($custom_posts as $key => $value){
+            if($value == 'page' || $value == 'post' || $value == 'product'){
+                continue;
+            }
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'category' => 'Custom Post Types',
+                    'priority' => 5,
+                    'callback' => function() use($value){
+                        return get_post_type( get_the_ID() ) == $value;
+                    }
+                ];
+            }
+        }
+
+        foreach ($taxonomies as $key => $value){
+            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
+
+                $rules[] = [
+                    'name' => $value,
+                    'rule' => 'is_' . $value,
+                    'category' => 'Taxonomies',
+                    'priority' => 5,
+                    'callback' => function() use($value){
+                        return is_tax($value);
+                    },
+                ];
+            }
+        }
+
+        $rules[] = [
+            'name' => 'author',
+            'rule' => 'is_author',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_author();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'home',
+            'rule' => 'is_home',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_home();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'page',
+            'rule' => 'is_page',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_page();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'post',
+            'rule' => 'is_post',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_singular();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'search',
+            'rule' => 'is_search',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_search();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'attachment',
+            'rule' => 'is_attachment',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_attachment();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'single',
+            'rule' => 'is_single',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_single();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'sticky',
+            'rule' => 'is_sticky',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_sticky();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'paged',
+            'rule' => 'is_paged',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_paged();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'path',
+            'rule' => 'is_path',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return true;
+            },
+        ];
+
+        return $rules;
+    }
+
+
+    public function clear_cache_on_option_update( $option, $old_value, $value ) {
+
+        if ( $option == 'autoptimize_uucss_settings' ) {
+
+            $needs_to_cleared = false;
+
+            $diffs = [];
+            $diffs_invert = [];
+
+            if ( $old_value && $value ) {
+                $diffs        = array_diff_key( $old_value, $value );
+                $diffs_invert = array_diff_key( $value, $old_value );
+            }
+
+            if ( isset( $diffs_invert['valid_domain'] ) ) {
+                unset( $diffs_invert['valid_domain'] );
+            }
+            if ( isset( $diffs['valid_domain'] ) ) {
+                unset( $diffs['valid_domain'] );
+            }
+
+            $diffs = array_merge( $diffs, $diffs_invert );
+
+            // if these settings are changed cache will be cleared
+            if ( isset( $diffs['uucss_minify'] ) ||
+                isset( $diffs['uucss_keyframes'] ) ||
+                isset( $diffs['uucss_fontface'] ) ||
+                isset( $diffs['uucss_analyze_javascript'] ) ||
+                isset( $diffs['uucss_safelist'] ) ||
+                isset( $diffs['whitelist_packs'] ) ||
+                isset( $diffs['uucss_blocklist'] ) ||
+                isset( $diffs['uucss_variables'] ) ) {
+                $needs_to_cleared = true;
+            }
+
+            foreach ( [ 'whitelist_packs', 'uucss_safelist', 'uucss_blocklist' ] as $compare_value ) {
+                if ( isset( $value[ $compare_value ] ) && isset( $old_value[ $compare_value ] ) && $old_value[ $compare_value ] !== $value[ $compare_value ] ) {
+                    $needs_to_cleared = true;
+                    break;
+                }
+            }
+
+            if(isset( $diffs['uucss_enable_rules'] )){
+                RapidLoad_DB::detach_all_rules();
+            }
+
+            if ( $needs_to_cleared ) {
+
+                /*$this->uucss->clear_cache( null, [
+                    'soft' => true
+                ] );*/
+            }
+
+            RapidLoad_Base::fetch_options(false);
+        }
+
+    }
+
+    public function uucss_license() {
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->get( 'license', [
+            'url' => $this->transform_url(get_site_url()),
+            'version' => UUCSS_VERSION,
+            'db_version' => RapidLoad_DB::$db_version,
+            'db_version_exist' => RapidLoad_DB::$current_version
+        ] );
+
+        if ( ! is_wp_error( $data ) ) {
+
+            if ( isset( $data->errors ) ) {
+                wp_send_json_error( $data->errors[0]->detail );
+            }
+
+            if ( gettype( $data ) === 'string' ) {
+                wp_send_json_error( $data );
+            }
+
+            do_action( 'uucss/license-verified' );
+
+            wp_send_json_success( $data->data );
+        }
+
+        wp_send_json_error( 'unknown error occurred' );
+    }
+
+    public function frontend_logs(){
+
+        $args = [];
+
+        $args['type'] = isset($_REQUEST['type']) && !empty($_REQUEST['type']) ? $_REQUEST['type'] : 'frontend';
+        $args['log'] = isset($_REQUEST['log']) && !empty($_REQUEST['log']) ? $_REQUEST['log'] : '';
+        $args['url'] = isset($_REQUEST['url']) && !empty($_REQUEST['url']) ? $_REQUEST['url'] : '';
+
+        self::log($args);
+
+        wp_send_json_success(true);
     }
 
     public function inject_cloudflare_settings($data){
@@ -134,37 +503,6 @@ class RapidLoad_Admin
         <?php
     }
 
-    public function upload_rules(){
-
-        if(!isset($_REQUEST['rules'])){
-            wp_send_json_error('rules required');
-        }
-
-        $rules = json_decode(stripslashes($_REQUEST['rules']));
-
-        if(!$rules){
-            wp_send_json_error('rules required');
-        }
-
-        foreach ($rules as $rule){
-
-            $rule_job = new RapidLoad_Job([
-               'url' => $rule->url,
-               'rule' => $rule->rule,
-               'regex' => $rule->regex
-            ]);
-            $rule_job->save(true);
-        }
-
-        wp_send_json_success('success');
-    }
-
-    public function get_all_rules(){
-
-        wp_send_json_success(RapidLoad_Job::all());
-
-    }
-
     public function get_robots_text(){
 
         $robotsUrl = trailingslashit(get_site_url()) . "robots.txt";
@@ -207,148 +545,6 @@ class RapidLoad_Admin
 
     }
 
-    public function rapidload_purge_all(){
-
-        $job_type = isset($_REQUEST['job_type']) ? $_REQUEST['job_type'] : 'all';
-        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
-        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
-        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
-        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
-        $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
-
-        if($clear){
-
-            if(!empty($url_list)){
-
-                if($job_type == 'url'){
-
-                    foreach ($url_list as $value){
-
-                        RapidLoad_DB::clear_job_data($job_type, [
-                            'url' => $value
-                        ]);
-                        RapidLoad_DB::clear_jobs($job_type, [
-                            'url' => $value
-                        ]);
-
-                    }
-
-                }else{
-
-                    foreach ($url_list as $value){
-
-                        if(isset($value['rule']) && isset($value['regex'])){
-                            RapidLoad_DB::clear_job_data($job_type, [
-                                'rule' => $value['rule'],
-                                'regex' => $value['regex']
-                            ]);
-                            RapidLoad_DB::clear_jobs($job_type, [
-                                'rule' => $value['rule'],
-                                'regex' => $value['regex']
-                            ]);
-                        }
-
-                    }
-
-                }
-
-            }else{
-
-                if($rule && $regex){
-                    RapidLoad_DB::clear_job_data($job_type, [
-                        'rule' => $rule,
-                        'regex' => $regex
-                    ]);
-                    RapidLoad_DB::clear_jobs($job_type, [
-                        'rule' => $rule,
-                        'regex' => $regex
-                    ]);
-                }elseif ($url){
-                    RapidLoad_DB::clear_job_data($job_type, [
-                        'url' => $url
-                    ]);
-                    RapidLoad_DB::clear_jobs($job_type, [
-                        'url' => $url
-                    ]);
-                }else{
-                    RapidLoad_DB::clear_job_data($job_type);
-                    RapidLoad_DB::clear_jobs($job_type);
-                }
-
-            }
-
-        }
-        else{
-
-            switch ($job_type){
-
-                case 'url':{
-
-                    if($url){
-
-                        if($url && $this->is_url_allowed($url)){
-
-                            $job = new RapidLoad_Job(['url' => $url]);
-                            $job->save(true);
-
-                        }
-                    }
-                    break;
-                }
-                case 'rule':{
-
-                    if($url && $rule && $regex){
-
-                        $this->update_rule((object)[
-                            'url' => $url,
-                            'rule' => $rule,
-                            'regex' => $regex
-                        ]);
-                    }
-                    break;
-                }
-                case 'site_map':{
-
-                    if($url){
-
-                        $spawned = $this->schedule_cron('add_sitemap_to_jobs',[
-                            'url' => $url
-                        ]);
-                    }
-                    break;
-                }
-                default:{
-
-                    $posts = new WP_Query(array(
-                        'post_type'=> $job_type,
-                        'posts_per_page' => -1
-                    ));
-
-                    if($posts && $posts->have_posts()){
-
-                        while ($posts->have_posts()){
-
-                            $posts->the_post();
-
-                            $url = $this->transform_url(get_the_permalink(get_the_ID()));
-
-                            if($this->is_url_allowed($url)){
-
-                                $job = new RapidLoad_Job(['url' => $url]);
-                                $job->save(true);
-                            }
-                        }
-                    }
-
-                    wp_reset_query();
-
-                    break;
-                }
-            }
-        }
-        wp_send_json_success('Successfully purged');
-   }
-
     function add_sitemap_to_jobs($url = false){
 
         if(!$url){
@@ -377,32 +573,6 @@ class RapidLoad_Admin
         }
     }
 
-    public function update_rule($args, $old = false){
 
-        if($old && isset($old['url'])){
-
-            $job = new RapidLoad_Job([
-                'url' => $old['url']
-            ]);
-
-            $job->url = $args->url;
-            $job->rule = $args->rule;
-            $job->regex = $args->regex;
-
-            $job->save();
-
-        }else{
-
-            $job = new RapidLoad_Job([
-                'url' => $args->url
-            ]);
-            $job->rule = $args->rule;
-            $job->regex = $args->regex;
-
-            $job->save();
-
-        }
-
-    }
 
 }

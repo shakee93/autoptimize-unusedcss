@@ -1753,7 +1753,7 @@
             e.preventDefault();
         });
 
-        function requeue(post_type, data = {}, list = [], type = 'path'){
+        function requeue(post_type, data = {}, list = [], type = 'requeue_all_url'){
 
             var data_ = {
                 url_list : list,
@@ -1765,7 +1765,7 @@
                 job_type : type,
             }
 
-            wp.ajax.post('uucss_queue',data_).then(function (i) {
+            /*wp.ajax.post('uucss_queue',data_).then(function (i) {
                 if(table && type === 'path'){
                     table.ajax.reload(null, false);
                 }else if(rule_table && type === 'rule'){
@@ -1773,15 +1773,15 @@
                 }
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
-            });
+            });*/
 
             wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
 
             }).done(function(){
-
+                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
 
-            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
+            //wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
 
         }
 
@@ -1890,22 +1890,22 @@
                             var requeue_url_list = [];
                             if(table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    requeue_url_list.push(table_row_value.url)
+                                    requeue_url_list.push(table_row_value.id)
                                 });
                             }
-                            requeue('current', {}, requeue_url_list);
+                            requeue('current', {}, requeue_url_list, 'requeue_all_url');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
-                            requeue('warnings');
+                            requeue('warnings', {}, requeue_url_list, 'requeue_all_url_warnings');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
-                            requeue('failed');
+                            requeue('failed', {}, requeue_url_list, 'requeue_all_url_failed');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
-                            requeue('processing');
+                            requeue('processing', {}, requeue_url_list, 'requeue_all_url_processing');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }
@@ -1922,7 +1922,7 @@
                                 var url_list = [];
                                 if(table.rows('.selected').data().length){
                                     $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                        url_list.push(table_row_value.url)
+                                        url_list.push(table_row_value.id)
                                     });
                                 }
                                 if(url_list.length){
@@ -1930,7 +1930,7 @@
                                 }
                             }
 
-                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
+                            /*wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
                                     $.uucssAlert('Successfully removed links from the table', 'info');
@@ -1942,11 +1942,11 @@
 
                             }).done(function(){
 
-                            });
+                            });*/
                             wp.ajax.post('rapidload_purge_all',data).then(function (i) {
 
                             }).done(function(){
-
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
@@ -2037,26 +2037,22 @@
                             var requeue_url_list = [];
                             if(rule_table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    requeue_url_list.push({
-                                        url : table_row_value.url,
-                                        rule : table_row_value.rule,
-                                        regex : table_row_value.regex
-                                    })
+                                    requeue_url_list.push(table_row_value.id)
                                 });
                             }
-                            requeue('current', {}, requeue_url_list, 'rule');
+                            requeue('current', {}, requeue_url_list, 'requeue_all_rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
-                            requeue('warnings', {},  null, 'rule');
+                            requeue('warnings', {},  null, 'requeue_all_rule_warnings');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
-                            requeue('failed', {}, null, 'rule');
+                            requeue('failed', {}, null, 'requeue_all_rule_failed');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
-                            requeue('processing', {}, null, 'rule');
+                            requeue('processing', {}, null, 'requeue_all_rule_processing');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }

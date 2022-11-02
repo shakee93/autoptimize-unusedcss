@@ -144,4 +144,25 @@ class RapidLoad_Job_Data{
         }
         return [];
     }
+
+    public function get_files(){
+        if(isset($this->data) && !empty($this->data)){
+            return unserialize($this->data);
+        }
+        return [];
+    }
+
+    public static function find_or_fail($id, $job_type){
+        global $wpdb;
+        $job_data = false;
+
+        $exist = $wpdb->get_row("SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $job_type ."' AND id = '" . $id . "' ORDER BY id LIMIT 1", OBJECT);
+
+        if($exist){
+            $job = RapidLoad_Job::find_or_fail($exist->job_id);
+            $job_data = new RapidLoad_Job_Data($job, $job_type);
+        }
+
+        return $job_data;
+    }
 }

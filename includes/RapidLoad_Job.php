@@ -173,4 +173,13 @@ class RapidLoad_Job{
         return RapidLoad_DB::get_rules_where();
 
     }
+
+    function delete(){
+
+        global $wpdb;
+
+        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id = " . $this->id);
+        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job WHERE id = " . $this->id);
+
+    }
 }

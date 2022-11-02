@@ -4,36 +4,36 @@
 
 <?php
 
-    global $uucss;
-    global $rapidload;
+global $uucss;
+global $rapidload;
 
-    $third_party_plugins = apply_filters('uucss/third-party/plugins', []);
-    $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
-        return isset($plugin['category']) && $plugin['category'] == 'cache';
-    });
+$third_party_plugins = apply_filters('uucss/third-party/plugins', []);
+$third_party_cache_plugins = array_filter($third_party_plugins, function ($plugin){
+    return isset($plugin['category']) && $plugin['category'] == 'cache';
+});
 
 ?>
 
 <form id='ao_settings_form' action='<?php echo admin_url( 'options.php' ); ?>' method='post'>
-	<?php settings_fields( 'autoptimize_uucss_settings' );
+    <?php settings_fields( 'autoptimize_uucss_settings' );
 
-	$api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
+    $api_key_verified = isset( $options['uucss_api_key_verified'] ) && $options['uucss_api_key_verified'] == '1';
     $default_debug_mode = ! empty( $options['uucss_enable_debug'] ) && '1' === $options['uucss_enable_debug'];
     $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_debug_mode);
 
-	?>
+    ?>
     <div style="display: flex">
         <ul style="width: 78%" id="uucss-wrapper">
             <li class="uucss-notification" style="display: none">
                 <div class="content"></div>
             </li>
 
-			<?php if ( ! $api_key_verified ) : ?>
+            <?php if ( ! $api_key_verified ) : ?>
                 <li class="uucss-intro">
-					<?php include_once 'intro.html.php' ?>
+                    <?php include_once 'intro.html.php' ?>
                 </li>
-			<?php endif; ?>
-			<?php if ( $api_key_verified) : ?>
+            <?php endif; ?>
+            <?php if ( $api_key_verified) : ?>
                 <li class="uucss-history uucss-job-history">
                     <h2>
                         Optimization Jobs
@@ -55,26 +55,26 @@
                     </div>
                 </li>
                 <?php if($rapidload->rules_enabled()) : ?>
-                <li class="uucss-history uucss-rule-history">
-                    <h2>
-                        Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/4404081180179-Rule-Based-Injection" style="font-size: 11px">Learn More</a>
-                        <span class="multiple-selected-text">
+                    <li class="uucss-history uucss-rule-history">
+                        <h2>
+                            Rules <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/4404081180179-Rule-Based-Injection" style="font-size: 11px">Learn More</a>
+                            <span class="multiple-selected-text">
                             <span class="multiple-selected-value multiple-selected-value-rule"></span>
                             Selected
                             <a href="#" id="js-uucss-clear-selection-rule">clear</a>
                         </span>
-                        <span class="uucss-add-menu uucss-add-site-rule" data-featherlight="#add_rule_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-rule-model">
+                            <span class="uucss-add-menu uucss-add-site-rule" data-featherlight="#add_rule_featherlight_content" data-featherlight-open-speed="50" data-featherlight-close-speed="50" data-featherlight-variant="add-site-rule-model">
                             <span class="dashicons dashicons-plus"></span>Add
                         </span>
-                        <button class="uucss-sub-menu uucss-add-site-rule-submenu" aria-expanded="false">
-                            <span class="dashicons dashicons-ellipsis"></span>
-                        </button>
-                    </h2>
-                    <div class="content">
-                        <div class="spinner spinner-history"></div>
-                        <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
-                    </div>
-                </li>
+                            <button class="uucss-sub-menu uucss-add-site-rule-submenu" aria-expanded="false">
+                                <span class="dashicons dashicons-ellipsis"></span>
+                            </button>
+                        </h2>
+                        <div class="content">
+                            <div class="spinner spinner-history"></div>
+                            <table id="uucss-rule-history" width="100%" class="hover uucss-history-table uucss-rule-history-table"></table>
+                        </div>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <h2>
@@ -85,7 +85,7 @@
                     </h2>
                     <div class="content" style="display:none;">
                         <?php
-                            do_action('uucss/options/before_option_table');
+                        do_action('uucss/options/before_option_table');
                         ?>
                         <table class="form-table" id="uucss-options">
                             <tr>
@@ -277,7 +277,7 @@
                                 </th>
                             </tr>
                             <?php
-                                do_action('uucss/options/css', $options);
+                            do_action('uucss/options/css', $options);
                             ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
@@ -473,8 +473,8 @@
                                 <td>
                                     <label><input id='uucss_load_original' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_load_original]' <?php if ( ! empty( $options['uucss_load_original'] ) && '1' === $options['uucss_load_original'] ) {
-					                        echo 'checked="checked"';
-				                        } ?> value='1'>
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
                                         <i>
                                             Inject original CSS files on user interaction. this can help resolve Javascript
                                             DOM selector related issues.
@@ -482,30 +482,13 @@
                                     </label>
                                 </td>
                             </tr>
-
-                            <?php if($uucss->provider != 'rapidload') : ?>
-                            <tr>
-                                <th scope="row"><?php _e( 'Parse All CSS Files', 'uucss' ); ?></th>
-                                <td>
-                                    <label><input id='autoptimize_uucss_include_all_files' type='checkbox'
-                                                  name='autoptimize_uucss_settings[autoptimize_uucss_include_all_files]' <?php if ( ! empty( $options['autoptimize_uucss_include_all_files'] ) && '1' === $options['autoptimize_uucss_include_all_files'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
-                                        <i>
-                                            Parse CSS files which are excluded by Autoptimize.
-                                        </i>
-                                    </label>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-
                             <tr>
                                 <th scope="row"><?php _e( 'Inline Small CSS Files', 'uucss' ); ?></th>
                                 <td>
                                     <label><input id='uucss_inline_css' type='checkbox'
                                                   name='autoptimize_uucss_settings[uucss_inline_css]' <?php if ( ! empty( $options['uucss_inline_css'] ) && '1' === $options['uucss_inline_css'] ) {
-											echo 'checked="checked"';
-										} ?> value='1'>
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
                                         <i>
                                             Inline CSS files which are smaller than 5kb after unused CSS is removed.
                                         </i>
@@ -515,7 +498,7 @@
 
                         </table>
                         <?php
-                            do_action('uucss/options/after_option_table');
+                        do_action('uucss/options/after_option_table');
                         ?>
                     </div>
                 </li>
@@ -530,7 +513,7 @@
                     </h2>
                     <div class="content" style="display:none;">
                         <?php
-                        $total = UnusedCSS_DB::get_total_job_count();
+                        $total = RapidLoad_DB::get_total_job_count();
                         $success = 0;
                         $queued = 0;
                         $processing = 0;
@@ -545,7 +528,7 @@
                             <strong>DB Version</strong> : <?php echo UnusedCSS_DB::$current_version ?>
                         </p>
                         <p class="style-sheet-count">
-                            <strong>CSS Stylesheets</strong> : <?php echo $this->uucss->cache_file_count() . ' files, totalling ' . $this->uucss->size(); ?>
+                            <strong>CSS Stylesheets</strong> : <?php echo RapidLoad_Base::cache_file_count() . ' files, totalling ' . $this->size(); ?>
                         </p>
                         <p>
                             <strong>Cache Folder</strong> : <?php echo UnusedCSS::$base_dir; ?>
@@ -554,14 +537,14 @@
                             <strong>Log File</strong> : <?php echo UUCSS_LOG_DIR . 'debug.log'; ?> <a id="status-view-uucss-log" href="#">View Logs</a>
                         </p>
                         <p>
-                            <strong>Can We Write ?</strong> : <?php echo ($this->uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
+                            <strong>Can We Write ?</strong> : <?php echo ($uucss->initFileSystem()) ? 'Yes' : 'No' ; ?>
                         </p>
                         <p class="more-info-uucss-status">
                             <strong>Total Optimization Jobs</strong> :  <span class="total-jobs"><?php echo $total; ?></span>
                         </p>
                         <div class="uucss-status-more-info" style="display: none">
                             <?php
-                                $hits = 0;
+                            $hits = 0;
                             ?>
                             <p class="status-hits-count">
                                 <strong>Hits</strong> : <span class="number"><?php echo $hits; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($hits/$total*100, 0) : '0'; ?></span>%
@@ -570,14 +553,14 @@
                                 <strong>Success</strong> : <span class="number"><?php echo $success; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($success/$total*100, 0) : '0'; ?></span>%
                             </p>
                             <?php
-                                if ( $rapidload->rules_enabled() ) :
+                            if ( $rapidload->rules_enabled() ) :
                                 $rule_based = 0;
-                            ?>
-                            <p class="status-rule-based-count">
-                                <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%
-                            </p>
+                                ?>
+                                <p class="status-rule-based-count">
+                                    <strong>Rule Based</strong> : <span class="number"><?php echo $rule_based; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($rule_based/$total*100, 0) : '0'; ?></span>%
+                                </p>
                             <?php
-                                endif;
+                            endif;
                             ?>
                             <p class="status-queued-count">
                                 <strong>Queued</strong> : <span class="number"><?php echo $queued; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($queued/$total*100, 0) : '0' ?></span>%
@@ -595,19 +578,19 @@
                                 <strong>Failed Jobs</strong> : <span class="number"><?php echo $failed; ?></span> - <span class="percentage"><?php echo ($total != 0) ? number_format($failed/$total*100, 0) : '0' ?></span>%
                             </p>
                             <?php
-                                if(count($third_party_plugins) > 0):
+                            if(count($third_party_plugins) > 0):
                                 ?>
-                                    <p>
-                                        <strong>Support Plugins</strong> :
-                                    </p>
-                                <?php
-                                endif;
+                                <p>
+                                    <strong>Support Plugins</strong> :
+                                </p>
+                            <?php
+                            endif;
                             ?>
                             <ul>
                                 <?php
-                                    foreach ($third_party_plugins as $party_plugin){
-                                        echo '<li style="margin-bottom:0">' . (isset($party_plugin['plugin']) ? $party_plugin['plugin'] : '') . ' - ' . (isset($party_plugin['category']) ? $party_plugin['category'] : '') .'</li>';
-                                    }
+                                foreach ($third_party_plugins as $party_plugin){
+                                    echo '<li style="margin-bottom:0">' . (isset($party_plugin['plugin']) ? $party_plugin['plugin'] : '') . ' - ' . (isset($party_plugin['category']) ? $party_plugin['category'] : '') .'</li>';
+                                }
                                 ?>
                             </ul>
                         </div>
@@ -638,8 +621,8 @@
                             <div>
                                 <input id='thirtd_part_cache_plugins' type='hidden'
                                        value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
-                                    echo '1';
-                                } ?>">
+                                           echo '1';
+                                       } ?>">
                                 <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="<?php if ( ! empty( $options['uucss_auto_refresh_frontend'] ) && '1' === $options['uucss_auto_refresh_frontend'] ) {
                                     echo '1';
@@ -654,25 +637,25 @@
                                 } ?>">
                                 <input type="hidden" name="autoptimize_uucss_settings[uucss_api_key_verified]"
                                        value="<?php if ( isset( $options['uucss_api_key_verified'] ) )
-									       echo $options['uucss_api_key_verified'] ?>">
+                                           echo $options['uucss_api_key_verified'] ?>">
                                 <input id='uucss_api_key' type='hidden'
                                        name='autoptimize_uucss_settings[uucss_api_key]'
                                        value="<?php echo ( isset( $options['uucss_api_key'] ) ) ? $options['uucss_api_key'] : '' ?>"
                                        size="40">
                                 <em id="verification_status"></em>
-								<?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
+                                <?php if ( isset( $options['valid_domain'] ) && $options['valid_domain'] ) : ?>
                                     <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
                                     <a href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-								<?php else : ?>
+                                <?php else : ?>
                                     <a href="<?php echo (defined('UUCSS_APP_URL') && UUCSS_APP_URL ? UUCSS_APP_URL : 'https://app.rapidload.io/')?>" target="_blank"
                                        class="uucss-activate" id="my-account"> My Account
                                     </a>
                                     <a style="margin-left: 5px"
-                                        href="<?php echo UnusedCSS::activation_url('authorize' ) ?>"
+                                       href="<?php echo UnusedCSS::activation_url('authorize' ) ?>"
                                        class="uucss-activate"> Reactivate License
                                     </a>
 
@@ -680,7 +663,7 @@
                                        href="<?php echo UnusedCSS::activation_url('deactivate' ) ?>"
                                        class="uucss-activate" id="uucss-deactivate"> Deactivate License
                                     </a>
-								<?php endif; ?>
+                                <?php endif; ?>
 
                             </div>
 
@@ -695,33 +678,33 @@
 
                         <a target="_blank" href="https://rapidload.io/">
                             <img
-                                    src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" width="130"
-                                    alt="RapidLoad.io logo">
+                                src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/logo.svg' ?>" width="130"
+                                alt="RapidLoad.io logo">
                         </a>
                     </p>
                 </li>
 
-			<?php endif; ?>
+            <?php endif; ?>
 
         </ul>
         <?php if($api_key_verified): ?>
-        <div style="width: 22%" class="uucss-banner-section">
-            <div class="uucss-banner">
-                <div class="banner-title">
-                    <h2>Get up to $60 in cash back</h2>
-                </div>
-                <div class="banner-image">
-                    <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/referral.svg' ?>" alt="" width="120px">
-                </div>
-                <div class="banner-content">
-                    <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
-                    <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
-                </div>
-                <div class="banner-footer">
-                    <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
+            <div style="width: 22%" class="uucss-banner-section">
+                <div class="uucss-banner">
+                    <div class="banner-title">
+                        <h2>Get up to $60 in cash back</h2>
+                    </div>
+                    <div class="banner-image">
+                        <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/referral.svg' ?>" alt="" width="120px">
+                    </div>
+                    <div class="banner-content">
+                        <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
+                        <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
+                    </div>
+                    <div class="banner-footer">
+                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php endif; ?>
     </div>
 
@@ -738,7 +721,7 @@
 </form>
 
 <?php
-    do_action('uucss/options/after_render_form');
+do_action('uucss/options/after_render_form');
 ?>
 
 <div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight">
@@ -839,13 +822,13 @@
         </div>
         <div>
             <input type="text" class="site-map-url show" placeholder="<?php echo trailingslashit(get_site_url())?>" data-site_url="<?php echo trailingslashit(get_site_url())?>" data-sitemap_url="<?php
-                /*$robots = UnusedCSS_Admin::get_robots_text(get_site_url());
-                if($robots && isset($robots->sitemap)){
-                    echo apply_filters('uucss/sitemap-path', $robots->sitemap);
-                }else{
-                    echo apply_filters('uucss/sitemap-path', home_url('/sitemap_index.xml'));
-                }*/
+            /*$robots = UnusedCSS_Admin::get_robots_text(get_site_url());
+            if($robots && isset($robots->sitemap)){
+                echo apply_filters('uucss/sitemap-path', $robots->sitemap);
+            }else{
                 echo apply_filters('uucss/sitemap-path', home_url('/sitemap_index.xml'));
+            }*/
+            echo apply_filters('uucss/sitemap-path', home_url('/sitemap_index.xml'));
             ?>">
         </div>
         <div class="add-action-wrap">
@@ -853,4 +836,3 @@
         </div>
     </div>
 </div>
-

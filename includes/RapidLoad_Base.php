@@ -37,9 +37,13 @@ class RapidLoad_Base
 
         self::fetch_options();
 
-        new RapidLoad_Admin_Frontend();
-
         add_action('init', function (){
+
+            RapidLoad_Base::activate();
+
+            new RapidLoad_Admin_Frontend();
+
+            $this->init_log_dir();
 
             RapidLoad_ThirdParty::initialize();
 
@@ -94,6 +98,31 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function init_log_dir(){
+
+        if(!self::get_log_option()){
+            return false;
+        }
+
+        $file_system = self::get_log_instance();
+
+        if ( $file_system->exists( UUCSS_LOG_DIR ) ) {
+            return true;
+        }
+
+        if( $file_system->is_writable( UUCSS_LOG_DIR ) ){
+            return false;
+        }
+
+        $created = $file_system->mkdir( UUCSS_LOG_DIR , 0755, !$file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+
+        if (!$created || ! $file_system->is_writable( UUCSS_LOG_DIR ) || ! $file_system->is_readable( UUCSS_LOG_DIR ) ) {
+            return false;
+        }
+
+        return true;
     }
 
     public function modules(){
@@ -244,7 +273,7 @@ class RapidLoad_Base
         return self::$options;
     }
 
-    public static function get_option($name, $default)
+    public static function get_option($name, $default = null)
     {
         if(is_multisite()){
 
@@ -279,7 +308,7 @@ class RapidLoad_Base
         return update_site_option( $name, $default );
     }
 
-    public static function delete_option($name, $default)
+    public static function delete_option($name)
     {
         if(is_multisite()){
 
@@ -366,7 +395,7 @@ class RapidLoad_Base
 
         self::update_option( 'autoptimize_uucss_settings', $options );
 
-        $data        = UnusedCSS_Admin::suggest_whitelist_packs();
+        $data        = self::suggest_whitelist_packs();
         $white_packs = isset($data->data) ? $data->data : [];
 
         $options['whitelist_packs'] = array();
@@ -379,6 +408,35 @@ class RapidLoad_Base
         self::$options = self::fetch_options(false);
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+    }
+
+    public static function suggest_whitelist_packs() {
+
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $plugins        = get_plugins();
+        $active_plugins = array_map( function ( $key, $item ) {
+
+            $item['slug'] = $key;
+
+            return $item;
+        }, array_keys( $plugins ), $plugins );
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->post( 'whitelist-packs/wp-suggest', [
+            'plugins' => $active_plugins,
+            'theme'   => get_template(),
+            'url'     => site_url()
+        ] );
+
+        if ( wp_doing_ajax() ) {
+            wp_send_json_success( $data->data );
+        }
+
+        return isset($data) && is_array($data) ? $data : [];
     }
 
     public function rules_enabled(){
@@ -411,6 +469,11 @@ class RapidLoad_Base
         return $this->applicable_rule;
     }
 
+    public static function is_domain_verified(){
+        $options = self::fetch_options();
+        return  $options['valid_domain'];
+    }
+
     public function get_pre_defined_rules($with_permalink = false){
 
         if(!$this->defined_rules){
@@ -419,5 +482,25 @@ class RapidLoad_Base
         }
 
         return $this->defined_rules;
+    }
+
+    public static function cache_file_count(){
+        $uucss_files = scandir(UnusedCSS::$base_dir);
+        $uucss_files = array_filter($uucss_files, function ($file){
+            return false !== strpos($file, '.css');
+        });
+        $cpcss_files = scandir(CriticalCSS::$base_dir);
+        $cpcss_files = array_filter($cpcss_files, function ($file){
+            return false !== strpos($file, '.css');
+        });
+        return count($uucss_files) + count($cpcss_files);
+    }
+
+    public static function is_api_key_verified() {
+
+        $api_key_status = isset( self::$options['uucss_api_key_verified'] ) ? self::$options['uucss_api_key_verified'] : '';
+
+        return $api_key_status == '1';
+
     }
 }
