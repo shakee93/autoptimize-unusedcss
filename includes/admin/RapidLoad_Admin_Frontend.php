@@ -594,6 +594,13 @@ class RapidLoad_Admin_Frontend
                 }
                 default:{
 
+                    if($url){
+
+                        $job = new RapidLoad_Job(['url' => $url]);
+                        $job->save(true);
+
+                    }
+
                     $posts = new WP_Query(array(
                         'post_type'=> $job_type,
                         'posts_per_page' => -1

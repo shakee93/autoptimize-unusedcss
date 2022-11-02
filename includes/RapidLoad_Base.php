@@ -166,16 +166,6 @@ class RapidLoad_Base
 
         }, apply_filters('uucss/scripts/global/priority', 90));
 
-        global $post;
-
-        $data = array(
-            'post_id'         => ($post) ? $post->ID : null,
-            'post_link'       => ($post) ? get_permalink($post) : null,
-        );
-
-        wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
-        wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
-        wp_enqueue_script( 'uucss_admin_bar_script' );
     }
 
     function add_plugin_update_message(){
