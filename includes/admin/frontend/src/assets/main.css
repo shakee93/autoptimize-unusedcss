@@ -14,3 +14,10 @@ body {
         font-family: Lexend, system-ui,Helvetica;
     }
 }
+
+@layer components {
+    .active{
+        background-color: #7F54B3 !important;
+        color: white !important;
+    }
+}

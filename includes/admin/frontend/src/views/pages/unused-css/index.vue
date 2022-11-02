@@ -26,14 +26,14 @@
       <div v-for="button in buttons" class="p-4 pl-32	pr-96">
         <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
         <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
-        <button v-on:click ="button.load_original_css = 'user_interaction'" :class="{ 'bg-purple text-white': button.load_original_css === 'user_interaction' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
+        <button v-on:click ="button.load_original_css = 'user_interaction'" :class="{ active: button.load_original_css === 'user_interaction' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
           On user interaction
         </button>
 
-        <button v-on:click ="button.load_original_css = 'asynchronously'" :class="{ 'bg-purple text-white': button.load_original_css === 'asynchronously' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
+        <button v-on:click ="button.load_original_css = 'asynchronously'" :class="{ active: button.load_original_css === 'asynchronously' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
           Asynchronously
         </button>
-        <button v-on:click ="button.load_original_css = 'remove'" :class="{ 'bg-purple text-white': button.load_original_css === 'remove' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
+        <button v-on:click ="button.load_original_css = 'remove'" :class="{ active: button.load_original_css === 'remove' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
           Remove
         </button>
 
