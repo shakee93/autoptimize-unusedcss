@@ -152,6 +152,13 @@ class RapidLoad_Job_Data{
         return [];
     }
 
+    public function get_stats(){
+        if(isset($this->stats) && !empty($this->stats)){
+            return unserialize($this->stats);
+        }
+        return [];
+    }
+
     public static function find_or_fail($id, $job_type){
         global $wpdb;
         $job_data = false;

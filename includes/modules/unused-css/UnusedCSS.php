@@ -48,8 +48,64 @@ class UnusedCSS
             return $this->get_cached_file($uucss_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
+        add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+
         new UnusedCSS_Queue();
     }
+
+    public function first_uucss_job() {
+
+        if ( class_exists('PAnD') && ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+            return;
+        }
+
+        if(get_current_screen() && get_current_screen()->base == 'settings_page_uucss'){
+            return;
+        }
+
+        $first_link = RapidLoad_DB::get_first_link();
+
+        $job = false;
+
+        if($first_link){
+
+            $first_link = new RapidLoad_Job([
+                'url' => $first_link
+            ]);
+
+            $job = new RapidLoad_Job_Data($first_link, 'uucss');
+        }
+
+        if ( $job && isset($job->id) && $job->status == 'success' ) : ?>
+            <div data-dismissible="first-uucss-job-forever"
+                 class="updated notice uucss-notice notice-success is-dismissible">
+                <h4><span class="dashicons dashicons-yes-alt"></span> RapidLoad successfully ran your first job!</h4>
+                <p><?php _e( 'You slashed <strong>' . $job->get_stats()->reductionSize . ' </strong> of unused CSS - that\'s <strong>' . $job->get_stats()->reduction . '% </strong> of your total CSS file size. Way to go 👏', 'sample-text-domain' ); ?></p>
+            </div>
+        <?php endif;
+
+        if ( $job && isset($job->id) && $job->status == 'failed' ) : ?>
+            <div data-dismissible="first-uucss-job-forever"
+                 class="error notice uucss-notice notice-error is-dismissible">
+                <h4><span class="dashicons dashicons-no-alt"></span> RapidLoad : We were unable to remove unused css
+                    from
+                    your site 🤕</h4>
+
+                <div>
+                    <p> Our team can help. Get in touch with support <a target="_blank"
+                                                                        href="https://rapidload.zendesk.com/hc/en-us/requests/new">here</a>
+                    </p>
+                    <blockquote class="error notice">
+                        <strong>Link :</strong> <?php echo $job['url'] ?> <br>
+                        <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>
+                        <strong>Message :</strong> <?php echo $job['meta']['error']['message'] ?>
+                    </blockquote>
+                </div>
+
+            </div>
+        <?php endif;
+    }
+
 
     function update_link($link){
 

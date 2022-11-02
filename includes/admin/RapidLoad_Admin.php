@@ -15,15 +15,173 @@ class RapidLoad_Admin
             add_action('updated_option', [$this, 'update_cloudflare_settings'], 10, 3 );
             add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
-            add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
-            add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
-            add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+            add_action('wp_ajax_uucss_logs', [$this, 'rapidload_logs']);
+            add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_rapidload_logs']);
+            add_action("wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+            add_action("wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
+            add_action("wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+            add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
+            add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
+            add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
         add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+    }
+
+    public function attach_rule(){
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule_id = isset($_REQUEST['rule_id']) ? $_REQUEST['rule_id'] : false;
+
+        if(!$type || !$url){
+            wp_send_json_error('Required field missing');
+        }
+
+        if($type == 'detach'){
+
+            $path = new RapidLoad_Job([
+                'url' => $url
+            ]);
+            $path->attach_rule();
+            $path->save();
+            wp_send_json_success('Successfully detached from rule');
+        }
+
+        if(!$type || $type == 'attach' && !$rule_id){
+            wp_send_json_error('Required field missing');
+        }
+
+        if($type == 'attach'){
+
+            $rule = RapidLoad_Job::find_or_fail($rule_id);
+
+            if(!$rule){
+                wp_send_json_error('Rule not found');
+            }
+
+            $path = new RapidLoad_Job([
+                'url' => $url
+            ]);
+
+            if(!self::is_url_glob_matched($url, $rule->regex)){
+                wp_send_json_success('Pattern not matched');
+            }
+
+            $path->attach_rule($rule->id, $rule->rule);
+            $path->save();
+            wp_send_json_success('Successfully attached to rule');
+        }
+
+    }
+
+    public function verify_api_key() {
+
+        if ( ! isset( $_POST['api_key'] ) ) {
+            wp_send_json_error();
+
+            return;
+        }
+
+        $uucss_api         = new RapidLoad_Api();
+        $uucss_api->apiKey = sanitize_text_field( $_POST['api_key'] );
+
+        $results = $uucss_api->get( 'verify' );
+
+        if ( isset( $results->data ) ) {
+            wp_send_json_success( true );
+        }
+
+        wp_send_json_error();
+
+    }
+
+    public function clear_rapidload_logs(){
+        $file_system = new RapidLoad_FileSystem();
+
+        if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
+            wp_send_json_success(true);
+        }
+
+        $file_system->delete_folder(WP_CONTENT_DIR . '/uploads/rapidload/');
+        wp_send_json_success(true);
+    }
+
+    public function rapidload_logs(){
+
+        $file_system = new RapidLoad_FileSystem();
+
+        if(!$file_system->exists(UUCSS_LOG_DIR . 'debug.log')){
+            wp_send_json_success([]);
+        }
+
+        $data = $file_system->get_contents(UUCSS_LOG_DIR . 'debug.log');
+
+        if(empty($data)){
+            wp_send_json_success([]);
+        }
+
+        $data = '[' . $data . ']';
+
+        wp_send_json_success(json_decode($data));
+    }
+
+    public function clear_page_cache(){
+
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
+        $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
+        $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
+
+        $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : false;
+
+        $type = isset($_REQUEST['type']) ? $_REQUEST['status'] : 'path';
+
+        if($url){
+
+            RapidLoad_DB::resetHits($url);
+            do_action( 'uucss/cached', [
+                'url' => $url
+            ] );
+        }
+
+        $links = false;
+
+        if($rule && $regex){
+
+            $rule_object = new RapidLoad_Job([
+                'rule' => $rule,
+                'regex' => $regex
+            ]);
+
+            if(isset($rule_object->id)){
+
+                RapidLoad_DB::resetRuleHits($rule_object->id);
+                $links = $rule_object->get_urls();
+                array_push($links, $rule_object->url);
+
+            }
+        }
+
+        if($status == 'warnings'){
+
+            RapidLoad_DB::resetWarningHits();
+            $links = RapidLoad_DB::getUrlsWithWarnings();
+
+        }
+
+        if($links && !empty($links)){
+
+            foreach ($links as $link){
+                do_action( 'uucss/cached', [
+                    'url' => $link
+                ] );
+            }
+        }
+
+        wp_send_json_success('page cache cleared');
     }
 
     public function uucss_connect(){

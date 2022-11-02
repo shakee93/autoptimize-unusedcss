@@ -579,4 +579,81 @@ abstract class RapidLoad_DB
         return true;
 
     }
+
+    static function resetHits($url){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE job_id IN (SELECT id FROM {$wpdb->prefix}rapidload_job WHERE url = '". $url ."') ");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function resetRuleHits($id){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE job_id = ". $id);
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function resetWarningHits(){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE status = 'success' AND warnings IS NOT NULL");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function getUrlsWithWarnings(){
+
+        global $wpdb;
+
+        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE id IN (SELECT job_id FROM {$wpdb->prefix}rapidload_job WHERE status = 'success' AND warnings IS NOT NULL)" , ARRAY_A);
+
+        if(!empty($data))
+        {
+            return array_unique(array_column($data, 'url'));
+        }
+
+        return [];
+
+    }
+
+    static function get_first_link(){
+
+        global $wpdb;
+
+        $link = $wpdb->get_results( "SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule = 'is_url' LIMIT 1", OBJECT );
+
+        $error = $wpdb->last_error;
+
+        if ( ! empty( $error ) ) {
+            self::show_db_error( $error );
+        }
+
+        if ( count( $link ) > 0 ) {
+            return $link[0]->url;
+        }
+
+        return false;
+
+    }
 }

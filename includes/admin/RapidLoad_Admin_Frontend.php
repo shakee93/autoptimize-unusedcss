@@ -64,8 +64,32 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_uucss_status', [ $this, 'uucss_status' ] );
             add_action( 'wp_ajax_rapidload_notifications', [$this, 'rapidload_notifications']);
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
+            add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
+            add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
+            add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
         }
 
+    }
+
+    public function suggest_whitelist_packs(){
+        RapidLoad_Base::suggest_whitelist_packs();
+    }
+
+    public function mark_notice_read(){
+
+        $notice_id = isset($_REQUEST['notice_id']) ? $_REQUEST['notice_id'] : false;
+
+        if($notice_id){
+            RapidLoad_Base::update_option('uucss_notice_' . $notice_id . '_read', true);
+        }
+
+        wp_send_json_success(true);
+    }
+
+    public function mark_faqs_read(){
+
+        RapidLoad_Base::update_option('rapidload_faqs_read', true);
+        wp_send_json_success(true);
     }
 
     public function uucss_update_rule(){

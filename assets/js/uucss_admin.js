@@ -1809,7 +1809,7 @@
 
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
+                    //$content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
