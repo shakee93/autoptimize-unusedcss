@@ -39,6 +39,8 @@ class RapidLoad_Base
 
         add_action('init', function (){
 
+            RapidLoad_Base::activate();
+
             new RapidLoad_Admin_Frontend();
 
             $this->init_log_dir();

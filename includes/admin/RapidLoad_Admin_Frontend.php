@@ -460,37 +460,8 @@ class RapidLoad_Admin_Frontend
 
             if(!empty($url_list)){
 
-                if($job_type == 'url'){
-
-                    foreach ($url_list as $value){
-
-                        RapidLoad_DB::clear_job_data($job_type, [
-                            'url' => $value
-                        ]);
-                        RapidLoad_DB::clear_jobs($job_type, [
-                            'url' => $value
-                        ]);
-
-                    }
-
-                }else{
-
-                    foreach ($url_list as $value){
-
-                        if(isset($value['rule']) && isset($value['regex'])){
-                            RapidLoad_DB::clear_job_data($job_type, [
-                                'rule' => $value['rule'],
-                                'regex' => $value['regex']
-                            ]);
-                            RapidLoad_DB::clear_jobs($job_type, [
-                                'rule' => $value['rule'],
-                                'regex' => $value['regex']
-                            ]);
-                        }
-
-                    }
-
-                }
+                RapidLoad_DB::clear_job_data($job_type, [], $url_list);
+                RapidLoad_DB::clear_jobs($job_type, [], $url_list);
 
             }else{
 
@@ -522,6 +493,46 @@ class RapidLoad_Admin_Frontend
 
             switch ($job_type){
 
+                case 'requeue_all_rule':{
+                    if(!empty($url_list)){
+                        RapidLoad_DB::updateRuleJobDataStatusWhere("queued", "", $url_list);
+                    }else{
+                        RapidLoad_DB::updateRuleJobDataStatusWhere();
+                    }
+                    break;
+                }
+                case 'requeue_all_rule_processing':{
+                    RapidLoad_DB::updateRuleJobDataStatusWhere("queued", "AND status = 'processing'");
+                    break;
+                }
+                case 'requeue_all_rule_warnings':{
+                    RapidLoad_DB::updateRuleJobDataStatusWhere("queued", "AND status = 'success' AND warnings IS NOT NULL");
+                    break;
+                }
+                case 'requeue_all_rule_failed':{
+                    RapidLoad_DB::updateRuleJobDataStatusWhere("queued", "AND status = 'failed'");
+                    break;
+                }
+                case 'requeue_all_url':{
+                    if(!empty($url_list)){
+                        RapidLoad_DB::updateUrlJobDataStatusWhere("queued", "", $url_list);
+                    }else{
+                        RapidLoad_DB::updateUrlJobDataStatusWhere();
+                    }
+                    break;
+                }
+                case 'requeue_all_url_processing':{
+                    RapidLoad_DB::updateUrlJobDataStatusWhere("queued", "AND status = 'processing'");
+                    break;
+                }
+                case 'requeue_all_url_warnings':{
+                    RapidLoad_DB::updateUrlJobDataStatusWhere("queued", "AND status = 'success' AND warnings IS NOT NULL");
+                    break;
+                }
+                case 'requeue_all_url_failed':{
+                    RapidLoad_DB::updateUrlJobDataStatusWhere("queued", "AND status = 'failed'");
+                    break;
+                }
                 case 'url':{
 
                     if($url){

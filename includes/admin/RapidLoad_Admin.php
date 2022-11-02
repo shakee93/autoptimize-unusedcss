@@ -10,17 +10,105 @@ class RapidLoad_Admin
     {
         if(is_admin()){
 
+            add_action('current_screen', [$this, 'validate_domain']);
             add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
             add_action('updated_option', [$this, 'update_cloudflare_settings'], 10, 3 );
             add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
             add_action( "wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
+            add_action( "wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
+            add_action( "wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
         add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+    }
+
+    public function uucss_connect(){
+
+        if ( ! isset( $_REQUEST['license_key'] ) || empty( $_REQUEST['license_key'] ) ) {
+            wp_send_json_error( 'License Key required' );
+        }
+
+        $license_key = $_REQUEST['license_key'];
+
+        $uucss_api         = new RapidLoad_Api();
+        $uucss_api->apiKey = $license_key;
+        $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
+
+        if ( $uucss_api->is_error( $results ) ) {
+            if(isset($results->errors) && isset($results->errors[0])){
+                wp_send_json_error($results->errors[0]->detail);
+            }else{
+                wp_send_json_error('License Key verification fail');
+            }
+        }
+
+        wp_send_json_success([
+            'success' => true,
+            'message' => 'License Key verification success',
+            'activation_nonce' => wp_create_nonce( 'uucss_activation' ),
+        ]);
+    }
+
+
+    public function validate_domain() {
+
+        if ( get_current_screen() && get_current_screen()->base != 'settings_page_uucss' ) {
+            return;
+        }
+
+        $options   = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
+
+        if(!isset( $options['uucss_api_key_verified'] ) || $options['uucss_api_key_verified'] != '1'){
+            return;
+        }
+
+        $uucss_api = new RapidLoad_Api();
+
+        if ( ! isset( $options['uucss_api_key'] ) ) {
+            return;
+        }
+
+        $results = $uucss_api->get( 'verify', [ 'url' => site_url(), 'token' => $options['uucss_api_key'] ] );
+
+        if($uucss_api->is_error($results)){
+            $options['valid_domain'] = false;
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+            return;
+        }
+
+        if(!isset($options['valid_domain']) || !$options['valid_domain']){
+            $options['valid_domain'] = true;
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+        }
+    }
+
+    public function ajax_deactivate() {
+
+        $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
+
+        $cache_key = 'pand-' . md5( 'first-uucss-job' );
+        RapidLoad_Base::delete_option( $cache_key );
+
+        do_action('rapidload/vanish');
+
+        $api = new RapidLoad_Api();
+
+        // remove domain from authorized list
+        $api->post( 'deactivate', [
+            'url' => site_url()
+        ] );
+
+        unset( $options['uucss_api_key_verified'] );
+        unset( $options['uucss_api_key'] );
+        unset( $options['whitelist_packs'] );
+
+        RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
+        wp_send_json_success( true );
     }
 
     function rapidload_rule_types($rules){
