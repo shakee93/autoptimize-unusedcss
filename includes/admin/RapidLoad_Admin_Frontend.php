@@ -21,6 +21,10 @@ class RapidLoad_Admin_Frontend
 
         }
 
+        if(!apply_filters('ao_installed', false)){
+            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
+        }
+
         $this->load_legacy_ajax();
 
         if ($this->is_rapidload_page()) {
@@ -48,6 +52,36 @@ class RapidLoad_Admin_Frontend
 
         add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
 
+
+    }
+
+    public function add_rapidload_admin_bar_menu($wp_admin_bar){
+
+        $color = 'green';
+
+        if(RapidLoad_DB::get_total_job_count(" WHERE status = 'failed' ") > 0){
+            $color = 'red';
+        }elseif (RapidLoad_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NOT NULL ") > 0){
+            $color = 'yellow';
+        }
+
+        if(apply_filters('uucss/tool-bar-menu',true)){
+
+            $wp_admin_bar->add_node( array(
+                'id'    => 'rapidload',
+                'title' => '<span class="ab-icon"></span><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
+                'href'  => admin_url( 'options-general.php?page=uucss' ),
+                'meta'  => array( 'class' => 'bullet-' . $color ),
+            ));
+
+            $wp_admin_bar->add_node( array(
+                'id'    => 'rapidload-clear-cache',
+                'title' => '<span class="ab-label">' . __( 'Remove All', 'remove_all' ) . '</span>',
+                'href'  => admin_url( 'options-general.php?action=rapidload_purge_all' ),
+                'meta'  => array( 'class' => 'rapidload-clear-all' ),
+                'parent' => 'rapidload'
+            ));
+        }
 
     }
 
