@@ -7,9 +7,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@johmun/vue-tags-input": "^2.1.0",
+    "@sipec/vue3-tags-input": "^3.0.4",
     "pinia": "^2.0.23",
     "vue": "^3.2.41",
-    "vue-router": "^4.1.5"
+    "vue-input-tag": "^2.0.7",
+    "vue-router": "^4.1.5",
+    "vue3-tags-input": "^1.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",

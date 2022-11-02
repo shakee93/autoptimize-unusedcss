@@ -68,7 +68,10 @@
         <h1 class="font-semibold text-base text-black-font">Selector Packs</h1>
         <p class="text-sm pb-3 text-gray-font">Selector packs contains predefined force exclude and include rules for plugins and themes.</p>
         <div class="grid mb-5">
-          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>
+          <vue3-tags-input :tags="tags"
+                           class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                           placeholder="Type your plugin..." />
+<!--          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
           <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
             <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
           </div>
@@ -256,20 +259,25 @@
 
 <script>
 import config from "../../../config";
+import Vue3TagsInput from 'vue3-tags-input';
 
 export default {
   name: "index",
+
+  components: {
+    Vue3TagsInput,
+  },
+
   data(){
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       tag: '',
-      tags:['Elementor', 'ActiveCampaign'],
+      tags: ['Elementor'],
       pages_with_rules1: false,
       advance_settings1: false,
       pages_with_rules2: false,
       advance_settings2: false,
       back: '/',
-      active: 'bg-purple',
       buttons:[
         {
           load_original_css: 'user_interaction',
