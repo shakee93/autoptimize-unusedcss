@@ -30,6 +30,10 @@ class UnusedCSS
             return;
         }
 
+        if(apply_filters('uucss/enable/notfound_fallback', true)){
+            add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
+        }
+
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->cache_trigger_hooks();
@@ -51,6 +55,34 @@ class UnusedCSS
         add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
 
         new UnusedCSS_Queue();
+    }
+
+    public function uucss_notfound_fallback(){
+
+        $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
+        $original_path = WP_CONTENT_DIR . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' . "/" . basename($original_request);
+
+        $options = RapidLoad_Base::fetch_options(false);
+
+        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
+            && !file_exists($original_path)
+            //&& isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1"
+        ) {
+
+            global $wp_query;
+            $wp_query->is_404 = false;
+
+            $fallback_target = UnusedCSS_DB::get_original_file_name($original_request);
+
+            if ( isset($fallback_target) ) {
+
+                wp_redirect( $fallback_target, 302 );
+            } else {
+
+                status_header( 410 );
+            }
+        }
+
     }
 
     public function first_uucss_job() {
