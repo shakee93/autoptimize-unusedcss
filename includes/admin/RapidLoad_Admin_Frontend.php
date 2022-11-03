@@ -77,7 +77,7 @@ class RapidLoad_Admin_Frontend
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload-clear-cache',
                 'title' => '<span class="ab-label">' . __( 'Remove All', 'remove_all' ) . '</span>',
-                'href'  => admin_url( 'options-general.php?action=rapidload_purge_all' ),
+                'href'  => admin_url( 'options-general.php?page=uucss&action=rapidload_purge_all' ),
                 'meta'  => array( 'class' => 'rapidload-clear-all' ),
                 'parent' => 'rapidload'
             ));
