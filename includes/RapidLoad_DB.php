@@ -513,6 +513,9 @@ abstract class RapidLoad_DB
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['rule'] = $job_url->rule;
             $data['base'] = $job_url->url;
+            if($data['regex'] == "/"){
+                $data['status'] = 'rule-based';
+            }
         }
 
         return apply_filters('uucss/link', $data);

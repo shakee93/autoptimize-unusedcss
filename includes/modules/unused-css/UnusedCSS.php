@@ -164,7 +164,9 @@ class UnusedCSS
                         $link['applied_successful_links'] = 0;
                     }
 
-                    $link['status'] = $job_data->status;
+                    if(!isset($link['status'])){
+                        $link['status'] = $job_data->status;
+                    }
                     $link['success_count'] = $job_data->hits;
                     $link['files'] = $job_data->get_files();
                     $link['job_id'] = $job_data->queue_job_id;
