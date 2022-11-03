@@ -9,21 +9,6 @@ body {
     background: #f0f0f1;
 }
 
-.v3ti .v3ti-tag{
-    background: #7F54B3 !important;
-    color: white !important;
-}
-.v3ti{
-    max-width: 647.55px;
-    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
-}
-.v3ti--focus {
-    outline: 0;
-    box-shadow: 0 0 0 1px #ffffff !important;
-    --tw-border-opacity: 1;
-    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
-}
-
 @layer base {
     html {
         font-family: Lexend, system-ui,Helvetica;
@@ -35,5 +20,34 @@ body {
         background-color: #7F54B3 !important;
         color: white !important;
     }
+}
 
+.v3ti .v3ti-tag{
+    background: #7F54B3 !important;
+    color: white !important;
+    padding: 18px 10px 18px 30px !important;
+}
+.v3ti .v3ti-tag .v3ti-remove-tag {
+    color: #7F54B3 !important;
+    transition: opacity 0.3s ease !important;
+    padding: 0 5px 0 10px !important;
+}
+.v3ti .v3ti-tag .v3ti-remove-tag:hover {
+    color: #ffffff !important;
+}
+.v3ti{
+    border-radius: 0.5rem !important;
+    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
+}
+.v3ti--focus {
+    outline: 0;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    --tw-border-opacity: 1;
+    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
+}
+
+@media (min-width: 905px) {
+    .container {
+        max-width: 905px;
+    }
 }
