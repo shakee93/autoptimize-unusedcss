@@ -513,8 +513,6 @@ abstract class RapidLoad_DB
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['rule'] = $job_url->rule;
             $data['base'] = $job_url->url;
-            $data['rule_status'] = 'success'; // TBC
-            $data['rule_hits'] = 0; // TBC
         }
 
         return apply_filters('uucss/link', $data);
@@ -626,7 +624,7 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE id IN (SELECT job_id FROM {$wpdb->prefix}rapidload_job WHERE status = 'success' AND warnings IS NOT NULL)" , ARRAY_A);
+        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE id IN (SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND warnings IS NOT NULL)" , ARRAY_A);
 
         if(!empty($data))
         {

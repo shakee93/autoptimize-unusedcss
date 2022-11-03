@@ -513,6 +513,7 @@ class RapidLoad_Admin_Frontend
         $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
         $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
         $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
+        $immediate = isset($_REQUEST['immediate']) ? $_REQUEST['immediate'] : false;
 
         if($clear){
 
@@ -600,6 +601,16 @@ class RapidLoad_Admin_Frontend
                             $job = new RapidLoad_Job(['url' => $url]);
                             $job->save(true);
 
+                            $args = [
+                                'requeue' => true
+                            ];
+
+                            if($immediate){
+                                $args['immediate'] = true;
+                            }
+
+                            do_action('rapidload/job/purge', $job, $args);
+
                         }
                     }
                     break;
@@ -611,7 +622,9 @@ class RapidLoad_Admin_Frontend
                         $this->update_rule((object)[
                             'url' => $url,
                             'rule' => $rule,
-                            'regex' => $regex
+                            'regex' => $regex,
+                            'immediate' => $immediate,
+                            'requeue' => true
                         ]);
                     }
                     break;
@@ -843,6 +856,8 @@ class RapidLoad_Admin_Frontend
 
     public function update_rule($args, $old = false){
 
+        $job = null;
+
         if($old && isset($old['url'])){
 
             $job = new RapidLoad_Job([
@@ -866,6 +881,19 @@ class RapidLoad_Admin_Frontend
             $job->save();
 
         }
+
+        $_args = [
+            'requeue' => true
+        ];
+
+        if(isset($args->immediate) && $args->immediate){
+            $_args['immediate'] = true;
+        }
+
+        if(isset($args->requeue) && $args->requeue){
+            do_action('rapidload/job/purge', $job, $_args);
+        }
+
 
     }
 

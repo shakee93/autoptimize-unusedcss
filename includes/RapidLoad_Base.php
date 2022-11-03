@@ -81,8 +81,8 @@ class RapidLoad_Base
 
             self::enqueueGlobalScript();
 
-            $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
+            $this->container['modules'] = new RapidLoad_Module();
             if(RapidLoad_DB::$current_version > 1.2){
                 $this->container['admin'] = new RapidLoad_Admin();
             }

@@ -38,6 +38,8 @@ class UnusedCSS
 
         $this->cache_trigger_hooks();
 
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
+
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_uucss'], 20, 2);
@@ -154,6 +156,13 @@ class UnusedCSS
                 $job_data = new RapidLoad_Job_Data($job, 'uucss');
 
                 if(isset($job_data->id)){
+
+                    if($job->rule != 'is_url'){
+                        $link['rule_status'] = $job_data->status;
+                        $link['rule_hits'] = $job_data->hits;
+                        $link['applied_links'] = count($job->get_urls());
+                        $link['applied_successful_links'] = 0;
+                    }
 
                     $link['status'] = $job_data->status;
                     $link['success_count'] = $job_data->hits;
@@ -281,7 +290,7 @@ class UnusedCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate'])){
+        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
             $this->job_data->requeue(isset( $args['immediate']) ? 0 : -1);
             $this->job_data->save();
         }

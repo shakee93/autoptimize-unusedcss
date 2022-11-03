@@ -39,6 +39,8 @@ class CriticalCSS
 
         $this->cache_trigger_hooks();
 
+        add_action('rapidload/job/purge', [$this, 'cache_cpcss'], 10, 2);
+
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
@@ -313,7 +315,7 @@ class CriticalCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate'])){
+        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
             $this->job_data->requeue(isset( $args['immediate']) ? 0 : -1);
             $this->job_data->save();
         }
