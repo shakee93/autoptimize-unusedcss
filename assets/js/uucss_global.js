@@ -301,6 +301,19 @@
             })
         })
 
+        $('.rapidload-clear-all').click(function (e) {
+            e.preventDefault();
+
+            wp.ajax.post('rapidload_purge_all', {
+                clear: true,
+                nonce: uucss_global.nonce,
+                url: null,
+            }).done(function (d) {
+                window.location.reload();
+            })
+
+        });
+
         updateLicenseInfo();
     });
 

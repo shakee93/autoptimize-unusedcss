@@ -57,15 +57,15 @@ class RapidLoad_Admin_Frontend
 
     public function add_rapidload_admin_bar_menu($wp_admin_bar){
 
-        $color = 'green';
+        if(apply_filters('rapidload/tool-bar-menu',true)){
 
-        if(RapidLoad_DB::get_total_job_count(" WHERE status = 'failed' ") > 0){
-            $color = 'red';
-        }elseif (RapidLoad_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NOT NULL ") > 0){
-            $color = 'yellow';
-        }
+            $color = 'green';
 
-        if(apply_filters('uucss/tool-bar-menu',true)){
+            if(RapidLoad_DB::get_total_job_count(" WHERE status = 'failed' ") > 0){
+                $color = 'red';
+            }elseif (RapidLoad_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NOT NULL ") > 0){
+                $color = 'yellow';
+            }
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
