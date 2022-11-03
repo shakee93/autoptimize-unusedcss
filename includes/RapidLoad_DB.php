@@ -480,7 +480,7 @@ abstract class RapidLoad_DB
 
         $data = $wpdb->get_results("select * from (select 
         job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
-        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, uucss.status, 
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
         cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
         
         from {$wpdb->prefix}rapidload_job as job
