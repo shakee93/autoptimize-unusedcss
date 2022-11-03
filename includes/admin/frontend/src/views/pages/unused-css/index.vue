@@ -22,30 +22,31 @@
         </div>
       </div>
 
-
-      <div class="p-4 pl-32	pr-96">
+      <div class="p-4 pl-32 pr-32">
+      <div v-for="button in buttons">
         <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
         <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
-        <button class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
+        <button v-on:click ="button.load_original_css = 'user_interaction'" :class="{ active: button.load_original_css === 'user_interaction' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
           On user interaction
         </button>
-        <button class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
+
+        <button v-on:click ="button.load_original_css = 'asynchronously'" :class="{ active: button.load_original_css === 'asynchronously' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
           Asynchronously
         </button>
-        <button class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
+        <button v-on:click ="button.load_original_css = 'remove'" :class="{ active: button.load_original_css === 'remove' }" class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
           Remove
         </button>
 
-        <div class="mt-5 mb-5 bg-purple-lite border border-purple rounded-2xl px-4 py-3 shadow-md" role="alert">
+        <div v-if="button.load_original_css==='remove'" class="mt-5 bg-purple-lite border border-purple rounded-2xl px-4 py-3 shadow-md" role="alert">
           <div class="flex">
             <div class="py-1 mt-1"><svg class="fill-current h-6 w-6 text-purple mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
             <div>
-              <p class="font-semibold text-purple-back-font leading-5">Removing the original files from loading may not be compatible with all the websites. <br> If you are having site-breaks try on user interaction or asynchronously.</p>
+              <p class="font-semibold text-sm text-purple-back-font leading-5">Removing the original files from loading may not be compatible with all the websites. <br> If you are having site-breaks try on user interaction or {{button.load_original_css}}.</p>
             </div>
           </div>
         </div>
 
-        <h1 class="font-semibold text-base text-black-font">Force Include selectors</h1>
+        <h1 class="font-semibold text-base text-black-font mt-5">Force Include selectors</h1>
         <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
         <div class="grid mb-5">
@@ -67,7 +68,10 @@
         <h1 class="font-semibold text-base text-black-font">Selector Packs</h1>
         <p class="text-sm pb-3 text-gray-font">Selector packs contains predefined force exclude and include rules for plugins and themes.</p>
         <div class="grid mb-5">
-          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>
+          <vue3-tags-input :tags="tags"
+                           class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                           placeholder="Type your plugin..." />
+<!--          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
           <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
             <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
           </div>
@@ -106,7 +110,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
+                  <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
                     RapidLoad will analyze a parent<br>
                     page and will apply results for all matched pages.</p>
                 </div>
@@ -148,7 +152,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
+                  <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
                     RapidLoad will analyze a parent<br>
                     page and will apply results for all matched pages.</p>
                 </div>
@@ -190,7 +194,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
+                  <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
                     RapidLoad will analyze a parent<br>
                     page and will apply results for all matched pages.</p>
                 </div>
@@ -231,7 +235,7 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
+                  <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
                     RapidLoad will analyze a parent<br>
                     page and will apply results for all matched pages.</p>
                 </div>
@@ -241,7 +245,7 @@
         </div>
 
       </div>
-
+      </div>
       <div class="px-32 pb-8">
       <button class="bg-purple-500 hover:bg-purple-500 font-semibold hover:text-white text-white py-2 px-4 border border-gray-300	 hover:border-transparent mt-5 rounded-lg">
         Save Settings
@@ -255,19 +259,32 @@
 
 <script>
 import config from "../../../config";
+import Vue3TagsInput from 'vue3-tags-input';
 
 export default {
   name: "index",
+
+  components: {
+    Vue3TagsInput,
+  },
+
   data(){
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       tag: '',
-      tags:['Elementor', 'ActiveCampaign'],
+      tags: ['Elementor'],
       pages_with_rules1: false,
       advance_settings1: false,
       pages_with_rules2: false,
       advance_settings2: false,
       back: '/',
+      buttons:[
+        {
+          load_original_css: 'user_interaction',
+        }
+      ],
+
+
     }
   },
 

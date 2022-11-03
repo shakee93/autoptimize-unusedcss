@@ -26,6 +26,7 @@ module.exports = {
       'purple-back-font': '#202020',
     },
 
+
   },
   plugins: [],
 }

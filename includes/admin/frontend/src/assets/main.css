@@ -9,8 +9,31 @@ body {
     background: #f0f0f1;
 }
 
+.v3ti .v3ti-tag{
+    background: #7F54B3 !important;
+    color: white !important;
+}
+.v3ti{
+    max-width: 647.55px;
+    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
+}
+.v3ti--focus {
+    outline: 0;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    --tw-border-opacity: 1;
+    border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
+}
+
 @layer base {
     html {
         font-family: Lexend, system-ui,Helvetica;
     }
+}
+
+@layer components {
+    .active{
+        background-color: #7F54B3 !important;
+        color: white !important;
+    }
+
 }
