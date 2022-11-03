@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+    <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
         <div class="flex-initial w-32 pl-8">
           <RouterLink type="button" :to="back" class="bg-white hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
@@ -179,7 +179,7 @@
           </div>
 
 
-          <div v-if="advance_settings1" class="pl-9">
+          <div :class="{ 'opacity-100': advance_settings1 }" class="pl-9 transform transition-all duration-150 ease-in-out opacity-0">
             <button
                 class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
               Manage Rules
@@ -220,7 +220,7 @@
           </div>
 
 
-          <div v-if="advance_settings2" class="pl-9">
+          <div :class="{ 'scale-100': advance_settings2 }" class="pl-9 transform transition-all duration-150 ease-in-out scale-0">
             <button
                 class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
               Manage Rules
@@ -243,6 +243,7 @@
             </div>
           </div>
         </div>
+
 
       </div>
       </div>
