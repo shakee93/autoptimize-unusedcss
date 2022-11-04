@@ -81,8 +81,8 @@ class RapidLoad_Base
 
             self::enqueueGlobalScript();
 
-            $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
+            $this->container['modules'] = new RapidLoad_Module();
             if(RapidLoad_DB::$current_version > 1.2){
                 $this->container['admin'] = new RapidLoad_Admin();
             }
@@ -166,23 +166,6 @@ class RapidLoad_Base
 
         }, apply_filters('uucss/scripts/global/priority', 90));
 
-        add_action('init', function (){
-
-            if(!is_admin()){
-                return;
-            }
-
-            global $post;
-
-            $data = array(
-                'post_id'         => ($post) ? $post->ID : null,
-                'post_link'       => ($post) ? get_permalink($post) : null,
-            );
-
-            wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
-            wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
-            wp_enqueue_script( 'uucss_admin_bar_script' );
-        });
     }
 
     function add_plugin_update_message(){

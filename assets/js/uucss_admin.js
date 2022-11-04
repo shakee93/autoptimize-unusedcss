@@ -791,9 +791,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '" data-regex="' + row.regex + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '" data-regex="' + row.regex + '" ><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -892,7 +892,7 @@
 
                             switch (action) {
                                 case 'requeue_url':{
-                                    requeue('url', {url : data.url})
+                                    requeue('current', {url : data.url},null, 'url')
                                     break;
                                 }
                                 case 'regenerate_cpcss':{
@@ -968,7 +968,7 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
-                                    wp.ajax.post('rapidload_purge_all',{
+                                    /*wp.ajax.post('rapidload_purge_all',{
                                         job_type : 'url',
                                         url : data.url,
                                         clear : true
@@ -976,7 +976,7 @@
 
                                     }).done(function(){
 
-                                    });
+                                    });*/
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1114,20 +1114,21 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
+                    var regex = $(this).data('regex');
                     var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id, regex : regex})
 
                 });
 
-                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, {immediate : true})
 
-                });*/
+                });
             }
         });
 
@@ -1531,7 +1532,7 @@
 
                             switch (action) {
                                 case 'requeue_rule':{
-                                    requeue('url', {
+                                    requeue('current', {
                                         url : url,
                                         rule : rule,
                                         regex : regex
@@ -1578,7 +1579,7 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
-                                    wp.ajax.post('rapidload_purge_all',{
+                                    /*wp.ajax.post('rapidload_purge_all',{
                                         job_type : 'rule',
                                         rule : rule,
                                         regex : regex,
@@ -1587,7 +1588,7 @@
 
                                     }).done(function(){
 
-                                    });
+                                    });*/
                                     break;
                                 }
                                 case 'purge-url':{
@@ -1728,20 +1729,21 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
+                    var regex = $(this).data('regex');
                     var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id, regex : regex})
 
                 });
 
-                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, {immediate : true})
 
-                });*/
+                });
             }
         });
 
@@ -1809,7 +1811,7 @@
 
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
+                    //$content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -2084,18 +2086,18 @@
                                 }
                             }
 
-                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
+                            /*wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(rule_table){
                                     rule_table.ajax.reload(null, false);
                                     $.uucssAlert('Successfully removed links from the table', 'info');
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
-                            });
+                            });*/
                             wp.ajax.post('rapidload_purge_all',data).then(function (i) {
 
                             }).done(function(){
-
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
@@ -2193,15 +2195,35 @@
                 $(this).hide();
             }
 
+            var _data = {
+                url: data.url,
+                clear: isClear,
+                nonce: uucss.nonce,
+            }
+
+            if(args.rule && args.regex){
+                _data.rule = args.rule
+                _data.regex = args.regex
+            }
+
+            if(args.immediate){
+                _data.immediate = true;
+            }
+
+            if(_data.clear || _data.immediate){
+                if(_data.rule && _data.regex){
+                    _data.job_type = 'rule'
+                }else if(_data.url){
+                    _data.job_type = 'url'
+                }
+            }
+
+
+
             $.ajax({
                 method : 'POST',
-                url: wp.ajax.settings.url + '?action=uucss_purge_url',
-                data : {
-                    url: data.url,
-                    clear: isClear,
-                    nonce: uucss.nonce,
-                    args : args
-                },
+                url: wp.ajax.settings.url + '?action=rapidload_purge_all',
+                data : _data,
                 success : function(response){
 
                     if(!args.rule){
@@ -2531,7 +2553,7 @@
             })
         }
 
-        setInterval(updateRapidLoadStatus, 60000);
+        //setInterval(updateRapidLoadStatus, 60000);
 
         updateSitemapUrl();
     });

@@ -480,7 +480,7 @@ abstract class RapidLoad_DB
 
         $data = $wpdb->get_results("select * from (select 
         job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
-        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, uucss.status, 
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
         cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
         
         from {$wpdb->prefix}rapidload_job as job
@@ -513,8 +513,9 @@ abstract class RapidLoad_DB
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['rule'] = $job_url->rule;
             $data['base'] = $job_url->url;
-            $data['rule_status'] = 'success'; // TBC
-            $data['rule_hits'] = 0; // TBC
+            if($data['regex'] == "/"){
+                $data['status'] = 'rule-based';
+            }
         }
 
         return apply_filters('uucss/link', $data);
@@ -577,6 +578,83 @@ abstract class RapidLoad_DB
         }
 
         return true;
+
+    }
+
+    static function resetHits($url){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE job_id IN (SELECT id FROM {$wpdb->prefix}rapidload_job WHERE url = '". $url ."') ");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function resetRuleHits($id){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE job_id = ". $id);
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function resetWarningHits(){
+
+        global $wpdb;
+
+        $wpdb->query( "UPDATE {$wpdb->prefix}rapidload_job_data SET hits = 0 WHERE status = 'success' AND warnings IS NOT NULL");
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return true;
+
+    }
+
+    static function getUrlsWithWarnings(){
+
+        global $wpdb;
+
+        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE id IN (SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND warnings IS NOT NULL)" , ARRAY_A);
+
+        if(!empty($data))
+        {
+            return array_unique(array_column($data, 'url'));
+        }
+
+        return [];
+
+    }
+
+    static function get_first_link(){
+
+        global $wpdb;
+
+        $link = $wpdb->get_results( "SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule = 'is_url' LIMIT 1", OBJECT );
+
+        $error = $wpdb->last_error;
+
+        if ( ! empty( $error ) ) {
+            self::show_db_error( $error );
+        }
+
+        if ( count( $link ) > 0 ) {
+            return $link[0]->url;
+        }
+
+        return false;
 
     }
 }

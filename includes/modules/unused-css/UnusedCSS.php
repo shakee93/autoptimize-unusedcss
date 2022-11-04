@@ -30,9 +30,15 @@ class UnusedCSS
             return;
         }
 
+        if(apply_filters('uucss/enable/notfound_fallback', true)){
+            add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
+        }
+
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         $this->cache_trigger_hooks();
+
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
@@ -48,8 +54,92 @@ class UnusedCSS
             return $this->get_cached_file($uucss_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
+        add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+
         new UnusedCSS_Queue();
     }
+
+    public function uucss_notfound_fallback(){
+
+        $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
+        $original_path = WP_CONTENT_DIR . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' . "/" . basename($original_request);
+
+        $options = RapidLoad_Base::fetch_options(false);
+
+        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
+            && !file_exists($original_path)
+            //&& isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1"
+        ) {
+
+            global $wp_query;
+            $wp_query->is_404 = false;
+
+            $fallback_target = UnusedCSS_DB::get_original_file_name($original_request);
+
+            if ( isset($fallback_target) ) {
+
+                wp_redirect( $fallback_target, 302 );
+            } else {
+
+                status_header( 410 );
+            }
+        }
+
+    }
+
+    public function first_uucss_job() {
+
+        if ( class_exists('PAnD') && ! PAnD::is_admin_notice_active( 'first-uucss-job-forever' ) ) {
+            return;
+        }
+
+        if(get_current_screen() && get_current_screen()->base == 'settings_page_uucss'){
+            return;
+        }
+
+        $first_link = RapidLoad_DB::get_first_link();
+
+        $job = false;
+
+        if($first_link){
+
+            $first_link = new RapidLoad_Job([
+                'url' => $first_link
+            ]);
+
+            $job = new RapidLoad_Job_Data($first_link, 'uucss');
+        }
+
+        if ( $job && isset($job->id) && $job->status == 'success' ) : ?>
+            <div data-dismissible="first-uucss-job-forever"
+                 class="updated notice uucss-notice notice-success is-dismissible">
+                <h4><span class="dashicons dashicons-yes-alt"></span> RapidLoad successfully ran your first job!</h4>
+                <p><?php _e( 'You slashed <strong>' . $job->get_stats()->reductionSize . ' </strong> of unused CSS - that\'s <strong>' . $job->get_stats()->reduction . '% </strong> of your total CSS file size. Way to go 👏', 'sample-text-domain' ); ?></p>
+            </div>
+        <?php endif;
+
+        if ( $job && isset($job->id) && $job->status == 'failed' ) : ?>
+            <div data-dismissible="first-uucss-job-forever"
+                 class="error notice uucss-notice notice-error is-dismissible">
+                <h4><span class="dashicons dashicons-no-alt"></span> RapidLoad : We were unable to remove unused css
+                    from
+                    your site 🤕</h4>
+
+                <div>
+                    <p> Our team can help. Get in touch with support <a target="_blank"
+                                                                        href="https://rapidload.zendesk.com/hc/en-us/requests/new">here</a>
+                    </p>
+                    <blockquote class="error notice">
+                        <strong>Link :</strong> <?php echo $job['url'] ?> <br>
+                        <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>
+                        <strong>Message :</strong> <?php echo $job['meta']['error']['message'] ?>
+                    </blockquote>
+                </div>
+
+            </div>
+        <?php endif;
+    }
+
 
     function update_link($link){
 
@@ -67,7 +157,16 @@ class UnusedCSS
 
                 if(isset($job_data->id)){
 
-                    $link['status'] = $job_data->status;
+                    if($job->rule != 'is_url'){
+                        $link['rule_status'] = $job_data->status;
+                        $link['rule_hits'] = $job_data->hits;
+                        $link['applied_links'] = count($job->get_urls());
+                        $link['applied_successful_links'] = 0;
+                    }
+
+                    if(!isset($link['status'])){
+                        $link['status'] = $job_data->status;
+                    }
                     $link['success_count'] = $job_data->hits;
                     $link['files'] = $job_data->get_files();
                     $link['job_id'] = $job_data->queue_job_id;
@@ -193,7 +292,7 @@ class UnusedCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate'])){
+        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
             $this->job_data->requeue(isset( $args['immediate']) ? 0 : -1);
             $this->job_data->save();
         }

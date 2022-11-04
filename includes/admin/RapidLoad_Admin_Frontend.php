@@ -21,6 +21,10 @@ class RapidLoad_Admin_Frontend
 
         }
 
+        if(!apply_filters('ao_installed', false)){
+            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
+        }
+
         $this->load_legacy_ajax();
 
         if ($this->is_rapidload_page()) {
@@ -51,6 +55,36 @@ class RapidLoad_Admin_Frontend
 
     }
 
+    public function add_rapidload_admin_bar_menu($wp_admin_bar){
+
+        if(apply_filters('rapidload/tool-bar-menu',true)){
+
+            $color = 'green';
+
+            if(RapidLoad_DB::get_total_job_count(" WHERE status = 'failed' ") > 0){
+                $color = 'red';
+            }elseif (RapidLoad_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NOT NULL ") > 0){
+                $color = 'yellow';
+            }
+
+            $wp_admin_bar->add_node( array(
+                'id'    => 'rapidload',
+                'title' => '<span class="ab-icon"></span><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
+                'href'  => admin_url( 'options-general.php?page=uucss' ),
+                'meta'  => array( 'class' => 'bullet-' . $color ),
+            ));
+
+            $wp_admin_bar->add_node( array(
+                'id'    => 'rapidload-clear-cache',
+                'title' => '<span class="ab-label">' . __( 'Remove All', 'remove_all' ) . '</span>',
+                'href'  => admin_url( 'options-general.php?page=uucss&action=rapidload_purge_all' ),
+                'meta'  => array( 'class' => 'rapidload-clear-all' ),
+                'parent' => 'rapidload'
+            ));
+        }
+
+    }
+
     public function load_legacy_ajax(){
 
         if(is_admin()){
@@ -64,8 +98,32 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_uucss_status', [ $this, 'uucss_status' ] );
             add_action( 'wp_ajax_rapidload_notifications', [$this, 'rapidload_notifications']);
             add_action( "wp_ajax_uucss_update_rule", [ $this, 'uucss_update_rule' ] );
+            add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
+            add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
+            add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
         }
 
+    }
+
+    public function suggest_whitelist_packs(){
+        RapidLoad_Base::suggest_whitelist_packs();
+    }
+
+    public function mark_notice_read(){
+
+        $notice_id = isset($_REQUEST['notice_id']) ? $_REQUEST['notice_id'] : false;
+
+        if($notice_id){
+            RapidLoad_Base::update_option('uucss_notice_' . $notice_id . '_read', true);
+        }
+
+        wp_send_json_success(true);
+    }
+
+    public function mark_faqs_read(){
+
+        RapidLoad_Base::update_option('rapidload_faqs_read', true);
+        wp_send_json_success(true);
     }
 
     public function uucss_update_rule(){
@@ -455,6 +513,7 @@ class RapidLoad_Admin_Frontend
         $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
         $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
         $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
+        $immediate = isset($_REQUEST['immediate']) ? $_REQUEST['immediate'] : false;
 
         if($clear){
 
@@ -542,6 +601,16 @@ class RapidLoad_Admin_Frontend
                             $job = new RapidLoad_Job(['url' => $url]);
                             $job->save(true);
 
+                            $args = [
+                                'requeue' => true
+                            ];
+
+                            if($immediate){
+                                $args['immediate'] = true;
+                            }
+
+                            do_action('rapidload/job/purge', $job, $args);
+
                         }
                     }
                     break;
@@ -553,7 +622,9 @@ class RapidLoad_Admin_Frontend
                         $this->update_rule((object)[
                             'url' => $url,
                             'rule' => $rule,
-                            'regex' => $regex
+                            'regex' => $regex,
+                            'immediate' => $immediate,
+                            'requeue' => true
                         ]);
                     }
                     break;
@@ -569,6 +640,13 @@ class RapidLoad_Admin_Frontend
                     break;
                 }
                 default:{
+
+                    if($url){
+
+                        $job = new RapidLoad_Job(['url' => $url]);
+                        $job->save(true);
+
+                    }
 
                     $posts = new WP_Query(array(
                         'post_type'=> $job_type,
@@ -778,6 +856,8 @@ class RapidLoad_Admin_Frontend
 
     public function update_rule($args, $old = false){
 
+        $job = null;
+
         if($old && isset($old['url'])){
 
             $job = new RapidLoad_Job([
@@ -801,6 +881,19 @@ class RapidLoad_Admin_Frontend
             $job->save();
 
         }
+
+        $_args = [
+            'requeue' => true
+        ];
+
+        if(isset($args->immediate) && $args->immediate){
+            $_args['immediate'] = true;
+        }
+
+        if(isset($args->requeue) && $args->requeue){
+            do_action('rapidload/job/purge', $job, $_args);
+        }
+
 
     }
 
