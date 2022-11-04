@@ -33,19 +33,18 @@ class RapidLoad_Base
 
     public function __construct()
     {
-        self::activateByLicenseKey();
-
         self::fetch_options();
 
         add_action('init', function (){
 
-            RapidLoad_Base::activate();
+            RapidLoad_DB::update_db_version();
 
-            if(is_admin()){
+            self::activateByLicenseKey();
+            self::activate();
+
+            if(is_admin() && !$this->check_dependencies()){
 
                 new RapidLoad_Onboard();
-
-                $this->check_dependencies();
 
             }
 
@@ -54,8 +53,6 @@ class RapidLoad_Base
             RapidLoad_ThirdParty::initialize();
 
             register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
-
-            add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
             add_filter('uucss/cache-base-dir', function ($dir){
 
@@ -77,22 +74,26 @@ class RapidLoad_Base
 
             }, 10 , 1);
 
-            $this->add_plugin_update_message();
-
-            RapidLoad_DB::update_db_version();
-
             if(is_admin()){
-                RapidLoad_DB::check_db_updates();
-            }
 
-            self::enqueueGlobalScript();
+                add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+                add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+                    $this,
+                    'add_plugin_action_link'
+                ] );
+
+                $this->add_plugin_update_message();
+
+                RapidLoad_DB::check_db_updates();
+
+                self::enqueueGlobalScript();
+            }
 
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
-            if(RapidLoad_DB::$current_version > 1.2){
-                $this->container['admin'] = new RapidLoad_Admin();
-                $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
-            }
+            $this->container['admin'] = new RapidLoad_Admin();
+            $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
 
         });
 
@@ -105,6 +106,15 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function add_plugin_action_link( $links ) {
+
+        $_links = array(
+            '<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
+        );
+
+        return array_merge( $_links, $links );
     }
 
     public function check_dependencies() {
