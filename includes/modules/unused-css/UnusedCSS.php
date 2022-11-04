@@ -182,9 +182,9 @@ class UnusedCSS
                                                                         href="https://rapidload.zendesk.com/hc/en-us/requests/new">here</a>
                     </p>
                     <blockquote class="error notice">
-                        <strong>Link :</strong> <?php echo $job['url'] ?> <br>
-                        <strong>Error :</strong> <?php echo $job['meta']['error']['code'] ?> <br>
-                        <strong>Message :</strong> <?php echo $job['meta']['error']['message'] ?>
+                        <strong>Link :</strong> <?php echo $job->job->url ?> <br>
+                        <strong>Error :</strong> <?php echo $job->get_error()->code ?> <br>
+                        <strong>Message :</strong> <?php echo $job->get_error()->message ?>
                     </blockquote>
                 </div>
 

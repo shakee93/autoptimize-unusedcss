@@ -159,6 +159,16 @@ class RapidLoad_Job_Data{
         return [];
     }
 
+    public function get_error(){
+        if(isset($this->error) && !empty($this->error)){
+            return unserialize($this->error);
+        }
+        return (object)[
+            'code' => null,
+            'message' => null
+        ];
+    }
+
     public static function find_or_fail($id, $job_type){
         global $wpdb;
         $job_data = false;
