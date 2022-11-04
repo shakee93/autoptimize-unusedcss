@@ -41,7 +41,7 @@ class RapidLoad_Base
 
             RapidLoad_Base::activate();
 
-            new RapidLoad_Admin_Frontend();
+            new RapidLoad_Onboard();
 
             $this->init_log_dir();
 
@@ -81,10 +81,11 @@ class RapidLoad_Base
 
             self::enqueueGlobalScript();
 
-            $this->container['queue'] = new RapidLoad_Queue();
             $this->container['modules'] = new RapidLoad_Module();
+            $this->container['queue'] = new RapidLoad_Queue();
             if(RapidLoad_DB::$current_version > 1.2){
                 $this->container['admin'] = new RapidLoad_Admin();
+                $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
             }
 
         });

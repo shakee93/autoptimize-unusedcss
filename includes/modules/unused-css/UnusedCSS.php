@@ -104,7 +104,7 @@ class UnusedCSS
         if($first_link){
 
             $first_link = new RapidLoad_Job([
-                'url' => $first_link
+                'url' => $first_link['url']
             ]);
 
             $job = new RapidLoad_Job_Data($first_link, 'uucss');

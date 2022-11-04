@@ -642,7 +642,14 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $link = $wpdb->get_results( "SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule = 'is_url' LIMIT 1", OBJECT );
+        $link = $wpdb->get_results( "select * from (select 
+        job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
+        cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
+        
+        from {$wpdb->prefix}rapidload_job as job
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table WHERE rule = 'is_url' LIMIT 1", OBJECT );
 
         $error = $wpdb->last_error;
 
@@ -651,7 +658,7 @@ abstract class RapidLoad_DB
         }
 
         if ( count( $link ) > 0 ) {
-            return $link[0]->url;
+            return self::transform_link($link[0]);
         }
 
         return false;
