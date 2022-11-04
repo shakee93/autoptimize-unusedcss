@@ -24,6 +24,8 @@ module.exports = {
       'gray-font': '#6D6D6D',
       'dark-gray-font': '#424242',
       'purple-back-font': '#202020',
+      'blue': '#185EF3',
+      'gray': '#E8E8E8',
     },
 
 

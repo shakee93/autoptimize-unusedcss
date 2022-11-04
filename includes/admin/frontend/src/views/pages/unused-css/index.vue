@@ -32,18 +32,18 @@
           <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
           <button v-on:click="button.load_original_css = 'user_interaction'"
                   :class="{ active: button.load_original_css === 'user_interaction' }"
-                  class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
+                  class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
             On user interaction
           </button>
 
           <button v-on:click="button.load_original_css = 'asynchronously'"
                   :class="{ active: button.load_original_css === 'asynchronously' }"
-                  class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
+                  class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
             Asynchronously
           </button>
           <button v-on:click="button.load_original_css = 'remove'"
                   :class="{ active: button.load_original_css === 'remove' }"
-                  class="bg-transparent text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
+                  class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
             Remove
           </button>
 
@@ -123,7 +123,7 @@
 
             <div :class="{ expand: pages_with_rules1 }" class="pl-9 not-expand">
               <button
-                  class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                 Manage Rules
               </button>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
@@ -166,7 +166,7 @@
 
             <div :class="{ expand: pages_with_rules2 }" class="pl-9 not-expand">
               <button
-                  class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                 Manage Rules
               </button>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
@@ -209,7 +209,7 @@
 
             <div :class="{ expand: advance_settings1 }" class="pl-9 not-expand">
               <button
-                  class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                 Manage Rules
               </button>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
@@ -251,7 +251,7 @@
 
             <div :class="{ expand: advance_settings2 }" class="pl-9 not-expand">
               <button
-                  class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                 Manage Rules
               </button>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
@@ -276,7 +276,7 @@
 
         </div>
         <button
-            class="bg-transparent mb-3 text-black-font hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+            class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
           Save Settings
         </button>
       </div>
@@ -305,6 +305,7 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       tag: '',
       tags: ['Elementor'],
+      page_animation: true,
       pages_with_rules1: false,
       advance_settings1: false,
       pages_with_rules2: false,

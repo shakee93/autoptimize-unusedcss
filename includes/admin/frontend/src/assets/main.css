@@ -31,8 +31,12 @@ body {
         max-height: 200px;
     }
 
+    .page-load{
+
+    }
 }
 
+/*config tags packages style, these style will not work without import tags*/
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
     color: white !important;
@@ -60,6 +64,7 @@ body {
     padding: 5px 4px 0 5px !important;
 }
 
+/*overriding wordpress checkbox color */
 input[type=checkbox]:checked{
     background: #7F54B3;
     -webkit-appearance: checkbox;
