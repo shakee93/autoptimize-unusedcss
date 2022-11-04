@@ -15,14 +15,14 @@ class RapidLoad_Admin_Frontend
 
         add_action('admin_menu', [$this, 'menu_item']);
 
+        if(!apply_filters('ao_installed', false)){
+            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
+        }
+
         if($this->is_rapidload_legacy_page()){
 
             $this->load_legacy_scripts();
 
-        }
-
-        if(!apply_filters('ao_installed', false)){
-            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
         }
 
         $this->load_legacy_ajax();

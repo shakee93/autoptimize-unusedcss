@@ -36,8 +36,6 @@ class UnusedCSS
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
-        $this->cache_trigger_hooks();
-
         add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
@@ -54,9 +52,63 @@ class UnusedCSS
             return $this->get_cached_file($uucss_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
-        add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+        if(is_admin()){
+
+            $this->cache_trigger_hooks();
+
+            add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+            add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
+            add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
+        }
 
         new UnusedCSS_Queue();
+    }
+
+    public function add_meta_boxes()
+    {
+        add_meta_box(
+            'uucss-options',
+            __( 'RapidLoad Options', 'uucss' ),
+            [$this, 'meta_box'],
+            get_post_types(),
+            'side'
+        );
+    }
+
+    public function meta_box( $post ) {
+
+        $options = RapidLoad_Base::get_page_options($post->ID);
+
+        include('parts/admin-post.html.php');
+    }
+
+    public function save_meta_box_options($post_id, $post)
+    {
+        if ( !isset( $_POST['uucss_nonce'] ) || !wp_verify_nonce( $_POST['uucss_nonce'], 'uucss_option_save' ) ) {
+            return;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        $this->update_meta($post_id);
+
+    }
+
+    public function update_meta($post_id)
+    {
+        foreach (RapidLoad_Base::$page_options as $option) {
+
+            if ( ! isset( $_POST[ 'uucss_' . $option ] ) ) {
+                delete_post_meta( $post_id, '_uucss_' . $option );
+                continue;
+            }
+
+            $value = sanitize_text_field( $_POST[ 'uucss_' . $option ] );
+
+            update_post_meta( $post_id, '_uucss_' . $option, $value );
+        }
     }
 
     public function uucss_notfound_fallback(){

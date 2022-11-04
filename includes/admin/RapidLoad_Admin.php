@@ -11,24 +11,25 @@ class RapidLoad_Admin
         if(is_admin()){
 
             add_action('current_screen', [$this, 'validate_domain']);
-            add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
             add_action('updated_option', [$this, 'update_cloudflare_settings'], 10, 3 );
+            add_action('updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
             add_action('uucss/options/after_settings_section',[$this, 'render_cloudflare_settings']);
+            add_action('wp_ajax_get_robots_text', [$this, 'get_robots_text']);
             add_action('wp_ajax_frontend_logs', [$this, 'frontend_logs']);
             add_action('wp_ajax_uucss_logs', [$this, 'rapidload_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_rapidload_logs']);
-            add_action("wp_ajax_uucss_license", [ $this, 'uucss_license' ] );
-            add_action("wp_ajax_uucss_deactivate", [ $this, 'ajax_deactivate' ] );
-            add_action("wp_ajax_uucss_connect", [ $this, 'uucss_connect' ] );
+            add_action('wp_ajax_uucss_license', [ $this, 'uucss_license' ] );
+            add_action('wp_ajax_uucss_deactivate', [ $this, 'ajax_deactivate' ] );
+            add_action('wp_ajax_uucss_connect', [ $this, 'uucss_connect' ] );
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
-            add_action( "wp_ajax_verify_api_key", [ $this, 'verify_api_key' ] );
-            add_action( "wp_ajax_attach_rule", [ $this, 'attach_rule' ] );
+            add_action('wp_ajax_verify_api_key', [ $this, 'verify_api_key' ] );
+            add_action('wp_ajax_attach_rule', [ $this, 'attach_rule' ] );
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
-        add_action( 'add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
-        add_action( 'updated_option', [ $this, 'clear_cache_on_option_update' ], 10, 3 );
+        add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
     }
 
     public function attach_rule(){

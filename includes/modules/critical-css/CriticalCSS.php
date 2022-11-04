@@ -37,8 +37,6 @@ class CriticalCSS
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
-        $this->cache_trigger_hooks();
-
         add_action('rapidload/job/purge', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
@@ -50,6 +48,12 @@ class CriticalCSS
         add_filter('uucss/link', [$this, 'update_link']);
 
         add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 2);
+
+        if(is_admin()){
+
+            $this->cache_trigger_hooks();
+
+        }
 
         new CriticalCSS_Queue();
     }
