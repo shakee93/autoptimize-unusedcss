@@ -101,6 +101,36 @@ class RapidLoad_Base
         });
     }
 
+    public function check_dependencies() {
+
+        if(self::is_api_key_verified()) {
+            return true;
+        }else {
+
+            $url = $this->get_current_url();
+
+            if(strpos($url, 'page=uucss') !== false ){
+                return;
+            }
+
+            $notice = [
+                'action'  => 'on-board',
+                'title'   => 'RapidLoad Power Up',
+                'message' => 'Complete on-boarding steps, it only takes 2 minutes.',
+
+                'main_action' => [
+                    'key'   => 'Get Started',
+                    'value' => admin_url( 'options-general.php?page=rapidload-onboarding' )
+                ],
+                'type'        => 'warning'
+            ];
+            self::add_advanced_admin_notice($notice);
+            UnusedCSS_RapidLoad_Onboard::display_get_start_link();
+        }
+
+        return false;
+    }
+
     public function init_log_dir(){
 
         if(!self::get_log_option()){
