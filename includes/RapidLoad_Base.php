@@ -41,7 +41,13 @@ class RapidLoad_Base
 
             RapidLoad_Base::activate();
 
-            new RapidLoad_Onboard();
+            if(is_admin()){
+
+                new RapidLoad_Onboard();
+
+                $this->check_dependencies();
+
+            }
 
             $this->init_log_dir();
 
@@ -110,7 +116,7 @@ class RapidLoad_Base
             $url = $this->get_current_url();
 
             if(strpos($url, 'page=uucss') !== false ){
-                return;
+                return false;
             }
 
             $notice = [
@@ -125,7 +131,7 @@ class RapidLoad_Base
                 'type'        => 'warning'
             ];
             self::add_advanced_admin_notice($notice);
-            UnusedCSS_RapidLoad_Onboard::display_get_start_link();
+            self::display_get_start_link();
         }
 
         return false;
@@ -516,5 +522,15 @@ class RapidLoad_Base
 
         return $api_key_status == '1';
 
+    }
+
+    public static function display_get_start_link() {
+        add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
+            $_links = array(
+                '<a href="' . admin_url( 'options-general.php?page=rapidload-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
+            );
+
+            return array_merge( $_links, $links );
+        } );
     }
 }

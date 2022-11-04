@@ -2,8 +2,8 @@
 
 defined( 'ABSPATH' ) or die();
 
-$steps = _RapidLoad_Onboard::$onboard_steps;
-$step  = _RapidLoad_Onboard::$current_step + 1;
+$steps = RapidLoad_Onboard::$onboard_steps;
+$step  = RapidLoad_Onboard::$current_step + 1;
 ?>
 
 <div class="main-section on-board">
