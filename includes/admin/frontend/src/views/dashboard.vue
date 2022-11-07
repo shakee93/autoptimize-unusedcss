@@ -56,12 +56,12 @@ export default {
       }
       console.log("State:"+ toggle)
       const data = {
-        module: 'unsedCSS',
+        module: 'unused-css',
         active: toggle,
         action : 'activate_module'
       };
 
-      axios.post(window.uucss_global.ajax_url, data)
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module', data)
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
@@ -119,6 +119,14 @@ export default {
       ],
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/'
     }
+  },
+  mounted() {
+    axios.get(window.uucss_global.ajax_url + '?action=list_module')
+        .then(response => console.log(response.data))
+        .catch(error => {
+          this.errorMessage = error.message;
+          console.error("There was an error!", error);
+        });
   }
 }
 </script>
