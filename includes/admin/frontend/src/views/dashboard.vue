@@ -26,7 +26,7 @@
             </div>
             <div class="col-end-7 col-span-2 ...">
               <label :for="'toggle'+item.name" class="inline-flex relative items-center cursor-pointer">
-                <input type="checkbox" v-model="item.enable" @click="unusedCSS(item.enable)" value="" :id="'toggle'+item.name" class="sr-only peer">
+                <input type="checkbox" v-model="item.status" @click="unusedCSS(item.status)" value="" :id="'toggle'+item.name" class="sr-only peer">
                 <div
                     class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-blue"></div>
               </label>
@@ -36,7 +36,7 @@
         </div>
       </li>
     </ul>
-
+    <button @click="getItems()"> Click me</button>
   </main>
 </template>
 
@@ -46,15 +46,28 @@ import config from "../config";
 import axios from 'axios';
 
 export default {
+  async mounted() {
+    await axios.get(window.uucss_global.ajax_url + '?action=list_module')
+        .then(response =>
+            this.items_data = response.data
+        )
+        .catch(error => {
+          this.errorMessage = error.message;
+          console.error("There was an error!", error);
+        });
+  },
   methods:{
-    unusedCSS(toggle){
+    getItems(){
+      const critical = "critical-css";
 
+      console.log(this.items_data.data);
+    },
+    unusedCSS(toggle){
       if(!toggle){
         toggle = "on";
       } else{
         toggle = "off";
       }
-      console.log("State:"+ toggle)
       const data = {
         module: 'unused-css',
         active: toggle,
@@ -72,61 +85,62 @@ export default {
   },
   data() {
     return {
+      items_data: [],
+      // items : this.items_data.data.map((component) => ({
+      //   name: component.title,
+      //   description: component.description,
+      //   link: '/'+component.id,
+      //   image: component.id + '.svg',
+      //   status: component.status,
+      // })),
       items: [
         {
           name: "Unused CSS",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
-          enable: false
+          status: false
         },
         {
           name: "Critical CSS",
           description: 'Generate above the fold critical CSS for your pages',
           image: 'critical-css.svg',
           link: '/critical-css',
-          enable: false
+          status: false
         },
         {
           name: "Image Delivery",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'image-delivery.svg',
           link: '/image-delivery',
-          enable: true
+          status: true
         },
         {
           name: "Speed Monitoring",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'speed-monitoring.svg',
           link: '/speed-monitoring',
-          enable: true
+          status: true
         },
         {
           name: "Asset Manager",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'asset-manager.svg',
           link: '/asset-manager',
-          enable: false
+          status: false
         },
         {
           name: "Font Optimization",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'font-optimization.svg',
           link: '/font-optimization',
-          enable: false
+          status: false
         },
 
       ],
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/'
     }
-  },
-  mounted() {
-    axios.get(window.uucss_global.ajax_url + '?action=list_module')
-        .then(response => console.log(response.data))
-        .catch(error => {
-          this.errorMessage = error.message;
-          console.error("There was an error!", error);
-        });
   }
+
 }
 </script>
