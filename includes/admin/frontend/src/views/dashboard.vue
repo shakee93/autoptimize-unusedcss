@@ -60,12 +60,14 @@ export default {
         active: toggle,
         action : 'activate_module'
       };
-      axios.post("http://rapidload.local/wp-admin/admin-ajax.php", data)
+      console.log(window.uucss_global);
+      axios.post("window.uucss_global", data)
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
           });
+
     }
   },
   data() {
@@ -76,7 +78,7 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
-          enable: true
+          enable: false
         },
         {
           name: "Critical CSS",
