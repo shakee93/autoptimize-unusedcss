@@ -183,8 +183,20 @@ class UnusedCSS
                     </p>
                     <blockquote class="error notice">
                         <strong>Link :</strong> <?php echo $job->job->url ?> <br>
-                        <strong>Error :</strong> <?php echo $job->get_error()->code ?> <br>
-                        <strong>Message :</strong> <?php echo $job->get_error()->message ?>
+
+                        <?php
+                            $error = $job->get_error();
+
+                            if(isset($error['code'])) :
+                        ?>
+
+                        <strong>Error :</strong> <?php echo $error['code'] ?> <br>
+                        <strong>Message :</strong> <?php echo $error['message'] ?>
+
+                        <?php
+                            endif;
+                        ?>
+
                     </blockquote>
                 </div>
 
@@ -340,7 +352,7 @@ class UnusedCSS
             $this->job_data->save();
         }
 
-        if($this->job_data->status == 'failed' && $this->job_data->attempts > 2 && !isset($args['immediate'])){
+        if($this->job_data->status == 'failed' && $this->job_data->attempts > 2 && !isset($args['immediate']) || !isset( $args['requeue'])){
             return false;
         }
 

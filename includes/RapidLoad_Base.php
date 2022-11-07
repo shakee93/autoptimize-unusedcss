@@ -42,11 +42,13 @@ class RapidLoad_Base
             self::activateByLicenseKey();
             self::activate();
 
-            if(is_admin() && !$this->check_dependencies()){
+            if(is_admin()){
 
                 new RapidLoad_Onboard();
 
             }
+
+            $this->check_dependencies();
 
             $this->init_log_dir();
 
