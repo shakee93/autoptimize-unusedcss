@@ -26,7 +26,7 @@
       </div>
 
       <div>
-      <div class="p-4 pl-32 pr-32">
+      <div class="p-4 pl-32 pr-72">
         <div v-for="button in buttons">
           <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
           <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
@@ -94,10 +94,28 @@
           <p class="text-sm pb-3 text-gray-font">Selector packs contains predefined force exclude and include rules for
             plugins and themes.</p>
           <div class="grid mb-5">
+            <div class="flex text-sm">
             <vue3-tags-input :tags="tags"
                              class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                              placeholder="Type your plugin..."/>
             <!--          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
+
+
+            <div class="mt-3 z-50 -ml-9 cursor-pointer">
+              <svg :class="{'animate-spin': refresh_element}" @click="refresh_element = !refresh_element" class="fill-none transition ease-in-out" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 13 13">
+                <g class="" clip-path="url(#clip0_49_525)">
+                  <path d="M11.466 4.33334C10.6301 2.42028 8.72122 1.08334 6.5 1.08334C3.6913 1.08334 1.38187 3.22113 1.11011 5.95834" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9.20825 4.33333H11.5916C11.7711 4.33333 11.9166 4.18783 11.9166 4.00833V1.625" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1.56079 8.66666C2.39665 10.5797 4.30557 11.9167 6.52676 11.9167C9.33546 11.9167 11.6449 9.77886 11.9167 7.04166" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3.81844 8.66666H1.43511C1.25562 8.66666 1.11011 8.81215 1.11011 8.99166V11.375" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+
+              </svg>
+            </div>
+            </div>
+
+
             <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
             </div>
@@ -300,11 +318,16 @@ export default {
     Vue3TagsInput,
   },
 
+  methods:{
+
+  },
+
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       tag: '',
       tags: ['Elementor'],
+      refresh_element: false,
       page_animation: true,
       pages_with_rules1: false,
       advance_settings1: false,

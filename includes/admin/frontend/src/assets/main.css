@@ -31,16 +31,25 @@ body {
         max-height: 200px;
     }
 
-    .page-load{
-
+    .rotate{
+        transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
     }
+
 }
 
 /*config tags packages style, these style will not work without import tags*/
+.v3ti .v3ti-content{
+    width: 90% !important;
+}
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
     color: white !important;
-    padding: 18px 10px 18px 30px !important;
+    padding: 16px 10px 18px 30px !important;
+    margin: 2px !important;
 }
 .v3ti .v3ti-tag .v3ti-remove-tag {
     color: #7F54B3 !important;
@@ -61,7 +70,7 @@ body {
     border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
 }
 .v3ti .v3ti-new-tag {
-    padding: 5px 4px 0 5px !important;
+    padding: 0 4px 0 5px !important;
 }
 
 /*overriding wordpress checkbox color */
@@ -75,6 +84,6 @@ input[type=checkbox]:checked::before {
 
 @media (min-width: 905px) {
     .container {
-        max-width: 905px;
+        max-width: 1100px;
     }
 }

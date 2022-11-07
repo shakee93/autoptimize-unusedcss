@@ -26,7 +26,7 @@
             </div>
             <div class="col-end-7 col-span-2 ...">
               <label :for="'toggle'+item.name" class="inline-flex relative items-center cursor-pointer">
-                <input type="checkbox" v-model="item.enable" value="" :id="'toggle'+item.name" class="sr-only peer">
+                <input type="checkbox" v-model="item.enable" @click="unusedCSS(item.enable)" value="" :id="'toggle'+item.name" class="sr-only peer">
                 <div
                     class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-blue"></div>
               </label>
@@ -43,8 +43,31 @@
 <script>
 
 import config from "../config";
+import axios from 'axios';
 
 export default {
+  methods:{
+    unusedCSS(toggle){
+
+      if(!toggle){
+        toggle = "on";
+      } else{
+        toggle = "off";
+      }
+      console.log("State:"+ toggle)
+      const data = {
+        module: 'unsedCSS',
+        active: toggle,
+        action : 'activate_module'
+      };
+      axios.post("http://rapidload.local/wp-admin/admin-ajax.php", data)
+          .then(response => console.log(response.data))
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    }
+  },
   data() {
     return {
       items: [
@@ -53,7 +76,7 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
-          enable: false
+          enable: true
         },
         {
           name: "Critical CSS",
