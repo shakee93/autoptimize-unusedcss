@@ -163,7 +163,7 @@ class RapidLoad_Job_Data{
         if(isset($this->error) && !empty($this->error)){
             return unserialize($this->error);
         }
-        return (object)[
+        return [
             'code' => null,
             'message' => null
         ];
