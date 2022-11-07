@@ -60,8 +60,8 @@ export default {
         active: toggle,
         action : 'activate_module'
       };
-      console.log(window.uucss_global);
-      axios.post("window.uucss_global", data)
+
+      axios.post(window.uucss_global.ajax_url, data)
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
