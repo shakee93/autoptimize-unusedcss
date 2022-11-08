@@ -31,15 +31,44 @@ class Javascript_Enqueue
             $this->options = $state['options'];
         }
 
+        global $post;
+
+        if(isset($post->ID)){
+
+            $settings = get_post_meta($post->ID, 'rapidload_js_settings');
+
+            if(isset($settings[0])){
+
+                $settings = $settings[0];
+
+            }
+
+        }
+
         $links = $this->dom->find( 'script' );
 
         foreach ( $links as $link ) {
 
             if(self::is_js($link) && !self::is_file_excluded($link->src)){
 
-                if(isset($this->options['uucss_load_js_method'])){
+                $method = false;
 
-                    switch ($this->options['uucss_load_js_method']){
+                if(isset($settings['js_files'])){
+
+                    $key = array_search($link->src, array_column($settings['js_files'], 'url'));
+
+                    if(isset($key) && is_numeric($key)){
+                        $method = $settings['js_files'][$key]->action;
+                    }
+                }
+
+                if(!$method || $method != 'none'){
+                    $method = $this->options['uucss_load_js_method'];
+                }
+
+                if($method){
+
+                    switch ($method){
 
                         case 'defer' : {
                             $link->defer = true;
@@ -51,10 +80,14 @@ class Javascript_Enqueue
                             unset($link->defer);
                             break;
                         }
-                        default:{
+                        case 'on_user_interaction' : {
                             $data_attr = "data-rapidload-src";
                             $link->{$data_attr} = $link->src;
                             unset($link->src);
+                            break;
+                        }
+                        default:{
+
 
                         }
 
@@ -66,20 +99,16 @@ class Javascript_Enqueue
 
         }
 
-        if(isset($this->options['uucss_load_js_method']) && $this->options['uucss_load_js_method'] == "on-user-interaction"){
-
-            $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
+        $body = $this->dom->find('body', 0);
+        $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
                     });
                 });");
 
-            $node->setAttribute('type', 'text/javascript');
-            $body->appendChild($node);
-
-        }
+        $node->setAttribute('type', 'text/javascript');
+        $body->appendChild($node);
 
         return $state;
     }

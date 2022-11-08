@@ -18,6 +18,15 @@
             return id;
         }
 
+        function set_js_url_action(url, action) {
+            rapidload_optimized_data.js_files = rapidload_optimized_data.js_files.map(function (js) {
+                if(js.url === url){
+                    js.action = action
+                }
+                return js;
+            })
+        }
+
         var sampleData = {
             "url": "https://rapidload.io",
             "totalCSS": 13,
@@ -7349,7 +7358,8 @@
 
                             }
                         })
-                    }else{
+                    }
+                    else{
 
                         var opportunities = [];
                         var js_related = {}
@@ -7363,9 +7373,9 @@
                         opportunities.map(function (opp){
                             if(opp.details && opp.details.items.length){
                                 opp.details.items.map(function (item) {
-                                    if(item.url && item.url.includes('.js') && !js_related[opp.id]){
+                                    if(item.url && item.url.includes('.js')){
                                         js_related[opp.id] = opp
-
+                                        console.log(item.url)
                                         if(!rapidload_optimized_data.js_files.includes(item.url)){
                                             rapidload_optimized_data.js_files.push(item.url)
                                         }
@@ -7413,7 +7423,7 @@
 
                                 })
 
-                                $opportunity_html.find('tr.' + js_related[key].id + '-' + index).append('<td class="column-primary"><select><option value="defer">Defer</option><option value="async">Async</option><option value="on_user_interaction">On User Interaction</option></select></td>')
+                                $opportunity_html.find('tr.' + js_related[key].id + '-' + index).append('<td class="column-primary"><select class="js-action" data-url="'+ row.url +'"><option value="none">None</option><option value="defer">Defer</option><option value="async">Async</option><option value="on_user_interaction">On User Interaction</option></select></td>')
 
                             })
 
@@ -7421,8 +7431,36 @@
 
                         console.log(rapidload_optimized_data.files)
                         $('#rapidload-optimizer-dialog').append($opportunity_html)
+
+                        $('select.js-action').change(function(){
+
+                            var $this = $(this)
+
+                            var url = $this.data('url')
+                            
+                            set_js_url_action(url, $this.val())
+
+                            $('select[data-url="' + url + '"] option[value="' + $this.val() + '"]').attr('selected','selected')
+                        });
                     }
 
+                    $('#rapidload-optimizer-dialog').append('<div class="model-footer"><input id="btn-js-optimizer-settings" type="button" value="Save Changes"></div>')
+
+                    $('#btn-js-optimizer-settings').click(function () {
+
+                        $.ajax({
+                            url : rapidload_js_optimizer.ajax_url + '?action=update_js_settings',
+                            method : 'POST',
+                            data : {
+                                post_id : rapidload_js_optimizer.post_id,
+                                settings : rapidload_optimized_data
+                            },
+                            success : function (result){
+
+                            }
+                        })
+
+                    })
                 }
             })
         })

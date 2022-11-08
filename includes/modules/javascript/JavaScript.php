@@ -21,9 +21,37 @@ class JavaScript
 
         add_action( 'admin_bar_menu', [$this, 'add_admin_bar_items' ], 90 );
 
+        $this->enqueue_admin_scripts();
+
+        $this->ajax_calls();
+    }
+
+    public function ajax_calls(){
+
+        if(is_admin()){
+
+            add_action('wp_ajax_update_js_settings', [$this, 'update_js_settings']);
+
+        }
+
+    }
+
+    public function update_js_settings(){
+
+        $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : null;
+        $settings = isset($_REQUEST['settings']) ? $_REQUEST['settings'] : [];
+
+        if(!isset($post_id) || !isset($settings)){
+            wp_send_json_error('requierd field missing');
+        }
+
+        update_post_meta($post_id, 'rapidload_js_settings', $settings);
+
+        wp_send_json_success(true);
+    }
+
+    public function enqueue_admin_scripts(){
         if(is_user_logged_in()){
-
-
 
             add_action('wp_after_load_template', function (){
 
@@ -40,7 +68,8 @@ class JavaScript
                     ) , UUCSS_VERSION);
 
                     wp_localize_script( 'rapidload-js-optimizer', 'rapidload_js_optimizer', [
-                        'post_id' => $post->ID
+                        'post_id' => $post->ID,
+                        'ajax_url' => admin_url( 'admin-ajax.php' ),
                     ] );
 
                     wp_enqueue_script('rapidload-js-optimizer');
