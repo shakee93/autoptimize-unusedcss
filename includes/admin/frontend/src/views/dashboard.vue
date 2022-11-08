@@ -11,8 +11,8 @@
           class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
           <div class="content p-4">
-            <img v-if="item.image" :src="base + item.image" :alt="item.name">
-            <h4 class="mt-2 text-gray-800 font-bold text-base">{{ item.name }}</h4>
+            <img v-if="item.image" :src="base + item.image" :alt="item.title">
+            <h4 class="mt-2 text-gray-800 font-bold text-base">{{ item.title }}</h4>
             <p class="mb-1 text-sm text-gray-500 ">{{ item.description }}</p>
           </div>
           <hr class="border-gray-border-line border-b-0">
@@ -25,8 +25,8 @@
               </RouterLink>
             </div>
             <div class="col-end-7 col-span-2 ...">
-              <label :for="'toggle'+item.name" class="inline-flex relative items-center cursor-pointer">
-                <input type="checkbox" v-model="item.status" @click="unusedCSS(item.status)" value="" :id="'toggle'+item.name" class="sr-only peer">
+              <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
+                <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">
                 <div
                     class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-blue"></div>
               </label>
@@ -36,7 +36,7 @@
         </div>
       </li>
     </ul>
-    <button @click="getItems()"> Click me</button>
+
   </main>
 </template>
 
@@ -47,34 +47,46 @@ import axios from 'axios';
 
 export default {
   async mounted() {
-    await axios.get(window.uucss_global.ajax_url + '?action=list_module')
-        .then(response =>
-            this.items_data = response.data
-        )
-        .catch(error => {
-          this.errorMessage = error.message;
-          console.error("There was an error!", error);
+    // await axios.get(window.uucss_global.ajax_url + '?action=list_module')
+    //     .then(response =>
+    //         this.items_data = response.data
+    //     )
+    //     .catch(error => {
+    //       this.errorMessage = error.message;
+    //       console.error("There was an error!", error);
+    //     });
+
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
         });
+      }
+    });
+    this.items_data = activeModules
+
+    if (this.items_data) {
+      Object.keys(this.items_data).map((key) => {
+        this.items.map((val) => {
+          if (val.id === this.items_data[key].id) {
+            val.status = this.items_data[key].status === 'on';
+          }
+        })
+      });
+    }
   },
   methods:{
-    getItems(){
-      const critical = "critical-css";
 
-      console.log(this.items_data.data);
-    },
-    unusedCSS(toggle){
+    update(toggle, module){
       if(!toggle){
         toggle = "on";
       } else{
         toggle = "off";
       }
-      const data = {
-        module: 'unused-css',
-        active: toggle,
-        action : 'activate_module'
-      };
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module', data)
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
@@ -95,42 +107,48 @@ export default {
       // })),
       items: [
         {
-          name: "Unused CSS",
+          id : "unused-css",
+          title: "Unused CSS",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
           status: false
         },
         {
-          name: "Critical CSS",
+          id : "critical-css",
+          title: "Critical CSS",
           description: 'Generate above the fold critical CSS for your pages',
           image: 'critical-css.svg',
           link: '/critical-css',
           status: false
         },
         {
-          name: "Image Delivery",
+          id : "image-delivery",
+          title: "Image Delivery",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'image-delivery.svg',
           link: '/image-delivery',
-          status: true
+          status: false
         },
         {
-          name: "Speed Monitoring",
+          id : "speed-monitoring",
+          title: "Speed Monitoring",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'speed-monitoring.svg',
           link: '/speed-monitoring',
-          status: true
+          status: false
         },
         {
-          name: "Asset Manager",
+          id : "asset-manager",
+          title: "Asset Manager",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'asset-manager.svg',
           link: '/asset-manager',
           status: false
         },
         {
-          name: "Font Optimization",
+          id : "font-optimization",
+          title: "Font Optimization",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'font-optimization.svg',
           link: '/font-optimization',
