@@ -17,7 +17,7 @@ class RapidLoad_Module
             'id' => 'unused-css',
             'title' => 'Unused CSS',
             'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
-            'status' => 'on',
+            'status' => 'off',
             'class' => UnusedCSS::class,
             'global' => 'uucss'
         ];
@@ -26,7 +26,7 @@ class RapidLoad_Module
             'id' => 'critical-css',
             'title' => 'Critical CSS',
             'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
-            'status' => 'on',
+            'status' => 'off',
             'class' => CriticalCSS::class,
             'global' => 'cpcss'
         ];
@@ -35,13 +35,13 @@ class RapidLoad_Module
             'id' => 'javascript',
             'title' => 'Javascript',
             'description' => 'Optimize Javascript',
-            'status' => 'on',
+            'status' => 'off',
             'class' => JavaScript::class,
             'global' => 'javascript'
         ];
 
-        // Todo get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] )
-        $stored_modules = ['unused-css' => 'on', 'critical-css' => 'on', 'javascript' => 'on'];
+        $stored_modules = [];
+        $stored_modules = get_option( 'rapidload_modules', $stored_modules );
 
         foreach ($stored_modules as $key => $value){
             $this->modules[$key]['status'] = $value;
@@ -78,15 +78,19 @@ class RapidLoad_Module
     function activate_module(){
 
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : false;
-        $active = isset($_REQUEST['activate']) ? $_REQUEST['activate'] : 'off';
+        $active = isset($_REQUEST['active']) ? $_REQUEST['active'] : 'off';
 
         if(!$module){
             wp_send_json_error('Rapidload module required');
         }
 
-        $stored = get_option( 'rapidload_modules', ['unused-css'] );
+        $stored = get_option( 'rapidload_modules', [] );
+
+        error_log(json_encode($stored));
 
         $stored[$module] = $active;
+
+        error_log(json_encode($stored));
 
         update_option( 'rapidload_modules', $stored );
 
