@@ -111,6 +111,23 @@
                 $('select[data-url="' + url + '"] option[value="' + $this.val() + '"]').attr('selected', 'selected')
             });
 
+            $('#rapidload-optimizer-dialog').append('<div class="model-footer"><input id="btn-js-optimizer-settings" type="button" value="Save Changes"></div>')
+
+            $('#btn-js-optimizer-settings').click(function () {
+
+                $.ajax({
+                    url: rapidload_js_optimizer.ajax_url + '?action=update_js_settings',
+                    method: 'POST',
+                    data: {
+                        post_id: rapidload_js_optimizer.post_id,
+                        settings: rapidload_optimized_data
+                    },
+                    success: function (result) {
+
+                    }
+                })
+
+            })
         }
 
         var sampleData = {
@@ -7420,7 +7437,7 @@
             }
         }
 
-        sampleData = false;
+        //sampleData = false;
 
         $('#wp-admin-bar-rapidload_psa div').click(function () {
 
@@ -7447,24 +7464,6 @@
                     }
                 }
             })
-        })
-
-        $('#rapidload-optimizer-dialog').append('<div class="model-footer"><input id="btn-js-optimizer-settings" type="button" value="Save Changes"></div>')
-
-        $('#btn-js-optimizer-settings').click(function () {
-
-            $.ajax({
-                url: rapidload_js_optimizer.ajax_url + '?action=update_js_settings',
-                method: 'POST',
-                data: {
-                    post_id: rapidload_js_optimizer.post_id,
-                    settings: rapidload_optimized_data
-                },
-                success: function (result) {
-
-                }
-            })
-
         })
 
     });
