@@ -20,17 +20,55 @@ class JavaScript
         add_action('rapidload/job/handle', [$this, 'optimize_javascript'], 30, 2);
 
         add_action( 'admin_bar_menu', [$this, 'add_admin_bar_items' ], 90 );
+
+        if(is_user_logged_in()){
+
+
+
+            add_action('wp_after_load_template', function (){
+
+                global $post;
+
+                if(isset($post->ID)){
+
+                    wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
+                    wp_enqueue_style('rapidload-optimizer', UUCSS_PLUGIN_URL . 'includes/modules/javascript/assets/css/style.css', UUCSS_VERSION);
+
+                    wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
+                    wp_register_script( 'rapidload-js-optimizer', UUCSS_PLUGIN_URL . 'includes/modules/javascript/assets/js/js-core.min.js', array(
+                        'jquery',
+                    ) , UUCSS_VERSION);
+
+                    wp_localize_script( 'rapidload-js-optimizer', 'rapidload_js_optimizer', [
+                        'post_id' => $post->ID
+                    ] );
+
+                    wp_enqueue_script('rapidload-js-optimizer');
+                }
+
+            });
+
+        }
     }
 
     public function add_admin_bar_items($wp_admin_bar){
-        $wp_admin_bar->add_menu(
-            array(
-                'id'     => 'rapidload_psa',
-                'parent' => 'top-secondary',
-                'title'  => '<span class="ab-item">RapidLoad Optimizer</span>',
-                'meta'   => array( 'title' => 'RapidLoad Optimizer' ),
-            )
-        );
+
+        global $post;
+
+        if(isset($post->ID)){
+
+            $wp_admin_bar->add_menu(
+                array(
+                    'id'     => 'rapidload_psa',
+                    'parent' => 'top-secondary',
+                    'title'  => '<span class="ab-item">RapidLoad Optimizer</span>',
+                    'meta'   => array( 'title' => 'RapidLoad Optimizer' ),
+                )
+            );
+
+        }
+
+
     }
 
     public function render_options($args){
