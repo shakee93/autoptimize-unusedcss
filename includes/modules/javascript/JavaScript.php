@@ -63,12 +63,13 @@ class JavaScript
                     wp_enqueue_style('rapidload-optimizer', UUCSS_PLUGIN_URL . 'includes/modules/javascript/assets/css/style.css', UUCSS_VERSION);
 
                     wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
-                    wp_register_script( 'rapidload-js-optimizer', UUCSS_PLUGIN_URL . 'includes/modules/javascript/assets/js/js-core.min.js', array(
+                    wp_register_script( 'rapidload-js-optimizer', UUCSS_PLUGIN_URL . 'includes/modules/javascript/assets/js/js-core.js', array(
                         'jquery',
                     ) , UUCSS_VERSION);
 
                     wp_localize_script( 'rapidload-js-optimizer', 'rapidload_js_optimizer', [
                         'post_id' => $post->ID,
+                        'current_url' => $this->transform_url(get_permalink($post->ID)),
                         'ajax_url' => admin_url( 'admin-ajax.php' ),
                     ] );
 

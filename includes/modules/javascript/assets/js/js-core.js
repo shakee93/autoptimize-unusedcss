@@ -7437,7 +7437,7 @@
             }
         }
 
-        //sampleData = false;
+        sampleData = false;
 
         $('#wp-admin-bar-rapidload_psa div').click(function () {
 
@@ -7447,10 +7447,10 @@
 
                     if (!sampleData) {
                         $.ajax({
-                            url: 'http://localhost:3000/api/v1/gpsi',
+                            url: 'https://api.rapidload.io/api/v1/gpsi',
                             method: 'POST',
                             data: {
-                                url: "https://rapidload.io",
+                                url: rapidload_js_optimizer.current_url,
                                 include_matrix: true
                             },
                             success: function (result) {
