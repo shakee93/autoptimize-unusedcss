@@ -569,4 +569,8 @@ trait RapidLoad_Utils {
 
         return true;
     }
+
+    function is_regex_expression($string) {
+        return @preg_match($string, '') !== FALSE;
+    }
 }

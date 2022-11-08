@@ -31,7 +31,7 @@ class RapidLoad_Module
             'global' => 'cpcss'
         ];
 
-        $this->modules['critical-css'] = [
+        $this->modules['javascript'] = [
             'id' => 'javascript',
             'title' => 'Javascript',
             'description' => 'Optimize Javascript',
@@ -41,7 +41,7 @@ class RapidLoad_Module
         ];
 
         // Todo get_option( 'rapidload_modules', ['unused-css' => 'on', 'critical-css' => 'on'] )
-        $stored_modules = ['unused-css' => 'on', 'critical-css' => 'on', 'javascript' => 'off'];
+        $stored_modules = ['unused-css' => 'on', 'critical-css' => 'on', 'javascript' => 'on'];
 
         foreach ($stored_modules as $key => $value){
             $this->modules[$key]['status'] = $value;

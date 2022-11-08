@@ -23,6 +23,7 @@ return array(
     'GoogleModPageSpeedCompatible' => $baseDir . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
     'HideMyWP_Compatible' => $baseDir . '/includes/third-party/plugins/hide-my-wp/HideMyWP_Compatible.php',
     'JavaScript' => $baseDir . '/includes/modules/javascript/JavaScript.php',
+    'Javascript_Enqueue' => $baseDir . '/includes/modules/javascript/Javascript_Enqueue.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',

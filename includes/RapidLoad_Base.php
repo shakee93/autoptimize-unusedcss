@@ -208,6 +208,7 @@ class RapidLoad_Base
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                'active_modules' => (array)self::get()->modules()->active_modules()
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
@@ -518,13 +519,21 @@ class RapidLoad_Base
 
     public static function cache_file_count(){
         $uucss_files = scandir(UnusedCSS::$base_dir);
-        $uucss_files = array_filter($uucss_files, function ($file){
-            return false !== strpos($file, '.css');
-        });
+        if(is_array($uucss_files)){
+            $uucss_files = array_filter($uucss_files, function ($file){
+                return false !== strpos($file, '.css');
+            });
+        }else{
+            $uucss_files = [];
+        }
         $cpcss_files = scandir(CriticalCSS::$base_dir);
-        $cpcss_files = array_filter($cpcss_files, function ($file){
-            return false !== strpos($file, '.css');
-        });
+        if(is_array($cpcss_files)){
+            $cpcss_files = array_filter($cpcss_files, function ($file){
+                return false !== strpos($file, '.css');
+            });
+        }else{
+            $cpcss_files = [];
+        }
         return count($uucss_files) + count($cpcss_files);
     }
 

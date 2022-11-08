@@ -314,6 +314,28 @@
 
         });
 
+        $('#wp-admin-bar-rapidload_psa div').click(function (){
+
+            $.featherlight('<div id="rapidload-optimizer-dialog"></div>',{
+                variant : 'rapidload-optimizer-model',
+                afterOpen:function (){
+
+                    $.ajax({
+                        url : 'http://localhost:3000/api/v1/gpsi',
+                        method : 'POST',
+                        data : {
+                            url : "https://rapidload.io",
+                            include_matrix : true
+                        },
+                        success : function (result){
+                            console.log(result);
+                        }
+                    })
+
+                }
+            })
+        })
+
         updateLicenseInfo();
     });
 

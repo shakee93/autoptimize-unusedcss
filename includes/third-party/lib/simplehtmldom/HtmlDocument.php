@@ -1092,7 +1092,7 @@ class HtmlDocument
 		}
 
 		$node->tag = $name;
-
+        error_log($node->parent);
 		return $node;
 	}
 

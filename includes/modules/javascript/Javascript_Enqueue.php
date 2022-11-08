@@ -1,0 +1,122 @@
+<?php
+
+class Javascript_Enqueue
+{
+    use RapidLoad_Utils;
+
+    private $job = null;
+
+    private $dom;
+    private $inject;
+    private $options;
+
+    public function __construct($job)
+    {
+        $this->job = $job;
+
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+    }
+
+    public function update_content($state){
+
+        if(isset($state['dom'])){
+            $this->dom = $state['dom'];
+        }
+
+        if(isset($state['inject'])){
+            $this->inject = $state['inject'];
+        }
+
+        if(isset($state['options'])){
+            $this->options = $state['options'];
+        }
+
+        $links = $this->dom->find( 'script' );
+
+        foreach ( $links as $link ) {
+
+            if(self::is_js($link) && !self::is_file_excluded($link->src)){
+
+                if(isset($this->options['uucss_load_js_method'])){
+
+                    switch ($this->options['uucss_load_js_method']){
+
+                        case 'defer' : {
+                            $link->defer = true;
+                            unset($link->async);
+                            break;
+                        }
+                        case 'async' : {
+                            $link->async = true;
+                            unset($link->defer);
+                            break;
+                        }
+                        default:{
+                            $data_attr = "data-rapidload-src";
+                            $link->{$data_attr} = $link->src;
+                            unset($link->src);
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if(isset($this->options['uucss_load_js_method']) && $this->options['uucss_load_js_method'] == "on-user-interaction"){
+
+            $body = $this->dom->find('body', 0);
+            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
+                    removeEventListener(event, listener);
+                    } 
+                    addEventListener(event, listener);
+                    });
+                });");
+
+            $node->setAttribute('type', 'text/javascript');
+            $body->appendChild($node);
+
+        }
+
+        return $state;
+    }
+
+    private static function is_js( $el ) {
+        return $el->type === 'text/javascript' && !empty($el->src);
+    }
+
+    private function is_file_excluded($file){
+
+        $exclude_files = isset($this->options['uucss_excluded_js_files']) && !empty($this->options['uucss_excluded_js_files']) ? explode("\n", $this->options['uucss_excluded_js_files']) : [];
+
+        $excluded = false;
+
+        foreach ($exclude_files as $exclude_file){
+
+            $exclude_file = str_replace("\r", "", $exclude_file);
+
+            if(self::is_regex_expression($exclude_file)){
+
+                $excluded = preg_match($exclude_file, $file);
+
+            }
+
+            if(!$excluded){
+
+                $excluded = $this->str_contains($file, $exclude_file);
+
+            }
+
+            if($excluded){
+
+                break;
+            }
+
+        }
+
+        return $excluded;
+    }
+}
