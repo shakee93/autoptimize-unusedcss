@@ -22,9 +22,9 @@
     </th>
     <td>
 
-        <select name="autoptimize_uucss_settings[uucss_load_js_method]" id="uucss_jobs_per_queue">
+        <select name="autoptimize_uucss_settings[uucss_load_js_method]" id="uucss_load_js_method">
+            <option value="none" <?php if($options['uucss_load_js_method'] === 'none') {  echo 'selected'; } else {echo '';} ?>>None</option>
             <option value="defer" <?php if($options['uucss_load_js_method'] === 'defer') {  echo 'selected'; } else {echo '';} ?>>Defer</option>
-            <option value="async" <?php if($options['uucss_load_js_method'] === 'async') {  echo 'selected'; } else {echo '';} ?>>Async</option>
             <option value="on-user-interaction" <?php if($options['uucss_load_js_method'] === 'on-user-interaction') {  echo 'selected'; } else {echo '';} ?>>On User Interaction</option>
         </select>
 

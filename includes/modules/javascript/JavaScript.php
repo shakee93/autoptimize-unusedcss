@@ -53,7 +53,7 @@ class JavaScript
     public function enqueue_admin_scripts(){
         if(is_user_logged_in()){
 
-            add_action('wp_after_load_template', function (){
+            add_action('wp', function (){
 
                 global $post;
 
@@ -71,6 +71,7 @@ class JavaScript
                         'post_id' => $post->ID,
                         'current_url' => $this->transform_url(get_permalink($post->ID)),
                         'ajax_url' => admin_url( 'admin-ajax.php' ),
+                        'settings' => get_post_meta($post->ID, 'rapidload_js_settings')
                     ] );
 
                     wp_enqueue_script('rapidload-js-optimizer');

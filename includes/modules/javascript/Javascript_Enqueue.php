@@ -49,47 +49,57 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            if(self::is_js($link) && !self::is_file_excluded($link->src)){
+            $method = false;
 
-                $method = false;
+            if(isset($settings['js_files'])){
 
-                if(isset($settings['js_files'])){
+                $key = array_search($link->src, array_column($settings['js_files'], 'url'));
 
-                    $key = array_search($link->src, array_column($settings['js_files'], 'url'));
-
-                    if(isset($key) && is_numeric($key)){
-                        $method = $settings['js_files'][$key]->action;
-                    }
+                if(isset($key) && is_numeric($key)){
+                    $method = $settings['js_files'][$key]['action'];
                 }
+            }
 
-                if(!$method || $method != 'none'){
-                    $method = $this->options['uucss_load_js_method'];
-                }
+            if(!$method || $method == 'none'){
+                $method = $this->options['uucss_load_js_method'];
+            }
 
-                if($method){
+            if($method){
 
-                    switch ($method){
+                switch ($method){
 
-                        case 'defer' : {
+                    case 'defer' : {
+
+                        if(self::is_js($link) && !self::is_file_excluded($link->src)){
+
                             $link->defer = true;
                             unset($link->async);
-                            break;
+
+                        }else if(self::is_inline_script($link)){
+
+                            $parent = $link->parent;
+                            $script = $this->dom->createElement('script', "");
+
+                            $script->setAttribute('type', 'text/javascript');
+                            $script->setAttribute('src', 'data:text/javascript,'.  rawurlencode($link->innertext()));
+                            $script->setAttribute('defer', true);
+                            $parent->appendChild($script);
+                            $link->remove();
+
                         }
-                        case 'async' : {
-                            $link->async = true;
-                            unset($link->defer);
-                            break;
-                        }
-                        case 'on_user_interaction' : {
+
+                        break;
+                    }
+                    case 'on_user_interaction' : {
+                        if(self::is_js($link) && !self::is_file_excluded($link->src)){
                             $data_attr = "data-rapidload-src";
                             $link->{$data_attr} = $link->src;
                             unset($link->src);
-                            break;
                         }
-                        default:{
+                        break;
+                    }
+                    default:{
 
-
-                        }
 
                     }
 
@@ -114,7 +124,11 @@ class Javascript_Enqueue
     }
 
     private static function is_js( $el ) {
-        return $el->type === 'text/javascript' && !empty($el->src);
+        return !empty($el->src);
+    }
+
+    private static function is_inline_script( $el ) {
+        return !empty($el->type) && $el->type == "text/javascript";
     }
 
     private function is_file_excluded($file){
