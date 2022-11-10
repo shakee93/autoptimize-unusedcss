@@ -171,7 +171,7 @@ class Javascript_Enqueue
     }
 
     private static function is_inline_script( $el ) {
-        return true;//!empty($el->type) && $el->type == "text/javascript";
+        return !empty($el->type) && $el->type == "text/javascript";
     }
 
     private function is_file_excluded($file){
