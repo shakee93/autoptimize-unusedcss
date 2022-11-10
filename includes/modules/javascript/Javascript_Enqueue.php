@@ -84,7 +84,24 @@ class Javascript_Enqueue
             return;
         }
 
-        $filename = md5($link->src) . '-minified.js';
+        $file_path = $this->get_file_path_from_url($link->src);
+
+        if(!$file_path){
+            return;
+        }
+
+        $filename = basename(preg_replace('/\?.*/', '', $link));
+
+        if(!$filename){
+            return;
+        }
+
+        if($this->str_contains($filename, ".min.js")){
+            $filename = str_replace(".min.js",".rapidload.min.js", $filename);
+        }else if($this->str_contains($filename, ".js" )){
+            $filename = str_replace(".js",".rapidload.min.js", $filename);
+        }
+
         $minified_file = JavaScript::$base_dir . '/' . $filename;
         $minified_url = apply_filters('uucss/enqueue/js-minified-url', $filename);
 
@@ -92,10 +109,20 @@ class Javascript_Enqueue
 
         if(!$file_exist){
 
-            $file_path = $this->get_file_path_from_url($link->src);
-            if($file_path){
+            $minifier = new \MatthiasMullie\Minify\JS($file_path);
+            $minifier->minify($minified_file);
+
+        }else{
+
+            $minified_content = $this->file_system->get_contents($minified_file);
+
+            $original_file_content = $this->file_system->get_contents($file_path);
+
+            if(md5($minified_content) != md5($original_file_content)){
+
                 $minifier = new \MatthiasMullie\Minify\JS($file_path);
                 $minifier->minify($minified_file);
+
             }
 
         }
