@@ -86,11 +86,7 @@ class RapidLoad_Module
 
         $stored = get_option( 'rapidload_modules', [] );
 
-        error_log(json_encode($stored));
-
         $stored[$module] = $active;
-
-        error_log(json_encode($stored));
 
         update_option( 'rapidload_modules', $stored );
 

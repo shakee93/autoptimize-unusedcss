@@ -31,6 +31,16 @@
     </td>
 </tr>
 <tr>
+    <th scope="row"><?php _e( 'Minify Javsacript', 'uucss' ); ?></th>
+    <td>
+        <label><input id='minify_js' type='checkbox'
+                      name='autoptimize_uucss_settings[minify_js]' <?php if ( ! empty( $options['minify_js'] ) && '1' === $options['minify_js'] ) {
+                echo 'checked="checked"';
+            } ?> value='1'>
+        </label>
+    </td>
+</tr>
+<tr>
     <th scope="row"><?php _e( 'Exclude JS', 'uucss' ); ?>
         <span class="exclude-links has-tooltip"
               data-message="Exclude from RapidLoad hello-url/some-url">
