@@ -145,6 +145,7 @@ class Javascript_Enqueue
 
                         $link->type = 'text/javascript';
                         $link->defer = true;
+                        $link->rapidload = true;
                         $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
                         $link->__set('innertext',"");
 
