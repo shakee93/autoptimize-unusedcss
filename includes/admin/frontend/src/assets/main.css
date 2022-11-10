@@ -28,7 +28,7 @@ body {
         transition: max-height 0.5s;
     }
     .expand {
-        max-height: 200px;
+        max-height: 1000px;
     }
 
     .rotate{
@@ -38,6 +38,11 @@ body {
         -moz-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
     }
+
+    .dropdown .dropdown-menu {
+        display: block;
+    }
+
 
 }
 

@@ -10,6 +10,7 @@ export default defineConfig({
     dynamicBase({
       publicPath : 'window.rapidload_admin.frontend_base'
     }),
+
   ],
   base: "/__dynamic_base__/",
   mode: 'es2015',
