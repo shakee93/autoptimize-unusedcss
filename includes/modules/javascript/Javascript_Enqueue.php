@@ -147,7 +147,7 @@ class Javascript_Enqueue
 
                     break;
                 }
-                case 'on_user_interaction' : {
+                case 'on-user-interaction' : {
                     if(self::is_js($link) && !self::is_file_excluded($link->src)){
                         $data_attr = "data-rapidload-src";
                         $link->{$data_attr} = $link->src;
