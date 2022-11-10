@@ -140,7 +140,7 @@ class RapidLoad_Job_Data{
 
     public function get_warnings(){
         if(isset($this->warnings)){
-            return $this->warnings;
+            return unserialize($this->warnings);
         }
         return [];
     }
@@ -181,5 +181,14 @@ class RapidLoad_Job_Data{
         }
 
         return $job_data;
+    }
+
+    public function set_warnings($warnings){
+        if(isset($warnings) && count($warnings) > 0){
+            $this->hits = 0;
+            $this->warnings = serialize($warnings);
+        }else{
+            $this->warnings = null;
+        }
     }
 }

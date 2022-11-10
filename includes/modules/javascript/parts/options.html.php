@@ -22,12 +22,32 @@
     </th>
     <td>
 
-        <select name="autoptimize_uucss_settings[uucss_load_js_method]" id="uucss_jobs_per_queue">
+        <select name="autoptimize_uucss_settings[uucss_load_js_method]" id="uucss_load_js_method">
+            <option value="none" <?php if($options['uucss_load_js_method'] === 'none') {  echo 'selected'; } else {echo '';} ?>>None</option>
             <option value="defer" <?php if($options['uucss_load_js_method'] === 'defer') {  echo 'selected'; } else {echo '';} ?>>Defer</option>
-            <option value="async" <?php if($options['uucss_load_js_method'] === 'async') {  echo 'selected'; } else {echo '';} ?>>Async</option>
             <option value="on-user-interaction" <?php if($options['uucss_load_js_method'] === 'on-user-interaction') {  echo 'selected'; } else {echo '';} ?>>On User Interaction</option>
         </select>
 
+    </td>
+</tr>
+<tr>
+    <th scope="row"><?php _e( 'Defer inline Javascript', 'uucss' ); ?></th>
+    <td>
+        <label><input id='defer_inline_js' type='checkbox'
+                      name='autoptimize_uucss_settings[defer_inline_js]' <?php if ( ! empty( $options['defer_inline_js'] ) && '1' === $options['defer_inline_js'] ) {
+                echo 'checked="checked"';
+            } ?> value='1'>
+        </label>
+    </td>
+</tr>
+<tr>
+    <th scope="row"><?php _e( 'Minify Javsacript', 'uucss' ); ?></th>
+    <td>
+        <label><input id='minify_js' type='checkbox'
+                      name='autoptimize_uucss_settings[minify_js]' <?php if ( ! empty( $options['minify_js'] ) && '1' === $options['minify_js'] ) {
+                echo 'checked="checked"';
+            } ?> value='1'>
+        </label>
     </td>
 </tr>
 <tr>

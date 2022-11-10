@@ -1,5 +1,7 @@
 <?php
 
+use MatthiasMullie\Minify;
+
 class Javascript_Enqueue
 {
     use RapidLoad_Utils;
@@ -9,10 +11,13 @@ class Javascript_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $file_system;
+    private $settings;
 
     public function __construct($job)
     {
         $this->job = $job;
+        $this->file_system = new RapidLoad_FileSystem();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
     }
@@ -35,11 +40,11 @@ class Javascript_Enqueue
 
         if(isset($post->ID)){
 
-            $settings = get_post_meta($post->ID, 'rapidload_js_settings');
+            $this->settings = get_post_meta($post->ID, 'rapidload_js_settings');
 
-            if(isset($settings[0])){
+            if(isset($this->settings[0])){
 
-                $settings = $settings[0];
+                $this->settings = $this->settings[0];
 
             }
 
@@ -49,53 +54,9 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            if(self::is_js($link) && !self::is_file_excluded($link->src)){
+            $this->minify_js($link);
 
-                $method = false;
-
-                if(isset($settings['js_files'])){
-
-                    $key = array_search($link->src, array_column($settings['js_files'], 'url'));
-
-                    if(isset($key) && is_numeric($key)){
-                        $method = $settings['js_files'][$key]->action;
-                    }
-                }
-
-                if(!$method || $method != 'none'){
-                    $method = $this->options['uucss_load_js_method'];
-                }
-
-                if($method){
-
-                    switch ($method){
-
-                        case 'defer' : {
-                            $link->defer = true;
-                            unset($link->async);
-                            break;
-                        }
-                        case 'async' : {
-                            $link->async = true;
-                            unset($link->defer);
-                            break;
-                        }
-                        case 'on_user_interaction' : {
-                            $data_attr = "data-rapidload-src";
-                            $link->{$data_attr} = $link->src;
-                            unset($link->src);
-                            break;
-                        }
-                        default:{
-
-
-                        }
-
-                    }
-
-                }
-
-            }
+            $this->optimize_js_delivery($link);
 
         }
 
@@ -113,8 +74,100 @@ class Javascript_Enqueue
         return $state;
     }
 
+    public function minify_js($link){
+
+        if(!isset($this->options['minify_js'])){
+            return;
+        }
+
+        if(!self::is_js($link) || self::is_file_excluded($link->src)){
+            return;
+        }
+
+        $filename = md5($link->src) . '-minified.js';
+        $minified_file = JavaScript::$base_dir . '/' . $filename;
+        $minified_url = apply_filters('uucss/enqueue/js-minified-url', $filename);
+
+        $file_exist = $this->file_system->exists($minified_file);
+
+        if(!$file_exist){
+
+            $file_path = $this->get_file_path_from_url($link->src);
+            if($file_path){
+                $minifier = new \MatthiasMullie\Minify\JS($file_path);
+                $minifier->minify($minified_file);
+            }
+
+        }
+
+        $link->src = $minified_url;
+
+    }
+
+    public function optimize_js_delivery($link){
+
+        $method = false;
+
+        if(isset($this->settings['js_files'])){
+
+            $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));
+
+            if(isset($key) && is_numeric($key)){
+                $method = $this->settings['js_files'][$key]['action'];
+            }
+        }
+
+        if(!$method || $method == 'none'){
+            $method = $this->options['uucss_load_js_method'];
+        }
+
+        if($method){
+
+            switch ($method){
+
+                case 'defer' : {
+
+                    if(self::is_js($link) && !self::is_file_excluded($link->src)){
+
+                        $link->defer = true;
+                        unset($link->async);
+
+                    }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
+
+                        $link->type = 'text/javascript';
+                        $link->defer = true;
+                        $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
+                        $link->__set('innertext',"");
+
+                    }
+
+                    break;
+                }
+                case 'on-user-interaction' : {
+                    if(self::is_js($link) && !self::is_file_excluded($link->src)){
+                        $data_attr = "data-rapidload-src";
+                        $link->{$data_attr} = $link->src;
+                        unset($link->src);
+                    }
+                    break;
+                }
+                default:{
+
+
+                }
+
+            }
+
+        }
+
+    }
+
     private static function is_js( $el ) {
-        return $el->type === 'text/javascript' && !empty($el->src);
+        return !empty($el->src);
+    }
+
+    private static function is_inline_script( $el ) {
+        return !empty($el->type) && $el->type == "text/javascript";
     }
 
     private function is_file_excluded($file){

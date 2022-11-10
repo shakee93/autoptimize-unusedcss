@@ -20,6 +20,7 @@ define( 'UUCSS_VERSION', '1.6.33' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
+define( 'UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
 
 if ( is_multisite() ) {
     $blog_id = get_current_blog_id();

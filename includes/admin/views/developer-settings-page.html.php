@@ -270,7 +270,9 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                                         </label>
                                     </td>
                                 </tr>
-                            <?php endif; ?>
+                            <?php endif;
+                            do_action('uucss/options/js', $options);
+                            ?>
                             <tr>
                                 <th class="sub-heading">
                                     <h4>CSS Optimization</h4>
@@ -278,7 +280,6 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                             </tr>
                             <?php
                             do_action('uucss/options/css', $options);
-                            do_action('uucss/options/js', $options);
                             ?>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
