@@ -147,8 +147,9 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            $sheet->onload = 'this.media="' . $sheet->media . '";';
-            $sheet->media = 'print';
+            $sheet->onload = "this.onload=null;this.rel='stylesheet'";
+            $sheet->rel = "preload";
+            $sheet->as = "style";
 
         }
     }
