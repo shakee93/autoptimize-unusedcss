@@ -99,9 +99,9 @@ class Javascript_Enqueue
         }
 
         if($this->str_contains($filename, ".min.js")){
-            $filename = str_replace(".min.js",".{$version}.rapidload.min.js", $filename);
+            $filename = str_replace(".min.js","-{$version}.rapidload.min.js", $filename);
         }else if($this->str_contains($filename, ".js" )){
-            $filename = str_replace(".js",".{$version}.rapidload.min.js", $filename);
+            $filename = str_replace(".js","-{$version}.rapidload.min.js", $filename);
         }
 
         $minified_file = JavaScript::$base_dir . '/' . $filename;
