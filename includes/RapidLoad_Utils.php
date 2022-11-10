@@ -577,7 +577,7 @@ trait RapidLoad_Utils {
     function get_file_path_from_url($url)
     {
         $file_relative_path = parse_url($url, PHP_URL_PATH);
-        $site_path = parse_url(FLYING_PRESS_SITE_URL, PHP_URL_PATH);
+        $site_path = parse_url(site_url(), PHP_URL_PATH);
         $file_path = UUCSS_ABSPATH . preg_replace("$^$site_path$", '', $file_relative_path);
         return str_replace("//","/", $file_path);
     }
