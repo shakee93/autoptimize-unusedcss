@@ -2,8 +2,7 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,vue,jsx,tsx}",
-    './node_modules/tw-elements/dist/js/**/*.js',
+    "./src/**/*.{js,ts,vue}",
   ],
   theme: {
     screens: {
@@ -32,6 +31,5 @@ module.exports = {
 
   },
   plugins: [
-    require('tw-elements/dist/plugin')
   ],
 }
