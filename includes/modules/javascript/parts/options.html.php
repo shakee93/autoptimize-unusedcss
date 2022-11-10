@@ -31,6 +31,16 @@
     </td>
 </tr>
 <tr>
+    <th scope="row"><?php _e( 'Defer inline Javascript', 'uucss' ); ?></th>
+    <td>
+        <label><input id='defer_inline_js' type='checkbox'
+                      name='autoptimize_uucss_settings[defer_inline_js]' <?php if ( ! empty( $options['defer_inline_js'] ) && '1' === $options['defer_inline_js'] ) {
+                echo 'checked="checked"';
+            } ?> value='1'>
+        </label>
+    </td>
+</tr>
+<tr>
     <th scope="row"><?php _e( 'Minify Javsacript', 'uucss' ); ?></th>
     <td>
         <label><input id='minify_js' type='checkbox'

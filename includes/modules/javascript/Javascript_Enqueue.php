@@ -132,7 +132,7 @@ class Javascript_Enqueue
                         $link->defer = true;
                         unset($link->async);
 
-                    }else if(self::is_inline_script($link)){
+                    }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
 
                         $parent = $link->parent;
                         $script = $this->dom->createElement('script', "");
