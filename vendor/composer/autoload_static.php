@@ -6,6 +6,25 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0846b02cb01ca9de966b580779093b89
 {
+    public static $prefixLengthsPsr4 = array (
+        'M' => 
+        array (
+            'MatthiasMullie\\PathConverter\\' => 29,
+            'MatthiasMullie\\Minify\\' => 22,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'MatthiasMullie\\PathConverter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/matthiasmullie/path-converter/src',
+        ),
+        'MatthiasMullie\\Minify\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/matthiasmullie/minify/src',
+        ),
+    );
+
     public static $classMap = array (
         'AMP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/amp/AMP_Compatible.php',
         'AdvancedCustomFields_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/advanced-custom-fields/AdvancedCustomFields_Compatible.php',
@@ -78,6 +97,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit0846b02cb01ca9de966b580779093b89::$classMap;
 
         }, null, ClassLoader::class);
