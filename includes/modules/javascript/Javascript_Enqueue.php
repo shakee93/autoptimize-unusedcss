@@ -134,14 +134,19 @@ class Javascript_Enqueue
 
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
 
-                        $parent = $link->parent;
+                        /*$parent = $link->parent;
                         $script = $this->dom->createElement('script', "");
 
                         $script->setAttribute('type', 'text/javascript');
                         $script->setAttribute('src', 'data:text/javascript,'.  rawurlencode($link->innertext()));
                         $script->setAttribute('defer', true);
                         $parent->appendChild($script);
-                        $link->remove();
+                        $link->remove();*/
+
+                        $link->type = 'text/javascript';
+                        $link->defer = true;
+                        $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
+                        $link->__set('innertext',"");
 
                     }
 
