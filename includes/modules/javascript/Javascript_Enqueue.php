@@ -6,14 +6,13 @@ class Javascript_Enqueue
 {
     use RapidLoad_Utils;
 
-    private $job_data = [];
     private $job = null;
 
     private $dom;
     private $inject;
     private $options;
-    private $tobe_minified = [];
     private $file_system;
+    private $settings;
 
     public function __construct($job)
     {
@@ -41,11 +40,11 @@ class Javascript_Enqueue
 
         if(isset($post->ID)){
 
-            $settings = get_post_meta($post->ID, 'rapidload_js_settings');
+            $this->settings = get_post_meta($post->ID, 'rapidload_js_settings');
 
-            if(isset($settings[0])){
+            if(isset($this->settings[0])){
 
-                $settings = $settings[0];
+                $this->settings = $this->settings[0];
 
             }
 
@@ -71,12 +70,6 @@ class Javascript_Enqueue
 
         $node->setAttribute('type', 'text/javascript');
         $body->appendChild($node);
-
-        if(!empty($this->tobe_minified)){
-
-            do_action('rapidload/js/minify', $this->job_data, $this->tobe_minified);
-
-        }
 
         return $state;
     }
@@ -115,12 +108,12 @@ class Javascript_Enqueue
 
         $method = false;
 
-        if(isset($settings['js_files'])){
+        if(isset($this->settings['js_files'])){
 
-            $key = array_search($link->src, array_column($settings['js_files'], 'url'));
+            $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));
 
             if(isset($key) && is_numeric($key)){
-                $method = $settings['js_files'][$key]['action'];
+                $method = $this->settings['js_files'][$key]['action'];
             }
         }
 
