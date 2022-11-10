@@ -54,6 +54,7 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
+
             $this->minify_js($link);
 
             $this->optimize_js_delivery($link);
