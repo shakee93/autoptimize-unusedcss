@@ -86,6 +86,8 @@ class Javascript_Enqueue
 
         $file_path = $this->get_file_path_from_url($link->src);
 
+        $version = substr(hash_file('md5', $file_path), 0, 12);
+
         if(!$file_path){
             return;
         }
@@ -97,9 +99,9 @@ class Javascript_Enqueue
         }
 
         if($this->str_contains($filename, ".min.js")){
-            $filename = str_replace(".min.js",".rapidload.min.js", $filename);
+            $filename = str_replace(".min.js",".{$version}.rapidload.min.js", $filename);
         }else if($this->str_contains($filename, ".js" )){
-            $filename = str_replace(".js",".rapidload.min.js", $filename);
+            $filename = str_replace(".js",".{$version}.rapidload.min.js", $filename);
         }
 
         $minified_file = JavaScript::$base_dir . '/' . $filename;
@@ -112,22 +114,9 @@ class Javascript_Enqueue
             $minifier = new \MatthiasMullie\Minify\JS($file_path);
             $minifier->minify($minified_file);
 
-        }else{
-
-            $minified_content = $this->file_system->get_contents($minified_file);
-
-            $original_file_content = $this->file_system->get_contents($file_path);
-
-            if(md5($minified_content) != md5($original_file_content)){
-
-                $minifier = new \MatthiasMullie\Minify\JS($file_path);
-                $minifier->minify($minified_file);
-
-            }
-
         }
 
-        $link->src = $minified_url;
+        $link->src = $minified_url ;
 
     }
 
