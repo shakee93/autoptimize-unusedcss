@@ -83,6 +83,10 @@ class Javascript_Enqueue
 
     public function minify_js($link){
 
+        if(!isset($this->options['minify_js'])){
+            return;
+        }
+
         if(!self::is_js($link) || self::is_file_excluded($link->src)){
             return;
         }
