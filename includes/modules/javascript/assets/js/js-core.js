@@ -29,14 +29,8 @@
 
         function render_page(sampleData) {
 
-            var opportunities = [];
+            var opportunities = sampleData.opportunity;
             var js_related = {}
-
-            Object.keys(sampleData.page_matrix.lighthouseResult.audits).map(function (key) {
-                if (sampleData.page_matrix.lighthouseResult.audits[key].details && sampleData.page_matrix.lighthouseResult.audits[key].details.type === "opportunity") {
-                    opportunities.push(sampleData.page_matrix.lighthouseResult.audits[key])
-                }
-            })
 
             opportunities.map(function (opp) {
                 if (opp.details && opp.details.items.length) {
