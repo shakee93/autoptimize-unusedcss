@@ -61,7 +61,7 @@
 
             if(scripts.length){
 
-                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><th>URL</th><th>Action</th></thead><tbody></tbody></table></div>')
+                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><th>URL</th><th>Impact</th><th>Action</th></thead><tbody></tbody></table></div>')
 
                 scripts = scripts.filter(function(script){
                     return !script.startsWith('data:text/javascript');
@@ -190,7 +190,7 @@
                 scripts.map(function (script){
                     var _url = new URL(script.src)
                     _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>Defer</td></tr>')
+                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
                 })
             }
 
