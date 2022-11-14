@@ -29,7 +29,7 @@
                 return js;
             })
         }
-        
+
         function runPageSpeed(url){
 
             if(!url){
@@ -144,9 +144,10 @@
                             }
 
                             scripts = scripts.map(function (script){
-                                if(script.src === item.url){
+                                if(script && script.src === item.url){
                                     script.acronym.push(opp.acronym.id)
                                 }
+                                return script;
                             })
 
                         }
@@ -188,9 +189,11 @@
 
             if(scripts.length){
                 scripts.map(function (script){
-                    var _url = new URL(script.src)
-                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
+                    if(script){
+                        var _url = new URL(script.src)
+                        _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
+                        $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
+                    }
                 })
             }
 
@@ -250,7 +253,7 @@
             $.featherlight('<div id="rapidload-optimizer-dialog"></div>', {
                 variant: 'rapidload-optimizer-model',
                 afterOpen: function () {
-                    
+
                     render_page()
 
                     //runPageSpeed()
