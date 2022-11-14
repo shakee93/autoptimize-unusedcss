@@ -165,6 +165,8 @@ class JavaScript
 
             if(empty($post_meta)){
 
+                $post_meta = [];
+
                 foreach ($scripts as $script){
 
                     array_push($post_meta['scripts'], (object)[
