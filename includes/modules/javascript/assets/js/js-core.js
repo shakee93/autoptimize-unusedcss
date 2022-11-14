@@ -164,11 +164,7 @@
                 $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><ul></ul></div>')
 
                 scripts = scripts.filter(function(script){
-                    var _url = new URL(script)
-                    if(_url.origin){
-                        return true;
-                    }
-                    return false;
+                    return !script.startsWith('data:text/javascript');
                 })
 
                 scripts.map(function (script){
