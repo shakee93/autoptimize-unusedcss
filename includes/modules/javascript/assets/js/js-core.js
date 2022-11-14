@@ -61,7 +61,7 @@
 
             if(scripts.length){
 
-                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><td>URL</td><td>Action</td></thead><tbody></tbody></table></div>')
+                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><th>URL</th><th>Action</th></thead><tbody></tbody></table></div>')
 
                 scripts = scripts.filter(function(script){
                     return !script.startsWith('data:text/javascript');
@@ -127,10 +127,10 @@
 
                     opp.details.headings.map((h)=>{
                         if(h.label){
-                            $opportunity_html.find('li.'+ opp.id +' table.js thead').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.css thead').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.images thead').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.other thead').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.js thead').append('<th class="column-primary">' + h.label + '</th>')
+                            $opportunity_html.find('li.'+ opp.id +' table.css thead').append('<th class="column-primary">' + h.label + '</th>')
+                            $opportunity_html.find('li.'+ opp.id +' table.images thead').append('<th class="column-primary">' + h.label + '</th>')
+                            $opportunity_html.find('li.'+ opp.id +' table.other thead').append('<th class="column-primary">' + h.label + '</th>')
                         }
 
                     })
