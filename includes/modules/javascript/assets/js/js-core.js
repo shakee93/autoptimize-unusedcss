@@ -58,16 +58,37 @@
             var css_related = {}
 
             var scripts = sampleData.scripts;
+            var styles = sampleData.styles;
 
             if(scripts.length){
 
-                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><th>URL</th><th>Impact</th><th>Action</th></thead><tbody></tbody></table></div>')
+                $('#rapidload-optimizer-dialog').append('<div class="js-scripts">JS Files<table><thead><th>URL</th><th>Impact</th><th>Action</th></thead><tbody></tbody></table></div>')
 
                 scripts = scripts.filter(function(script){
                     return !script.startsWith('data:text/javascript');
                 })
 
                 scripts = scripts.map(function (script){
+
+                    return{
+                        action : null,
+                        src : script,
+                        acronym : []
+                    }
+
+                })
+
+            }
+
+            if(styles.length){
+
+                $('#rapidload-optimizer-dialog').append('<div class="css-files">CSS Files<table><thead><th>URL</th><th>Impact</th><th>Action</th></thead><tbody></tbody></table></div>')
+
+                styles = styles.filter(function(style){
+                    return style.includes('.css');
+                })
+
+                styles = styles.map(function (script){
 
                     return{
                         action : null,
@@ -145,9 +166,16 @@
 
                             scripts = scripts.map(function (script){
                                 if(script && script.src === item.url){
-                                    script.acronym.push(opp.acronym.id)
+                                    script.acronym.push(opp.acronym[0].id)
                                 }
                                 return script;
+                            })
+
+                            styles = styles.map(function (style){
+                                if(style && style.src === item.url){
+                                    style.acronym.push(opp.acronym[0].id)
+                                }
+                                return style;
                             })
 
                         }
@@ -193,6 +221,16 @@
                         var _url = new URL(script.src)
                         _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
                         $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
+                    }
+                })
+            }
+
+            if(styles.length){
+                styles.map(function (script){
+                    if(script){
+                        var _url = new URL(script.src)
+                        _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
+                        $('#rapidload-optimizer-dialog .css-files table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
                     }
                 })
             }
