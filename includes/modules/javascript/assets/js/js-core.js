@@ -163,11 +163,18 @@
 
                 $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><ul></ul></div>')
 
-                scripts.map(function (script){
+                scripts.filter(function(script){
+                    var _url = new URL(script)
+                    if(_url.origin){
+                        return true;
+                    }
+                    return false;
+                }).map(function (script){
                     if(script.includes('.js')){
                         var _url = new URL(script)
                         _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
                         $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
+
                     }
                 })
             }
