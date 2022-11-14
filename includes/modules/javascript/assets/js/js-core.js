@@ -167,14 +167,20 @@
                     return !script.startsWith('data:text/javascript');
                 })
 
-                scripts.map(function (script){
-                    if(script.includes('.js')){
-                        var _url = new URL(script)
-                        _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                        $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
+                scripts = scripts.map(function (script){
 
-
+                    return{
+                        action : null,
+                        src : script,
+                        acronym : []
                     }
+
+                })
+
+                scripts.map(function (script){
+                    var _url = new URL(script.src)
+                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
+                    $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
                 })
             }
 
