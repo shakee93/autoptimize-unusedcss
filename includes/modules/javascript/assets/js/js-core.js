@@ -44,7 +44,7 @@
                     include_matrix: true
                 },
                 success: function (result) {
-                    renderInsightResults(result.data.insights);
+                    renderInsightResults(result.data);
                 }
             })
         }
@@ -53,7 +53,7 @@
 
             $('#rapidload-optimizer-dialog').find('.opportunity-html').remove()
 
-            var opportunities = sampleData.opportunity;
+            var opportunities = sampleData.insights.opportunity;
             var js_related = {}
             var css_related = {}
 
@@ -157,38 +157,18 @@
 
             })
 
-            /*window.rapidload_optimized_data.js_files.map(function (file) {
+            var scripts = sampleData.insights.scripts;
 
-                $opportunity_html.find('ul').append('<li class="' + file.id + '">' + file.id + '<table class="' + file.id + ' wp-list-table widefat fixed striped table-view-list posts"><tr class="heading"></tr></table></li>')
+            if(scripts.length){
 
-                var columns = js_related[key].details.headings.map(function (heading) {
-                    if (heading.label) {
-                        $opportunity_html.find('table.' + js_related[key].id).find('tr.heading').append('<th>' + (heading.label ? heading.label : '') + '</th>')
+                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><ul></ul></div>')
+
+                scripts.map(function (script){
+                    if(script.includes('.js')){
+                        $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + script + '</li>')
                     }
-                    return heading;
                 })
-                $opportunity_html.find('table.' + js_related[key].id).find('tr.heading').append('<th>Action</th>')
-
-                var rows = js_related[key].details.items.map(function (item) {
-                    return item;
-                })
-
-                rows.map(function (row, index) {
-                    $opportunity_html.find('table.' + js_related[key].id).append('<tr class="' + js_related[key].id + '-' + index + '"></tr>')
-
-                    columns.map(function (col) {
-
-                        if (row[col.key]) {
-                            $opportunity_html.find('tr.' + js_related[key].id + '-' + index).append('<td class="column-primary ' + col.key + ' " >' + row[col.key] + '</td>')
-                        }
-
-                    })
-
-                    $opportunity_html.find('tr.' + js_related[key].id + '-' + index).append('<td class="column-primary"><select class="js-action" data-url="' + row.url + '"><option value="none">None</option><option value="defer">Defer</option><option value="on_user_interaction">On User Interaction</option></select></td>')
-
-                })
-
-            })*/
+            }
 
             $('#rapidload-optimizer-dialog').append($opportunity_html)
 
