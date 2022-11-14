@@ -109,7 +109,7 @@ class JavaScript
            'url' => $_REQUEST['url']
         ]);
 
-        $html = file_get_contents( $_REQUEST['url']);
+        $html = file_get_contents( trailingslashit($_REQUEST['url']) . '?no_rapidload');
 
         $dom = new \simplehtmldom\HtmlDocument(
             null,
