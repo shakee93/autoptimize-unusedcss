@@ -9,6 +9,8 @@ class JavaScript
     public $file_system;
     public $options = [];
 
+    public static $key_post_meta = 'rapidload_post_meta';
+
     public static $base_dir;
 
     public function __construct()
@@ -103,6 +105,8 @@ class JavaScript
             wp_send_json_error('url missing');
         }
 
+        $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false;
+
         $api = new RapidLoad_Api();
 
         $result = $api->post('pagespeed/insights', [
@@ -135,7 +139,7 @@ class JavaScript
 
         foreach ( $links as $link ) {
 
-            if(!empty($link->src)){
+            if(!empty($link->src) && strpos($link->src,"data:text/javascript") === false){
                 array_push($scripts, $link->src);
             }
 
@@ -153,10 +157,49 @@ class JavaScript
 
         }
 
+        $post_meta = null;
+
+        if(isset($post_id)){
+
+            $post_meta = get_post_meta($post_id, self::$key_post_meta);
+
+            if(empty($post_meta)){
+
+                foreach ($scripts as $script){
+
+                    array_push($post_meta['scripts'], (object)[
+                        'impact' => [],
+                        'src' => $script,
+                        'action' => 'none'
+                    ]);
+
+                }
+
+                foreach ($styles as $style){
+
+                    array_push($post_meta['styles'], (object)[
+                        'impact' => [],
+                        'src' => $style,
+                        'action' => 'none'
+                    ]);
+
+                }
+
+                update_post_meta($post_id, self::$key_post_meta, $post_meta);
+
+            }else{
+
+                $post_meta = $post_meta[0];
+
+            }
+        }
+
+
         wp_send_json_success([
             'scripts' => $scripts,
             'styles' => $styles,
-            'insights' => $result
+            'insights' => $result,
+            'post_meta' => $post_meta
         ]);
     }
 
