@@ -91,9 +91,71 @@ class JavaScript
         if(is_admin()){
 
             add_action('wp_ajax_update_js_settings', [$this, 'update_js_settings']);
+            add_action('wp_ajax_page_speed_insights', [$this, 'page_speed_insights']);
 
         }
 
+    }
+
+    public function page_speed_insights(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url missing');
+        }
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('pagespeed/insights', [
+           'url' => $_REQUEST['url']
+        ]);
+
+        $html = file_get_contents( $_REQUEST['url']);
+
+        $dom = new \simplehtmldom\HtmlDocument(
+            null,
+            false,
+            false,
+            \simplehtmldom\DEFAULT_TARGET_CHARSET,
+            false
+        );
+
+        $dom->load(
+            $html,
+            false,
+            false,
+            \simplehtmldom\DEFAULT_TARGET_CHARSET,
+            false
+        );
+
+        $links = $dom->find( 'script' );
+
+        $scripts = [];
+
+        foreach ( $links as $link ) {
+
+            if(!empty($link->src)){
+                array_push($scripts, $link->src);
+            }
+
+        }
+
+        $style_links = $dom->find( 'link' );
+
+        $styles = [];
+
+        foreach ( $style_links as $style_link ) {
+
+            if(!empty($style_link->href) && $style_link->rel == 'stylesheet'){
+                array_push($styles, $style_link->href);
+            }
+
+        }
+
+        wp_send_json_success([
+            'scripts' => $scripts,
+            'styles' => $styles,
+            'insights' => $result
+        ]);
     }
 
     public function update_js_settings(){

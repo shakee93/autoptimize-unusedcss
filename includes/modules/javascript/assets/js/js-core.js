@@ -2,8 +2,11 @@
 
     $(document).ready(function () {
 
-        var rapidload_optimized_data = {
-            js_files: []
+        rapidload_js_optimizer.current_url = 'https://www.urbanearthstudios.com/';
+
+        window.rapidload_optimized_data = {
+            js_files: [],
+            css_files: []
         }
 
         function get_js_file_id(url) {
@@ -26,41 +29,137 @@
                 return js;
             })
         }
+        
+        function runPageSpeed(url){
 
-        function render_page(sampleData) {
+            if(!url){
+                url = $('#page-speed-url').val()
+            }
+
+            $.ajax({
+                url: rapidload_js_optimizer.ajax_url + '?action=page_speed_insights',
+                method: 'POST',
+                data: {
+                    url: url,
+                    include_matrix: true
+                },
+                success: function (result) {
+                    renderInsightResults(result.data.insights);
+                }
+            })
+        }
+
+        function renderInsightResults(sampleData){
+
+            $('#rapidload-optimizer-dialog').find('.opportunity-html').remove()
 
             var opportunities = sampleData.opportunity;
             var js_related = {}
+            var css_related = {}
 
-            opportunities.map(function (opp) {
-                if (opp.details && opp.details.items.length) {
-                    opp.details.items.map(function (item) {
-                        if (item.url && item.url.includes('.js')) {
-                            js_related[opp.id] = opp
-                            console.log(item.url)
-                            if (!rapidload_optimized_data.js_files.includes(item.url)) {
-                                rapidload_optimized_data.js_files.push(item.url)
+            var $opportunity_html = $('<div class="opportunity-html"><div>Opportunity</div></div>')
+            $opportunity_html.append('<ul class="opportunity"></ul>')
+
+            opportunities.map((opp)=>{
+
+                $opportunity_html.find('ul.opportunity').append('<li class="'+ opp.id +'"><div>' + opp.title + '</div></li>')
+
+                if(opp.details && opp.details.items && opp.details.items.length){
+
+                    var js_items = opp.details.items.filter((i)=>{
+                        return i.url && i.url.includes('.js')
+                    })
+
+                    var css_items = opp.details.items.filter((i)=>{
+                        return i.url && i.url.includes('.css')
+                    })
+
+                    var image_items = opp.details.items.filter((i)=>{
+                        return i.url && (i.url.includes('.jpeg') || i.url.includes('.jpg'))
+                    })
+
+                    var other_items = opp.details.items.filter((i)=>{
+                        return i.url && (!js_items.includes(i.url) && !css_items.includes(i.url) && !image_items.includes(i.url))
+                    })
+
+                    if(js_items.length){
+                        $opportunity_html.find('li.' + opp.id).append('<div>JS</div><table class="'+ opp.id +' js wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                    }
+
+                    if(css_items.length){
+                        $opportunity_html.find('li.' + opp.id).append('<div>CSS</div><table class="'+ opp.id +' css wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                    }
+
+                    if(image_items.length){
+                        $opportunity_html.find('li.' + opp.id).append('<div>Images</div><table class="'+ opp.id +' images wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                    }
+
+                    if(other_items.length){
+                        $opportunity_html.find('li.' + opp.id).append('<div>Other</div><table class="'+ opp.id +' other wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                    }
+
+                    opp.details.headings.map((h)=>{
+                        if(h.label){
+                            $opportunity_html.find('li.'+ opp.id +' table.js tr.heading').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.css tr.heading').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.images tr.heading').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.other tr.heading').append('<td class="column-primary">' + h.label + '</td>')
+                        }
+
+                    })
+
+                    opp.details.items.map((item, index)=>{
+
+                        var table_class = 'other';
+
+                        if(item.url){
+                            if(item.url.includes('.js')){
+                                table_class = 'js';
+                            }else if(item.url.includes('.css')){
+                                table_class = 'css';
+                            }else if(item.url.includes('.jpeg') || item.url.includes('.jpg')){
+                                table_class = 'images';
+                            }
+                        }
+
+                        $opportunity_html.find('li.'+ opp.id +' table.' + table_class).append('<tr class="'+ index +'"></tr>')
+
+                        opp.details.headings.map((h)=>{
+                            if(h.key === 'node'){
+                                //$opportunity_html.find('li.'+ opp.id +' table.' + table_class + ' tr.' + index).append('<td>'+ item[h.key].snippet +'</td>')
+                            }else{
+                                $opportunity_html.find('li.'+ opp.id +' table.' + table_class + ' tr.' + index).append('<td class="column-primary">'+ (typeof item[h.key].type === 'object' ? JSON.stringify(item[h.key]) : item[h.key]) +'</td>')
                             }
 
-                        }
+                        })
+
+                        /*if(item.url){
+
+                            if(item.url.includes('.js')){
+
+
+
+
+                                $opportunity_html.find('ul.js.' + opp.id).append('<li>' + item.url + '</li>')
+                            }else if(item.url.includes('.css')){
+                                $opportunity_html.find('ul.css.' + opp.id).append('<li>' + item.url + '</li>')
+                            }else if(item.url.includes('.jpeg') || item.url.includes('.jpg')){
+                                $opportunity_html.find('ul.images.' + opp.id).append('<li>' + item.url + '</li>')
+                            }else{
+                                $opportunity_html.find('ul.other.' + opp.id).append('<li>' + item.url + '</li>')
+                            }
+
+                        }*/
+
                     })
+
                 }
+
             })
 
-            rapidload_optimized_data.js_files = rapidload_optimized_data.js_files.map(function (file, index) {
-                return {
-                    id: index,
-                    url: file,
-                    action: null
-                }
-            })
+            /*window.rapidload_optimized_data.js_files.map(function (file) {
 
-            var $opportunity_html = $('<div class="opportunity-html"></div>')
-            $opportunity_html.append('<ul></ul>')
-
-            Object.keys(js_related).map(function (key) {
-
-                $opportunity_html.find('ul').append('<li class="' + js_related[key].id + '">' + js_related[key].id + '<table class="' + js_related[key].id + ' wp-list-table widefat fixed striped table-view-list posts"><tr class="heading"></tr></table></li>')
+                $opportunity_html.find('ul').append('<li class="' + file.id + '">' + file.id + '<table class="' + file.id + ' wp-list-table widefat fixed striped table-view-list posts"><tr class="heading"></tr></table></li>')
 
                 var columns = js_related[key].details.headings.map(function (heading) {
                     if (heading.label) {
@@ -89,20 +188,9 @@
 
                 })
 
-            })
+            })*/
 
             $('#rapidload-optimizer-dialog').append($opportunity_html)
-
-            $('select.js-action').change(function () {
-
-                var $this = $(this)
-
-                var url = $this.data('url')
-
-                set_js_url_action(url, $this.val())
-
-                $('select[data-url="' + url + '"] option[value="' + $this.val() + '"]').attr('selected', 'selected')
-            });
 
             $('#rapidload-optimizer-dialog').append('<div class="model-footer"><input id="btn-js-optimizer-settings" type="button" value="Save Changes"></div>')
 
@@ -122,8 +210,35 @@
 
             })
 
+            /*$('select.js-action').change(function () {
+
+                var $this = $(this)
+
+                var url = $this.data('url')
+
+                set_js_url_action(url, $this.val())
+
+                $('select[data-url="' + url + '"] option[value="' + $this.val() + '"]').attr('selected', 'selected')
+            });*/
+
             window.js_related = js_related;
             window.a = rapidload_optimized_data.js_files
+        }
+
+        function render_page() {
+
+            var $model = $('#rapidload-optimizer-dialog')
+
+            $model.append('<div class="model-optimizer-header"></div>')
+            $model.append('<div class="model-optimizer-actions"></div>')
+
+            $model.find('.model-optimizer-header').append('<div style="display: flex"><input style="margin-right: 10px" type="text" class="url" id="page-speed-url"><input id="refresh-page-speed" type="button" value="Refresh Insights"></div>')
+
+            $('#refresh-page-speed').click(function (){
+                runPageSpeed()
+            })
+
+
         }
 
         $('#wp-admin-bar-rapidload_psa div').click(function () {
@@ -131,22 +246,15 @@
             $.featherlight('<div id="rapidload-optimizer-dialog"></div>', {
                 variant: 'rapidload-optimizer-model',
                 afterOpen: function () {
+                    
+                    render_page()
 
-                    $.ajax({
-                        url: 'https://api.rapidload.io/api/v1/pagespeed/insights',
-                        method: 'POST',
-                        data: {
-                            url: rapidload_js_optimizer.current_url,
-                            include_matrix: true
-                        },
-                        success: function (result) {
-                            render_page(result);
-                        }
-                    })
+                    //runPageSpeed()
 
                 }
             })
         })
+
 
     });
 
