@@ -165,7 +165,10 @@ class JavaScript
 
             if(empty($post_meta)){
 
-                $post_meta = [];
+                $post_meta = [
+                    'scripts' => [],
+                    'styles' => []
+                ];
 
                 foreach ($scripts as $script){
 
