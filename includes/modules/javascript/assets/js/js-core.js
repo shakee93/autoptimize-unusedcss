@@ -57,6 +57,33 @@
             var js_related = {}
             var css_related = {}
 
+            var scripts = sampleData.scripts;
+
+            if(scripts.length){
+
+                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><table><thead><td>URL</td><td>Action</td></thead><tbody></tbody></table></div>')
+
+                scripts = scripts.filter(function(script){
+                    return !script.startsWith('data:text/javascript');
+                })
+
+                scripts = scripts.map(function (script){
+
+                    return{
+                        action : null,
+                        src : script,
+                        acronym : []
+                    }
+
+                })
+
+                scripts.map(function (script){
+                    var _url = new URL(script.src)
+                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
+                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>Defer</td></tr>')
+                })
+            }
+
             var $opportunity_html = $('<div class="opportunity-html"><div>Opportunity</div></div>')
             $opportunity_html.append('<ul class="opportunity"></ul>')
 
@@ -157,32 +184,7 @@
 
             })
 
-            var scripts = sampleData.scripts;
 
-            if(scripts.length){
-
-                $('#rapidload-optimizer-dialog').append('<div class="js-scripts"><ul></ul></div>')
-
-                scripts = scripts.filter(function(script){
-                    return !script.startsWith('data:text/javascript');
-                })
-
-                scripts = scripts.map(function (script){
-
-                    return{
-                        action : null,
-                        src : script,
-                        acronym : []
-                    }
-
-                })
-
-                scripts.map(function (script){
-                    var _url = new URL(script.src)
-                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                    $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
-                })
-            }
 
             $('#rapidload-optimizer-dialog').append($opportunity_html)
 
