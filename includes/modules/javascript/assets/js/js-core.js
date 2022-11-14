@@ -157,7 +157,7 @@
 
             })
 
-            var scripts = sampleData.insights.scripts;
+            var scripts = sampleData.scripts;
 
             if(scripts.length){
 
