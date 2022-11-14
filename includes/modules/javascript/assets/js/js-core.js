@@ -165,7 +165,7 @@
 
                 scripts.map(function (script){
                     if(script.includes('.js')){
-                        $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + script + '</li>')
+                        $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + script.slice(0,50) + '</li>')
                     }
                 })
             }
