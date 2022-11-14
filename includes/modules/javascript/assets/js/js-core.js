@@ -110,11 +110,11 @@
                     })
 
                     if(js_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>JS</div><table class="'+ opp.id +' js wp-list-table widefat fixed striped table-view-list posts"><thead><</thead><tbody></tbody></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>JS</div><table class="'+ opp.id +' js wp-list-table widefat fixed striped table-view-list posts"><thead></thead><tbody></tbody></table>')
                     }
 
                     if(css_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>CSS</div><table class="'+ opp.id +' css wp-list-table widefat fixed striped table-view-list posts"><thead><</thead><tbody></tbody></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>CSS</div><table class="'+ opp.id +' css wp-list-table widefat fixed striped table-view-list posts"><thead></thead><tbody></tbody></table>')
                     }
 
                     if(image_items.length){
