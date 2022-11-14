@@ -77,11 +77,6 @@
 
                 })
 
-                scripts.map(function (script){
-                    var _url = new URL(script.src)
-                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>Defer</td></tr>')
-                })
             }
 
             var $opportunity_html = $('<div class="opportunity-html"><div>Opportunity</div></div>')
@@ -147,6 +142,13 @@
                             }else if(item.url.includes('.jpeg') || item.url.includes('.jpg')){
                                 table_class = 'images';
                             }
+
+                            scripts = scripts.map(function (script){
+                                if(script.src === item.url){
+                                    script.acronym.push(opp.acronym.id)
+                                }
+                            })
+
                         }
 
                         $opportunity_html.find('li.'+ opp.id +' table.' + table_class + ' tbody').append('<tr class="'+ index +'"></tr>')
@@ -184,7 +186,13 @@
 
             })
 
-
+            if(scripts.length){
+                scripts.map(function (script){
+                    var _url = new URL(script.src)
+                    _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
+                    $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>Defer</td></tr>')
+                })
+            }
 
             $('#rapidload-optimizer-dialog').append($opportunity_html)
 
