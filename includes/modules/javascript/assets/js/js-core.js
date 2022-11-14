@@ -175,9 +175,7 @@
                     if(script.includes('.js')){
                         var _url = new URL(script)
                         _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
-                        if(_url.origin){
-                            $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
-                        }
+                        $('#rapidload-optimizer-dialog .js-scripts ul').append('<li>' + _url + '</li>')
 
 
                     }
