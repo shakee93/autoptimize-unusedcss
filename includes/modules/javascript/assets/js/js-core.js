@@ -110,27 +110,27 @@
                     })
 
                     if(js_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>JS</div><table class="'+ opp.id +' js wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>JS</div><table class="'+ opp.id +' js wp-list-table widefat fixed striped table-view-list posts"><thead><</thead><tbody></tbody></table>')
                     }
 
                     if(css_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>CSS</div><table class="'+ opp.id +' css wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>CSS</div><table class="'+ opp.id +' css wp-list-table widefat fixed striped table-view-list posts"><thead><</thead><tbody></tbody></table>')
                     }
 
                     if(image_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>Images</div><table class="'+ opp.id +' images wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>Images</div><table class="'+ opp.id +' images wp-list-table widefat fixed striped table-view-list posts"><thead></thead><tbody></tbody></table>')
                     }
 
                     if(other_items.length){
-                        $opportunity_html.find('li.' + opp.id).append('<div>Other</div><table class="'+ opp.id +' other wp-list-table widefat fixed striped table-view-list posts"><thead><tr class="heading"></tr></thead></table>')
+                        $opportunity_html.find('li.' + opp.id).append('<div>Other</div><table class="'+ opp.id +' other wp-list-table widefat fixed striped table-view-list posts"><thead></thead><tbody></tbody></table>')
                     }
 
                     opp.details.headings.map((h)=>{
                         if(h.label){
-                            $opportunity_html.find('li.'+ opp.id +' table.js tr.heading').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.css tr.heading').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.images tr.heading').append('<td class="column-primary">' + h.label + '</td>')
-                            $opportunity_html.find('li.'+ opp.id +' table.other tr.heading').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.js thead').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.css thead').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.images thead').append('<td class="column-primary">' + h.label + '</td>')
+                            $opportunity_html.find('li.'+ opp.id +' table.other thead').append('<td class="column-primary">' + h.label + '</td>')
                         }
 
                     })
@@ -149,7 +149,7 @@
                             }
                         }
 
-                        $opportunity_html.find('li.'+ opp.id +' table.' + table_class).append('<tr class="'+ index +'"></tr>')
+                        $opportunity_html.find('li.'+ opp.id +' table.' + table_class + ' tbody').append('<tr class="'+ index +'"></tr>')
 
                         opp.details.headings.map((h)=>{
                             if(h.key === 'node'){
