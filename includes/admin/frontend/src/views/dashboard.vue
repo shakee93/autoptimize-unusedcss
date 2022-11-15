@@ -37,6 +37,13 @@
       </li>
     </ul>
 
+    <div class="pt-6">
+      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                  to="/page-optimizer">
+        <button>Page Optimizer</button>
+      </RouterLink>
+    </div>
+
   </main>
 </template>
 
@@ -46,15 +53,7 @@ import config from "../config";
 import axios from 'axios';
 
 export default {
-  async mounted() {
-    // await axios.get(window.uucss_global.ajax_url + '?action=list_module')
-    //     .then(response =>
-    //         this.items_data = response.data
-    //     )
-    //     .catch(error => {
-    //       this.errorMessage = error.message;
-    //       console.error("There was an error!", error);
-    //     });
+  mounted() {
 
     const activeModules = [];
     Object.keys(window.uucss_global).map((key) => {

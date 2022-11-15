@@ -10,7 +10,6 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/">
         <img alt="RapidLoad Logo" class="logo ml-4" src="@/assets/logo.svg" width="200" />
       </RouterLink>
-
       <div class="wrapper mb-8">
 
         <nav>

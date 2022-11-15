@@ -43,7 +43,78 @@ body {
         display: block;
     }
 
+    /* custom dropdown start */
+    .custom-select {
+        position: relative;
+        text-align: left;
+        outline: none;
+        min-width: 85px;
+    }
 
+    .custom-select .selected {
+        border-radius: 6px;
+        cursor: pointer;
+        user-select: none;
+
+    }
+
+    .custom-select .selected.open {
+        border: 1px solid #7F54B3;
+        /*border-radius: 6px 6px 0px 0px;*/
+    }
+
+    .custom-select .selected:after {
+        position: absolute;
+        content: "";
+        top: 10px;
+        right: 12px;
+        width: 8px;
+        height: 8px;
+        border-bottom: 2px solid;
+        border-right: 2px solid;
+        transform: rotate(45deg);
+        border-color: #CBCBCB;
+        transition-duration: 0.3s;
+
+    }
+    .custom-select .selected:hover:after {
+        border-color: #ffffff;
+    }
+
+    .custom-select .selected.open:after {
+        top: 13px;
+        transform: rotate(225deg);
+        transition-duration: 0.3s;
+    }
+
+    .custom-select .items {
+        /*border-radius: 0px 0px 6px 6px;*/
+        border-radius: 6px;
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        margin-top: 1px;
+        line-height: 25px;
+
+    }
+
+    .custom-select .items div {
+        padding-left: 1em;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /*.custom-select .items div:hover {*/
+    /*  background-color: #ad8225;*/
+    /*}*/
+
+    .selectHide {
+        display: none;
+
+    }
+    /* custom dropdown end */
 }
 
 /*config tags packages style, these style will not work without import tags*/
@@ -92,3 +163,5 @@ input[type=checkbox]:checked::before {
         max-width: 1100px;
     }
 }
+
+

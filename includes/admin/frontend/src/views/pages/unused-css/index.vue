@@ -317,13 +317,19 @@
                     </div>
                     <div>
                       <h1 class="font-semibold text-base text-black-font">Queue</h1>
-                      <p class="text-sm text-gray-font">Remove unused CSS variables</p>
 
-
-
-
-
-
+                      <div class="flex">
+                      <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
+                      <dropDown
+                          :options="queue_jobs_options"
+                          class="select mr-3"
+                      />
+                        <p class="text-sm text-gray-font pr-3 pt-1">Per</p>
+                        <dropDown
+                            :options="jobs_timing_options"
+                            class="select mr-3" style="min-width: 110px"
+                        />
+                      </div>
                     </div>
                   </div>
                   <div class="flex mt-5">
@@ -498,13 +504,14 @@
 <script>
 import config from "../../../config";
 import Vue3TagsInput from 'vue3-tags-input';
-
+import dropDown from '../../../components/dropDown.vue'
 
 export default {
   name: "index",
 
   components: {
     Vue3TagsInput,
+    dropDown,
   },
 
   methods: {},
@@ -520,6 +527,8 @@ export default {
       advance_settings1: false,
       pages_with_rules2: false,
       advance_settings2: false,
+      queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
+      jobs_timing_options: ['1 Minute', '5 Minuts', '10 Minutes', '30 Minutes', '1 Hour'],
       advance_settings:[{
         default: false,
         queue_option: [{

@@ -59,7 +59,14 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/pages/font-optimization.vue')
     },
-
+    {
+      path: '/page-optimizer',
+      name: 'page-optimizer',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/pages/page-optimizer.vue')
+    },
   ]
 })
 
