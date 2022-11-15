@@ -218,7 +218,7 @@
 
             if(scripts.length){
                 scripts.map(function (script){
-                    if(script){
+                    if(script && script.acronym.length){
                         var _url = new URL(script.src)
                         _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
                         $('#rapidload-optimizer-dialog .js-scripts table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
@@ -228,7 +228,7 @@
 
             if(styles.length){
                 styles.map(function (script){
-                    if(script){
+                    if(script && script.acronym.length){
                         var _url = new URL(script.src)
                         _url = _url.origin + '[...]' + _url.href.toString().substr(_url.href.toString().lastIndexOf("/")+1)
                         $('#rapidload-optimizer-dialog .css-files table tbody').append('<tr><td>' + _url + '</td><td>' + JSON.stringify(script.acronym) + '</td><td>Defer</td></tr>')
