@@ -9,6 +9,8 @@ class JavaScript
     public $file_system;
     public $options = [];
 
+    public static $key_post_meta = 'rapidload_post_meta';
+
     public static $base_dir;
 
     public function __construct()
@@ -91,9 +93,140 @@ class JavaScript
         if(is_admin()){
 
             add_action('wp_ajax_update_js_settings', [$this, 'update_js_settings']);
+            add_action('wp_ajax_page_speed_insights', [$this, 'page_speed_insights']);
 
         }
 
+    }
+
+    public function page_speed_insights(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url missing');
+        }
+
+        $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false;
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('pagespeed/insights', [
+           'url' => $_REQUEST['url']
+        ]);
+
+        $url = strtok($_REQUEST['url'], "?");
+
+        $html = file_get_contents( trailingslashit($url) . '?no_rapidload');
+
+        $dom = new \simplehtmldom\HtmlDocument(
+            null,
+            false,
+            false,
+            \simplehtmldom\DEFAULT_TARGET_CHARSET,
+            false
+        );
+
+        $dom->load(
+            $html,
+            false,
+            false,
+            \simplehtmldom\DEFAULT_TARGET_CHARSET,
+            false
+        );
+
+        $links = $dom->find( 'script' );
+
+        $scripts = [];
+
+        foreach ( $links as $link ) {
+
+            if(!empty($link->src) && strpos($link->src,"data:text/javascript") === false){
+                array_push($scripts, $link->src);
+            }
+
+        }
+
+        $style_links = $dom->find( 'link' );
+
+        $styles = [];
+
+        foreach ( $style_links as $style_link ) {
+
+            if(!empty($style_link->href) && $style_link->rel == 'stylesheet'){
+                array_push($styles, $style_link->href);
+            }
+
+        }
+
+        $post_meta = [
+            'scripts' => [],
+            'styles' => []
+        ];
+
+        foreach ($scripts as $script){
+
+            array_push($post_meta['scripts'], [
+                'impact' => [],
+                'src' => $script,
+                'action' => 'none'
+            ]);
+
+        }
+
+        foreach ($styles as $style){
+
+            array_push($post_meta['styles'], [
+                'impact' => [],
+                'src' => $style,
+                'action' => 'none'
+            ]);
+
+        }
+
+        if(isset($post_id)){
+
+            $post_meta_exist = get_post_meta($post_id, self::$key_post_meta);
+
+            if(empty($post_meta_exist)){
+
+                update_post_meta($post_id, self::$key_post_meta, $post_meta);
+
+            }else{
+
+                $post_meta_exist = $post_meta_exist[0];
+
+                foreach ($post_meta['scripts'] as $script){
+
+                    $key = array_search($script['src'], array_column($post_meta_exist['scripts'], 'src'));
+
+                    if(is_numeric($key) && isset($post_meta_exist['scripts'][$key])){
+
+                        $script['action'] = $post_meta_exist['scripts'][$key]['action'];
+
+                    }
+                }
+
+                foreach ($post_meta['styles'] as $style){
+
+                    $key = array_search($style['src'], array_column($post_meta_exist['styles'], 'src'));
+
+                    if(is_numeric($key) && isset($post_meta_exist['styles'][$key])){
+
+                        $style['action'] = $post_meta_exist['styles'][$key]['action'];
+
+                    }
+                }
+
+                update_post_meta($post_id, self::$key_post_meta, $post_meta);
+            }
+        }
+
+
+        wp_send_json_success([
+            'scripts' => $scripts,
+            'styles' => $styles,
+            'insights' => $result,
+            'post_meta' => $post_meta
+        ]);
     }
 
     public function update_js_settings(){
