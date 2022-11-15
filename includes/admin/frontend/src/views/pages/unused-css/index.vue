@@ -136,6 +136,25 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
+                      <input v-model="query_string" type="checkbox" value=""
+                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <h1 class="font-semibold text-base text-black-font">Query String</h1>
+                  <p class="text-sm text-gray-font">Consider URLs with query strings as separate URLs.</p>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <label>
                       <input v-model="pages_with_rules" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
@@ -207,20 +226,7 @@
                   </div>
                 </div>
                 <div :class="{ expand: settings.queue_option.default}" class="pl-9 not-expand">
-                  <div class="flex mt-5">
-                    <div class="pr-1">
-                      <div class="flex items-center mr-4 mt-3">
-                        <label>
-                          <input v-model="settings.queue_option.query_string" type="checkbox" value=""
-                                 class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                        </label>
-                      </div>
-                    </div>
-                    <div>
-                      <h1 class="font-semibold text-base text-black-font">Query String</h1>
-                      <p class="text-sm text-gray-font">Consider URLs with query strings as separate URLs.</p>
-                    </div>
-                  </div>
+
                   <div class="flex mt-5">
                     <div class="pr-1">
                       <div class="flex items-center mr-4 mt-3">
@@ -430,11 +436,11 @@ export default {
       queue_jobs:'',
       queue_jobs_time:'',
       jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
+      query_string: false,
       advance_settings:[{
         default: false,
         queue_option: [{
           default: false,
-          query_string: false,
           queue: false,
           disable_auto_queue: false,
           disable_requeue: false,
