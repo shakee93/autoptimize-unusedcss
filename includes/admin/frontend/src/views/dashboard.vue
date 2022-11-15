@@ -124,9 +124,9 @@ export default {
         {
           id : "javascript",
           title: "Java Script Optimization",
-          description: 'Java Script Optimization',
+          description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'image-delivery.svg',
-          link: '/image-delivery',
+          link: '/java-script',
           status: false
         },
         {

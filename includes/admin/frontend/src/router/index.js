@@ -28,12 +28,12 @@ const router = createRouter({
       component: () => import('../views/pages/critical-css.vue')
     },
     {
-      path: '/image-delivery',
-      name: 'image-delivery',
+      path: '/java-script',
+      name: 'java-script',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/image-delivery.vue')
+      component: () => import('../views/pages/java-script.vue')
     },
     {
       path: '/speed-monitoring',
