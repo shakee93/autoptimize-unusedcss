@@ -106,8 +106,8 @@ export default {
       // })),
       items: [
         {
-          id : "unused-css",
-          title: "Unused CSS",
+          id : "css",
+          title: "CSS",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
