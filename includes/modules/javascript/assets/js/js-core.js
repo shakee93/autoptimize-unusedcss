@@ -41,6 +41,7 @@
                 method: 'POST',
                 data: {
                     url: url,
+                    post_id : rapidload_js_optimizer.post_id,
                     include_matrix: true
                 },
                 success: function (result) {

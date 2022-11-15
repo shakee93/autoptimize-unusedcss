@@ -157,45 +157,66 @@ class JavaScript
 
         }
 
-        $post_meta = null;
+        $post_meta = [
+            'scripts' => [],
+            'styles' => []
+        ];
+
+        foreach ($scripts as $script){
+
+            array_push($post_meta['scripts'], [
+                'impact' => [],
+                'src' => $script,
+                'action' => 'none'
+            ]);
+
+        }
+
+        foreach ($styles as $style){
+
+            array_push($post_meta['styles'], [
+                'impact' => [],
+                'src' => $style,
+                'action' => 'none'
+            ]);
+
+        }
 
         if(isset($post_id)){
 
-            $post_meta = get_post_meta($post_id, self::$key_post_meta);
+            $post_meta_exist = get_post_meta($post_id, self::$key_post_meta);
 
-            if(empty($post_meta)){
-
-                $post_meta = [
-                    'scripts' => [],
-                    'styles' => []
-                ];
-
-                foreach ($scripts as $script){
-
-                    array_push($post_meta['scripts'], (object)[
-                        'impact' => [],
-                        'src' => $script,
-                        'action' => 'none'
-                    ]);
-
-                }
-
-                foreach ($styles as $style){
-
-                    array_push($post_meta['styles'], (object)[
-                        'impact' => [],
-                        'src' => $style,
-                        'action' => 'none'
-                    ]);
-
-                }
+            if(empty($post_meta_exist)){
 
                 update_post_meta($post_id, self::$key_post_meta, $post_meta);
 
             }else{
 
-                $post_meta = $post_meta[0];
+                $post_meta_exist = $post_meta_exist[0];
 
+                foreach ($post_meta['scripts'] as $script){
+
+                    $key = array_search($script['src'], array_column($post_meta_exist['scripts'], 'src'));
+
+                    if(is_numeric($key) && isset($post_meta_exist['scripts'][$key])){
+
+                        $script['action'] = $post_meta_exist['scripts'][$key]['action'];
+
+                    }
+                }
+
+                foreach ($post_meta['styles'] as $style){
+
+                    $key = array_search($style['src'], array_column($post_meta_exist['styles'], 'src'));
+
+                    if(is_numeric($key) && isset($post_meta_exist['styles'][$key])){
+
+                        $style['action'] = $post_meta_exist['styles'][$key]['action'];
+
+                    }
+                }
+
+                update_post_meta($post_id, self::$key_post_meta, $post_meta);
             }
         }
 
