@@ -9,16 +9,8 @@
           </RouterLink>
         </div>
         <div class="flex mt-1">
-          <div class="pr-1">
-            <div class="items-center mr-4 mt-3">
-              <label>
-                <input id="purple-checkbox" v-model="remove_css" type="checkbox" value=""
-                       class="rounded-lg checkmark accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-              </label>
-            </div>
-          </div>
           <div>
-            <h1 class="font-semibold text-base text-black-font">Remove Unused CSS</h1>
+            <h1 class="font-semibold text-base text-black-font">Settings</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
               CSS</p>
           </div>
@@ -130,7 +122,7 @@
             </div>
 
             <div class="mt-5">
-              <h1 class="font-semibold text-base text-black-font ">Force Exclude selectors</h1>
+              <h1 class="font-semibold text-base text-black-font ">Exclude CSS Files</h1>
               <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
               <div class="grid mb-5">
@@ -182,6 +174,23 @@
 
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <label>
+                      <input v-model="inline_small_css" type="checkbox" value=""
+                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <h1 class="font-semibold text-base text-black-font">Inline Small CSS Files</h1>
+                  <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS is removed.</p>
+                </div>
               </div>
             </div>
 
@@ -423,7 +432,7 @@ export default {
       css_font: false,
       inline_css: false,
       cash_busting: false,
-
+      inline_small_css: false,
 
 
       tag: '',

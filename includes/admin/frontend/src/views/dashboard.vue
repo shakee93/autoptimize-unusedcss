@@ -28,7 +28,7 @@
               <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                 <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">
                 <div
-                    class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-blue"></div>
+                    class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
               </label>
             </div>
 
@@ -41,6 +41,11 @@
       <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                   to="/page-optimizer">
         <button>Page Optimizer</button>
+      </RouterLink>
+
+      <RouterLink class="ml-6 text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                  to="/general-settings">
+        <button>General Settings</button>
       </RouterLink>
     </div>
 
@@ -114,19 +119,19 @@ export default {
           status: false
         },
         {
+          id : "javascript",
+          title: "Javascript",
+          description: 'Reduce your CSS file size by remove unused CSS from your pages',
+          image: 'image-delivery.svg',
+          link: '/java-script',
+          status: false
+        },
+        {
           id : "critical-css",
           title: "Critical CSS",
           description: 'Generate above the fold critical CSS for your pages',
           image: 'critical-css.svg',
           link: '/critical-css',
-          status: false
-        },
-        {
-          id : "javascript",
-          title: "Java Script Optimization",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'image-delivery.svg',
-          link: '/java-script',
           status: false
         },
         {

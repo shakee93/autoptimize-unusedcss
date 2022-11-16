@@ -75,6 +75,14 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/pages/unused-css/remove-unused-css.vue')
     },
+    {
+      path: '/general-settings',
+      name: 'general-settings',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/pages/general-settings.vue')
+    },
   ]
 })
 
