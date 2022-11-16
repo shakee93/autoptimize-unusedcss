@@ -19,6 +19,10 @@ class JavaScript
 
         add_action('uucss/options/js', [$this, 'render_options']);
 
+        if(is_admin()){
+            add_action('wp_ajax_update_rapidload_js_settings', [$this, 'update_rapidload_js_settings']);
+        }
+
         if(!isset($this->options['uucss_enable_javascript'])){
             return;
         }
@@ -97,6 +101,45 @@ class JavaScript
 
         }
 
+    }
+
+    public function update_rapidload_js_settings(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(isset($_REQUEST['uucss_enable_javascript'])){
+
+            $options['uucss_enable_javascript'] = boolval($_REQUEST['uucss_enable_javascript']) == true ? "1" : "";
+
+        }
+
+        if(isset($_REQUEST['uucss_load_js_method'])){
+
+            $options['uucss_load_js_method'] = $_REQUEST['uucss_load_js_method'];
+
+        }
+
+        if(isset($_REQUEST['defer_inline_js'])){
+
+            $options['defer_inline_js'] = boolval($_REQUEST['defer_inline_js']) == true ? "1" : "";
+
+        }
+
+        if(isset($_REQUEST['minify_js'])){
+
+            $options['minify_js'] = boolval($_REQUEST['minify_js']) == true ? "1" : "";
+
+        }
+
+        if(isset($_REQUEST['uucss_excluded_js_files'])){
+
+            $options['uucss_excluded_js_files'] = $_REQUEST['uucss_excluded_js_files'];
+
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
+
+        wp_send_json_success(true);
     }
 
     public function page_speed_insights(){
