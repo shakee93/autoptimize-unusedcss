@@ -27,14 +27,12 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
-          <div v-for="button in load_original_css">
-
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="minify" type="checkbox" value=""
+                      <input v-model="uucss_minify" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -83,6 +81,7 @@
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
                 <div class="grid mb-5">
                 <textarea
+                v-model="settings.additional_critical_css"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
                   <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -141,24 +140,24 @@
 
             <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
             <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
-            <button v-on:click="button.load_css = 'user_interaction'"
-                    :class="{ active: button.load_css === 'user_interaction' }"
+            <button v-on:click="uucss_load_js_method = 'user_interaction'"
+                    :class="{ active: uucss_load_js_method === 'user_interaction' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
               On user interaction
             </button>
 
-            <button v-on:click="button.load_css = 'asynchronously'"
-                    :class="{ active: button.load_css === 'asynchronously' }"
+            <button v-on:click="uucss_load_js_method = 'asynchronously'"
+                    :class="{ active: uucss_load_js_method === 'asynchronously' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
               Asynchronously
             </button>
-            <button v-on:click="button.load_css = 'remove'"
-                    :class="{ active: button.load_css === 'remove' }"
+            <button v-on:click="uucss_load_js_method = 'remove'"
+                    :class="{ active: uucss_load_js_method === 'remove' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
               Remove
             </button>
 
-            <div :class="{ expand : button.load_css === 'remove'}" class="not-expand">
+            <div :class="{ expand : uucss_load_js_method === 'remove'}" class="not-expand">
               <div class="mt-5 bg-purple-lite border border-purple rounded-2xl px-4 py-3 shadow-md" role="alert">
                 <div class="flex">
                   <div class="py-1 mt-1">
@@ -178,64 +177,8 @@
               </div>
             </div>
 
-            <h1 class="font-semibold text-base text-black-font mt-5">Force Include selectors</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
-
-            <div class="grid mb-5">
-            <textarea
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                  ‘elementor-*, *-gallery’ etc...</p>
-              </div>
-            </div>
-
-
-
-            <h1 class="font-semibold text-base text-black-font">Selector Packs</h1>
-            <p class="text-sm pb-3 text-gray-font">Selector packs contains predefined force exclude and include rules
-              for
-              plugins and themes.</p>
-            <div class="grid mb-5">
-              <div class="flex text-sm">
-                <vue3-tags-input :tags="tags"
-                                 class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                 placeholder="Type your plugin..."/>
-                <!--          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
-
-
-                <div class="mt-3 z-50 -ml-9 cursor-pointer">
-                  <svg :class="{'animate-spin': refresh_element}" @click="refresh_element = !refresh_element"
-                       class="fill-none transition ease-in-out" width="20px" height="20px"
-                       xmlns="http://www.w3.org/2000/svg"
-                       viewBox="0 0 13 13">
-                    <g class="" clip-path="url(#clip0_49_525)">
-                      <path
-                          d="M11.466 4.33334C10.6301 2.42028 8.72122 1.08334 6.5 1.08334C3.6913 1.08334 1.38187 3.22113 1.11011 5.95834"
-                          stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M9.20825 4.33333H11.5916C11.7711 4.33333 11.9166 4.18783 11.9166 4.00833V1.625"
-                            stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path
-                          d="M1.56079 8.66666C2.39665 10.5797 4.30557 11.9167 6.52676 11.9167C9.33546 11.9167 11.6449 9.77886 11.9167 7.04166"
-                          stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M3.81844 8.66666H1.43511C1.25562 8.66666 1.11011 8.81215 1.11011 8.99166V11.375"
-                            stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
-
-                  </svg>
-                </div>
-              </div>
-
-
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
-              </div>
-            </div>
-
-          </div>
-          <button
+          <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
@@ -253,6 +196,7 @@
 import config from "../../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../../components/dropDown.vue'
+import axios from "axios";
 
 export default {
   name: "index",
@@ -262,61 +206,34 @@ export default {
     dropDown,
   },
 
-  methods: {
-    triggerClick(){
-      console.log(this.queue_jobs);
+  methods:{
+
+    saveSettings(){
+      console.log(this.$data)
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data)
+          .then(response => console.log(response.data))
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+
     }
   },
 
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-      tag: '',
-      tags: ['Elementor'],
-      refresh_element: false,
-      page_animation: true,
-      pages_with_rules: false,
-      minify: false,
+      uucss_minify: false,
       remove_unused_css: false,
       unused_css_settings_link: '/remove-unused-css',
-      queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
-      queue_jobs:'',
-      queue_jobs_time:'',
-      jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
-      query_string: false,
       critical_css:[{
         default: false,
         mobile_critical_css: false,
-        additinal_critical_css: false
-      }],
-      advance_settings:[{
-        default: false,
-        queue_option: [{
-          default: false,
-          queue: false,
-          disable_auto_queue: false,
-          disable_requeue: false,
-        }],
-        misc_unused_css:[{
-          default: false,
-
-          css_variables: false,
-          css_animation: false,
-          css_font: false,
-          inline_css: false,
-          cash_busting: false
-
-        }],
+        additional_critical_css: [],
       }],
       remove_css: false,
       back: '/',
-      load_original_css: [
-        {
-          load_css: 'user_interaction',
-        }
-      ],
-      runJobDropDown: false,
-
+      uucss_load_js_method: 'user_interaction',
 
     }
   },

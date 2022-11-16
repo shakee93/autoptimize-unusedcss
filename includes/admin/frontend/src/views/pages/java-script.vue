@@ -50,22 +50,22 @@
           </div>
 
 
-          <div v-for="button in load_javascript">
+
             <h1 class="font-semibold text-base text-black-font">Load Javascript</h1>
             <p class="text-sm pb-3 text-gray-font">Load Scripts on User Interaction</p>
-            <button v-on:click="button.load_js =  'none'"
-                    :class="{ active: button.load_js === 'none' }"
+            <button v-on:click="uucss_load_js_method =  'none'"
+                    :class="{ active: uucss_load_js_method === 'none' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
               None
             </button>
 
-            <button v-on:click="button.load_js = 'defer'"
-                    :class="{ active: button.load_js === 'defer' }"
+            <button v-on:click="uucss_load_js_method = 'defer'"
+                    :class="{ active: uucss_load_js_method === 'defer' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
               Defer
             </button>
-            <button v-on:click="button.load_js = 'user_interaction'"
-                    :class="{ active: button.load_js === 'user_interaction' }"
+            <button v-on:click="uucss_load_js_method = 'user_interaction'"
+                    :class="{ active: uucss_load_js_method === 'user_interaction' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
               On user interaction
             </button>
@@ -76,7 +76,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="defer_inline_javascript" type="checkbox" value=""
+                      <input v-model="defer_inline_js" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -92,17 +92,15 @@
               <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Exclude JS</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-              <textarea
+              <textarea v-model="uucss_excluded_js_files"
                   class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="force-include" type="text" placeholder=""></textarea>
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                  ‘elementor-*, *-gallery’ etc...</p>
+                <p class="text-sm text-dark-gray-font">
+                  Exclude JS from RapidLoad enter each file in new line</p>
               </div>
             </div>
-
-          </div>
-          <button
+          <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
@@ -119,6 +117,7 @@
 <script>
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
+import axios from "axios";
 
 export default {
   name: "java-script",
@@ -128,23 +127,26 @@ export default {
   },
 
   methods:{
+       async saveSettings(){
 
+         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data)
+              .then(response => console.log(response.data))
+              .catch(error => {
+                this.errorMessage = error.message;
+                console.error("There was an error!", error);
+              });
+        }
   },
 
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-      enable_javascript_optimization: false,
-      defer_inline_javascript: false,
+      defer_inline_js: false,
       js_optimization: false,
       minify_javascript: false,
       back: '/',
-      load_javascript: [
-        {
-          load_js: 'user_interaction',
-        }
-      ],
-
+      uucss_load_js_method: 'user_interaction',
+      uucss_excluded_js_files: [],
 
     }
   },
