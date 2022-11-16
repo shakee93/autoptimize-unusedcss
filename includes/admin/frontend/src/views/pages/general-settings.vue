@@ -28,7 +28,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="rule_based_injection" type="checkbox" value=""
+                      <input v-model="query_string" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -64,7 +64,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <label>
-                    <input v-model="defer_inline_javascript" type="checkbox" value=""
+                    <input v-model="rule_based_injection" type="checkbox" value=""
                            class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                   </label>
                 </div>
