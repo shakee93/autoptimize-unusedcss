@@ -18,7 +18,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </div>
     </header>
 
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component, route }">
       <transition name="route" mode="out-in">
         <component :is="Component"></component>
       </transition>
