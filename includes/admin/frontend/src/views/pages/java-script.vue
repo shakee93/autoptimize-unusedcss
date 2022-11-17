@@ -36,7 +36,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="minify_javascript" type="checkbox" value=""
+                      <input v-model="minify_js" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -64,8 +64,8 @@
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
               Defer
             </button>
-            <button v-on:click="uucss_load_js_method = 'user_interaction'"
-                    :class="{ active: uucss_load_js_method === 'user_interaction' }"
+            <button v-on:click="uucss_load_js_method = 'on-user-interaction'"
+                    :class="{ active: uucss_load_js_method === 'on-user-interaction' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
               On user interaction
             </button>
@@ -129,7 +129,11 @@ export default {
   methods:{
        async saveSettings(){
 
-         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data)
+         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data, {
+            headers: {
+             'Content-Type':'multipart/form-data'
+            }
+         })
               .then(response => console.log(response.data))
               .catch(error => {
                 this.errorMessage = error.message;
@@ -143,9 +147,9 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       defer_inline_js: false,
       js_optimization: false,
-      minify_javascript: false,
+      minify_js: false,
       back: '/',
-      uucss_load_js_method: 'user_interaction',
+      uucss_load_js_method: 'none',
       uucss_excluded_js_files: [],
 
     }

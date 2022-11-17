@@ -107,12 +107,6 @@ class JavaScript
 
         $options = RapidLoad_Base::fetch_options();
 
-        if(isset($_REQUEST['uucss_enable_javascript'])){
-
-            $options['uucss_enable_javascript'] = boolval($_REQUEST['uucss_enable_javascript']) == true ? "1" : "";
-
-        }
-
         if(isset($_REQUEST['uucss_load_js_method'])){
 
             $options['uucss_load_js_method'] = $_REQUEST['uucss_load_js_method'];
@@ -121,13 +115,13 @@ class JavaScript
 
         if(isset($_REQUEST['defer_inline_js'])){
 
-            $options['defer_inline_js'] = boolval($_REQUEST['defer_inline_js']) == true ? "1" : "";
+            $options['defer_inline_js'] = ($_REQUEST['defer_inline_js'] == 'true' ? "1" : null);
 
         }
 
         if(isset($_REQUEST['minify_js'])){
 
-            $options['minify_js'] = boolval($_REQUEST['minify_js']) == true ? "1" : "";
+            $options['minify_js'] = ($_REQUEST['minify_js'] == 'true' ? "1" : null);
 
         }
 
