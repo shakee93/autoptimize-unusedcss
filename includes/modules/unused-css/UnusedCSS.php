@@ -20,8 +20,8 @@ class UnusedCSS
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_uucss'])){
-            //return;
+        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_uucss'] = "" ){
+            return;
         }
 
         $this->file_system = new RapidLoad_FileSystem();

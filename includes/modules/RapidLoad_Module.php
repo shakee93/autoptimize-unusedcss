@@ -17,7 +17,8 @@ class RapidLoad_Module
             'id' => 'unused-css',
             'title' => 'Unused CSS',
             'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
-            'status' => 'off',
+            'group' => 'css',
+            'status' => 'on',
             'class' => UnusedCSS::class,
             'global' => 'uucss'
         ];
@@ -26,7 +27,8 @@ class RapidLoad_Module
             'id' => 'critical-css',
             'title' => 'Critical CSS',
             'description' => 'Removing render blocking and increase your page scores, you can boost your site with this option',
-            'status' => 'off',
+            'group' => 'css',
+            'status' => 'on',
             'class' => CriticalCSS::class,
             'global' => 'cpcss'
         ];
@@ -35,17 +37,12 @@ class RapidLoad_Module
             'id' => 'javascript',
             'title' => 'Javascript',
             'description' => 'Optimize Javascript',
-            'status' => 'off',
+            'group' => 'javascript',
+            'status' => 'on',
             'class' => JavaScript::class,
             'global' => 'javascript'
         ];
 
-        $stored_modules = [];
-        $stored_modules = get_option( 'rapidload_modules', $stored_modules );
-
-        foreach ($stored_modules as $key => $value){
-            $this->modules[$key]['status'] = $value;
-        }
     }
 
     function load_modules(){
@@ -77,6 +74,8 @@ class RapidLoad_Module
 
     function activate_module(){
 
+        $options = RapidLoad_Base::fetch_options();
+
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : false;
         $active = isset($_REQUEST['active']) ? $_REQUEST['active'] : 'off';
 
@@ -84,19 +83,36 @@ class RapidLoad_Module
             wp_send_json_error('Rapidload module required');
         }
 
-        $stored = get_option( 'rapidload_modules', [] );
+        switch ($module){
+            case 'css' : {
+                $options['uucss_enable_css'] = $active == "on" ? "1" : "";
+                break;
+            }
+            case 'javascript' : {
+                $options['uucss_enable_javascript'] = $active == "on" ? "1" : "";
+                break;
+            }
+        }
 
-        $stored[$module] = $active;
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
 
-        update_option( 'rapidload_modules', $stored );
-
-        wp_send_json_success();
+        wp_send_json_success(true);
     }
 
     public function active_modules(){
-        return array_filter($this->modules, function ($value){
-            return isset($value['status']) && $value['status'] == "on";
-        });
+
+        $options = RapidLoad_Base::fetch_options();
+
+        return [
+            'css' => [
+                'id' => 'css',
+                'status' => isset($options['uucss_enable_css']) && $options['uucss_enable_css'] == "1" ? "on" : "off"
+            ],
+            'javascript' => [
+                'id' => 'javascript',
+                'status' => isset($options['uucss_enable_javascript']) && $options['uucss_enable_javascript'] == "1" ? "on" : "off"
+            ],
+        ];
     }
 
 }
