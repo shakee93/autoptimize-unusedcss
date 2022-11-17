@@ -110,7 +110,13 @@ class RapidLoad_Module
             ],
             'javascript' => [
                 'id' => 'javascript',
-                'status' => isset($options['uucss_enable_javascript']) && $options['uucss_enable_javascript'] == "1" ? "on" : "off"
+                'status' => isset($options['uucss_enable_javascript']) && $options['uucss_enable_javascript'] == "1" ? "on" : "off",
+                'options' => [
+                    'uucss_load_js_method' => isset($options['uucss_load_js_method']) ? $options['uucss_load_js_method'] : 'none',
+                    'defer_inline_js' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
+                    'minify_js' => isset($options['minify_js']) && $options['minify_js'] == "1" ? true : false,
+                    'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
+                ]
             ],
         ];
     }
