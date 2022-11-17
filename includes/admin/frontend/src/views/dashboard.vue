@@ -65,14 +65,11 @@ export default {
       if (key === 'active_modules') {
         const entry = window.uucss_global[key];
         Object.keys(entry).forEach((a) => {
-          console.log(a);
           activeModules.push(entry[a])
         });
       }
     });
     this.items_data = activeModules
-
-    console.log(this.items_data)
 
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
