@@ -123,6 +123,10 @@ class RapidLoad_Module
                             'uucss_fontface' => isset($options['uucss_keyframes']) && $options['uucss_fontface'] == "1" ? true : false,
                             'uucss_include_inline_css' => isset($options['uucss_include_inline_css']) && $options['uucss_include_inline_css'] == "1" ? true : false,
                             'uucss_cache_busting_v2' => isset($options['uucss_include_inline_css']) && $options['uucss_cache_busting_v2'] == "1" ? true : false,
+                            'uucss_excluded_files' => isset($options['uucss_excluded_files']) ? $options['uucss_excluded_files'] : null,
+                            'uucss_safelist' => isset($options['uucss_safelist']) ? $options['uucss_safelist'] : null,
+                            'uucss_blocklist' => isset($options['uucss_blocklist']) ? $options['uucss_blocklist'] : null,
+                            'uucss_excluded_files' => isset($options['uucss_excluded_files']) ? $options['uucss_excluded_files'] : null,
                         ]
                     ],
                     'uucss_load_original' =>  isset($options['uucss_load_original']) && $options['uucss_load_original'] == "1" ? true : false,
