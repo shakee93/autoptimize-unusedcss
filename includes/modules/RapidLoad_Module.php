@@ -106,6 +106,27 @@ class RapidLoad_Module
         return [
             'css' => [
                 'id' => 'css',
+                'options' => [
+                    'uucss_minify' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
+                    'critical_css' => [
+                        'status' => isset($options['uucss_enable_cpcss']) && $options['uucss_enable_cpcss'] == "1" ? "on" : "off",
+                        'options' => [
+                            'uucss_enable_cpcss_mobile' =>  isset($options['uucss_enable_cpcss_mobile']) && $options['uucss_enable_cpcss_mobile'] == "1" ? true : false,
+                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? $options['uucss_additional_css'] : null,
+                        ]
+                    ],
+                    'unused_css' => [
+                        'status' => isset($options['uucss_enable_uucss']) && $options['uucss_enable_uucss'] == "1" ? "on" : "off",
+                        'options' => [
+                            'uucss_variables' => isset($options['uucss_load_original']) && $options['uucss_load_original'] == "1" ? true : false,
+                            'uucss_keyframes' => isset($options['uucss_keyframes']) && $options['uucss_keyframes'] == "1" ? true : false,
+                            'uucss_fontface' => isset($options['uucss_keyframes']) && $options['uucss_fontface'] == "1" ? true : false,
+                            'uucss_include_inline_css' => isset($options['uucss_include_inline_css']) && $options['uucss_include_inline_css'] == "1" ? true : false,
+                            'uucss_cache_busting_v2' => isset($options['uucss_include_inline_css']) && $options['uucss_cache_busting_v2'] == "1" ? true : false,
+                        ]
+                    ],
+                    'uucss_load_original' =>  isset($options['uucss_load_original']) && $options['uucss_load_original'] == "1" ? true : false,
+                ],
                 'status' => isset($options['uucss_enable_css']) && $options['uucss_enable_css'] == "1" ? "on" : "off"
             ],
             'javascript' => [
