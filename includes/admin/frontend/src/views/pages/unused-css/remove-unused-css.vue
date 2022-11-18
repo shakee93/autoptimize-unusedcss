@@ -19,14 +19,12 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
-          <div v-for="button in load_original_css">
-
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="css_variables" type="checkbox" value=""
+                      <input v-model="uucss_variables" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -43,7 +41,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="css_animation" type="checkbox" value=""
+                      <input v-model="uucss_keyframes" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -61,7 +59,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="css_font" type="checkbox" value=""
+                      <input v-model="uucss_fontface" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -77,7 +75,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="inline_css" type="checkbox" value=""
+                      <input v-model="uucss_inline_css" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -94,7 +92,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="cash_busting" type="checkbox" value=""
+                      <input v-model="uucss_cache_busting_v2" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -121,12 +119,27 @@
             </div>
             </div>
 
+          <div class="mt-5">
+            <h1 class="font-semibold text-base text-black-font ">Force Exclude selectors</h1>
+            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
+
+            <div class="grid mb-5">
+            <textarea
+                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="force-include" type="text" placeholder=""></textarea>
+              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
+                  ‘elementor-*, *-gallery’ etc...</p>
+              </div>
+            </div>
+          </div>
+
             <div class="mt-5">
               <h1 class="font-semibold text-base text-black-font ">Exclude CSS Files</h1>
               <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
               <div class="grid mb-5">
-            <textarea
+            <textarea v-model="uucss_excluded_files"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
                 <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -194,9 +207,7 @@
               </div>
             </div>
 
-
-          </div>
-          <button
+          <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
@@ -214,6 +225,7 @@
 import config from "../../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../../components/dropDown.vue'
+import axios from "axios";
 
 export default {
   name: "remove-unused-css",
@@ -223,67 +235,80 @@ export default {
     dropDown,
   },
 
+  mounted() {
+
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
+        });
+      }
+    });
+    this.remove_css_config = activeModules;
+
+    if (this.remove_css_config) {
+      Object.keys(this.remove_css_config).map((key) => {
+        if (this.id === this.remove_css_config[key].id) {
+          const option = this.remove_css_config[key].options;
+          this.uucss_variables = option.unused_css.options.uucss_variables;
+          this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
+          this.uucss_fontface = option.unused_css.options.uucss_fontface;
+          this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
+          this.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
+          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files;
+          console.log(option)
+        }
+
+      });
+    }
+  },
+
   methods: {
-    triggerClick(){
-      console.log(this.queue_jobs);
+    saveSettings(){
+
+      const data = {
+        uucss_cache_busting_v2 : this.uucss_cache_busting_v2,
+        uucss_excluded_files : this.uucss_excluded_files,
+        uucss_fontface : this.uucss_fontface,
+        uucss_inline_css : this.uucss_inline_css,
+        uucss_keyframes : this.uucss_keyframes,
+        uucss_variables : this.uucss_variables,
+
+      }
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(response => console.log(response.data))
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+
     }
   },
 
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-      css_variables: false,
-      css_animation: false,
-      css_font: false,
-      inline_css: false,
-      cash_busting: false,
-      inline_small_css: false,
 
+      remove_css_config: [],
+      id: 'css',
+      uucss_variables: false,
+      uucss_keyframes: false,
+      uucss_fontface: false,
+      uucss_inline_css: false,
+      uucss_cache_busting_v2: false,
+      inline_small_css: false,
+      uucss_excluded_files : '',
 
       tag: '',
       tags: ['Elementor'],
       refresh_element: false,
-      page_animation: true,
-      pages_with_rules: false,
-      minify: false,
-      queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
-      queue_jobs:'',
-      queue_jobs_time:'',
-      jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
-      query_string: false,
-      critical_css:[{
-        default: false,
-        mobile_critical_css: false,
-        additinal_critical_css: false
-      }],
-      advance_settings:[{
-        default: false,
-        queue_option: [{
-          default: false,
-          queue: false,
-          disable_auto_queue: false,
-          disable_requeue: false,
-        }],
-        misc_unused_css:[{
-          default: false,
-
-          css_variables: false,
-          css_animation: false,
-          css_font: false,
-          inline_css: false,
-          cash_busting: false
-
-        }],
-      }],
-      remove_css: false,
       back: '/unused-css',
-      load_original_css: [
-        {
-          load_css: 'user_interaction',
-        }
-      ],
-      runJobDropDown: false,
-
 
     }
   },

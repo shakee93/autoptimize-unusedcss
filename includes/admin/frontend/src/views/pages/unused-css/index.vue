@@ -53,12 +53,12 @@
               </div>
             </div>
 
-            <div v-for="settings in critical_css" class="mb-5">
+            <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="settings.status" type="checkbox" value=""
+                      <input v-model="critical_css.status" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -69,12 +69,12 @@
                 </div>
               </div>
 
-              <div :class="{ expand: settings.status }" class="pl-9 not-expand">
+              <div :class="{ expand: critical_css.status }" class="pl-9 not-expand">
                 <div class="flex mt-5">
                   <div class="pr-1">
                     <div class="flex items-center mr-4 mt-3">
                       <label>
-                        <input v-model="settings.mobile_critical_css" type="checkbox" value=""
+                        <input v-model="critical_css.mobile_critical_css" type="checkbox" value=""
                                class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                       </label>
                     </div>
@@ -90,7 +90,7 @@
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
                 <div class="grid mb-5">
                 <textarea
-                v-model="settings.additional_critical_css"
+                v-model="critical_css.additional_critical_css"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
                   <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -242,7 +242,7 @@ export default {
           this.critical_css.status = option.critical_css.status === 'on';
           this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
           this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
-          this.remove_css = option.unused_css.status === 'on';
+          this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_load_original = option.uucss_load_original;
           this.uucss_minify = option.uucss_minify;
@@ -256,6 +256,7 @@ export default {
   methods:{
 
     saveSettings(){
+
      const data = {
        uucss_additional_css : this.critical_css.additional_critical_css,
        uucss_enable_cpcss_mobile : this.critical_css.mobile_critical_css,
@@ -263,9 +264,13 @@ export default {
        uucss_enable_rules : this.uucss_enable_rules,
        uucss_load_original : this.uucss_load_original,
        uucss_minify : this.uucss_minify,
-       uucss_enable_uucss : this.remove_css,
+       uucss_enable_uucss : this.remove_unused_css,
      }
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data)
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
@@ -284,12 +289,11 @@ export default {
       remove_unused_css: false,
       uucss_enable_rules: false,
       unused_css_settings_link: '/remove-unused-css',
-      critical_css:[{
+      critical_css:{
         status: false,
         mobile_critical_css: false,
         additional_critical_css: [],
-      }],
-      remove_css: false,
+      },
       back: '/',
       uucss_load_original: false,
 
