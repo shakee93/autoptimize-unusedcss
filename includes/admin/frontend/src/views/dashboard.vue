@@ -18,7 +18,7 @@
           <hr class="border-gray-border-line border-b-0">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
 
-            <div class="col-start-1 col-end-3 ...">
+            <div class="col-start-1 col-end-3 ..." >
               <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button>Settings</button>
@@ -70,7 +70,7 @@ export default {
       }
     });
     this.items_data = activeModules
-
+    console.log(activeModules);
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
@@ -116,7 +116,8 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'unused-css.svg',
           link: '/unused-css',
-          status: false
+          status: false,
+          isDisabled: false,
         },
         {
           id : "javascript",
@@ -124,15 +125,17 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'image-delivery.svg',
           link: '/java-script',
-          status: false
+          status: false,
+          isDisabled: false
         },
         {
-          id : "critical-css",
-          title: "Critical CSS",
+          id : "image-delivery",
+          title: "Image Delivery",
           description: 'Generate above the fold critical CSS for your pages',
-          image: 'critical-css.svg',
-          link: '/critical-css',
-          status: false
+          image: 'image-delivery.svg',
+          link: '/image-delivery',
+          status: false,
+          isDisabled: false
         },
         {
           id : "speed-monitoring",
@@ -140,7 +143,8 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'speed-monitoring.svg',
           link: '/speed-monitoring',
-          status: false
+          status: false,
+          isDisabled: true
         },
         {
           id : "asset-manager",
@@ -148,7 +152,8 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'asset-manager.svg',
           link: '/asset-manager',
-          status: false
+          status: false,
+          isDisabled: true
         },
         {
           id : "font-optimization",
@@ -156,7 +161,8 @@ export default {
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'font-optimization.svg',
           link: '/font-optimization',
-          status: false
+          status: false,
+          isDisabled: true
         },
 
       ],

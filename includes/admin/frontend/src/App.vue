@@ -3,13 +3,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="rapidload-wrapper mt-12 ml-8 container rounded-lg bg-white">
+  <div class="rapidload-wrapper mt-12 ml-8">
 
-    <header class="bg-w-color">
+    <header class="pb-8">
       <RouterLink to="/">
         <img alt="RapidLoad Logo" class="logo ml-4" src="@/assets/logo.svg" width="200" />
       </RouterLink>
-      <div class="wrapper pb-8" >
+      <div class="wrapper" >
         <nav>
         </nav>
       </div>

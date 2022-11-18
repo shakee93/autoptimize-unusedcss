@@ -9,14 +9,6 @@
           </RouterLink>
         </div>
         <div class="flex mt-1">
-          <div class="pr-1">
-            <div class="items-center mr-4 mt-3">
-              <label>
-                <input id="purple-checkbox" v-model="js_optimization" type="checkbox" value=""
-                       class="rounded-lg checkmark accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-              </label>
-            </div>
-          </div>
           <div>
             <h1 class="font-semibold text-base text-black-font">Javascript Optimization</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
@@ -126,6 +118,31 @@ export default {
     Vue3TagsInput,
   },
 
+  mounted() {
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
+        });
+      }
+    });
+    this.javascript = activeModules
+    console.log(activeModules);
+    if (this.javascript) {
+      Object.keys(this.javascript).map((key) => {
+          if (this.id === this.javascript[key].id) {
+            const options = this.javascript[key].options;
+            this.defer_inline_js = options.defer_inline_js
+            this.minify_js = options.minify_js
+            this.uucss_excluded_js_files = options.uucss_excluded_js_files
+            this.uucss_load_js_method = options.uucss_load_js_method
+          }
+
+      });
+    }
+  },
   methods:{
        async saveSettings(){
 
@@ -144,6 +161,8 @@ export default {
 
   data() {
     return {
+      javascript: [],
+      id: 'javascript',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       defer_inline_js: false,
       js_optimization: false,
