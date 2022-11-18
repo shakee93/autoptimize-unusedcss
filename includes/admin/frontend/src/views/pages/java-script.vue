@@ -146,7 +146,7 @@ export default {
   methods:{
        async saveSettings(){
 
-         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data, {
+         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , this.$data, {
             headers: {
              'Content-Type':'multipart/form-data'
             }

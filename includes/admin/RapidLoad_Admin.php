@@ -26,12 +26,46 @@ class RapidLoad_Admin
             add_action('wp_ajax_attach_rule', [ $this, 'attach_rule' ] );
             add_action('wp_ajax_activate_module', [ $this, 'activate_module' ] );
             add_action('wp_ajax_list_module', [ $this, 'list_module' ] );
+            add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    public function update_rapidload_settings(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(isset($_REQUEST['uucss_load_js_method'])){
+
+            $options['uucss_load_js_method'] = $_REQUEST['uucss_load_js_method'];
+
+        }
+
+        if(isset($_REQUEST['defer_inline_js'])){
+
+            $options['defer_inline_js'] = ($_REQUEST['defer_inline_js'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['minify_js'])){
+
+            $options['minify_js'] = ($_REQUEST['minify_js'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_excluded_js_files'])){
+
+            $options['uucss_excluded_js_files'] = $_REQUEST['uucss_excluded_js_files'];
+
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
+
+        wp_send_json_success(true);
     }
 
     public function list_module(){
