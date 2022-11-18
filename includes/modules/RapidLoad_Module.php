@@ -129,7 +129,7 @@ class RapidLoad_Module
             'css' => [
                 'id' => 'css',
                 'options' => [
-                    'uucss_minify' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
+                    'uucss_minify' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ? true : false,
                     'critical_css' => [
                         'status' => isset($options['uucss_enable_cpcss']) && $options['uucss_enable_cpcss'] == "1" ? "on" : "off",
                         'options' => [
@@ -140,11 +140,11 @@ class RapidLoad_Module
                     'unused_css' => [
                         'status' => isset($options['uucss_enable_uucss']) && $options['uucss_enable_uucss'] == "1" ? "on" : "off",
                         'options' => [
-                            'uucss_variables' => isset($options['uucss_load_original']) && $options['uucss_load_original'] == "1" ? true : false,
+                            'uucss_variables' => isset($options['uucss_variables']) && $options['uucss_variables'] == "1" ? true : false,
                             'uucss_keyframes' => isset($options['uucss_keyframes']) && $options['uucss_keyframes'] == "1" ? true : false,
-                            'uucss_fontface' => isset($options['uucss_keyframes']) && $options['uucss_fontface'] == "1" ? true : false,
+                            'uucss_fontface' => isset($options['uucss_fontface']) && $options['uucss_fontface'] == "1" ? true : false,
                             'uucss_include_inline_css' => isset($options['uucss_include_inline_css']) && $options['uucss_include_inline_css'] == "1" ? true : false,
-                            'uucss_cache_busting_v2' => isset($options['uucss_include_inline_css']) && $options['uucss_cache_busting_v2'] == "1" ? true : false,
+                            'uucss_cache_busting_v2' => isset($options['uucss_cache_busting_v2']) && $options['uucss_cache_busting_v2'] == "1" ? true : false,
                             'uucss_excluded_files' => isset($options['uucss_excluded_files']) ? $options['uucss_excluded_files'] : null,
                             'uucss_safelist' => isset($options['uucss_safelist']) ? $options['uucss_safelist'] : null,
                             'uucss_blocklist' => isset($options['uucss_blocklist']) ? $options['uucss_blocklist'] : null,
