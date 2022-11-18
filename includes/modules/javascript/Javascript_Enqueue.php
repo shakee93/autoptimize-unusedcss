@@ -93,7 +93,7 @@ class Javascript_Enqueue
             return;
         }
 
-        $filename = basename(preg_replace('/\?.*/', '', $link));
+        $filename = basename(preg_replace('/\?.*/', '', $link->src));
 
         if(!$filename){
             return;

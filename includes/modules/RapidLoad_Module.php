@@ -33,6 +33,16 @@ class RapidLoad_Module
             'global' => 'cpcss'
         ];
 
+        $this->modules['minify-css'] = [
+            'id' => 'minify-css',
+            'title' => 'Minify CSS',
+            'description' => 'Minify CSS',
+            'group' => 'css',
+            'status' => 'on',
+            'class' => MinifyCSS::class,
+            'global' => 'mincss'
+        ];
+
         $this->modules['javascript'] = [
             'id' => 'javascript',
             'title' => 'Javascript',

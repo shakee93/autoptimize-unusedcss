@@ -282,6 +282,19 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                             do_action('uucss/options/css', $options);
                             ?>
                             <tr>
+                                <th scope="row"><?php _e( 'Enable Remove Unused CSS', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_enable_uucss' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_enable_uucss]' <?php if ( ! empty( $options['uucss_enable_uucss'] ) && '1' === $options['uucss_enable_uucss'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable to remove unused CSS
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="css-whitelist has-tooltip"
                                           data-message="Safelist Selectors (regex supported)">

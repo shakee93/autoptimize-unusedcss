@@ -26,6 +26,8 @@ return array(
     'Javascript_Enqueue' => $baseDir . '/includes/modules/javascript/Javascript_Enqueue.php',
     'Kinsta_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
     'LiteSpeed_Cache_Compatible' => $baseDir . '/includes/third-party/plugins/litespeed-cache/LiteSpeed_Cache_Compatible.php',
+    'MinifyCSS' => $baseDir . '/includes/modules/css/minify-css/MinifyCSS.php',
+    'MinifyCSS_Enqueue' => $baseDir . '/includes/modules/css/minify-css/MinifyCSS_Enqueue.php',
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
     'NinjaFroms_Compatible' => $baseDir . '/includes/third-party/plugins/ninja-forms/NinjaFroms_Compatible.php',
     'Nitropack_Compatible' => $baseDir . '/includes/third-party/plugins/nitropack/Nitropack_Compatible.php',
