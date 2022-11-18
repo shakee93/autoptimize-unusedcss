@@ -9,14 +9,6 @@
           </RouterLink>
         </div>
         <div class="flex mt-1">
-          <div class="pr-1">
-            <div class="items-center mr-4 mt-3">
-              <label>
-                <input id="purple-checkbox" v-model="remove_css" type="checkbox" value=""
-                       class="rounded-lg checkmark accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-              </label>
-            </div>
-          </div>
           <div>
             <h1 class="font-semibold text-base text-black-font">CSS Optimization</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
@@ -27,6 +19,23 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <label>
+                    <input v-model="uucss_load_original" type="checkbox" value=""
+                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                  </label>
+                </div>
+              </div>
+              <div>
+                <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
+                <p class="text-sm text-gray-font">How to load the original CSS files?</p>
+              </div>
+            </div>
+          </div>
+
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -49,7 +58,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="settings.default" type="checkbox" value=""
+                      <input v-model="settings.status" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -60,7 +69,7 @@
                 </div>
               </div>
 
-              <div :class="{ expand: settings.default }" class="pl-9 not-expand">
+              <div :class="{ expand: settings.status }" class="pl-9 not-expand">
                 <div class="flex mt-5">
                   <div class="pr-1">
                     <div class="flex items-center mr-4 mt-3">
@@ -138,27 +147,31 @@
               </div>
             </div>
 
-            <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
-            <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
-            <button v-on:click="uucss_load_js_method = 'user_interaction'"
-                    :class="{ active: uucss_load_js_method === 'user_interaction' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
-              On user interaction
-            </button>
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <label>
+                    <input v-model="rule_based_injection" type="checkbox" value=""
+                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                  </label>
+                </div>
+              </div>
+              <div>
+                <h1 class="font-semibold text-base text-black-font">Rule Based Injection</h1>
+                <p class="text-sm text-gray-font">Enable rule based injection.</p>
+              </div>
+            </div>
 
-            <button v-on:click="uucss_load_js_method = 'asynchronously'"
-                    :class="{ active: uucss_load_js_method === 'asynchronously' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
-              Asynchronously
-            </button>
-            <button v-on:click="uucss_load_js_method = 'remove'"
-                    :class="{ active: uucss_load_js_method === 'remove' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
-              Remove
-            </button>
 
-            <div :class="{ expand : uucss_load_js_method === 'remove'}" class="not-expand">
-              <div class="mt-5 bg-purple-lite border border-purple rounded-2xl px-4 py-3 shadow-md" role="alert">
+            <div :class="{ expand: rule_based_injection }" class="pl-9 not-expand">
+              <RouterLink :to="unused_css_settings_link">
+                <button
+                    class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  Settings
+                </button>
+              </RouterLink>
+              <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
                 <div class="flex">
                   <div class="py-1 mt-1">
                     <svg class="fill-current h-6 w-6 text-purple mr-4" xmlns="http://www.w3.org/2000/svg"
@@ -168,14 +181,17 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-sm text-purple-back-font leading-5">Removing the original files from
-                      loading may not be compatible with all the websites. <br> If you are having site-breaks try on
-                      user
-                      interaction or asynchronously.</p>
+                    <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50
+                      plus pages.
+                      RapidLoad will analyze a parent<br>
+                      page and will apply results for all matched pages.</p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+
+
 
 
           <button @click="saveSettings"
@@ -206,6 +222,37 @@ export default {
     dropDown,
   },
 
+  mounted() {
+
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
+        });
+      }
+    });
+    this.css_config = activeModules;
+
+    if (this.css_config) {
+      Object.keys(this.css_config).map((key) => {
+        if (this.id === this.css_config[key].id) {
+          const option = this.css_config[key].options;
+          this.critical_css.status = option.critical_css.status === 'on';
+          this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
+          this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
+          this.remove_css = option.unused_css.status === 'on';
+          this.rule_based_injection = option.uucss_enable_rules;
+          this.uucss_load_original = option.uucss_load_original;
+          this.uucss_minify = option.uucss_minify;
+          console.log(option)
+        }
+
+      });
+    }
+  },
+
   methods:{
 
     saveSettings(){
@@ -222,18 +269,21 @@ export default {
 
   data() {
     return {
+      css_config: [],
+      id: 'css',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       uucss_minify: false,
       remove_unused_css: false,
+      rule_based_injection: false,
       unused_css_settings_link: '/remove-unused-css',
       critical_css:[{
-        default: false,
+        status: false,
         mobile_critical_css: false,
         additional_critical_css: [],
       }],
       remove_css: false,
       back: '/',
-      uucss_load_js_method: 'user_interaction',
+      uucss_load_original: false,
 
     }
   },
