@@ -105,13 +105,30 @@ class RapidLoad_Admin
 
             }
 
-            // exclude css files
+            if(isset($_REQUEST['uucss_excluded_files'])){
 
-            // safelist
+                $options['uucss_excluded_files'] = $_REQUEST['uucss_excluded_files'];
 
-            // blocklist
+            }
 
-            // safelist packs
+            if(isset($_REQUEST['uucss_safelist'])){
+
+                $options['uucss_safelist'] = $_REQUEST['uucss_safelist'];
+
+            }
+
+            if(isset($_REQUEST['uucss_blocklist'])){
+
+                $options['uucss_blocklist'] = $_REQUEST['uucss_blocklist'];
+
+            }
+
+            if(isset($_REQUEST['whitelist_packs'])){
+
+                $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
+
+            }
+
 
         }
 
