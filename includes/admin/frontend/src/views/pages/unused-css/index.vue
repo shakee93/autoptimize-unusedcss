@@ -199,7 +199,7 @@ import dropDown from '../../../components/dropDown.vue'
 import axios from "axios";
 
 export default {
-  name: "index",
+  name: "css",
 
   components: {
     Vue3TagsInput,
