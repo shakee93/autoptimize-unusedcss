@@ -39,6 +39,98 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
+        // update  css options
+
+        if(isset($_REQUEST['uucss_minify'])){
+
+            $options['uucss_minify'] = ($_REQUEST['uucss_minify'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_enable_cpcss'])){
+
+            $options['uucss_enable_cpcss'] = ($_REQUEST['uucss_enable_cpcss'] == 'true' ? "1" : null);
+
+            if(isset($_REQUEST['uucss_enable_cpcss_mobile'])){
+
+                $options['uucss_enable_cpcss_mobile'] = ($_REQUEST['uucss_enable_cpcss_mobile'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_additional_css'])){
+
+                $options['uucss_additional_css'] = $_REQUEST['uucss_additional_css'];
+
+            }
+
+        }
+
+        if(isset($_REQUEST['uucss_enable_uucss'])){
+
+            $options['uucss_enable_uucss'] = ($_REQUEST['uucss_enable_uucss'] == 'true' ? "1" : null);
+
+            if(isset($_REQUEST['uucss_variables'])){
+
+                $options['uucss_variables'] = ($_REQUEST['uucss_variables'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_keyframes'])){
+
+                $options['uucss_keyframes'] = ($_REQUEST['uucss_keyframes'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_fontface'])){
+
+                $options['uucss_fontface'] = ($_REQUEST['uucss_fontface'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_include_inline_css'])){
+
+                $options['uucss_include_inline_css'] = ($_REQUEST['uucss_include_inline_css'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_cache_busting_v2'])){
+
+                $options['uucss_cache_busting_v2'] = ($_REQUEST['uucss_cache_busting_v2'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_inline_css'])){
+
+                $options['uucss_inline_css'] = ($_REQUEST['uucss_inline_css'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_excluded_files'])){
+
+                $options['uucss_excluded_files'] = $_REQUEST['uucss_excluded_files'];
+
+            }
+
+            if(isset($_REQUEST['uucss_safelist'])){
+
+                $options['uucss_safelist'] = $_REQUEST['uucss_safelist'];
+
+            }
+
+            if(isset($_REQUEST['uucss_blocklist'])){
+
+                $options['uucss_blocklist'] = $_REQUEST['uucss_blocklist'];
+
+            }
+
+            if(isset($_REQUEST['whitelist_packs'])){
+
+                $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
+
+            }
+
+
+        }
 
 
         // update js options
