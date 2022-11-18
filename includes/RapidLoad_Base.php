@@ -457,6 +457,8 @@ class RapidLoad_Base
             return $item;
         }, array_keys( $plugins ), $plugins );
 
+        error_log(json_encode($active_plugins, JSON_PRETTY_PRINT));
+
         $api = new RapidLoad_Api();
 
         $data = $api->post( 'whitelist-packs/wp-suggest', [
