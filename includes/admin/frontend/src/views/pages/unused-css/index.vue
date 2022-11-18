@@ -152,7 +152,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <label>
-                    <input v-model="rule_based_injection" type="checkbox" value=""
+                    <input v-model="uucss_enable_rules" type="checkbox" value=""
                            class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                   </label>
                 </div>
@@ -164,7 +164,7 @@
             </div>
 
 
-            <div :class="{ expand: rule_based_injection }" class="pl-9 not-expand">
+            <div :class="{ expand: uucss_enable_rules }" class="pl-9 not-expand">
               <RouterLink :to="unused_css_settings_link">
                 <button
                     class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
@@ -243,7 +243,7 @@ export default {
           this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
           this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
           this.remove_css = option.unused_css.status === 'on';
-          this.rule_based_injection = option.uucss_enable_rules;
+          this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_load_original = option.uucss_load_original;
           this.uucss_minify = option.uucss_minify;
           console.log(option)
@@ -256,8 +256,16 @@ export default {
   methods:{
 
     saveSettings(){
-      console.log(this.$data)
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , this.$data)
+     const data = {
+       uucss_additional_css : this.critical_css.additional_critical_css,
+       uucss_enable_cpcss_mobile : this.critical_css.mobile_critical_css,
+       uucss_enable_cpcss : this.critical_css.status,
+       uucss_enable_rules : this.uucss_enable_rules,
+       uucss_load_original : this.uucss_load_original,
+       uucss_minify : this.uucss_minify,
+       uucss_enable_uucss : this.remove_css,
+     }
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data)
           .then(response => console.log(response.data))
           .catch(error => {
             this.errorMessage = error.message;
@@ -274,7 +282,7 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       uucss_minify: false,
       remove_unused_css: false,
-      rule_based_injection: false,
+      uucss_enable_rules: false,
       unused_css_settings_link: '/remove-unused-css',
       critical_css:[{
         status: false,
