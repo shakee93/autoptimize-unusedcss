@@ -39,6 +39,10 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
+
+
+        // update js options
+
         if(isset($_REQUEST['uucss_load_js_method'])){
 
             $options['uucss_load_js_method'] = $_REQUEST['uucss_load_js_method'];
