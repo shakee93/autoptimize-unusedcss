@@ -1,6 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Dashboard from '../views/dashboard.vue'
 import CSS from '../views/pages/unused-css/index.vue'
+import javascript from '../views/pages/java-script.vue'
+import assetManager from '../views/pages/asset-manager.vue'
+import removeUnusedCss from '../views/pages/unused-css/remove-unused-css.vue'
+import generalSettings from '../views/pages/general-settings.vue'
 
 
 const router = createRouter({
@@ -27,7 +31,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/java-script.vue')
+      component: javascript
     },
     {
       path: '/speed-monitoring',
@@ -43,7 +47,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/asset-manager.vue')
+      component: assetManager
     },
     {
       path: '/font-optimization',
@@ -67,7 +71,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/unused-css/remove-unused-css.vue')
+      component: removeUnusedCss
     },
     {
       path: '/general-settings',
@@ -75,7 +79,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/general-settings.vue')
+      component: generalSettings
     },
   ]
 })
