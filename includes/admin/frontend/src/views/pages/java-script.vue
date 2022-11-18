@@ -128,11 +128,12 @@ export default {
         });
       }
     });
-    this.javascript_config = activeModules
-    if (this.javascript_config) {
-      Object.keys(this.javascript_config).map((key) => {
-          if (this.id === this.javascript_config[key].id) {
-            const options = this.javascript_config[key].options;
+    this.javascript = activeModules
+    console.log(activeModules);
+    if (this.javascript) {
+      Object.keys(this.javascript).map((key) => {
+          if (this.id === this.javascript[key].id) {
+            const options = this.javascript[key].options;
             this.defer_inline_js = options.defer_inline_js
             this.minify_js = options.minify_js
             this.uucss_excluded_js_files = options.uucss_excluded_js_files
@@ -144,15 +145,8 @@ export default {
   },
   methods:{
        async saveSettings(){
-         const data = {
-           defer_inline_js: this.defer_inline_js,
-           js_optimization: this.js_optimization,
-           minify_js: this.minify_js,
-           uucss_load_js_method: this.uucss_load_js_method,
-           uucss_excluded_js_files: this.uucss_excluded_js_files,
-         }
 
-         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_js_settings' , data, {
+         await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , this.$data, {
             headers: {
              'Content-Type':'multipart/form-data'
             }
@@ -167,7 +161,7 @@ export default {
 
   data() {
     return {
-      javascript_config: [],
+      javascript: [],
       id: 'javascript',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       defer_inline_js: false,

@@ -7,7 +7,7 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
 
-      <li v-for="item in items" :key="item.link"
+      <li v-for="item in items" :key="item.id"
           class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
           <div class="content p-4">

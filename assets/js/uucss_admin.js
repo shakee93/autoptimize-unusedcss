@@ -648,7 +648,7 @@
                             })
                         }
 
-                            if(rowData.meta.warnings && rowData.meta.warnings.length){
+                            if(rowData.meta && rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');

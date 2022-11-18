@@ -278,9 +278,36 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                                     <h4>CSS Optimization</h4>
                                 </th>
                             </tr>
+                            <tr>
+                                <th scope="row"><?php _e( 'Enable CSS Optimization', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_enable_css' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_enable_css]' <?php if ( ! empty( $options['uucss_enable_css'] ) && '1' === $options['uucss_enable_css'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable CSS Optimization
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
+
                             <?php
                             do_action('uucss/options/css', $options);
                             ?>
+                            <tr>
+                                <th scope="row"><?php _e( 'Enable Remove Unused CSS', 'uucss' ); ?></th>
+                                <td>
+                                    <label><input id='uucss_enable_uucss' type='checkbox'
+                                                  name='autoptimize_uucss_settings[uucss_enable_uucss]' <?php if ( ! empty( $options['uucss_enable_uucss'] ) && '1' === $options['uucss_enable_uucss'] ) {
+                                            echo 'checked="checked"';
+                                        } ?> value='1'>
+                                        <i>
+                                            Enable to remove unused CSS
+                                        </i>
+                                    </label>
+                                </td>
+                            </tr>
                             <tr>
                                 <th scope="row"><?php _e( 'Sitewide Safelist', 'uucss' ); ?>
                                     <span class="css-whitelist has-tooltip"
