@@ -19,14 +19,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/pages/unused-css/index.vue')
     },
-    {
-      path: '/critical-css',
-      name: 'critical-css',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/critical-css.vue')
-    },
+
     {
       path: '/java-script',
       name: 'java-script',

@@ -22,6 +22,18 @@
       <div>
         <div class="p-4 pl-32 pr-72">
 
+          <div class="grid mb-5">
+            <h1 class="font-semibold text-base text-black-font">Exclude URLs</h1>
+            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <textarea
+                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="force-include" type="text" placeholder=""></textarea>
+            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
+                ‘elementor-*, *-gallery’ etc...</p>
+            </div>
+          </div>
+
           <div class="grid">
             <div class="mb-5">
               <div class="flex">
@@ -59,22 +71,6 @@
               </div>
             </div>
 
-          <div class="mb-5">
-            <div class="flex">
-              <div class="pr-1">
-                <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="rule_based_injection" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
-                </div>
-              </div>
-              <div>
-                <h1 class="font-semibold text-base text-black-font">Rule Based Injection</h1>
-                <p class="text-sm text-gray-font">Enable rule based injection.</p>
-              </div>
-            </div>
-          </div>
 
           <div class="flex mt-5">
             <div class="pr-1">
@@ -152,18 +148,6 @@
             </div>
           </div>
 
-            <div class="grid mb-5 mt-5">
-              <h1 class="font-semibold text-base text-black-font">Exclude URLs</h1>
-              <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-              <textarea
-                  class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                  ‘elementor-*, *-gallery’ etc...</p>
-              </div>
-            </div>
-
           <button
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
@@ -198,7 +182,6 @@ export default {
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-      rule_based_injection: false,
       debug_mode: false,
       query_string: false,
       back: '/',

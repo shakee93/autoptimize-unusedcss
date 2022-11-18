@@ -70,7 +70,7 @@ export default {
       }
     });
     this.items_data = activeModules
-    console.log(activeModules);
+
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
