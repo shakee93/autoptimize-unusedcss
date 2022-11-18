@@ -526,8 +526,7 @@ class RapidLoad_Admin
             $diffs = array_merge( $diffs, $diffs_invert );
 
             // if these settings are changed cache will be cleared
-            if ( isset( $diffs['uucss_minify'] ) ||
-                isset( $diffs['uucss_keyframes'] ) ||
+            if ( isset( $diffs['uucss_keyframes'] ) ||
                 isset( $diffs['uucss_fontface'] ) ||
                 isset( $diffs['uucss_analyze_javascript'] ) ||
                 isset( $diffs['uucss_safelist'] ) ||
