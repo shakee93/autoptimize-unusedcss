@@ -269,6 +269,7 @@ export default {
     saveSettings(){
 
       const data = {
+        uucss_enable_uucss : true,
         uucss_cache_busting_v2 : this.uucss_cache_busting_v2,
         uucss_excluded_files : this.uucss_excluded_files,
         uucss_fontface : this.uucss_fontface,
