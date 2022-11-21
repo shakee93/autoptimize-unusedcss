@@ -288,11 +288,11 @@ export default {
 
       const safelist = this.uucss_safelist;
       if(safelist){
-        this.safelist = JSON.stringify((safelist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+        this.safelist = '"' + JSON.stringify((safelist).split("\n").map((r)=>{ return { type : 'greedy', rule : r  } })) + '"';
       }
       const blocklist = this.uucss_blocklist;
       if(blocklist){
-        this.blocklist = JSON.stringify((blocklist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+        this.blocklist = '"' + JSON.stringify((blocklist).split("\n").map((r)=>{ return { type : 'greedy', rule : r  } })) + '"';
       }
 
       console.log('white list pack: '+this.whitelist)
@@ -304,8 +304,8 @@ export default {
         uucss_include_inline_css: this.uucss_include_inline_css,
         uucss_keyframes : this.uucss_keyframes,
         uucss_variables : this.uucss_variables,
-        uucss_safelist: safelist,
-        uucss_blocklist: blocklist,
+        uucss_safelist: this.safelist,
+        uucss_blocklist: this.blocklist,
         whitelist_packs: this.whitelist,
         uucss_inline_css : this.uucss_inline_css,
       }
