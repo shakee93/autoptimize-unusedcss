@@ -304,7 +304,7 @@ export default {
         uucss_include_inline_css: this.uucss_include_inline_css,
         uucss_keyframes : this.uucss_keyframes,
         uucss_variables : this.uucss_variables,
-        uucss_safelist: this.safelist,
+        uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.blocklist,
         whitelist_packs: this.whitelist,
         uucss_inline_css : this.uucss_inline_css,

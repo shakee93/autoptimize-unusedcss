@@ -113,13 +113,24 @@ class RapidLoad_Admin
 
             if(isset($_REQUEST['uucss_safelist'])){
 
-                $options['uucss_safelist'] = $_REQUEST['uucss_safelist'];
+                $value = explode("\r\n", $_REQUEST['uucss_safelist']);
+
+                $value = array_map(function ($v){
+                    return (object)[
+                        'type' => 'greedy',
+                        'rule' => $v
+                    ];
+                }, $value);
+
+                $options['uucss_safelist'] = json_encode($value);
 
             }
 
             if(isset($_REQUEST['uucss_blocklist'])){
 
-                $options['uucss_blocklist'] = $_REQUEST['uucss_blocklist'];
+                $value = explode("\r\n", $_REQUEST['uucss_blocklist']);
+
+                $options['uucss_blocklist'] = json_encode($value);
 
             }
 

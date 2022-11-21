@@ -50,8 +50,6 @@
          * @type {any}
          */
 
-        console.log($('#uucss_safelist').val())
-
         window.safelist = JSON.parse($('#uucss_safelist').val() || '[]');
         window.blocklist = JSON.parse($('#uucss_blocklist').val() || '[]');
         drawSafeList();
