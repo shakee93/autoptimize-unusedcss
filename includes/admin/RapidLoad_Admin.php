@@ -115,12 +115,16 @@ class RapidLoad_Admin
 
                 $value = explode("\r\n", $_REQUEST['uucss_safelist']);
 
+                $value = array_filter($value, function ($v){
+                    return !empty($v);
+                });
+
                 $value = array_map(function ($v){
                     return (object)[
                         'type' => 'greedy',
                         'rule' => $v
                     ];
-                }, $value);
+                }, array_values($value));
 
                 $options['uucss_safelist'] = json_encode($value);
 
@@ -130,7 +134,11 @@ class RapidLoad_Admin
 
                 $value = explode("\r\n", $_REQUEST['uucss_blocklist']);
 
-                $options['uucss_blocklist'] = json_encode($value);
+                $value = array_filter($value, function ($v){
+                   return !empty($v);
+                });
+
+                $options['uucss_blocklist'] = json_encode(array_values($value));
 
             }
 

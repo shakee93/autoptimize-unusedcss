@@ -260,7 +260,7 @@ export default {
           }
           const blocklist = option.unused_css.options.uucss_blocklist;
           if(blocklist){
-            this.blocklist = JSON.parse(blocklist).map((i)=>{ return i.rule }).join("\r\n");
+            this.blocklist = JSON.parse(blocklist).map((i)=>{ return i }).join("\r\n");
           }
           this.uucss_variables = option.unused_css.options.uucss_variables;
           this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
@@ -286,16 +286,6 @@ export default {
 
     saveSettings(){
 
-      const safelist = this.uucss_safelist;
-      if(safelist){
-        this.safelist = '"' + JSON.stringify((safelist).split("\n").map((r)=>{ return { type : 'greedy', rule : r  } })) + '"';
-      }
-      const blocklist = this.uucss_blocklist;
-      if(blocklist){
-        this.blocklist = '"' + JSON.stringify((blocklist).split("\n").map((r)=>{ return { type : 'greedy', rule : r  } })) + '"';
-      }
-
-      console.log('white list pack: '+this.whitelist)
       const data = {
         uucss_enable_uucss : true,
         uucss_cache_busting_v2 : this.uucss_cache_busting_v2,
@@ -305,7 +295,7 @@ export default {
         uucss_keyframes : this.uucss_keyframes,
         uucss_variables : this.uucss_variables,
         uucss_safelist: this.uucss_safelist,
-        uucss_blocklist: this.blocklist,
+        uucss_blocklist: this.uucss_blocklist,
         whitelist_packs: this.whitelist,
         uucss_inline_css : this.uucss_inline_css,
       }
