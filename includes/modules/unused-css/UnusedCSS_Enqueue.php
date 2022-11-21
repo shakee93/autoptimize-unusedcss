@@ -384,16 +384,22 @@ class UnusedCSS_Enqueue {
 
         $inline = $this->get_inline_content( $link );
 
-        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 0 ) ) {
+        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 1000 ) ) {
             return;
         }
 
+        $source_file = '';
+        $source_media = '';
+
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
-        $source_file = 'data-src="'. $old_link . '"';
-        $source_media = 'data-media="'. $sheet->media . '"';
 
-        $sheet->__set('outertext', sprintf('<style %s %s %s %s >%s</style>', $file_name, $tag_name, $source_file, $source_media, $inline['content']));
+        if($this->options['uucss_load_original']){
+            $source_file = 'data-src="'. $old_link . '"';
+            $source_media = 'data-media="'. $sheet->media . '"';
+        }
+
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name .' '. $source_file .' '. $source_media .'>'. htmlspecialchars($inline['content']) .'</style>');
     }
 
     private function get_inline_content( $file_name ) {

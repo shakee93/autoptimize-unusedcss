@@ -8,7 +8,7 @@
             var files = document.querySelectorAll('link[href*="uucss/uucss-"]')
 
             if (!files.length || fired) {
-                //return;
+                return;
             }
 
             for (var i = 0; i < files.length; i++) {
@@ -55,7 +55,6 @@
                 link.type = 'text/css';
                 link.href = inlines_style.getAttribute('data-src');
                 link.media = inlines_style.getAttribute('data-media');
-                link.uucss = 'true';
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
