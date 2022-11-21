@@ -394,7 +394,7 @@ class UnusedCSS_Enqueue {
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
 
-        if($this->options['uucss_load_original']){
+        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1"){
             $source_file = 'data-src="'. $old_link . '"';
             $source_media = 'data-media="'. $sheet->media . '"';
         }
