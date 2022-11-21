@@ -164,7 +164,7 @@
 
 
                 <div class="mt-3 z-50 -ml-9 cursor-pointer">
-                  <svg :class="{'animate-spin': refresh_element}" @click="refresh_element = !refresh_element"
+                  <svg :class="{'animate-spin': refresh_element}" @click="loadWhitelistPacks"
                        class="fill-none transition ease-in-out" width="20px" height="20px"
                        xmlns="http://www.w3.org/2000/svg"
                        viewBox="0 0 13 13">
@@ -279,6 +279,14 @@ export default {
   },
 
   methods: {
+    loadWhitelistPacks(){
+      axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
+          .then(response => console.log(response.data))
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    },
     handleChangeTag(tags) {
       this.whitelist = tags;
     },
