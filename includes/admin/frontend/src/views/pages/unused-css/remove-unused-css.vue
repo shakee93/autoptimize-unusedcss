@@ -256,11 +256,11 @@ export default {
           console.log(option)
           const safelist = option.unused_css.options.uucss_safelist;
           if(safelist){
-            JSON.parse(safelist).map((i)=>{ return i.rule }).join("\r\n");
+            this.safelist = JSON.parse(safelist).map((i)=>{ return i.rule }).join("\r\n");
           }
           const blocklist = option.unused_css.options.uucss_blocklist;
           if(blocklist){
-            JSON.parse(blocklist).map((i)=>{ return i.rule }).join("\r\n");
+            this.blocklist = JSON.parse(blocklist).map((i)=>{ return i.rule }).join("\r\n");
           }
           this.uucss_variables = option.unused_css.options.uucss_variables;
           this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
@@ -287,11 +287,11 @@ export default {
 
       const safelist = this.uucss_safelist;
       if(safelist){
-        JSON.stringify((safelist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+        this.safelist = JSON.stringify((safelist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
       }
       const blocklist = this.uucss_blocklist;
       if(blocklist){
-        JSON.stringify((blocklist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+        this.blocklist = JSON.stringify((blocklist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
       }
 
       console.log('white list pack: '+this.whitelist)
