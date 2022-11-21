@@ -281,12 +281,19 @@ export default {
 
   methods: {
     loadWhitelistPacks(){
+      this.refresh_element = true;
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
-          .then(response => console.log(response.data))
+          .then(response =>{
+            //console.log(response.data)
+            response.data.data.map((value)=>{
+              this.whitelist_packs = value.name;
+            })
+          } )
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
           });
+      this.refresh_element = false;
     },
     handleChangeTag(tags) {
       this.whitelist = tags;
