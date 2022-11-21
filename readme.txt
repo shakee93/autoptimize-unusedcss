@@ -3,7 +3,7 @@ Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
 Requires at least: 4.0
-Tested up to: 6.0
+Tested up to: 6.1
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
