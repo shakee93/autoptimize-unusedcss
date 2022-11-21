@@ -97,7 +97,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.34 - 21/11/2022 =
- * improve: remove no-scripts tag wrapping for replaceable stylesheets
+ * fix: wrong folder permission for the cache folder
+ * fix: load original css not working for inlined stylesheets
+ * improve: remove critical-css styles when load original css enabled
+ * feat: tested up to WordPress 6.1
 
 = 1.6.33 - 21/10/2022 =
  * improve: remove no-scripts tag wrapping for replaceable stylesheets

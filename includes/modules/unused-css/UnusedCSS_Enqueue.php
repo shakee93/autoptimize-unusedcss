@@ -250,11 +250,13 @@ class UnusedCSS_Enqueue {
                             $sheet->uucss = true;
                         }
 
+                        $old_link = $sheet->href;
+
                         $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
 
                         if ( isset( $this->options['uucss_inline_css'] ) ) {
 
-                            $this->inline_sheet($sheet, $uucss_file);
+                            $this->inline_sheet($sheet, $uucss_file, $old_link);
                         }
 
                         array_push( $this->inject->injected_css_files, $newLink );
@@ -378,19 +380,20 @@ class UnusedCSS_Enqueue {
         ]);
     }
 
-    private function inline_sheet( $sheet, $link ) {
+    private function inline_sheet( $sheet, $link , $old_link) {
 
         $inline = $this->get_inline_content( $link );
 
-        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 1000 ) ) {
+        if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 0 ) ) {
             return;
         }
 
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
+        $source_file = 'data-src="'. $old_link . '"';
+        $source_media = 'data-media="'. $sheet->media . '"';
 
-        $sheet->outertext = sprintf('<style %s %s>%s</style>', $file_name, $tag_name, $inline['content']);
-
+        $sheet->__set('outertext', sprintf('<style %s %s %s %s >%s</style>', $file_name, $tag_name, $source_file, $source_media, $inline['content']));
     }
 
     private function get_inline_content( $file_name ) {

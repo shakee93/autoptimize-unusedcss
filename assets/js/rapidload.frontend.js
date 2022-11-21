@@ -8,7 +8,7 @@
             var files = document.querySelectorAll('link[href*="uucss/uucss-"]')
 
             if (!files.length || fired) {
-                return;
+                //return;
             }
 
             for (var i = 0; i < files.length; i++) {
@@ -32,12 +32,37 @@
                 link.prev = file
 
                 link.addEventListener('load',function (e) {
-                    if (link.prev) link.prev.remove();
+                    if (this.prev) this.prev.remove();
                 });
 
                 file.parentNode.insertBefore(link, file.nextSibling);
 
                 fired = true
+            }
+
+            var inlined_styles = document.querySelectorAll('style[data-src]')
+
+            if (!inlined_styles.length) {
+                return;
+            }
+
+            for (var i = 0; i < inlined_styles.length; i++){
+
+                var inlines_style = inlined_styles[i];
+
+                var link  = document.createElement('link');
+                link.rel  = 'stylesheet';
+                link.type = 'text/css';
+                link.href = inlines_style.getAttribute('data-src');
+                link.media = inlines_style.getAttribute('data-media');
+                link.uucss = 'true';
+                link.prev = inlines_style
+
+                link.addEventListener('load',function (e) {
+                    if (this.prev) this.prev.remove()
+                });
+
+                inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
             }
         }
 
