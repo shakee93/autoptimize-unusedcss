@@ -21,8 +21,6 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'CriticalCSS_Queue' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Queue.php',
         'CriticalCSS_Store' => __DIR__ . '/../..' . '/includes/modules/critical-css/CriticalCSS_Store.php',
         'Elementor_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/elementor/Elementor_Compatible.php',
-        'Flatted' => __DIR__ . '/../..' . '/includes/admin/views/app/node_modules/flatted/php/flatted.php',
-        'FlattedString' => __DIR__ . '/../..' . '/includes/admin/views/app/node_modules/flatted/php/flatted.php',
         'GoogleModPageSpeedCompatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kagg-pagespeed-module/GoogleModPageSpeedCompatible.php',
         'HideMyWP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/hide-my-wp/HideMyWP_Compatible.php',
         'Kinsta_Cache_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/kinsta-cache/Kinsta_Cache_Compatible.php',
