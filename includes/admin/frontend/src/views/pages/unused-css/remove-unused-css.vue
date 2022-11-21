@@ -109,7 +109,7 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-            <textarea
+            <textarea v-model="uucss_safelist"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -124,7 +124,7 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-            <textarea
+            <textarea v-model="uucss_blocklist"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -156,10 +156,11 @@
               plugins and themes.</p>
             <div class="grid mb-5">
               <div class="flex text-sm">
-                <vue3-tags-input :tags="tags"
+                <vue3-tags-input :tags="whitelist_packs"
+                                 @on-tags-changed="handleChangeTag"
                                  class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                  placeholder="Type your plugin..."/>
-                <!--          <textarea v-model="tags" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
+<!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
 
 
                 <div class="mt-3 z-50 -ml-9 cursor-pointer">
@@ -252,13 +253,25 @@ export default {
       Object.keys(this.remove_css_config).map((key) => {
         if (this.id === this.remove_css_config[key].id) {
           const option = this.remove_css_config[key].options;
+          console.log(option)
+          const safelist = option.unused_css.options.uucss_safelist;
+          if(safelist){
+            JSON.parse(safelist).map((i)=>{ return i.rule }).join("\r\n");
+          }
+          const blocklist = option.unused_css.options.uucss_blocklist;
+          if(blocklist){
+            JSON.parse(blocklist).map((i)=>{ return i.rule }).join("\r\n");
+          }
           this.uucss_variables = option.unused_css.options.uucss_variables;
           this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
           this.uucss_fontface = option.unused_css.options.uucss_fontface;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
           this.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
           this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files;
-          console.log(option)
+          this.uucss_safelist= safelist;
+          this.uucss_blocklist= blocklist;
+          this.whitelist_packs= option.unused_css.options.whitelist_packs;
+
         }
 
       });
@@ -266,8 +279,22 @@ export default {
   },
 
   methods: {
+    handleChangeTag(tags) {
+      this.whitelist = tags;
+    },
+
     saveSettings(){
 
+      const safelist = this.uucss_safelist;
+      if(safelist){
+        JSON.stringify((safelist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+      }
+      const blocklist = this.uucss_blocklist;
+      if(blocklist){
+        JSON.stringify((blocklist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
+      }
+
+      console.log('white list pack: '+this.whitelist)
       const data = {
         uucss_cache_busting_v2 : this.uucss_cache_busting_v2,
         uucss_excluded_files : this.uucss_excluded_files,
@@ -275,7 +302,9 @@ export default {
         uucss_inline_css : this.uucss_inline_css,
         uucss_keyframes : this.uucss_keyframes,
         uucss_variables : this.uucss_variables,
-
+        uucss_safelist: safelist,
+        uucss_blocklist: blocklist,
+        whitelist_packs: this.whitelist,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {
@@ -304,9 +333,10 @@ export default {
       uucss_cache_busting_v2: false,
       inline_small_css: false,
       uucss_excluded_files : '',
-
-      tag: '',
-      tags: ['Elementor'],
+      uucss_safelist: '',
+      uucss_blocklist: '',
+      whitelist: [],
+      whitelist_packs: [],
       refresh_element: false,
       back: '/unused-css',
 
