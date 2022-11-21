@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.6.34 - 21/11/2022 =
+ * improve: remove no-scripts tag wrapping for replaceable stylesheets
+
 = 1.6.33 - 21/10/2022 =
  * improve: remove no-scripts tag wrapping for replaceable stylesheets
 
