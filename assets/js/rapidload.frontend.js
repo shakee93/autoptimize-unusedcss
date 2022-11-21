@@ -3,6 +3,7 @@
     var RapidLoad = function () {
 
         var fired = false
+        var fired_inline = false
 
         var load_css = function (uucss) {
             var files = document.querySelectorAll('link[href*="uucss/uucss-"]')
@@ -40,9 +41,13 @@
                 fired = true
             }
 
+
+        }
+
+        var load_inline_css = function (uucss){
             var inlined_styles = document.querySelectorAll('style[data-src]')
 
-            if (!inlined_styles.length) {
+            if (!inlined_styles.length || fired_inline) {
                 return;
             }
 
@@ -62,6 +67,8 @@
                 });
 
                 inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
+
+                fired_inline = true;
             }
         }
 
@@ -82,6 +89,7 @@
 
                 var listener = function () {
                     load_css(window.rapidload.files)
+                    load_inline_css(window.rapidload.files)
                     if(window.rapidload && window.rapidload.remove_cpcss_on_ui){
                         setTimeout(removeCriticalCSS, 200);
                     }
