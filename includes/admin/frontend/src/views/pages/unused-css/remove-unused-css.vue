@@ -267,7 +267,7 @@ export default {
           this.uucss_fontface = option.unused_css.options.uucss_fontface;
           this.uucss_include_inline_css = option.unused_css.options.uucss_include_inline_css;
           this.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
-          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files;
+          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files.split(",").join("\r\n");
           this.uucss_safelist= this.safelist;
           this.uucss_blocklist= this.blocklist;
           this.whitelist_packs= option.unused_css.options.whitelist_packs;

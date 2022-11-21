@@ -107,7 +107,15 @@ class RapidLoad_Admin
 
             if(isset($_REQUEST['uucss_excluded_files'])){
 
-                $options['uucss_excluded_files'] = $_REQUEST['uucss_excluded_files'];
+                $value = explode("\r\n", $_REQUEST['uucss_excluded_files']);
+
+                $value = array_filter($value, function ($v){
+                    return !empty($v);
+                });
+
+                $value = implode(",",array_values($value));
+
+                $options['uucss_excluded_files'] = $value;
 
             }
 
@@ -144,7 +152,9 @@ class RapidLoad_Admin
 
             if(isset($_REQUEST['whitelist_packs'])){
 
-                $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
+                $value = explode(",", $_REQUEST['whitelist_packs']);
+
+                $options['whitelist_packs'] = json_encode($value);
 
             }
 
