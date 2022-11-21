@@ -152,9 +152,7 @@ class RapidLoad_Admin
 
             if(isset($_REQUEST['whitelist_packs'])){
 
-                $value = explode(",", $_REQUEST['whitelist_packs']);
-
-                $options['whitelist_packs'] = json_encode($value);
+                $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
 
             }
 

@@ -270,6 +270,9 @@ export default {
           this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files.split(",").join("\r\n");
           this.uucss_safelist= this.safelist;
           this.uucss_blocklist= this.blocklist;
+
+          console.log(option.unused_css.options.whitelist_packs)
+
           this.whitelist_packs= option.unused_css.options.whitelist_packs;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
 
@@ -285,8 +288,8 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response =>{
             //console.log(response.data)
-            response.data.data.map((value)=>{
-              this.whitelist_packs = value.name;
+            this.whitelist_packs = response.data.data.map((value)=>{
+               return value.id + ':' + value.name;
             })
           } )
           .catch(error => {
