@@ -75,7 +75,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="uucss_inline_css" type="checkbox" value=""
+                      <input v-model="uucss_include_inline_css" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -196,7 +196,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="inline_small_css" type="checkbox" value=""
+                      <input v-model="uucss_inline_css" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -260,17 +260,18 @@ export default {
           }
           const blocklist = option.unused_css.options.uucss_blocklist;
           if(blocklist){
-            this.blocklist = JSON.parse(blocklist).map((i)=>{ return i.rule }).join("\r\n");
+            this.blocklist = JSON.parse(blocklist).map((i)=>{ return i }).join("\r\n");
           }
           this.uucss_variables = option.unused_css.options.uucss_variables;
           this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
           this.uucss_fontface = option.unused_css.options.uucss_fontface;
-          this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
+          this.uucss_include_inline_css = option.unused_css.options.uucss_include_inline_css;
           this.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
-          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files;
+          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files.split(",").join("\r\n");
           this.uucss_safelist= this.safelist;
           this.uucss_blocklist= this.blocklist;
           this.whitelist_packs= option.unused_css.options.whitelist_packs;
+          this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
 
         }
 
@@ -293,27 +294,18 @@ export default {
 
     saveSettings(){
 
-      const safelist = this.uucss_safelist;
-      if(safelist){
-        this.safelist = JSON.stringify((safelist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
-      }
-      const blocklist = this.uucss_blocklist;
-      if(blocklist){
-        this.blocklist = JSON.stringify((blocklist).split("\r\n").map((r)=>{ return { type : 'greedy', rule : r  } }));
-      }
-
-      console.log('white list pack: '+this.whitelist)
       const data = {
         uucss_enable_uucss : true,
         uucss_cache_busting_v2 : this.uucss_cache_busting_v2,
         uucss_excluded_files : this.uucss_excluded_files,
         uucss_fontface : this.uucss_fontface,
-        uucss_inline_css : this.uucss_inline_css,
+        uucss_include_inline_css: this.uucss_include_inline_css,
         uucss_keyframes : this.uucss_keyframes,
         uucss_variables : this.uucss_variables,
-        uucss_safelist: safelist,
-        uucss_blocklist: blocklist,
+        uucss_safelist: this.uucss_safelist,
+        uucss_blocklist: this.uucss_blocklist,
         whitelist_packs: this.whitelist,
+        uucss_inline_css : this.uucss_inline_css,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {
@@ -338,6 +330,7 @@ export default {
       uucss_variables: false,
       uucss_keyframes: false,
       uucss_fontface: false,
+      uucss_include_inline_css : false,
       uucss_inline_css: false,
       uucss_cache_busting_v2: false,
       inline_small_css: false,

@@ -107,25 +107,54 @@ class RapidLoad_Admin
 
             if(isset($_REQUEST['uucss_excluded_files'])){
 
-                $options['uucss_excluded_files'] = $_REQUEST['uucss_excluded_files'];
+                $value = explode("\r\n", $_REQUEST['uucss_excluded_files']);
+
+                $value = array_filter($value, function ($v){
+                    return !empty($v);
+                });
+
+                $value = implode(",",array_values($value));
+
+                $options['uucss_excluded_files'] = $value;
 
             }
 
             if(isset($_REQUEST['uucss_safelist'])){
 
-                $options['uucss_safelist'] = $_REQUEST['uucss_safelist'];
+                $value = explode("\r\n", $_REQUEST['uucss_safelist']);
+
+                $value = array_filter($value, function ($v){
+                    return !empty($v);
+                });
+
+                $value = array_map(function ($v){
+                    return (object)[
+                        'type' => 'greedy',
+                        'rule' => $v
+                    ];
+                }, array_values($value));
+
+                $options['uucss_safelist'] = json_encode($value);
 
             }
 
             if(isset($_REQUEST['uucss_blocklist'])){
 
-                $options['uucss_blocklist'] = $_REQUEST['uucss_blocklist'];
+                $value = explode("\r\n", $_REQUEST['uucss_blocklist']);
+
+                $value = array_filter($value, function ($v){
+                   return !empty($v);
+                });
+
+                $options['uucss_blocklist'] = json_encode(array_values($value));
 
             }
 
             if(isset($_REQUEST['whitelist_packs'])){
 
-                $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
+                $value = explode(",", $_REQUEST['whitelist_packs']);
+
+                $options['whitelist_packs'] = json_encode($value);
 
             }
 
