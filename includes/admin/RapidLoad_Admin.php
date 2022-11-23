@@ -198,6 +198,50 @@ class RapidLoad_Admin
 
         }
 
+        // update general settings
+
+        if(isset($_REQUEST['uucss_query_string'])){
+
+            $options['uucss_query_string'] = ($_REQUEST['uucss_query_string'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_enable_debug'])){
+
+            $options['uucss_enable_debug'] = ($_REQUEST['uucss_enable_debug'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_disable_add_to_queue'])){
+
+            $options['uucss_disable_add_to_queue'] = ($_REQUEST['uucss_disable_add_to_queue'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_disable_add_to_re_queue'])){
+
+            $options['uucss_disable_add_to_re_queue'] = ($_REQUEST['uucss_disable_add_to_re_queue'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_jobs_per_queue'])){
+
+            $options['uucss_jobs_per_queue'] = $_REQUEST['uucss_jobs_per_queue'];
+
+        }
+
+        if(isset($_REQUEST['uucss_queue_interval'])){
+
+            $options['uucss_queue_interval'] = $_REQUEST['uucss_queue_interval'];
+
+        }
+
+        if(isset($_REQUEST['uucss_excluded_links'])){
+
+            $options['uucss_excluded_links'] = $_REQUEST['uucss_excluded_links'];
+
+        }
+
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
         wp_send_json_success(true);
