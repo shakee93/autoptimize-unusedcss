@@ -158,6 +158,7 @@
               <div class="flex text-sm">
                 <vue3-tags-input :tags="whitelist_packs"
                                  @on-tags-changed="handleChangeTag"
+                                 @keydown.enter.prevent
                                  class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                  placeholder="Type your plugin..."/>
 <!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
@@ -291,12 +292,13 @@ export default {
             this.whitelist_packs = response.data.data.map((value)=>{
                return value.id + ':' + value.name;
             })
+            this.refresh_element = false;
           } )
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
           });
-      this.refresh_element = false;
+
     },
     handleChangeTag(tags) {
       this.whitelist = tags;
