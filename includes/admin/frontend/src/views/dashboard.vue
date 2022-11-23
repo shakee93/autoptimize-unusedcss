@@ -21,7 +21,7 @@
             <div class="col-start-1 col-end-3 ..." >
               <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
-                <button>Settings</button>
+                <button :disabled="item.status !== 'on'" >Settings</button>
               </RouterLink>
             </div>
             <div class="col-end-7 col-span-2 ...">

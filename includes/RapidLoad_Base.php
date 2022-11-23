@@ -354,8 +354,10 @@ class RapidLoad_Base
     public static function uucss_activate() {
 
         $default_options = self::get_option('autoptimize_uucss_settings',[
+            'uucss_enable_css' => "1",
+            'uucss_enable_uucss' => "1",
+            'uucss_minify' => "1",
             'uucss_load_original' => "1",
-            'uucss_enable_rules' => "1",
         ]);
 
         if(!isset($default_options['uucss_api_key'])){

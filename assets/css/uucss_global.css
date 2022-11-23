@@ -873,3 +873,7 @@ body.settings_page_rapidload-onboarding{
     color: #ffc107;
     font-size: 14px;
 }
+
+a.toplevel_page_rapidload img{
+    margin: 0 auto;
+}
