@@ -102,6 +102,8 @@
 
                 <div class="flex">
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
+                  <p>{{queue_option.uucss_jobs_per_queue}}</p>
+                  <p>{{queue_option.uucss_queue_interval}}</p>
                   <dropDown
                       :options="queue_jobs_options"
                       :default="queue_option.uucss_jobs_per_queue"
@@ -194,22 +196,14 @@ export default {
       Object.keys(this.general_config).map((key) => {
         if (this.id === this.general_config[key].id) {
           const option = this.general_config[key].options;
-          console.log(option)
+
           this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
           this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
           this.uucss_enable_debug = option.uucss_enable_debug;
           this.uucss_excluded_links = option.uucss_excluded_links;
           this.uucss_query_string = option.uucss_query_string;
-          if(option.uucss_jobs_per_queue < 2){
-            this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue + " Job";
-          }else{
-            this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue + " Jobs";
-          }
-          if(option.uucss_queue_interval < 61){
-            this.queue_option.uucss_queue_interval = option.uucss_queue_interval / 60 + " Minute";
-          }else{
-            this.queue_option.uucss_queue_interval = option.uucss_queue_interval / 60 + " Minutes";
-          }
+          this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
+          this.queue_option.uucss_queue_interval = option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
 
 
         }
