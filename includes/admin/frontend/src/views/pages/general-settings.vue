@@ -25,7 +25,7 @@
           <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Exclude URLs</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <textarea
+            <textarea v-model="uucss_excluded_links"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="force-include" type="text" placeholder=""></textarea>
             <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -40,7 +40,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="query_string" type="checkbox" value=""
+                      <input v-model="uucss_query_string" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -59,7 +59,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="debug_mode" type="checkbox" value=""
+                      <input v-model="uucss_enable_debug" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -104,16 +104,16 @@
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
                   <dropDown
                       :options="queue_jobs_options"
-                      :default="'4 Jobs'"
+                      :default="queue_option.uucss_jobs_per_queue"
                       class="select mr-3"
-                      @input="this.queue_jobs=$event"
+                      @input="queue_option.uucss_jobs_per_queue=$event"
                   />
                   <p class="text-sm text-gray-font pr-3 pt-1">Per</p>
                   <dropDown
                       :options="jobs_timing_options"
-                      :default="'10 Minutes'"
+                      :default="queue_option.uucss_queue_interval"
                       class="select mr-3" style="min-width: 110px"
-                      @input="this.queue_jobs_time=$event"
+                      @input="queue_option.uucss_queue_interval=$event"
                   />
                 </div>
               </div>
@@ -122,7 +122,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <label>
-                    <input v-model="queue_option.disable_auto_queue" type="checkbox" value=""
+                    <input v-model="queue_option.uucss_disable_add_to_queue" type="checkbox" value=""
                            class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                   </label>
                 </div>
@@ -136,7 +136,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <label>
-                    <input v-model="queue_option.disable_requeue" type="checkbox" value=""
+                    <input v-model="queue_option.uucss_disable_add_to_re_queue" type="checkbox" value=""
                            class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                   </label>
                 </div>
@@ -148,7 +148,7 @@
             </div>
           </div>
 
-          <button
+          <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
@@ -166,6 +166,7 @@
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../components/dropDown.vue'
+import axios from "axios";
 
 export default {
   name: "general-settings",
@@ -175,26 +176,96 @@ export default {
     dropDown,
   },
 
-  methods:{
+  mounted() {
 
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
+        });
+      }
+    });
+    this.general_config = activeModules;
+    console.log(activeModules)
+
+    if (this.general_config) {
+      Object.keys(this.general_config).map((key) => {
+        if (this.id === this.general_config[key].id) {
+          const option = this.general_config[key].options;
+          console.log(option)
+          this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
+          this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
+          this.uucss_enable_debug = option.uucss_enable_debug;
+          this.uucss_excluded_links = option.uucss_excluded_links;
+          this.uucss_query_string = option.uucss_query_string;
+          if(option.uucss_jobs_per_queue < 2){
+            this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue + " Job";
+          }else{
+            this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue + " Jobs";
+          }
+          if(option.uucss_queue_interval < 61){
+            this.queue_option.uucss_queue_interval = option.uucss_queue_interval / 60 + " Minute";
+          }else{
+            this.queue_option.uucss_queue_interval = option.uucss_queue_interval / 60 + " Minutes";
+          }
+
+
+        }
+
+      });
+    }
+  },
+
+  methods:{
+    saveSettings(){
+
+      const data = {
+        uucss_enable_debug : this.uucss_enable_debug,
+        uucss_query_string : this.uucss_query_string,
+        uucss_excluded_links : this.uucss_excluded_links,
+        uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue.replace(/\D/g,''),
+        uucss_queue_interval : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
+        uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,
+        uucss_disable_add_to_re_queue : this.queue_option.uucss_disable_add_to_re_queue,
+      }
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(response => response.data)
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+
+    }
   },
 
   data() {
     return {
+      general_config:[],
+      id: 'general',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-      debug_mode: false,
-      query_string: false,
       back: '/',
+
+      uucss_enable_debug: false,
+      uucss_query_string: false,
+      uucss_excluded_links: [],
       queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
-      queue_jobs:'',
-      queue_jobs_time:'',
       jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
-      queue_option: [{
+
+      queue_option: {
         default: false,
         queue: false,
-        disable_auto_queue: false,
-        disable_requeue: false,
-      }],
+        uucss_disable_add_to_queue: false,
+        uucss_disable_add_to_re_queue: false,
+        uucss_jobs_per_queue:'',
+        uucss_queue_interval:'',
+        test: "4",
+      },
 
 
     }

@@ -129,7 +129,6 @@ export default {
       }
     });
     this.javascript = activeModules
-    console.log(activeModules);
     if (this.javascript) {
       Object.keys(this.javascript).map((key) => {
           if (this.id === this.javascript[key].id) {
@@ -157,7 +156,7 @@ export default {
              'Content-Type':'multipart/form-data'
             }
          })
-              .then(response => console.log(response.data))
+              .then(response => response.data)
               .catch(error => {
                 this.errorMessage = error.message;
                 console.error("There was an error!", error);

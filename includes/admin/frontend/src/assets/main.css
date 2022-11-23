@@ -115,6 +115,10 @@ body {
 
     }
     /* custom dropdown end */
+    .disableClick{
+        pointer-events: none;
+        cursor: default;
+    }
 }
 
 /*config tags packages style, these style will not work without import tags*/

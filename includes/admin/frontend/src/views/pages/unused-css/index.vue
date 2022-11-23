@@ -246,7 +246,6 @@ export default {
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_load_original = option.uucss_load_original;
           this.uucss_minify = option.uucss_minify;
-          console.log(option)
         }
 
       });
@@ -271,7 +270,7 @@ export default {
           'Content-Type':'multipart/form-data'
         }
       })
-          .then(response => console.log(response.data))
+          .then(response => response.data)
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);

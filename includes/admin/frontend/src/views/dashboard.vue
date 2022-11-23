@@ -19,9 +19,9 @@
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
 
             <div class="col-start-1 col-end-3 ..." >
-              <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink :class="{disableClick: !item.status}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
-                <button :disabled="item.status !== 'on'" >Settings</button>
+                <button >Settings</button>
               </RouterLink>
             </div>
             <div class="col-end-7 col-span-2 ...">

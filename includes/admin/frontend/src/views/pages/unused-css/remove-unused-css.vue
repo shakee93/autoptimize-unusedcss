@@ -254,7 +254,6 @@ export default {
       Object.keys(this.remove_css_config).map((key) => {
         if (this.id === this.remove_css_config[key].id) {
           const option = this.remove_css_config[key].options;
-          console.log(option)
           const safelist = option.unused_css.options.uucss_safelist;
           if(safelist){
             this.safelist = JSON.parse(safelist).map((i)=>{ return i.rule }).join("\r\n");
@@ -271,9 +270,6 @@ export default {
           this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files.split(",").join("\r\n");
           this.uucss_safelist= this.safelist;
           this.uucss_blocklist= this.blocklist;
-
-          console.log(option.unused_css.options.whitelist_packs)
-
           this.whitelist_packs= option.unused_css.options.whitelist_packs;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
 
@@ -324,7 +320,7 @@ export default {
           'Content-Type':'multipart/form-data'
         }
       })
-          .then(response => console.log(response.data))
+          .then(response => response.data)
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
