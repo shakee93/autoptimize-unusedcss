@@ -43,6 +43,8 @@ return array(
     'RapidLoad_Enqueue' => $baseDir . '/includes/RapidLoad_Enqueue.php',
     'RapidLoad_Feedback' => $baseDir . '/includes/utils/Feedback/RapidLoad_Feedback.php',
     'RapidLoad_FileSystem' => $baseDir . '/includes/RapidLoad_FileSystem.php',
+    'RapidLoad_Image' => $baseDir . '/includes/modules/image/RapidLoad_Image.php',
+    'RapidLoad_Image_Enqueue' => $baseDir . '/includes/modules/image/RapidLoad_Image_Enqueue.php',
     'RapidLoad_Job' => $baseDir . '/includes/RapidLoad_Job.php',
     'RapidLoad_Job_Data' => $baseDir . '/includes/RapidLoad_Job_Data.php',
     'RapidLoad_Module' => $baseDir . '/includes/modules/RapidLoad_Module.php',

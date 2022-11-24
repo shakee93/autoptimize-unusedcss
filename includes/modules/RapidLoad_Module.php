@@ -53,6 +53,16 @@ class RapidLoad_Module
             'global' => 'javascript'
         ];
 
+        $this->modules['image-delivery'] = [
+            'id' => 'image-delivery',
+            'title' => 'Image Optimization',
+            'description' => 'Image Optimization',
+            'group' => 'image-optimization',
+            'status' => 'on',
+            'class' => RapidLoad_Image::class,
+            'global' => 'image-optimization'
+        ];
+
     }
 
     function load_modules(){
@@ -100,6 +110,10 @@ class RapidLoad_Module
             }
             case 'javascript' : {
                 $options['uucss_enable_javascript'] = $active == "on" ? "1" : "";
+                break;
+            }
+            case 'image-delivery' : {
+                $options['uucss_enable_image_delivery'] = $active == "on" ? "1" : "";
                 break;
             }
         }
@@ -165,6 +179,12 @@ class RapidLoad_Module
                     'defer_inline_js' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
                     'minify_js' => isset($options['minify_js']) && $options['minify_js'] == "1" ? true : false,
                     'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
+                ]
+            ],
+            'image-delivery' => [
+                'id' => 'image-delivery',
+                'status' => isset($options['uucss_enable_image_delivery']) && $options['uucss_enable_image_delivery'] == "1" ? "on" : "off",
+                'options' => [
                 ]
             ],
         ];
