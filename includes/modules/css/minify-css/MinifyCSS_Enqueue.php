@@ -60,7 +60,7 @@ class MinifyCSS_Enqueue
             return;
         }
 
-        $file_path = $this->get_file_path_from_url($link->href);
+        $file_path = self::get_file_path_from_url($link->href);
 
         $version = substr(hash_file('md5', $file_path), 0, 12);
 

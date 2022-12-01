@@ -27,4 +27,18 @@ class RapidLoad_Image
         new RapidLoad_Image_Enqueue($job);
 
     }
+
+    public static function get_replaced_url($url, $cdn, $width = false, $height = false )
+    {
+
+        $options = 'q_lossy+to_auto+ret_img';
+
+        if($width && $height){
+
+            $options .= '+w_' . $width . '+h_' . $height;
+        }
+
+        return $cdn . $options . '/' . $url;
+    }
+
 }

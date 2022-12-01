@@ -574,11 +574,47 @@ trait RapidLoad_Utils {
         return @preg_match($string, '') !== FALSE;
     }
 
-    function get_file_path_from_url($url)
+    public static function get_file_path_from_url($url)
     {
         $file_relative_path = parse_url($url, PHP_URL_PATH);
         $site_path = parse_url(site_url(), PHP_URL_PATH);
         $file_path = UUCSS_ABSPATH . preg_replace("$^$site_path$", '', $file_relative_path);
         return str_replace("//","/", $file_path);
+    }
+
+    public static function get_width_height($file_path){
+
+        if (!is_file($file_path)) {
+            return false;
+        }
+
+        if (pathinfo($file_path, PATHINFO_EXTENSION) === 'svg') {
+            $xml = @simplexml_load_file($file_path);
+            $attr = $xml->attributes();
+            $viewbox = explode(' ', $attr->viewBox);
+            $width =
+                isset($attr->width) && preg_match('/\d+/', $attr->width, $value)
+                    ? (int) $value[0]
+                    : (count($viewbox) == 4
+                    ? (int) $viewbox[2]
+                    : null);
+            $height =
+                isset($attr->height) && preg_match('/\d+/', $attr->height, $value)
+                    ? (int) $value[0]
+                    : (count($viewbox) == 4
+                    ? (int) $viewbox[3]
+                    : null);
+            if ($width && $height) {
+                return ['width' => $width, 'height' => $height];
+            }
+        }
+
+        // Get image size by checking the file
+        list($width, $height) = getimagesize($file_path);
+
+        if ($width && $height) {
+            return ['width' => $width, 'height' => $height];
+        }
+
     }
 }

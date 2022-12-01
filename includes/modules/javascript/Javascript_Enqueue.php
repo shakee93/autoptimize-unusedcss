@@ -85,7 +85,7 @@ class Javascript_Enqueue
             return;
         }
 
-        $file_path = $this->get_file_path_from_url($link->src);
+        $file_path = self::get_file_path_from_url($link->src);
 
         $version = substr(hash_file('md5', $file_path), 0, 12);
 
