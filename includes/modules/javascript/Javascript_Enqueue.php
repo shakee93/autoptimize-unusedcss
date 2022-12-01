@@ -19,7 +19,7 @@ class Javascript_Enqueue
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 60);
     }
 
     public function update_content($state){
@@ -85,7 +85,7 @@ class Javascript_Enqueue
             return;
         }
 
-        $file_path = $this->get_file_path_from_url($link->src);
+        $file_path = self::get_file_path_from_url($link->src);
 
         $version = substr(hash_file('md5', $file_path), 0, 12);
 

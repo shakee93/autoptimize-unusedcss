@@ -17,7 +17,7 @@ class MinifyCSS_Enqueue
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 50);
     }
 
     public function update_content($state){
@@ -60,7 +60,7 @@ class MinifyCSS_Enqueue
             return;
         }
 
-        $file_path = $this->get_file_path_from_url($link->href);
+        $file_path = self::get_file_path_from_url($link->href);
 
         $version = substr(hash_file('md5', $file_path), 0, 12);
 
