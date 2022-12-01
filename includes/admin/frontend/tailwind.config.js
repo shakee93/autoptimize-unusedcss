@@ -27,6 +27,7 @@ module.exports = {
       'blue': '#185EF3',
       'gray': '#E8E8E8',
       'w-color': '#F0F0F1',
+      'message-green': '#48BB78',
     },
 
 

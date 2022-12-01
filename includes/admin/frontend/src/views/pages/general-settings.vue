@@ -1,6 +1,8 @@
 <template>
   <main>
+
     <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+      <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
         <div class="flex-initial w-32 pl-8">
           <RouterLink type="button" :to="back"
@@ -102,16 +104,15 @@
 
                 <div class="flex">
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
-                  <p>{{queue_option.uucss_jobs_per_queue}}</p>
-                  <p>{{queue_option.uucss_queue_interval}}</p>
-                  <dropDown
+
+                  <dropDown v-if="queue_option.uucss_jobs_per_queue"
                       :options="queue_jobs_options"
                       :default="queue_option.uucss_jobs_per_queue"
                       class="select mr-3"
                       @input="queue_option.uucss_jobs_per_queue=$event"
                   />
                   <p class="text-sm text-gray-font pr-3 pt-1">Per</p>
-                  <dropDown
+                  <dropDown v-if="queue_option.uucss_queue_interval"
                       :options="jobs_timing_options"
                       :default="queue_option.uucss_queue_interval"
                       class="select mr-3" style="min-width: 110px"
@@ -168,6 +169,7 @@
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../components/dropDown.vue'
+import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
 
 export default {
@@ -176,6 +178,7 @@ export default {
   components: {
     Vue3TagsInput,
     dropDown,
+    messageBox,
   },
 
   mounted() {
@@ -203,7 +206,7 @@ export default {
           this.uucss_excluded_links = option.uucss_excluded_links;
           this.uucss_query_string = option.uucss_query_string;
           this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
-          this.queue_option.uucss_queue_interval = option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
+          this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
 
 
         }
@@ -215,12 +218,15 @@ export default {
   methods:{
     saveSettings(){
 
+
+
+
       const data = {
         uucss_enable_debug : this.uucss_enable_debug,
         uucss_query_string : this.uucss_query_string,
         uucss_excluded_links : this.uucss_excluded_links,
         uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue.replace(/\D/g,''),
-        uucss_queue_interval : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
+        uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
         uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,
         uucss_disable_add_to_re_queue : this.queue_option.uucss_disable_add_to_re_queue,
       }
@@ -229,7 +235,17 @@ export default {
           'Content-Type':'multipart/form-data'
         }
       })
-          .then(response => response.data)
+          .then(response => {
+            response.data;
+            this.$notify(
+                {
+                  group: "success",
+                  title: "Success",
+                  text: "General Settings Updated!"
+                },
+                4000
+            );
+          } )
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
@@ -258,7 +274,7 @@ export default {
         uucss_disable_add_to_re_queue: false,
         uucss_jobs_per_queue:'',
         uucss_queue_interval:'',
-        test: "4",
+        test: 4 +" test",
       },
 
 
