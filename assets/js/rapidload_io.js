@@ -6,11 +6,13 @@
 
             var url = $(value).data('original-src')
 
-            var options = 'q_lossy+to_auto+ret_img'
+            if(url){
+                var options = 'q_lossy+to_auto+ret_img'
 
-            options += '+w_' + $(value).width()
+                options += '+w_' + $(value).width()
 
-            $(value).attr('src', 'https://cdn.shortpixel.ai/spai/' + options + '/' + url);
+                $(value).attr('src', 'https://cdn.shortpixel.ai/spai/' + options + '/' + url);
+            }
 
         })
 
