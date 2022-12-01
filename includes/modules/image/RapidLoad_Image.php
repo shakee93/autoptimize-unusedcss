@@ -22,8 +22,6 @@ class RapidLoad_Image
 
     public function enqueue_frontend_js(){
 
-
-
         ?>
         <script type="text/javascript">
 
@@ -34,7 +32,7 @@ class RapidLoad_Image
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
                 s.async = true;
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js' ?>"
+                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js?v=' . UUCSS_VERSION ?>"
                 b.appendChild(s);
             }(window, document));
 
