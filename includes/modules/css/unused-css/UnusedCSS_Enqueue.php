@@ -166,6 +166,10 @@ class UnusedCSS_Enqueue
 
                         $this->inject->successfully_injected = false;
 
+                        if(!$this->warnings){
+                            $this->warnings = [];
+                        }
+
                         if(!in_array($link, array_column($this->warnings, 'file'))){
 
                             $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
