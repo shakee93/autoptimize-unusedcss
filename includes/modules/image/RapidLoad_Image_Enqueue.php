@@ -109,7 +109,7 @@ class RapidLoad_Image_Enqueue
 
         $images = $this->dom->find( 'img[src]' );
 
-        foreach ( $images as $index => $img ) {
+        foreach ( $images as $img ) {
 
             $url = $this->extractUrl($img->src);
 
