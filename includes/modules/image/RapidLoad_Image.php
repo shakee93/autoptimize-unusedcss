@@ -27,10 +27,6 @@ class RapidLoad_Image
         ?>
         <script type="text/javascript">
 
-            window.rapidload_io_data = {
-                options : true
-            }
-
             (function(w, d){
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
