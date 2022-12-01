@@ -43,6 +43,23 @@ class RapidLoad_Admin_Frontend
 
         }
 
+
+        if ($this->is_rapidload_on_board()) {
+
+            $this->load_on_board_scripts();
+
+            // TODO: temporary should be removed so it supports all the browsers
+            add_filter('script_loader_tag', function ($tag, $handle) {
+
+                if ( 'rapidload_admin_on_board' !== $handle )
+                    return $tag;
+
+                return str_replace( ' src', ' type="module" src', $tag );
+
+            }, 10, 2);
+
+        }
+
         if(is_admin()){
 
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
@@ -743,6 +760,11 @@ class RapidLoad_Admin_Frontend
         return isset($_GET['page']) && $_GET['page'] === 'rapidload';
     }
 
+    public function is_rapidload_on_board()
+    {
+        return isset($_GET['page']) && $_GET['page'] === 'on-board';
+    }
+
     public function is_rapidload_legacy_page()
     {
         return isset($_GET['page']) && $_GET['page'] === 'uucss';
@@ -762,6 +784,26 @@ class RapidLoad_Admin_Frontend
         wp_localize_script( 'rapidload_admin_frontend', 'rapidload_admin', $data );
 
         wp_enqueue_script( 'rapidload_admin_frontend' );
+
+
+
+    }
+
+
+    public function load_on_board_scripts()
+    {
+
+        wp_enqueue_style( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.css');
+
+        wp_register_script( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.js');
+
+        $data = array(
+            'on_board_base' => UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist'
+        );
+
+        wp_localize_script( 'rapidload_admin_on_board', 'rapidload_admin', $data );
+
+        wp_enqueue_script( 'rapidload_admin_on_board' );
 
 
 
