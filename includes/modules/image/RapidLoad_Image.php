@@ -28,6 +28,9 @@ class RapidLoad_Image
         <script type="text/javascript">
 
             (function(w, d){
+                w.rapidload_io_data = {
+                    options : true
+                }
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
                 s.async = true;
