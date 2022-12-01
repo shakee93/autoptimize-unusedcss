@@ -11,7 +11,7 @@ class RapidLoad_Image
         $this->options = RapidLoad_Base::fetch_options();
 
         if(!isset($this->options['uucss_enable_image_delivery'])){
-            //return;
+            return;
         }
 
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
