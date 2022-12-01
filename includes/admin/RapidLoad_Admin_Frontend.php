@@ -63,6 +63,7 @@ class RapidLoad_Admin_Frontend
         if(is_admin()){
 
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
+            add_action( 'admin_menu', array( $this, 'add_rapidload_onboard_page' ) );
             add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
 
         }
@@ -726,6 +727,23 @@ class RapidLoad_Admin_Frontend
 
     }
 
+    public function add_rapidload_onboard_page(){
+
+        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'rapidload-on-board', function () {
+            wp_enqueue_script( 'post' );
+
+            ?>
+            <div id="rapidload-on-board">
+
+            </div>
+
+            <?php
+        });
+
+        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+
+    }
+
     public function add_developer_settings_page() {
 
         add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
@@ -762,7 +780,7 @@ class RapidLoad_Admin_Frontend
 
     public function is_rapidload_on_board()
     {
-        return isset($_GET['page']) && $_GET['page'] === 'on-board';
+        return isset($_GET['page']) && $_GET['page'] === 'rapidload-on-board';
     }
 
     public function is_rapidload_legacy_page()
