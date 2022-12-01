@@ -6,6 +6,8 @@ class RapidLoad_Image
 
     public $options = [];
 
+    public static $image_indpoint;
+
     public function __construct()
     {
         $this->options = RapidLoad_Base::fetch_options();
@@ -14,11 +16,13 @@ class RapidLoad_Image
             //return;
         }
 
+        self::$image_indpoint = "https://cdn.shortpixel.ai/spai/";
+
         add_action('wp_head', [$this, 'enqueue_frontend_js']);
 
         add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
             foreach ($a as $index => $src){
-                $a[$index]['url'] = self::get_replaced_url($a[$index]['url'],null);
+                $a[$index]['url'] = self::get_replaced_url($a[$index]['url'],self::$image_indpoint);
             }
         }, 10, 5);
 
@@ -60,10 +64,10 @@ class RapidLoad_Image
     public static function get_replaced_url($url, $cdn, $width = false, $height = false )
     {
         if(!$cdn){
-
+            $cdn = self::$image_indpoint;
         }
 
-        $options = 'q_lossy,to_auto,ret_img';
+        $options = 'q_lossy,to_auto,ret_wait';
 
         if($width && $height){
 
