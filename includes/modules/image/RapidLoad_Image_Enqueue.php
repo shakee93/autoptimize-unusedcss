@@ -21,7 +21,7 @@ class RapidLoad_Image_Enqueue
         $this->imgExt = ["jpg", "jpeg", "png", "svg"];
         $this->cdn = 'https://cdn.shortpixel.ai/spai/';
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
     }
 
     public function update_content($state){
@@ -103,6 +103,7 @@ class RapidLoad_Image_Enqueue
             $style->__set('innertext', $cssDocument->render());
         }
 
+        return $state;
     }
 
     public function lazy_load_images(){

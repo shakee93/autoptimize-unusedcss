@@ -25,7 +25,7 @@ class CriticalCSS_Enqueue
         $this->data = $job_data->data;
         $this->warnings = $this->job_data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
     }
 
     function update_content($state){
