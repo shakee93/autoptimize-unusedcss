@@ -16,6 +16,12 @@ class RapidLoad_Image
 
         add_action('wp_head', [$this, 'enqueue_frontend_js']);
 
+        add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
+            foreach ($a as $index => $src){
+                $a[$index]['url'] = self::get_replaced_url($a[$index]['url'],null);
+            }
+        }, 10, 5);
+
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
 
     }
@@ -53,6 +59,9 @@ class RapidLoad_Image
 
     public static function get_replaced_url($url, $cdn, $width = false, $height = false )
     {
+        if(!$cdn){
+
+        }
 
         $options = 'q_lossy,to_auto,ret_img';
 
