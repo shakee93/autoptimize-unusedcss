@@ -18,7 +18,7 @@ class RapidLoad_Image_Enqueue
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
-        $this->imgExt = ["jpg", "jpeg", "png"];
+        $this->imgExt = ["jpg", "jpeg", "png", "svg"];
         $this->cdn = 'https://cdn.shortpixel.ai/spai/';
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
