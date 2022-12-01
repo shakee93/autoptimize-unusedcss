@@ -1,6 +1,7 @@
 <template>
   <main>
     <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+      <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
         <div class="flex-initial w-32 pl-8">
           <RouterLink type="button" :to="back"
@@ -109,6 +110,7 @@
 <script>
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
+import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
 
 export default {
@@ -116,6 +118,7 @@ export default {
 
   components: {
     Vue3TagsInput,
+    messageBox,
   },
 
   mounted() {
@@ -156,7 +159,17 @@ export default {
              'Content-Type':'multipart/form-data'
             }
          })
-              .then(response => response.data)
+              .then(response => {
+                response.data
+                this.$notify(
+                    {
+                      group: "success",
+                      title: "Success",
+                      text: "Javascript Settings Updated!"
+                    },
+                    4000
+                );
+              })
               .catch(error => {
                 this.errorMessage = error.message;
                 console.error("There was an error!", error);

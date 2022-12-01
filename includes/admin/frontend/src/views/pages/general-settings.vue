@@ -74,13 +74,13 @@
             </div>
 
 
-          <div class="flex mt-5">
+          <div class="flex mt-5 pb-1 transition duration-300 hover:cursor-pointer rounded" @click="queue_option.default=!queue_option.default">
             <div class="pr-1">
               <div class="flex items-center mr-4 mt-3">
-                <label>
-                  <input v-model="queue_option.default" type="checkbox" value=""
-                         class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                </label>
+
+                <svg class="ml-[-3px]" :class="{'advanced-after': queue_option.default , 'advanced-before' : !queue_option.default }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
+                </svg>
               </div>
             </div>
             <div>
@@ -88,17 +88,17 @@
               <p class="text-sm text-gray-font">More advanced options for pro users</p>
             </div>
           </div>
-          <div :class="{ expand: queue_option.default}" class="pl-9 not-expand">
+          <div :class="{ expand: queue_option.default}" class="pl-[42px] not-expand">
 
             <div class="flex mt-5">
-              <div class="pr-1">
-                <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="queue_option.queue" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
-                </div>
-              </div>
+<!--              <div class="pr-1">-->
+<!--                <div class="flex items-center mr-4 mt-3">-->
+<!--                  <label>-->
+<!--                    <input v-model="queue_option.queue" type="checkbox" value=""-->
+<!--                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">-->
+<!--                  </label>-->
+<!--                </div>-->
+<!--              </div>-->
               <div>
                 <h1 class="font-semibold text-base text-black-font">Queue</h1>
 
@@ -203,7 +203,7 @@ export default {
           this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
           this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
           this.uucss_enable_debug = option.uucss_enable_debug;
-          this.uucss_excluded_links = option.uucss_excluded_links;
+          this.uucss_excluded_links = option.uucss_excluded_links.replace(/,/g, '\n');
           this.uucss_query_string = option.uucss_query_string;
           this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
           this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
@@ -216,15 +216,16 @@ export default {
   },
 
   methods:{
+    advanceSettings(){
+      // queue_option.default = true;
+      console.log(this.queue_option.default)
+    },
     saveSettings(){
-
-
-
 
       const data = {
         uucss_enable_debug : this.uucss_enable_debug,
         uucss_query_string : this.uucss_query_string,
-        uucss_excluded_links : this.uucss_excluded_links,
+        uucss_excluded_links : this.uucss_excluded_links.replace(/\n/g, ","),
         uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue.replace(/\D/g,''),
         uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
         uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,

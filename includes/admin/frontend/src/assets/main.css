@@ -119,6 +119,15 @@ body {
         pointer-events: none;
         cursor: default;
     }
+
+    .advanced-after{
+        transform: rotate(90deg);
+        transition-duration: .3s;
+    }
+    .advanced-before{
+        transform: rotate(0deg);
+        transition-duration: .3s;
+    }
 }
 
 /*config tags packages style, these style will not work without import tags*/
@@ -140,6 +149,7 @@ body {
     color: #ffffff !important;
 }
 .v3ti{
+    min-height: 48px !important;
     border-radius: 0.5rem !important;
     border-color: rgb(203 203 203 / var(--tw-border-opacity)) !important;
 }
