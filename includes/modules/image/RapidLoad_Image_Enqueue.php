@@ -44,25 +44,25 @@ class RapidLoad_Image_Enqueue
 
         $this->set_width_and_height();
 
+        $this->lazy_load_images();
+
+        // replacing urls
+
         $images = $this->dom->find( 'img[src]' );
 
-        foreach ( $images as $index => $img ) {
-
-            if(($index + 1) <= $this->options['exclude_above_the_fold_image_count']){
-                $img->loading = "eager";
-                $img->decoding = "sync";
-                $img->fetchpriority = "high";
-            }else{
-                $img->loading = "lazy";
-                $img->decoding = "async";
-                $img->fetchpriority = "low";
-            }
+        foreach ( $images as $img ) {
 
             $url = $this->extractUrl($img->src);
+
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
             if (in_array($urlExt, $this->imgExt)) {
 
-                $img->src = RapidLoad_Image::get_replaced_url($url,$this->cdn);
+                $data_src = 'data-original-src';
+
+                $img->src = $this->get_placeholder($img);
+
+                $img->$data_src = $url;
 
             }
 
@@ -105,6 +105,25 @@ class RapidLoad_Image_Enqueue
 
     }
 
+    public function lazy_load_images(){
+
+        $images = $this->dom->find( 'img[src]' );
+
+        foreach ( $images as $index => $img ) {
+
+            if(($index + 1) <= $this->options['exclude_above_the_fold_image_count']){
+                $img->loading = "eager";
+                $img->decoding = "sync";
+                $img->fetchpriority = "high";
+            }else{
+                $img->loading = "lazy";
+                $img->decoding = "async";
+                $img->fetchpriority = "low";
+            }
+
+        }
+    }
+
     public function set_width_and_height(){
 
         $images = $this->dom->find( 'img[src]' );
@@ -144,4 +163,11 @@ class RapidLoad_Image_Enqueue
         return isset(parse_url($url)['host']);
     }
 
+    function get_placeholder($image)
+    {
+        if ($image->width && $image->height) {
+            return $image->src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 $image->width $image->height'%2F%3E";
+        }
+        return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw';
+    }
 }

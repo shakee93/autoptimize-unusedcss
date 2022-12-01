@@ -14,7 +14,33 @@ class RapidLoad_Image
             //return;
         }
 
+        add_action('wp_head', [$this, 'enqueue_frontend_js']);
+
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
+
+    }
+
+    public function enqueue_frontend_js(){
+
+
+
+        ?>
+        <script type="text/javascript">
+
+            window.rapidload_io_data = {
+                options : true
+            }
+
+            (function(w, d){
+                var b = d.getElementsByTagName('head')[0];
+                var s = d.createElement("script");
+                s.async = true;
+                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js' ?>"
+                b.appendChild(s);
+            }(window, document));
+
+        </script>
+        <?php
 
     }
 
