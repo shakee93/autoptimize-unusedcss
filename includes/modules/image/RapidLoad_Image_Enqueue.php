@@ -42,6 +42,8 @@ class RapidLoad_Image_Enqueue
             $this->options['exclude_above_the_fold_image_count'] = 3;
         }
 
+        $this->set_width_and_height();
+
         $images = $this->dom->find( 'img[src]' );
 
         foreach ( $images as $index => $img ) {
@@ -60,27 +62,7 @@ class RapidLoad_Image_Enqueue
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
             if (in_array($urlExt, $this->imgExt)) {
 
-                $file_path = self::get_file_path_from_url($url);
-
-                $dimension = self::get_width_height($file_path);
-
-                if($dimension && isset($dimension['width']) && $dimension['height']){
-
-                    if(!isset($img->width)){
-                        $img->width = $dimension['width'];
-                    }
-
-                    if(!isset($img->height)){
-                        $img->height = $dimension['height'];
-                    }
-
-                    $img->src = RapidLoad_Image::get_replaced_url($url,$this->cdn, $dimension['width'], $dimension['height']);
-
-                }else{
-
-                    $img->src = RapidLoad_Image::get_replaced_url($url,$this->cdn);
-
-                }
+                $img->src = RapidLoad_Image::get_replaced_url($url,$this->cdn);
 
             }
 
@@ -121,6 +103,32 @@ class RapidLoad_Image_Enqueue
             $style->__set('innertext', $cssDocument->render());
         }
 
+    }
+
+    public function set_width_and_height(){
+
+        $images = $this->dom->find( 'img[src]' );
+
+        foreach ( $images as $index => $img ) {
+
+            $url = $this->extractUrl($img->src);
+
+            $file_path = self::get_file_path_from_url($url);
+
+            $dimension = self::get_width_height($file_path);
+
+            if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                if (!isset($img->width)) {
+                    $img->width = $dimension['width'];
+                }
+
+                if (!isset($img->height)) {
+                    $img->height = $dimension['height'];
+                }
+
+            }
+        }
     }
 
     public function extractUrl($url){
