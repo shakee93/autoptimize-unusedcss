@@ -7,9 +7,9 @@
             var url = $(value).data('original-src')
 
             if(url){
-                var options = 'q_lossy+to_auto+ret_img'
+                var options = 'q_lossy,to_auto,ret_img'
 
-                options += '+w_' + $(value).width()
+                options += ',w_' + $(value).width()
 
                 $(value).attr('src', 'https://cdn.shortpixel.ai/spai/' + options + '/' + url);
             }
