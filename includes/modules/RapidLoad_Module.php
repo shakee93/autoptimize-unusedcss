@@ -152,6 +152,7 @@ class RapidLoad_Module
                         ]);
                         unset($options['uucss_cdn_dns_id']);
                         unset($options['uucss_cdn_zone_id']);
+                        unset($options['uucss_cdn_url']);
                     }
 
                 }
