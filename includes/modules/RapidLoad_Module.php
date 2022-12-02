@@ -141,6 +141,9 @@ class RapidLoad_Module
                     if(isset($response->dns_id)){
                         $options['uucss_cdn_dns_id'] = $response->dns_id;
                     }
+                    if(isset($response->cdn_url)){
+                        $options['uucss_cdn_url'] = $response->cdn_url;
+                    }
                 }else{
                     if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
                         $api->post('delete-cdn',[
