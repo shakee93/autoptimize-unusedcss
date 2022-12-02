@@ -1,8 +1,9 @@
 <template>
   <main>
     <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+      <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
-        <div class="flex-initial w-32 pl-8">
+        <div class="flex-initial w-28 pl-8">
           <RouterLink type="button" :to="back"
                       class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
             <img :src="base+'/arrow-left.svg'" alt="Back">
@@ -38,24 +39,6 @@
               LOSSLESS
             </button>
 
-            <div :class="{ expand : compression_level === 'lossless'}" class="not-expand">
-              <div class="mt-5 bg-purple-lite border border-purple rounded-2xl px-4 py-3 shadow-md" role="alert">
-                <div class="flex">
-                  <div class="py-1 mt-1">
-                    <svg class="fill-current h-6 w-6 text-purple mr-4" xmlns="http://www.w3.org/2000/svg"
-                         viewBox="0 0 20 20">
-                      <path
-                          d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p class="font-semibold text-sm text-purple-back-font leading-5">Removing the original files from
-                      loading may not be compatible with all the websites. <br> If you are having site-breaks try on user
-                      interaction or asynchronously.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
           <div class="grid">
             <div class="mb-5 mt-5">
@@ -63,7 +46,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <label>
-                      <input v-model="minify_js" type="checkbox" value=""
+                      <input v-model="next_gen_image" type="checkbox" value=""
                              class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
                     </label>
                   </div>
@@ -76,8 +59,31 @@
             </div>
           </div>
 
+          <div class="grid">
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-2">
+                    <label>
+                      <input
+                          v-model="image_count"
+                          type="number"
+                          style="max-width: 55px"
+                          class="px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <h1 class="font-semibold text-base text-black-font">Exclude above the fold image count</h1>
+                  <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <button
+
+          <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
@@ -94,40 +100,84 @@
 <script>
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
+import axios from "axios";
+import messageBox from "../../components/messageBox.vue";
 
 export default {
   name: "image-delivery",
 
   components: {
     Vue3TagsInput,
+    messageBox,
+  },
+
+  mounted() {
+    const activeModules = [];
+    Object.keys(window.uucss_global).map((key) => {
+      if (key === 'active_modules') {
+        const entry = window.uucss_global[key];
+        Object.keys(entry).forEach((a) => {
+          activeModules.push(entry[a])
+        });
+      }
+    });
+    this.image_delivery = activeModules
+    console.log(this.image_delivery)
+    if (this.image_delivery) {
+      Object.keys(this.image_delivery).map((key) => {
+        if (this.id === this.image_delivery[key].id) {
+          const options = this.image_delivery[key].options;
+          this.compression_level = options.uucss_image_optimize_level
+          this.next_gen_image = options.uucss_support_next_gen_formats
+          this.image_count = options.uucss_exclude_above_the_fold_image_count
+        }
+
+      });
+    }
   },
 
   methods:{
+    async saveSettings(){
+      const data = {
+        uucss_image_optimize_level: this.compression_level,
+        uucss_support_next_gen_formats: this.next_gen_image,
+        uucss_exclude_above_the_fold_image_count: this.image_count,
+        uucss_enable_image_delivery : true,
+      }
 
+      await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data, {
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(response => {
+            response.data
+            this.$notify(
+                {
+                  group: "success",
+                  title: "Success",
+                  text: "Image Delivery Settings Updated!"
+                },
+                4000
+            );
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    }
   },
 
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-
-      compression_level: 'lossy',
-
-
-      tag: '',
-      tags: ['Elementor'],
-      refresh_element: false,
-      page_animation: true,
-      pages_with_rules1: false,
-      advance_settings1: false,
-      pages_with_rules2: false,
-      advance_settings2: false,
-      remove_css: false,
       back: '/',
-      buttons: [
-        {
-          load_original_css: 'user_interaction',
-        }
-      ],
+
+      image_delivery: [],
+      id: 'image-delivery',
+      compression_level: 'lossy',
+      next_gen_image: false,
+      image_count: 3,
 
 
     }
