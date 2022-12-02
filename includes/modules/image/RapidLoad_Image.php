@@ -8,6 +8,8 @@ class RapidLoad_Image
 
     public static $image_indpoint;
 
+    public static $instance;
+
     public function __construct()
     {
         $this->options = RapidLoad_Base::fetch_options();
@@ -28,6 +30,7 @@ class RapidLoad_Image
 
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
 
+        self::$instance = $this;
     }
 
     public function enqueue_frontend_js(){
@@ -37,7 +40,9 @@ class RapidLoad_Image
 
             (function(w, d){
                 w.rapidload_io_data = {
-                    options : true
+                    image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
+                    optimize_level : <?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?> ,
+                    support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
                 }
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
@@ -67,7 +72,15 @@ class RapidLoad_Image
             $cdn = self::$image_indpoint;
         }
 
-        $options = 'q_lossy,to_auto,ret_img';
+        $options = 'ret_img';
+
+        if(isset(self::$instance->options['uucss_image_optimize_level'])){
+            $options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
+        }
+
+        if(isset(self::$instance->options['uucss_support_next_gen_formats']) && self::$instance->options['uucss_support_next_gen_formats'] == "1"){
+            $options .= ',to_auto';
+        }
 
         if($width && $height){
 

@@ -185,6 +185,9 @@ class RapidLoad_Module
                 'id' => 'image-delivery',
                 'status' => isset($options['uucss_enable_image_delivery']) && $options['uucss_enable_image_delivery'] == "1" ? "on" : "off",
                 'options' => [
+                    'uucss_image_optimize_level' => isset($options['uucss_image_optimize_level']) ? $options['uucss_image_optimize_level'] : null,
+                    'uucss_exclude_above_the_fold_image_count' => isset($options['uucss_exclude_above_the_fold_image_count']) ? $options['uucss_exclude_above_the_fold_image_count'] : null,
+                    'uucss_support_next_gen_formats' => isset($options['uucss_support_next_gen_formats']) && $options['uucss_support_next_gen_formats'] == "1" ? true : false,
                 ]
             ],
         ];

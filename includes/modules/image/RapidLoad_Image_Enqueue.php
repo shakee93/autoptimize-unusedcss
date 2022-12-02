@@ -112,7 +112,7 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $index => $img ) {
 
-            if(($index + 1) <= $this->options['exclude_above_the_fold_image_count']){
+            if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
                 $img->loading = "eager";
                 $img->decoding = "sync";
                 $img->fetchpriority = "high";
