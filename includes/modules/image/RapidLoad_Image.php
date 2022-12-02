@@ -15,7 +15,7 @@ class RapidLoad_Image
         $this->options = RapidLoad_Base::fetch_options();
 
         if(!isset($this->options['uucss_enable_image_delivery'])){
-            return;
+            //return;
         }
 
         self::$image_indpoint = "https://cdn.shortpixel.ai/spai/";
@@ -40,7 +40,9 @@ class RapidLoad_Image
 
             (function(w, d){
                 w.rapidload_io_data = {
-                    options : true
+                    image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
+                    optimize_level : <?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?> ,
+                    support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
                 }
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
