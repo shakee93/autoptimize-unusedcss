@@ -5,7 +5,7 @@ import javascript from '../views/pages/java-script.vue'
 import assetManager from '../views/pages/asset-manager.vue'
 import removeUnusedCss from '../views/pages/unused-css/remove-unused-css.vue'
 import generalSettings from '../views/pages/general-settings.vue'
-
+import imageDelivery from '../views/pages/image-delivery.vue'
 
 const router = createRouter({
 
@@ -33,6 +33,15 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: javascript
     },
+    {
+      path: '/image-delivery',
+      name: 'image-delivery',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: imageDelivery
+    },
+
     {
       path: '/speed-monitoring',
       name: 'speed-monitoring',
