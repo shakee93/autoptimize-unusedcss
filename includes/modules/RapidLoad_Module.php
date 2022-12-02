@@ -204,6 +204,12 @@ class RapidLoad_Module
                     'uucss_support_next_gen_formats' => isset($options['uucss_support_next_gen_formats']) && $options['uucss_support_next_gen_formats'] == "1" ? true : false,
                 ]
             ],
+            'cdn' => [
+                'id' => 'cdn',
+                'status' => isset($options['uucss_enable_cdn']) && $options['uucss_enable_cdn'] == "1" ? "on" : "off",
+                'options' => [
+                ]
+            ],
         ];
     }
 
