@@ -22,7 +22,7 @@ class RapidLoad_Image
 
         add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
             foreach ($a as $index => $src){
-                $a[$index]['url'] = self::get_replaced_url($a[$index]['url'],self::$image_indpoint);
+                $a[$index]['url'] = self::get_replaced_url($src['url'],self::$image_indpoint);
             }
         }, 10, 5);
 
