@@ -133,7 +133,7 @@ class RapidLoad_Module
 
                 if($options['uucss_enable_cdn'] == "1"){
                     $response = $api->post('cdn',[
-                        'url' => 'https://app.preview.rapidload.io'
+                        'url' => trailingslashit(site_url())
                     ]);
                     if(isset($response->zone_id)){
                         $options['uucss_cdn_zone_id'] = $response->zone_id;
