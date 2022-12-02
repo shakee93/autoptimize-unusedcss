@@ -128,6 +128,29 @@ class RapidLoad_Module
             }
             case 'cdn' : {
                 $options['uucss_enable_cdn'] = $active == "on" ? "1" : "";
+
+                $api = new RapidLoad_Api();
+
+                if($options['uucss_enable_cdn'] == "1"){
+                    $response = $api->post('cdn',[
+                        'url' => site_url()
+                    ]);
+                    if(isset($response->result->id)){
+                        $options['uucss_cdn_dns_id'] = $response->result->id;
+                    }
+                    error_log(json_encode($response));
+                }else{
+
+                    if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id'])){
+                        $response = $api->post('cdn/' . $options['uucss_cdn_dns_id'],[]);
+                        error_log(json_encode($response));
+                        if(isset($response->result->id)){
+                            unset($options['uucss_cdn_dns_id']);
+                        }
+                    }
+
+                }
+
                 break;
             }
         }
