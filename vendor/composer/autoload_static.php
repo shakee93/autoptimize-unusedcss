@@ -67,6 +67,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_Api' => __DIR__ . '/../..' . '/includes/RapidLoad_Api.php',
         'RapidLoad_Base' => __DIR__ . '/../..' . '/includes/RapidLoad_Base.php',
         'RapidLoad_Buffer' => __DIR__ . '/../..' . '/includes/RapidLoad_Buffer.php',
+        'RapidLoad_CDN' => __DIR__ . '/../..' . '/includes/modules/cdn/RapidLoad_CDN.php',
         'RapidLoad_DB' => __DIR__ . '/../..' . '/includes/RapidLoad_DB.php',
         'RapidLoad_Enqueue' => __DIR__ . '/../..' . '/includes/RapidLoad_Enqueue.php',
         'RapidLoad_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/RapidLoad_Feedback.php',

@@ -63,6 +63,16 @@ class RapidLoad_Module
             'global' => 'image-optimization'
         ];
 
+        $this->modules['cdn'] = [
+            'id' => 'cdn',
+            'title' => 'CDN',
+            'description' => 'CDN',
+            'group' => 'cdn',
+            'status' => 'on',
+            'class' => RapidLoad_CDN::class,
+            'global' => 'cdn'
+        ];
+
     }
 
     function load_modules(){
@@ -114,6 +124,10 @@ class RapidLoad_Module
             }
             case 'image-delivery' : {
                 $options['uucss_enable_image_delivery'] = $active == "on" ? "1" : "";
+                break;
+            }
+            case 'cdn' : {
+                $options['uucss_enable_cdn'] = $active == "on" ? "1" : "";
                 break;
             }
         }

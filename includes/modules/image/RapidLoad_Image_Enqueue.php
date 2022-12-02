@@ -38,8 +38,8 @@ class RapidLoad_Image_Enqueue
             $this->options = $state['options'];
         }
 
-        if(!isset($this->options['exclude_above_the_fold_image_count'])){
-            $this->options['exclude_above_the_fold_image_count'] = 3;
+        if(!isset($this->options['uucss_exclude_above_the_fold_image_count'])){
+            $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
         $this->set_width_and_height();

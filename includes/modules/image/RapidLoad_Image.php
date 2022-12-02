@@ -15,7 +15,7 @@ class RapidLoad_Image
         $this->options = RapidLoad_Base::fetch_options();
 
         if(!isset($this->options['uucss_enable_image_delivery'])){
-            //return;
+            return;
         }
 
         self::$image_indpoint = "https://cdn.shortpixel.ai/spai/";
