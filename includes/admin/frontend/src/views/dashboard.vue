@@ -6,7 +6,7 @@
   <main>
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
-
+      <messageBox></messageBox>
       <li v-for="item in items" :key="item.id"
           class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
@@ -56,8 +56,16 @@
 
 import config from "../config";
 import axios from 'axios';
+import messageBox from "../components/messageBox.vue";
+import Vue3TagsInput from "vue3-tags-input";
 
 export default {
+
+  components: {
+    Vue3TagsInput,
+    messageBox,
+  },
+
   mounted() {
 
     const activeModules = [];
@@ -91,7 +99,17 @@ export default {
       }
 
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
-          .then(response => console.log(response.data))
+          .then(response => {
+            response.data
+            this.$notify(
+                {
+                  group: "success",
+                  title: "Success",
+                  text: "Settings Updated!"
+                },
+                4000
+            );
+          })
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
@@ -102,13 +120,6 @@ export default {
   data() {
     return {
       items_data: [],
-      // items : this.items_data.data.map((component) => ({
-      //   name: component.title,
-      //   description: component.description,
-      //   link: '/'+component.id,
-      //   image: component.id + '.svg',
-      //   status: component.status,
-      // })),
       items: [
         {
           id : "css",
@@ -136,6 +147,15 @@ export default {
           link: '/image-delivery',
           status: false,
           isDisabled: false
+        },
+        {
+          id : "cdn",
+          title: "CDN",
+          description: 'Reduce your CSS file size by remove unused CSS from your pages',
+          image: 'speed-monitoring.svg',
+          link: '/cdn',
+          status: false,
+          isDisabled: true
         },
         {
           id : "speed-monitoring",
