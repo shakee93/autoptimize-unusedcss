@@ -135,18 +135,20 @@ class RapidLoad_Module
                     $response = $api->post('cdn',[
                         'url' => site_url()
                     ]);
-                    if(isset($response->result->id)){
-                        $options['uucss_cdn_dns_id'] = $response->result->id;
+                    if(isset($response->zone_id)){
+                        $options['uucss_cdn_zone_id'] = $response->zone_id;
                     }
-                    error_log(json_encode($response));
+                    if(isset($response->dns_id)){
+                        $options['uucss_cdn_dns_id'] = $response->dns_id;
+                    }
                 }else{
-
-                    if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id'])){
-                        $response = $api->post('cdn/' . $options['uucss_cdn_dns_id'],[]);
-                        error_log(json_encode($response));
-                        if(isset($response->result->id)){
-                            unset($options['uucss_cdn_dns_id']);
-                        }
+                    if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
+                        $api->post('delete-cdn',[
+                            'dns_id' => $options['uucss_cdn_dns_id'],
+                            'zone_id' => $options['uucss_cdn_zone_id']
+                        ]);
+                        unset($options['uucss_cdn_dns_id']);
+                        unset($options['uucss_cdn_zone_id']);
                     }
 
                 }
