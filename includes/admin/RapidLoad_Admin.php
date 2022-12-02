@@ -242,6 +242,32 @@ class RapidLoad_Admin
 
         }
 
+        // update image delivery settings
+
+        if(isset($_REQUEST['uucss_enable_image_delivery'])){
+
+            if(isset($_REQUEST['uucss_image_optimize_level'])){
+
+                $options['uucss_image_optimize_level'] = $_REQUEST['uucss_image_optimize_level'];
+
+            }
+
+            if(isset($_REQUEST['uucss_exclude_above_the_fold_image_count'])){
+
+                $options['uucss_exclude_above_the_fold_image_count'] = $_REQUEST['uucss_exclude_above_the_fold_image_count'];
+
+            }
+
+            if(isset($_REQUEST['uucss_support_next_gen_formats'])){
+
+                $options['uucss_support_next_gen_formats'] = ($_REQUEST['uucss_support_next_gen_formats'] == 'true' ? "1" : null);
+
+            }
+
+        }
+
+
+
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
         wp_send_json_success(true);
