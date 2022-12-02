@@ -42,7 +42,7 @@ class RapidLoad_Image
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
                 s.async = true;
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js?v=2' . UUCSS_VERSION ?>"
+                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js?v=3' . UUCSS_VERSION ?>"
                 b.appendChild(s);
             }(window, document));
 
@@ -67,7 +67,7 @@ class RapidLoad_Image
             $cdn = self::$image_indpoint;
         }
 
-        $options = 'q_lossy,to_auto,ret_wait';
+        $options = 'q_lossy,to_auto,ret_img';
 
         if($width && $height){
 
