@@ -29,6 +29,16 @@ class MinifyCSS
         },10,1);
 
         add_action('rapidload/job/handle', [$this, 'minify_css'], 40, 2);
+
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
+    }
+
+    public function vanish() {
+
+        if ( $this->file_system->exists( self::$base_dir ) ){
+            $this->file_system->delete( self::$base_dir, true );
+        }
+
     }
 
     public function minify_css($job, $args){

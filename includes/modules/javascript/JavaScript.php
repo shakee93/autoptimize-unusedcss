@@ -40,6 +40,16 @@ class JavaScript
         $this->enqueue_admin_scripts();
 
         $this->ajax_calls();
+
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
+    }
+
+    public function vanish() {
+
+        if ( $this->file_system->exists( self::$base_dir ) ){
+            $this->file_system->delete( self::$base_dir, true );
+        }
+
     }
 
     public function initFileSystem() {
