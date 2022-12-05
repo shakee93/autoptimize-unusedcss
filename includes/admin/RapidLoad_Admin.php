@@ -270,7 +270,7 @@ class RapidLoad_Admin
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
-        wp_send_json_success(true);
+        wp_send_json_success(RapidLoad_Base::get()->modules()->active_modules());
     }
 
     public function list_module(){
