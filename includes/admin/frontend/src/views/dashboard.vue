@@ -89,7 +89,7 @@ export default {
   },
 
   mounted() {
-    this.getData(null);
+    this.getData();
   },
   methods:{
 
@@ -108,12 +108,8 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => {
             response.data
-            this.modules = response.data.data;
-            this.getData(this.modules);
-            // console.log(window.uucss_global)
-            // console.log(response.data)
-           // window.uucss_global = response.data;
-           // this.getData(response.data.data)
+            window.uucss_global = response.data.data;
+
             this.loading = false;
           })
           .catch(error => {
@@ -123,7 +119,7 @@ export default {
 
     },
 
-    getData(modules){
+    getData(){
       const activeModules = [];
       Object.keys(window.uucss_global).map((key) => {
         if (key === 'active_modules') {
