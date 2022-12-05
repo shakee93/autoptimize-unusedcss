@@ -56,23 +56,15 @@ class RapidLoad_Font_Enqueue
     public function add_display_swap_to_internal_styles(){
 
         $stlyes = $this->dom->find('style');
-
         foreach ($stlyes as $style){
-
             $inner_text = $style->innertext;
-
             $inner_text = preg_replace(
                 '/font-display:\s?(auto|block|fallback|optional)/',
                 'font-display:swap',
                 $inner_text
             );
-
             $inner_text = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $inner_text);
-
             $style->__set('innertext', $inner_text);
-
-            error_log('changed ' . $style->id);
         }
-
     }
 }
