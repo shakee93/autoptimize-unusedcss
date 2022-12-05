@@ -114,7 +114,10 @@ export default {
 
 
     update(toggle, module){
-      this.loading = true;
+      if(module==='cdn'){
+        this.loading = true;
+      }
+
       if(!toggle){
         toggle = "on";
       } else{
@@ -187,15 +190,17 @@ export default {
           status: false,
           isDisabled: true
         },
+
         {
-          id : "speed-monitoring",
-          title: "Speed Monitoring",
+          id : "font-optimization",
+          title: "Font Optimization",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'speed-monitoring.svg',
-          link: '/speed-monitoring',
+          image: 'font-optimization.svg',
+          link: '/font-optimization',
           status: false,
           isDisabled: true
         },
+
         {
           id : "asset-manager",
           title: "Asset Manager",
@@ -205,12 +210,14 @@ export default {
           status: false,
           isDisabled: true
         },
+
+
         {
-          id : "font-optimization",
-          title: "Font Optimization",
+          id : "speed-monitoring",
+          title: "Speed Monitoring",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'font-optimization.svg',
-          link: '/font-optimization',
+          image: 'speed-monitoring.svg',
+          link: '/speed-monitoring',
           status: false,
           isDisabled: true
         },
