@@ -19,7 +19,9 @@ class RapidLoad_CDN
 
     public function replace_cdn($url){
 
-        if(isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])){
+        if(isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
+            && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
+            && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
              return trailingslashit($this->options['uucss_cdn_url']);
         }
 
