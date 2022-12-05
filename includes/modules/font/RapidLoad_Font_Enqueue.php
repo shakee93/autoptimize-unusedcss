@@ -93,7 +93,6 @@ class RapidLoad_Font_Enqueue
             'link[rel*=pre][href*=fonts.gstatic.com], link[rel*=rel][href*=fonts.googleapis.com]'
         );
         foreach ($preconnects as $preconnect) {
-            error_log($preconnect->outertext);
             $preconnect->remove();
         }
 
