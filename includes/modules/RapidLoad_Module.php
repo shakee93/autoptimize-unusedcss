@@ -135,15 +135,14 @@ class RapidLoad_Module
                     $response = $api->post('cdn',[
                         'url' => trailingslashit(site_url())
                     ]);
-                    if(isset($response->zone_id)){
+                    if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
                         $options['uucss_cdn_zone_id'] = $response->zone_id;
-                    }
-                    if(isset($response->dns_id)){
                         $options['uucss_cdn_dns_id'] = $response->dns_id;
-                    }
-                    if(isset($response->cdn_url)){
                         $options['uucss_cdn_url'] = $response->cdn_url;
+                    }else{
+                        $options['uucss_enable_cdn'] = "";
                     }
+
                 }else{
                     if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
                         $api->post('delete-cdn',[
