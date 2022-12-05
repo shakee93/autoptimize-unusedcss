@@ -129,7 +129,6 @@ export default {
     });
 
     this.javascript = activeModules
-    console.log(this.javascript)
     if (this.javascript) {
       Object.keys(this.javascript).map((key) => {
           if (this.id === this.javascript[key].id) {
@@ -159,7 +158,7 @@ export default {
          })
               .then(response => {
                 response.data;
-                console.log(response.data)
+                window.uucss_global.active_modules = response.data.data
                 this.$notify(
                     {
                       group: "success",

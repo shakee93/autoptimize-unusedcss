@@ -124,7 +124,6 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => {
             response.data
-            this.modules = response.data.data;
             window.uucss_global.active_modules = response.data.data
 
             this.loading = false;
@@ -138,22 +137,10 @@ export default {
 
   },
 
-  watch: {
-    '$route' () {
-          // console.log(this.items.map((val) =>{
-          //   return{
-          //     id: val.id,
-          //     val: val.status
-          //   }
-          // }))
-
-    }
-  },
   data() {
     return {
       items_data: [],
       loading: false,
-      modules: null,
       items: [
         {
           id : "css",
