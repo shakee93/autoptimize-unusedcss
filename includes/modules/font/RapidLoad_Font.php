@@ -128,7 +128,6 @@ class RapidLoad_Font
 
     private static function get_font_urls($css)
     {
-        // Extract font urls like: https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2
         $regex = '/url\((https:\/\/fonts\.gstatic\.com\/.*?)\)/';
         preg_match_all($regex, $css, $matches);
         return array_unique($matches[1]);
@@ -140,7 +139,6 @@ class RapidLoad_Font
         $file_pointers = [];
         $curl_handles = [];
 
-        // Add curl multi handles, one per file we don't already have
         foreach ($urls as $key => $url) {
             $file = self::$base_dir . '/' . basename($url);
             $curl_handles[$key] = curl_init($url);
@@ -151,12 +149,10 @@ class RapidLoad_Font
             curl_multi_add_handle($multi_handle, $curl_handles[$key]);
         }
 
-        // Download the files
         do {
             curl_multi_exec($multi_handle, $running);
         } while ($running > 0);
 
-        // Free up objects
         foreach ($urls as $key => $url) {
             curl_multi_remove_handle($multi_handle, $curl_handles[$key]);
             curl_close($curl_handles[$key]);
