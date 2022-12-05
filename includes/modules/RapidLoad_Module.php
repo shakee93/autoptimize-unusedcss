@@ -162,7 +162,7 @@ class RapidLoad_Module
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
 
-        wp_send_json_success(true);
+        wp_send_json_success($this->active_modules());
     }
 
     public function active_modules(){
