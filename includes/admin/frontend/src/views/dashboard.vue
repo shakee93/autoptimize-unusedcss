@@ -89,26 +89,7 @@ export default {
   },
 
   mounted() {
-    const activeModules = [];
-    Object.keys(window.uucss_global).map((key) => {
-      if (key === 'active_modules') {
-        const entry = window.uucss_global[key];
-        Object.keys(entry).forEach((a) => {
-          activeModules.push(entry[a])
-        });
-      }
-    });
-    this.items_data = activeModules
-
-    if (this.items_data) {
-      Object.keys(this.items_data).map((key) => {
-        this.items.map((val) => {
-          if (val.id === this.items_data[key].id) {
-            val.status = this.items_data[key].status === 'on';
-          }
-        })
-      });
-    }
+    this.getData(null);
   },
   methods:{
 
@@ -127,7 +108,12 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => {
             response.data
-            console.log(response.data)
+            this.modules = response.data.data;
+            this.getData(this.modules);
+            // console.log(window.uucss_global)
+            // console.log(response.data)
+           // window.uucss_global = response.data;
+           // this.getData(response.data.data)
             this.loading = false;
           })
           .catch(error => {
@@ -135,6 +121,34 @@ export default {
             console.error("There was an error!", error);
           });
 
+    },
+
+    getData(modules){
+      const activeModules = [];
+      Object.keys(window.uucss_global).map((key) => {
+        if (key === 'active_modules') {
+          const entry = window.uucss_global[key];
+          Object.keys(entry).forEach((a) => {
+            activeModules.push(entry[a])
+          });
+        }
+      });
+      if(modules){
+        console.log(modules);
+        this.items_data = modules
+      }else {
+        this.items_data = activeModules
+      }
+
+      if (this.items_data) {
+        Object.keys(this.items_data).map((key) => {
+          this.items.map((val) => {
+            if (val.id === this.items_data[key].id) {
+              val.status = this.items_data[key].status === 'on';
+            }
+          })
+        });
+      }
     }
   },
 
@@ -153,6 +167,7 @@ export default {
     return {
       items_data: [],
       loading: false,
+      modules: null,
       items: [
         {
           id : "css",
