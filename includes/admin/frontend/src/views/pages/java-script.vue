@@ -124,13 +124,8 @@ export default {
   mounted() {
 
     const activeModules = [];
-    Object.keys(window.uucss_global).map((key) => {
-      if (key === 'active_modules') {
-        const entry = window.uucss_global[key];
-        Object.keys(entry).forEach((a) => {
-          activeModules.push(entry[a])
-        });
-      }
+    Object.keys(window.uucss_global.active_modules).forEach((a) => {
+      activeModules.push(window.uucss_global.active_modules[a])
     });
 
     this.javascript = activeModules
@@ -163,7 +158,8 @@ export default {
             }
          })
               .then(response => {
-                response.data
+                response.data;
+                console.log(response.data)
                 this.$notify(
                     {
                       group: "success",

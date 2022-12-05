@@ -89,7 +89,23 @@ export default {
   },
 
   mounted() {
-    this.getData();
+    const activeModules = [];
+
+    Object.keys(window.uucss_global.active_modules).forEach((a) => {
+      activeModules.push(window.uucss_global.active_modules[a])
+    });
+
+    this.items_data = activeModules
+
+    if (this.items_data) {
+      Object.keys(this.items_data).map((key) => {
+        this.items.map((val) => {
+          if (val.id === this.items_data[key].id) {
+            val.status = this.items_data[key].status === 'on';
+          }
+        })
+      });
+    }
   },
   methods:{
 
@@ -110,10 +126,7 @@ export default {
             response.data
             this.modules = response.data.data;
             window.uucss_global.active_modules = response.data.data
-            // console.log(window.uucss_global)
-            // console.log(response.data)
-           // window.uucss_global = response.data;
-           // this.getData(response.data.data)
+
             this.loading = false;
           })
           .catch(error => {
@@ -123,25 +136,6 @@ export default {
 
     },
 
-    getData(){
-      const activeModules = [];
-
-      Object.keys(window.uucss_global.active_modules).forEach((a) => {
-        activeModules.push(window.uucss_global.active_modules[a])
-      });
-
-      this.items_data = activeModules
-
-      if (this.items_data) {
-        Object.keys(this.items_data).map((key) => {
-          this.items.map((val) => {
-            if (val.id === this.items_data[key].id) {
-              val.status = this.items_data[key].status === 'on';
-            }
-          })
-        });
-      }
-    }
   },
 
   watch: {
