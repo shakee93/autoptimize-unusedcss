@@ -48,7 +48,7 @@ class RapidLoad_Font_Enqueue
     {
 
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
-            explode(",", $this->options['uucss_preload_font_urls']) : ['http://dev.rapidload.local/wp-content/cache/rapidload/font/wlpwgwvFAVdoq2_v9KQU82RHaBBX.woff2'];
+            explode(",", $this->options['uucss_preload_font_urls']) : [];
 
         foreach ($font_urls as $url) {
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);

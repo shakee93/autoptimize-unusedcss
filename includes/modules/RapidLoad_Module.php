@@ -259,7 +259,7 @@ class RapidLoad_Module
                 'id' => 'font',
                 'status' => isset($options['uucss_enable_font_optimization']) && $options['uucss_enable_font_optimization'] == "1" ? "on" : "off",
                 'options' => [
-
+                    'uucss_preload_font_urls' => isset($options['uucss_preload_font_urls']) ? $options['uucss_preload_font_urls'] : null,
                 ]
             ],
         ];
