@@ -187,7 +187,7 @@ class CriticalCSS_Enqueue
 
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
 
-                $this->dom->find( 'title' )[0]->outertext = $title_content . $critical_css_content;
+                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_content);
 
                 $this->update_noscript();
 
