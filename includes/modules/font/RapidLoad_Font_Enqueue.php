@@ -49,16 +49,7 @@ class RapidLoad_Font_Enqueue
 
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
             explode(",", $this->options['uucss_preload_font_urls']) :
-            [
-                'https://fonts.gstatic.com/s/lexend/v17/wlptgwvFAVdoq2_F94zlCfv0bz1WCzsWzLdnfw.ttf',
-                'https://fonts.gstatic.com/s/nunitosans/v12/pe0qMImSLYBIv1o4X1M8cce9I94.ttf',
-                'https://fonts.gstatic.com/s/lexend/v17/wlptgwvFAVdoq2_F94zlCfv0bz1WC9wRzLdnfw.ttf',
-                'https://fonts.gstatic.com/s/lexend/v17/wlptgwvFAVdoq2_F94zlCfv0bz1WC-URzLdnfw.ttf',
-                'https://fonts.gstatic.com/s/lexend/v17/wlptgwvFAVdoq2_F94zlCfv0bz1WCwkWzLdnfw.ttf',
-                'https://fonts.gstatic.com/s/nunitosans/v12/pe03MImSLYBIv1o4X1M8cc9iB85tU1Q.ttf',
-                'https://fonts.gstatic.com/s/nunitosans/v12/pe03MImSLYBIv1o4X1M8cc8GBs5tU1Q.ttf',
-                'https://staging.rapidload.io/wp-content/plugins/elementor/assets/lib/font-awesome/webfonts/fa-solid-900.woff2',
-            ];
+            [];
 
         foreach ($font_urls as $url) {
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
