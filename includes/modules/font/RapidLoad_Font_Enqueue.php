@@ -33,7 +33,7 @@ class RapidLoad_Font_Enqueue
             $this->options = $state['options'];
         }
 
-        $this->add_display_swap_to_internal_styles();
+        $this->add_display_swap_to_inline_styles();
 
         $this->add_display_swap_to_google_fonts();
 
@@ -73,7 +73,7 @@ class RapidLoad_Font_Enqueue
 
     }
 
-    public function add_display_swap_to_internal_styles(){
+    public function add_display_swap_to_inline_styles(){
 
         $styles = $this->dom->find('style');
         foreach ($styles as $style){
