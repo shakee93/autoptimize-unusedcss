@@ -62,11 +62,11 @@ class MinifyCSS_Enqueue
 
         $file_path = self::get_file_path_from_url($link->href);
 
-        $version = substr(hash_file('md5', $file_path), 0, 12);
-
         if(!$file_path){
             return;
         }
+
+        $version = substr(hash_file('md5', $file_path), 0, 12);
 
         $filename = basename(preg_replace('/\?.*/', '', $link->href));
 
