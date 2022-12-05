@@ -194,3 +194,8 @@ input[type=checkbox]:checked::before {
 .route-leave-active{
     transition: all 0.1s ease-in;
 }
+
+
+
+
+

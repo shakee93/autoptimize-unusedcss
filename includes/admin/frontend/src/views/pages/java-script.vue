@@ -122,6 +122,7 @@ export default {
   },
 
   mounted() {
+
     const activeModules = [];
     Object.keys(window.uucss_global).map((key) => {
       if (key === 'active_modules') {
@@ -131,7 +132,9 @@ export default {
         });
       }
     });
+
     this.javascript = activeModules
+    console.log(this.javascript)
     if (this.javascript) {
       Object.keys(this.javascript).map((key) => {
           if (this.id === this.javascript[key].id) {
@@ -169,6 +172,7 @@ export default {
                     },
                     4000
                 );
+
               })
               .catch(error => {
                 this.errorMessage = error.message;
