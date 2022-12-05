@@ -76,6 +76,9 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                         </div>
                     </li>
                 <?php endif; ?>
+
+                <?php if(1==2) : ?>
+
                 <li>
                     <h2>
                         Advanced Settings
@@ -532,6 +535,8 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                     </div>
                 </li>
 
+                <?php endif; ?>
+
                 <?php do_action('uucss/options/after_settings_section'); ?>
 
                 <li class="rapidload-status">
@@ -700,6 +705,8 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                     </div>
                 </li>
 
+                <?php if(1==2) : ?>
+
                 <li class="submit">
 
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
@@ -712,6 +719,8 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                         </a>
                     </p>
                 </li>
+
+                <?php endif; ?>
 
             <?php endif; ?>
 
