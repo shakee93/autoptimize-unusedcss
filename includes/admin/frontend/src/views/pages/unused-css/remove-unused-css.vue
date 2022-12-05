@@ -288,7 +288,6 @@ export default {
                return value.id + ':' + value.name;
             })
             this.refresh_element = false;
-            window.uucss_global.active_modules = response.data.data;
 
           } )
           .catch(error => {
@@ -323,6 +322,8 @@ export default {
       })
           .then(response => {
             response.data
+            window.uucss_global.active_modules = response.data.data;
+
             this.$notify(
                 {
                   group: "success",
