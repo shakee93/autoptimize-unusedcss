@@ -73,6 +73,16 @@ class RapidLoad_Module
             'global' => 'cdn'
         ];
 
+        $this->modules['font'] = [
+            'id' => 'font',
+            'title' => 'Font',
+            'description' => 'Font',
+            'group' => 'font',
+            'status' => 'on',
+            'class' => RapidLoad_Font::class,
+            'global' => 'font'
+        ];
+
     }
 
     function load_modules(){
@@ -124,6 +134,10 @@ class RapidLoad_Module
             }
             case 'image-delivery' : {
                 $options['uucss_enable_image_delivery'] = $active == "on" ? "1" : "";
+                break;
+            }
+            case 'font' : {
+                $options['uucss_enable_font_optimization'] = $active == "on" ? "1" : "";
                 break;
             }
             case 'cdn' : {
@@ -239,6 +253,13 @@ class RapidLoad_Module
                     'uucss_cdn_url' => isset($options['uucss_cdn_url']) ? $options['uucss_cdn_url'] : null,
                     'uucss_cdn_dns_id' => isset($options['uucss_cdn_dns_id']) ? $options['uucss_cdn_dns_id'] : null,
                     'uucss_cdn_zone_id' => isset($options['uucss_cdn_zone_id']) ? $options['uucss_cdn_zone_id'] : null,
+                ]
+            ],
+            'font' => [
+                'id' => 'font',
+                'status' => isset($options['uucss_enable_font_optimization']) && $options['uucss_enable_font_optimization'] == "1" ? "on" : "off",
+                'options' => [
+
                 ]
             ],
         ];
