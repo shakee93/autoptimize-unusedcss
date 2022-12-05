@@ -37,6 +37,8 @@ class RapidLoad_Font_Enqueue
 
         $this->add_display_swap_to_google_fonts();
 
+        $this->optimize_google_fonts();
+
         return $state;
     }
 
@@ -65,6 +67,35 @@ class RapidLoad_Font_Enqueue
             );
             $inner_text = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $inner_text);
             $style->__set('innertext', $inner_text);
+        }
+    }
+
+    public function optimize_google_fonts(){
+
+        $preconnects = $this->dom->find(
+            'link[rel*=pre][href*=fonts.gstatic.com], link[rel*=rel][href*=fonts.googleapis.com]'
+        );
+        foreach ($preconnects as $preconnect) {
+            error_log($preconnect->outertext);
+            $preconnect->remove();
+        }
+
+        $google_fonts = $this->dom->find('link[href*=fonts.googleapis.com]');
+
+        foreach ($google_fonts as $google_font) {
+            $hash = substr(md5($google_font->href), 0, 12);
+            $filename = "$hash.google-font.css";
+
+            $file_path = RapidLoad_Font::$base_dir . '/' . $filename;
+            $file_url = apply_filters('uucss/enqueue/font-url', $filename);
+
+            if (!is_file($file_path)) {
+                RapidLoad_Font::self_host_style_sheet($google_font->href, $file_path);
+            }
+
+            if (is_file($file_path)) {
+                $google_font->href = $file_url;
+            }
         }
     }
 }
