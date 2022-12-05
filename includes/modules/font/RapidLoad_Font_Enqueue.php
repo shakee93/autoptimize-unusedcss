@@ -71,7 +71,7 @@ class RapidLoad_Font_Enqueue
 
             $style->__set('innertext', $inner_text);
 
-            error_log('changed ' . $inner_text);
+            error_log('changed ' . $style->id);
         }
 
     }
