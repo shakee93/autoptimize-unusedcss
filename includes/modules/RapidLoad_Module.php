@@ -128,6 +128,34 @@ class RapidLoad_Module
             }
             case 'cdn' : {
                 $options['uucss_enable_cdn'] = $active == "on" ? "1" : "";
+
+                $api = new RapidLoad_Api();
+
+                if($options['uucss_enable_cdn'] == "1"){
+                    $response = $api->post('cdn',[
+                        'url' => trailingslashit(site_url())
+                    ]);
+                    if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
+                        $options['uucss_cdn_zone_id'] = $response->zone_id;
+                        $options['uucss_cdn_dns_id'] = $response->dns_id;
+                        $options['uucss_cdn_url'] = $response->cdn_url;
+                    }else{
+                        $options['uucss_enable_cdn'] = "";
+                    }
+
+                }else{
+                    if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
+                        $api->post('delete-cdn',[
+                            'dns_id' => $options['uucss_cdn_dns_id'],
+                            'zone_id' => $options['uucss_cdn_zone_id']
+                        ]);
+                        unset($options['uucss_cdn_dns_id']);
+                        unset($options['uucss_cdn_zone_id']);
+                        unset($options['uucss_cdn_url']);
+                    }
+
+                }
+
                 break;
             }
         }
@@ -208,6 +236,9 @@ class RapidLoad_Module
                 'id' => 'cdn',
                 'status' => isset($options['uucss_enable_cdn']) && $options['uucss_enable_cdn'] == "1" ? "on" : "off",
                 'options' => [
+                    'uucss_cdn_url' => isset($options['uucss_cdn_url']) ? $options['uucss_cdn_url'] : null,
+                    'uucss_cdn_dns_id' => isset($options['uucss_cdn_dns_id']) ? $options['uucss_cdn_dns_id'] : null,
+                    'uucss_cdn_zone_id' => isset($options['uucss_cdn_zone_id']) ? $options['uucss_cdn_zone_id'] : null,
                 ]
             ],
         ];

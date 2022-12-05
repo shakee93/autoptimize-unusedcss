@@ -8,15 +8,25 @@ class RapidLoad_CDN
 
     public function __construct()
     {
+        $this->options = RapidLoad_Base::fetch_options();
+
         if(!isset($this->options['uucss_enable_cdn'])){
-            //return;
+            return;
         }
 
         add_filter('uucss/enqueue/cache-file-url/cdn', [$this, 'replace_cdn'], 30);
     }
 
     public function replace_cdn($url){
-        error_log($url);
+
+        if(isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
+            && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
+            && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
+             return trailingslashit($this->options['uucss_cdn_url']);
+        }
+
         return $url;
     }
+
+
 }

@@ -568,6 +568,8 @@ class RapidLoad_Admin_Frontend
         }
         else{
 
+            $url = $this->transform_url($url);
+
             switch ($job_type){
 
                 case 'requeue_all_rule':{
