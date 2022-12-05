@@ -68,7 +68,7 @@ class RapidLoad_Font_Enqueue
                 $inner_text
             );
 
-            $inner_text = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $inner_text);
+            $inner_text = preg_replace('/@font-face[\s]*{/', '@font-face{font-display:swap;', $inner_text);
 
             $stlye->__set('innertext', $inner_text);
         }
