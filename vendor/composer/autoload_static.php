@@ -72,6 +72,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_Enqueue' => __DIR__ . '/../..' . '/includes/RapidLoad_Enqueue.php',
         'RapidLoad_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/RapidLoad_Feedback.php',
         'RapidLoad_FileSystem' => __DIR__ . '/../..' . '/includes/RapidLoad_FileSystem.php',
+        'RapidLoad_Font' => __DIR__ . '/../..' . '/includes/modules/font/RapidLoad_Font.php',
+        'RapidLoad_Font_Enqueue' => __DIR__ . '/../..' . '/includes/modules/font/RapidLoad_Font_Enqueue.php',
         'RapidLoad_Image' => __DIR__ . '/../..' . '/includes/modules/image/RapidLoad_Image.php',
         'RapidLoad_Image_Enqueue' => __DIR__ . '/../..' . '/includes/modules/image/RapidLoad_Image_Enqueue.php',
         'RapidLoad_Job' => __DIR__ . '/../..' . '/includes/RapidLoad_Job.php',
