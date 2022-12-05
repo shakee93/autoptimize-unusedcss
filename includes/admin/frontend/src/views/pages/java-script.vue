@@ -124,17 +124,11 @@ export default {
   mounted() {
 
     const activeModules = [];
-    Object.keys(window.uucss_global).map((key) => {
-      if (key === 'active_modules') {
-        const entry = window.uucss_global[key];
-        Object.keys(entry).forEach((a) => {
-          activeModules.push(entry[a])
-        });
-      }
+    Object.keys(window.uucss_global.active_modules).forEach((a) => {
+      activeModules.push(window.uucss_global.active_modules[a])
     });
 
     this.javascript = activeModules
-    console.log(this.javascript)
     if (this.javascript) {
       Object.keys(this.javascript).map((key) => {
           if (this.id === this.javascript[key].id) {
@@ -163,7 +157,8 @@ export default {
             }
          })
               .then(response => {
-                response.data
+                response.data;
+                window.uucss_global.active_modules = response.data.data
                 this.$notify(
                     {
                       group: "success",

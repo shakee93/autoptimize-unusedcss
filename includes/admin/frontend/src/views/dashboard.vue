@@ -89,7 +89,23 @@ export default {
   },
 
   mounted() {
-    this.getData();
+    const activeModules = [];
+
+    Object.keys(window.uucss_global.active_modules).forEach((a) => {
+      activeModules.push(window.uucss_global.active_modules[a])
+    });
+
+    this.items_data = activeModules
+
+    if (this.items_data) {
+      Object.keys(this.items_data).map((key) => {
+        this.items.map((val) => {
+          if (val.id === this.items_data[key].id) {
+            val.status = this.items_data[key].status === 'on';
+          }
+        })
+      });
+    }
   },
   methods:{
 
@@ -108,12 +124,8 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => {
             response.data
-            this.modules = response.data.data;
             window.uucss_global.active_modules = response.data.data
-            // console.log(window.uucss_global)
-            // console.log(response.data)
-           // window.uucss_global = response.data;
-           // this.getData(response.data.data)
+
             this.loading = false;
           })
           .catch(error => {
@@ -123,43 +135,12 @@ export default {
 
     },
 
-    getData(){
-      const activeModules = [];
-
-      Object.keys(window.uucss_global.active_modules).forEach((a) => {
-        activeModules.push(window.uucss_global.active_modules[a])
-      });
-
-      this.items_data = activeModules
-
-      if (this.items_data) {
-        Object.keys(this.items_data).map((key) => {
-          this.items.map((val) => {
-            if (val.id === this.items_data[key].id) {
-              val.status = this.items_data[key].status === 'on';
-            }
-          })
-        });
-      }
-    }
   },
 
-  watch: {
-    '$route' () {
-          // console.log(this.items.map((val) =>{
-          //   return{
-          //     id: val.id,
-          //     val: val.status
-          //   }
-          // }))
-
-    }
-  },
   data() {
     return {
       items_data: [],
       loading: false,
-      modules: null,
       items: [
         {
           id : "css",
