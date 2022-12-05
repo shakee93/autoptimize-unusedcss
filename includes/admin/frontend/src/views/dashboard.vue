@@ -60,12 +60,12 @@
     </ul>
 
     <div class="pt-6">
-      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+<!--      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                   to="/page-optimizer">
         <button>Page Optimizer</button>
-      </RouterLink>
+      </RouterLink>-->
 
-      <RouterLink class="ml-6 text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                   to="/general-settings">
         <button>General Settings</button>
       </RouterLink>
@@ -108,8 +108,12 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
           .then(response => {
             response.data
-            window.uucss_global = response.data.data;
-
+            this.modules = response.data.data;
+            window.uucss_global.active_modules = response.data.data
+            // console.log(window.uucss_global)
+            // console.log(response.data)
+           // window.uucss_global = response.data;
+           // this.getData(response.data.data)
             this.loading = false;
           })
           .catch(error => {
@@ -121,20 +125,12 @@ export default {
 
     getData(){
       const activeModules = [];
-      Object.keys(window.uucss_global).map((key) => {
-        if (key === 'active_modules') {
-          const entry = window.uucss_global[key];
-          Object.keys(entry).forEach((a) => {
-            activeModules.push(entry[a])
-          });
-        }
+
+      Object.keys(window.uucss_global.active_modules).forEach((a) => {
+        activeModules.push(window.uucss_global.active_modules[a])
       });
-      if(modules){
-        console.log(modules);
-        this.items_data = modules
-      }else {
-        this.items_data = activeModules
-      }
+
+      this.items_data = activeModules
 
       if (this.items_data) {
         Object.keys(this.items_data).map((key) => {
