@@ -14,7 +14,7 @@ class RapidLoad_Font
         $this->options = RapidLoad_Base::fetch_options();
 
         if(!isset($this->options['uucss_enable_font_optimization'])){
-            //return;
+            return;
         }
 
         $this->file_system = new RapidLoad_FileSystem();

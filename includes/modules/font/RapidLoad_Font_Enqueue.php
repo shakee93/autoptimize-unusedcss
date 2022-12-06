@@ -90,18 +90,11 @@ class RapidLoad_Font_Enqueue
 
     public function optimize_google_fonts(){
 
-        $preconnects = $this->dom->find(
-            'link[rel*=pre][href*=fonts.gstatic.com], link[rel*=rel][href*=fonts.googleapis.com]'
-        );
-        foreach ($preconnects as $preconnect) {
-            $preconnect->remove();
-        }
-
         $google_fonts = $this->dom->find('link[href*=fonts.googleapis.com]');
 
         foreach ($google_fonts as $google_font) {
-            $hash = substr(md5($google_font->href), 0, 12);
-            $filename = "$hash.google-font.css";
+            $version = substr(md5($google_font->href), 0, 15);
+            $filename = $version . ".google-font.css";
 
             $file_path = RapidLoad_Font::$base_dir . '/' . $filename;
             $file_url = apply_filters('uucss/enqueue/font-url', $filename);
@@ -113,6 +106,14 @@ class RapidLoad_Font_Enqueue
             if (is_file($file_path)) {
                 $google_font->href = $file_url;
             }
+        }
+
+        $preload_fonts = $this->dom->find(
+            'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+        );
+
+        foreach ($preload_fonts as $preload_font) {
+            $preload_font->remove();
         }
     }
 }
