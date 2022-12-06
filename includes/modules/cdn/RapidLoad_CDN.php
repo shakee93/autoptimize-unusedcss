@@ -44,8 +44,8 @@ class RapidLoad_CDN
 
         $parsed_url = parse_url($url);
 
-        if(isset($parsed_url['scheme']) && $parsed_url['path'] && !empty($cdn)){
-            return $parsed_url['scheme'] . '://' . $cdn . $parsed_url['path'];
+        if($parsed_url['path'] && !empty($cdn)){
+            return $cdn . $parsed_url['path'];
         }
 
         return $url;
