@@ -20,7 +20,7 @@
                 })
 
                 if (!original) {
-                    return;
+                    continue;
                 }
 
                 let link = file.cloneNode()
@@ -41,13 +41,6 @@
             }
         }
 
-        var removeCriticalCSS = function (){
-            let element = document.getElementById('rapidload-critical-css')
-            if(element){
-                element.remove();
-            }
-        }
-
         this.add_events = function () {
 
             if (!window.rapidload || !window.rapidload.files || !window.rapidload.files.length) {
@@ -58,9 +51,6 @@
 
                 var listener = function () {
                     load_css(window.rapidload.files)
-                    if(window.rapidload && window.rapidload.remove_cpcss_on_ui){
-                        setTimeout(removeCriticalCSS, 200);
-                    }
                     removeEventListener(event, listener);
                 }
                 addEventListener(event, listener);
@@ -73,9 +63,6 @@
     };
 
     document.addEventListener("DOMContentLoaded", function (event) {
-        if(window.rapidload && window.rapidload.frontend_debug === "1"){
-            console.log('RapidLoad 🔥 1.0');
-        }
         new RapidLoad();
     });
 
