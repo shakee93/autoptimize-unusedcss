@@ -8,6 +8,7 @@ class RapidLoad_Font
     public $base;
     public $file_system;
     public static $base_dir;
+    public static $base_url;
 
     public function __construct()
     {
@@ -22,6 +23,8 @@ class RapidLoad_Font
         if( ! $this->initFileSystem() ){
             return;
         }
+
+        error_log(self::$base_url);
 
         add_filter('uucss/enqueue/font-url', function ($js_file){
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
@@ -60,6 +63,7 @@ class RapidLoad_Font
     public function init_base_dir() {
 
         self::$base_dir = WP_CONTENT_DIR . $this->base;
+        self::$base_url = untrailingslashit(content_url($this->base));
 
         if ( $this->file_system->exists( self::$base_dir ) ) {
             return true;
@@ -130,7 +134,7 @@ class RapidLoad_Font
         self::download_urls_in_parallel($font_urls);
 
         foreach ($font_urls as $font_url) {
-            $cached_font_url = apply_filters('uucss/enqueue/font-url', basename($font_url));
+            $cached_font_url = RapidLoad_Font::$base_url . '/' . basename($font_url);
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 

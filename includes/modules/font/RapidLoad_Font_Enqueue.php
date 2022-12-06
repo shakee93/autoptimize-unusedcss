@@ -97,7 +97,7 @@ class RapidLoad_Font_Enqueue
             $filename = $version . ".google-font.css";
 
             $file_path = RapidLoad_Font::$base_dir . '/' . $filename;
-            $file_url = apply_filters('uucss/enqueue/font-url', $filename);
+            $file_url = RapidLoad_Font::$base_url . '/' . $filename;
 
             if (!is_file($file_path)) {
                 RapidLoad_Font::self_host_style_sheet($google_font->href, $file_path);

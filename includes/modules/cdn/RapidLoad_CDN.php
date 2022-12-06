@@ -16,6 +16,8 @@ class RapidLoad_CDN
 
         add_filter('uucss/enqueue/cache-file-url/cdn', [$this, 'replace_cdn'], 30);
 
+        add_filter('uucss/enqueue/cdn', [$this, 'replace_cdn'], 30);
+
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
     }
 
