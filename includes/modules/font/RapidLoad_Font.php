@@ -24,8 +24,6 @@ class RapidLoad_Font
             return;
         }
 
-        error_log(self::$base_url);
-
         add_filter('uucss/enqueue/font-url', function ($js_file){
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
@@ -148,7 +146,7 @@ class RapidLoad_Font
         self::download_urls_in_parallel($font_urls);
 
         foreach ($font_urls as $font_url) {
-            $cached_font_url = RapidLoad_Font::$base_url . '/' . basename($font_url);
+            $cached_font_url = self::$base_url . '/' . basename($font_url);
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 
