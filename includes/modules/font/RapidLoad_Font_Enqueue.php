@@ -33,11 +33,19 @@ class RapidLoad_Font_Enqueue
             $this->options = $state['options'];
         }
 
-        $this->add_display_swap_to_inline_styles();
+        if(isset($this->options['uucss_display_swap_fonts']) && $this->options['uucss_display_swap_fonts'] == "1"){
 
-        $this->add_display_swap_to_google_fonts();
+            $this->add_display_swap_to_inline_styles();
 
-        $this->optimize_google_fonts();
+            $this->add_display_swap_to_google_fonts();
+
+        }
+
+        if(isset($this->options['uucss_self_host_google_fonts']) && $this->options['uucss_self_host_google_fonts'] == "1"){
+
+            $this->optimize_google_fonts();
+
+        }
 
         $this->preload_fonts();
 

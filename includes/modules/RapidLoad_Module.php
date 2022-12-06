@@ -260,6 +260,8 @@ class RapidLoad_Module
                 'status' => isset($options['uucss_enable_font_optimization']) && $options['uucss_enable_font_optimization'] == "1" ? "on" : "off",
                 'options' => [
                     'uucss_preload_font_urls' => isset($options['uucss_preload_font_urls']) ? $options['uucss_preload_font_urls'] : null,
+                    'uucss_display_swap_fonts' => isset($options['uucss_display_swap_fonts']) && $options['uucss_display_swap_fonts'] == "1" ? true : false,
+                    'uucss_self_host_google_fonts' => isset($options['uucss_self_host_google_fonts']) && $options['uucss_self_host_google_fonts'] == "1" ? true : false,
                 ]
             ],
         ];
