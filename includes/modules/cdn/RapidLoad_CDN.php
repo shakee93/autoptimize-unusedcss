@@ -10,7 +10,7 @@ class RapidLoad_CDN
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] != "1"){
+        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] == ""){
             return;
         }
 
