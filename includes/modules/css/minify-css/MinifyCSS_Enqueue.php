@@ -60,6 +60,10 @@ class MinifyCSS_Enqueue
             return;
         }
 
+        if(!$this->str_contains($link->href, ".css")){
+            return;
+        }
+
         $file_path = self::get_file_path_from_url($link->href);
 
         if(!$file_path){

@@ -266,6 +266,28 @@ class RapidLoad_Admin
 
         }
 
+        // update font settings
+
+        if(isset($_REQUEST['uucss_enable_font_optimization'])){
+
+            if(isset($_REQUEST['uucss_preload_font_urls'])){
+
+                $options['uucss_preload_font_urls'] = $_REQUEST['uucss_preload_font_urls'];
+
+            }
+
+            if(isset($_REQUEST['uucss_display_swap_fonts'])){
+
+                $options['uucss_display_swap_fonts'] = ($_REQUEST['uucss_display_swap_fonts'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_self_host_google_fonts'])){
+
+                $options['uucss_self_host_google_fonts'] = ($_REQUEST['uucss_self_host_google_fonts'] == 'true' ? "1" : null);
+
+            }
+        }
 
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
