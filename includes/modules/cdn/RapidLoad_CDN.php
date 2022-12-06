@@ -14,7 +14,9 @@ class RapidLoad_CDN
             return;
         }
 
-        add_filter('uucss/enqueue/cache-file-url/cdn', [$this, 'replace_cdn'], 30);
+        //add_filter('uucss/enqueue/cache-file-url/cdn', [$this, 'replace_cdn'], 30);
+
+        add_action('rapidload/job/handle', [$this, 'replace_cdn'], 40, 2);
 
         add_filter('uucss/enqueue/cdn', [$this, 'replace_cdn_url'], 30);
 
@@ -50,15 +52,13 @@ class RapidLoad_CDN
         return $url;
     }
 
-    public function replace_cdn($url){
+    public function replace_cdn($job){
 
-        if( isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
-            && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
-            && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
-            return trailingslashit($this->options['uucss_cdn_url']);
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_mincss'] )){
+            return false;
         }
 
-        return $url;
+        new RapidLoad_CDN_Enqueue($job);
     }
 
     public function is_cdn_enabled(){
