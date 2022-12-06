@@ -40,6 +40,7 @@ return array(
     'RapidLoad_Base' => $baseDir . '/includes/RapidLoad_Base.php',
     'RapidLoad_Buffer' => $baseDir . '/includes/RapidLoad_Buffer.php',
     'RapidLoad_CDN' => $baseDir . '/includes/modules/cdn/RapidLoad_CDN.php',
+    'RapidLoad_CDN_Enqueue' => $baseDir . '/includes/modules/cdn/RapidLoad_CDN_Enqueue.php',
     'RapidLoad_DB' => $baseDir . '/includes/RapidLoad_DB.php',
     'RapidLoad_Enqueue' => $baseDir . '/includes/RapidLoad_Enqueue.php',
     'RapidLoad_Feedback' => $baseDir . '/includes/utils/Feedback/RapidLoad_Feedback.php',
