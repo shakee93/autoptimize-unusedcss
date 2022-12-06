@@ -16,7 +16,7 @@ class RapidLoad_CDN_Enqueue
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 50);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
     }
 
     public function update_content($state){
@@ -58,7 +58,7 @@ class RapidLoad_CDN_Enqueue
                 if( isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
                     && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
                     && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
-                    $script->setAttribute('src', str_replace(trailingslashit(site_url()),trailingslashit($this->options['uucss_cdn_url']),$script->src));
+                    $script->src = str_replace(trailingslashit(site_url()),trailingslashit($this->options['uucss_cdn_url']),$script->src);
                 }
 
             }
