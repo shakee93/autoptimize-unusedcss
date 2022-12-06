@@ -65,6 +65,10 @@ class RapidLoad_CDN
             return false;
         }
 
+        if(!$this->is_cdn_enabled()){
+            return false;
+        }
+
         new RapidLoad_CDN_Enqueue($job);
     }
 

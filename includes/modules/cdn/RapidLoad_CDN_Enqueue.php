@@ -33,6 +33,11 @@ class RapidLoad_CDN_Enqueue
             $this->options = $state['options'];
         }
 
+        $head = $this->dom->find('head', 0);
+        $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';
+        $first_child = $head->first_child();
+        $first_child->__set('outertext', $preconnect . $first_child->outertext);
+
         $links = $this->dom->find( 'link' );
 
         foreach ($links as $link){
