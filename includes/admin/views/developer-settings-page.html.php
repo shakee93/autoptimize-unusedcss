@@ -34,6 +34,8 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                 </li>
             <?php endif; ?>
             <?php if ( $api_key_verified) : ?>
+
+                <?php if(isset($_GET['uucss_jobs'])) : ?>
                 <li class="uucss-history uucss-job-history">
                     <h2>
                         Optimization Jobs
@@ -54,6 +56,8 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                         <table id="uucss-history" width="100%" class="hover uucss-history-table uucss-job-history-table"></table>
                     </div>
                 </li>
+                <?php endif; ?>
+
                 <?php if($rapidload->rules_enabled()) : ?>
                     <li class="uucss-history uucss-rule-history">
                         <h2>
@@ -535,8 +539,6 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                     </div>
                 </li>
 
-                <?php endif; ?>
-
                 <?php do_action('uucss/options/after_settings_section'); ?>
 
                 <li class="rapidload-status">
@@ -705,8 +707,6 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
                     </div>
                 </li>
 
-                <?php if(1==2) : ?>
-
                 <li class="submit">
 
                     <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
@@ -725,35 +725,6 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
             <?php endif; ?>
 
         </ul>
-        <?php if($api_key_verified): ?>
-            <div style="width: 22%" class="uucss-banner-section">
-                <div class="uucss-banner">
-                    <div class="banner-title">
-                        <h2>Get up to $60 in cash back</h2>
-                    </div>
-                    <div class="banner-image">
-                        <img src="<?php echo UUCSS_PLUGIN_URL . '/assets/images/referral.svg' ?>" alt="" width="120px">
-                    </div>
-                    <div class="banner-content">
-                        <p>refer-a-friend and give your friend 10% off, get yourself up to $60 in cash backs.</p>
-                        <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>
-                    </div>
-                    <div class="banner-footer">
-                        <a href="https://app.rapidload.io/auth/sign-in/?goto=https://app.rapidload.io/referral-program" class="button button-primary" target="_blank">Invite</a>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <div class="uucss-support">
-        <div id="uucss-support-tooltip" style="display: none">
-            <h3>Support</h3>
-            <br>
-            We are here to help, take a look at our knowledge base or feel free to open a ticket.
-        </div>
-        <a target="_blank" href="https://rapidload.zendesk.com/hc/en-us/articles/1500000568821-FAQ"><span class="dashicons dashicons-sos"></span>
-            Help</a>
     </div>
 
 </form>

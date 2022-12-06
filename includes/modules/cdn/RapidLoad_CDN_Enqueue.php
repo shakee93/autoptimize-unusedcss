@@ -9,12 +9,10 @@ class RapidLoad_CDN_Enqueue
     private $dom;
     private $inject;
     private $options;
-    private $file_system;
 
     public function __construct($job)
     {
         $this->job = $job;
-        $this->file_system = new RapidLoad_FileSystem();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
     }

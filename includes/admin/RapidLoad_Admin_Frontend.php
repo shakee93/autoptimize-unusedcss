@@ -753,7 +753,6 @@ class RapidLoad_Admin_Frontend
 
             ?>
             <div class="wrap">
-                <h1><?php _e( 'RapidLoad Settings', 'autoptimize' ); ?></h1>
                 <?php
                 do_action('uucss/options/before_render_form');
                 ?>
