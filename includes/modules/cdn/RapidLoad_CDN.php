@@ -16,7 +16,7 @@ class RapidLoad_CDN
 
         add_filter('uucss/enqueue/cache-file-url/cdn', [$this, 'replace_cdn'], 30);
 
-        add_filter('uucss/enqueue/cdn', [$this, 'replace_cdn'], 30);
+        add_filter('uucss/enqueue/cdn', [$this, 'replace_cdn_url'], 30);
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
     }
@@ -32,12 +32,31 @@ class RapidLoad_CDN
 
     }
 
+    public function replace_cdn_url($url){
+
+        $cdn = '';
+
+        if(isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
+            && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
+            && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
+            $cdn = trailingslashit($this->options['uucss_cdn_url']);
+        }
+
+        $parsed_url = parse_url($url);
+
+        if(isset($parsed_url['scheme']) && $parsed_url['path'] && !empty($cdn)){
+            return $parsed_url['scheme'] . '://' . $cdn . $parsed_url['path'];
+        }
+
+        return $url;
+    }
+
     public function replace_cdn($url){
 
         if(isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
             && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
             && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
-             return trailingslashit($this->options['uucss_cdn_url']);
+            return trailingslashit($this->options['uucss_cdn_url']);
         }
 
         return $url;
