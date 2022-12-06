@@ -60,6 +60,9 @@ class RapidLoad_Font_Enqueue
             [];
 
         foreach ($font_urls as $url) {
+            if(empty($url)){
+                continue;
+            }
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
             $preload_font = '<link rel="preload" href="'. $url .'" as="font" fetchpriority="high" type="font/'. $extension .'"> ';
             $title_content = $this->dom->find( 'title' )[0]->outertext;
