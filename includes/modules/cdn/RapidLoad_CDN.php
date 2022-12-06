@@ -27,7 +27,6 @@ class RapidLoad_CDN
 
         if($this->options['uucss_cdn_zone_id'] && !empty($this->options['uucss_cdn_zone_id'])){
             $result = $api->post('purge-cdn/' . $this->options['uucss_cdn_zone_id']);
-            error_log(json_encode($result) . 'cdn purged');
         }
 
     }
