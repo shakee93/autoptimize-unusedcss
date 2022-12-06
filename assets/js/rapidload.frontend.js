@@ -27,6 +27,7 @@
                 let link = file.cloneNode()
                 link.href = original.original
                 link.removeAttribute('data-href')
+                link.removeAttribute('data-media')
                 if(window.rapidload && window.rapidload.frontend_debug === "1"){
                     link.removeAttribute('uucss')
                     link.setAttribute('uucss-reverted', '')
