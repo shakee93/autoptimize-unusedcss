@@ -117,7 +117,6 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.image_delivery = activeModules
-    console.log(this.image_delivery)
     if (this.image_delivery) {
       Object.keys(this.image_delivery).map((key) => {
         if (this.id === this.image_delivery[key].id) {

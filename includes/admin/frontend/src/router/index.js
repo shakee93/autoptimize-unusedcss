@@ -6,6 +6,8 @@ import assetManager from '../views/pages/asset-manager.vue'
 import removeUnusedCss from '../views/pages/unused-css/remove-unused-css.vue'
 import generalSettings from '../views/pages/general-settings.vue'
 import imageDelivery from '../views/pages/image-delivery.vue'
+import font from '../views/pages/font-optimization.vue'
+
 
 const router = createRouter({
 
@@ -64,7 +66,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/pages/font-optimization.vue')
+      component: font
     },
     {
       path: '/page-optimizer',

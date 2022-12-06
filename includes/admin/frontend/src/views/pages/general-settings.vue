@@ -4,7 +4,7 @@
     <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
-        <div class="flex-initial w-32 pl-8">
+        <div class="flex-initial w-28 pl-8">
           <RouterLink type="button" :to="back"
                       class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
             <img :src="base+'/arrow-left.svg'" alt="Back">
@@ -188,7 +188,6 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.general_config = activeModules;
-    console.log(activeModules)
 
     if (this.general_config) {
       Object.keys(this.general_config).map((key) => {
@@ -211,10 +210,7 @@ export default {
   },
 
   methods:{
-    advanceSettings(){
-      // queue_option.default = true;
-      console.log(this.queue_option.default)
-    },
+
     saveSettings(){
 
       const data = {

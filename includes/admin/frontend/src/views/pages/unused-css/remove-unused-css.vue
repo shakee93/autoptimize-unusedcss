@@ -282,7 +282,6 @@ export default {
       this.refresh_element = true;
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response =>{
-            //console.log(response.data)
 
             this.whitelist_packs = response.data.data.map((value)=>{
                return value.id + ':' + value.name;

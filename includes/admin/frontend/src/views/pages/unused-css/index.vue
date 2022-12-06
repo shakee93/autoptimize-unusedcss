@@ -166,12 +166,11 @@
 
 
             <div :class="{ expand: uucss_enable_rules }" class="pl-9 not-expand">
-              <RouterLink :to="unused_css_settings_link">
-                <button
+                <button @click="url.replace('rapidload', 'uucss')"
                     class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                   Settings
                 </button>
-              </RouterLink>
+
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
                 <div class="flex">
                   <div class="py-1 mt-1">
@@ -286,6 +285,7 @@ export default {
           });
 
     }
+
   },
 
   data() {
@@ -297,6 +297,7 @@ export default {
       remove_unused_css: false,
       uucss_enable_rules: false,
       unused_css_settings_link: '/remove-unused-css',
+
       critical_css:{
         status: false,
         mobile_critical_css: false,
