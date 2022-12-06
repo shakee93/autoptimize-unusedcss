@@ -43,16 +43,16 @@ class RapidLoad_Font_Enqueue
 
         if(isset($this->options['uucss_self_host_google_fonts']) && $this->options['uucss_self_host_google_fonts'] == "1"){
 
-            $this->optimize_google_fonts();
+            $this->self_host_google_fonts();
 
         }
 
-        $this->preload_fonts();
+        $this->preload_font_urls();
 
         return $state;
     }
 
-    public function preload_fonts()
+    public function preload_font_urls()
     {
 
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
@@ -96,7 +96,7 @@ class RapidLoad_Font_Enqueue
         }
     }
 
-    public function optimize_google_fonts(){
+    public function self_host_google_fonts(){
 
         $google_fonts = $this->dom->find('link[href*=fonts.googleapis.com]');
 
