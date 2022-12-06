@@ -49,7 +49,7 @@ class RapidLoad_Font_Enqueue
 
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
             explode(",", $this->options['uucss_preload_font_urls']) :
-            ['https://staging.rapidload.io/wp-content/plugins/elementor/assets/lib/eicons/fonts/eicons.woff2?5.16.0'];
+            [];
 
         foreach ($font_urls as $url) {
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
