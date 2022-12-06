@@ -117,7 +117,7 @@ class Javascript_Enqueue
 
         }
 
-        $link->src = $minified_url ;
+        $link->setAttribute('src', $minified_url);
 
     }
 
