@@ -39,9 +39,7 @@ class RapidLoad_CDN_Enqueue
 
             if($this->str_contains($link->href, site_url())){
 
-                if( isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
-                    && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
-                    && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
+                if($this->is_cdn_enabled()){
                     $link->href = str_replace(trailingslashit(site_url()),trailingslashit($this->options['uucss_cdn_url']),$link->href);
                 }
 
@@ -55,9 +53,7 @@ class RapidLoad_CDN_Enqueue
 
             if($this->str_contains($script->src, site_url())){
 
-                if( isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
-                    && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
-                    && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
+                if($this->is_cdn_enabled()){
                     $script->src = str_replace(trailingslashit(site_url()),trailingslashit($this->options['uucss_cdn_url']),$script->src);
                 }
 
@@ -67,5 +63,11 @@ class RapidLoad_CDN_Enqueue
 
         return $state;
 
+    }
+
+    public function is_cdn_enabled(){
+        return isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
+            && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
+            && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id']);
     }
 }
