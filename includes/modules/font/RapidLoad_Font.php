@@ -24,10 +24,6 @@ class RapidLoad_Font
             return;
         }
 
-        add_filter('uucss/enqueue/font-url', function ($js_file){
-            return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
-        },10,1);
-
         add_action('rapidload/job/handle', [$this, 'optimize_font'], 30, 2);
 
         add_filter('rapidload/cpcss/minify', [$this, 'add_display_swap_to_inline_styles']);
@@ -99,25 +95,6 @@ class RapidLoad_Font
 
         new RapidLoad_Font_Enqueue($job);
 
-    }
-
-    public function get_cached_file( $file_url, $cdn = null ) {
-
-        if ( ! $cdn || empty( $cdn ) ) {
-            $cdn = content_url();
-        } else {
-
-            $url_parts = parse_url( content_url() );
-
-            $cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
-
-        }
-
-        return implode( '/', [
-            $cdn,
-            trim($this->base, "/"),
-            $file_url
-        ] );
     }
 
     public static function self_host_style_sheet($url, $file_path)
