@@ -34,6 +34,15 @@ class RapidLoad_Font
 
         add_filter('rapidload/cpcss/minify', [$this, 'add_display_swap_to_inline_styles']);
 
+        add_filter('uucss/css/excluded-files', [$this, 'exclude_google_font_uucss']);
+
+    }
+
+    public function exclude_google_font_uucss($args){
+
+        $args[] = 'fonts.googleapis.com';
+
+        return $args;
     }
 
     public function add_display_swap_to_inline_styles($content){

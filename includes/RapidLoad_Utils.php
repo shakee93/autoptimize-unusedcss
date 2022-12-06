@@ -369,7 +369,7 @@ trait RapidLoad_Utils {
     public function is_file_excluded( $options, $file ) {
 
         if ( isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ) {
-            $files = explode( ',', $options['uucss_excluded_files'] );
+            $files = apply_filters('uucss/css/excluded-files',explode( ',', $options['uucss_excluded_files'] ));
 
             foreach ( $files as $excluded_file ) {
 
