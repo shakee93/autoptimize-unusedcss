@@ -170,21 +170,20 @@ export default {
           isDisabled: false
         },
         {
+          id : "font",
+          title: "Font Optimization",
+          description: 'Reduce your CSS file size by remove unused CSS from your pages',
+          image: 'font-optimization.svg',
+          link: '/font-optimization',
+          status: false,
+          isDisabled: true
+        },
+        {
           id : "cdn",
           title: "CDN",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
           image: 'speed-monitoring.svg',
           link: '/cdn',
-          status: false,
-          isDisabled: true
-        },
-
-        {
-          id : "font-optimization",
-          title: "Font Optimization",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'font-optimization.svg',
-          link: '/font-optimization',
           status: false,
           isDisabled: true
         },
