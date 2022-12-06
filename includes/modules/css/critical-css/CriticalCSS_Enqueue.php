@@ -156,45 +156,45 @@ class CriticalCSS_Enqueue
 
     function enqueue_cpcss(){
 
-            $critical_css_content = '';
+        $critical_css_content = '';
 
-            if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
-                $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
-            }
+        if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
+            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+        }
 
-            if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
+        if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
 
-                $critical_css_content .= $this->options['uucss_additional_css'];
+            $critical_css_content .= $this->options['uucss_additional_css'];
 
-            }
+        }
 
-            if(empty($critical_css_content)){
+        if(empty($critical_css_content)){
 
-                self::log([
-                    'type' => 'injection',
-                    'url' => $this->job_data->job->url,
-                    'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-content_empty'
-                ]);
+            self::log([
+                'type' => 'injection',
+                'url' => $this->job_data->job->url,
+                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-content_empty'
+            ]);
 
-                return;
-            }
+            return;
+        }
 
-            $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content);
+        $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content);
 
-            $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
+        $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
 
-            if(isset($this->dom->find( 'title' )[0])){
+        if(isset($this->dom->find( 'title' )[0])){
 
-                $title_content = $this->dom->find( 'title' )[0]->outertext;
+            $title_content = $this->dom->find( 'title' )[0]->outertext;
 
-                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_content);
+            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_content);
 
-                $this->update_noscript();
+            $this->update_noscript();
 
-            }
+        }
 
-            $this->job_data->mark_as_successful_hit();
-            $this->job_data->save();
+        $this->job_data->mark_as_successful_hit();
+        $this->job_data->save();
 
         self::log([
             'type' => 'injection',
