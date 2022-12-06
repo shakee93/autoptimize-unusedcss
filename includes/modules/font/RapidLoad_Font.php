@@ -24,8 +24,6 @@ class RapidLoad_Font
             return;
         }
 
-        error_log(self::$base_url);
-
         add_filter('uucss/enqueue/font-url', function ($js_file){
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
