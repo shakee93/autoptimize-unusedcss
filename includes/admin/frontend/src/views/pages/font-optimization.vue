@@ -109,14 +109,14 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.font_config = activeModules;
-      console.log(this.font_config);
+
     if (this.font_config) {
       Object.keys(this.font_config).map((key) => {
         if (this.id === this.font_config[key].id) {
           const option = this.font_config[key].options;
           this.preload_font_urls = option.uucss_preload_font_urls? option.uucss_preload_font_urls.replace(/,/g, '\n'): "";
           this.self_host_google_font= option.uucss_self_host_google_fonts;
-          this.display_swap_fonts = option.display_swap_fonts;
+          this.display_swap_fonts = option.uucss_display_swap_fonts;
 
         }
 
