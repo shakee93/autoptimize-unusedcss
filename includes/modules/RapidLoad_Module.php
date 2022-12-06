@@ -145,7 +145,7 @@ class RapidLoad_Module
 
                 $api = new RapidLoad_Api();
 
-                if($options['uucss_enable_cdn'] == "1"){
+                if($options['uucss_enable_cdn'] == "1" && !isset($options['uucss_cdn_url'])){
                     $response = $api->post('cdn',[
                         'url' => trailingslashit(site_url())
                     ]);
@@ -158,14 +158,19 @@ class RapidLoad_Module
                     }
 
                 }else{
-                    if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
-                        $api->post('delete-cdn',[
-                            'dns_id' => $options['uucss_cdn_dns_id'],
-                            'zone_id' => $options['uucss_cdn_zone_id']
-                        ]);
-                        unset($options['uucss_cdn_dns_id']);
-                        unset($options['uucss_cdn_zone_id']);
-                        unset($options['uucss_cdn_url']);
+
+                    if(apply_filters('rapidload/cdn/clear-server-dns', false)){
+
+                        if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
+                            $api->post('delete-cdn',[
+                                'dns_id' => $options['uucss_cdn_dns_id'],
+                                'zone_id' => $options['uucss_cdn_zone_id']
+                            ]);
+                            unset($options['uucss_cdn_dns_id']);
+                            unset($options['uucss_cdn_zone_id']);
+                            unset($options['uucss_cdn_url']);
+                        }
+
                     }
 
                 }
