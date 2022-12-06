@@ -10,7 +10,7 @@ class RapidLoad_CDN
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_cdn'])){
+        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] != "1"){
             return;
         }
 
@@ -35,7 +35,7 @@ class RapidLoad_CDN
 
         $cdn = '';
 
-        if( isset($this->options['uucss_enable_cdn']) && $this->options['uucss_enable_cdn'] == "1"
+        if( $this->is_cdn_enabled()
             && isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
             && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
             && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
@@ -53,7 +53,7 @@ class RapidLoad_CDN
 
     public function replace_cdn($url){
 
-        if( isset($this->options['uucss_enable_cdn']) && $this->options['uucss_enable_cdn'] == "1"
+        if( $this->is_cdn_enabled()
             && isset($this->options['uucss_cdn_url']) && !empty($this->options['uucss_cdn_url'])
             && isset($this->options['uucss_cdn_dns_id']) && !empty($this->options['uucss_cdn_dns_id'])
             && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id'])){
@@ -63,5 +63,8 @@ class RapidLoad_CDN
         return $url;
     }
 
+    public function is_cdn_enabled(){
+        return isset($this->options['uucss_enable_cdn']) && $this->options['uucss_enable_cdn'] == "1";
+    }
 
 }
