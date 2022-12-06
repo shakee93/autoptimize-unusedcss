@@ -174,6 +174,8 @@ class UnusedCSS_Enqueue
                     }
 
                     $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
+                    $sheet->{'data-href'} = $sheet->href;
+                    $sheet->{'data-media'} = $sheet->media;
 
                     if ( isset( $this->options['uucss_inline_css'] ) ) {
 
@@ -340,7 +342,7 @@ class UnusedCSS_Enqueue
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
 
-        $sheet->outertext = sprintf('<style %s %s>%s</style>', $file_name, $tag_name, $inline['content']);
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name .' data-href="'. $sheet->{'data-href'} .'" data-media="'. $sheet->{'data-media'} .'">'. htmlspecialchars($inline['content']) .'</style>');
 
     }
 
