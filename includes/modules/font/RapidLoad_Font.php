@@ -20,7 +20,7 @@ class RapidLoad_Font
         $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
-            //return;
+            return;
         }
 
         add_filter('uucss/enqueue/font-url', function ($js_file){
@@ -29,15 +29,17 @@ class RapidLoad_Font
 
         add_action('rapidload/job/handle', [$this, 'optimize_font'], 30, 2);
 
-        add_filter('rapidload/cpcss/minify', function ($content){
-            $content = preg_replace(
-                '/font-display:\s?(auto|block|fallback|optional)/',
-                'font-display:swap',
-                $content
-            );
-            return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
-        });
+        add_filter('rapidload/cpcss/minify', [$this, 'add_display_swap_to_inline_styles']);
 
+    }
+
+    public function add_display_swap_to_inline_styles($content){
+        $content = preg_replace(
+            '/font-display:\s?(auto|block|fallback|optional)/',
+            'font-display:swap',
+            $content
+        );
+        return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
     }
 
     public function initFileSystem() {
