@@ -1,6 +1,7 @@
 <template>
   <main>
     <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+      <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mt-12 mb-6 pr-8">
         <div class="flex-initial w-28 pl-8">
           <RouterLink type="button" :to="back"
@@ -91,12 +92,14 @@
 import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import axios from "axios";
+import messageBox from "../../components/messageBox.vue";
 
 export default {
   name: "font-optimization",
 
   components: {
     Vue3TagsInput,
+    messageBox,
   },
 
   mounted() {
@@ -107,24 +110,18 @@ export default {
     });
     this.font_config = activeModules;
       console.log(this.font_config);
-    // if (this.font_config) {
-    //   Object.keys(this.font_config).map((key) => {
-    //     if (this.id === this.font_config[key].id) {
-    //       const option = this.font_config[key].options;
-    //
-    //       this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
-    //       this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
-    //       this.uucss_enable_debug = option.uucss_enable_debug;
-    //       this.uucss_excluded_links = option.uucss_excluded_links.replace(/,/g, '\n');
-    //       this.uucss_query_string = option.uucss_query_string;
-    //       this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
-    //       this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
-    //
-    //
-    //     }
-    //
-    //   });
-    // }
+    if (this.font_config) {
+      Object.keys(this.font_config).map((key) => {
+        if (this.id === this.font_config[key].id) {
+          const option = this.font_config[key].options;
+          this.preload_font_urls = option.uucss_preload_font_urls? option.uucss_preload_font_urls.replace(/,/g, '\n'): "";
+          this.self_host_google_font= option.uucss_self_host_google_fonts;
+          this.display_swap_fonts = option.display_swap_fonts;
+
+        }
+
+      });
+    }
   },
 
   methods:{
