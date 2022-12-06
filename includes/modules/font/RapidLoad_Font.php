@@ -46,12 +46,17 @@ class RapidLoad_Font
     }
 
     public function add_display_swap_to_inline_styles($content){
-        $content = preg_replace(
-            '/font-display:\s?(auto|block|fallback|optional)/',
-            'font-display:swap',
-            $content
-        );
-        return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
+
+        if(isset($this->options['uucss_display_swap_fonts']) && $this->options['uucss_display_swap_fonts'] == "1"){
+            $content = preg_replace(
+                '/font-display:\s?(auto|block|fallback|optional)/',
+                'font-display:swap',
+                $content
+            );
+            $content = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
+        }
+
+        return $content;
     }
 
     public function initFileSystem() {
