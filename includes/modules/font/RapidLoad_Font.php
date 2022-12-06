@@ -148,7 +148,7 @@ class RapidLoad_Font
         self::download_urls_in_parallel($font_urls);
 
         foreach ($font_urls as $font_url) {
-            $cached_font_url = RapidLoad_Font::$base_url . '/' . basename($font_url);
+            $cached_font_url = self::$base_url . '/' . basename($font_url);
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 
