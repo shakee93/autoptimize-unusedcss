@@ -129,6 +129,8 @@ class UnusedCSS_DB extends RapidLoad_DB{
             self::show_db_error($error);
         }
 
+        $used = [];
+
         foreach ($result as $res){
 
             if(isset($res) && !empty($res)){
@@ -141,7 +143,9 @@ class UnusedCSS_DB extends RapidLoad_DB{
 
             }
 
-            $used_files = array_merge($used_files, $used);
+            if(is_array($used)){
+                $used_files = array_merge($used_files, $used);
+            }
         }
 
         if(!empty($used_files)){
