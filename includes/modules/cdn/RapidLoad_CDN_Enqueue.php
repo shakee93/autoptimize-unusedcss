@@ -64,6 +64,20 @@ class RapidLoad_CDN_Enqueue
 
         }
 
+        $images = $this->dom->find( 'img' );
+
+        foreach ($images as $image){
+
+            if($this->str_contains($image->src, site_url())){
+
+                if($this->is_cdn_enabled()){
+                    $image->src = str_replace(trailingslashit(site_url()),trailingslashit($this->options['uucss_cdn_url']),$image->src);
+                }
+
+            }
+
+        }
+
         return $state;
 
     }

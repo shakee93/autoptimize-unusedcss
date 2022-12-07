@@ -196,11 +196,11 @@ class CriticalCSS_Enqueue
         $this->job_data->mark_as_successful_hit();
         $this->job_data->save();
 
-        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1" && apply_filters('rapidload/cpcss/remove_on_user_interaction', false)){
+        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1" && apply_filters('rapidload/cpcss/remove_on_user_interaction', true)){
 
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script',
-                "['mousemove', 'touchstart', 'keydown'].forEach(function (event) { var listener = function () { setTimeout(function (){ let element = document.getElementById('rapidload-critical-css'); if(element){ element.remove();} }, 200); removeEventListener(event, listener) }; addEventListener(event, listener);});");
+                "['mousemove', 'touchstart', 'keydown'].forEach(function (event) { var listener = function () { setTimeout(function (){ let element = document.getElementById('rapidload-critical-css'); if(element){ element.remove();} }, 1000); removeEventListener(event, listener) }; addEventListener(event, listener);});");
 
             $node->setAttribute('type', 'text/javascript');
             $body->appendChild($node);
