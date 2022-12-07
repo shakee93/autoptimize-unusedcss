@@ -196,7 +196,7 @@ class CriticalCSS_Enqueue
         $this->job_data->mark_as_successful_hit();
         $this->job_data->save();
 
-        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1" && apply_filters('rapidload/cpcss/remove_on_user_interaction', true)){
+        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1" && apply_filters('rapidload/cpcss/remove_on_user_interaction', false)){
 
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script',
