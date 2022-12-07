@@ -7,6 +7,39 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
+      <div  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+        <div class="content p-4">
+          <h4 class="mt-2 text-gray-800 font-bold text-base">License Information</h4>
+          <img v-if="tick_image" :src="base + tick_image" :alt="tick_image">
+        </div>
+        <hr class="border-gray-border-line border-b-0">
+        <div class="content p-4">
+          <p class="mb-1 text-sm text-gray-500 ">Name: {{license_information.name}}</p>
+          <p class="mb-1 text-sm text-gray-500 ">Expiration Date: {{license_information.exp_date}}</p>
+          <p class="mb-1 text-sm text-gray-500 ">License: {{license_information.license}}</p>
+        </div>
+
+        <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3" >
+            <RouterLink :class="{disableClick: license_information.status}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                        :to="license_information.link">
+              <button >Settings</button>
+            </RouterLink>
+          </div>
+
+
+          <div class="col-end-7 col-span-2 ...">
+<!--            <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">-->
+<!--              <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">-->
+<!--              <div-->
+<!--                  class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>-->
+<!--            </label>-->
+          </div>
+
+        </div>
+      </div>
+
       <li v-for="item in items" :key="item.id"
           class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
@@ -139,6 +172,15 @@ export default {
 
   data() {
     return {
+      tick_image: '',
+      license_information:
+          {
+            name: 'William Olivia',
+            exp_date:'December 4, 2023',
+            license:'Agency',
+            status: true,
+            link:'',
+          },
       items_data: [],
       loading: false,
       items: [
