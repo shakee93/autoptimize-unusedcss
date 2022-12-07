@@ -232,7 +232,7 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.css_config = activeModules;
-    console.log(this.css_config)
+
     if (this.css_config) {
       Object.keys(this.css_config).map((key) => {
         if (this.id === this.css_config[key].id) {
@@ -319,14 +319,6 @@ export default {
     ruleSettings(){
      location.reload();
     }
-
-  },
-  watch: {
-    getUrl(){
-      if (window.location.href.indexOf("rule") > -1) {
-        console.log('test')
-      }
-    },
 
   },
 
