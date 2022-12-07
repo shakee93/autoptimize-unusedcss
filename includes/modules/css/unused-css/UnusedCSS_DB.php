@@ -131,7 +131,7 @@ class UnusedCSS_DB extends RapidLoad_DB{
 
         foreach ($result as $res){
 
-            $used = isset($res) && !empty($res) ? unserialize($res) : [];
+            $used = isset($res) && !empty($res) && is_array($res) ? $res : [];
 
             $used_files = array_merge($used_files, $used);
         }
