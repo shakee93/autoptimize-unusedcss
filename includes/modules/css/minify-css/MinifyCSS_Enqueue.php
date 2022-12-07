@@ -70,7 +70,9 @@ class MinifyCSS_Enqueue
             return;
         }
 
-        $version = substr(hash_file('md5', $file_path), 0, 12);
+        if(is_file($file_path)){
+            $version = substr(hash_file('md5', $file_path), 0, 12);
+        }
 
         $filename = basename(preg_replace('/\?.*/', '', $link->href));
 
