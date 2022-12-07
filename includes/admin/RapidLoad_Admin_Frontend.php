@@ -731,6 +731,8 @@ class RapidLoad_Admin_Frontend
 
     public function add_rapidload_onboard_page(){
 
+        global $submenu;
+
         add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'rapidload-on-board', function () {
             wp_enqueue_script( 'post' );
 
@@ -744,9 +746,22 @@ class RapidLoad_Admin_Frontend
 
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
 
+        $key = null;
+
+        if(!isset($submenu['options-general.php'])){
+            return;
+        }
+
+        $key = array_search(["RapidLoad","manage_options","rapidload-on-board","RapidLoad"], $submenu['options-general.php']);
+
+        if(isset($submenu['options-general.php'][$key])){
+            unset($submenu['options-general.php'][$key]);
+        }
     }
 
     public function add_developer_settings_page() {
+
+        global $submenu;
 
         add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
             wp_enqueue_script( 'post' );
@@ -765,6 +780,18 @@ class RapidLoad_Admin_Frontend
         });
 
         register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+
+        $key = null;
+
+        if(!isset($submenu['options-general.php'])){
+            return;
+        }
+
+        $key = array_search(["RapidLoad","manage_options","uucss","RapidLoad"], $submenu['options-general.php']);
+
+        if(isset($submenu['options-general.php'][$key])){
+            unset($submenu['options-general.php'][$key]);
+        }
 
     }
 
