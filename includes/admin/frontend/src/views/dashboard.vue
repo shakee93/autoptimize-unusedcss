@@ -188,7 +188,7 @@ export default {
           isDisabled: true
         },
 
-        {
+        /*{
           id : "asset-manager",
           title: "Asset Manager",
           description: 'Reduce your CSS file size by remove unused CSS from your pages',
@@ -207,7 +207,7 @@ export default {
           link: '/speed-monitoring',
           status: false,
           isDisabled: true
-        },
+        },*/
 
       ],
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/'

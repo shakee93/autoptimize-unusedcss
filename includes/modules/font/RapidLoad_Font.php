@@ -14,7 +14,7 @@ class RapidLoad_Font
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_font_optimization'])){
+        if(!isset($this->options['uucss_enable_font_optimization']) || $this->options['uucss_enable_font_optimization'] == ""){
             return;
         }
 
@@ -23,10 +23,6 @@ class RapidLoad_Font
         if( ! $this->initFileSystem() ){
             return;
         }
-
-        add_filter('uucss/enqueue/font-url', function ($js_file){
-            return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
-        },10,1);
 
         add_action('rapidload/job/handle', [$this, 'optimize_font'], 30, 2);
 
@@ -45,16 +41,12 @@ class RapidLoad_Font
 
     public function add_display_swap_to_inline_styles($content){
 
-        if(isset($this->options['uucss_display_swap_fonts']) && $this->options['uucss_display_swap_fonts'] == "1"){
-            $content = preg_replace(
-                '/font-display:\s?(auto|block|fallback|optional)/',
-                'font-display:swap',
-                $content
-            );
-            $content = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
-        }
-
-        return $content;
+        $content = preg_replace(
+            '/font-display:\s?(auto|block|fallback|optional)/',
+            'font-display:swap',
+            $content
+        );
+        return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
     }
 
     public function initFileSystem() {
@@ -93,31 +85,12 @@ class RapidLoad_Font
 
     public function optimize_font($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_image'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_font'] )){
             return false;
         }
 
         new RapidLoad_Font_Enqueue($job);
 
-    }
-
-    public function get_cached_file( $file_url, $cdn = null ) {
-
-        if ( ! $cdn || empty( $cdn ) ) {
-            $cdn = content_url();
-        } else {
-
-            $url_parts = parse_url( content_url() );
-
-            $cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
-
-        }
-
-        return implode( '/', [
-            $cdn,
-            trim($this->base, "/"),
-            $file_url
-        ] );
     }
 
     public static function self_host_style_sheet($url, $file_path)

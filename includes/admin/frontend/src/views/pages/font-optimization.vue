@@ -21,18 +21,6 @@
       <div>
         <div class="p-4 pl-32 pr-72">
 
-          <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Preload Font URLs</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <textarea v-model="preload_font_urls"
-                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="force-include" type="text" placeholder=""></textarea>
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
-            </div>
-          </div>
-
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -51,26 +39,17 @@
               </div>
             </div>
 
-            <div class="mb-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="display_swap_fonts" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <h1 class="font-semibold text-base text-black-font">Display Swap Fonts</h1>
-                  <p class="text-sm text-gray-font">This can help you group pages which has same html structure. Product
-                    pages, Category pages etc...</p>
-                </div>
-              </div>
-
+          <div class="grid mb-5">
+            <h1 class="font-semibold text-base text-black-font">Preload Font URLs</h1>
+            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <textarea v-model="preload_font_urls"
+                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="force-include" type="text" placeholder=""></textarea>
+            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
+                ‘elementor-*, *-gallery’ etc...</p>
             </div>
-
-
+          </div>
 
 
 
@@ -116,7 +95,6 @@ export default {
           const option = this.font_config[key].options;
           this.preload_font_urls = option.uucss_preload_font_urls? option.uucss_preload_font_urls.replace(/,/g, '\n'): "";
           this.self_host_google_font= option.uucss_self_host_google_fonts;
-          this.display_swap_fonts = option.uucss_display_swap_fonts;
 
         }
 
@@ -130,7 +108,6 @@ export default {
       const data = {
         uucss_preload_font_urls : this.preload_font_urls.replace(/\n/g, ","),
         uucss_self_host_google_fonts : this.self_host_google_font,
-        uucss_display_swap_fonts : this.display_swap_fonts,
         uucss_enable_font_optimization : true,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
@@ -166,7 +143,6 @@ export default {
       id: 'font',
 
       self_host_google_font: false,
-      display_swap_fonts: false,
       preload_font_urls: [],
       back: '/',
 

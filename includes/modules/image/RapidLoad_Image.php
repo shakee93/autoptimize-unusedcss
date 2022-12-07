@@ -14,7 +14,7 @@ class RapidLoad_Image
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_image_delivery'])){
+        if(!isset($this->options['uucss_enable_image_delivery']) || $this->options['uucss_enable_image_delivery'] == ""){
             return;
         }
 

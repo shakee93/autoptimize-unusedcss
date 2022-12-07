@@ -19,14 +19,37 @@ class UnusedCSS_Enqueue
 
     public function __construct($job_data)
     {
+        $this->options = RapidLoad_Base::fetch_options();
+
         $this->file_system = new RapidLoad_FileSystem();
 
         $this->job_data = $job_data;
 
         $this->files = isset($job_data->data) ? unserialize($job_data->data) : [];
+
+        $this->enqueue_frontend_scripts();
+
         $this->warnings = $this->job_data->get_warnings();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+    }
+
+    function enqueue_frontend_scripts(){
+
+        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1"){
+
+            if(isset($this->job_data->id) && $this->job_data->status == 'success' && !empty($this->files)){
+
+                wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ], UUCSS_VERSION );
+                wp_localize_script( 'rapidload', 'rapidload', [
+                    'files' => $this->files
+                ] );
+                wp_enqueue_script( 'rapidload' );
+
+            }
+
+        }
+
     }
 
     function update_content($state){
@@ -151,6 +174,11 @@ class UnusedCSS_Enqueue
                     }
 
                     $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
+
+                    if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1"){
+                        $sheet->{'data-href'} = $sheet->href;
+                        $sheet->{'data-media'} = $sheet->media;
+                    }
 
                     if ( isset( $this->options['uucss_inline_css'] ) ) {
 
@@ -317,7 +345,10 @@ class UnusedCSS_Enqueue
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
 
-        $sheet->outertext = sprintf('<style %s %s>%s</style>', $file_name, $tag_name, $inline['content']);
+        $data_href = isset($sheet->{'data-href'}) ? ' data-href="'. $sheet->{'data-href'} . '" ' : ' ';
+        $data_media = isset($sheet->{'data-media'}) ? ' data-media="'. $sheet->{'data-media'} . '" ' : ' ';
+
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name . $data_href . $data_media .'>'. htmlspecialchars($inline['content']) .'</style>');
 
     }
 
