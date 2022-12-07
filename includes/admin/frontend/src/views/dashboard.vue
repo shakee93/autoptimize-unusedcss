@@ -8,33 +8,32 @@
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
       <div  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
-        <div class="content p-4">
+        <div class="content pl-4 pr-4 pb-2 pt-2">
           <h4 class="mt-2 text-gray-800 font-bold text-base">License Information</h4>
           <img v-if="tick_image" :src="base + tick_image" :alt="tick_image">
         </div>
         <hr class="border-gray-border-line border-b-0">
-        <div class="content p-4">
+        <div class="content p-2 pl-4 pr-4 pb-3.5">
           <p class="mb-1 text-sm text-gray-500 ">Name: {{license_information.name}}</p>
           <p class="mb-1 text-sm text-gray-500 ">Expiration Date: {{license_information.exp_date}}</p>
           <p class="mb-1 text-sm text-gray-500 ">License: {{license_information.license}}</p>
         </div>
-
-        <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
+        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>
+        <div class="actions pt-2 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
 
           <div class="col-start-1 col-end-3" >
-            <RouterLink :class="{disableClick: license_information.status}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+            <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                         :to="license_information.link">
-              <button >Settings</button>
+              <button >Upgrade Now</button>
             </RouterLink>
           </div>
 
 
           <div class="col-end-7 col-span-2 ...">
-<!--            <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">-->
-<!--              <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">-->
-<!--              <div-->
-<!--                  class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>-->
-<!--            </label>-->
+            <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                        :to="license_information.link">
+              <button >View My Account</button>
+            </RouterLink>
           </div>
 
         </div>
@@ -186,8 +185,8 @@ export default {
       items: [
         {
           id : "css",
-          title: "CSS",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
+          title: "CSS Delivery",
+          description: 'Deliver CSS files by removing unused CSS and prioritizing critical CSS',
           image: 'unused-css.svg',
           link: '/unused-css',
           status: false,
@@ -195,9 +194,9 @@ export default {
         },
         {
           id : "javascript",
-          title: "Javascript",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'image-delivery.svg',
+          title: "Javascript Delivery",
+          description: 'Minify and deliver Javascript files with best practices',
+          image: 'javascript.svg',
           link: '/java-script',
           status: false,
           isDisabled: false
@@ -205,7 +204,7 @@ export default {
         {
           id : "image-delivery",
           title: "Image Delivery",
-          description: 'Generate above the fold critical CSS for your pages',
+          description: 'Optimize all your images on-the-fly with modern formats (AVIF, WEBP)',
           image: 'image-delivery.svg',
           link: '/image-delivery',
           status: false,
@@ -213,18 +212,18 @@ export default {
         },
         {
           id : "font",
-          title: "Font Optimization",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'font-optimization.svg',
+          title: "Font Delivery",
+          description: 'Locally host and optimize your fonts for faster page load times',
+          image: 'font.svg',
           link: '/font-optimization',
           status: false,
           isDisabled: true
         },
         {
           id : "cdn",
-          title: "CDN",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'speed-monitoring.svg',
+          title: "Cloud Delivery (CDN)",
+          description: 'Load resource files faster by using 112 edge locations with only 27ms latency',
+          image: 'cdn.svg',
           link: '/cdn',
           status: false,
           isDisabled: true
