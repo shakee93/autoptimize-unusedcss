@@ -20,22 +20,6 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
-          <div class="mb-5">
-            <div class="flex">
-              <div class="pr-1">
-                <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="uucss_load_original" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
-                </div>
-              </div>
-              <div>
-                <h1 class="font-semibold text-base text-black-font">Load Original CSS</h1>
-                <p class="text-sm text-gray-font">How to load the original CSS files?</p>
-              </div>
-            </div>
-          </div>
 
             <div class="mb-5">
               <div class="flex">
@@ -242,7 +226,6 @@ export default {
           this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
-          this.uucss_load_original = option.uucss_load_original;
           this.uucss_minify = option.uucss_minify;
         }
 
@@ -266,7 +249,6 @@ export default {
        uucss_enable_cpcss_mobile : this.critical_css.mobile_critical_css,
        uucss_enable_cpcss : this.critical_css.status,
        uucss_enable_rules : this.uucss_enable_rules,
-       uucss_load_original : this.uucss_load_original,
        uucss_minify : this.uucss_minify,
        uucss_enable_uucss : this.remove_unused_css,
      }
@@ -338,7 +320,6 @@ export default {
         additional_critical_css: [],
       },
       back: '/',
-      uucss_load_original: false,
 
     }
   },

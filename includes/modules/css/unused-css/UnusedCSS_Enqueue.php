@@ -36,17 +36,13 @@ class UnusedCSS_Enqueue
 
     function enqueue_frontend_scripts(){
 
-        if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1"){
+        if(isset($this->job_data->id) && $this->job_data->status == 'success' && !empty($this->files)){
 
-            if(isset($this->job_data->id) && $this->job_data->status == 'success' && !empty($this->files)){
-
-                wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ], UUCSS_VERSION );
-                wp_localize_script( 'rapidload', 'rapidload', [
-                    'files' => $this->files
-                ] );
-                wp_enqueue_script( 'rapidload' );
-
-            }
+            wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js', [ 'jquery' ], UUCSS_VERSION );
+            wp_localize_script( 'rapidload', 'rapidload', [
+                'files' => $this->files
+            ] );
+            wp_enqueue_script( 'rapidload' );
 
         }
 
@@ -175,10 +171,8 @@ class UnusedCSS_Enqueue
 
                     $sheet->href  = apply_filters('uucss/enqueue/new/link', $newLink);
 
-                    if(isset($this->options['uucss_load_original']) && $this->options['uucss_load_original'] == "1"){
-                        $sheet->{'data-href'} = $sheet->href;
-                        $sheet->{'data-media'} = $sheet->media;
-                    }
+                    $sheet->{'data-href'} = $sheet->href;
+                    $sheet->{'data-media'} = $sheet->media;
 
                     if ( isset( $this->options['uucss_inline_css'] ) ) {
 

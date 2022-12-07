@@ -177,13 +177,6 @@ class RapidLoad_Admin
 
         }
 
-        if(isset($_REQUEST['uucss_load_original'])){
-
-            $options['uucss_load_original'] = ($_REQUEST['uucss_load_original'] == 'true' ? "1" : null);
-
-        }
-
-
         // update js options
 
         if(isset($_REQUEST['uucss_load_js_method'])){

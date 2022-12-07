@@ -357,7 +357,6 @@ class RapidLoad_Base
             'uucss_enable_css' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
-            'uucss_load_original' => "1",
         ]);
 
         if(!isset($default_options['uucss_api_key'])){

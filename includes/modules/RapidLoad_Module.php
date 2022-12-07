@@ -227,7 +227,6 @@ class RapidLoad_Module
                             'uucss_inline_css' => isset($options['uucss_inline_css']) && $options['uucss_inline_css'] == "1" ? true : false,
                         ]
                     ],
-                    'uucss_load_original' =>  isset($options['uucss_load_original']) && $options['uucss_load_original'] == "1" ? true : false,
                     'uucss_enable_rules' => isset($options['uucss_enable_rules']) && $options['uucss_enable_rules'] == "1" ? true : false,
                 ],
                 'status' => isset($options['uucss_enable_css']) && $options['uucss_enable_css'] == "1" ? "on" : "off"
