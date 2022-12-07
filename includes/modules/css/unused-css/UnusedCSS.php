@@ -145,7 +145,7 @@ class UnusedCSS
             return;
         }
 
-        if(get_current_screen() && get_current_screen()->base == 'settings_page_uucss'){
+        if(get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'toplevel_page_rapidload')){
             return;
         }
 
