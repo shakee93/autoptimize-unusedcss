@@ -345,10 +345,10 @@ class UnusedCSS_Enqueue
         $file_name = 'id="' . basename( $link ) . '"';
         $tag_name = RapidLoad_Enqueue::$frontend_debug ? 'uucss': '';
 
-        $data_href = isset($sheet->{'data-href'}) ? ' data-href="'. $sheet->{'data-href'} : ' ';
-        $data_media = isset($sheet->{'data-media'}) ? ' data-media="'. $sheet->{'data-media'} : ' ';
+        $data_href = isset($sheet->{'data-href'}) ? ' data-href="'. $sheet->{'data-href'} : '" ';
+        $data_media = isset($sheet->{'data-media'}) ? ' data-media="'. $sheet->{'data-media'} : '" ';
 
-        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name . $data_href . $data_media .'">'. htmlspecialchars($inline['content']) .'</style>');
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name . $data_href . $data_media .'>'. htmlspecialchars($inline['content']) .'</style>');
 
     }
 
