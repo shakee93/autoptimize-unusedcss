@@ -167,7 +167,7 @@
 
             <div :class="{ expand: uucss_enable_rules }" class="pl-9 not-expand">
                 <a :href="uucss_url">
-                <button
+                <button @click="ruleSettings"
                     class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
                   Settings
                 </button>
@@ -232,7 +232,7 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.css_config = activeModules;
-
+    console.log(this.css_config)
     if (this.css_config) {
       Object.keys(this.css_config).map((key) => {
         if (this.id === this.css_config[key].id) {
@@ -252,6 +252,8 @@ export default {
     const href = new URL(window.location.href);
     href.searchParams.set('page', 'uucss');
     this.uucss_url = href.toString();
+
+
 
   },
 
@@ -295,6 +297,7 @@ export default {
     saveRuleBased(){
       const data = {
         uucss_enable_rules : this.uucss_enable_rules,
+
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {
@@ -311,8 +314,19 @@ export default {
             console.error("There was an error!", error);
           });
 
+    },
+
+    ruleSettings(){
+     location.reload();
     }
 
+  },
+  watch: {
+    getUrl(){
+      if (window.location.href.indexOf("rule") > -1) {
+        console.log('test')
+      }
+    },
 
   },
 
