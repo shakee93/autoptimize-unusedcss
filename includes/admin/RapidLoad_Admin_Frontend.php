@@ -75,7 +75,7 @@ class RapidLoad_Admin_Frontend
 
     public function add_rapidload_admin_bar_menu($wp_admin_bar){
 
-        if(apply_filters('rapidload/tool-bar-menu',true)){
+        if(apply_filters('rapidload/tool-bar-menu',false)){
 
             $color = 'green';
 
