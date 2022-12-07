@@ -127,7 +127,7 @@ class RapidLoad_Base
 
             $url = $this->get_current_url();
 
-            if(strpos($url, 'page=uucss') !== false ){
+            if(strpos($url, 'page=uucss') !== false || strpos($url, 'page=rapidload') !== false){
                 return false;
             }
 
