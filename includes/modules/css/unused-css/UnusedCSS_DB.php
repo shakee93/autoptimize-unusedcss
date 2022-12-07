@@ -129,11 +129,23 @@ class UnusedCSS_DB extends RapidLoad_DB{
             self::show_db_error($error);
         }
 
+        $used = [];
+
         foreach ($result as $res){
 
-            $used = isset($res) && !empty($res) ? unserialize($res) : [];
+            if(isset($res) && !empty($res)){
 
-            $used_files = array_merge($used_files, $used);
+                if(is_array($res)){
+                    $used = $res;
+                }elseif (gettype($res) == 'string'){
+                    $used = unserialize($res);
+                }
+
+            }
+
+            if(is_array($used)){
+                $used_files = array_merge($used_files, $used);
+            }
         }
 
         if(!empty($used_files)){
