@@ -785,6 +785,19 @@ class RapidLoad_Admin
 
         $api = new RapidLoad_Api();
 
+        $disconnect = isset($_REQUEST['disconnect']);
+
+        if($disconnect){
+
+            $options = RapidLoad_Base::fetch_options();
+            unset($options['uucss_api_key_verified']);
+            unset($options['uucss_api_key']);
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+            RapidLoad_Base::fetch_options(false);
+
+            wp_send_json_success(true);
+        }
+
         $data = $api->get( 'license', [
             'url' => $this->transform_url(get_site_url()),
             'version' => UUCSS_VERSION,
