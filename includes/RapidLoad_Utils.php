@@ -333,7 +333,7 @@ trait RapidLoad_Utils {
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
 	}
 
-    public static function activation_url( $action, $to = 'options-general.php?page=uucss' ) {
+    public static function activation_url( $action, $to = 'options-general.php?page=rapidload' ) {
 
 	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
 		    define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
