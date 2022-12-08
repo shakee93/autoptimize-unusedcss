@@ -7,33 +7,67 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-      <div  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+
+      <div v-if="!license_information.licensed_domain" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+        <div class="content pl-4 pr-4 pb-2 pt-2">
+          <h4 class="mt-2 text-gray-800 font-bold text-base">Connect your website</h4>
+          <img v-if="tick_image" :src="base + tick_image" :alt="tick_image">
+        </div>
+        <hr class="border-gray-border-line border-b-0">
+
+        <div class="content p-2 pl-4 pr-4 pb-3.5">
+          <p class="mb-1 text-sm text-gray-500 ">Slow load times are the #1 reason for high
+            bounce rates and one of the root causes of
+            poor Google Rankings.</p>
+        </div>
+
+       <div class="actions grid justify-center">
+         <a :href="license_information.link" target="_blank">
+           <button class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+           >Get RapidLoad</button>
+         </a>
+       </div>
+
+       <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Already have license ?</p>
+        <div class="actions pt-2 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3" >
+            <a :href="license_information.connect_link" target="_blank">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+              >Connect</button>
+            </a>
+          </div>
+
+          <div class="col-end-7 col-span-2 ...">
+            <a :href="license_information.link" target="_blank">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+              >Connect with license key</button>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div class="content pl-4 pr-4 pb-2 pt-2">
           <h4 class="mt-2 text-gray-800 font-bold text-base">License Information</h4>
           <img v-if="tick_image" :src="base + tick_image" :alt="tick_image">
         </div>
         <hr class="border-gray-border-line border-b-0">
+
         <div class="content p-2 pl-4 pr-4 pb-3.5">
           <p class="mb-1 text-sm text-gray-500 ">Name: {{license_information.name}}</p>
           <p class="mb-1 text-sm text-gray-500 ">Expiration Date: {{license_information.exp_date.toLocaleDateString()}}</p>
           <p class="mb-1 text-sm text-gray-500 ">License: {{license_information.license}}</p>
         </div>
-        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>
+
+<!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
         <div class="actions pt-2 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
 
           <div class="col-start-1 col-end-3" >
-            <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
-                        :to="license_information.link">
-              <button >Upgrade Now</button>
-            </RouterLink>
-          </div>
-
-
-          <div class="col-end-7 col-span-2 ...">
-            <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
-                        :to="license_information.link">
-              <button >View My Account</button>
-            </RouterLink>
+              <a :href="license_information.link" target="_blank">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
+              </a>
           </div>
 
         </div>
@@ -153,6 +187,7 @@ export default {
           this.license_information.name = response.data?.data?.name
           this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)
           this.license_information.license = response.data?.data?.plan
+          this.license_information.licensed_domain = response.data?.data?.licensedDomain
         }
       })
     },
@@ -193,7 +228,9 @@ export default {
             exp_date:new Date(),
             license:'',
             status: true,
-            link:'https://app.rapidload.io/subscription',
+            link: window.uucss_global.app_url,
+            licensed_domain: null,
+            connect_link: window.uucss_global.activation_url,
           },
       items_data: [],
       loading: false,
