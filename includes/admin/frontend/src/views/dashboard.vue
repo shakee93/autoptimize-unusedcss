@@ -177,8 +177,17 @@ export default {
     }
   },
   methods:{
+
+    disconnect_license(){
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {disconnect:true},{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+
+    },
     update_license(){
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {disconnect:true}).then((response)=>{
         /*exp_date:'December 4, 2023',
             license:'Agency',
             status: true,
@@ -188,6 +197,9 @@ export default {
           this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)
           this.license_information.license = response.data?.data?.plan
           this.license_information.licensed_domain = response.data?.data?.licensedDomain
+          if(!response.data?.data?.licensedDomain){
+            this.disconnect_license();
+          }
         }
       })
     },
