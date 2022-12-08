@@ -210,6 +210,7 @@ class RapidLoad_Base
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
                 'active_modules' => (array)self::get()->modules()->active_modules(),
                 'activation_url' => self::activation_url('authorize' ),
+                'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
