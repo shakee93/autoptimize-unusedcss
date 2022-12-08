@@ -171,7 +171,7 @@ class RapidLoad_Module
 
                 }else{
 
-                    if(apply_filters('rapidload/cdn/clear-server-dns', true)){
+                    if(apply_filters('rapidload/cdn/clear-server-dns', false)){
 
                         if(isset($options['uucss_cdn_dns_id']) && !empty($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && !empty($options['uucss_cdn_zone_id'])){
                             $api->post('delete-cdn',[
