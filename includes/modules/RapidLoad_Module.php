@@ -134,6 +134,18 @@ class RapidLoad_Module
             }
             case 'image-delivery' : {
                 $options['uucss_enable_image_delivery'] = $active == "on" ? "1" : "";
+                $api = new RapidLoad_Api();
+                if($options['uucss_enable_image_delivery'] == "1"){
+                    $api->post('spai-associate-host',[
+                        'url' => trailingslashit(site_url()),
+                        'action' => 'add-domain'
+                    ]);
+                }else{
+                    $api->post('spai-associate-host',[
+                        'url' => trailingslashit(site_url()),
+                        'action' => 'revoke-domain'
+                    ]);
+                }
                 break;
             }
             case 'font' : {
