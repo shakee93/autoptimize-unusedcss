@@ -187,7 +187,7 @@ export default {
 
     },
     update_license(){
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {disconnect:true}).then((response)=>{
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
         /*exp_date:'December 4, 2023',
             license:'Agency',
             status: true,
