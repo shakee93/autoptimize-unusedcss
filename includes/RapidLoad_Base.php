@@ -208,7 +208,8 @@ class RapidLoad_Base
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
-                'active_modules' => (array)self::get()->modules()->active_modules()
+                'active_modules' => (array)self::get()->modules()->active_modules(),
+                'activation_url' => self::activation_url('authorize' ),
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
