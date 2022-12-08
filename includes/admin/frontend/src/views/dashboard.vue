@@ -10,37 +10,36 @@
 
       <div v-if="!license_information.licensed_domain" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div class="content pl-4 pr-4 pb-2 pt-2">
-          <h4 class="mt-2 text-gray-800 font-bold text-base">Connect your website</h4>
+          <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
           <img v-if="tick_image" :src="base + tick_image" :alt="tick_image">
         </div>
         <hr class="border-gray-border-line border-b-0">
 
-        <div class="content p-2 pl-4 pr-4 pb-3.5">
-          <p class="mb-1 text-sm text-gray-500 ">Slow load times are the #1 reason for high
-            bounce rates and one of the root causes of
-            poor Google Rankings.</p>
+        <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+          <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
+            bounce rates</b> and one of the root causes of
+            <b>poor Google Rankings.</b></p>
         </div>
 
        <div class="actions grid justify-center">
          <a :href="license_information.link" target="_blank">
-           <button class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+           <button class="text-xss bg-purple font-semibold text-white py-2 px-4 border rounded-full"
            >Get RapidLoad</button>
          </a>
        </div>
 
-       <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Already have license ?</p>
-        <div class="actions pt-2 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
-
+       <p class="mb-1 text-xsm mt-2 text-purple-p pl-4">Already have license ?</p>
+        <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
           <div class="col-start-1 col-end-3" >
             <a :href="license_information.connect_link" target="_blank">
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+              <button class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
               >Connect</button>
             </a>
           </div>
 
           <div class="col-end-7 col-span-2 ...">
             <a :href="license_information.link" target="_blank">
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+              <button class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
               >Connect with license key</button>
             </a>
           </div>
@@ -73,19 +72,20 @@
         </div>
       </div>
 
+
       <li v-for="item in items" :key="item.id"
           class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
-        <div>
-          <div class="content p-4">
+        <div :class="{disableBlock: !license_information.licensed_domain}">
+          <div class="content p-4 pb-6">
             <img v-if="item.image" :src="base + item.image" :alt="item.title">
-            <h4 class="mt-2 text-gray-800 font-bold text-base">{{ item.title }}</h4>
-            <p class="mb-1 text-sm text-gray-500 ">{{ item.description }}</p>
+            <h4 class="mt-2 text-black font-bold text-base">{{ item.title }}</h4>
+            <p class="mb-1 text-xm text-black leading-db-lh">{{ item.description }}</p>
           </div>
-          <hr class="border-gray-border-line border-b-0">
+          <hr class="border-gray-border-line border-b-0 mt-1">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
 
             <div class="col-start-1 col-end-3" >
-              <RouterLink v-if="item.id !== 'cdn'" :class="{disableClick: !item.status}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink v-if="item.id !== 'cdn'" :class="{disableClick: !item.status}" class="text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
@@ -188,10 +188,6 @@ export default {
     },
     update_license(){
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
-        /*exp_date:'December 4, 2023',
-            license:'Agency',
-            status: true,
-            link:'',*/
         if(response.data?.data){
           this.license_information.name = response.data?.data?.name
           this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)

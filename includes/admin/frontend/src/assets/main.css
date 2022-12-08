@@ -1,5 +1,5 @@
 /*@import './base.css';*/
-
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,11 +7,12 @@
 
 body {
     background: #f0f0f1;
+    font-family: 'Lexend', sans-serif;
 }
 
 @layer base {
     html {
-        font-family: Lexend, system-ui,Helvetica;
+        font-family: 'Lexend', sans-serif;
     }
 }
 
@@ -119,6 +120,12 @@ body {
         pointer-events: none;
         cursor: default;
     }
+    .disableBlock{
+        pointer-events: none;
+        cursor: default;
+        opacity: 0.5;
+    }
+
 
     .advanced-after{
         transform: rotate(90deg);
