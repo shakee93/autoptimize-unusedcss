@@ -15,7 +15,7 @@
         <hr class="border-gray-border-line border-b-0">
         <div class="content p-2 pl-4 pr-4 pb-3.5">
           <p class="mb-1 text-sm text-gray-500 ">Name: {{license_information.name}}</p>
-          <p class="mb-1 text-sm text-gray-500 ">Expiration Date: {{license_information.exp_date}}</p>
+          <p class="mb-1 text-sm text-gray-500 ">Expiration Date: {{license_information.exp_date.toLocaleDateString()}}</p>
           <p class="mb-1 text-sm text-gray-500 ">License: {{license_information.license}}</p>
         </div>
         <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>
@@ -121,6 +121,9 @@ export default {
   },
 
   mounted() {
+
+    this.update_license()
+
     const activeModules = [];
 
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
@@ -140,7 +143,19 @@ export default {
     }
   },
   methods:{
-
+    update_license(){
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
+        /*exp_date:'December 4, 2023',
+            license:'Agency',
+            status: true,
+            link:'',*/
+        if(response.data?.data){
+          this.license_information.name = response.data?.data?.name
+          this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)
+          this.license_information.license = response.data?.data?.plan
+        }
+      })
+    },
 
     update(toggle, module){
       if(module==='cdn'){
@@ -174,11 +189,11 @@ export default {
       tick_image: '',
       license_information:
           {
-            name: 'William Olivia',
-            exp_date:'December 4, 2023',
-            license:'Agency',
+            name: '',
+            exp_date:new Date(),
+            license:'',
             status: true,
-            link:'',
+            link:'https://app.rapidload.io/subscription',
           },
       items_data: [],
       loading: false,
