@@ -487,7 +487,7 @@ class RapidLoad_Admin
 
     public function validate_domain() {
 
-        if ( get_current_screen() && get_current_screen()->base != 'settings_page_uucss' ) {
+        if ( get_current_screen() && (get_current_screen()->base != 'settings_page_uucss' && get_current_screen()->base != 'toplevel_page_rapidload')) {
             return;
         }
 
@@ -792,6 +792,7 @@ class RapidLoad_Admin
             $options = RapidLoad_Base::fetch_options();
             unset($options['uucss_api_key_verified']);
             unset($options['uucss_api_key']);
+            unset($options['valid_domain']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
             RapidLoad_Base::fetch_options(false);
 
