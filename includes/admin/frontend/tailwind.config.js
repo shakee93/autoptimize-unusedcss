@@ -33,6 +33,8 @@ module.exports = {
       'gray-h': '#332247',
       'w-color': '#F0F0F1',
       'message-green': '#48BB78',
+      'arrow-message': '#FFF2F2',
+      'arrow-message-tc': '#DD3F3F',
     },
     extend: {
       fontFamily: {
@@ -40,17 +42,20 @@ module.exports = {
       },
       lineHeight: {
         'db-lh': '0.9344rem',
+        'arw-mbox': '1.688rem',
       }
     },
     fontSize: {
       xsss: '0.625rem',
       xss: '0.6875rem',
+      xsmm: '0.688rem',
       xsm: '0.75rem',
       xm: '0.8125rem',
       sm: '0.875rem',
       base: '1rem',
       lg: '1.125rem',
       xl: '1.25rem',
+      xll: '1.625rem',
     },
 
   },
