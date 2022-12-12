@@ -221,14 +221,14 @@ export default {
   methods:{
 
     connect_license(){
-      console.log("Your are activating under key :" + this.license_information.key)
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {license_key:this.license_information.key},{
+
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_connect', {license_key:this.license_information.key},{
         headers: {
           'Content-Type':'multipart/form-data'
         }
       }).then((response)=>{
         if(response.data?.data){
-          console.log(response.data.data)
+          window.location.href = window.location.href + '&token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce
         }
       })
 
@@ -303,6 +303,7 @@ export default {
             link: window.uucss_global.app_url,
             licensed_domain: null,
             connect_link: window.uucss_global.activation_url,
+            activation_nonce: null,
           },
       items_data: [],
       loading: false,
