@@ -228,7 +228,7 @@ export default {
         }
       }).then((response)=>{
         if(response.data?.data){
-          window.location.href = window.location.href + '&token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce
+          window.location.href = '?token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
         }
       })
 
