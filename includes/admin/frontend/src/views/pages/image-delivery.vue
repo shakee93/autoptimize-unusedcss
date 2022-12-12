@@ -82,6 +82,20 @@
             </div>
           </div>
 
+          <div class="grid">
+            <div class="grid mb-5">
+              <h1 class="font-semibold text-base text-black-font">Exclude Images</h1>
+              <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+              <textarea v-model="uucss_exclude_images"
+                        class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="force-include" type="text" placeholder=""></textarea>
+              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">
+                  Exclude Images from RapidLoad enter each file in new line</p>
+              </div>
+            </div>
+          </div>
+
 
           <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
@@ -124,6 +138,7 @@ export default {
           this.compression_level = options.uucss_image_optimize_level
           this.next_gen_image = options.uucss_support_next_gen_formats
           this.image_count = options.uucss_exclude_above_the_fold_image_count
+          this.uucss_exclude_images = options.uucss_exclude_images
         }
 
       });
@@ -136,6 +151,7 @@ export default {
         uucss_image_optimize_level: this.compression_level,
         uucss_support_next_gen_formats: this.next_gen_image,
         uucss_exclude_above_the_fold_image_count: this.image_count,
+        uucss_exclude_images : this.uucss_exclude_images,
         uucss_enable_image_delivery : true,
       }
 
@@ -173,7 +189,7 @@ export default {
       compression_level: 'lossy',
       next_gen_image: false,
       image_count: 3,
-
+      uucss_exclude_images: [],
 
     }
   },
