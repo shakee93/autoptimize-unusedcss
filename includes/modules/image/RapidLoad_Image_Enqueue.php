@@ -52,6 +52,10 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $img ) {
 
+            if($this->is_file_excluded($img->src)){
+                continue;
+            }
+
             $url = $this->extractUrl($img->src);
 
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
@@ -112,6 +116,10 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $index => $img ) {
 
+            if($this->is_file_excluded($img->src)){
+                continue;
+            }
+
             if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
                 $img->loading = "eager";
                 $img->decoding = "sync";
@@ -130,6 +138,10 @@ class RapidLoad_Image_Enqueue
         $images = $this->dom->find( 'img[src]' );
 
         foreach ( $images as $img ) {
+
+            if($this->is_file_excluded($img->src)){
+                continue;
+            }
 
             $url = $this->extractUrl($img->src);
 
@@ -170,5 +182,37 @@ class RapidLoad_Image_Enqueue
             return $image->src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 $image->width $image->height'%2F%3E";
         }
         return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw';
+    }
+
+    private function is_file_excluded($file){
+
+        $exclude_files = isset($this->options['uucss_exclude_images']) && !empty($this->options['uucss_exclude_images']) ? explode("\n", $this->options['uucss_exclude_images']) : [];
+
+        $excluded = false;
+
+        foreach ($exclude_files as $exclude_file){
+
+            $exclude_file = str_replace("\r", "", $exclude_file);
+
+            if(self::is_regex_expression($exclude_file)){
+
+                $excluded = preg_match($exclude_file, $file);
+
+            }
+
+            if(!$excluded){
+
+                $excluded = $this->str_contains($file, $exclude_file);
+
+            }
+
+            if($excluded){
+
+                break;
+            }
+
+        }
+
+        return $excluded;
     }
 }

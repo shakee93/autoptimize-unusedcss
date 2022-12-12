@@ -269,6 +269,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_exclude_images'])){
+
+                $options['uucss_exclude_images'] = ($_REQUEST['uucss_exclude_images'] == 'true' ? "1" : null);
+
+            }
+
         }
 
         // update font settings
