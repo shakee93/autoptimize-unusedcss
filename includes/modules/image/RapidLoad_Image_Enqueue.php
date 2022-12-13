@@ -56,27 +56,31 @@ class RapidLoad_Image_Enqueue
                 continue;
             }
 
-            if($this->is_file_preloaded($img->src, 'uucss_preload_lcp_image')){
+            if($this->is_file_preloaded($img->src)){
 
                 $preload_image = '<link rel="preload" href="'. $img->src .'" as="image" > ';
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
                 $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
 
+            }else{
+
+                $url = $this->extractUrl($img->src);
+
+                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+                if (in_array($urlExt, $this->imgExt)) {
+
+                    $data_src = 'data-original-src';
+
+                    $img->src = $this->get_placeholder($img);
+
+                    $img->$data_src = $url;
+
+                }
+
             }
 
-            $url = $this->extractUrl($img->src);
 
-            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-
-            if (in_array($urlExt, $this->imgExt)) {
-
-                $data_src = 'data-original-src';
-
-                $img->src = $this->get_placeholder($img);
-
-                $img->$data_src = $url;
-
-            }
 
         }
 
