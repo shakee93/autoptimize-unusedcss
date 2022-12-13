@@ -27,7 +27,7 @@
                   <p class="text-sm text-gray-font">Purge Cache</p>
               </div>
               <div>
-                <button @click="saveSettings"
+                <button @click="purgeCach"
                         class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
                   Purge Cache
                 </button>
@@ -38,15 +38,13 @@
           <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">CDN URL</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <input
+            <input :class="{ 'pointer-events-none	cursor-default disabled': !devmode }"
                 v-model="uucss_cdn_dns_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="cdn-url" type="text" placeholder="">
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
-            </div>
           </div>
+
+          <div :class="{ expand: devmode }" class="not-expand">
           <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Bunny CDN Zone</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
@@ -54,10 +52,6 @@
                 v-model="uucss_cdn_url"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="bunny-cdn" type="text" placeholder="">
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
-            </div>
           </div>
           <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Cloudflare DNS</h1>
@@ -66,10 +60,6 @@
                 v-model="uucss_cdn_zone_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="clouldflare" type="text" placeholder="">
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
-            </div>
           </div>
 
 
@@ -78,6 +68,7 @@
                   class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
           </button>
+          </div>
         </div>
       </div>
       <div class="pb-6">
@@ -103,6 +94,9 @@ export default {
   },
 
   mounted() {
+    if(window.location.href.indexOf("devmode") > -1){
+      this.devmode = true;
+    }
 
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
@@ -124,8 +118,33 @@ export default {
   },
 
   methods:{
+    purgeCach(){
+      axios.post(window.uucss_global.ajax_url + '?action=wp_ajax_purge_rapidload_cdn' , {
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(response => {
+            response.data;
+            this.$notify(
+                {
+                  group: "success",
+                  title: "Success",
+                  text: "Cache Cleared"
+                },
+                4000
+            );
+          } )
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    },
     saveSettings(){
 
+      if(!this.devmode){
+        return;
+      }
       const data = {
         uucss_cdn_dns_id : this.uucss_cdn_dns_id,
         uucss_cdn_url : this.uucss_cdn_url,
@@ -166,6 +185,7 @@ export default {
       uucss_cdn_dns_id: null,
       uucss_cdn_url: null,
       uucss_cdn_zone_id: null,
+      devmode: false,
       back: '/',
 
 
