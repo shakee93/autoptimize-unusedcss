@@ -18,7 +18,7 @@ class RapidLoad_Image
             return;
         }
 
-        self::$image_indpoint = "https://cdn.shortpixel.ai/spai/";
+        self::$image_indpoint = "https://images.rapidload-cdn.io/spai/";
 
         add_action('wp_head', [$this, 'enqueue_frontend_js']);
 
