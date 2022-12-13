@@ -93,6 +93,17 @@
                 Exclude JS from RapidLoad enter each file in new line</p>
             </div>
           </div>
+          <div class="grid mb-5">
+            <h1 class="font-semibold text-base text-black-font">Load Scripts On User Interaction</h1>
+            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <textarea v-model="uucss_load_scripts_on_user_interaction"
+                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="force-include" type="text" placeholder=""></textarea>
+            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+              <p class="text-sm text-dark-gray-font">
+                Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
+            </div>
+          </div>
           <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
@@ -137,6 +148,7 @@ export default {
             this.minify_js = options.minify_js
             this.uucss_excluded_js_files = options.uucss_excluded_js_files
             this.uucss_load_js_method = options.uucss_load_js_method
+            this.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
           }
 
       });
@@ -149,6 +161,7 @@ export default {
            minify_js : this.minify_js,
            uucss_excluded_js_files : this.uucss_excluded_js_files,
            uucss_load_js_method : this.uucss_load_js_method,
+           uucss_load_scripts_on_user_interaction: this.uucss_load_scripts_on_user_interaction,
          }
 
          await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data, {
@@ -187,6 +200,7 @@ export default {
       back: '/',
       uucss_load_js_method: 'none',
       uucss_excluded_js_files: [],
+      uucss_load_scripts_on_user_interaction: [],
 
     }
   },
