@@ -29,6 +29,10 @@
 
         }
 
+        window.onresize = function(event) {
+            window.rapidload_replace_image_src();
+        };
+
         window.rapidload_replace_image_src();
 
     })
