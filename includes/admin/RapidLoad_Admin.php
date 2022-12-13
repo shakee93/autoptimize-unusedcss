@@ -203,6 +203,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_load_scripts_on_user_interaction'])){
+
+            $options['uucss_load_scripts_on_user_interaction'] = $_REQUEST['uucss_load_scripts_on_user_interaction'];
+
+        }
+
         // update general settings
 
         if(isset($_REQUEST['uucss_query_string'])){
