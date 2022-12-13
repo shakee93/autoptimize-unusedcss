@@ -119,7 +119,7 @@ export default {
 
   methods:{
     purgeCach(){
-      axios.post(window.uucss_global.ajax_url + '?action=wp_ajax_purge_rapidload_cdn' , {
+      axios.post(window.uucss_global.ajax_url + '?action=purge_rapidload_cdn' , {
         headers: {
           'Content-Type':'multipart/form-data'
         }
