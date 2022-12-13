@@ -66,7 +66,7 @@ class RapidLoad_Image
 
     }
 
-    public static function get_replaced_url($url, $cdn, $width = false, $height = false )
+    public static function get_replaced_url($url, $cdn = null, $width = false, $height = false )
     {
         if(!$cdn){
             $cdn = self::$image_indpoint;

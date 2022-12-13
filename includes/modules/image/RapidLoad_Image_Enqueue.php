@@ -58,7 +58,7 @@ class RapidLoad_Image_Enqueue
 
             if($this->is_file_preloaded($img->src)){
 
-                $preload_image = '<link rel="preload" href="'. $img->src .'" as="image" > ';
+                $preload_image = '<link rel="preload" href="'. RapidLoad_Image::get_replaced_url($img->src) .'" as="image" > ';
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
                 $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
 
