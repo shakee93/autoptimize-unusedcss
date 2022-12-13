@@ -18,7 +18,7 @@ class RapidLoad_Image
             return;
         }
 
-        self::$image_indpoint = "https://cdn.shortpixel.ai/spai/";
+        self::$image_indpoint = "https://images.rapidload-cdn.io/spai/";
 
         add_action('wp_head', [$this, 'enqueue_frontend_js']);
 
@@ -47,7 +47,7 @@ class RapidLoad_Image
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
                 s.async = true;
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js?v=3' . UUCSS_VERSION ?>"
+                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_io.min.js?v=4' . UUCSS_VERSION ?>"
                 b.appendChild(s);
             }(window, document));
 

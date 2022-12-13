@@ -87,6 +87,8 @@ class Javascript_Enqueue
 
         $file_path = self::get_file_path_from_url($link->src);
 
+        $version = "";
+
         if(is_file($file_path)){
             $version = substr(hash_file('md5', $file_path), 0, 12);
         }

@@ -82,17 +82,17 @@
             </div>
 
 
-              <div class="grid mb-5">
+          <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Exclude JS</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-              <textarea v-model="uucss_excluded_js_files"
-                  class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">
-                  Exclude JS from RapidLoad enter each file in new line</p>
-              </div>
+            <textarea v-model="uucss_excluded_js_files"
+                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="force-include" type="text" placeholder=""></textarea>
+            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+              <p class="text-sm text-dark-gray-font">
+                Exclude JS from RapidLoad enter each file in new line</p>
             </div>
+          </div>
           <button @click="saveSettings"
               class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
             Save Settings
