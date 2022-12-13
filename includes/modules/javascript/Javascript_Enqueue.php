@@ -57,6 +57,8 @@ class Javascript_Enqueue
 
             $this->minify_js($link);
 
+            $this->load_scripts_on_user_interaction($link);
+
             $this->optimize_js_delivery($link);
 
         }
@@ -73,6 +75,20 @@ class Javascript_Enqueue
         $body->appendChild($node);
 
         return $state;
+    }
+
+    public function load_scripts_on_user_interaction($link){
+
+        if(!self::is_js($link) || self::is_file_excluded($link->src)){
+            return;
+        }
+
+        if(self::is_load_on_user_interaction($link->src)){
+            $data_attr = "data-rapidload-src";
+            $link->{$data_attr} = $link->src;
+            unset($link->src);
+        }
+
     }
 
     public function minify_js($link){
@@ -210,6 +226,38 @@ class Javascript_Enqueue
             if(!$excluded){
 
                 $excluded = $this->str_contains($file, $exclude_file);
+
+            }
+
+            if($excluded){
+
+                break;
+            }
+
+        }
+
+        return $excluded;
+    }
+
+    private function is_load_on_user_interaction($file){
+
+        $files = isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction']) ? explode("\n", $this->options['uucss_load_scripts_on_user_interaction']) : [];
+
+        $excluded = false;
+
+        foreach ($files as $_file){
+
+            $_file = str_replace("\r", "", $_file);
+
+            if(self::is_regex_expression($_file)){
+
+                $excluded = preg_match($_file, $file);
+
+            }
+
+            if(!$excluded){
+
+                $excluded = $this->str_contains($file, $_file);
 
             }
 

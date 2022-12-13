@@ -251,6 +251,7 @@ class RapidLoad_Module
                     'defer_inline_js' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
                     'minify_js' => isset($options['minify_js']) && $options['minify_js'] == "1" ? true : false,
                     'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
+                    'uucss_load_scripts_on_user_interaction' => isset($options['uucss_load_scripts_on_user_interaction']) ? $options['uucss_load_scripts_on_user_interaction'] : null,
                 ]
             ],
             'image-delivery' => [
