@@ -54,10 +54,9 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
+            $this->load_scripts_on_user_interaction($link);
 
             $this->minify_js($link);
-
-            $this->load_scripts_on_user_interaction($link);
 
             $this->optimize_js_delivery($link);
 
