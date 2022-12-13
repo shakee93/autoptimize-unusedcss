@@ -294,6 +294,29 @@ class RapidLoad_Admin
             }
         }
 
+        // update cdn options
+
+        if(isset($_REQUEST['uucss_enable_cdn'])){
+
+            if(isset($_REQUEST['uucss_cdn_url'])){
+
+                $options['uucss_cdn_url'] = $_REQUEST['uucss_cdn_url'];
+
+            }
+
+            if(isset($_REQUEST['uucss_cdn_dns_id'])){
+
+                $options['uucss_cdn_dns_id'] = $_REQUEST['uucss_cdn_dns_id'];
+
+            }
+
+            if(isset($_REQUEST['uucss_cdn_zone_id'])){
+
+                $options['uucss_cdn_zone_id'] = $_REQUEST['uucss_cdn_zone_id'];
+
+            }
+
+        }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
