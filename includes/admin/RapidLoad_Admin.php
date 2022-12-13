@@ -275,6 +275,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_preload_lcp_image'])){
+
+                $options['uucss_preload_lcp_image'] = $_REQUEST['uucss_preload_lcp_image'];
+
+            }
+
         }
 
         // update font settings
