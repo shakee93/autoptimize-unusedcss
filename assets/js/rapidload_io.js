@@ -22,7 +22,10 @@
 
                     options += ',w_' + $(value).width()
 
-                    $(value).attr('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
+                    if(!$(value).attr('src').toString().includes(',w_' + $(value).width())){
+                        $(value).attr('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
+                    }
+
                 }
 
             })
