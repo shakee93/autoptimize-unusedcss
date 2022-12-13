@@ -7,7 +7,7 @@ import removeUnusedCss from '../views/pages/unused-css/remove-unused-css.vue'
 import generalSettings from '../views/pages/general-settings.vue'
 import imageDelivery from '../views/pages/image-delivery.vue'
 import font from '../views/pages/font-optimization.vue'
-
+import cdn from '../views/pages/cdn.vue'
 
 const router = createRouter({
 
@@ -67,6 +67,14 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: font
+    },
+    {
+      path: '/cdn',
+      name: 'cdn',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: cdn
     },
     {
       path: '/page-optimizer',

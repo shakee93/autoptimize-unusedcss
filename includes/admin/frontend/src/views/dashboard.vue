@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div :class="{'Show': connect_btn, 'Hide': !connect_btn}" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[230px] z-[100]">
+      <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[230px] z-[100]">
         <div class="content pl-4 pr-4 pb-1 pt-2">
           <h4 class="mt-2 text-gray-h text-base font-semibold text-xsmm">Enter your License Key below</h4>
         </div>
@@ -97,7 +97,7 @@
 
         <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
         <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
-          <div :class="{'Show': (license_information.key).length<31, 'Hide': (license_information.key).length>31}" class="col-start-1 col-end-3 mt-0.5" >
+          <div :class="(license_information.key).length<31? 'Show' : 'Hide'" class="col-start-1 col-end-3 mt-0.5" >
             <div class="ml-3 arrow-top font-medium text-xsss relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px]">Invalid License Key</div>
           </div>
 
@@ -127,13 +127,17 @@
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
 
             <div class="col-start-1 col-end-3" >
-              <RouterLink v-if="item.id !== 'cdn' && license_information.licensed_domain" :class="{'Show': item.status, 'Hide': !item.status}" class=" text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink v-if="item.id !== 'cdn' && license_information.licensed_domain" :class="item.status ? 'Show' :'Hide'" class=" text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                          :to="item.link">
+                <button >Settings</button>
+              </RouterLink>
+              <RouterLink v-if="item.id === 'cdn' && license_information.licensed_domain" :class="item.status && !loading? 'Show': 'Hide'" class=" text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
 
 
-              <svg v-if="item.id === 'cdn' && loading === true" class="" width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg v-if="item.id === 'cdn'"  :class="loading? 'Show': 'Hide'" class="absolute" style="top:80.5%; left:14.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="loader">
                   <animateTransform
                       xlink:href="#loader"
@@ -198,6 +202,15 @@ export default {
 
   mounted() {
 
+    // if (localStorage.rapidLoadLicense) {
+    //   console.log(localStorage.rapidLoadLicense);
+    //   this.license_information.name = localStorage.rapidLoadLicense.name
+    //   this.license_information.exp_date = new Date(localStorage.rapidLoadLicense.next_billing * 1000)
+    //   this.license_information.license = localStorage.rapidLoadLicense.plan
+    //   this.license_information.licensed_domain = localStorage.rapidLoadLicense.licensedDomain
+    // }else{
+    //   this.update_license()
+    // }
     this.update_license()
 
     const activeModules = [];
@@ -245,6 +258,9 @@ export default {
     update_license(){
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
         if(response.data?.data){
+          // const licenseData = []
+          // licenseData.push(response.data?.data)
+          // localStorage.rapidLoadLicense = licenseData
           this.license_information.name = response.data?.data?.name
           this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)
           this.license_information.license = response.data?.data?.plan
@@ -347,7 +363,7 @@ export default {
         {
           id : "cdn",
           title: "Cloud Delivery (CDN)",
-          description: 'Load resource files faster by using 112 edge locations with only 27ms latency',
+          description: 'Load resources faster using 112 edge locations with only 27ms latency',
           image: 'cdn.svg',
           link: '/cdn',
           status: false,
