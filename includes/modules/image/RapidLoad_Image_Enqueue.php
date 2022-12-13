@@ -56,7 +56,7 @@ class RapidLoad_Image_Enqueue
                 continue;
             }
 
-            if(!$this->is_file_excluded($img->src, 'uucss_preload_lcp_image')){
+            if($this->is_file_preloaded($img->src, 'uucss_preload_lcp_image')){
 
                 $preload_image = '<link rel="preload" href="'. $img->src .'" as="image" > ';
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
@@ -211,6 +211,38 @@ class RapidLoad_Image_Enqueue
             if(!$excluded){
 
                 $excluded = $this->str_contains($file, $exclude_file);
+
+            }
+
+            if($excluded){
+
+                break;
+            }
+
+        }
+
+        return $excluded;
+    }
+
+    private function is_file_preloaded($file, $option_name = 'uucss_preload_lcp_image'){
+
+        $preloaded_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
+
+        $excluded = false;
+
+        foreach ($preloaded_files as $preloaded_file){
+
+            $preloaded_file = str_replace("\r", "", $preloaded_file);
+
+            if(self::is_regex_expression($preloaded_file)){
+
+                $excluded = preg_match($preloaded_file, $file);
+
+            }
+
+            if(!$excluded){
+
+                $excluded = $this->str_contains($file, $preloaded_file);
 
             }
 
