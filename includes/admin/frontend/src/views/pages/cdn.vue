@@ -39,7 +39,7 @@
             <h1 class="font-semibold text-base text-black-font">CDN URL</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <input
-                v-model="preload_font_urls"
+                v-model="uucss_cdn_dns_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="cdn-url" type="text" placeholder="">
             <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -51,9 +51,9 @@
             <h1 class="font-semibold text-base text-black-font">Bunny CDN Zone</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <input
-                v-model="preload_font_urls"
+                v-model="uucss_cdn_url"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder="">
+                id="bunny-cdn" type="text" placeholder="">
             <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                 ‘elementor-*, *-gallery’ etc...</p>
@@ -63,9 +63,9 @@
             <h1 class="font-semibold text-base text-black-font">Cloudflare DNS</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <input
-                v-model="preload_font_urls"
+                v-model="uucss_cdn_zone_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder="">
+                id="clouldflare" type="text" placeholder="">
             <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                 ‘elementor-*, *-gallery’ etc...</p>
@@ -108,15 +108,15 @@ export default {
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
     });
-    this.font_config = activeModules;
-
-    if (this.font_config) {
-      Object.keys(this.font_config).map((key) => {
-        if (this.id === this.font_config[key].id) {
-          const option = this.font_config[key].options;
-          this.preload_font_urls = option.uucss_preload_font_urls? option.uucss_preload_font_urls.replace(/,/g, '\n'): "";
-          this.self_host_google_font= option.uucss_self_host_google_fonts;
-
+    this.cdn_config = activeModules;
+    console.log(this.cdn_config)
+    if (this.cdn_config) {
+      Object.keys(this.cdn_config).map((key) => {
+        if (this.id === this.cdn_config[key].id) {
+          const option = this.cdn_config[key].options;
+          this.uucss_cdn_dns_id = option.uucss_cdn_dns_id;
+          this.uucss_cdn_url= option.uucss_cdn_url;
+          this.uucss_cdn_zone_id = option.uucss_cdn_zone_id;
         }
 
       });
@@ -127,9 +127,9 @@ export default {
     saveSettings(){
 
       const data = {
-        uucss_preload_font_urls : this.preload_font_urls.replace(/\n/g, ","),
-        uucss_self_host_google_fonts : this.self_host_google_font,
-        uucss_enable_font_optimization : true,
+        uucss_cdn_dns_id : this.uucss_cdn_dns_id,
+        uucss_cdn_url : this.uucss_cdn_url,
+        uucss_cdn_zone_id : this.uucss_cdn_zone_id,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {
@@ -160,11 +160,12 @@ export default {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
 
-      font_config:[],
-      id: 'font',
+      cdn_config:[],
+      id: 'cdn',
 
-      self_host_google_font: false,
-      preload_font_urls: [],
+      uucss_cdn_dns_id: null,
+      uucss_cdn_url: null,
+      uucss_cdn_zone_id: null,
       back: '/',
 
 
