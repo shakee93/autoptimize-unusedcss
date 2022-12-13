@@ -56,6 +56,14 @@ class RapidLoad_Image_Enqueue
                 continue;
             }
 
+            if(!$this->is_file_excluded($img->src, 'uucss_preload_lcp_image')){
+
+                $preload_image = '<link rel="preload" href="'. $img->src .'" as="image" > ';
+                $title_content = $this->dom->find( 'title' )[0]->outertext;
+                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
+
+            }
+
             $url = $this->extractUrl($img->src);
 
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
@@ -184,9 +192,9 @@ class RapidLoad_Image_Enqueue
         return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw';
     }
 
-    private function is_file_excluded($file){
+    private function is_file_excluded($file, $option_name = 'uucss_exclude_images'){
 
-        $exclude_files = isset($this->options['uucss_exclude_images']) && !empty($this->options['uucss_exclude_images']) ? explode("\n", $this->options['uucss_exclude_images']) : [];
+        $exclude_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
 
         $excluded = false;
 
