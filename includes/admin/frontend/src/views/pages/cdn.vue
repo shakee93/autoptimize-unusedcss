@@ -103,7 +103,7 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
     this.cdn_config = activeModules;
-    console.log(this.cdn_config)
+
     if (this.cdn_config) {
       Object.keys(this.cdn_config).map((key) => {
         if (this.id === this.cdn_config[key].id) {

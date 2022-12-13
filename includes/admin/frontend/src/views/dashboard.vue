@@ -201,17 +201,27 @@ export default {
   },
 
   mounted() {
+    this.getHoursDiff(localStorage.expDate, new Date().getTime())
+    if(this.expTime > 720){
+      localStorage.clear();
+    }
 
-    // if (localStorage.rapidLoadLicense) {
-    //   console.log(localStorage.rapidLoadLicense);
-    //   this.license_information.name = localStorage.rapidLoadLicense.name
-    //   this.license_information.exp_date = new Date(localStorage.rapidLoadLicense.next_billing * 1000)
-    //   this.license_information.license = localStorage.rapidLoadLicense.plan
-    //   this.license_information.licensed_domain = localStorage.rapidLoadLicense.licensedDomain
-    // }else{
-    //   this.update_license()
-    // }
-    this.update_license()
+    const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
+
+    if (rapidLoadLicense) {
+      Object.keys(rapidLoadLicense).forEach((a) => {
+        const data = rapidLoadLicense[a];
+        this.license_information.name = data.name
+        this.license_information.exp_date = new Date(data.next_billing * 1000)
+        this.license_information.license = data.plan
+        this.license_information.licensed_domain = data.licensedDomain
+
+      })
+
+    }else{
+      this.update_license()
+    }
+
 
     const activeModules = [];
 
@@ -258,9 +268,11 @@ export default {
     update_license(){
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
         if(response.data?.data){
-          // const licenseData = []
-          // licenseData.push(response.data?.data)
-          // localStorage.rapidLoadLicense = licenseData
+
+          const licenseData = []
+          licenseData.push(response.data?.data)
+          localStorage.setItem('rapidLoadLicense', JSON.stringify(licenseData))
+          localStorage.expDate = new Date().getTime()
           this.license_information.name = response.data?.data?.name
           this.license_information.exp_date = new Date(response.data?.data?.next_billing * 1000)
           this.license_information.license = response.data?.data?.plan
@@ -270,8 +282,13 @@ export default {
           }
         }
       })
-    },
 
+    },
+    getHoursDiff(startDate, endDate) {
+      const msInHour = 1000 * 60 ;
+      const minutes =  Math.round(Math.abs(endDate - startDate) / msInHour);
+      this.expTime = minutes;
+    },
     update(toggle, module){
 
       if(!this.license_information.licensed_domain){
@@ -309,6 +326,7 @@ export default {
     return {
       tick_image: 'license-information.svg',
       connect_btn: false,
+      expTime: null,
       license_information:
           {
             name: '',
