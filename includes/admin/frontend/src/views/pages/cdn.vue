@@ -49,7 +49,7 @@
             <h1 class="font-semibold text-base text-black-font">Bunny CDN Zone</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <input
-                v-model="uucss_cdn_dns_id"
+                v-model="uucss_cdn_zone_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="bunny-cdn" type="text" placeholder="">
           </div>
@@ -57,7 +57,7 @@
             <h1 class="font-semibold text-base text-black-font">Cloudflare DNS</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <input
-                v-model="uucss_cdn_zone_id"
+                v-model="uucss_cdn_dns_id"
                 class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="clouldflare" type="text" placeholder="">
           </div>
@@ -163,7 +163,7 @@ export default {
                 {
                   group: "success",
                   title: "Success",
-                  text: "Font Settings Updated!"
+                  text: "CDN Settings Updated!"
                 },
                 4000
             );
