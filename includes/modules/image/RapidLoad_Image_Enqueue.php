@@ -58,26 +58,23 @@ class RapidLoad_Image_Enqueue
 
             if($this->is_file_preloaded($img->src)){
 
-                $preload_image = '<link rel="preload" href="'. RapidLoad_Image::get_replaced_url($img->src) .'" as="image" > ';
+                /*$preload_image = '<link rel="preload" href="'. RapidLoad_Image::get_replaced_url($img->src) .'" as="image" > ';
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
-                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
-                $img->src = RapidLoad_Image::get_replaced_url($img->src);
+                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);*/
 
-            }else{
+            }
 
-                $url = $this->extractUrl($img->src);
+            $url = $this->extractUrl($img->src);
 
-                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
-                if (in_array($urlExt, $this->imgExt)) {
+            if (in_array($urlExt, $this->imgExt)) {
 
-                    $data_src = 'data-original-src';
+                $data_src = 'data-original-src';
 
-                    $img->src = $this->get_placeholder($img);
+                $img->src = $this->get_placeholder($img);
 
-                    $img->$data_src = $url;
-
-                }
+                $img->$data_src = $url;
 
             }
 
