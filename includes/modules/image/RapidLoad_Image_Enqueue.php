@@ -58,7 +58,7 @@ class RapidLoad_Image_Enqueue
 
             if($this->is_file_preloaded($img->src)){
 
-                $preload_image = '<link rel="preload" href="'. basename($img->src) .'" as="image" > ';
+                $preload_image = '<link rel="preload" href="' . basename($img->src) .'" as="image" > ';
                 $title_content = $this->dom->find( 'title' )[0]->outertext;
                 $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
 
@@ -128,6 +128,10 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $index => $img ) {
 
+            if($this->is_file_excluded($img->src)){
+                continue;
+            }
+
             if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
                 $img->loading = "eager";
                 $img->decoding = "sync";
@@ -146,6 +150,10 @@ class RapidLoad_Image_Enqueue
         $images = $this->dom->find( 'img[src]' );
 
         foreach ( $images as $img ) {
+
+            if($this->is_file_excluded($img->src)){
+                continue;
+            }
 
             $url = $this->extractUrl($img->src);
 
