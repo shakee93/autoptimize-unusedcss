@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '54ac04d353576cf09d89d856c81f2a44cb40b3f3',
+        'reference' => 'c63038304589783eb926e352baa81fef28b2075d',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '54ac04d353576cf09d89d856c81f2a44cb40b3f3',
+            'reference' => 'c63038304589783eb926e352baa81fef28b2075d',
             'dev_requirement' => false,
         ),
         'collizo4sky/persist-admin-notices-dismissal' => array(
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'matthiasmullie/minify' => array(
-            'pretty_version' => '1.3.69',
-            'version' => '1.3.69.0',
+            'pretty_version' => '1.3.70',
+            'version' => '1.3.70.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../matthiasmullie/minify',
             'aliases' => array(),
-            'reference' => 'a61c949cccd086808063611ef9698eabe42ef22f',
+            'reference' => '2807d9f9bece6877577ad44acb5c801bb3ae536b',
             'dev_requirement' => false,
         ),
         'matthiasmullie/path-converter' => array(

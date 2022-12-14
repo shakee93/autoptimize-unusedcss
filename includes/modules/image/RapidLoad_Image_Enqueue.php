@@ -71,7 +71,6 @@ class RapidLoad_Image_Enqueue
             if (in_array($urlExt, $this->imgExt)) {
 
                 $data_src = 'data-original-src';
-
                 $img->src = RapidLoad_Image::get_replaced_url($img->src, null, $img->width, $img->height, [
                     'optimize_level' => 'lqip'
                 ]);
