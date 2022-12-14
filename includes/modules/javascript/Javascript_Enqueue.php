@@ -163,7 +163,7 @@ class Javascript_Enqueue
 
                 case 'defer' : {
 
-                    if(self::is_js($link) && !self::is_file_excluded($link->src)){
+                    if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
 
                         $link->defer = true;
                         unset($link->async);
@@ -206,9 +206,9 @@ class Javascript_Enqueue
         return !empty($el->type) && $el->type == "text/javascript";
     }
 
-    private function is_file_excluded($file){
+    private function is_file_excluded($file, $option_name = 'uucss_excluded_js_files'){
 
-        $exclude_files = isset($this->options['uucss_excluded_js_files']) && !empty($this->options['uucss_excluded_js_files']) ? explode("\n", $this->options['uucss_excluded_js_files']) : [];
+        $exclude_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
 
         $excluded = false;
 

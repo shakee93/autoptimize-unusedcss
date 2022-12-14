@@ -203,6 +203,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_excluded_js_files_from_defer'])){
+
+            $options['uucss_excluded_js_files_from_defer'] = $_REQUEST['uucss_excluded_js_files_from_defer'];
+
+        }
+
         if(isset($_REQUEST['uucss_load_scripts_on_user_interaction'])){
 
             $options['uucss_load_scripts_on_user_interaction'] = $_REQUEST['uucss_load_scripts_on_user_interaction'];
@@ -272,6 +278,12 @@ class RapidLoad_Admin
             if(isset($_REQUEST['uucss_support_next_gen_formats'])){
 
                 $options['uucss_support_next_gen_formats'] = ($_REQUEST['uucss_support_next_gen_formats'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_set_width_and_height'])){
+
+                $options['uucss_set_width_and_height'] = ($_REQUEST['uucss_set_width_and_height'] == 'true' ? "1" : null);
 
             }
 

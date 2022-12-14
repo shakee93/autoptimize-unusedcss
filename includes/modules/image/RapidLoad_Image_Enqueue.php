@@ -42,6 +42,8 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
+        $this->preload_images();
+
         $this->set_width_and_height();
 
         $this->lazy_load_images();
@@ -56,14 +58,6 @@ class RapidLoad_Image_Enqueue
                 continue;
             }
 
-            if($this->is_file_preloaded($img->src)){
-
-                /*$preload_image = '<link rel="preload" href="'. RapidLoad_Image::get_replaced_url($img->src) .'" as="image" > ';
-                $title_content = $this->dom->find( 'title' )[0]->outertext;
-                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);*/
-
-            }
-
             $url = $this->extractUrl($img->src);
 
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
@@ -71,8 +65,10 @@ class RapidLoad_Image_Enqueue
             if (in_array($urlExt, $this->imgExt)) {
 
                 $data_src = 'data-original-src';
-
-                $img->src = $this->get_placeholder($img);
+                $img->src = RapidLoad_Image::get_replaced_url($img->src, null, $img->width, $img->height, [
+                    'optimize_level' => 'lqip'
+                ]);
+                //$this->get_placeholder($img);
 
                 $img->$data_src = $url;
 
@@ -120,6 +116,22 @@ class RapidLoad_Image_Enqueue
         return $state;
     }
 
+    public function preload_images(){
+
+        $preloaded_files = isset($this->options['uucss_preload_lcp_image']) && !empty($this->options['uucss_preload_lcp_image']) ? explode("\n", $this->options['uucss_preload_lcp_image']) : [];
+
+        foreach ($preloaded_files as $preloaded_file){
+
+            $preloaded_file = str_replace("\r", "", $preloaded_file);
+
+            $preload_image = '<link rel="preload" href="' . $preloaded_file .'" as="image" > ';
+            $title_content = $this->dom->find( 'title' )[0]->outertext;
+            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
+
+        }
+
+    }
+
     public function lazy_load_images(){
 
         $images = $this->dom->find( 'img[src]' );
@@ -145,32 +157,37 @@ class RapidLoad_Image_Enqueue
 
     public function set_width_and_height(){
 
-        $images = $this->dom->find( 'img[src]' );
+        if(isset($this->options['uucss_set_width_and_height']) && $this->options['uucss_set_width_and_height'] == "1"){
 
-        foreach ( $images as $img ) {
+            $images = $this->dom->find( 'img[src]' );
 
-            if($this->is_file_excluded($img->src)){
-                continue;
-            }
+            foreach ( $images as $img ) {
 
-            $url = $this->extractUrl($img->src);
-
-            $file_path = self::get_file_path_from_url($url);
-
-            $dimension = self::get_width_height($file_path);
-
-            if ($dimension && isset($dimension['width']) && $dimension['height']) {
-
-                if (!isset($img->width)) {
-                    $img->width = $dimension['width'];
+                if($this->is_file_excluded($img->src)){
+                    continue;
                 }
 
-                if (!isset($img->height)) {
-                    $img->height = $dimension['height'];
-                }
+                $url = $this->extractUrl($img->src);
 
+                $file_path = self::get_file_path_from_url($url);
+
+                $dimension = self::get_width_height($file_path);
+
+                if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                    if (!isset($img->width)) {
+                        $img->width = $dimension['width'];
+                    }
+
+                    if (!isset($img->height)) {
+                        $img->height = $dimension['height'];
+                    }
+
+                }
             }
+
         }
+
     }
 
     public function extractUrl($url){
@@ -226,35 +243,4 @@ class RapidLoad_Image_Enqueue
         return $excluded;
     }
 
-    private function is_file_preloaded($file, $option_name = 'uucss_preload_lcp_image'){
-
-        $preloaded_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
-
-        $excluded = false;
-
-        foreach ($preloaded_files as $preloaded_file){
-
-            $preloaded_file = str_replace("\r", "", $preloaded_file);
-
-            if(self::is_regex_expression($preloaded_file)){
-
-                $excluded = preg_match($preloaded_file, $file);
-
-            }
-
-            if(!$excluded){
-
-                $excluded = $this->str_contains($file, $preloaded_file);
-
-            }
-
-            if($excluded){
-
-                break;
-            }
-
-        }
-
-        return $excluded;
-    }
 }
