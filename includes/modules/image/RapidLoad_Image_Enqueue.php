@@ -42,6 +42,8 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
+        $this->preload_images();
+
         $this->set_width_and_height();
 
         $this->lazy_load_images();
@@ -54,14 +56,6 @@ class RapidLoad_Image_Enqueue
 
             if($this->is_file_excluded($img->src)){
                 continue;
-            }
-
-            if($this->is_file_preloaded($img->src)){
-
-                $preload_image = '<link rel="preload" href="' . basename($img->src) .'" as="image" > ';
-                $title_content = $this->dom->find( 'title' )[0]->outertext;
-                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
-
             }
 
             $url = $this->extractUrl($img->src);
@@ -120,6 +114,22 @@ class RapidLoad_Image_Enqueue
         }
 
         return $state;
+    }
+
+    public function preload_images(){
+
+        $preloaded_files = isset($this->options['uucss_preload_lcp_image']) && !empty($this->options['uucss_preload_lcp_image']) ? explode("\n", $this->options['uucss_preload_lcp_image']) : [];
+
+        foreach ($preloaded_files as $preloaded_file){
+
+            $preloaded_file = str_replace("\r", "", $preloaded_file);
+
+            $preload_image = '<link rel="preload" href="' . $preloaded_file .'" as="image" > ';
+            $title_content = $this->dom->find( 'title' )[0]->outertext;
+            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
+
+        }
+
     }
 
     public function lazy_load_images(){
@@ -228,35 +238,4 @@ class RapidLoad_Image_Enqueue
         return $excluded;
     }
 
-    private function is_file_preloaded($file, $option_name = 'uucss_preload_lcp_image'){
-
-        $preloaded_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
-
-        $excluded = false;
-
-        foreach ($preloaded_files as $preloaded_file){
-
-            $preloaded_file = str_replace("\r", "", $preloaded_file);
-
-            if(self::is_regex_expression($preloaded_file)){
-
-                $excluded = preg_match($preloaded_file, $file);
-
-            }
-
-            if(!$excluded){
-
-                $excluded = $this->str_contains($file, $preloaded_file);
-
-            }
-
-            if($excluded){
-
-                break;
-            }
-
-        }
-
-        return $excluded;
-    }
 }
