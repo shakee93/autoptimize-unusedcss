@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Javascript Optimization</h1>
+            <h1 class="font-semibold text-base text-black-font">Javascript Delivery</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
               CSS</p>
           </div>
@@ -96,8 +96,8 @@
 
 
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Load Scripts On User Interaction</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <h1 class="font-semibold text-base text-black-font">Delay Javascripts to Load on User Interaction</h1>
+            <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>
             <textarea v-model="uucss_load_scripts_on_user_interaction"
                       class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="force-include" type="text" placeholder=""></textarea>
