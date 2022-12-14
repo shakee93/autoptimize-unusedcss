@@ -157,32 +157,37 @@ class RapidLoad_Image_Enqueue
 
     public function set_width_and_height(){
 
-        $images = $this->dom->find( 'img[src]' );
+        if(isset($this->options['uucss_set_width_and_height']) && $this->options['uucss_set_width_and_height'] == "1"){
 
-        foreach ( $images as $img ) {
+            $images = $this->dom->find( 'img[src]' );
 
-            if($this->is_file_excluded($img->src)){
-                continue;
-            }
+            foreach ( $images as $img ) {
 
-            $url = $this->extractUrl($img->src);
-
-            $file_path = self::get_file_path_from_url($url);
-
-            $dimension = self::get_width_height($file_path);
-
-            if ($dimension && isset($dimension['width']) && $dimension['height']) {
-
-                if (!isset($img->width)) {
-                    $img->width = $dimension['width'];
+                if($this->is_file_excluded($img->src)){
+                    continue;
                 }
 
-                if (!isset($img->height)) {
-                    $img->height = $dimension['height'];
-                }
+                $url = $this->extractUrl($img->src);
 
+                $file_path = self::get_file_path_from_url($url);
+
+                $dimension = self::get_width_height($file_path);
+
+                if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                    if (!isset($img->width)) {
+                        $img->width = $dimension['width'];
+                    }
+
+                    if (!isset($img->height)) {
+                        $img->height = $dimension['height'];
+                    }
+
+                }
             }
+
         }
+
     }
 
     public function extractUrl($url){

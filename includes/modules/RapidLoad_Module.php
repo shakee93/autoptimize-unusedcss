@@ -251,6 +251,7 @@ class RapidLoad_Module
                     'defer_inline_js' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
                     'minify_js' => isset($options['minify_js']) && $options['minify_js'] == "1" ? true : false,
                     'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
+                    'uucss_excluded_js_files_from_defer' => isset($options['uucss_excluded_js_files_from_defer']) ? $options['uucss_excluded_js_files_from_defer'] : null,
                     'uucss_load_scripts_on_user_interaction' => isset($options['uucss_load_scripts_on_user_interaction']) ? $options['uucss_load_scripts_on_user_interaction'] : null,
                 ]
             ],
@@ -262,6 +263,7 @@ class RapidLoad_Module
                     'uucss_exclude_above_the_fold_image_count' => isset($options['uucss_exclude_above_the_fold_image_count']) ? $options['uucss_exclude_above_the_fold_image_count'] : null,
                     'uucss_exclude_images' => isset($options['uucss_exclude_images']) ? $options['uucss_exclude_images'] : '',
                     'uucss_support_next_gen_formats' => isset($options['uucss_support_next_gen_formats']) && $options['uucss_support_next_gen_formats'] == "1" ? true : false,
+                    'uucss_set_width_and_height' => isset($options['uucss_set_width_and_height']) && $options['uucss_set_width_and_height'] == "1" ? true : false,
                 ]
             ],
             'cdn' => [
