@@ -66,7 +66,7 @@ class RapidLoad_Image
 
     }
 
-    public static function get_replaced_url($url, $cdn = null, $width = false, $height = false )
+    public static function get_replaced_url($url, $cdn = null, $width = false, $height = false, $args = [])
     {
         if(!$cdn){
             $cdn = self::$image_indpoint;
@@ -74,7 +74,9 @@ class RapidLoad_Image
 
         $options = 'ret_img';
 
-        if(isset(self::$instance->options['uucss_image_optimize_level'])){
+        if(isset($args['optimize_level'])){
+            $options .= ',q_' . $args['optimize_level'];
+        }else if(isset(self::$instance->options['uucss_image_optimize_level'])){
             $options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
         }
 

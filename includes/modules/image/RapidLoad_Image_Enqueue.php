@@ -72,7 +72,10 @@ class RapidLoad_Image_Enqueue
 
                 $data_src = 'data-original-src';
 
-                $img->src = $this->get_placeholder($img);
+                $img->src = RapidLoad_Image::get_replaced_url($img->src, null, $img->width, $img->height, [
+                    'optimize_level' => 'lqip'
+                ]);
+                //$this->get_placeholder($img);
 
                 $img->$data_src = $url;
 
