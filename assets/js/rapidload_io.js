@@ -24,7 +24,7 @@
 
         const targetNode = document.getElementsByTagName('body')[0];
 
-        const config = { attributes: true, childList: true, subtree: true };
+        const config = { attributes: false, childList: true, subtree: true };
 
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
