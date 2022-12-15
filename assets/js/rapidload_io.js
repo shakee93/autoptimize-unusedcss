@@ -15,8 +15,9 @@
                         options += ",to_auto"
                     }
                     options += ',w_' + $(value).width()
-                    if(!$(value).attr('src').toString().includes(',w_' + $(value).width())){
-                        $(value).attr('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
+                    url = window.rapidload_io_data.image_endpoint + options + '/' + url
+                    if($(value).attr('src').toString() !== url){
+                        $(value).attr('src', url);
                     }
                 }
             })
@@ -24,7 +25,7 @@
 
         const targetNode = document.getElementsByTagName('body')[0];
 
-        const config = { attributes: false, childList: true, subtree: true };
+        const config = { attributes: true, childList: true, subtree: true };
 
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
