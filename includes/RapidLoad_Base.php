@@ -359,6 +359,7 @@ class RapidLoad_Base
             'uucss_enable_css' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
+            'uucss_exclude_above_the_fold_image_count' => 3,
         ]);
 
         if(!isset($default_options['uucss_api_key'])){
