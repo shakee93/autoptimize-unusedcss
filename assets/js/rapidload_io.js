@@ -2,14 +2,6 @@
 
     $(document).ready(function (){
 
-        function isHTML(str) {
-            var a = document.createElement(str);
-            for (var c = a.childNodes, i = c.length; i--; ) {
-                if (c[i].nodeType == 1) return true;
-            }
-            return false;
-        }
-
         window.rapidload_replace_image_src = function(){
 
             $('img').each(function (index, value){
@@ -50,7 +42,7 @@
                     console.log(mutation.addedNodes)
                     for (const node of mutation.addedNodes){
                         console.log(node)
-                        if(isHTML(node)){
+                        if(node.toString().startsWith('<') && node.toString().endsWith('>')){
                             try {
                                 var imageTags = node.getElementsByTagName('img');
                                 if(imageTags.length){
