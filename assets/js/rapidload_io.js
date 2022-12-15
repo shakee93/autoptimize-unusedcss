@@ -2,6 +2,17 @@
 
     $(document).ready(function (){
 
+        function isHTML(str) {
+            var a = document.createElement('div');
+            a.innerHTML = str;
+
+            for (var c = a.childNodes, i = c.length; i--; ) {
+                if (c[i].nodeType == 1) return true;
+            }
+
+            return false;
+        }
+
         window.rapidload_replace_image_src = function(){
 
             $('img').each(function (index, value){
@@ -40,7 +51,7 @@
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
                     for (const node of mutation.addedNodes){
-                        if(typeof node == 'object'){
+                        if(isHTML(node)){
                             try {
                                 var imageTags = node.getElementsByTagName('img');
                                 if(imageTags.length){
