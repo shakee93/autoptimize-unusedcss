@@ -145,6 +145,10 @@ class Javascript_Enqueue
 
         $method = false;
 
+        if(!isset($link->type)){
+            $link->type = 'text/javascript';
+        }
+
         if(isset($this->settings['js_files'])){
 
             $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));
