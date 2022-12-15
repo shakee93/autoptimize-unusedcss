@@ -39,25 +39,28 @@
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
                 for (const node of mutation.addedNodes){
-                    for (const img of node.getElementsByTagName('img')){
-                        var url = img.getAttribute('data-original-src')
+                    var imageTags = node.getElementsByTagName('img');
+                    if(imageTags.length){
+                        for (const img of imageTags){
+                            var url = img.getAttribute('data-original-src')
 
-                        if(window.rapidload_io_data && url){
+                            if(window.rapidload_io_data && url){
 
-                            var options = 'ret_img'
+                                var options = 'ret_img'
 
-                            if(window.rapidload_io_data.optimize_level){
-                                options += ",q_" + window.rapidload_io_data.optimize_level
+                                if(window.rapidload_io_data.optimize_level){
+                                    options += ",q_" + window.rapidload_io_data.optimize_level
+                                }
+
+                                if(window.rapidload_io_data.support_next_gen_format){
+                                    options += ",to_auto"
+                                }
+
+                                options += ',w_' + img.getBoundingClientRect().width
+
+                                img.setAttribute('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
+
                             }
-
-                            if(window.rapidload_io_data.support_next_gen_format){
-                                options += ",to_auto"
-                            }
-
-                            options += ',w_' + img.getBoundingClientRect().width
-
-                            img.setAttribute('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
-
                         }
                     }
                 }
