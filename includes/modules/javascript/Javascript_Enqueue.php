@@ -166,6 +166,7 @@ class Javascript_Enqueue
                         unset($link->async);
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
                         if(isset($link->{"data-rapidload-delayed"})){
+                            unset($link->{"data-rapidload-delayed"});
                             $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
                         }else{
                             $link->type = 'text/javascript';
@@ -175,6 +176,7 @@ class Javascript_Enqueue
                         }
                     }else{
                         if(isset($link->{"data-rapidload-delayed"})){
+                            unset($link->{"data-rapidload-delayed"});
                             $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
                         }
                     }
