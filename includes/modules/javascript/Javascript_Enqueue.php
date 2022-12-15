@@ -180,6 +180,10 @@ class Javascript_Enqueue
                             $link->__set('innertext',"");
                         }
 
+                    }else{
+                        if(isset($link->{"data-delayed-script"})){
+                            $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
+                        }
                     }
 
                     break;
