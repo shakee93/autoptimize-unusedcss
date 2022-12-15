@@ -40,6 +40,7 @@
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
                     for (const node of mutation.addedNodes){
+                        console.log(node)
                         if(node){
                             var imageTags = node.getElementsByTagName('img');
                             if(imageTags.length){
