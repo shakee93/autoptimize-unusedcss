@@ -159,18 +159,12 @@ class Javascript_Enqueue
         }
 
         if($method){
-
             switch ($method){
-
                 case 'defer' : {
-
                     if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
-
                         $link->defer = true;
                         unset($link->async);
-
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
-
                         if(isset($link->{"data-delayed-script"})){
                             $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
                         }else{
@@ -179,13 +173,11 @@ class Javascript_Enqueue
                             $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
                             $link->__set('innertext',"");
                         }
-
                     }else{
                         if(isset($link->{"data-delayed-script"})){
                             $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
                         }
                     }
-
                     break;
                 }
                 case 'on-user-interaction' : {
@@ -198,11 +190,8 @@ class Javascript_Enqueue
                 }
                 default:{
 
-
                 }
-
             }
-
         }
 
     }
