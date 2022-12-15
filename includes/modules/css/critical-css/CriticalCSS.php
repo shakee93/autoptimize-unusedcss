@@ -315,7 +315,7 @@ class CriticalCSS
             $this->job_data->save();
         }
 
-        if($this->job_data->status == 'failed' && $this->job_data->attempts > 2 && !isset($args['immediate'])){
+        if($this->job_data->status == 'failed' && $this->job_data->attempts >= 2 && !isset($args['immediate'])){
             return false;
         }
 
