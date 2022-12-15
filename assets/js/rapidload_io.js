@@ -30,12 +30,10 @@
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
-                    console.log(mutation.addedNodes)
                     for (const node of mutation.addedNodes){
                         if(node.nodeName === "#text"){
                             continue;
                         }
-                        console.log(node)
                         try {
                             var imageTags = node.getElementsByTagName('img');
                             if(imageTags.length){
