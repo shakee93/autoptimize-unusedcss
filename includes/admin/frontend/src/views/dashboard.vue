@@ -267,6 +267,10 @@ export default {
           if(!response.data?.data?.licensedDomain){
             this.disconnect_license();
             localStorage.clear();
+            this.license_information.name = null
+            this.license_information.exp_date = null
+            this.license_information.license = null
+            this.license_information.licensed_domain = null
           }else{
             const licenseData = []
             licenseData.push(response.data?.data)
