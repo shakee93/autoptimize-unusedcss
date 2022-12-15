@@ -3,13 +3,10 @@
     $(document).ready(function (){
 
         function isHTML(str) {
-            var a = document.createElement('div');
-            a.innerHTML = str;
-
+            var a = document.createElement(str);
             for (var c = a.childNodes, i = c.length; i--; ) {
                 if (c[i].nodeType == 1) return true;
             }
-
             return false;
         }
 
@@ -50,7 +47,9 @@
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
+                    console.log(mutation.addedNodes)
                     for (const node of mutation.addedNodes){
+                        console.log(node)
                         if(isHTML(node)){
                             try {
                                 var imageTags = node.getElementsByTagName('img');
