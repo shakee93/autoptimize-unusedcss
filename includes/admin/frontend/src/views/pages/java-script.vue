@@ -59,7 +59,7 @@
               </div>
             </div>
 
-            <div :class="{ expand: uucss_load_js_method.status }" class="pl-9 not-expand">
+            <div :class="{ expand: uucss_load_js_method.status }" class="pl-4 ml-10 main-border not-expand">
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
