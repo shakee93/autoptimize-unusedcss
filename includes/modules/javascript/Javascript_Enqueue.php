@@ -171,16 +171,15 @@ class Javascript_Enqueue
 
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
 
-                        /*$link->type = 'text/javascript';
-                        $link->defer = true;
-                        $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
-                        $link->__set('innertext',"");*/
+                        if(isset($link->{"data-delayed-script"})){
+                            $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
+                        }else{
+                            $link->type = 'text/javascript';
+                            $link->defer = true;
+                            $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
+                            $link->__set('innertext',"");
+                        }
 
-                        $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
-
-                    }else{
-                        error_log("dadasd");
-                        $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
                     }
 
                     break;
