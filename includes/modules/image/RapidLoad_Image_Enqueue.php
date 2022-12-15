@@ -123,10 +123,11 @@ class RapidLoad_Image_Enqueue
         foreach ($preloaded_files as $preloaded_file){
 
             $preloaded_file = str_replace("\r", "", $preloaded_file);
-
-            $preload_image = '<link rel="preload" href="' . $preloaded_file .'" as="image" > ';
-            $title_content = $this->dom->find( 'title' )[0]->outertext;
-            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
+            if(filter_var($preloaded_file, FILTER_VALIDATE_URL)){
+                $preload_image = '<link rel="preload" href="' . $preloaded_file .'" as="image" > ';
+                $title_content = $this->dom->find( 'title' )[0]->outertext;
+                $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_image);
+            }
 
         }
 
