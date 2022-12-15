@@ -56,9 +56,7 @@
 
                             options += ',w_' + img.getBoundingClientRect().width
 
-                            if(!img.getAttribute('src').toString().includes(',w_' + img.getBoundingClientRect().width)){
-                                img.setAttribute('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
-                            }
+                            img.setAttribute('src', window.rapidload_io_data.image_endpoint + options + '/' + url);
 
                         }
                     }
