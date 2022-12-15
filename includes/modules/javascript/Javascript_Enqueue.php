@@ -64,7 +64,7 @@ class Javascript_Enqueue
 
         $body = $this->dom->find('body', 0);
         $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
-                    document.querySelectorAll('noscript[data-delayed-script]').forEach(function(el){ el.outerHTML = el.innerHTML})
+                    document.querySelectorAll('noscript[data-rapidload-delayed]').forEach(function(el){ el.outerHTML = el.innerHTML})
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
