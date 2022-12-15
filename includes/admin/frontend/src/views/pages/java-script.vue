@@ -163,7 +163,7 @@ export default {
             this.uucss_load_js_method.defer_inline_js = options.defer_inline_js
             this.minify_js = options.minify_js
             this.uucss_excluded_js_files = options.uucss_excluded_js_files
-            this.uucss_load_js_method.status = options.uucss_load_js_method === 'on-user-interaction'
+            this.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
             this.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
             this.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
           }
@@ -178,7 +178,7 @@ export default {
            defer_inline_js : this.uucss_load_js_method.defer_inline_js,
            minify_js : this.minify_js,
            uucss_excluded_js_files : this.uucss_excluded_js_files,
-           uucss_load_js_method : this.uucss_load_js_method.status? 'on-user-interaction': 'none',
+           uucss_load_js_method : this.uucss_load_js_method.status? 'defer': 'none',
            uucss_load_scripts_on_user_interaction: this.uucss_load_scripts_on_user_interaction,
            uucss_excluded_js_files_from_defer: this.uucss_load_js_method.uucss_excluded_js_files_from_defer,
          }

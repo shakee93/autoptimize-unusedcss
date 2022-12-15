@@ -64,6 +64,7 @@ class Javascript_Enqueue
 
         $body = $this->dom->find('body', 0);
         $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
+                    document.querySelectorAll('noscript[data-delayed-script]').forEach(function(el){ el.outerHTML = el.innerHTML})
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
@@ -170,11 +171,16 @@ class Javascript_Enqueue
 
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
 
-                        $link->type = 'text/javascript';
+                        /*$link->type = 'text/javascript';
                         $link->defer = true;
                         $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
-                        $link->__set('innertext',"");
+                        $link->__set('innertext',"");*/
 
+                        $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
+
+                    }else{
+                        error_log("dadasd");
+                        $link->__set('outertext',"<noscript data-delayed-script>" . $link->outertext() . "</noscript>");
                     }
 
                     break;
