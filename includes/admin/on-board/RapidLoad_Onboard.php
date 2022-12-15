@@ -38,8 +38,6 @@ class RapidLoad_Onboard{
             wp_send_json_error(false);
         }
 
-        add_filter('uucss/purge/async', function ($async){ return false;}, 10, 1);
-
         $site_url = $this->transform_url(get_site_url());
 
         $job = new RapidLoad_Job([
@@ -47,7 +45,15 @@ class RapidLoad_Onboard{
         ]);
         $job->save(true);
 
-        do_action('rapidload/job/purge', $job, [ 'immediate' => true ]);
+        $job_data = new RapidLoad_Job_Data($job, 'uucss');
+
+        if(!isset($job_data->id)){
+            $job_data->save();
+        }
+
+        global $uucss;
+
+        $uucss->init_async_store($job_data, [ 'immediate' => true ]);
 
         $this->rapidload_configured();
 

@@ -849,6 +849,11 @@ class RapidLoad_Admin
             RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
             RapidLoad_Base::fetch_options(false);
 
+            $cache_key = 'pand-' . md5( 'first-uucss-job' );
+            RapidLoad_Base::delete_option( $cache_key );
+
+            do_action('rapidload/vanish');
+
             wp_send_json_success(true);
         }
 
