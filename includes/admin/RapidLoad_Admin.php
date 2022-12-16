@@ -287,9 +287,21 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_lazy_load_images'])){
+
+                $options['uucss_lazy_load_images'] = ($_REQUEST['uucss_lazy_load_images'] == 'true' ? "1" : null);
+
+            }
+
             if(isset($_REQUEST['uucss_exclude_images'])){
 
                 $options['uucss_exclude_images'] = $_REQUEST['uucss_exclude_images'];
+
+            }
+
+            if(isset($_REQUEST['uucss_exclude_images_from_lazy_load'])){
+
+                $options['uucss_exclude_images_from_lazy_load'] = $_REQUEST['uucss_exclude_images_from_lazy_load'];
 
             }
 
@@ -848,6 +860,11 @@ class RapidLoad_Admin
             unset($options['valid_domain']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
             RapidLoad_Base::fetch_options(false);
+
+            $cache_key = 'pand-' . md5( 'first-uucss-job' );
+            RapidLoad_Base::delete_option( $cache_key );
+
+            do_action('rapidload/vanish');
 
             wp_send_json_success(true);
         }

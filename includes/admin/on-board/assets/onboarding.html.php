@@ -74,7 +74,7 @@ $step  = RapidLoad_Onboard::$current_step + 1;
             </div>
             <div class="action-wrap">
                 <a class="act-button uucss-settings js-goto-settings"
-                   href="<?php echo admin_url('options-general.php?page=uucss') ?>">View Jobs</a>
+                   href="<?php echo admin_url('admin.php?page=rapidload#/') ?>">View Dashboard</a>
                 <a class="act-button uucss-support js-goto-support"
                    href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Contact Support</a>
             </div>

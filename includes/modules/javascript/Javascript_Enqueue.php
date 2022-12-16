@@ -64,6 +64,7 @@ class Javascript_Enqueue
 
         $body = $this->dom->find('body', 0);
         $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
+                    document.querySelectorAll('noscript[data-rapidload-delayed]').forEach(function(el){ el.outerHTML = el.innerHTML})
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
@@ -144,6 +145,10 @@ class Javascript_Enqueue
 
         $method = false;
 
+        if(!isset($link->type)){
+            $link->type = 'text/javascript';
+        }
+
         if(isset($this->settings['js_files'])){
 
             $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));
@@ -158,25 +163,27 @@ class Javascript_Enqueue
         }
 
         if($method){
-
             switch ($method){
-
                 case 'defer' : {
-
                     if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
-
                         $link->defer = true;
                         unset($link->async);
-
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
-
-                        $link->type = 'text/javascript';
-                        $link->defer = true;
-                        $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
-                        $link->__set('innertext',"");
-
+                        if(isset($link->{"data-rapidload-delayed"})){
+                            unset($link->{"data-rapidload-delayed"});
+                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
+                        }else{
+                            $link->type = 'text/javascript';
+                            $link->defer = true;
+                            $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
+                            $link->__set('innertext',"");
+                        }
+                    }else{
+                        if(isset($link->{"data-rapidload-delayed"})){
+                            unset($link->{"data-rapidload-delayed"});
+                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
+                        }
                     }
-
                     break;
                 }
                 case 'on-user-interaction' : {
@@ -189,11 +196,8 @@ class Javascript_Enqueue
                 }
                 default:{
 
-
                 }
-
             }
-
         }
 
     }

@@ -642,6 +642,8 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
+        $first_link = false;
+
         $link = $wpdb->get_results( "select * from (select 
         job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
         uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
@@ -658,10 +660,14 @@ abstract class RapidLoad_DB
         }
 
         if ( count( $link ) > 0 ) {
-            return self::transform_link($link[0]);
+            $first_link = self::transform_link($link[0]);
         }
 
-        return false;
+        if(!isset($first_link['status']) || ($first_link['status'] != "success" && $first_link['status'] != "failed")){
+            return false;
+        }
+
+        return $first_link;
 
     }
 }
