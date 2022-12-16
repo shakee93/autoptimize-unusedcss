@@ -135,24 +135,26 @@ class RapidLoad_Image_Enqueue
 
     public function lazy_load_images(){
 
-        $images = $this->dom->find( 'img[src]' );
+        if(isset($this->options['uucss_lazy_load_images']) && $this->options['uucss_lazy_load_images'] == "1"){
+            $images = $this->dom->find( 'img[src]' );
 
-        foreach ( $images as $index => $img ) {
+            foreach ( $images as $index => $img ) {
 
-            if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
-                continue;
+                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
+                    continue;
+                }
+
+                if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
+                    $img->loading = "eager";
+                    $img->decoding = "sync";
+                    $img->fetchpriority = "high";
+                }else{
+                    $img->loading = "lazy";
+                    $img->decoding = "async";
+                    $img->fetchpriority = "low";
+                }
+
             }
-
-            if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
-                $img->loading = "eager";
-                $img->decoding = "sync";
-                $img->fetchpriority = "high";
-            }else{
-                $img->loading = "lazy";
-                $img->decoding = "async";
-                $img->fetchpriority = "low";
-            }
-
         }
     }
 
