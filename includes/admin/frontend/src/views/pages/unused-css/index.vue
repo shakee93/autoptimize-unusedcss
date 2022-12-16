@@ -24,10 +24,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_minify" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_minify = !uucss_minify"  :class="uucss_minify? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_minify" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -41,10 +43,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="critical_css.status" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="critical_css.status = !critical_css.status"  :class="critical_css.status? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="critical_css.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -57,10 +61,12 @@
                 <div class="flex mt-5">
                   <div class="pr-1">
                     <div class="flex items-center mr-4 mt-3">
-                      <label>
-                        <input v-model="critical_css.mobile_critical_css" type="checkbox" value=""
-                               class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                      </label>
+                      <div @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css"  :class="critical_css.mobile_critical_css? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                        <svg v-if="critical_css.mobile_critical_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                          <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                        </svg>
+                      </div>
+
                     </div>
                   </div>
                   <div>
@@ -75,9 +81,9 @@
                 <div class="grid mb-5">
                 <textarea
                 v-model="critical_css.additional_critical_css"
-                class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                 id="force-include" type="text" placeholder=""></textarea>
-                  <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                  <div :class="critical_css.additional_critical_css? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">Paste any CSS content you would like to merge with Critical CSS</p>
                   </div>
                 </div>
@@ -89,10 +95,15 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="remove_unused_css" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="remove_unused_css = !remove_unused_css"  :class="remove_unused_css? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="remove_unused_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+<!--                    <label>-->
+<!--                      <input v-model="remove_unused_css" type="checkbox" value=""-->
+<!--                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple dark:ring-offset-purple dark:bg-purple dark:border-purple focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent">-->
+<!--                    </label>-->
                   </div>
                 </div>
                 <div>
@@ -118,10 +129,11 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="uucss_enable_rules" type="checkbox" value="" @change="saveRuleBased"
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
+                  <div @click="uucss_enable_rules = !uucss_enable_rules"  :class="uucss_enable_rules? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="uucss_enable_rules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
                 </div>
               </div>
               <div>

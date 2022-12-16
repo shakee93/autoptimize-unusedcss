@@ -24,10 +24,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_variables" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_variables = !uucss_variables"  :class="uucss_variables? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_variables" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -41,10 +43,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_keyframes" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_keyframes = !uucss_keyframes"  :class="uucss_keyframes? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_keyframes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -59,10 +63,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_fontface" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_fontface = !uucss_fontface"  :class="uucss_fontface? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_fontface" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -75,10 +81,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_include_inline_css" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_include_inline_css = !uucss_include_inline_css"  :class="uucss_include_inline_css? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_include_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -92,10 +100,12 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_cache_busting_v2" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_cache_busting_v2 = !uucss_cache_busting_v2"  :class="uucss_cache_busting_v2? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_cache_busting_v2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -110,9 +120,11 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-            <textarea v-model="uucss_safelist"
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder=""></textarea>
+              <textarea
+                  v-model="uucss_safelist"
+                  class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                  id="force-include" type="text" placeholder=""></textarea>
+
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                   ‘elementor-*, *-gallery’ etc...</p>
@@ -125,9 +137,11 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-            <textarea v-model="uucss_blocklist"
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder=""></textarea>
+               <textarea
+                   v-model="uucss_blocklist"
+                   class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                   id="force-include" type="text" placeholder=""></textarea>
+
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                   ‘elementor-*, *-gallery’ etc...</p>
@@ -140,9 +154,11 @@
               <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
               <div class="grid mb-5">
-            <textarea v-model="uucss_excluded_files"
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder=""></textarea>
+                <textarea
+                    v-model="uucss_excluded_files"
+                    class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+
                 <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
                   <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                     ‘elementor-*, *-gallery’ etc...</p>
@@ -160,7 +176,7 @@
                 <vue3-tags-input :tags="whitelist_packs"
                                  @on-tags-changed="handleChangeTag"
                                  @keydown.enter.prevent
-                                 class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                 class="flex resize-none z-50 appearance-none border border-purple rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                                  placeholder="Type your plugin..."/>
 <!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
 
@@ -197,10 +213,11 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_inline_css" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_inline_css = !uucss_inline_css"  :class="uucss_inline_css? 'bg-purple':''" class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
                   </div>
                 </div>
                 <div>
