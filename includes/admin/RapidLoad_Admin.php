@@ -293,6 +293,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_exclude_images_from_lazy_load'])){
+
+                $options['uucss_exclude_images_from_lazy_load'] = $_REQUEST['uucss_exclude_images_from_lazy_load'];
+
+            }
+
             if(isset($_REQUEST['uucss_preload_lcp_image'])){
 
                 $options['uucss_preload_lcp_image'] = $_REQUEST['uucss_preload_lcp_image'];

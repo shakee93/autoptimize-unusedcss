@@ -139,7 +139,7 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $index => $img ) {
 
-            if($this->is_file_excluded($img->src)){
+            if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
                 continue;
             }
 
