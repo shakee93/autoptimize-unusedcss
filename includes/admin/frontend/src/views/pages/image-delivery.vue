@@ -12,8 +12,7 @@
         <div class="flex mt-1">
           <div>
             <h1 class="font-semibold text-base text-black-font">Image Delivery</h1>
-            <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
-              CSS</p>
+            <p class="text-sm text-gray-font">Optimize all your images on-the-fly with modern formats (AVIF, WEBP)</p>
           </div>
         </div>
       </div>
@@ -21,21 +20,21 @@
       <div>
         <div class="p-4 pl-32 pr-72">
             <h1 class="font-semibold text-base text-black-font">Compression Level</h1>
-            <p class="text-sm pb-3 text-gray-font">How to load the original CSS files?</p>
+            <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
             <button v-on:click="compression_level = 'lossy'"
                     :class="{ active: compression_level === 'lossy' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	hover:border-transparent rounded-l-lg">
+                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple	rounded-l-lg">
               LOSSY
             </button>
 
             <button v-on:click="compression_level = 'glossy'"
                     :class="{ active: compression_level === 'glossy' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y border-gray-button-border	 hover:border-transparent">
+                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y-2 border-purple">
               GLOSSY
             </button>
             <button v-on:click="compression_level = 'lossless'"
                     :class="{ active: compression_level === 'lossless' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border	 hover:border-transparent rounded-r-lg">
+                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple rounded-r-lg">
               LOSSLESS
             </button>
 
@@ -52,7 +51,71 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Next-gen Images Support</h1>
+                  <h1 class="font-semibold text-base text-black-font">Serve next-gen Images (AVIF, WEBP)</h1>
+                  <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <label>
+                    <input v-model="uucss_lazy_load_images.status" type="checkbox" value=""
+                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                  </label>
+                </div>
+              </div>
+              <div>
+                <h1 class="font-semibold text-base text-black-font">Lazy Load</h1>
+                <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
+              </div>
+            </div>
+
+            <div :class="!uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+              <div class="mt-5">
+                <h1 class="font-semibold text-base text-black-font">Exclude Above-the-fold images from Lazy Load</h1>
+                <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
+
+
+                  <button v-for="button in 5" v-on:click="uucss_lazy_load_images.image_count = button"
+                          :class="['btn',(button === Number(uucss_lazy_load_images.image_count) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
+                          class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-l-2 border-y-2 border-purple">
+                    {{ button }}
+                  </button>
+
+              </div>
+
+              <div class="mt-5">
+                <h1 class="font-semibold text-base text-black-font">Exclude Images from Lazy Load</h1>
+                <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+                <textarea v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
+                          class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="force-include" type="text" placeholder=""></textarea>
+                <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                  <p class="text-sm text-dark-gray-font">
+                    Exclude Images from RapidLoad enter each file in new line</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="mb-5 mt-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <label>
+                      <input v-model="uucss_set_width_and_height" type="checkbox" value=""
+                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <h1 class="font-semibold text-base text-black-font">Add Width and Height Attributes</h1>
                   <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
                 </div>
               </div>
@@ -60,24 +123,15 @@
           </div>
 
           <div class="grid">
-            <div class="mb-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-2">
-                    <label>
-                      <input
-                          v-model="image_count"
-                          type="number"
-                          style="max-width: 55px"
-                          class="px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                      />
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <h1 class="font-semibold text-base text-black-font">Exclude above the fold image count</h1>
-                  <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
-                </div>
+            <div class="grid mb-5">
+              <h1 class="font-semibold text-base text-black-font">Priority LCP Images</h1>
+              <p class="text-sm pb-3 text-gray-font">Preload critical above-the-fold images to prioritize its loading. These images will not be lazy loaded</p>
+              <textarea v-model="uucss_preload_lcp_image"
+                        class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="force-include" type="text" placeholder=""></textarea>
+              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">
+                  Preload LCP Image from RapidLoad enter each file in new line</p>
               </div>
             </div>
           </div>
@@ -85,21 +139,8 @@
           <div class="grid">
             <div class="grid mb-5">
               <h1 class="font-semibold text-base text-black-font">Exclude Images</h1>
-              <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN</p>
               <textarea v-model="uucss_exclude_images"
-                        class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">
-                  Exclude Images from RapidLoad enter each file in new line</p>
-              </div>
-            </div>
-          </div>
-          <div class="grid">
-            <div class="grid mb-5">
-              <h1 class="font-semibold text-base text-black-font">Preload LCP Image</h1>
-              <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-              <textarea v-model="uucss_preload_lcp_image"
                         class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="force-include" type="text" placeholder=""></textarea>
               <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
@@ -150,12 +191,15 @@ export default {
           const options = this.image_delivery[key].options;
           this.compression_level = options.uucss_image_optimize_level
           this.next_gen_image = options.uucss_support_next_gen_formats
-          this.image_count = options.uucss_exclude_above_the_fold_image_count
-          this.uucss_exclude_images = options.uucss_exclude_images
+          this.uucss_lazy_load_images.status= options.uucss_lazy_load_images
+          this.uucss_lazy_load_images.image_count = options.uucss_exclude_above_the_fold_image_count
+          this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
           this.uucss_preload_lcp_image = options.uucss_preload_lcp_image
+          this.uucss_set_width_and_height = options.uucss_set_width_and_height
+          this.uucss_exclude_images = options.uucss_exclude_images
         }
-
       });
+
     }
   },
 
@@ -164,9 +208,12 @@ export default {
       const data = {
         uucss_image_optimize_level: this.compression_level,
         uucss_support_next_gen_formats: this.next_gen_image,
-        uucss_exclude_above_the_fold_image_count: this.image_count,
-        uucss_exclude_images : this.uucss_exclude_images,
+        uucss_lazy_load_images: this.uucss_lazy_load_images.status,
+        uucss_exclude_above_the_fold_image_count: this.uucss_lazy_load_images.image_count,
+        uucss_exclude_images_from_lazy_load : this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load,
         uucss_preload_lcp_image : this.uucss_preload_lcp_image,
+        uucss_set_width_and_height : this.uucss_set_width_and_height,
+        uucss_exclude_images: this.uucss_exclude_images,
         uucss_enable_image_delivery : true,
       }
 
@@ -203,8 +250,13 @@ export default {
       id: 'image-delivery',
       compression_level: 'lossy',
       next_gen_image: false,
-      image_count: 3,
       uucss_exclude_images: [],
+      uucss_lazy_load_images:{
+        status: false,
+        image_count: 3,
+        uucss_exclude_images_from_lazy_load: [],
+      },
+      uucss_set_width_and_height: false,
       uucss_preload_lcp_image: [],
 
     }

@@ -12,8 +12,7 @@
         <div class="flex mt-1">
           <div>
             <h1 class="font-semibold text-base text-black-font">Javascript Delivery</h1>
-            <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
-              CSS</p>
+            <p class="text-sm text-gray-font">Minify and deliver Javascript files with best practices</p>
           </div>
         </div>
       </div>
@@ -59,7 +58,7 @@
               </div>
             </div>
 
-            <div :class="{ expand: uucss_load_js_method.status }" class="pl-4 ml-10 main-border not-expand">
+            <div :class="!uucss_load_js_method.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
@@ -76,7 +75,7 @@
               </div>
 
               <div class="mt-5">
-                <h1 class="font-semibold text-base text-black-font">Exclude JS files from Defer</h1>
+                <h1 class="font-semibold text-base text-black-font">Exclude Javascript from Deferring</h1>
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
                 <div class="grid mb-5">
                 <textarea
@@ -107,7 +106,7 @@
             </div>
           </div>
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Exclude JS</h1>
+            <h1 class="font-semibold text-base text-black-font">Exclude Javascript</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <textarea v-model="uucss_excluded_js_files"
                       class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

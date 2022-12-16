@@ -12,7 +12,7 @@
         <div class="flex mt-1">
           <div>
             <h1 class="font-semibold text-base text-black-font">Cloud Delivery (CDN)</h1>
-            <p class="text-sm text-gray-font">Load resources faster using 112 edge locations with only 27ms latency</p>
+            <p class="text-sm text-gray-font">Load resource files faster by using 112 edge locations with only 27ms latency</p>
           </div>
         </div>
       </div>
@@ -27,10 +27,17 @@
                   <p class="text-sm text-gray-font">Purge Cache</p>
               </div>
               <div>
-                <button @click="purgeCach"
-                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
+                <button @click="purgeCach" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
+                  <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
                   Purge Cache
                 </button>
+<!--                <button @click="purgeCach"-->
+<!--                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">-->
+<!--                  Purge Cache-->
+<!--                </button>-->
               </div>
             </div>
           </div>
@@ -64,10 +71,13 @@
 
 
 
-          <button @click="saveSettings"
-                  class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
-            Save Settings
-          </button>
+            <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+              <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Save Settings
+            </button>
           </div>
         </div>
       </div>
@@ -118,7 +128,9 @@ export default {
   },
 
   methods:{
+
     purgeCach(){
+      this.loading = true;
       axios.post(window.uucss_global.ajax_url + '?action=purge_rapidload_cdn' , {
         headers: {
           'Content-Type':'multipart/form-data'
@@ -126,6 +138,7 @@ export default {
       })
           .then(response => {
             response.data;
+            this.loading = false;
             this.$notify(
                 {
                   group: "success",
@@ -141,9 +154,11 @@ export default {
           });
     },
     saveSettings(){
-
+      this.loading = true;
       if(!this.devmode){
+        this.loading = false;
         return;
+
       }
       const data = {
         uucss_enable_cdn : true,
@@ -159,6 +174,7 @@ export default {
           .then(response => {
             response.data;
             window.uucss_global.active_modules = response.data.data;
+            this.loading = false;
             this.$notify(
                 {
                   group: "success",
@@ -182,7 +198,7 @@ export default {
 
       cdn_config:[],
       id: 'cdn',
-
+      loading: false,
       uucss_cdn_dns_id: null,
       uucss_cdn_url: null,
       uucss_cdn_zone_id: null,

@@ -11,9 +11,8 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Font Optimization</h1>
-            <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
-              CSS</p>
+            <h1 class="font-semibold text-base text-black-font">Font Delivery</h1>
+            <p class="text-sm text-gray-font">Locally host and optimize your fonts for faster page load times</p>
           </div>
         </div>
       </div>

@@ -376,7 +376,7 @@ export default {
         {
           id : "cdn",
           title: "Cloud Delivery (CDN)",
-          description: 'Load resources faster using 112 edge locations with only 27ms latency',
+          description: 'Load resource files faster by using 112 edge locations with only 27ms latency',
           image: 'cdn.svg',
           link: '/cdn',
           status: false,

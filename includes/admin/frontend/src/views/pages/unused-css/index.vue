@@ -11,9 +11,8 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">CSS Optimization</h1>
-            <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
-              CSS</p>
+            <h1 class="font-semibold text-base text-black-font">CSS Delivery</h1>
+            <p class="text-sm text-gray-font">Deliver CSS files by removing unused CSS and prioritizing critical CSS</p>
           </div>
         </div>
       </div>
@@ -33,7 +32,7 @@
                 </div>
                 <div>
                   <h1 class="font-semibold text-base text-black-font">Minify</h1>
-                  <p class="text-sm text-gray-font">Minify and Remove CSS comments via the API</p>
+                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines from CSS files</p>
                 </div>
               </div>
             </div>
@@ -50,11 +49,11 @@
                 </div>
                 <div>
                   <h1 class="font-semibold text-base text-black-font">Critical CSS</h1>
-                  <p class="text-sm text-gray-font">More advanced options for pro users</p>
+                  <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
                 </div>
               </div>
 
-              <div :class="{ expand: critical_css.status }" class="pl-9 not-expand">
+              <div :class="!critical_css.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
                 <div class="flex mt-5">
                   <div class="pr-1">
                     <div class="flex items-center mr-4 mt-3">
@@ -66,21 +65,20 @@
                   </div>
                   <div>
                     <h1 class="font-semibold text-base text-black-font">Mobile Critical CSS</h1>
-                    <p class="text-sm text-gray-font">Generate separate mobile version of Critical CSS</p>
+                    <p class="text-sm text-gray-font">Extract Critical CSS for mobile screens</p>
                   </div>
                 </div>
 
               <div class="mt-5">
-                <h1 class="font-semibold text-base text-black-font">Aditional CSS</h1>
-                <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+                <h1 class="font-semibold text-base text-black-font">Above-the-fold CSS</h1>
+                <p class="text-sm pb-3 text-gray-font">Include any CSS content you need to load above the fold.</p>
                 <div class="grid mb-5">
                 <textarea
                 v-model="critical_css.additional_critical_css"
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                 id="force-include" type="text" placeholder=""></textarea>
                   <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                      ‘elementor-*, *-gallery’ etc...</p>
+                    <p class="text-sm text-dark-gray-font">Paste any CSS content you would like to merge with Critical CSS</p>
                   </div>
                 </div>
               </div>
@@ -99,40 +97,24 @@
                 </div>
                 <div>
                   <h1 class="font-semibold text-base text-black-font">Remove Unused CSS</h1>
-                  <p class="text-sm text-gray-font">This can help you group pages which has same html structure. Product
-                    pages, Category pages etc...</p>
+                  <p class="text-sm text-gray-font">Remove unused CSS content by analyzing the HTML and CSS content in your website</p>
                 </div>
               </div>
 
 
-              <div :class="{ expand: remove_unused_css }" class="pl-9 not-expand">
-                <RouterLink :to="unused_css_settings_link">
-                <button
-                    class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
-                  Settings
-                </button>
-                </RouterLink>
-                <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
-                  <div class="flex">
-                    <div class="py-1 mt-1">
-                      <svg class="fill-current h-6 w-6 text-purple mr-4" xmlns="http://www.w3.org/2000/svg"
-                           viewBox="0 0 20 20">
-                        <path
-                            d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50
-                        plus pages.
-                        RapidLoad will analyze a parent<br>
-                        page and will apply results for all matched pages.</p>
-                    </div>
-                  </div>
+              <div :class="!remove_unused_css? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+                <div class="mt-5">
+                  <RouterLink :to="unused_css_settings_link">
+                    <button
+                        class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent rounded-lg">
+                      Settings
+                    </button>
+                  </RouterLink>
                 </div>
               </div>
             </div>
 
-          <div class="mb-5">
+          <div :class="turn_on_group_by_pages? '': 'hidden'" class="mb-5">
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
@@ -143,19 +125,21 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-semibold text-base text-black-font">Rule Based Injection</h1>
-                <p class="text-sm text-gray-font">Enable rule based injection.</p>
+                <h1 class="font-semibold text-base text-black-font">Group by Pages</h1>
+                <p class="text-sm text-gray-font">Define rules to group pages that have the same page structure. example groups : product pages, category pages or blog pages.</p>
               </div>
             </div>
 
 
-            <div :class="{ expand: uucss_enable_rules }" class="pl-9 not-expand">
+            <div :class="!uucss_enable_rules? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+              <div class="mt-5">
                 <a :href="uucss_url">
                 <button @click="ruleSettings"
-                    class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                    class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent mt-2 rounded-lg">
                   Settings
                 </button>
               </a>
+              </div>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
                 <div class="flex">
                   <div class="py-1 mt-1">
@@ -166,10 +150,8 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50
-                      plus pages.
-                      RapidLoad will analyze a parent<br>
-                      page and will apply results for all matched pages.</p>
+                    <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50 plus pages.
+                      RapidLoad will analyze a parent page and will apply results for all matched pages.</p>
                   </div>
                 </div>
               </div>
@@ -177,9 +159,7 @@
           </div>
 
 
-
-
-          <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+          <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -187,6 +167,7 @@
             Save Settings
           </button>
         </div>
+<!--        <button @click="turn_on_group_by_pages = !turn_on_group_by_pages">click me</button>-->
       </div>
       <div class="pb-6">
       </div>
@@ -230,6 +211,7 @@ export default {
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_minify = option.uucss_minify;
+          this.turn_on_group_by_pages = option.turn_on_group_by_pages;
         }
 
       });
@@ -244,6 +226,7 @@ export default {
   },
 
   methods:{
+
 
     saveSettings(){
       this.loading = true;
@@ -318,6 +301,7 @@ export default {
       remove_unused_css: false,
       uucss_enable_rules: false,
       unused_css_settings_link: '/remove-unused-css',
+      turn_on_group_by_pages: false,
       uucss_url:'',
       critical_css:{
         status: false,

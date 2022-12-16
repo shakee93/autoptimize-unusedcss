@@ -118,7 +118,8 @@ body {
     /* custom dropdown end */
 
     .main-border{
-        border-left: 3px solid #7F54B3;
+        border-left: 1px solid #7f54b373;
+        margin-left: 42px;
     }
     .disableClick{
         visibility: hidden;
