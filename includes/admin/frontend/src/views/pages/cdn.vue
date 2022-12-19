@@ -21,11 +21,13 @@
         <div class="p-4 pl-32 pr-72">
 
           <div class="mb-5">
-            <div class="flex">
+            <div class="mb-3">
               <div class="pr-1 mr-5">
-                  <h1 class="font-semibold text-base text-black-font">Clear Cache</h1>
-                  <p class="text-sm text-gray-font">Purge Cache</p>
+                  <h1 class="font-semibold text-base text-black-font">Clear CDN Cache</h1>
+                  <p class="text-sm text-gray-font">Clear resource caches across the CDN network</p>
               </div>
+            </div>
+            <div>
               <div>
                 <button @click="purgeCach" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
                   <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -34,10 +36,10 @@
                   </svg>
                   Purge Cache
                 </button>
-<!--                <button @click="purgeCach"-->
-<!--                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">-->
-<!--                  Purge Cache-->
-<!--                </button>-->
+                <!--                <button @click="purgeCach"-->
+                <!--                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">-->
+                <!--                  Purge Cache-->
+                <!--                </button>-->
               </div>
             </div>
           </div>

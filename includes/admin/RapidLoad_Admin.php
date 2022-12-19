@@ -40,6 +40,10 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
+        if(!isset($options['uucss_cdn_zone_id']) || $options['uucss_cdn_zone_id'] != "1"){
+            wp_send_json_success(true);
+        }
+
         $api = new RapidLoad_Api();
 
         $api->post('purge-cdn/' . $options['uucss_cdn_zone_id'],[]);
