@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Unused CSS Settings</h1>
+            <h1 class="font-medium text-base text-black-font">Unused CSS Settings</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
               CSS</p>
           </div>
@@ -22,7 +22,7 @@
         <div class="pl-32 pr-72">
 
           <div class="mt-5">
-            <h1 class="font-semibold text-base text-black-font ">Force Include selectors</h1>
+            <h1 class="font-normal text-base text-black-font ">Force Include selectors</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
@@ -39,7 +39,7 @@
           </div>
 
           <div class="mt-5">
-            <h1 class="font-semibold text-base text-black-font ">Force Exclude selectors</h1>
+            <h1 class="font-normal text-base text-black-font ">Force Exclude selectors</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
@@ -56,7 +56,7 @@
           </div>
 
 
-          <h1 class="font-semibold text-base text-black-font">Selector Packs (Safelist Packs)</h1>
+          <h1 class="font-normal text-base text-black-font">Selector Packs (Safelist Packs)</h1>
           <p class="text-sm pb-3 text-gray-font">Selector packs contains predefined force exclude and include rules
             for
             plugins and themes.</p>
@@ -114,7 +114,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">CSS Variables</h1>
+                  <h1 class="font-normal text-base text-black-font">CSS Variables</h1>
                   <p class="text-sm text-gray-font">Remove unused CSS variables</p>
                 </div>
               </div>
@@ -135,7 +135,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font"> CSS Animation keyframes</h1>
+                  <h1 class="font-normal text-base text-black-font"> CSS Animation keyframes</h1>
                   <p class="text-sm text-gray-font">Remove unused keyframe animations</p>
                 </div>
               </div>
@@ -157,7 +157,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">CSS @font-face rules</h1>
+                  <h1 class="font-normal text-base text-black-font">CSS @font-face rules</h1>
                   <p class="text-sm text-gray-font">Remove unused @font-face rules</p>
                 </div>
               </div>
@@ -178,7 +178,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Inline CSS</h1>
+                  <h1 class="font-normal text-base text-black-font">Inline CSS</h1>
                   <p class="text-sm text-gray-font">Optimize Inline CSS</p>
                 </div>
               </div>
@@ -200,7 +200,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Cache Busting</h1>
+                  <h1 class="font-normal text-base text-black-font">Cache Busting</h1>
                   <p class="text-sm text-gray-font">Enable RapidLoad crawler to view pages with a random query string</p>
                 </div>
               </div>
