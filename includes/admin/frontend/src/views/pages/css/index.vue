@@ -39,6 +39,27 @@
               </div>
             </div>
 
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <div @click="uucss_inline_css = !uucss_inline_css" :class="uucss_inline_css? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h1 class="font-semibold text-base text-black-font">Inline Small CSS Files</h1>
+                <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS is
+                  removed.</p>
+              </div>
+            </div>
+          </div>
+
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -170,6 +191,23 @@
             </div>
           </div>
 
+          <div class="mt-5">
+            <h1 class="font-semibold text-base text-black-font ">Exclude CSS Files</h1>
+            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
+
+            <div class="grid mb-5">
+                <textarea
+                    v-model="uucss_excluded_files"
+                    class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+
+              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
+                  ‘elementor-*, *-gallery’ etc...</p>
+              </div>
+            </div>
+          </div>
+
 
           <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -220,10 +258,12 @@ export default {
           this.critical_css.status = option.critical_css.status === 'on';
           this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
           this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
+          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_minify = option.uucss_minify;
           this.turn_on_group_by_pages = option.turn_on_group_by_pages;
+          this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
         }
 
       });
@@ -245,10 +285,12 @@ export default {
      const data = {
        uucss_additional_css : this.critical_css.additional_critical_css,
        uucss_enable_cpcss_mobile : this.critical_css.mobile_critical_css,
+       uucss_excluded_files: this.uucss_excluded_files,
        uucss_enable_cpcss : this.critical_css.status,
        uucss_enable_rules : this.uucss_enable_rules,
        uucss_minify : this.uucss_minify,
        uucss_enable_uucss : this.remove_unused_css,
+       uucss_inline_css: this.uucss_inline_css,
      }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {
@@ -311,6 +353,8 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       uucss_minify: false,
       remove_unused_css: false,
+      uucss_excluded_files: '',
+      uucss_inline_css: false,
       uucss_enable_rules: false,
       unused_css_settings_link: '/css/unused-css',
       turn_on_group_by_pages: false,

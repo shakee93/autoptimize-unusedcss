@@ -63,6 +63,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_inline_css'])){
+
+            $options['uucss_inline_css'] = ($_REQUEST['uucss_inline_css'] == 'true' ? "1" : null);
+
+        }
+
         if(isset($_REQUEST['uucss_enable_cpcss'])){
 
             $options['uucss_enable_cpcss'] = ($_REQUEST['uucss_enable_cpcss'] == 'true' ? "1" : null);
@@ -78,6 +84,20 @@ class RapidLoad_Admin
                 $options['uucss_additional_css'] = $_REQUEST['uucss_additional_css'];
 
             }
+
+        }
+
+        if(isset($_REQUEST['uucss_excluded_files'])){
+
+            $value = explode("\r\n", $_REQUEST['uucss_excluded_files']);
+
+            $value = array_filter($value, function ($v){
+                return !empty($v);
+            });
+
+            $value = implode(",",array_values($value));
+
+            $options['uucss_excluded_files'] = $value;
 
         }
 
@@ -112,26 +132,6 @@ class RapidLoad_Admin
             if(isset($_REQUEST['uucss_cache_busting_v2'])){
 
                 $options['uucss_cache_busting_v2'] = ($_REQUEST['uucss_cache_busting_v2'] == 'true' ? "1" : null);
-
-            }
-
-            if(isset($_REQUEST['uucss_inline_css'])){
-
-                $options['uucss_inline_css'] = ($_REQUEST['uucss_inline_css'] == 'true' ? "1" : null);
-
-            }
-
-            if(isset($_REQUEST['uucss_excluded_files'])){
-
-                $value = explode("\r\n", $_REQUEST['uucss_excluded_files']);
-
-                $value = array_filter($value, function ($v){
-                    return !empty($v);
-                });
-
-                $value = implode(",",array_values($value));
-
-                $options['uucss_excluded_files'] = $value;
 
             }
 
