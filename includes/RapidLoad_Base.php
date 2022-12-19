@@ -211,6 +211,7 @@ class RapidLoad_Base
                 'active_modules' => (array)self::get()->modules()->active_modules(),
                 'activation_url' => self::activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
+                'total_jobs' => RapidLoad_DB::get_total_job_count()
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );

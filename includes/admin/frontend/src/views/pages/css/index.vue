@@ -166,12 +166,10 @@
 
             <div :class="!uucss_enable_rules? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
-                <a :href="uucss_url">
                 <button @click="ruleSettings"
-                    class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent mt-2 rounded-lg">
+                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent mt-2 rounded-lg">
                   Settings
                 </button>
-              </a>
               </div>
               <div class="mb-5 bg-purple-lite border border-purple rounded-lg px-4 py-3 shadow-md" role="alert">
                 <div class="flex">
@@ -262,7 +260,7 @@ export default {
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_minify = option.uucss_minify;
-          this.turn_on_group_by_pages = option.turn_on_group_by_pages;
+          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 5;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
         }
 
@@ -340,7 +338,7 @@ export default {
     },
 
     ruleSettings(){
-     location.reload();
+      window.location.href = window.uucss_global.setting_url;
     }
 
   },
