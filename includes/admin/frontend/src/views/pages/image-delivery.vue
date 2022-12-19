@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Image Delivery</h1>
+            <h1 class="font-medium text-base text-black-font">Image Delivery</h1>
             <p class="text-sm text-gray-font">Optimize all your images on-the-fly with modern formats (AVIF, WEBP)</p>
           </div>
         </div>
@@ -19,7 +19,7 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
-            <h1 class="font-semibold text-base text-black-font">Compression Level</h1>
+            <h1 class="font-normal text-base text-black-font">Compression Level</h1>
             <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
             <button v-on:click="compression_level = 'lossy'"
                     :class="{ active: compression_level === 'lossy' }"
@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Serve next-gen Images (AVIF, WEBP)</h1>
+                  <h1 class="font-normal text-base text-black-font">Serve next-gen Images (AVIF, WEBP)</h1>
                   <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
                 </div>
               </div>
@@ -69,14 +69,14 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-semibold text-base text-black-font">Lazy Load</h1>
+                <h1 class="font-normal text-base text-black-font">Lazy Load</h1>
                 <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
               </div>
             </div>
 
             <div :class="!uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
-                <h1 class="font-semibold text-base text-black-font">Exclude Above-the-fold images from Lazy Load</h1>
+                <h1 class="font-normal text-base text-black-font">Exclude Above-the-fold images from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
 
 
@@ -89,7 +89,7 @@
               </div>
 
               <div class="mt-5">
-                <h1 class="font-semibold text-base text-black-font">Exclude Images from Lazy Load</h1>
+                <h1 class="font-normal text-base text-black-font">Exclude Images from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
                 <textarea v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
                           class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -115,7 +115,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Add Width and Height Attributes</h1>
+                  <h1 class="font-normal text-base text-black-font">Add Width and Height Attributes</h1>
                   <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
                 </div>
               </div>
@@ -124,7 +124,7 @@
 
           <div class="grid">
             <div class="grid mb-5">
-              <h1 class="font-semibold text-base text-black-font">Priority LCP Images</h1>
+              <h1 class="font-normal text-base text-black-font">Priority LCP Images</h1>
               <p class="text-sm pb-3 text-gray-font">Preload critical above-the-fold images to prioritize its loading. These images will not be lazy loaded</p>
               <textarea v-model="uucss_preload_lcp_image"
                         class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -138,7 +138,7 @@
 
           <div class="grid">
             <div class="grid mb-5">
-              <h1 class="font-semibold text-base text-black-font">Exclude Images</h1>
+              <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
               <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN</p>
               <textarea v-model="uucss_exclude_images"
                         class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

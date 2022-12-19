@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Font Delivery</h1>
+            <h1 class="font-medium text-base text-black-font">Font Delivery</h1>
             <p class="text-sm text-gray-font">Locally host and optimize your fonts for faster page load times</p>
           </div>
         </div>
@@ -31,7 +31,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Self Host Google Fonts</h1>
+                  <h1 class="font-normal text-base text-black-font">Self Host Google Fonts</h1>
                   <p class="text-sm text-gray-font">This can help you group pages which has same html structure. Product
                     pages, Category pages etc...</p>
                 </div>
@@ -39,7 +39,7 @@
             </div>
 
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Preload Font URLs</h1>
+            <h1 class="font-normal text-base text-black-font">Preload Font URLs</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <textarea v-model="preload_font_urls"
                       class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

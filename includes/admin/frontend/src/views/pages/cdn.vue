@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Cloud Delivery (CDN)</h1>
+            <h1 class="font-medium text-base text-black-font">Cloud Delivery (CDN)</h1>
             <p class="text-sm text-gray-font">Load resource files faster by using 112 edge locations with only 27ms latency</p>
           </div>
         </div>
@@ -23,7 +23,7 @@
           <div class="mb-5">
             <div class="mb-3">
               <div class="pr-1 mr-5">
-                  <h1 class="font-semibold text-base text-black-font">Clear CDN Cache</h1>
+                  <h1 class="font-normal text-base text-black-font">Clear CDN Cache</h1>
                   <p class="text-sm text-gray-font">Clear resource caches across the CDN network</p>
               </div>
             </div>
@@ -45,7 +45,7 @@
           </div>
 
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">CDN Endpoint</h1>
+            <h1 class="font-normal text-base text-black-font">CDN Endpoint</h1>
             <p class="text-sm pb-3 text-gray-font">Your CDN endpoint to store and serve all your resource across the CDN network</p>
             <div class="flex">
               <input :class="{ 'pointer-events-none	cursor-default disabled': !devmode }"
@@ -65,7 +65,7 @@
 
           <div :class="{ expand: devmode }" class="not-expand">
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Zone</h1>
+            <h1 class="font-normal text-base text-black-font">Zone</h1>
             <p class="text-sm pb-3 text-gray-font"></p>
             <input
                 v-model="uucss_cdn_zone_id"
@@ -73,7 +73,7 @@
                 id="bunny-cdn" type="text" placeholder="">
           </div>
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">DNS</h1>
+            <h1 class="font-normal text-base text-black-font">DNS</h1>
             <p class="text-sm pb-3 text-gray-font"></p>
             <input
                 v-model="uucss_cdn_dns_id"
