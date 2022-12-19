@@ -151,8 +151,11 @@
             </div>
           </div>
 
-          <button @click="saveSettings"
-              class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+          <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+            <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
             Save Settings
           </button>
         </div>
@@ -212,7 +215,7 @@ export default {
   methods:{
 
     saveSettings(){
-
+      this.loading = true;
       const data = {
         uucss_enable_debug : this.uucss_enable_debug,
         uucss_query_string : this.uucss_query_string,
@@ -230,19 +233,13 @@ export default {
           .then(response => {
             response.data;
             window.uucss_global.active_modules = response.data.data;
-            this.$notify(
-                {
-                  group: "success",
-                  title: "Success",
-                  text: "General Settings Updated!"
-                },
-                4000
-            );
           } )
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
-          });
+          }).finally(()=>{
+            this.loading = false;
+        });
 
     }
   },
@@ -253,7 +250,7 @@ export default {
       id: 'general',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       back: '/',
-
+      loading : false,
       uucss_enable_debug: false,
       uucss_query_string: false,
       uucss_excluded_links: [],

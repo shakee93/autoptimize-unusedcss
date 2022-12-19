@@ -154,14 +154,6 @@ export default {
           .then(response => {
             response.data;
             this.loading = false;
-            this.$notify(
-                {
-                  group: "success",
-                  title: "Success",
-                  text: "Cache Cleared"
-                },
-                4000
-            );
           } )
           .catch(error => {
             this.errorMessage = error.message;
@@ -190,14 +182,6 @@ export default {
             response.data;
             window.uucss_global.active_modules = response.data.data;
             this.loading = false;
-            this.$notify(
-                {
-                  group: "success",
-                  title: "Success",
-                  text: "CDN Settings Updated!"
-                },
-                4000
-            );
           } )
           .catch(error => {
             this.errorMessage = error.message;

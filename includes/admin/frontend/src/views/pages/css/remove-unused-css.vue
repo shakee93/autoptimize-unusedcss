@@ -99,6 +99,11 @@
           </div>
 
           <div class="mt-5">
+            <h1 class="font-normal text-base text-black-font ">Misc Options</h1>
+            <p class="text-sm pb-3 text-gray-font">RapidLoad crawler will use following options for optimization</p>
+          </div>
+
+          <div class="mt-3 pl-6 main-border" style="margin-left: 0">
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -208,7 +213,7 @@
           </div>
 
           <button @click="saveSettings" :disabled="loading"
-                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-10 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -326,14 +331,6 @@ export default {
             response.data
             window.uucss_global.active_modules = response.data.data;
             this.loading = false;
-            this.$notify(
-                {
-                  group: "success",
-                  title: "Success",
-                  text: "Remove Unused CSS Settings Updated!"
-                },
-                4000
-            );
           })
           .catch(error => {
             this.errorMessage = error.message;

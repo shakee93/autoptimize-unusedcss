@@ -213,14 +213,6 @@ export default {
             response.data;
             window.uucss_global.active_modules = response.data.data
             this.loading = false;
-            this.$notify(
-                {
-                  group: "success",
-                  title: "Success",
-                  text: "Javascript Settings Updated!"
-                },
-                4000
-            );
 
           })
           .catch(error => {
