@@ -54,7 +54,9 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            $this->load_scripts_on_user_interaction($link);
+            if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
+                $this->load_scripts_on_user_interaction($link);
+            }
 
             $this->minify_js($link);
 
@@ -62,8 +64,9 @@ class Javascript_Enqueue
 
         }
 
-        $body = $this->dom->find('body', 0);
-        $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
+        if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
+            $body = $this->dom->find('body', 0);
+            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
                     document.querySelectorAll('noscript[data-rapidload-delayed]').forEach(function(el){ el.outerHTML = el.innerHTML})
                     removeEventListener(event, listener);
                     } 
@@ -71,8 +74,9 @@ class Javascript_Enqueue
                     });
                 });");
 
-        $node->setAttribute('type', 'text/javascript');
-        $body->appendChild($node);
+            $node->setAttribute('type', 'text/javascript');
+            $body->appendChild($node);
+        }
 
         return $state;
     }

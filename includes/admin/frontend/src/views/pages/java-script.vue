@@ -95,15 +95,34 @@
 
 
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Delay Javascripts to Load on User Interaction</h1>
-            <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>
-            <textarea v-model="uucss_load_scripts_on_user_interaction"
-                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="force-include" type="text" placeholder=""></textarea>
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">
-                Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
+            <div class="flex mb-5">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <label>
+                    <input v-model="delay_javascript" type="checkbox" value=""
+                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
+                  </label>
+                </div>
+              </div>
+              <div>
+                <h1 class="font-semibold text-base text-black-font">Delay Javascripts to Load on User Interaction</h1>
+                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>
+              </div>
             </div>
+            <div :class="!delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+              <div>
+                <div class="grid">
+                <textarea v-model="uucss_load_scripts_on_user_interaction"
+                          class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          id="force-include" type="text" placeholder=""></textarea>
+                  <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">
+                      Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           <div class="grid mb-5">
             <h1 class="font-semibold text-base text-black-font">Exclude Javascript</h1>
@@ -161,6 +180,7 @@ export default {
             const options = this.javascript[key].options;
             this.uucss_load_js_method.defer_inline_js = options.defer_inline_js
             this.minify_js = options.minify_js
+            this.delay_javascript = options.delay_javascript
             this.uucss_excluded_js_files = options.uucss_excluded_js_files
             this.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
             this.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
@@ -176,6 +196,7 @@ export default {
          const data = {
            defer_inline_js : this.uucss_load_js_method.defer_inline_js,
            minify_js : this.minify_js,
+           delay_javascript : this.delay_javascript,
            uucss_excluded_js_files : this.uucss_excluded_js_files,
            uucss_load_js_method : this.uucss_load_js_method.status? 'defer': 'none',
            uucss_load_scripts_on_user_interaction: this.uucss_load_scripts_on_user_interaction,
@@ -215,6 +236,7 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       js_optimization: false,
       minify_js: false,
+      delay_javascript : false,
       back: '/',
       loading: false,
       uucss_load_js_method: {

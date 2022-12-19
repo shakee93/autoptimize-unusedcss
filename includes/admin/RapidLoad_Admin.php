@@ -201,6 +201,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['delay_javascript'])){
+
+            $options['delay_javascript'] = ($_REQUEST['delay_javascript'] == 'true' ? "1" : null);
+
+        }
+
         if(isset($_REQUEST['uucss_excluded_js_files'])){
 
             $options['uucss_excluded_js_files'] = $_REQUEST['uucss_excluded_js_files'];
