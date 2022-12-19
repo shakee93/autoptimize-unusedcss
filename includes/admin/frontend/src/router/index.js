@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Dashboard from '../views/dashboard.vue'
-import CSS from '../views/pages/unused-css/index.vue'
+import CSS from '../views/pages/css/index.vue'
 import javascript from '../views/pages/java-script.vue'
 import assetManager from '../views/pages/asset-manager.vue'
-import removeUnusedCss from '../views/pages/unused-css/remove-unused-css.vue'
+import removeUnusedCss from '../views/pages/css/remove-unused-css.vue'
 import generalSettings from '../views/pages/general-settings.vue'
 import imageDelivery from '../views/pages/image-delivery.vue'
 import font from '../views/pages/font-optimization.vue'
@@ -19,8 +19,8 @@ const router = createRouter({
       component: Dashboard
     },
     {
-      path: '/unused-css',
-      name: 'unused-css',
+      path: '/css',
+      name: 'css',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -28,16 +28,16 @@ const router = createRouter({
     },
 
     {
-      path: '/java-script',
-      name: 'java-script',
+      path: '/javascript',
+      name: 'javascript',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: javascript
     },
     {
-      path: '/image-delivery',
-      name: 'image-delivery',
+      path: '/image',
+      name: 'image',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -61,8 +61,8 @@ const router = createRouter({
       component: assetManager
     },
     {
-      path: '/font-optimization',
-      name: 'font-optimization',
+      path: '/font',
+      name: 'font',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -85,16 +85,16 @@ const router = createRouter({
       component: () => import('../views/pages/page-optimizer.vue')
     },
     {
-      path: '/remove-unused-css',
-      name: 'remove-unused-css',
+      path: '/css/unused-css',
+      name: 'unused-css',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: removeUnusedCss
     },
     {
-      path: '/general-settings',
-      name: 'general-settings',
+      path: '/settings',
+      name: 'settings',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.

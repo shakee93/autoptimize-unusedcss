@@ -379,7 +379,7 @@ export default {
       whitelist: [],
       whitelist_packs: [],
       refresh_element: false,
-      back: '/unused-css',
+      back: '/css',
 
     }
   },

@@ -178,7 +178,7 @@
       </RouterLink>-->
 
       <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
-                  to="/general-settings">
+                  to="/settings">
         <button>General Settings</button>
       </RouterLink>
     </div>
@@ -346,7 +346,7 @@ export default {
           title: "CSS Delivery",
           description: 'Deliver CSS files by removing unused CSS and prioritizing critical CSS',
           image: 'unused-css.svg',
-          link: '/unused-css',
+          link: '/css',
           status: false,
           isDisabled: false,
         },
@@ -355,7 +355,7 @@ export default {
           title: "Javascript Delivery",
           description: 'Minify and deliver Javascript files with best practices',
           image: 'javascript.svg',
-          link: '/java-script',
+          link: '/javascript',
           status: false,
           isDisabled: false
         },
@@ -364,7 +364,7 @@ export default {
           title: "Image Delivery",
           description: 'Optimize all your images on-the-fly with modern formats (AVIF, WEBP)',
           image: 'image-delivery.svg',
-          link: '/image-delivery',
+          link: '/image',
           status: false,
           isDisabled: false
         },
@@ -373,7 +373,7 @@ export default {
           title: "Font Delivery",
           description: 'Locally host and optimize your fonts for faster page load times',
           image: 'font.svg',
-          link: '/font-optimization',
+          link: '/font',
           status: false,
           isDisabled: true
         },

@@ -312,7 +312,7 @@ export default {
       uucss_minify: false,
       remove_unused_css: false,
       uucss_enable_rules: false,
-      unused_css_settings_link: '/remove-unused-css',
+      unused_css_settings_link: '/css/unused-css',
       turn_on_group_by_pages: false,
       uucss_url:'',
       critical_css:{
