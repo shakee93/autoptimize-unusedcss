@@ -12,7 +12,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">General Settings</h1>
+            <h1 class="font-medium text-base text-black-font">General Settings</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
               CSS</p>
           </div>
@@ -25,7 +25,7 @@
         <div class="p-4 pl-32 pr-72">
 
           <div class="grid mb-5">
-            <h1 class="font-semibold text-base text-black-font">Exclude URLs</h1>
+            <h1 class="font-normal text-base text-black-font">Exclude URLs</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
             <textarea v-model="uucss_excluded_links"
                 class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -48,7 +48,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Query String</h1>
+                  <h1 class="font-normal text-base text-black-font">Query String</h1>
                   <p class="text-sm text-gray-font">Consider URLs with query strings as separate URLs.</p>
                 </div>
               </div>
@@ -67,7 +67,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Debug Mode</h1>
+                  <h1 class="font-normal text-base text-black-font">Debug Mode</h1>
                   <p class="text-sm text-gray-font">Enable debug logs for RapidLoad.</p>
                 </div>
               </div>
@@ -84,7 +84,7 @@
               </div>
             </div>
             <div>
-              <h1 class="font-semibold text-base text-black-font">Queue options</h1>
+              <h1 class="font-normal text-base text-black-font">Queue options</h1>
               <p class="text-sm text-gray-font">More advanced options for pro users</p>
             </div>
           </div>
@@ -100,7 +100,7 @@
 <!--                </div>-->
 <!--              </div>-->
               <div>
-                <h1 class="font-semibold text-base text-black-font">Queue</h1>
+                <h1 class="font-normal text-base text-black-font">Queue</h1>
 
                 <div class="flex">
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
@@ -131,7 +131,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-semibold text-base text-black-font">Disable Auto Queue</h1>
+                <h1 class="font-normal text-base text-black-font">Disable Auto Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs adding to queue on user visits.</p>
               </div>
             </div>
@@ -145,7 +145,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-semibold text-base text-black-font">Disable Re-Queue</h1>
+                <h1 class="font-normal text-base text-black-font">Disable Re-Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs re-queuing on warnings.</p>
               </div>
             </div>
@@ -197,7 +197,7 @@ export default {
           this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
           this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
           this.uucss_enable_debug = option.uucss_enable_debug;
-          this.uucss_excluded_links = option.uucss_excluded_links.replace(/,/g, '\n');
+          this.uucss_excluded_links = option.uucss_excluded_links?.replace(/,/g, '\n');
           this.uucss_query_string = option.uucss_query_string;
           this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
           this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
