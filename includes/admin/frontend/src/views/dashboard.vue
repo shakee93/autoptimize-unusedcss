@@ -308,6 +308,10 @@ export default {
             window.uucss_global.active_modules = response.data.data
 
             this.loading = false;
+
+            this.items.map((item)=>{
+              item.status = response.data.data[item.id].status === "on";
+            })
           })
           .catch(error => {
             this.errorMessage = error.message;
