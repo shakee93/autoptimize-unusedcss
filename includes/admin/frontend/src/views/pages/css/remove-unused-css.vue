@@ -200,7 +200,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-semibold text-base text-black-font">Cash Busting</h1>
+                  <h1 class="font-semibold text-base text-black-font">Cache Busting</h1>
                   <p class="text-sm text-gray-font">Enable RapidLoad crawler to view pages with a random query string</p>
                 </div>
               </div>
