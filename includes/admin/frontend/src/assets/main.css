@@ -206,6 +206,9 @@ input[type=checkbox], input[type=radio]{
     transition: all 0.1s ease-out;
 }
 
+.license-error-popup{
+    top:0;
+}
 
 .route-enter-from{
     opacity: 0;
@@ -234,14 +237,19 @@ input[type=checkbox], input[type=radio]{
 
 .arrow-top:before{
     position: absolute;
-    top: -8px;
-    left:20%;
+    top: 26px;
+    left: 20%;
     margin-left: -10px;
-    content:"";
-    display:block;
+    content: "";
+    display: block;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid #FFF2F2;
+    transform: rotate(180deg);
+}
+
+.text-color-grey{
+    color: #757575;
 }
 
 

@@ -28,11 +28,11 @@
          </a>
        </div>
 
-       <p class="mb-1 text-xsm mt-2 text-purple-p pl-4">Already have license ?</p>
+       <p class="mb-1 text-xsm mt-2 text-color-grey pl-4">Already have license?</p>
         <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
           <div class="col-start-1 col-end-3" >
-            <a :href="license_information.connect_link" target="_blank">
-              <button class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+            <a :href="license_information.connect_link">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
               >Connect</button>
             </a>
           </div>
@@ -40,8 +40,8 @@
           <div class="col-end-7 col-span-2">
               <button :class="{'bg-black-b text-white': connect_btn}"
                       @click="connect_btn = !connect_btn"
-                      class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-semibold hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
-              >Connect with license key</button>
+                      class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+              >License Key</button>
           </div>
 
         </div>
@@ -62,9 +62,9 @@
         <hr class="border-gray-border-line border-b-0">
 
         <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
-          <p class="mb-1 text-xm text-black font-semibold">Name: <span class="text-purple-p">{{license_information.name}}</span></p>
-          <p class="mb-1 text-xm text-black font-semibold">Expiration Date: <span class="text-purple-p">{{license_information.exp_date.toLocaleDateString()}}</span></p>
-          <p class="mb-1 text-xm text-black font-semibold">License: <span class="text-purple-p">{{license_information.license}}</span></p>
+          <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
+          <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
+          <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
         </div>
 
 <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
@@ -72,7 +72,7 @@
 
           <div class="col-start-1 col-end-3" >
               <a :href="license_information.link" target="_blank">
-              <button class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
               </a>
           </div>
 
@@ -89,7 +89,7 @@
           <div class="grid">
                 <input
                     v-model="license_information.key"
-                    class="resize-none text-xsss z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="force-include" type="text" placeholder="License Key">
           </div>
         </div>
@@ -97,8 +97,9 @@
 
         <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
         <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
-          <div :class="(license_information.key).length<31? 'Show' : 'Hide'" class="col-start-1 col-end-3 mt-0.5" >
-            <div class="ml-3 arrow-top font-medium text-xsss relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px]">Invalid License Key</div>
+          <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="absolute px-2 mt-0.5 license-error-popup" >
+            <div class="arrow-top font-medium text-xs relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">
+              {{ connect_with_license_error }}</div>
           </div>
 
 
@@ -107,7 +108,7 @@
 <!--              <button @click="connect_license" class="text-xsss bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"-->
 <!--              >Connect</button>-->
 <!--            </a>-->
-            <button @click="connect_license" class="text-xsss bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
+            <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
             >Connect</button>
           </div>
         </div>
@@ -120,18 +121,18 @@
         <div>
           <div class="content p-4 pb-6">
             <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">
-            <h4 class="mt-2 text-black font-bold text-base">{{ item.title }}</h4>
-            <p class="mb-1 text-xm text-black leading-db-lh">{{ item.description }}</p>
+            <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
+            <p class="mb-1 mt-1 text-xm text-black leading-db-lh">{{ item.description }}</p>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
 
             <div class="col-start-1 col-end-3" >
-              <RouterLink v-if="item.id !== 'cdn' && license_information.licensed_domain" :class="item.status ? 'Show' :'Hide'" class=" text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink v-if="item.id !== 'cdn' && license_information.licensed_domain" :class="item.status ? 'Show' :'Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
-              <RouterLink v-if="item.id === 'cdn' && license_information.licensed_domain" :class="item.status && !loading? 'Show': 'Hide'" class=" text-xsss bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink v-if="item.id === 'cdn' && license_information.licensed_domain" :class="item.status && !loading? 'Show': 'Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
@@ -240,14 +241,21 @@ export default {
   methods:{
 
     connect_license(){
-
+      this.connect_with_license_error = "";
       axios.post(window.uucss_global.ajax_url + '?action=uucss_connect', {license_key:this.license_information.key},{
         headers: {
           'Content-Type':'multipart/form-data'
         }
       }).then((response)=>{
-        if(response.data?.data){
+        console.log(response.data.data)
+        if(response.data?.success){
           window.location.href = '?token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
+        }else{
+          if(typeof response.data?.data === "string"){
+            this.connect_with_license_error = response.data?.data
+          }else{
+            this.connect_with_license_error = "Invalid License Key"
+          }
         }
       })
 
@@ -271,6 +279,7 @@ export default {
             this.license_information.exp_date = null
             this.license_information.license = null
             this.license_information.licensed_domain = null
+            this.license_information.key = ''
           }else{
             const licenseData = []
             licenseData.push(response.data?.data)
@@ -326,6 +335,7 @@ export default {
     return {
       tick_image: 'license-information.svg',
       connect_btn: false,
+      connect_with_license_error : '',
       license_information:
           {
             name: '',
