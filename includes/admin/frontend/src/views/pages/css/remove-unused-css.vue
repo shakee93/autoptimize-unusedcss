@@ -11,7 +11,7 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-semibold text-base text-black-font">Settings</h1>
+            <h1 class="font-semibold text-base text-black-font">Unused CSS Settings</h1>
             <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
               CSS</p>
           </div>
