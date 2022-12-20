@@ -155,6 +155,8 @@ class UnusedCSS_Store
 
                 $css .=  $file->css;
 
+                $css = apply_filters('rapidload/cache_file_creating/css', $css);
+
                 $this->file_system->put_contents( $file_location, $css );
 
                 do_action( 'uucss/cache_file_created', $file_location, $file->css );

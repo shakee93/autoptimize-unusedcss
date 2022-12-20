@@ -30,6 +30,22 @@ class RapidLoad_Font
 
         add_filter('uucss/css/excluded-files', [$this, 'exclude_google_font_uucss']);
 
+        add_filter('rapidload/cache_file_creating/css', [$this, 'self_host_gstatic_fonts'], 10 , 1);
+
+    }
+
+    public function self_host_gstatic_fonts($css){
+
+        $font_urls = self::get_font_urls($css);
+
+        self::download_urls_in_parallel($font_urls);
+
+        foreach ($font_urls as $font_url) {
+            $cached_font_url = self::$base_url . '/' . basename($font_url);
+            $css = str_replace($font_url, $cached_font_url, $css);
+        }
+
+        return $css;
     }
 
     public function exclude_google_font_uucss($args){
@@ -141,6 +157,9 @@ class RapidLoad_Font
 
         foreach ($urls as $key => $url) {
             $file = self::$base_dir . '/' . basename($url);
+            if(file_exists($file)){
+                continue;
+            }
             $curl_handles[$key] = curl_init($url);
             $file_pointers[$key] = fopen($file, 'w');
             curl_setopt($curl_handles[$key], CURLOPT_FILE, $file_pointers[$key]);
