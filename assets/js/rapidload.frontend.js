@@ -37,7 +37,7 @@
                 link.addEventListener('load',function (e) {
                     //if (this.prev) this.prev.remove();
                 });
-                file.parentNode.insertBefore(link, file.nextSibling);
+                file.parentNode.insertBefore(link, file);
                 fired = true
             }
 
