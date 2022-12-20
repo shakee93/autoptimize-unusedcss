@@ -110,12 +110,12 @@ class CriticalCSS_Store
             ];
         }
 
+        $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
+
         $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
         $file_name_mobile = str_replace(".css","-mobile.css",$file_name);
 
         if(!empty($purged_css)){
-
-            $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
 
             if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name)){
                 $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name, $purged_css);
