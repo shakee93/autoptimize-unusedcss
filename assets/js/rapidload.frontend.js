@@ -75,7 +75,7 @@
                     //if (this.prev) this.prev.remove()
                 });
 
-                inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
+                inlines_style.parentNode.insertBefore(link, inlines_style);
 
                 fired_inline = true;
             }
