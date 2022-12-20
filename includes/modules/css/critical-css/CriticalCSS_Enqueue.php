@@ -200,7 +200,7 @@ class CriticalCSS_Enqueue
 
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script',
-                "['mousemove', 'touchstart', 'keydown'].forEach(function (event) { var listener = function () { setTimeout(function (){ let element = document.getElementById('rapidload-critical-css'); if(element){ element.remove();} }, 1000); removeEventListener(event, listener) }; addEventListener(event, listener);});");
+                "['mousemove', 'touchstart', 'keydown'].forEach(function (event) { var listener = function () { setTimeout(function (){ let element = document.getElementById('rapidload-critical-css'); if(element){ element.remove();} }, 5000); removeEventListener(event, listener) }; addEventListener(event, listener);});");
 
             $node->setAttribute('type', 'text/javascript');
             $body->appendChild($node);
