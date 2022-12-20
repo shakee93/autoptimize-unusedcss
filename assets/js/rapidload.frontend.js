@@ -26,6 +26,7 @@
 
                 let link = file.cloneNode()
                 link.href = original.original
+                link.rel  = 'preload';
                 link.removeAttribute('data-href')
                 link.removeAttribute('data-media')
                 if(window.rapidload && window.rapidload.frontend_debug === "1"){
@@ -62,7 +63,7 @@
                 }
 
                 var link  = document.createElement('link');
-                link.rel  = 'stylesheet';
+                link.rel  = 'preload';
                 link.type = 'text/css';
                 link.href = original.original;
                 link.media = inlines_style.getAttribute('data-media');
