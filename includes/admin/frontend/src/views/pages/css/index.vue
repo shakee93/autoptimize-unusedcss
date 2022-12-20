@@ -118,6 +118,27 @@
                   </div>
                 </div>
               </div>
+
+              <div class="flex mt-5">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <div @click="critical_css.remove_cpcss_on_user_interaction = !critical_css.remove_cpcss_on_user_interaction"
+                         :class="critical_css.remove_cpcss_on_user_interaction? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="critical_css.remove_cpcss_on_user_interaction" xmlns="http://www.w3.org/2000/svg"
+                           viewBox="0 0 24 24" fill="white" class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+                  <h1 class="font-normal text-base text-black-font">Remove Critical CSS on User Interaction</h1>
+                  <p class="text-sm text-gray-font">Remove on User Interaction</p>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -274,6 +295,7 @@ export default {
           const option = this.css_config[key].options;
           this.critical_css.status = option.critical_css.status === 'on';
           this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
+          this.critical_css.remove_cpcss_on_user_interaction = option.critical_css.options.remove_cpcss_on_user_interaction;
           this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
           this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
           this.remove_unused_css = option.unused_css.status === 'on';
@@ -301,6 +323,7 @@ export default {
       const data = {
         uucss_additional_css: this.critical_css.additional_critical_css,
         uucss_enable_cpcss_mobile: this.critical_css.mobile_critical_css,
+        remove_cpcss_on_user_interaction: this.critical_css.remove_cpcss_on_user_interaction,
         uucss_excluded_files: this.uucss_excluded_files,
         uucss_enable_cpcss: this.critical_css.status,
         uucss_enable_rules: this.uucss_enable_rules,
@@ -370,6 +393,7 @@ export default {
       critical_css: {
         status: false,
         mobile_critical_css: false,
+        remove_cpcss_on_user_interaction: false,
         additional_critical_css: [],
       },
       back: '/',
