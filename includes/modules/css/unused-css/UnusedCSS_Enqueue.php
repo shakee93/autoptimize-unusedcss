@@ -38,7 +38,7 @@ class UnusedCSS_Enqueue
 
         if(isset($this->job_data->id) && $this->job_data->status == 'success' && !empty($this->files)){
 
-            wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js?v=f', [ 'jquery' ], UUCSS_VERSION );
+            wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js?v=d', [ 'jquery' ], UUCSS_VERSION );
             wp_localize_script( 'rapidload', 'rapidload', [
                 'files' => $this->files
             ] );
