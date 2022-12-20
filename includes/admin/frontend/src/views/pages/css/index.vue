@@ -279,7 +279,7 @@ export default {
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_minify = option.uucss_minify;
-          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 100;
+          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 1;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
         }
 
