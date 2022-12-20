@@ -203,7 +203,7 @@ class CriticalCSS_Enqueue
                 "['mousemove', 'touchstart', 'keydown'].forEach(function (event) { var listener = function () { setTimeout(function (){ let element = document.getElementById('rapidload-critical-css'); if(element){ element.remove();} }, 1000); removeEventListener(event, listener) }; addEventListener(event, listener);});");
 
             $node->setAttribute('type', 'text/javascript');
-            $body->appendChild($node);
+            //$body->appendChild($node);
 
         }
 
