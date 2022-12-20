@@ -98,19 +98,33 @@
             </div>
           </div>
 
-          <div class="mt-5">
-            <h1 class="font-normal text-base text-black-font ">Misc Options</h1>
-            <p class="text-sm pb-3 text-gray-font">RapidLoad crawler will use following options for optimization</p>
+
+
+
+
+          <div class="flex mt-5 pb-1 transition duration-300 hover:cursor-pointer rounded" @click="misc_options.default=!misc_options.default">
+            <div class="pr-1">
+              <div class="flex items-center mr-4 mt-3">
+
+                <svg class="ml-[-3px]" :class="{'advanced-after': misc_options.default , 'advanced-before' : !misc_options.default }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h1 class="font-normal text-base text-black-font">Misc Options</h1>
+              <p class="text-sm text-gray-font">RapidLoad crawler will use following options for optimization</p>
+            </div>
           </div>
 
-          <div class="mt-3 pl-6 main-border" style="margin-left: 0">
+          <div :class="{ expand: misc_options.default}" class="mt-3 pl-6 not-expand main-border">
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_variables = !uucss_variables" :class="uucss_variables? 'bg-purple':''"
+                    <div @click="misc_options.uucss_variables = !misc_options.uucss_variables" :class="misc_options.uucss_variables? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
-                      <svg v-if="uucss_variables" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="misc_options.uucss_variables" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -129,9 +143,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_keyframes = !uucss_keyframes" :class="uucss_keyframes? 'bg-purple':''"
+                    <div @click="misc_options.uucss_keyframes = !misc_options.uucss_keyframes" :class="misc_options.uucss_keyframes? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
-                      <svg v-if="uucss_keyframes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="misc_options.uucss_keyframes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -151,9 +165,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_fontface = !uucss_fontface" :class="uucss_fontface? 'bg-purple':''"
+                    <div @click="misc_options.uucss_fontface = !misc_options.uucss_fontface" :class="misc_options.uucss_fontface? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
-                      <svg v-if="uucss_fontface" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="misc_options.uucss_fontface" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -171,10 +185,10 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_include_inline_css = !uucss_include_inline_css"
-                         :class="uucss_include_inline_css? 'bg-purple':''"
+                    <div @click="misc_options.uucss_include_inline_css = !misc_options.uucss_include_inline_css"
+                         :class="misc_options.uucss_include_inline_css? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
-                      <svg v-if="uucss_include_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                      <svg v-if="misc_options.uucss_include_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                            fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -193,10 +207,10 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_cache_busting_v2 = !uucss_cache_busting_v2"
-                         :class="uucss_cache_busting_v2? 'bg-purple':''"
+                    <div @click="misc_options.uucss_cache_busting_v2 = !misc_options.uucss_cache_busting_v2"
+                         :class="misc_options.uucss_cache_busting_v2? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
-                      <svg v-if="uucss_cache_busting_v2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                      <svg v-if="misc_options.uucss_cache_busting_v2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                            fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -212,8 +226,10 @@
             </div>
           </div>
 
+
+
           <button @click="saveSettings" :disabled="loading"
-                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-10 rounded-lg">
+                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -272,11 +288,11 @@ export default {
               return i
             }).join("\r\n");
           }
-          this.uucss_variables = option.unused_css.options.uucss_variables;
-          this.uucss_keyframes = option.unused_css.options.uucss_keyframes;
-          this.uucss_fontface = option.unused_css.options.uucss_fontface;
-          this.uucss_include_inline_css = option.unused_css.options.uucss_include_inline_css;
-          this.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
+          this.misc_options.uucss_variables = option.unused_css.options.uucss_variables;
+          this.misc_options.uucss_keyframes = option.unused_css.options.uucss_keyframes;
+          this.misc_options.uucss_fontface = option.unused_css.options.uucss_fontface;
+          this.misc_options.uucss_include_inline_css = option.unused_css.options.uucss_include_inline_css;
+          this.misc_options.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
           this.uucss_safelist = this.safelist;
           this.uucss_blocklist = this.blocklist;
           this.whitelist_packs = option.unused_css.options.whitelist_packs;
@@ -313,11 +329,11 @@ export default {
       this.loading = true;
       const data = {
         uucss_enable_uucss: true,
-        uucss_cache_busting_v2: this.uucss_cache_busting_v2,
-        uucss_fontface: this.uucss_fontface,
-        uucss_include_inline_css: this.uucss_include_inline_css,
-        uucss_keyframes: this.uucss_keyframes,
-        uucss_variables: this.uucss_variables,
+        uucss_cache_busting_v2: this.misc_options.uucss_cache_busting_v2,
+        uucss_fontface: this.misc_options.uucss_fontface,
+        uucss_include_inline_css: this.misc_options.uucss_include_inline_css,
+        uucss_keyframes: this.misc_options.uucss_keyframes,
+        uucss_variables: this.misc_options.uucss_variables,
         uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.uucss_blocklist,
         whitelist_packs: this.whitelist,
@@ -346,11 +362,15 @@ export default {
       loading: false,
       remove_css_config: [],
       id: 'css',
-      uucss_variables: false,
-      uucss_keyframes: false,
-      uucss_fontface: false,
-      uucss_include_inline_css: false,
-      uucss_cache_busting_v2: false,
+      misc_options:{
+        default: false,
+        uucss_variables: false,
+        uucss_keyframes: false,
+        uucss_fontface: false,
+        uucss_include_inline_css: false,
+        uucss_cache_busting_v2: false,
+      },
+
       inline_small_css: false,
       uucss_safelist: '',
       uucss_blocklist: '',

@@ -41,10 +41,14 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_query_string" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_query_string = !uucss_query_string" :class="uucss_query_string? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_query_string" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -60,10 +64,14 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_enable_debug" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_enable_debug = !uucss_enable_debug" :class="uucss_enable_debug? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_enable_debug" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -88,17 +96,9 @@
               <p class="text-sm text-gray-font">More advanced options for pro users</p>
             </div>
           </div>
-          <div :class="{ expand: queue_option.default}" class="pl-[42px] not-expand">
+          <div :class="{ expand: queue_option.default}" class="mt-3 pl-6 not-expand main-border">
 
-            <div class="flex mt-5">
-<!--              <div class="pr-1">-->
-<!--                <div class="flex items-center mr-4 mt-3">-->
-<!--                  <label>-->
-<!--                    <input v-model="queue_option.queue" type="checkbox" value=""-->
-<!--                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">-->
-<!--                  </label>-->
-<!--                </div>-->
-<!--              </div>-->
+            <div class="flex">
               <div>
                 <h1 class="font-normal text-base text-black-font">Queue</h1>
 
@@ -124,10 +124,14 @@
             <div class="flex mt-5">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="queue_option.uucss_disable_add_to_queue" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
+                  <div @click="queue_option.uucss_disable_add_to_queue = !queue_option.uucss_disable_add_to_queue" :class="queue_option.uucss_disable_add_to_queue? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="queue_option.uucss_disable_add_to_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+
                 </div>
               </div>
               <div>
@@ -138,10 +142,14 @@
             <div class="flex mt-5">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="queue_option.uucss_disable_add_to_re_queue" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
+                  <div @click="queue_option.uucss_disable_add_to_re_queue = !queue_option.uucss_disable_add_to_re_queue" :class="queue_option.uucss_disable_add_to_re_queue? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="queue_option.uucss_disable_add_to_re_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+
                 </div>
               </div>
               <div>
