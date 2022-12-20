@@ -110,7 +110,7 @@ class CriticalCSS_Store
             ];
         }
 
-        //$purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
+        $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
 
         $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
         $file_name_mobile = str_replace(".css","-mobile.css",$file_name);
