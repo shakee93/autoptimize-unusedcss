@@ -37,7 +37,7 @@
                 link.addEventListener('load',function (e) {
                     if (this.prev) this.prev.remove();
                 });
-                file.parentNode.insertBefore(link, file);
+                file.parentNode.insertBefore(link, file.nextSibling);
                 fired = true
             }
 
@@ -75,7 +75,7 @@
                     if (this.prev) this.prev.remove()
                 });
 
-                inlines_style.parentNode.insertBefore(link, inlines_style);
+                inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
 
                 fired_inline = true;
             }
