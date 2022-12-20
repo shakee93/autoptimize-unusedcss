@@ -26,10 +26,13 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="minify_js" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="minify_js = !minify_js" :class="minify_js? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -45,10 +48,14 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="uucss_load_js_method.status" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
+                  <div @click="uucss_load_js_method.status = !uucss_load_js_method.status" :class="uucss_load_js_method.status? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="uucss_load_js_method.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+
                 </div>
               </div>
               <div>
@@ -61,10 +68,14 @@
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <label>
-                      <input v-model="uucss_load_js_method.defer_inline_js" type="checkbox" value=""
-                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                    </label>
+                    <div @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" :class="uucss_load_js_method.defer_inline_js? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                      <svg v-if="uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
                   </div>
                 </div>
                 <div>
@@ -96,10 +107,14 @@
             <div class="flex mb-5">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <label>
-                    <input v-model="delay_javascript" type="checkbox" value=""
-                           class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple-300 dark:ring-offset-purple-800 dark:bg-purple-700 dark:border-purple-600">
-                  </label>
+                  <div @click="delay_javascript = !delay_javascript" :class="delay_javascript? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                    <svg v-if="delay_javascript" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+
                 </div>
               </div>
               <div>
@@ -134,7 +149,7 @@
             </div>
           </div>
           <button @click="saveSettings" :disabled="loading"
-                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
+                  class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

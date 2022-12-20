@@ -248,6 +248,10 @@ input[type=checkbox], input[type=radio]{
     transform: rotate(180deg);
 }
 
+.arrow-top-copied:before{
+    border-bottom: 10px solid #F2EEF7 !important;
+}
+
 .text-color-grey{
     color: #757575;
 }

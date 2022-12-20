@@ -150,7 +150,7 @@
               <div class="mt-5">
                 <RouterLink :to="unused_css_settings_link">
                   <button
-                      class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent rounded-lg">
+                      class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
                     Settings
                   </button>
                 </RouterLink>
