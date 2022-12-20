@@ -819,9 +819,9 @@ class RapidLoad_Admin_Frontend
     public function load_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.43');
+        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.44');
 
-        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.43');
+        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.44');
 
         $data = array(
             'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'

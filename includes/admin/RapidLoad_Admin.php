@@ -79,6 +79,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['remove_cpcss_on_user_interaction'])){
+
+                $options['remove_cpcss_on_user_interaction'] = ($_REQUEST['remove_cpcss_on_user_interaction'] == 'true' ? "1" : null);
+
+            }
+
             if(isset($_REQUEST['uucss_additional_css'])){
 
                 $options['uucss_additional_css'] = $_REQUEST['uucss_additional_css'];

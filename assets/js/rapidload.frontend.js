@@ -26,6 +26,7 @@
 
                 let link = file.cloneNode()
                 link.href = original.original
+                link.rel  = 'preload';
                 link.removeAttribute('data-href')
                 link.removeAttribute('data-media')
                 if(window.rapidload && window.rapidload.frontend_debug === "1"){
@@ -36,7 +37,7 @@
                 link.addEventListener('load',function (e) {
                     if (this.prev) this.prev.remove();
                 });
-                file.parentNode.insertBefore(link, file.nextSibling);
+                file.parentNode.insertBefore(link, file);
                 fired = true
             }
 
@@ -62,17 +63,19 @@
                 }
 
                 var link  = document.createElement('link');
-                link.rel  = 'stylesheet';
+                link.rel  = 'preload';
+                link.as  = 'style';
                 link.type = 'text/css';
                 link.href = original.original;
                 link.media = inlines_style.getAttribute('data-media');
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
+                    this.rel = 'stylesheet';
                     if (this.prev) this.prev.remove()
                 });
 
-                inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
+                inlines_style.parentNode.insertBefore(link, inlines_style);
 
                 fired_inline = true;
             }

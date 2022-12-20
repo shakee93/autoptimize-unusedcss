@@ -140,6 +140,8 @@ class UnusedCSS_Store
             if(!$this->str_contains($file->file,'//inline-style@'))
             {
 
+                $file->css = apply_filters('rapidload/cache_file_creating/css', $file->css);
+
                 $file_location = $this->append_cache_file_dir( $file->file, $file->css );
 
                 $files[] = [

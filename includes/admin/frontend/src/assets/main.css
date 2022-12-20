@@ -207,7 +207,8 @@ input[type=checkbox], input[type=radio]{
 }
 
 .license-error-popup{
-    top:0;
+    top:2px;
+    min-width: 180px;
 }
 
 .route-enter-from{
