@@ -64,12 +64,14 @@
 
                 var link  = document.createElement('link');
                 link.rel  = 'preload';
+                link.as  = 'style';
                 link.type = 'text/css';
                 link.href = original.original;
                 link.media = inlines_style.getAttribute('data-media');
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
+                    this.rel = 'stylesheet';
                     //if (this.prev) this.prev.remove()
                 });
 
