@@ -34,7 +34,7 @@
                 }
                 link.prev = file
                 link.addEventListener('load',function (e) {
-                    if (this.prev) this.prev.remove();
+                    //if (this.prev) this.prev.remove();
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);
                 fired = true
@@ -69,7 +69,7 @@
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
-                    if (this.prev) this.prev.remove()
+                    //if (this.prev) this.prev.remove()
                 });
 
                 inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
