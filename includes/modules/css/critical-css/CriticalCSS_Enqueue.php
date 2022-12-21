@@ -162,7 +162,7 @@ class CriticalCSS_Enqueue
 
             if(isset($sheet->href)){
 
-                if($this->str_contains($sheet->href,'frontend-legacy-')){
+                if($this->str_contains($sheet->href,'frontend-legacy')){
 
                     $sheet->parent->last_child->__set('outertext', $sheet->outertext . $sheet->parent->last_child->outertext);
                     $sheet->__set('outertext', '');
