@@ -211,7 +211,7 @@ class Javascript_Enqueue
     }
 
     private static function is_inline_script( $el ) {
-        return !empty($el->type) && $el->type == "text/javascript";
+        return !empty($el->type) && $el->type == "text/javascript" && !isset($el->src);
     }
 
     private function is_file_excluded($file, $option_name = 'uucss_excluded_js_files'){
