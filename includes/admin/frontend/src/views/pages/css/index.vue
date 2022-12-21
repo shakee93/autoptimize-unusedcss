@@ -109,9 +109,10 @@
                 <div class="grid mb-5">
                 <textarea
                     v-model="critical_css.additional_critical_css"
+                    @focus="focus='above'" @blur="focus = null"
                     class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                  <div :class="critical_css.additional_critical_css? 'bg-purple-lite':'bg-gray-lite-background'"
+                  <div :class="focus==='above'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">Paste any CSS content you would like to merge with Critical
                       CSS</p>
@@ -233,14 +234,16 @@
             <div class="grid mb-5">
                 <textarea
                     v-model="uucss_excluded_files"
-                    class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    @focus="focus='exclude'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+              <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                   ‘elementor-*, *-gallery’ etc...</p>
               </div>
             </div>
+
           </div>
 
 
@@ -381,6 +384,7 @@ export default {
       css_config: [],
       id: 'css',
       loading: false,
+      focus: null,
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       uucss_minify: false,
       remove_unused_css: false,

@@ -26,16 +26,18 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-              <textarea
-                  v-model="uucss_safelist"
-                  class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                  id="force-include" type="text" placeholder=""></textarea>
-
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <textarea
+                    v-model="uucss_safelist"
+                    @focus="focus='safe'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='safe'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                   ‘elementor-*, *-gallery’ etc...</p>
               </div>
             </div>
+
           </div>
 
           <div class="mt-5">
@@ -43,16 +45,18 @@
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
 
             <div class="grid mb-5">
-               <textarea
-                   v-model="uucss_blocklist"
-                   class="resize-none z-50 appearance-none border border-purple rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                   id="force-include" type="text" placeholder=""></textarea>
-
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                <textarea
+                    v-model="uucss_blocklist"
+                    @focus="focus='block-list'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='block-list'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                 <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                   ‘elementor-*, *-gallery’ etc...</p>
               </div>
             </div>
+
           </div>
 
 
@@ -64,8 +68,9 @@
             <div class="flex text-sm">
               <vue3-tags-input :tags="whitelist_packs"
                                @on-tags-changed="handleChangeTag"
+                               @focus="focus='tag'" @blur="focus = null"
                                @keydown.enter.prevent
-                               class="flex resize-none z-50 appearance-none border border-purple rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                               class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                                placeholder="Type your plugin..."/>
               <!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
 
@@ -93,7 +98,7 @@
             </div>
 
 
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+            <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
             </div>
           </div>
@@ -362,6 +367,7 @@ export default {
       loading: false,
       remove_css_config: [],
       id: 'css',
+      focus: null,
       misc_options:{
         default: false,
         uucss_variables: false,
