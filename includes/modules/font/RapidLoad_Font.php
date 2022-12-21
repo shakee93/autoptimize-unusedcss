@@ -157,9 +157,6 @@ class RapidLoad_Font
 
         foreach ($urls as $key => $url) {
             $file = self::$base_dir . '/' . basename($url);
-            if(file_exists($file)){
-                continue;
-            }
             $curl_handles[$key] = curl_init($url);
             $file_pointers[$key] = fopen($file, 'w');
             curl_setopt($curl_handles[$key], CURLOPT_FILE, $file_pointers[$key]);
