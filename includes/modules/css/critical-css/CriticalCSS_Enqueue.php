@@ -158,8 +158,24 @@ class CriticalCSS_Enqueue
 
         $critical_css_content = '';
 
+        foreach ( $this->dom->find( 'link' ) as $key => $sheet ) {
+
+            if(isset($sheet->href)){
+
+                $file_path = self::get_file_path_from_url($sheet->href);
+
+                if(file_exists($file_path)){
+
+                    $critical_css_content .= @file_get_contents($file_path);
+
+                }
+
+            }
+
+        }
+
         if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
-            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+            //$critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
         }
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
