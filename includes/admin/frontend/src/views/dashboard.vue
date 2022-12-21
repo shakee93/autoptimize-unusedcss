@@ -8,113 +8,7 @@
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
 
-      <div v-if="!license_information.licensed_domain" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white mb-1">
-        <div class="content pl-4 pr-4 pb-2 pt-2">
-          <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
-        </div>
 
-        <hr class="border-gray-border-line border-b-0">
-
-        <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
-          <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
-            bounce rates</b> and one of the root causes of
-            <b>poor Google Rankings.</b></p>
-        </div>
-
-       <div class="actions grid justify-center">
-         <a :href="license_information.link" target="_blank">
-           <button class="text-xss bg-purple font-semibold text-white py-2 px-4 border rounded-full"
-           >Get RapidLoad</button>
-         </a>
-       </div>
-
-       <p class="mb-1 text-xsm mt-2 text-color-grey pl-4">Already have license?</p>
-        <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
-          <div class="col-start-1 col-end-3" >
-            <a :href="license_information.connect_link">
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
-              >Connect</button>
-            </a>
-          </div>
-
-          <div class="col-end-7 col-span-2">
-              <button :class="{'bg-black-b text-white': connect_btn}"
-                      @click="connect_btn = !connect_btn"
-                      class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
-              >License Key</button>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
-
-        <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
-          <div class="col-start-1 col-end-3" >
-            <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
-          </div>
-          <div class="col-end-7 col-span-2">
-            <img class="mt-2" v-if="tick_image" :src="base + tick_image" :alt="tick_image">
-          </div>
-        </div>
-
-        <hr class="border-gray-border-line border-b-0">
-
-        <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
-          <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
-          <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
-          <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
-        </div>
-
-<!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
-        <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
-
-          <div class="col-start-1 col-end-3" >
-              <a :href="license_information.link" target="_blank">
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
-              </a>
-          </div>
-
-        </div>
-      </div>
-
-      <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[230px] z-[100]">
-        <div class="content pl-4 pr-4 pb-1 pt-2">
-          <h4 class="mt-2 text-gray-h text-base font-semibold text-xsmm">Enter your License Key below</h4>
-        </div>
-
-        <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1">
-
-          <div class="grid">
-                <input
-                    v-model="license_information.key"
-                    class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="force-include" type="text" placeholder="License Key">
-          </div>
-        </div>
-
-
-        <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
-        <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
-          <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="absolute px-2 mt-0.5 license-error-popup" >
-            <div class="arrow-top font-medium text-xs relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">
-              {{ connect_with_license_error }}</div>
-          </div>
-
-
-          <div class="col-end-7 col-span-2">
-<!--            <a :href="license_information.link" target="_blank">-->
-<!--              <button @click="connect_license" class="text-xsss bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"-->
-<!--              >Connect</button>-->
-<!--            </a>-->
-            <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
-            >Connect</button>
-          </div>
-        </div>
-
-
-      </div>
 
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
@@ -170,6 +64,118 @@
           </div>
         </div>
       </li>
+
+      <div v-if="!license_information.licensed_domain" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white mb-1">
+        <div class="content pl-4 pr-4 pb-2 pt-2">
+          <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
+        </div>
+
+        <hr class="border-gray-border-line border-b-0">
+
+        <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+          <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
+            bounce rates</b> and one of the root causes of
+            <b>poor Google Rankings.</b></p>
+        </div>
+
+        <div class="actions grid justify-center">
+          <a :href="license_information.link" target="_blank">
+            <button class="text-xss bg-purple font-semibold text-white py-2 px-4 border rounded-full"
+            >Get RapidLoad</button>
+          </a>
+        </div>
+
+<!--        popup starts Here-->
+
+        <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[76px] z-[100]">
+          <div class="content pl-4 pr-4 pb-1 pt-2">
+            <h4 class="mt-2 text-gray-h text-base font-semibold text-xsmm">Enter your License Key below</h4>
+          </div>
+
+          <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1">
+
+            <div class="grid">
+              <input
+                  v-model="license_information.key"
+                  class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="force-include" type="text" placeholder="License Key">
+            </div>
+          </div>
+
+
+          <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
+          <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
+            <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="absolute px-2 mt-0.5 license-error-popup" >
+              <div class="arrow-top font-medium text-xs relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">
+                {{ connect_with_license_error }}</div>
+            </div>
+
+
+            <div class="col-end-7 col-span-2">
+              <!--            <a :href="license_information.link" target="_blank">-->
+              <!--              <button @click="connect_license" class="text-xsss bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"-->
+              <!--              >Connect</button>-->
+              <!--            </a>-->
+              <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
+              >Connect</button>
+            </div>
+          </div>
+        </div>
+
+<!--        ends here-->
+
+        <p class="mb-1 text-xsm mt-2 text-color-grey pl-4">Already have license?</p>
+        <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+          <div class="col-start-1 col-end-3" >
+            <a :href="license_information.connect_link">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+              >Connect</button>
+            </a>
+          </div>
+
+          <div class="col-end-7 col-span-2">
+            <button :class="{'bg-black-b text-white': connect_btn}"
+                    @click="connect_btn = !connect_btn"
+                    class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+            >License Key</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+
+        <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+          <div class="col-start-1 col-end-3" >
+            <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
+          </div>
+          <div class="col-end-7 col-span-2">
+            <img class="mt-2" v-if="tick_image" :src="base + tick_image" :alt="tick_image">
+          </div>
+        </div>
+
+        <hr class="border-gray-border-line border-b-0">
+
+        <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
+          <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
+          <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
+          <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
+        </div>
+
+        <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
+        <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3" >
+            <a :href="license_information.link" target="_blank">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+
     </ul>
 
     <div class="pt-6">
