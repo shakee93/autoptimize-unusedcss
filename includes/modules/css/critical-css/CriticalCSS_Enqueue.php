@@ -162,11 +162,10 @@ class CriticalCSS_Enqueue
 
             if(isset($sheet->href)){
 
-                $file_path = self::get_file_path_from_url($sheet->href);
+                if($this->str_contains($sheet->href,'frontend-legacy-')){
 
-                if(file_exists($file_path)){
-
-                    $critical_css_content .= @file_get_contents($file_path);
+                    $sheet->parent->last_child->__set('outertext', $sheet->outertext . $sheet->parent->last_child->outertext);
+                    $sheet->__set('outertext', '');
 
                 }
 
@@ -175,7 +174,7 @@ class CriticalCSS_Enqueue
         }
 
         if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
-            //$critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
         }
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
