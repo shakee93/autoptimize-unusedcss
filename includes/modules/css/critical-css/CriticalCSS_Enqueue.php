@@ -158,21 +158,6 @@ class CriticalCSS_Enqueue
 
         $critical_css_content = '';
 
-        foreach ( $this->dom->find( 'link' ) as $key => $sheet ) {
-
-            if(isset($sheet->href)){
-
-                if($this->str_contains($sheet->href,'frontend-legacy')){
-
-                    $sheet->parent->last_child()->__set('outertext', $sheet->outertext . $sheet->parent->last_child->outertext);
-                    $sheet->__set('outertext', '');
-
-                }
-
-            }
-
-        }
-
         if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
             $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
         }
