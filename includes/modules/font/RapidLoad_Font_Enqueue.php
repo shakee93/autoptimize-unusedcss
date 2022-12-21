@@ -74,7 +74,7 @@ class RapidLoad_Font_Enqueue
             $url = parse_url($google_font->href);
             parse_str($url['query'], $q);
             $q['display'] = 'swap';
-            $new_url = $url['scheme'] . '://' . $url['host'] . $url['path'] . '?' . http_build_query($q);
+            $new_url = 'https://' . $url['host'] . $url['path'] . '?' . http_build_query($q);
             $google_font->href = $new_url;
         }
 
