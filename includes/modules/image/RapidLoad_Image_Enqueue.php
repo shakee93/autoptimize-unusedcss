@@ -65,7 +65,7 @@ class RapidLoad_Image_Enqueue
             if (in_array($urlExt, $this->imgExt)) {
 
                 $data_src = 'data-original-src';
-                $img->src = RapidLoad_Image::get_replaced_url($img->src, null, $img->width, $img->height, [
+                $img->src = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
                     'optimize_level' => 'lqip'
                 ]);
                 //$this->get_placeholder($img);
@@ -198,6 +198,10 @@ class RapidLoad_Image_Enqueue
 
         if(!$this->isAbsolute($url)){
             $url = untrailingslashit(site_url()) . $url;
+        }
+
+        if(str_starts_with($url,"//")){
+            $url = "https:" . $url;
         }
 
         return $url;
