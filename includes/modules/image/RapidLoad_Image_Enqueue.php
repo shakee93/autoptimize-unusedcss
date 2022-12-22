@@ -82,7 +82,8 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $inline_styles as $inline_style ) {
 
-            preg_match_all('/background[-image]*:.*[\s]*url\(["|\']+(.*)["|\']+\)/', $inline_style->style, $matches, PREG_SET_ORDER);
+            $inline_style->handled = "1";
+            preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg))/', $inline_style->style, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
                 $url = $this->extractUrl($match[1]);
                 $urlExt = pathinfo($url, PATHINFO_EXTENSION);
