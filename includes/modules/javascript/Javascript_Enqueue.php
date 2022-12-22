@@ -207,7 +207,7 @@ class Javascript_Enqueue
     }
 
     private static function is_js( $el ) {
-        return !empty($el->src);
+        return !empty($el->src) && strpos($el->src,".js");
     }
 
     private static function is_inline_script( $el ) {
