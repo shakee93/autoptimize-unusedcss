@@ -152,7 +152,7 @@ body {
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
     color: white !important;
-    padding: 16px 10px 18px 30px !important;
+    padding: 16px 10px 15px 30px !important;
     margin: 2px !important;
 }
 .v3ti .v3ti-tag .v3ti-remove-tag {
@@ -164,29 +164,31 @@ body {
     color: #ffffff !important;
 }
 .v3ti{
-    min-height: 48px !important;
+    min-height: 45px !important;
     border-radius: 0.5rem !important;
     border-color: #CBCBCB !important;
+    pointer-events: none;
+    cursor: default;
 }
-.v3ti--focus {
-    outline: 0;
-    border-color: #7F54B3 !important;
+.v3ti.focus-tags {
+    border: 1px solid #7F54B3 !important;
+    box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179);
 }
 .v3ti .v3ti-new-tag {
     padding: 0 4px 0 5px !important;
 }
 
-/*overriding wordpress checkbox color */
-input[type=checkbox]:checked{
-    background: #7F54B3;
-    -webkit-appearance: checkbox;
-}
-input[type=checkbox]:checked::before {
-    content: none;
-}
-input[type=checkbox], input[type=radio]{
-    border: 1px solid #7F54B3;
-}
+/*!*overriding wordpress checkbox color *!*/
+/*input[type=checkbox]:checked{*/
+/*    background: #7F54B3;*/
+/*    -webkit-appearance: checkbox;*/
+/*}*/
+/*input[type=checkbox]:checked::before {*/
+/*    content: none;*/
+/*}*/
+/*input[type=checkbox], input[type=radio]{*/
+/*    border: 1px solid #7F54B3;*/
+/*}*/
 
 @media (min-width: 905px) {
     .container {
@@ -208,7 +210,6 @@ input[type=checkbox], input[type=radio]{
 
 .license-error-popup{
     top:2px;
-    min-width: 180px;
 }
 
 .route-enter-from{

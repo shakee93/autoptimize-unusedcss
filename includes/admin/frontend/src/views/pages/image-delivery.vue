@@ -97,15 +97,19 @@
               </div>
 
               <div class="mt-5">
+
                 <h1 class="font-normal text-base text-black-font">Exclude Images from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-                <textarea v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
-                          class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          id="force-include" type="text" placeholder=""></textarea>
-                <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                  <p class="text-sm text-dark-gray-font">
-                    Exclude Images from RapidLoad enter each file in new line</p>
-                </div>
+                <textarea
+                    v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
+                    @focus="focus='exclude'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Exclude Images from RapidLoad enter each file in new line</p>
+                  </div>
+
               </div>
 
             </div>
@@ -138,13 +142,15 @@
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Priority LCP Images</h1>
               <p class="text-sm pb-3 text-gray-font">Preload critical above-the-fold images to prioritize its loading. These images will not be lazy loaded</p>
-              <textarea v-model="uucss_preload_lcp_image"
-                        class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">
-                  Preload LCP Image from RapidLoad enter each file in new line</p>
-              </div>
+                <textarea
+                    v-model="uucss_preload_lcp_image"
+                    @focus="focus='preload'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                <div :class="focus==='preload'? 'bg-purple-lite':'bg-gray-lite-background'"
+                     class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                  <p class="text-sm text-dark-gray-font">reload LCP Image from RapidLoad enter each file in new line</p>
+                </div>
             </div>
           </div>
 
@@ -152,12 +158,14 @@
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
               <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN</p>
-              <textarea v-model="uucss_exclude_images"
-                        class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="force-include" type="text" placeholder=""></textarea>
-              <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">
-                  Preload LCP Image from RapidLoad enter each file in new line</p>
+              <textarea
+                  v-model="uucss_exclude_images"
+                  @focus="focus='exclude-images'" @blur="focus = null"
+                  class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                  id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='exclude-images'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">Preload LCP Image from RapidLoad enter each file in new line</p>
               </div>
             </div>
           </div>
@@ -259,6 +267,7 @@ export default {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       back: '/',
       loading : false,
+      focus: null,
       image_delivery: [],
       id: 'image-delivery',
       compression_level: 'lossy',

@@ -85,9 +85,29 @@
           </a>
         </div>
 
-<!--        popup starts Here-->
 
-        <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[76px] z-[100]">
+
+        <p class="mb-1 text-xsm mt-2 text-color-grey pl-4">Already have license?</p>
+        <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+          <div class="col-start-1 col-end-3" >
+            <a :href="license_information.connect_link">
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+              >Connect</button>
+            </a>
+          </div>
+
+          <div class="col-end-7 col-span-2">
+            <button :class="{'bg-black-b text-white': connect_btn}"
+                    @click="connect_btn = !connect_btn"
+                    class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
+            >License Key</button>
+          </div>
+
+        </div>
+
+        <!--        popup starts Here-->
+
+        <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[0px] z-[100]">
           <div class="content pl-4 pr-4 pb-1 pt-2">
             <h4 class="mt-2 text-gray-h text-base font-semibold text-xsmm">Enter your License Key below</h4>
           </div>
@@ -122,26 +142,7 @@
           </div>
         </div>
 
-<!--        ends here-->
-
-        <p class="mb-1 text-xsm mt-2 text-color-grey pl-4">Already have license?</p>
-        <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
-          <div class="col-start-1 col-end-3" >
-            <a :href="license_information.connect_link">
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
-              >Connect</button>
-            </a>
-          </div>
-
-          <div class="col-end-7 col-span-2">
-            <button :class="{'bg-black-b text-white': connect_btn}"
-                    @click="connect_btn = !connect_btn"
-                    class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
-            >License Key</button>
-          </div>
-
-        </div>
-
+        <!--        ends here-->
       </div>
 
       <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">

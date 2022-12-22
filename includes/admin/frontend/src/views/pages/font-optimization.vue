@@ -36,22 +36,27 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Self Host Google Fonts</h1>
-                  <p class="text-sm text-gray-font">This can help you group pages which has same html structure. Product
-                    pages, Category pages etc...</p>
+                  <p class="text-sm text-gray-font">Self host all your Google fonts load the fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN</p>
                 </div>
               </div>
             </div>
 
           <div class="grid mb-5">
-            <h1 class="font-normal text-base text-black-font">Preload Font URLs</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <textarea v-model="preload_font_urls"
-                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="force-include" type="text" placeholder=""></textarea>
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
+            <h1 class="font-normal text-base text-black-font">Preload Fonts</h1>
+            <p class="text-sm pb-3 text-gray-font">Preload critical font files to avoid FOUT and signal browsers to download fonts earlier.</p>
+
+            <div class="grid mb-5">
+                <textarea
+                    v-model="preload_font_urls"
+                    @focus="focus='preload'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='preload'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">Add one font URL per line. Make sure you have the full font URL.</p>
+              </div>
             </div>
+
           </div>
 
 
@@ -141,7 +146,7 @@ export default {
   data() {
     return {
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
-
+      focus: null,
       font_config:[],
       id: 'font',
       loading: false,
