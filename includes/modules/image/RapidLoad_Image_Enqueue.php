@@ -102,7 +102,7 @@ class RapidLoad_Image_Enqueue
             $cssDocument = $parser->parse();
             foreach ($cssDocument->getAllValues() as $value) {
                 if( $value instanceof \Sabberworm\CSS\Value\URL){
-                    $url = $this->extractUrl($this->extractUrl($value->getURL()->getString()));
+                    $url = $this->extractUrl($value->getURL()->getString());
                     $urlExt = pathinfo($url, PATHINFO_EXTENSION);
                     if (in_array($urlExt, $this->imgExt)) {
                         $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);

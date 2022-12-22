@@ -15,9 +15,7 @@ class RapidLoad_Admin_Frontend
 
         add_action('admin_menu', [$this, 'menu_item']);
 
-        if(!apply_filters('ao_installed', false)){
-            add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
-        }
+        add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
         if($this->is_rapidload_legacy_page()){
 
@@ -75,21 +73,13 @@ class RapidLoad_Admin_Frontend
 
     public function add_rapidload_admin_bar_menu($wp_admin_bar){
 
-        if(apply_filters('rapidload/tool-bar-menu',false)){
-
-            $color = 'green';
-
-            if(RapidLoad_DB::get_total_job_count(" WHERE status = 'failed' ") > 0){
-                $color = 'red';
-            }elseif (RapidLoad_DB::get_total_job_count(" WHERE status = 'success' AND warnings IS NOT NULL ") > 0){
-                $color = 'yellow';
-            }
+        if(apply_filters('rapidload/tool-bar-menu',true)){
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
                 'title' => '<span class="ab-icon"></span><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
                 'href'  => admin_url( 'options-general.php?page=uucss' ),
-                'meta'  => array( 'class' => 'bullet-' . $color ),
+                'meta'  => array( 'class' => 'bullet-green' ),
             ));
 
             $wp_admin_bar->add_node( array(
@@ -561,6 +551,7 @@ class RapidLoad_Admin_Frontend
                 }else{
                     RapidLoad_DB::clear_job_data($job_type);
                     RapidLoad_DB::clear_jobs($job_type);
+                    do_action('rapidload/vanish');
                 }
 
             }
@@ -819,9 +810,9 @@ class RapidLoad_Admin_Frontend
     public function load_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.45');
+        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.46');
 
-        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.45');
+        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.46');
 
         $data = array(
             'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'
