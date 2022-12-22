@@ -31,7 +31,7 @@ class JavaScript
 
         add_action('rapidload/job/handle', [$this, 'optimize_javascript'], 30, 2);
 
-        add_action( 'admin_bar_menu', [$this, 'add_admin_bar_items' ], 90 );
+        //add_action( 'admin_bar_menu', [$this, 'add_admin_bar_items' ], 90 );
 
         add_filter('uucss/enqueue/js-minified-url', function ($js_file){
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));

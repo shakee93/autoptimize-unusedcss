@@ -32,6 +32,15 @@ class RapidLoad_Font
 
         //add_filter('rapidload/cache_file_creating/css', [$this, 'self_host_gstatic_fonts'], 10 , 1);
 
+        add_action('rapidload/vanish', [ $this, 'vanish' ]);
+    }
+
+    public function vanish() {
+
+        if ( $this->file_system->exists( self::$base_dir ) ){
+            $this->file_system->delete( self::$base_dir, true );
+        }
+
     }
 
     public function self_host_gstatic_fonts($css){

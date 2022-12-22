@@ -636,7 +636,7 @@
                             if(rowData.cpcss){
                                 if(rowData.cpcss.status === 'success'){
                                     $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                                 }
                             }
 
@@ -668,9 +668,9 @@
                         var attemptsString = '';
 
                         if((rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
-                            attemptsString = 'Hits : ' + rowData.success_count
+                            attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
-                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts
                         }else if(Number(rowData.attempts) !== 0) {
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
@@ -1280,7 +1280,7 @@
                             if(rowData.cpcss){
                                 if(rowData.cpcss.status === 'success'){
                                     $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                                 }
                             }
 
@@ -1312,9 +1312,9 @@
                         var attemptsString = '';
 
                         if(rowData.success_count > 0){
-                            attemptsString = 'Hits : ' + rowData.success_count
+                            attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts;
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
-                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts;
                         }else if(Number(rowData.attempts) !== 0){
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
