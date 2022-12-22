@@ -60,7 +60,7 @@ class RapidLoad_Font_Enqueue
                 continue;
             }
             $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
-            $preload_font = '<link rel="preload" href="'. $url .'" as="font" fetchpriority="high" type="font/'. $extension .'"> ';
+            $preload_font = '<link rel="preload" href="'. $url .'" as="font" fetchpriority="high" type="font/'. $extension .'" crossorigin> ';
             $title_content = $this->dom->find( 'title' )[0]->outertext;
             $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $preload_font);
         }
