@@ -334,6 +334,7 @@ export default {
 
     saveSettings() {
       this.loading = true;
+      console.log(this.whitelist)
       const data = {
         uucss_enable_uucss: true,
         uucss_cache_busting_v2: this.misc_options.uucss_cache_busting_v2,
@@ -343,7 +344,7 @@ export default {
         uucss_variables: this.misc_options.uucss_variables,
         uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.uucss_blocklist,
-        whitelist_packs: this.whitelist,
+        whitelist_packs: this.whitelist_packs,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
         headers: {
