@@ -88,16 +88,21 @@
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Deferring</h1>
                 <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from
                   optimization.</p>
+
                 <div class="grid mb-5">
                 <textarea
                     v-model="uucss_load_js_method.uucss_excluded_js_files_from_defer"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    @focus="focus='exclude'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                  <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+                  <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
                       ‘elementor-*, *-gallery’ etc...</p>
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -125,14 +130,17 @@
             <div :class="!delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div>
                 <div class="grid">
-                <textarea v-model="uucss_load_scripts_on_user_interaction"
-                          class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          id="force-include" type="text" placeholder=""></textarea>
-                  <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">
-                      Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
+                <textarea
+                    v-model="uucss_load_scripts_on_user_interaction"
+                    @focus="focus='delay'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
                   </div>
                 </div>
+
               </div>
             </div>
 
@@ -140,13 +148,15 @@
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <textarea v-model="uucss_excluded_js_files"
-                      class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="force-include" type="text" placeholder=""></textarea>
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">
-                Exclude JS from RapidLoad enter each file in new line</p>
-            </div>
+                <textarea
+                    v-model="uucss_excluded_js_files"
+                    @focus="focus='exclude-js'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad enter each file in new line</p>
+              </div>
           </div>
           <button @click="saveSettings" :disabled="loading"
                   class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
@@ -242,6 +252,7 @@ export default {
       javascript: [],
       id: 'javascript',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
+      focus: null,
       js_optimization: false,
       minify_js: false,
       delay_javascript: false,

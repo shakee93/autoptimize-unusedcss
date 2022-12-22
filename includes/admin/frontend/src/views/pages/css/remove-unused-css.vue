@@ -68,8 +68,8 @@
             <div class="flex text-sm">
               <vue3-tags-input :tags="whitelist_packs"
                                @on-tags-changed="handleChangeTag"
-                               @focus="focus='tag'" @blur="focus = null"
                                @keydown.enter.prevent
+                               :class="focus==='tag'? 'focus-tags': ''"
                                class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                                placeholder="Type your plugin..."/>
               <!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
@@ -98,7 +98,7 @@
             </div>
 
 
-            <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
+            <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font">Search by plugin or theme name. You can add multiple packs.</p>
             </div>
           </div>
@@ -311,6 +311,8 @@ export default {
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
+       this.focus='tag';
+       console.log(this.focus)
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
 
@@ -318,7 +320,7 @@ export default {
               return value.id + ':' + value.name;
             })
             this.refresh_element = false;
-
+            this.focus=null;
           })
           .catch(error => {
             this.errorMessage = error.message;

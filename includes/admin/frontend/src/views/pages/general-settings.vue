@@ -27,13 +27,18 @@
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude URLs</h1>
             <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
-            <textarea v-model="uucss_excluded_links"
-                class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="force-include" type="text" placeholder=""></textarea>
-            <div class="-mt-3 bg-gray-lite-background rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                ‘elementor-*, *-gallery’ etc...</p>
-            </div>
+
+                <textarea
+                    v-model="uucss_excluded_links"
+                    @focus="focus='exclude'" @blur="focus = null"
+                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+              <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
+                  ‘elementor-*, *-gallery’ etc...</p>
+              </div>
+
           </div>
 
           <div class="grid">
@@ -257,6 +262,7 @@ export default {
       general_config:[],
       id: 'general',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
+      focus: null,
       back: '/',
       loading : false,
       uucss_enable_debug: false,
