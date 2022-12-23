@@ -30,7 +30,7 @@ class RapidLoad_Font
 
         add_filter('uucss/css/excluded-files', [$this, 'exclude_google_font_uucss']);
 
-        //add_filter('rapidload/cache_file_creating/css', [$this, 'self_host_gstatic_fonts'], 10 , 1);
+        add_filter('rapidload/cache_file_creating/css', [$this, 'add_display_swap_to_inline_styles'], 10 , 1);
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
     }

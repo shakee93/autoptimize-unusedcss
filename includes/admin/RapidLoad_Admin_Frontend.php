@@ -78,14 +78,14 @@ class RapidLoad_Admin_Frontend
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
                 'title' => '<span class="ab-icon"></span><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
-                'href'  => admin_url( 'options-general.php?page=uucss' ),
+                'href'  => admin_url( 'admin.php?page=rapidload' ),
                 'meta'  => array( 'class' => 'bullet-green' ),
             ));
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload-clear-cache',
                 'title' => '<span class="ab-label">' . __( 'Remove All', 'remove_all' ) . '</span>',
-                'href'  => admin_url( 'options-general.php?page=uucss&action=rapidload_purge_all' ),
+                'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
                 'meta'  => array( 'class' => 'rapidload-clear-all' ),
                 'parent' => 'rapidload'
             ));
@@ -810,9 +810,9 @@ class RapidLoad_Admin_Frontend
     public function load_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.46');
+        wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.47');
 
-        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.46');
+        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.47');
 
         $data = array(
             'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'

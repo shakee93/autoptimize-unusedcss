@@ -112,7 +112,7 @@ class UnusedCSS_Enqueue
 
             $this->inject->found_sheets = true;
 
-            if ( self::is_css( $sheet ) ) {
+            if ( self::is_css( $sheet ) && !$this->is_file_excluded($this->options, $link)) {
 
                 array_push( $this->inject->found_css_files, $link );
 

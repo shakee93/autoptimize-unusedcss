@@ -66,8 +66,7 @@ class Javascript_Enqueue
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
             $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src'))})
-                    document.querySelectorAll('noscript[data-rapidload-delayed]').forEach(function(el){ el.outerHTML = el.innerHTML})
+            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { Array.from(document.getElementsByTagName('noscript')).forEach(function(e){ var tag = e.getAttribute('data-rapidload-delayed'); if(tag !== null && tag !== undefined) { var newScript = document.createElement('script'); var inlineScript = document.createTextNode(e.innerHTML); newScript.appendChild(inlineScript); e.parentNode.insertBefore(newScript, e) } })
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
@@ -106,6 +105,10 @@ class Javascript_Enqueue
         }
 
         $file_path = self::get_file_path_from_url($link->src);
+
+        if(!file_exists($file_path)){
+            return;
+        }
 
         $version = "";
 
@@ -175,17 +178,20 @@ class Javascript_Enqueue
                     }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
                         if(isset($link->{"data-rapidload-delayed"})){
                             unset($link->{"data-rapidload-delayed"});
-                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
+                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
                         }else{
-                            $link->type = 'text/javascript';
-                            $link->defer = true;
-                            $link->src = 'data:text/javascript,'.  rawurlencode($link->innertext());
-                            $link->__set('innertext',"");
+                            $inner_text = $link->innertext();
+                            if(!empty($inner_text)){
+                                $link->type = 'text/javascript';
+                                $link->defer = true;
+                                $link->src = 'data:text/javascript,'.  rawurlencode($inner_text);
+                                $link->__set('innertext',"");
+                            }
                         }
                     }else{
                         if(isset($link->{"data-rapidload-delayed"})){
                             unset($link->{"data-rapidload-delayed"});
-                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->outertext() . "</noscript>");
+                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
                         }
                     }
                     break;
@@ -207,7 +213,7 @@ class Javascript_Enqueue
     }
 
     private static function is_js( $el ) {
-        return !empty($el->src);
+        return !empty($el->src) && strpos($el->src,".js");
     }
 
     private static function is_inline_script( $el ) {
