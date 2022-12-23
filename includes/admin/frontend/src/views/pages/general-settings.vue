@@ -164,11 +164,19 @@
             </div>
           </div>
 
-          <button @click="saveSettings" :disabled="loading" class="disabled:opacity-50 flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">
-            <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <button @click="saveSettings" :disabled="loading" :class="saved? 'pointer-events-none': ''"
+                  class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
+            <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
+            <svg :class="saved ? 'block' : 'hidden'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                 class="transform scale-125 w-5 h-3.5 mt-1 mr-3 -ml-1">
+              <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+            </svg>
+
             Save Settings
           </button>
         </div>
@@ -227,13 +235,18 @@ export default {
 
   methods:{
 
+    dataSaved(){
+      this.saved = true;
+      setTimeout(() => this.saved = false, 2000)
+    },
+
     saveSettings(){
       this.loading = true;
       const data = {
         uucss_enable_debug : this.uucss_enable_debug,
         uucss_query_string : this.uucss_query_string,
-        uucss_excluded_links : this.uucss_excluded_links.replace(/\n/g, ","),
-        uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue.replace(/\D/g,''),
+        uucss_excluded_links : this.uucss_excluded_links?.replace(/\n/g, ","),
+        uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue?.replace(/\D/g,''),
         uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
         uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,
         uucss_disable_add_to_re_queue : this.queue_option.uucss_disable_add_to_re_queue,
@@ -251,8 +264,9 @@ export default {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
           }).finally(()=>{
-            this.loading = false;
-        });
+              this.loading = false;
+              this.dataSaved();
+          });
 
     }
   },
@@ -263,6 +277,7 @@ export default {
       id: 'general',
       base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
       focus: null,
+      saved: false,
       back: '/',
       loading : false,
       uucss_enable_debug: false,
