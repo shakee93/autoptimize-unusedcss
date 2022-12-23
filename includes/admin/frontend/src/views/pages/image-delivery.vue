@@ -276,7 +276,7 @@ export default {
 
   data() {
     return {
-      base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
+      base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
       back: '/',
       loading : false,
       saved: false,
