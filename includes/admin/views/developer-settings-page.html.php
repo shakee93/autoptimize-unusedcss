@@ -22,6 +22,16 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
     $hide_view_log = apply_filters('uucss/view_debug/frontend', (boolean)$default_debug_mode);
 
     ?>
+    <div>
+        <input id='thirtd_part_cache_plugins' type='hidden'
+               value="<?php if ( ! empty( $third_party_cache_plugins ) ) {
+                   echo '1';
+               } ?>">
+        <input id='uucss_auto_refresh_frontend-hidden' type='hidden'
+               name='autoptimize_uucss_settings[uucss_auto_refresh_frontend]'  value="1">
+        <input id='uucss_auto_refresh_frontend-hidden_rule' type='hidden'
+               name='autoptimize_uucss_settings[uucss_auto_refresh_frontend_rule]'  value="1">
+    </div>
     <div style="display: flex">
         <ul style="width: 78%" id="uucss-wrapper">
             <li class="uucss-notification" style="display: none">
