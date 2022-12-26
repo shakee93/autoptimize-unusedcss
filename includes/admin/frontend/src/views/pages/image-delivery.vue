@@ -244,7 +244,7 @@ export default {
           this.next_gen_image = options.uucss_support_next_gen_formats
           this.uucss_lazy_load_images.status= options.uucss_lazy_load_images
           this.uucss_lazy_load_images.image_count = options.uucss_exclude_above_the_fold_image_count
-          this.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_images
+          this.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_iframes
           this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
           this.uucss_preload_lcp_image = options.uucss_preload_lcp_image
           this.uucss_set_width_and_height = options.uucss_set_width_and_height
@@ -311,7 +311,7 @@ export default {
       uucss_lazy_load_images:{
         status: false,
         image_count: 3,
-        uucss_lazy_load_iframes,
+        uucss_lazy_load_iframes: false,
         uucss_exclude_images_from_lazy_load: [],
       },
       uucss_set_width_and_height: false,
