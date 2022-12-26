@@ -264,7 +264,7 @@ export default {
       javascript: [],
       id: 'javascript',
       saved: false,
-      base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
+      base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
       focus: null,
       js_optimization: false,
       minify_js: false,

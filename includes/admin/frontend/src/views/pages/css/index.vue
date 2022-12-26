@@ -400,7 +400,7 @@ export default {
       loading: false,
       focus: null,
       saved: false,
-      base: config.is_plugin ? config.public_base + '/public/images/' : 'images/',
+      base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
       uucss_minify: false,
       remove_unused_css: false,
       uucss_excluded_files: '',
