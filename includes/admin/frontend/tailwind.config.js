@@ -18,6 +18,7 @@ module.exports = {
       'purple': '#7F54B3',
       'purple-p': '#867C92',
       'purple-lite': '#F2EEF7',
+      'tips-purple': '#E1DDE7',
       'gray-border-line': '#E8E8E8',
       'gray-button-border': '#CBCBCB',
       'gray-lite-background': '#F0F0F0',

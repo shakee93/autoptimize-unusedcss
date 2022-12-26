@@ -5,10 +5,42 @@
 <template>
   <main>
 
+    <div class="z-50 right-16 absolute">
+    <div class="w-72 h-56 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple">
+
+      <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+
+          <div class="pointer-events-none flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
+            <img class="mr-2 w-3.5" v-if="whats_new" :src="base + whats_new" :alt="whats_new">
+            What’s new
+         </div>
+
+
+      </div>
+
+      <hr class="border-gray-border-line border-b-0">
+
+      <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
+        <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
+        <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
+        <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
+      </div>
+
+      <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
+      <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+        <div class="col-start-1 col-end-3" >
+          <a :href="license_information.link" target="_blank">
+            <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
+          </a>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-
-
 
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
@@ -341,6 +373,7 @@ export default {
   data() {
     return {
       tick_image: 'license-information.svg',
+      whats_new: 'tips-what.svg',
       connect_btn: false,
       connect_with_license_error : '',
       license_information:
