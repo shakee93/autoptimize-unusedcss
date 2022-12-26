@@ -144,7 +144,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $iframes as $index => $iframe ) {
 
-                if($this->is_file_excluded($iframe->src) || $this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
+                if($this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
                     continue;
                 }
 
