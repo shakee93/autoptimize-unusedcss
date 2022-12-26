@@ -42,6 +42,8 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
+        $this->lazy_load_iframes();
+
         $this->preload_images();
 
         $this->set_width_and_height();
@@ -132,6 +134,23 @@ class RapidLoad_Image_Enqueue
 
         }
 
+    }
+
+    public function lazy_load_iframes(){
+
+        if(isset($this->options['uucss_lazy_load_iframes']) && $this->options['uucss_lazy_load_iframes'] == "1"){
+
+            $iframes = $this->dom->find( 'iframe[src]' );
+
+            foreach ( $iframes as $index => $iframe ) {
+
+                if($this->is_file_excluded($iframe->src) || $this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
+                    continue;
+                }
+
+                $iframe->loading = "lazy";
+            }
+        }
     }
 
     public function lazy_load_images(){
