@@ -66,7 +66,7 @@ class Javascript_Enqueue
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
             $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { Array.from(document.getElementsByTagName('noscript')).forEach(function(e){ var tag = e.getAttribute('data-rapidload-delayed'); if(tag !== null && tag !== undefined) { var newScript = document.createElement('script'); var inlineScript = document.createTextNode(e.innerHTML); newScript.appendChild(inlineScript); e.parentNode.insertBefore(newScript, e); document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) } })
+            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){['mousemove', 'touchstart', 'keydown'].forEach(function (event) {var listener = function () { Array.from(document.getElementsByTagName('noscript')).forEach(function(e){ var tag = e.getAttribute('data-rapidload-delayed'); if(tag !== null && tag !== undefined) { var newScript = document.createElement('script'); var inlineScript = document.createTextNode(e.innerHTML); newScript.appendChild(inlineScript); e.parentNode.insertBefore(newScript, e); }}) document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) })
                     removeEventListener(event, listener);
                     } 
                     addEventListener(event, listener);
