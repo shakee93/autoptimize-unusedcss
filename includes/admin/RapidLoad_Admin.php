@@ -309,6 +309,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_lazy_load_iframes'])){
+
+                $options['uucss_lazy_load_iframes'] = ($_REQUEST['uucss_lazy_load_iframes'] == 'true' ? "1" : null);
+
+            }
+
             if(isset($_REQUEST['uucss_exclude_images'])){
 
                 $options['uucss_exclude_images'] = $_REQUEST['uucss_exclude_images'];
