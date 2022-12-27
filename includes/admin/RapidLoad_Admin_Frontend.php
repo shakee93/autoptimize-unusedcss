@@ -928,7 +928,8 @@ class RapidLoad_Admin_Frontend
             'edit_posts',
             'rapidload',
             [$this, 'page'],
-            UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg'
+            UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg',
+            59
         );
 
     }
