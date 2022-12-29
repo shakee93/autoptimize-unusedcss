@@ -303,12 +303,16 @@ export default {
           this.misc_options.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
           this.uucss_safelist = this.safelist;
           this.uucss_blocklist = this.blocklist;
-          this.whitelist_packs = option.unused_css.options.whitelist_packs;
+          //this.whitelist_packs = option.unused_css.options.whitelist_packs;
+          const packs = option.unused_css.options.whitelist_packs;
+          packs.forEach((a)=>{
+            this.whitelist_packs.push(a.split(':')[1]);
+          });
 
         }
-
       });
     }
+
   },
 
   methods: {
@@ -370,7 +374,8 @@ export default {
               this.dataSaved();
           });
 
-    }
+    },
+
   },
 
   data() {
