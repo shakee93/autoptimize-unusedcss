@@ -303,11 +303,8 @@ export default {
           this.misc_options.uucss_cache_busting_v2 = option.unused_css.options.uucss_cache_busting_v2;
           this.uucss_safelist = this.safelist;
           this.uucss_blocklist = this.blocklist;
-          //this.whitelist_packs = option.unused_css.options.whitelist_packs;
-          const packs = option.unused_css.options.whitelist_packs;
-          packs.forEach((a)=>{
-            this.whitelist_packs.push(a.split(':')[1]);
-          });
+          this.whitelist_packs = option.unused_css.options.whitelist_packs;
+
 
         }
       });
@@ -321,13 +318,10 @@ export default {
        this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
-            const packs = response.data.data.map((value) => {
+
+            this.whitelist_packs = response.data.data.map((value) => {
               return value.id + ':' + value.name;
             })
-            packs.forEach((a)=>{
-              this.whitelist_packs.push(a.split(':')[1]);
-            });
-
             this.refresh_element = false;
             this.focus=null;
           })
