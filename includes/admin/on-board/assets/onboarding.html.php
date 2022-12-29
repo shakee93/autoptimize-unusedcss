@@ -39,7 +39,7 @@ $step  = RapidLoad_Onboard::$current_step + 1;
             </div>
         </div>
         <div class="skip-wrap">
-            <a href="<?php echo admin_url('options-general.php?page=uucss') ?>">Skip</a>
+            <a href="<?php echo admin_url('admin.php?page=rapidload') ?>">Skip</a>
         </div>
     </div>
     <div class="card-complete loading">

@@ -113,7 +113,7 @@ class RapidLoad_Base
     public function add_plugin_action_link( $links ) {
 
         $_links = array(
-            '<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
+            '<a href="' . admin_url( 'admin.php?page=rapidload' ) . '">Settings</a>',
         );
 
         return array_merge( $_links, $links );
@@ -395,7 +395,7 @@ class RapidLoad_Base
 
             self::update_option( 'autoptimize_uucss_settings', $options );
 
-            header( 'Location: ' . admin_url( 'options-general.php?page=uucss') );
+            header( 'Location: ' . admin_url( 'admin.php?page=rapidload') );
             exit;
         }
 
