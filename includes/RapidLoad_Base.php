@@ -433,15 +433,18 @@ class RapidLoad_Base
 
         self::update_option( 'autoptimize_uucss_settings', $options );
 
-        $data        = self::suggest_whitelist_packs();
-        $white_packs = isset($data->data) ? $data->data : [];
+        if(!isset($options['whitelist_packs'])){
 
-        $options['whitelist_packs'] = array();
-        foreach ( $white_packs as $white_pack ) {
-            $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+            $data        = self::suggest_whitelist_packs();
+            $white_packs = isset($data->data) ? $data->data : [];
+
+            $options['whitelist_packs'] = array();
+            foreach ( $white_packs as $white_pack ) {
+                $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+            }
+
+            self::update_option( 'autoptimize_uucss_settings', $options );
         }
-
-        self::update_option( 'autoptimize_uucss_settings', $options );
 
         self::$options = self::fetch_options(false);
 
