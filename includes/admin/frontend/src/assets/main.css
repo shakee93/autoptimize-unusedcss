@@ -145,7 +145,7 @@ body {
     }
     .cdn.cdn-endpoint{
         border: 1px solid #7F54B3 !important;
-        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179);
+        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
     }
     .tips.section{
         top: 96px;
@@ -218,7 +218,9 @@ body {
 }
 
 .license-error-popup{
-    top:2px;
+    top: 103px;
+    right: 10px;
+    z-index: 9999;
 }
 
 .route-enter-from{
@@ -240,6 +242,11 @@ body {
 
 .gray-border{
     border-color: #CBCBCB !important;
+    border-radius: 7px !important;
+    outline: none !important;
+}
+.red-border{
+    border-color: #ff0000 !important;
     border-radius: 7px !important;
     outline: none !important;
 }

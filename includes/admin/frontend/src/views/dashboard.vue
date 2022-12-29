@@ -5,39 +5,42 @@
 <template>
   <main>
 
-    <div class="z-50 right-16 absolute">
-    <div class="w-72 h-56 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple">
+<!--    <div class="z-50 right-16 absolute">-->
+<!--    <div class="w-72 h-56 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple">-->
 
-      <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+<!--      <div class="pl-4 pr-4 mt-5 inline-flex">-->
+<!--      <div class="flex mb-3 transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent rounded-full">-->
+<!--        <img class="mr-2 w-3.5" v-if="whats_new" :src="base + whats_new" :alt="whats_new">-->
+<!--            What’s new-->
+<!--      </div>-->
+<!--      </div>-->
 
-          <div class="pointer-events-none flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
-            <img class="mr-2 w-3.5" v-if="whats_new" :src="base + whats_new" :alt="whats_new">
-            What’s new
-         </div>
 
+<!--      <div class="content p-2 pl-4 pr-4 pb-1 pt-2">-->
+<!--        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">Introducing Image Delivery</h2>-->
+<!--        <p class="mb-1 text-xsmm text-purple-tips-text font-normal">Optimize all your images on-the-fly with modern formats (AVIF, WEBP)</p>-->
+<!--      </div>-->
 
-      </div>
+<!--      <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">-->
 
-      <hr class="border-gray-border-line border-b-0">
+<!--        <div class="col-start-1 col-end-3" >-->
+<!--          <p class="mb-1 text-xsmm text-purple-tips-text font-normal">1/3</p>-->
 
-      <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
-        <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
-        <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
-        <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
-      </div>
+<!--        </div>-->
+<!--        <div class="col-end-7 col-span-2">-->
+<!--          <a :href="license_information.link" target="_blank">-->
+<!--            <button class="mr-2 text-xsss mb-3 text-purple transition duration-300 font-semibold">-->
+<!--              Learn more</button>-->
+<!--          </a>-->
+<!--          <a :href="license_information.link" target="_blank">-->
+<!--            <button class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-2 px-8 border border-purple hover:border-transparent rounded-lg">-->
+<!--              Next</button>-->
+<!--          </a>-->
+<!--        </div>-->
 
-      <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
-      <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
-
-        <div class="col-start-1 col-end-3" >
-          <a :href="license_information.link" target="_blank">
-            <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
-          </a>
-        </div>
-
-      </div>
-    </div>
-    </div>
+<!--      </div>-->
+<!--    </div>-->
+<!--    </div>-->
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
@@ -64,7 +67,7 @@
               </RouterLink>
 
 
-              <svg v-if="item.id === 'cdn'"  :class="loading? 'Show': 'Hide'" class="absolute" style="top:80.5%; left:14.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg v-if="item.id === 'cdn'"  :class="loading? 'Show': 'Hide'" class="absolute" style="top:80.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="loader">
                   <animateTransform
                       xlink:href="#loader"
@@ -98,6 +101,62 @@
       </li>
 
       <div v-if="!license_information.licensed_domain" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white mb-1">
+        <!--        popup starts Here-->
+
+        <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-56 transition duration-300 rounded-xl bg-white absolute mt-[0px] z-[100]">
+
+          <div class="actions pl-4 pr-4 pb-2 grid grid-cols-2">
+            <div class="col-start-1 col-end-3" >
+              <h4 class="mt-4 text-gray-h text-base font-semibold">Enter your License Key below</h4>
+            </div>
+
+            <div class="col-end-7 col-span-2">
+              <img @click="connect_btn = !connect_btn" class="absolute top-2 right-2 cursor-pointer" :src="base+'/close.svg'" alt="Back">
+            </div>
+
+          </div>
+
+          <hr class="border-gray-border-line border-b-0">
+
+          <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+            <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
+              bounce rates</b> and one of the root causes of
+              <b>poor Google Rankings.</b></p>
+          </div>
+
+          <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1 mt-4">
+
+            <div class="grid">
+<!--              <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="mt-0.5 license-error-popup" >-->
+<!--                <div class="arrow-top font-medium text-xs relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">-->
+<!--                  {{ connect_with_license_error }}</div>-->
+<!--              </div>-->
+              <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="flex mt-0.5 license-error-popup absolute" >
+                <div class="font-medium text-xs relative leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">
+                  {{ connect_with_license_error }}</div>
+                <img class="mt-3 w-3 absolute top-[26px] right-3.5" :src="base+'/error.svg'" alt="Back">
+              </div>
+              <input
+                  @focus="focus='license-error'"
+                  @blur="focus=''"
+                  v-model="license_information.key"
+                  :class="focus==='license-error' ? 'cdn-endpoint':'' || connect_with_license_error.length ? 'red-border' : 'gray-border' "
+                  class="cdn resize-none text-xs z-50 appearance-none border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="force-include" type="text" placeholder="License Key">
+            </div>
+          </div>
+
+          <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+            <div class="col-end-7 col-span-2">
+              <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
+              >Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!--        ends here-->
+
         <div class="content pl-4 pr-4 pb-2 pt-2">
           <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
         </div>
@@ -129,52 +188,14 @@
           </div>
 
           <div class="col-end-7 col-span-2">
-            <button :class="{'bg-black-b text-white': connect_btn}"
-                    @click="connect_btn = !connect_btn"
+            <button @click="connect_btn = !connect_btn"
                     class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-black-b font-medium hover:text-white py-1 px-4 border border-gray-button-border hover:border-transparent rounded-full"
             >License Key</button>
           </div>
 
         </div>
 
-        <!--        popup starts Here-->
 
-        <div :class="connect_btn? 'Show': 'Hide'" class="w-72 h-32 transition duration-300 drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute mt-[0px] z-[100]">
-          <div class="content pl-4 pr-4 pb-1 pt-2">
-            <h4 class="mt-2 text-gray-h text-base font-semibold text-xsmm">Enter your License Key below</h4>
-          </div>
-
-          <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1">
-
-            <div class="grid">
-              <input
-                  v-model="license_information.key"
-                  class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="force-include" type="text" placeholder="License Key">
-            </div>
-          </div>
-
-
-          <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
-          <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
-            <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="absolute px-2 mt-0.5 license-error-popup" >
-              <div class="arrow-top font-medium text-xs relative bg-arrow-message leading-arw-mbox text-center text-arrow-message-tc rounded-[7px] px-2">
-                {{ connect_with_license_error }}</div>
-            </div>
-
-
-            <div class="col-end-7 col-span-2">
-              <!--            <a :href="license_information.link" target="_blank">-->
-              <!--              <button @click="connect_license" class="text-xsss bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"-->
-              <!--              >Connect</button>-->
-              <!--            </a>-->
-              <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
-              >Connect</button>
-            </div>
-          </div>
-        </div>
-
-        <!--        ends here-->
       </div>
 
       <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
@@ -212,10 +233,6 @@
     </ul>
 
     <div class="pt-6">
-<!--      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
-                  to="/page-optimizer">
-        <button>Page Optimizer</button>
-      </RouterLink>-->
 
       <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                   to="/settings">
@@ -373,9 +390,10 @@ export default {
   data() {
     return {
       tick_image: 'license-information.svg',
-      whats_new: 'tips-what.svg',
+      whats_new: 'tips-whats.svg',
       connect_btn: false,
       connect_with_license_error : '',
+      focus: null,
       license_information:
           {
             name: '',
