@@ -31,14 +31,13 @@ class RapidLoad_CDN_Enqueue
             $this->options = $state['options'];
         }
 
-        $head = $this->dom->find('head', 0);
-        $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';
-        $first_child = $head->first_child();
-        $first_child->__set('outertext', $preconnect . $first_child->outertext);
-
         $links = $this->dom->find( 'link' );
 
         foreach ($links as $link){
+
+            if(isset($link->rel) && $link->rel == "canonical"){
+                continue;
+            }
 
             if($this->str_contains($link->href, site_url())){
 
@@ -77,6 +76,11 @@ class RapidLoad_CDN_Enqueue
             }
 
         }
+
+        $head = $this->dom->find('head', 0);
+        $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';
+        $first_child = $head->first_child();
+        $first_child->__set('outertext', $preconnect . $first_child->outertext);
 
         return $state;
 
