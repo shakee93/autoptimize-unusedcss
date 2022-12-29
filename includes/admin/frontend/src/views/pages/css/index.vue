@@ -154,14 +154,11 @@
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
                   </div>
-                  <!--                    <label>-->
-                  <!--                      <input v-model="remove_unused_css" type="checkbox" value=""-->
-                  <!--                             class="accent-purple w-4 h-4 transition duration-200 text-purple-600 bg-purple-100 rounded border-purple dark:ring-offset-purple dark:bg-purple dark:border-purple focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent">-->
-                  <!--                    </label>-->
+
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Remove Unused CSS</h1>
+                <h1 class="font-normal text-base text-black-font">Unused CSS settings</h1>
                 <p class="text-sm text-gray-font">Remove unused CSS content by analyzing the HTML and CSS content in
                   your website</p>
               </div>

@@ -72,8 +72,6 @@
                                :class="focus==='tag'? 'focus-tags': ''"
                                class="flex resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                                placeholder="Type your plugin..."/>
-              <!--                          <textarea v-model="whitelist" class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="force-include" type="text" placeholder="Type your plugin..."></textarea>-->
-
 
               <div class="mt-3 z-50 -ml-9 cursor-pointer">
                 <svg :class="{'animate-spin': refresh_element}" @click="loadWhitelistPacks"
@@ -317,7 +315,6 @@ export default {
     loadWhitelistPacks() {
       this.refresh_element = true;
        this.focus='tag';
-       console.log(this.focus)
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
 

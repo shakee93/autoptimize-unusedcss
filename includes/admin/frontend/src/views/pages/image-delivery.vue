@@ -39,7 +39,7 @@
             </button>
 
 
-          <div class="grid">
+
             <div class="mb-5 mt-5">
               <div class="flex">
                 <div class="pr-1">
@@ -60,7 +60,7 @@
                 </div>
               </div>
             </div>
-          </div>
+
 
           <div class="mb-5">
             <div class="flex">
@@ -135,7 +135,7 @@
             </div>
           </div>
 
-          <div class="grid">
+
             <div class="mb-5 mt-5">
               <div class="flex">
                 <div class="pr-1">
@@ -156,7 +156,7 @@
                 </div>
               </div>
             </div>
-          </div>
+
 
           <div class="grid">
             <div class="grid mb-5">

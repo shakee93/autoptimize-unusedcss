@@ -36,10 +36,6 @@
                   </svg>
                   Purge Cache
                 </button>
-                <!--                <button @click="purgeCach"-->
-                <!--                        class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">-->
-                <!--                  Purge Cache-->
-                <!--                </button>-->
               </div>
             </div>
           </div>
