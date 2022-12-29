@@ -66,7 +66,7 @@
             plugins and themes.</p>
           <div class="grid mb-5">
             <div class="flex text-sm">
-              <vue3-tags-input :tags="whitelist_packs"
+              <vue3-tags-input :tags="whitelist_render"
                                @on-tags-changed="handleChangeTag"
                                @keydown.enter.prevent
                                :class="focus==='tag'? 'focus-tags': ''"
@@ -305,23 +305,32 @@ export default {
           this.uucss_blocklist = this.blocklist;
           this.whitelist_packs = option.unused_css.options.whitelist_packs;
 
-
         }
       });
     }
 
   },
+  computed: {
+    whitelist_render(){
 
+      return this.whitelist_packs.map(function (wp) {
+        console.log(wp)
+        let item = wp.split(':')
+        return item[1];
+      })
+
+    }
+  },
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
        this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
-
             this.whitelist_packs = response.data.data.map((value) => {
               return value.id + ':' + value.name;
             })
+
             this.refresh_element = false;
             this.focus=null;
           })
@@ -354,6 +363,9 @@ export default {
         uucss_blocklist: this.uucss_blocklist,
         whitelist_packs: this.whitelist_packs,
       }
+
+      console.log(this.whitelist_packs);
+
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
