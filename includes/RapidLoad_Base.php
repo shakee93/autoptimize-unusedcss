@@ -113,7 +113,7 @@ class RapidLoad_Base
     public function add_plugin_action_link( $links ) {
 
         $_links = array(
-            '<a href="' . admin_url( 'options-general.php?page=uucss' ) . '">Settings</a>',
+            '<a href="' . admin_url( 'admin.php?page=rapidload' ) . '">Settings</a>',
         );
 
         return array_merge( $_links, $links );
@@ -200,7 +200,7 @@ class RapidLoad_Base
             wp_enqueue_style( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.css' );
             wp_enqueue_script( 'featherlight', UUCSS_PLUGIN_URL . 'assets/libs/popup/featherlight.js' , array( 'jquery' ) );
 
-            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery' ], UUCSS_VERSION );
+            wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery', 'wp-util' ], UUCSS_VERSION );
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
                 'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
@@ -395,7 +395,7 @@ class RapidLoad_Base
 
             self::update_option( 'autoptimize_uucss_settings', $options );
 
-            header( 'Location: ' . admin_url( 'options-general.php?page=uucss') );
+            header( 'Location: ' . admin_url( 'admin.php?page=rapidload') );
             exit;
         }
 
