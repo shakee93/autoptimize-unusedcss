@@ -84,7 +84,6 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $inline_styles as $inline_style ) {
 
-            $inline_style->handled = "1";
             preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg))/', $inline_style->style, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
                 $url = $this->extractUrl($match[1]);
@@ -92,6 +91,10 @@ class RapidLoad_Image_Enqueue
                 if (in_array($urlExt, $this->imgExt)) {
                     $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
                     $inline_style->style = str_replace($match[1],$replace_url,$inline_style->style);
+                    $inline_style->{'data-rapidload-lazy-style'} = $inline_style->style;
+                    $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
+                    $inline_style->{'data-rapidload-lazy-attributes'} = 'style';
+                    unset($inline_style->style);
                 }
             }
 

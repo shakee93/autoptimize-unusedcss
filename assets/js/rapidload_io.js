@@ -70,6 +70,28 @@
 
         window.rapidload_replace_image_src();
 
+        const observer_bg = new IntersectionObserver(
+            function (elements) {
+                elements.forEach(function (element) {
+                    if (element.isIntersecting) {
+                        observer_bg.unobserve(element.target);
+                        element.target
+                            .getAttribute('data-rapidload-lazy-attributes')
+                            .split(',')
+                            .forEach(function (attribute) {
+                                const value = element.target.getAttribute('data-rapidload-lazy-'.concat(attribute));
+                                element.target.setAttribute(attribute, value);
+                            });
+                    }
+                });
+            },
+            { rootMargin: '300px' },
+        );
+
+        document.querySelectorAll("[data-rapidload-lazy-method='viewport']").forEach(function (element) {
+            observer_bg.observe(element);
+        });
+
     })
 
 }(jQuery))
