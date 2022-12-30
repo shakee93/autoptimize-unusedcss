@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+    <div class="rl-container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
@@ -89,7 +89,7 @@
 
 
                   <button v-for="button in 5" v-on:click="uucss_lazy_load_images.image_count = button"
-                          :class="['btn',(button === Number(uucss_lazy_load_images.image_count) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
+                          :class="['rl-btn',(button === Number(uucss_lazy_load_images.image_count) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
                           class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-l-2 border-y-2 border-purple">
                     {{ button }}
                   </button>
