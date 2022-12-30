@@ -314,7 +314,6 @@ export default {
     whitelist_render(){
 
       return this.whitelist_packs.map(function (wp) {
-        console.log(wp)
         let item = wp.split(':')
         return item[1];
       })
