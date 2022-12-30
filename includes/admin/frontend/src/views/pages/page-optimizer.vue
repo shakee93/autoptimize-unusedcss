@@ -1,7 +1,7 @@
 <template>
   <main>
 
-    <div class="container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
+    <div class="rl-container mx-auto bg-white border-solid border border-gray-border-line inline-grid rounded-lg">
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-32 pl-8">
           <RouterLink type="button" :to="back"
