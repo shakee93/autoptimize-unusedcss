@@ -177,7 +177,7 @@
             </div>
           </div>
 
-          <div :class="turn_on_group_by_pages? '': 'hidden'" class="mb-5">
+          <div :class="turn_on_group_by_pages || devmode? '': 'hidden'" class="mb-5">
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
@@ -287,7 +287,9 @@ export default {
   },
 
   mounted() {
-
+    if(window.location.href.indexOf("dev_mode") > -1){
+      this.devmode = true;
+    }
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
@@ -306,7 +308,7 @@ export default {
           this.remove_unused_css = option.unused_css.status === 'on';
           this.uucss_enable_rules = option.uucss_enable_rules;
           this.uucss_minify = option.uucss_minify;
-          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 100;
+          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 200;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
         }
 
@@ -405,6 +407,7 @@ export default {
       uucss_enable_rules: false,
       unused_css_settings_link: '/css/unused-css',
       turn_on_group_by_pages: false,
+      devmode: false,
       uucss_url: '',
       critical_css: {
         status: false,

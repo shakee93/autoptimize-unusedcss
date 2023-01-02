@@ -5,86 +5,86 @@
 <template>
   <main>
 
-<!--    <div class="flex">-->
-<!--    <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple mr-8">-->
+    <div class="flex">
+    <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple mr-8">
 
-<!--      <div class="pl-6 pr-6 mt-3 inline-flex">-->
-<!--      <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-purple text-white py-1 px-3 border border-purple rounded-full">-->
-<!--        <img class="mr-2 w-3" v-if="whats_new" :src="base + whats_new" :alt="whats_new">-->
-<!--            What’s new-->
-<!--      </div>-->
-<!--      </div>-->
+      <div class="pl-6 pr-6 mt-3 inline-flex">
+      <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-purple text-white py-1 px-3 border border-purple rounded-full">
+        <img class="mr-2 w-3" v-if="whats_new" :src="base + whats_new" :alt="whats_new">
+            What’s new
+      </div>
+      </div>
 
-<!--      <div v-if="whatstips_count===1" class="content pl-6 pr-6 pt-1">-->
-<!--        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">Introducing Image Delivery</h2>-->
-<!--        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>-->
-<!--      </div>-->
-<!--      <div v-if="whatstips_count===2" class="content pl-6 pr-6 pt-1">-->
-<!--        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">2 Introducing Image Delivery</h2>-->
-<!--        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>-->
-<!--      </div>-->
-<!--      <div v-if="whatstips_count===3" class="content pl-6 pr-6 pt-1">-->
-<!--        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">3 Introducing Image Delivery</h2>-->
-<!--        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>-->
-<!--      </div>-->
-
-
-<!--      <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">-->
-
-<!--        <div class="col-start-1 col-end-3 mt-2" >-->
-<!--          <p class="text-xsmm text-purple-tips-text font-normal">{{whatstips_count}} of 3</p>-->
-
-<!--        </div>-->
-<!--        <div class="col-end-7 col-span-2">-->
-<!--          <a :href="license_information.link" target="_blank">-->
-<!--            <button class="mr-2 text-xsss mb-3 text-purple transition duration-300 font-semibold">-->
-<!--              Learn more</button>-->
-<!--          </a>-->
-<!--            <button @click="whatsnext"-->
-<!--                class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">-->
-<!--              Next</button>-->
-
-<!--        </div>-->
-
-<!--      </div>-->
-<!--    </div>-->
-
-<!--      <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-tips-border-green bg-tips-green-bg mr-8">-->
-
-<!--        <div class="pl-6 pr-6 mt-3 inline-flex">-->
-<!--          <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-tips-green-head text-white py-1 px-3 border border-tips-green-head rounded-full">-->
-<!--            <img class="mr-2 w-2" v-if="tips_toimprove" :src="base + tips_toimprove" :alt="tips_toimprove">-->
-<!--            Tips to improve PageSpeed-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="content pl-6 pr-6 pt-1">-->
-<!--          <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold">Defer JavaScript Files</h2>-->
-<!--          <p class="text-xsmm text-tips-dark-green-font font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>-->
-<!--        </div>-->
+      <div v-if="whatstips_count===1" class="content pl-6 pr-6 pt-1">
+        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">Introducing Image Delivery</h2>
+        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>
+      </div>
+      <div v-if="whatstips_count===2" class="content pl-6 pr-6 pt-1">
+        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">2 Introducing Image Delivery</h2>
+        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>
+      </div>
+      <div v-if="whatstips_count===3" class="content pl-6 pr-6 pt-1">
+        <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">3 Introducing Image Delivery</h2>
+        <p class="text-xsmm text-purple-tips-text font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>
+      </div>
 
 
-<!--        <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">-->
+      <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">
 
-<!--          <div class="col-start-1 col-end-3 mt-2" >-->
-<!--            <p class="mb-1 text-xsmm text-tips-dark-green font-normal">{{improvetips_count}} of 6</p>-->
+        <div class="col-start-1 col-end-3 mt-2" >
+          <p class="text-xsmm text-purple-tips-text font-normal">{{whatstips_count}} of 3</p>
 
-<!--          </div>-->
-<!--          <div class="col-end-7 col-span-2">-->
-<!--            <a :href="license_information.link" target="_blank">-->
-<!--              <button class="mr-2 text-xsss mb-3 text-tips-dark-green transition duration-300 font-semibold">-->
-<!--                Learn more</button>-->
-<!--            </a>-->
+        </div>
+        <div class="col-end-7 col-span-2">
+          <a :href="license_information.link" target="_blank">
+            <button class="mr-2 text-xsss mb-3 text-purple transition duration-300 font-semibold">
+              Learn more</button>
+          </a>
+            <button @click="whatsnext"
+                class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">
+              Next</button>
 
-<!--              <button @click="tipsimprovenext"-->
-<!--                      class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">-->
-<!--                Next</button>-->
+        </div>
 
-<!--          </div>-->
+      </div>
+    </div>
 
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+      <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-tips-border-green bg-tips-green-bg mr-8">
+
+        <div class="pl-6 pr-6 mt-3 inline-flex">
+          <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-tips-green-head text-white py-1 px-3 border border-tips-green-head rounded-full">
+            <img class="mr-2 w-2" v-if="tips_toimprove" :src="base + tips_toimprove" :alt="tips_toimprove">
+            Tips to improve PageSpeed
+          </div>
+        </div>
+
+        <div class="content pl-6 pr-6 pt-1">
+          <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold">Defer JavaScript Files</h2>
+          <p class="text-xsmm text-tips-dark-green-font font-normal">We may defer on what the numbers are, but there is general agreement that we have to do something to cut unwanted Javascript Files from your website.</p>
+        </div>
+
+
+        <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3 mt-2" >
+            <p class="mb-1 text-xsmm text-tips-dark-green font-normal">{{improvetips_count}} of 6</p>
+
+          </div>
+          <div class="col-end-7 col-span-2">
+            <a :href="license_information.link" target="_blank">
+              <button class="mr-2 text-xsss mb-3 text-tips-dark-green transition duration-300 font-semibold">
+                Learn more</button>
+            </a>
+
+              <button @click="tipsimprovenext"
+                      class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">
+                Next</button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
@@ -516,27 +516,6 @@ export default {
           status: false,
           isDisabled: true
         },
-
-        /*{
-          id : "asset-manager",
-          title: "Asset Manager",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'asset-manager.svg',
-          link: '/asset-manager',
-          status: false,
-          isDisabled: true
-        },
-
-
-        {
-          id : "speed-monitoring",
-          title: "Speed Monitoring",
-          description: 'Reduce your CSS file size by remove unused CSS from your pages',
-          image: 'speed-monitoring.svg',
-          link: '/speed-monitoring',
-          status: false,
-          isDisabled: true
-        },*/
 
       ],
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/'
