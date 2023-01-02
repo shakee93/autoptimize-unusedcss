@@ -181,7 +181,7 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="uucss_enable_rules = !uucss_enable_rules" :class="uucss_enable_rules? 'bg-purple':''"
+                  <div @click="saveRuleBased" :class="uucss_enable_rules? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
                     <svg v-if="uucss_enable_rules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
@@ -365,6 +365,8 @@ export default {
     },
 
     saveRuleBased() {
+
+      this.uucss_enable_rules = !this.uucss_enable_rules
       const data = {
         uucss_enable_rules: this.uucss_enable_rules,
 
@@ -375,6 +377,7 @@ export default {
         }
       })
           .then(response => {
+
             response.data;
             window.uucss_global.active_modules = response.data.data;
 
