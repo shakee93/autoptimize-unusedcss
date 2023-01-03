@@ -195,9 +195,19 @@
           <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
 
             <div class="col-end-7 col-span-2">
-              <button @click="connect_license" class="text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-6 border border-gray-button-border hover:border-transparent rounded-lg"
-              >Connect</button>
+              <button @click="connect_license" :disabled="license_loading" :class="license_loading? 'bg-purple text-white' : ''"
+                      class="disabled:opacity-50 flex text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+              >
+                <svg :class="license_loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+
+                Connect</button>
             </div>
+
           </div>
         </div>
 
@@ -280,7 +290,7 @@
 
     <div class="pt-6">
 
-      <RouterLink class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+      <RouterLink :class="{disableBlock: !license_information.licensed_domain}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                   to="/settings">
         <button>General Settings</button>
       </RouterLink>
@@ -356,6 +366,7 @@ export default {
       }
     },
     connect_license(){
+      this.license_loading = true;
       this.connect_with_license_error = "";
       axios.post(window.uucss_global.ajax_url + '?action=uucss_connect', {license_key:this.license_information.key},{
         headers: {
@@ -365,7 +376,9 @@ export default {
         console.log(response.data.data)
         if(response.data?.success){
           window.location.href = '?token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
+          this.license_loading = false;
         }else{
+          this.license_loading = false;
           if(typeof response.data?.data === "string"){
             this.connect_with_license_error = response.data?.data
           }else{
@@ -470,6 +483,7 @@ export default {
           },
       items_data: [],
       loading: false,
+      license_loading: false,
       items: [
         {
           id : "css",
