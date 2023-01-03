@@ -312,11 +312,11 @@ export default {
   },
   computed: {
     whitelist_render(){
-      return this.whitelist_packs = ['Elementor','pluginone']
-      // return this.whitelist_packs.map(function (wp) {
-      //   let item = wp.split(':')
-      //   return item[1];
-      // })
+      //return this.whitelist_packs = ['Elementor','pluginone']
+      return this.whitelist_packs.map(function (wp) {
+        let item = wp.split(':')
+        return item[1];
+      })
 
     }
   },
