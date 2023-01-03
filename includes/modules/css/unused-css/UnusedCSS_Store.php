@@ -111,6 +111,12 @@ class UnusedCSS_Store
 
     function cache_files($purged_files, $result = false){
 
+        if(!isset($purged_files) || !is_array($purged_files)){
+            $this->job_data->mark_as_failed('Unknown error occurred');
+            $this->job_data->save();
+            return;
+        }
+
         if($result){
             $this->result = $result;
         }
