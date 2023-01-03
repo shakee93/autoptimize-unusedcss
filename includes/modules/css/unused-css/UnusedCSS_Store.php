@@ -189,7 +189,7 @@ class UnusedCSS_Store
 
     function update_css(){
 
-        if(!$this->job_data->queue_job_id){
+        if(!$this->job_data->queue_job_id || $this->job_data->status == "success"){
             return;
         }
 
