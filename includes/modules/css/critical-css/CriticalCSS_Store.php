@@ -149,7 +149,7 @@ class CriticalCSS_Store
 
     function update_css(){
 
-        if(!$this->job_data->queue_job_id || $this->job_data->status == "success"){
+        if(!$this->job_data->queue_job_id || $this->job_data->status == "success" || $this->job_data->status == "failed"){
             return;
         }
 
@@ -207,6 +207,10 @@ class CriticalCSS_Store
 
             $this->cache_file($result->data, $result->data_mobile, $result);
 
+        }else{
+
+            $this->job_data->mark_as_failed('Unknown error occurred');
+            $this->job_data->save();
         }
     }
 }
