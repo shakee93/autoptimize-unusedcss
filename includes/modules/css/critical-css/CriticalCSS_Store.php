@@ -97,6 +97,12 @@ class CriticalCSS_Store
 
     function cache_file($purged_css, $purged_mobile = false, $result = false){
 
+        if(empty($purged_css)){
+            $this->job_data->mark_as_failed('Unknown error occurred');
+            $this->job_data->save();
+            return;
+        }
+
         if($result){
             $this->result = $result;
         }
