@@ -243,14 +243,10 @@ class UnusedCSS_Store
 
         }
 
-        if(isset($result->completed) && $result->completed && isset($result->data)){
+        if(isset($result->completed) && $result->completed){
 
             $this->cache_files($result->data, $result);
 
-        }else{
-
-            $this->job_data->mark_as_failed('Unknown error occurred');
-            $this->job_data->save();
         }
     }
 }

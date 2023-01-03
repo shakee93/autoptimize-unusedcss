@@ -203,14 +203,10 @@ class CriticalCSS_Store
 
         }
 
-        if(isset($result->completed) && $result->completed && isset($result->data)){
+        if(isset($result->completed) && $result->completed){
 
             $this->cache_file($result->data, $result->data_mobile, $result);
 
-        }else{
-
-            $this->job_data->mark_as_failed('Unknown error occurred');
-            $this->job_data->save();
         }
     }
 }
