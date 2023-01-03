@@ -352,7 +352,7 @@ class UnusedCSS
             $this->job_data->save();
         }
 
-        if($this->job_data->status == 'failed' && $this->job_data->attempts >= 2 && !isset($args['immediate']) || !isset( $args['requeue'])){
+        if($this->job_data->status == 'failed' && $this->job_data->attempts >= 2 && (!isset($args['immediate']) || !isset( $args['requeue']))){
             return false;
         }
 

@@ -111,6 +111,12 @@ class UnusedCSS_Store
 
     function cache_files($purged_files, $result = false){
 
+        if(!isset($purged_files) || !is_array($purged_files)){
+            $this->job_data->mark_as_failed('Unknown error occurred');
+            $this->job_data->save();
+            return;
+        }
+
         if($result){
             $this->result = $result;
         }
@@ -189,7 +195,7 @@ class UnusedCSS_Store
 
     function update_css(){
 
-        if(!$this->job_data->queue_job_id){
+        if(!$this->job_data->queue_job_id || $this->job_data->status == "success" || $this->job_data->status == "failed"){
             return;
         }
 
@@ -243,7 +249,7 @@ class UnusedCSS_Store
 
         }
 
-        if(isset($result->completed) && $result->completed && isset($result->data)){
+        if(isset($result->completed) && $result->completed){
 
             $this->cache_files($result->data, $result);
 

@@ -106,23 +106,4 @@
         new RapidLoad();
     });
 
-    document.addEventListener('DOMContentLoaded',function(event){
-        ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-            var listener = function () {
-                document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) })
-                Array.from(document.getElementsByTagName('noscript')).forEach(function(e){
-                    var tag = e.getAttribute('data-rapidload-delayed');
-                    if(tag !== null && tag !== undefined) {
-                        var newScript = document.createElement('script');
-                        var inlineScript = document.createTextNode(e.innerHTML);
-                        newScript.appendChild(inlineScript);
-                        e.parentNode.insertBefore(newScript, e);
-                    }}
-                );
-                removeEventListener(event, listener);
-            }
-            addEventListener(event, listener);
-        });
-    });
-
 }());

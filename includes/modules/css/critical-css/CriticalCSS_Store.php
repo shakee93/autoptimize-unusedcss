@@ -97,6 +97,12 @@ class CriticalCSS_Store
 
     function cache_file($purged_css, $purged_mobile = false, $result = false){
 
+        if(empty($purged_css)){
+            $this->job_data->mark_as_failed('Unknown error occurred');
+            $this->job_data->save();
+            return;
+        }
+
         if($result){
             $this->result = $result;
         }
@@ -149,7 +155,7 @@ class CriticalCSS_Store
 
     function update_css(){
 
-        if(!$this->job_data->queue_job_id){
+        if(!$this->job_data->queue_job_id || $this->job_data->status == "success" || $this->job_data->status == "failed"){
             return;
         }
 
@@ -203,7 +209,7 @@ class CriticalCSS_Store
 
         }
 
-        if(isset($result->completed) && $result->completed && isset($result->data)){
+        if(isset($result->completed) && $result->completed){
 
             $this->cache_file($result->data, $result->data_mobile, $result);
 
