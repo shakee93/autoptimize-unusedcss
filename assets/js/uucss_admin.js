@@ -643,6 +643,7 @@
                         }
 
                         if(!window.uucss || !window.uucss.uucss_enable_debug){
+                            console.log(rowData.meta?.warnings)
                             rowData.meta.warnings = rowData.meta?.warnings?.filter(function(w){
                                 return !w.message.toString().includes('optimized version for the file missing')
                             })
