@@ -84,6 +84,13 @@
 
         </div>
       </div>
+      <div class="-mt-[60px] -ml-[175px]">
+
+        <RouterLink :class="{disableBlock: !license_information.licensed_domain}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+                    to="/settings">
+          <button>General Settings</button>
+        </RouterLink>
+      </div>
     </div>
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
@@ -288,13 +295,7 @@
 
     </ul>
 
-    <div class="pt-6">
 
-      <RouterLink :class="{disableBlock: !license_information.licensed_domain}" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
-                  to="/settings">
-        <button>General Settings</button>
-      </RouterLink>
-    </div>
 
   </main>
 </template>
