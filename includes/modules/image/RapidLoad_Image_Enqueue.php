@@ -222,7 +222,7 @@ class RapidLoad_Image_Enqueue
             $url = untrailingslashit(site_url()) . $url;
         }
 
-        if(str_starts_with($url,"//")){
+        if(strpos($url,"//", 0) === 0){
             $url = "https:" . $url;
         }
 
