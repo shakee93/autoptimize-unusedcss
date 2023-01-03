@@ -877,7 +877,3 @@ body.settings_page_rapidload-onboarding{
 a.toplevel_page_rapidload img{
     margin: 0 auto;
 }
-
-#wpbody-content > div:not([data-v-app]) {
-    display: none;
-}
