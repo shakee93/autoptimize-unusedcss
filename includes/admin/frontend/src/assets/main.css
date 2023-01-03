@@ -10,6 +10,10 @@ body {
     font-family: 'Lexend', sans-serif;
 }
 
+#wpbody-content > div:not([data-v-app]) {
+    display: none;
+}
+
 @layer base {
     html {
         font-family: 'Lexend', sans-serif;
@@ -157,6 +161,11 @@ body {
 .v3ti .v3ti-content{
     width: 90% !important;
 }
+
+.v3ti .v3ti-new-tag{
+    pointer-events: none;
+    display: none;
+}
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
     color: white !important;
@@ -175,7 +184,6 @@ body {
     min-height: 45px !important;
     border-radius: 0.5rem !important;
     border-color: #CBCBCB !important;
-    pointer-events: none;
     cursor: default;
 }
 .v3ti.focus-tags {
