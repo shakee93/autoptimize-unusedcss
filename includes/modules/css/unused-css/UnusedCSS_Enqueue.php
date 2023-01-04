@@ -262,7 +262,15 @@ class UnusedCSS_Enqueue
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
 
-                        $this->warnings[] = $warning;
+                        $warning_exist = null;
+
+                        if(is_array($this->warnings)){
+                            $warning_exist = array_search($warning, $this->warnings);
+                        }
+
+                        if(!isset($warning_exist)){
+                            $this->warnings[] = $warning;
+                        }
 
                     }
 
@@ -271,7 +279,7 @@ class UnusedCSS_Enqueue
 
             if(!empty($inline_style_content)){
 
-                $file_name = 'id="uucss-inline-' . md5($this->data->url) . '"';
+                $file_name = 'id="uucss-inline-' . md5($this->job_data->job->url) . '"';
                 $uucss_tag = RapidLoad_Enqueue::$frontend_debug ? 'uucss' : '';
                 $inline_style_content = sprintf('<style %s %s>%s</style>', $file_name, $uucss_tag, $inline_style_content);
 
