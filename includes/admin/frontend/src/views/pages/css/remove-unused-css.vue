@@ -323,6 +323,7 @@ export default {
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
+      this.whitelist_packs = [];
       this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
