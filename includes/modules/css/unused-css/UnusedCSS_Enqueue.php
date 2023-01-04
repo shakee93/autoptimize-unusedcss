@@ -262,7 +262,15 @@ class UnusedCSS_Enqueue
                             "message" => "RapidLoad optimized version for the inline style missing."
                         ];
 
-                        $this->warnings[] = $warning;
+                        $warning_exist = null;
+
+                        if(is_array($this->warnings)){
+                            $warning_exist = array_search($warning, $this->warnings);
+                        }
+
+                        if(!isset($warning_exist)){
+                            $this->warnings[] = $warning;
+                        }
 
                     }
 
