@@ -279,7 +279,7 @@ class UnusedCSS_Enqueue
 
             if(!empty($inline_style_content)){
 
-                $file_name = 'id="uucss-inline-' . md5($this->data->url) . '"';
+                $file_name = 'id="uucss-inline-' . md5($this->job_data->job->url) . '"';
                 $uucss_tag = RapidLoad_Enqueue::$frontend_debug ? 'uucss' : '';
                 $inline_style_content = sprintf('<style %s %s>%s</style>', $file_name, $uucss_tag, $inline_style_content);
 
