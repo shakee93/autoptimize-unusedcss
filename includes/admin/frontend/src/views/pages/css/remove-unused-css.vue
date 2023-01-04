@@ -312,7 +312,7 @@ export default {
   },
   computed: {
     whitelist_render(){
-      //return this.whitelist_packs = ['Elementor','pluginone']
+     // return this.whitelist_packs = ['Elementor','pluginone']
       return this.whitelist_packs.map(function (wp) {
         let item = wp.split(':')
         return item[1];
@@ -323,9 +323,10 @@ export default {
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
-       this.focus='tag';
+      this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
+
             this.whitelist_packs = response.data.data.map((value) => {
               return value.id + ':' + value.name;
             })
@@ -360,10 +361,10 @@ export default {
         uucss_variables: this.misc_options.uucss_variables,
         uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.uucss_blocklist,
-        whitelist_packs: this.whitelist_packs,
+        whitelist_packs: this.whitelist? this.whitelist_packs.filter(whitelist_packs => whitelist_packs.includes(this.whitelist)): this.whitelist_packs,
       }
 
-      console.log(this.whitelist_packs);
+      //console.log(this.whitelist_packs);
 
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
         headers: {
