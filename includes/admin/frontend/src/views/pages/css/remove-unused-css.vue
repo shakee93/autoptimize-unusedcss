@@ -326,7 +326,7 @@ export default {
       this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
-
+           // this.whitelist_packs = ['1:Elementor','2:pluginone']
             this.whitelist_packs = response.data.data.map((value) => {
               return value.id + ':' + value.name;
             })
