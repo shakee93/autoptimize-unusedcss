@@ -168,6 +168,10 @@ class Javascript_Enqueue
             $link->type = 'text/javascript';
         }
 
+        if(apply_filters('rapidload/webfont/handle', false, $link)){
+            return;
+        }
+
         if(isset($this->settings['js_files'])){
 
             $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));

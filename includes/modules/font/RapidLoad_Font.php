@@ -33,6 +33,26 @@ class RapidLoad_Font
         add_filter('rapidload/cache_file_creating/css', [$this, 'add_display_swap_to_inline_styles'], 10 , 1);
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
+
+        add_filter('rapidload/webfont/handle', [$this, 'handle_web_font_js'], 10, 2);
+    }
+
+    public function handle_web_font_js($handle, $link){
+
+        $ids = isset($this->options['web_font_loader_ids']) ? explode(",", $this->options['web_font_loader_ids']) : [];
+
+        return $this->array_search_partial($link->id, $ids);
+    }
+
+    public function array_search_partial($needle, $haystack){
+        $results = array();
+        foreach ($haystack as $value) {
+            if (strpos($needle, $value) !== false) { $results[] = $value; }
+        }
+        if(!empty($results)){
+            return true;
+        }
+        return false;
     }
 
     public function vanish() {

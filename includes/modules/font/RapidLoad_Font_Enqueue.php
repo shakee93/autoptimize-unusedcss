@@ -45,7 +45,39 @@ class RapidLoad_Font_Enqueue
 
         $this->preload_font_urls();
 
+        $this->load_web_fonts_on_user_interaction();
+
         return $state;
+    }
+
+    public function load_web_fonts_on_user_interaction(){
+
+        $ids = isset($this->options['web_font_loader_ids']) ?
+            explode(",", $this->options['web_font_loader_ids']) :
+            [];
+
+        foreach ($ids as $id){
+
+            $script = $this->dom->find('script[id="'. $id .'"]');
+            $inlne_script = $this->dom->find('script[id="'. $id .'-after"]');
+
+            if(isset($script[0]) && isset($inlne_script[0])){
+                $script[0]->{'data-rapidload-src'} = $script[0]->src;
+                unset($script[0]->src);
+
+                error_log($inlne_script[0]->innertext());
+
+                $script[0]->onload = 'if(document.getElementById("'. $id .'-after")) {var newScript = document.createElement("script");
+                                var inlineScript = document.createTextNode(document.getElementById("'. $id .'-after").innerHTML);
+                                newScript.appendChild(inlineScript);
+                                document.body.appendChild(newScript);}';
+
+                $inlne_script[0]->__set('outertext','<noscript id="'.  $id . '-after" data-rapidload-web-font>' . $inlne_script[0]->innertext() . '</noscript>');
+
+            }
+
+        }
+
     }
 
     public function preload_font_urls()
