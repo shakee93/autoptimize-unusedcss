@@ -273,7 +273,7 @@ export default {
   },
 
   mounted() {
-
+    this.whitelist = [];
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
@@ -323,7 +323,7 @@ export default {
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
-      this.whitelist_packs = [];
+      this.whitelist = [];
       this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
