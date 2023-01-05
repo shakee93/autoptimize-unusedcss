@@ -440,7 +440,17 @@ export default {
         toggle = "off";
       }
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle)
+      if(this.axios_request){
+        this.axios_request.cancel("");
+        this.axios_request = null;
+      }
+
+      this.axios_request = axios.CancelToken.source();
+      const cancelToken = this.axios_request.token;
+
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle, {}, {
+        cancelToken: cancelToken
+      })
           .then(response => {
             response.data
             window.uucss_global.active_modules = response.data.data
@@ -462,6 +472,7 @@ export default {
 
   data() {
     return {
+      axios_request : null,
       tick_image: 'license-information.svg',
       whats_new: 'tips-whats.svg',
       tips_toimprove: 'tips-toimprove.svg',
