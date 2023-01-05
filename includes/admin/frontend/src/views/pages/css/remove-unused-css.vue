@@ -273,7 +273,6 @@ export default {
   },
 
   mounted() {
-    this.whitelist = [];
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
@@ -323,7 +322,6 @@ export default {
   methods: {
     loadWhitelistPacks() {
       this.refresh_element = true;
-      this.whitelist = [];
       this.focus='tag';
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs')
           .then(response => {
@@ -331,6 +329,7 @@ export default {
             this.whitelist_packs = response.data.data.map((value) => {
               return value.id + ':' + value.name;
             })
+            this.whitelist = this.whitelist_packs
 
             this.refresh_element = false;
             this.focus=null;
@@ -342,7 +341,34 @@ export default {
 
     },
     handleChangeTag(tags) {
-      this.whitelist = tags;
+      const list = tags;
+      if(list){
+        this.whitelist= [];
+        const valuesOriginal = this.whitelist_packs;
+        const values = valuesOriginal.map(function (wp) {
+          let item = wp.split(':')
+          return item[1];
+        })
+        const queries = list;
+
+        const findPositions = (first, second) => {
+          const indicies = [];
+          first.forEach((element, index) => {
+            if(second.includes(element)){
+              indicies.push(index);
+            };
+          });
+          return indicies;
+        };
+        const getIndexofElement = findPositions(values, queries)
+
+        for (let i = 0; i < getIndexofElement.length; i++) {
+          this.whitelist.push(valuesOriginal[getIndexofElement[i]]);
+
+        }
+        console.log(this.whitelist);
+      }
+
     },
 
     dataSaved(){
@@ -353,6 +379,9 @@ export default {
     saveSettings() {
       this.loading = true;
 
+      console.log(this.whitelist)
+      console.log(this.whitelist_packs)
+
       const data = {
         uucss_enable_uucss: true,
         uucss_cache_busting_v2: this.misc_options.uucss_cache_busting_v2,
@@ -362,7 +391,7 @@ export default {
         uucss_variables: this.misc_options.uucss_variables,
         uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.uucss_blocklist,
-        whitelist_packs: this.whitelist? this.whitelist_packs.filter(whitelist_packs => whitelist_packs.includes(this.whitelist)): this.whitelist_packs,
+        whitelist_packs: this.whitelist,
       }
 
       //console.log(this.whitelist_packs);
