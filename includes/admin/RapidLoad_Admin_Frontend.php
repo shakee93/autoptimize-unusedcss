@@ -758,7 +758,7 @@ class RapidLoad_Admin_Frontend
             wp_enqueue_script( 'post' );
 
             ?>
-            <div class="wrap">
+            <div class="uucss-wrap">
                 <?php
                 do_action('uucss/options/before_render_form');
                 ?>
