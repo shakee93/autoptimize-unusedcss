@@ -459,7 +459,7 @@ abstract class UnusedCSS_Admin {
             wp_send_json_success('Successfully detached from rule');
         }
 
-        if(!$type || $type == 'attach' && !$rule_id){
+        if(!is_numeric($rule_id) || !$type || $type == 'attach' && !$rule_id){
             wp_send_json_error('Required field missing');
         }
 
