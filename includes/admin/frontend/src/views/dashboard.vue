@@ -316,7 +316,6 @@ export default {
 
   mounted() {
 
-
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
     if (rapidLoadLicense) {
