@@ -181,7 +181,7 @@ class Javascript_Enqueue
             }
         }
 
-        if(!$method || $method == 'none'){
+        if((!$method || $method == 'none') && isset($this->options['uucss_load_js_method'])){
             $method = $this->options['uucss_load_js_method'];
         }
 
