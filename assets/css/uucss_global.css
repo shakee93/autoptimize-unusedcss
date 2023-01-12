@@ -847,6 +847,15 @@ body.settings_page_rapidload-onboarding{
     background: rgba(0, 0, 0, 0.8);
 }
 
+#wp-admin-bar-rapidload.bullet-green.rapidload a{
+    display: flex;
+    align-items: center;
+}
+
+#wp-admin-bar-rapidload.bullet-green.rapidload a img{
+    margin-right: 5px;
+}
+
 #wp-admin-bar-rapidload.bullet-green .ab-icon::before,
 #wp-admin-bar-rapidload.bullet-green:focus .ab-icon::before,
 #wp-admin-bar-rapidload.bullet-green:hover .ab-icon::before
