@@ -97,7 +97,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Changelog ==
 
 = 1.6.36 - 10/01/2023 =
-
+ * fix: potential vulnerability check added for rule-based-injection
 
 = 1.6.34 - 21/11/2022 =
  * fix: wrong folder permission for the cache folder
