@@ -286,7 +286,7 @@ class HtmlDocument
 
 	protected function decode()
 	{
-	    $parser_decodable = apply_filters('uucss/enqueue/content/decode_html', true);
+	    $parser_decodable = apply_filters('uucss/enqueue/content/decode_html', false);
 		foreach($this->nodes as $node) {
 			if (isset($node->_[HtmlNode::HDOM_INFO_TEXT])) {
 			    if($parser_decodable){

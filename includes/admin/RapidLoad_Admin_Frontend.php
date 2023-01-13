@@ -75,19 +75,19 @@ class RapidLoad_Admin_Frontend
 
         if(apply_filters('rapidload/tool-bar-menu',true)){
 
-            $wp_admin_bar->add_node( array(
+            /*$wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
                 'title' => '<img src="'. UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg' . '" alt="rapidload"><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
                 'href'  => admin_url( 'admin.php?page=rapidload' ),
                 'meta'  => array( 'class' => 'bullet-green rapidload' ),
-            ));
+            ));*/
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload-clear-cache',
-                'title' => '<span class="ab-label">' . __( 'Remove All', 'remove_all' ) . '</span>',
+                'title' => '<span class="ab-label">' . __( 'Clear Optimizations', 'clear_optimization' ) . '</span>',
                 'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
-                'meta'  => array( 'class' => 'rapidload-clear-all' ),
-                'parent' => 'rapidload'
+                'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
+                'parent' => 'top-secondary'
             ));
         }
 
