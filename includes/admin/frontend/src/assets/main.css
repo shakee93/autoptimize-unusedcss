@@ -16,6 +16,9 @@ body .rapidload {
 
 
 @layer components {
+    .genral-settings:hover{
+        fill: #1BA1E2;
+    }
     .rapidload h4{
         margin-bottom: 0px !important;
     }

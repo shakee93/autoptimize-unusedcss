@@ -36,7 +36,7 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Self Host Google Fonts</h1>
-                  <p class="text-sm text-gray-font">Self host all your Google fonts load the fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN</p>
+                  <p class="text-sm text-gray-font">Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN</p>
                 </div>
               </div>
             </div>

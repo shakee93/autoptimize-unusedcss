@@ -5,6 +5,10 @@
 <template>
 
   <main>
+    <div class="ml-4 mb-4">
+    <h1 class="text-3xl font-bold">Analyze & Connect</h1>
+    <h5 class="text-sm font-normal">Analyze your website up-front to see how RapidLoad can improve your page speed.</h5>
+    </div>
 
     <div class="w-[770px] h-[550px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute">
 
@@ -16,20 +20,20 @@
       <div class="flex justify-end">
         <div class="mr-20">
           <button @click="next"
-                       class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
+                       class="text-[13px] disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
           Analyze Website
         </button>
         </div>
       </div>
-      <div class="dotstyle dotstyle-dotmove">
+      <div class="dotstyle dotstyle-dotmove place-content-center place-items-center flex">
         <ul>
-          <li :class="count === 1? 'current': ''"><a :class="count === 1? '': 'dotstyle-bg'" href="#">Home</a></li>
-          <li :class="count === 2? 'current': ''"><a :class="count === 2? '': 'dotstyle-bg'" href="#">About</a></li>
-          <li :class="count === 3? 'current': ''"><a :class="count === 3? '': 'dotstyle-bg'" href="#">Products</a></li>
-          <li :class="count === 4? 'current': ''"><a :class="count === 4? '': 'dotstyle-bg'" href="#">Portfolio</a></li>
-          <li :class="count === 5? 'current': ''"><a :class="count === 5? '': 'dotstyle-bg'" href="#">Blog</a></li>
-          <li :class="count === 6? 'current': ''"><a :class="count === 6? '': 'dotstyle-bg'" href="#">Contact</a></li>
-          <li :class="count === 7? 'current': ''"><a :class="count === 7? '': ''" href="#">Contact</a></li>
+          <li @click="count =1" :class="count === 1? 'current': ''"><a :class="count === 1? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =2" :class="count === 2? 'current': ''"><a :class="count === 2? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =3" :class="count === 3? 'current': ''"><a  :class="count === 3? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =4" :class="count === 4? 'current': ''"><a :class="count === 4? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =5" :class="count === 5? 'current': ''"><a :class="count === 5? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =6" :class="count === 6? 'current': ''"><a :class="count === 6? '': 'dotstyle-bg'" ></a></li>
+          <li @click="count =7" :class="count === 7? 'current': ''"><a :class="count === 7? '': ''"></a></li>
         </ul>
       </div>
 

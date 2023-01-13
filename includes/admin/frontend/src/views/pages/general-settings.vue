@@ -13,8 +13,7 @@
         <div class="flex mt-1">
           <div>
             <h1 class="font-medium text-base text-black-font">General Settings</h1>
-            <p class="text-sm text-gray-font">Remove unused css and generate optimized css files with only with used
-              CSS</p>
+            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>
           </div>
         </div>
       </div>
@@ -26,7 +25,7 @@
 
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude URLs</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <p class="text-sm pb-3 text-gray-font">URLs that needs to be excluded from the whole RapidLoad optimization</p>
 
                 <textarea
                     v-model="uucss_excluded_links"
@@ -35,8 +34,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                  ‘elementor-*, *-gallery’ etc...</p>
+                <p class="text-sm text-dark-gray-font">URL/s to be excluded one URL per line.</p>
               </div>
 
           </div>
@@ -106,7 +104,7 @@
             <div class="flex">
               <div>
                 <h1 class="font-normal text-base text-black-font">Queue</h1>
-
+                <p class="text-sm text-gray-font pb-2">Count and time period to optimize URLs</p>
                 <div class="flex">
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
 

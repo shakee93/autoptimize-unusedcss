@@ -36,7 +36,7 @@
               </div>
               <div>
                 <h1 class="font-normal text-base text-black-font">Minify</h1>
-                <p class="text-sm text-gray-font">Remove unnecessary spaces, lines from CSS files</p>
+                <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files</p>
               </div>
             </div>
           </div>
@@ -56,8 +56,7 @@
               </div>
               <div>
                 <h1 class="font-normal text-base text-black-font">Inline Small CSS Files</h1>
-                <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS is
-                  removed.</p>
+                <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS will be inlined.</p>
               </div>
             </div>
           </div>
@@ -114,8 +113,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='above'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Paste any CSS content you would like to merge with Critical
-                      CSS</p>
+                    <p class="text-sm text-dark-gray-font">Paste the CSS content you would like to merge with Critical CSS</p>
                   </div>
                 </div>
               </div>
@@ -134,9 +132,9 @@
 
                   </div>
                 </div>
-                <div>
+                <div class="mt-2.5">
                   <h1 class="font-normal text-base text-black-font">Remove Critical CSS on User Interaction</h1>
-                  <p class="text-sm text-gray-font">Remove on User Interaction</p>
+<!--                  <p class="text-sm text-gray-font">Remove on User Interaction</p>-->
                 </div>
               </div>
 
@@ -158,9 +156,8 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Unused CSS settings</h1>
-                <p class="text-sm text-gray-font">Remove unused CSS content by analyzing the HTML and CSS content in
-                  your website</p>
+                <h1 class="font-normal text-base text-black-font">Remove Unused CSS</h1>
+                <p class="text-sm text-gray-font">Remove unused CSS for each page and reduce page size.</p>
               </div>
             </div>
 
@@ -192,8 +189,7 @@
               </div>
               <div>
                 <h1 class="font-normal text-base text-black-font">Group by Pages</h1>
-                <p class="text-sm text-gray-font">Define rules to group pages that have the same page structure. example
-                  groups : product pages, category pages or blog pages.</p>
+                <p class="text-sm text-gray-font">Define rules to group pages that have the same page structure.</p>
               </div>
             </div>
 
@@ -215,9 +211,7 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 50
-                      plus pages.
-                      RapidLoad will analyze a parent page and will apply results for all matched pages.</p>
+                    <p class="font-semibold text-sm text-purple-back-font leading-5">Recommended for websites with 100 plus pages. RapidLoad will analyze a parent page and will apply results for all matched pages. <br>Example groups : product pages, category pages or blog pages.</p>
                   </div>
                 </div>
               </div>
@@ -226,7 +220,7 @@
 
           <div class="mt-5">
             <h1 class="font-normal text-base text-black-font ">Exclude CSS Files</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully included into optimization.</p>
+            <p class="text-sm pb-3 text-gray-font">These CSS files will be forcefully excluded from optimization.</p>
 
             <div class="grid mb-5">
                 <textarea
@@ -236,8 +230,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                  ‘elementor-*, *-gallery’ etc...</p>
+                <p class="text-sm text-dark-gray-font">CSS file/s to be excluded one CSS file per line.</p>
               </div>
             </div>
 

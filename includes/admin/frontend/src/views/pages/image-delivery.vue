@@ -78,14 +78,14 @@
               </div>
               <div>
                 <h1 class="font-normal text-base text-black-font">Lazy Load</h1>
-                <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
+                <p class="text-sm text-gray-font">Lazy load images and iframes</p>
               </div>
             </div>
 
             <div :class="!uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude Above-the-fold images from Lazy Load</h1>
-                <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
+                <p class="text-sm pb-3 text-gray-font">Choose the image count to exclude from above-the-fold</p>
 
 
                   <button v-for="button in 5" v-on:click="uucss_lazy_load_images.image_count = button"
@@ -112,14 +112,14 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Iframes Lazy Load</h1>
-                  <p class="text-sm text-gray-font">Extract Critical CSS for mobile screens</p>
+                  <p class="text-sm text-gray-font">Lazy load all iframes in your website</p>
                 </div>
               </div>
 
               <div class="mt-5">
 
                 <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>
-                <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+                <p class="text-sm pb-3 text-gray-font">These Images/Iframes will be excluded from lazy-loading</p>
                 <textarea
                     v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
                     @focus="focus='exclude'" @blur="focus = null"
@@ -127,7 +127,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Exclude Images from RapidLoad enter each file in new line</p>
+                    <p class="text-sm text-dark-gray-font">Exclude Images/Iframes from RapidLoad enter each file in new line</p>
                   </div>
 
               </div>
@@ -152,7 +152,7 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Add Width and Height Attributes</h1>
-                  <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
+                  <p class="text-sm text-gray-font">Include Width and Height attributes for these images</p>
                 </div>
               </div>
             </div>
@@ -169,7 +169,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                 <div :class="focus==='preload'? 'bg-purple-lite':'bg-gray-lite-background'"
                      class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                  <p class="text-sm text-dark-gray-font">reload LCP Image from RapidLoad enter each file in new line</p>
+                  <p class="text-sm text-dark-gray-font">Preload LCP Image above-the-fold enter each file in new line</p>
                 </div>
             </div>
           </div>
@@ -185,7 +185,7 @@
                   id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-images'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Preload LCP Image from RapidLoad enter each file in new line</p>
+                <p class="text-sm text-dark-gray-font">Exclude these images from RapidLoad enter each file in new line</p>
               </div>
             </div>
           </div>

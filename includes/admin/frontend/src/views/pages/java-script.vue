@@ -37,7 +37,7 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Minify</h1>
-                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines from JS files</p>
+                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files</p>
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@
               </div>
               <div>
                 <h1 class="font-normal text-base text-black-font">Defer JavaScript</h1>
-                <p class="text-sm text-gray-font">More advanced options for pro users</p>
+                <p class="text-sm text-gray-font">Render-blocking JS on website can be resolved with Defer JavaScript.</p>
               </div>
             </div>
 
@@ -78,16 +78,15 @@
 
                   </div>
                 </div>
-                <div>
+                <div class="mt-2.5">
                   <h1 class="font-normal text-base text-black-font">Defer inline Javascript</h1>
-                  <p class="text-sm text-gray-font">Defer inline Javascript</p>
+<!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
                 </div>
               </div>
 
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Deferring</h1>
-                <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from
-                  optimization.</p>
+                <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from deferring.</p>
 
                 <div class="grid mb-5">
                 <textarea
@@ -97,8 +96,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">One selector rule per line. You can use wildcards as well
-                      ‘elementor-*, *-gallery’ etc...</p>
+                    <p class="text-sm text-dark-gray-font">JS files to be excluded one JS file per line.</p>
                   </div>
                 </div>
 
@@ -122,9 +120,9 @@
 
                 </div>
               </div>
-              <div>
+              <div class="mt-2.5">
                 <h1 class="font-normal text-base text-black-font">Delay Javascripts to Load on User Interaction</h1>
-                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>
+<!--                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>-->
               </div>
             </div>
             <div :class="!delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
@@ -137,7 +135,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Load Scripts On User Interaction from RapidLoad enter each file in new line</p>
+                    <p class="text-sm text-dark-gray-font">JS files to be delayed On User Interaction from RapidLoad enter each file in new line</p>
                   </div>
                 </div>
 
@@ -147,7 +145,7 @@
           </div>
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
-            <p class="text-sm pb-3 text-gray-font">These selectors will be forcefully excluded from optimization.</p>
+            <p class="text-sm pb-3 text-gray-font">These JS files will be forcefully excluded from optimization.</p>
                 <textarea
                     v-model="uucss_excluded_js_files"
                     @focus="focus='exclude-js'" @blur="focus = null"
@@ -155,9 +153,10 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad enter each file in new line</p>
+                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization and enter each file in new line</p>
               </div>
           </div>
+
           <button @click="saveSettings" :disabled="loading" :class="saved? 'pointer-events-none': ''"
                   class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
