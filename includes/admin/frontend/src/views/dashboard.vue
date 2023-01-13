@@ -86,7 +86,7 @@
         <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">
 
           <div class="col-start-1 col-end-3 mt-2" >
-            <p class="mb-1 text-xsmm text-tips-dark-green font-normal">{{improvetips_count}} of 6</p>
+            <p class="mb-1 text-xsmm text-tips-dark-green font-normal">{{improvetips_count}} of 5</p>
 
           </div>
           <div class="col-end-7 col-span-2">

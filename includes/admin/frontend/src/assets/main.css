@@ -155,6 +155,22 @@ body .rapidload {
         top: 96px;
         right: 64px;
     }
+
+    .slide {
+        position: absolute;
+        right: -100px;
+        width: 100px;
+        height: 100px;
+        background: blue;
+        transition: 0.3s;
+        opacity: 0;
+    }
+
+    .wrapper:hover #slide {
+        transition: 0.3s;
+        opacity: 1;
+        right: 0;
+    }
 }
 
 /*config tags packages style, these style will not work without import tags*/
