@@ -198,15 +198,7 @@ class Javascript_Enqueue
                         }else{
                             $inner_text = $link->innertext();
                             if(!empty($inner_text)){
-                                $id = null;
-                                if(isset($link->id)){
-                                    $id = $link->id;
-                                }
-                                $link->__set('outertext','<script type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-                                if($id){
-                                    $link->id = $id;
-                                }
-                                $link->test = true;
+                                $link->__set('outertext','<script' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
                             }
                         }
                     }else{
