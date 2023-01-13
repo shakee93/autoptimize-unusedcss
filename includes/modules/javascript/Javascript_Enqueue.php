@@ -198,17 +198,13 @@ class Javascript_Enqueue
                         }else{
                             $inner_text = $link->innertext();
                             if(!empty($inner_text)){
-                                $type = null;
                                 $id = null;
                                 if(isset($link->id)){
                                     $id = $link->id;
                                 }
-                                if(isset($link->type)){
-                                    $type = $link->type;
-                                }
                                 $link->__set('outertext','<script type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
                                 if($id){
-                                    $link->__set('id',$id);
+                                    $link->id = $id;
                                 }
                             }
                         }
