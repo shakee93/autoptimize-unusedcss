@@ -200,8 +200,8 @@ class Javascript_Enqueue
                             if(!empty($inner_text)){
                                 //$link->type = 'module';
                                 $link->defer = true;
-                                //$link->src = 'data:text/javascript;base64,'.  base64_encode($inner_text);
-                                //$link->__set('innertext','');
+                                $link->src = 'data:text/javascript;base64,'.  base64_encode($inner_text);
+                                $link->__set('innertext','');
                             }
                         }
                     }else{
