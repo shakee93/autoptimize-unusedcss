@@ -206,14 +206,9 @@ class Javascript_Enqueue
                                 if(isset($link->type)){
                                     $type = $link->type;
                                 }
-                                $link->__set('outertext','<script></script>');
-                                $link->defer = true;
-                                $link->src = 'data:text/javascript;base64,'.  base64_encode($inner_text);
+                                $link->__set('outertext','<script type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
                                 if($id){
                                     $link->__set('id',$id);
-                                }
-                                if($type){
-                                    $link->__set('type',$type);
                                 }
                             }
                         }
