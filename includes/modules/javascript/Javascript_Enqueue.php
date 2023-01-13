@@ -206,6 +206,7 @@ class Javascript_Enqueue
                                 if($id){
                                     $link->id = $id;
                                 }
+                                $link->test = true;
                             }
                         }
                     }else{
