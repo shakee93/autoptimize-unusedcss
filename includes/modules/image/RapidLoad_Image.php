@@ -30,7 +30,7 @@ class RapidLoad_Image
 
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
 
-        if(isset($this->options['rapidload_disable_thumbnails']) || $this->options['rapidload_disable_thumbnails'] == "1"){
+        if(isset($this->options['rapidload_disable_thumbnails']) && $this->options['rapidload_disable_thumbnails'] == "1"){
             add_filter('intermediate_image_sizes_advanced',function (){
                 return [];
             }, 90);
