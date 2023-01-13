@@ -5,22 +5,23 @@
 @tailwind utilities;
 
 
-body {
+body .rapidload {
     background: #f0f0f1;
-    font-family: 'Lexend', sans-serif;
+    font-family: 'Lexend', sans-serif !important;
 }
 
 #wpbody-content > div:not([data-v-app]) {
     display: none;
 }
 
-@layer base {
-    html {
-        font-family: 'Lexend', sans-serif;
-    }
-}
 
 @layer components {
+    .rapidload h4{
+        margin-bottom: 0px !important;
+    }
+    .rapidload h2{
+        margin-top: 0px !important;
+    }
     .active{
         background-color: #7F54B3 !important;
         color: white !important;
@@ -110,10 +111,6 @@ body {
         cursor: pointer;
         user-select: none;
     }
-
-    /*.custom-select .items div:hover {*/
-    /*  background-color: #ad8225;*/
-    /*}*/
 
     .selectHide {
         display: none;

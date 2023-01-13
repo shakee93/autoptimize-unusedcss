@@ -9,7 +9,7 @@
     <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-purple bg-tips-purple mr-8">
 
       <div class="pl-6 pr-6 mt-3 inline-flex">
-      <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-purple text-white py-1 px-3 border border-purple rounded-full">
+      <div class="leading-[15px] text-xsss font-medium flex mb-1 transition duration-300 bg-purple text-white py-1 px-3 border border-purple rounded-full">
         <img class="mr-2 w-3" v-if="whats_new" :src="base + whats_new" :alt="whats_new">
             What’s new
       </div>
@@ -52,7 +52,7 @@
       <div class="w-[448px] h-[165px] mb-8 drop-shadow-sm rounded-xl border-2 border-tips-border-green bg-tips-green-bg mr-8">
 
         <div class="pl-6 pr-6 mt-3 inline-flex">
-          <div class="text-xsss font-medium flex mb-1 transition duration-300 bg-tips-green-head text-white py-1 px-3 border border-tips-green-head rounded-full">
+          <div class="leading-[15px] text-xsss font-medium flex mb-1 transition duration-300 bg-tips-green-head text-white py-1 px-3 border border-tips-green-head rounded-full">
             <img class="mr-2 w-2" v-if="tips_toimprove" :src="base + tips_toimprove" :alt="tips_toimprove">
             Tips to improve PageSpeed
           </div>

@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="rapidload-wrapper mt-12 ml-8">
+  <div class="rapidload-wrapper mt-12 ml-8 rapidload">
 
     <header class="pb-8">
 <!--      <RouterLink to="/">-->
