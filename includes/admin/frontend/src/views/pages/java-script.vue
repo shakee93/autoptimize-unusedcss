@@ -153,7 +153,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization and enter each file in new line</p>
+                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization enter each file in new line</p>
               </div>
           </div>
 

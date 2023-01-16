@@ -25,6 +25,9 @@ body .rapidload {
     .rapidload h2{
         margin-top: 0px !important;
     }
+    .rapidload h1{
+        margin: 0px !important;
+    }
     .active{
         background-color: #7F54B3 !important;
         color: white !important;
@@ -156,20 +159,29 @@ body .rapidload {
         right: 64px;
     }
 
-    .slide {
+    .rapidload .tips-hidden {
         position: absolute;
-        right: -100px;
-        width: 100px;
-        height: 100px;
-        background: blue;
         transition: 0.3s;
         opacity: 0;
     }
 
-    .wrapper:hover #slide {
+    .rapidload .tips-slide {
         transition: 0.3s;
         opacity: 1;
-        right: 0;
+    }
+
+    .rapidload .general svg{
+        fill:none;
+        stroke:#000;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+        stroke-width:32px;
+        transition: 0.3s;
+    }
+    .rapidload .general svg:hover {
+        fill: #7F54B3;
+        stroke: rgb(127 84 179) !important;
+        transition: 0.3s;
     }
 }
 
