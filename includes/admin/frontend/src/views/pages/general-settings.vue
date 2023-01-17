@@ -79,7 +79,7 @@
                 </div>
                 <div>
                   <h1 class="font-normal text-base text-black-font">Debug Mode</h1>
-                  <p class="text-sm text-gray-font">Enable debug logs for RapidLoad.</p>
+                  <p class="text-sm text-gray-font">Enable debug logs for RapidLoad. <RouterLink :to="debug_logs_settings"><span class="text-purple cursor-pointer">View logs</span></RouterLink></p>
                 </div>
               </div>
             </div>
@@ -177,6 +177,7 @@
 
             Save Settings
           </button>
+
         </div>
       </div>
       <div class="pb-6">
@@ -238,6 +239,17 @@ export default {
       setTimeout(() => this.saved = false, 2000)
     },
 
+    getLog(){
+      axios.get(window.uucss_global.ajax_url + '?action=uucss_logs')
+          .then(response => {
+            this.debug_log = response.data.data;
+
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    },
     saveSettings(){
       this.loading = true;
       const data = {
@@ -278,12 +290,13 @@ export default {
       saved: false,
       back: '/',
       loading : false,
+      debug_logs_settings: '/debug-logs',
       uucss_enable_debug: false,
       uucss_query_string: false,
       uucss_excluded_links: [],
       queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
       jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
-
+      debug_log: null,
       queue_option: {
         default: false,
         queue: false,

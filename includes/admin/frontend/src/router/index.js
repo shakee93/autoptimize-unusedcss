@@ -8,6 +8,7 @@ import generalSettings from '../views/pages/general-settings.vue'
 import imageDelivery from '../views/pages/image-delivery.vue'
 import font from '../views/pages/font-optimization.vue'
 import cdn from '../views/pages/cdn.vue'
+import debugLogs from '../views/pages/debug-logs.vue'
 
 const router = createRouter({
 
@@ -99,6 +100,14 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: generalSettings
+    },
+    {
+      path: '/debug-logs',
+      name: 'debug-logs',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: debugLogs
     },
   ]
 })

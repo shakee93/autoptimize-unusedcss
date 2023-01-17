@@ -158,7 +158,7 @@
             </div>
 
 
-          <div class="grid">
+          <div class="grid hidden">
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Priority LCP Images</h1>
               <p class="text-sm pb-3 text-gray-font">Preload critical above-the-fold images to prioritize its loading. These images will not be lazy loaded</p>

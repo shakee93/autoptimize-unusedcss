@@ -10,7 +10,7 @@
     <h5 class="text-sm font-normal">Analyze your website up-front to see how RapidLoad can improve your page speed.</h5>
     </div>
 
-    <div class="w-[770px] h-[550px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white absolute">
+    <div class="w-[770px] h-[550px] drop-shadow-sm rounded-[40px] border border-gray-border-line bg-white absolute">
 
         <div class="content grid p-9 pb-6 pt-16 place-content-center place-items-center	">
           <span v-html="image1"></span>
