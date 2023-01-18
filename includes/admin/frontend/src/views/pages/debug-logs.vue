@@ -57,7 +57,7 @@
               </thead>
               <tbody>
               <tr v-for="(logs, index) in paginated" :key="index">
-                <td class="border border-gray-border-line p-0.5 min-w-[90px]">{{logs.time}}</td>
+                <td class="border border-gray-border-line p-0.5 min-w-[90px]">{{filterDate(logs.time)}}</td>
                 <td class="border border-gray-border-line p-0.5 min-w-[250px]">{{ logs.url.length < 35? logs.url : logs.url.substring(0,35)+".." }}</td>
                 <td class="border border-gray-border-line p-0.5 min-w-[350px]">{{ logs.log.length < 35? logs.log : logs.log.substring(0,35)+".." }}</td>
               </tr>
@@ -126,7 +126,7 @@ export default {
     axios.get(window.uucss_global.ajax_url + '?action=uucss_logs')
         .then(response => {
           this.debug_log = response.data.data;
-          this.table = this.debug_log? this.debug_log.length > 0 : false;
+          this.table = this.debug_log? this.debug_log.length > 0: false;
           this.loading = false;
         })
         .catch(error => {
@@ -138,7 +138,15 @@ export default {
 
   methods:{
 
-
+    filterDate(date){
+      const dateFormat= new Date(date);
+      return dateFormat.getDate()+
+          "/"+(dateFormat.getMonth()+1)+
+          "/"+dateFormat.getFullYear()+
+          " "+dateFormat.getHours()+
+          ":"+dateFormat.getMinutes()+
+          ":"+dateFormat.getSeconds();
+    },
     prev() {
       if(this.current < 2){
         return;
@@ -200,9 +208,7 @@ export default {
         return this.debug_log.slice(this.indexStart, this.indexEnd);
       }
     },
-    formattedDate(){
-      return Vue.filter('date')(this.value)
-    }
+
   },
   data() {
     return {
