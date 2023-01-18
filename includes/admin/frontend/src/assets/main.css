@@ -169,20 +169,23 @@ body .rapidload {
         transition: 0.3s;
         opacity: 1;
     }
+    a:focus{
+        outline: 0 !important;
+    }
 
-    .rapidload .general svg{
-        fill:none;
-        stroke:#000;
-        stroke-linecap:round;
-        stroke-linejoin:round;
-        stroke-width:32px;
-        transition: 0.3s;
-    }
-    .rapidload .general svg:hover {
-        fill: #7F54B3;
-        stroke: rgb(127 84 179) !important;
-        transition: 0.3s;
-    }
+    /*.rapidload .general svg{*/
+    /*    fill:none;*/
+    /*    stroke:#000;*/
+    /*    stroke-linecap:round;*/
+    /*    stroke-linejoin:round;*/
+    /*    stroke-width:32px;*/
+    /*    transition: 0.3s;*/
+    /*}*/
+    /*.rapidload .general svg:hover {*/
+    /*    fill: #7F54B3;*/
+    /*    stroke: rgb(127 84 179) !important;*/
+    /*    transition: 0.3s;*/
+    /*}*/
 }
 
 /*config tags packages style, these style will not work without import tags*/

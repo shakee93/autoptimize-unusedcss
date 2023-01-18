@@ -43,10 +43,10 @@
            </svg>
 
          </div>
-          <div v-if="!loading && !debug_log">
+          <div v-if="!loading && !table">
             <p class="text-sm text-gray-font">Sorry No Logs found please try again later...</p>
           </div>
-          <div v-if="!loading && debug_log">
+          <div v-if="!loading && table">
             <table  class="table-fixed border border-gray-border-line">
               <thead>
               <tr>
@@ -80,7 +80,7 @@
             </div>
           </div>
 
-          <button @click="clearLogs" :disabled="loading || !debug_log" :class="saved? 'pointer-events-none': ''"
+          <button @click="clearLogs" :disabled="loading || !table" :class="saved? 'pointer-events-none': ''"
                   class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-lg">
             <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -112,6 +112,7 @@ import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
 
+
 export default {
   name: "general-settings",
 
@@ -125,6 +126,7 @@ export default {
     axios.get(window.uucss_global.ajax_url + '?action=uucss_logs')
         .then(response => {
           this.debug_log = response.data.data;
+          this.table = this.debug_log? this.debug_log.length > 0 : false;
           this.loading = false;
         })
         .catch(error => {
@@ -135,6 +137,7 @@ export default {
   },
 
   methods:{
+
 
     prev() {
       if(this.current < 2){
@@ -170,12 +173,14 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=clear_uucss_logs')
           .then(response => {
             response.data;
+
           } )
           .catch(error => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
           }).finally(()=>{
               this.loading = false;
+              this.table = false;
               this.debug_log = null;
               this.dataSaved();
           });
@@ -194,7 +199,9 @@ export default {
       if(this.debug_log){
         return this.debug_log.slice(this.indexStart, this.indexEnd);
       }
-
+    },
+    formattedDate(){
+      return Vue.filter('date')(this.value)
     }
   },
   data() {
@@ -208,6 +215,7 @@ export default {
       loading : true,
       uucss_enable_debug: false,
       debug_log: null,
+      table: false,
       current: 1,
       pageSize: 10,
 
