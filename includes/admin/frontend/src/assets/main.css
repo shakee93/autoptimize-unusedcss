@@ -172,6 +172,12 @@ body .rapidload {
     a:focus{
         outline: 0 !important;
     }
+    .rapidload .doc{
+        fill: #6D6D6D;
+    }
+    .rapidload .doc-hover{
+        fill: white !important;
+    }
 
     /*.rapidload .general svg{*/
     /*    fill:none;*/
