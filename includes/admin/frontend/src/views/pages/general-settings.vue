@@ -5,9 +5,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">
@@ -59,7 +61,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_query_string = !uucss_query_string" :class="uucss_query_string? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_query_string" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -69,7 +71,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Query String</h1>
+                  <h1 @click="uucss_query_string = !uucss_query_string" class="font-normal text-base text-black-font cursor-pointer">Query String</h1>
                   <p class="text-sm text-gray-font">Consider URLs with query strings as separate URLs.</p>
                 </div>
               </div>
@@ -82,7 +84,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_enable_debug = !uucss_enable_debug" :class="uucss_enable_debug? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_enable_debug" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -92,7 +94,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Debug Mode</h1>
+                  <h1 @click="uucss_enable_debug = !uucss_enable_debug" class="font-normal text-base text-black-font cursor-pointer">Debug Mode</h1>
                   <p class="text-sm text-gray-font">Enable debug logs for RapidLoad. <RouterLink v-if="uucss_enable_debug" :to="debug_logs_settings"><span class="text-purple cursor-pointer">View logs</span></RouterLink></p>
                 </div>
               </div>
@@ -143,7 +145,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="queue_option.uucss_disable_add_to_queue = !queue_option.uucss_disable_add_to_queue" :class="queue_option.uucss_disable_add_to_queue? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="queue_option.uucss_disable_add_to_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -153,7 +155,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Disable Auto Queue</h1>
+                <h1 @click="queue_option.uucss_disable_add_to_queue = !queue_option.uucss_disable_add_to_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Auto Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs adding to queue on user visits.</p>
               </div>
             </div>
@@ -161,7 +163,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="queue_option.uucss_disable_add_to_re_queue = !queue_option.uucss_disable_add_to_re_queue" :class="queue_option.uucss_disable_add_to_re_queue? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="queue_option.uucss_disable_add_to_re_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -171,7 +173,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Disable Re-Queue</h1>
+                <h1 @click="queue_option.uucss_disable_add_to_re_queue = !queue_option.uucss_disable_add_to_re_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Re-Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs re-queuing on warnings.</p>
               </div>
             </div>

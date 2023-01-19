@@ -4,9 +4,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">
@@ -38,7 +40,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="minify_js = !minify_js" :class="minify_js? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -47,7 +49,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Minify</h1>
+                  <h1 @click="minify_js = !minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
                   <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files</p>
                 </div>
               </div>
@@ -60,7 +62,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="uucss_load_js_method.status = !uucss_load_js_method.status" :class="uucss_load_js_method.status? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_load_js_method.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -70,7 +72,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Defer JavaScript</h1>
+                <h1 @click="uucss_load_js_method.status = !uucss_load_js_method.status" class="font-normal text-base text-black-font cursor-pointer">Defer JavaScript</h1>
                 <p class="text-sm text-gray-font">Render-blocking JS on website can be resolved with Defer JavaScript.</p>
               </div>
             </div>
@@ -80,7 +82,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" :class="uucss_load_js_method.defer_inline_js? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -90,7 +92,7 @@
                   </div>
                 </div>
                 <div class="mt-2.5">
-                  <h1 class="font-normal text-base text-black-font">Defer inline Javascript</h1>
+                  <h1 @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer inline Javascript</h1>
 <!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
                 </div>
               </div>
@@ -122,7 +124,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="delay_javascript = !delay_javascript" :class="delay_javascript? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="delay_javascript" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -132,7 +134,7 @@
                 </div>
               </div>
               <div class="mt-2.5">
-                <h1 class="font-normal text-base text-black-font">Delay Javascripts to Load on User Interaction</h1>
+                <h1 @click="delay_javascript = !delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascripts to Load on User Interaction</h1>
 <!--                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>-->
               </div>
             </div>

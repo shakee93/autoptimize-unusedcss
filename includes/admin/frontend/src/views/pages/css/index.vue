@@ -4,9 +4,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">
@@ -38,7 +40,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="uucss_minify = !uucss_minify" :class="uucss_minify? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_minify" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -48,7 +50,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Minify</h1>
+                <h1 @click="uucss_minify = !uucss_minify" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
                 <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files</p>
               </div>
             </div>
@@ -59,7 +61,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="uucss_inline_css = !uucss_inline_css" :class="uucss_inline_css? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -68,7 +70,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Inline Small CSS Files</h1>
+                <h1 @click="uucss_inline_css = !uucss_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline Small CSS Files</h1>
                 <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS will be inlined.</p>
               </div>
             </div>
@@ -79,7 +81,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="critical_css.status = !critical_css.status" :class="critical_css.status? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="critical_css.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -89,7 +91,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Critical CSS</h1>
+                <h1 @click="critical_css.status = !critical_css.status" class="font-normal text-base text-black-font cursor-pointer">Critical CSS</h1>
                 <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
               </div>
             </div>
@@ -100,7 +102,7 @@
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css"
                          :class="critical_css.mobile_critical_css? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="critical_css.mobile_critical_css" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -110,7 +112,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Mobile Critical CSS</h1>
+                  <h1 @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css" class="font-normal text-base text-black-font cursor-pointer">Mobile Critical CSS</h1>
                   <p class="text-sm text-gray-font">Extract Critical CSS for mobile screens</p>
                 </div>
               </div>
@@ -136,7 +138,7 @@
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="critical_css.remove_cpcss_on_user_interaction = !critical_css.remove_cpcss_on_user_interaction"
                          :class="critical_css.remove_cpcss_on_user_interaction? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="critical_css.remove_cpcss_on_user_interaction" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -146,7 +148,7 @@
                   </div>
                 </div>
                 <div class="mt-2.5">
-                  <h1 class="font-normal text-base text-black-font">Remove Critical CSS on User Interaction</h1>
+                  <h1 @click="critical_css.remove_cpcss_on_user_interaction = !critical_css.remove_cpcss_on_user_interaction" class="font-normal text-base text-black-font cursor-pointer">Remove Critical CSS on User Interaction</h1>
 <!--                  <p class="text-sm text-gray-font">Remove on User Interaction</p>-->
                 </div>
               </div>
@@ -159,7 +161,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="remove_unused_css = !remove_unused_css" :class="remove_unused_css? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="remove_unused_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -169,7 +171,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Remove Unused CSS</h1>
+                <h1 @click="remove_unused_css = !remove_unused_css" class="font-normal text-base text-black-font cursor-pointer">Remove Unused CSS</h1>
                 <p class="text-sm text-gray-font">Remove unused CSS for each page and reduce page size.</p>
               </div>
             </div>

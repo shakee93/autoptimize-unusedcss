@@ -4,9 +4,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">
@@ -56,7 +58,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="next_gen_image = !next_gen_image" :class="next_gen_image? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="next_gen_image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -66,7 +68,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Serve next-gen Images (AVIF, WEBP)</h1>
+                  <h1 @click="next_gen_image = !next_gen_image" class="font-normal text-base text-black-font cursor-pointer">Serve next-gen Images (AVIF, WEBP)</h1>
                   <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
                 </div>
               </div>
@@ -78,7 +80,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="uucss_lazy_load_images.status = !uucss_lazy_load_images.status" :class="uucss_lazy_load_images.status? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_lazy_load_images.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -88,7 +90,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Lazy Load</h1>
+                <h1  @click="uucss_lazy_load_images.status = !uucss_lazy_load_images.status" class="font-normal text-base text-black-font cursor-pointer">Lazy Load</h1>
                 <p class="text-sm text-gray-font">Lazy load images and iframes</p>
               </div>
             </div>
@@ -112,7 +114,7 @@
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_lazy_load_images.uucss_lazy_load_iframes = !uucss_lazy_load_images.uucss_lazy_load_iframes"
                          :class="uucss_lazy_load_images.uucss_lazy_load_iframes? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_lazy_load_images.uucss_lazy_load_iframes" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -122,7 +124,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Iframes Lazy Load</h1>
+                  <h1 @click="uucss_lazy_load_images.uucss_lazy_load_iframes = !uucss_lazy_load_images.uucss_lazy_load_iframes" class="font-normal text-base text-black-font cursor-pointer">Iframes Lazy Load</h1>
                   <p class="text-sm text-gray-font">Lazy load all iframes in your website</p>
                 </div>
               </div>
@@ -152,7 +154,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_set_width_and_height = !uucss_set_width_and_height" :class="uucss_set_width_and_height? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_set_width_and_height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -162,7 +164,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Add Width and Height Attributes</h1>
+                  <h1 @click="uucss_set_width_and_height = !uucss_set_width_and_height" class="font-normal text-base text-black-font cursor-pointer">Add Width and Height Attributes</h1>
                   <p class="text-sm text-gray-font">Include Width and Height attributes for these images</p>
                 </div>
               </div>

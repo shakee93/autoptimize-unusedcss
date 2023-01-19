@@ -4,9 +4,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">

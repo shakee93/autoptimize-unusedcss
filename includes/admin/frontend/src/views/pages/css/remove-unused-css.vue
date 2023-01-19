@@ -4,9 +4,11 @@
       <messageBox></messageBox>
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
-          <RouterLink type="button" :to="back"
-                      class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-            <img :src="base+'/arrow-left.svg'" alt="Back">
+          <RouterLink :to="back">
+            <button
+                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+              <img :src="base+'/arrow-left.svg'" alt="Back">
+            </button>
           </RouterLink>
         </div>
         <div class="flex mt-1">
@@ -121,7 +123,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="misc_options.uucss_variables = !misc_options.uucss_variables" :class="misc_options.uucss_variables? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="misc_options.uucss_variables" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -131,7 +133,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">CSS Variables</h1>
+                  <h1 @click="misc_options.uucss_variables = !misc_options.uucss_variables" class="font-normal text-base text-black-font cursor-pointer">CSS Variables</h1>
                   <p class="text-sm text-gray-font">Remove unused CSS variables</p>
                 </div>
               </div>
@@ -142,7 +144,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="misc_options.uucss_keyframes = !misc_options.uucss_keyframes" :class="misc_options.uucss_keyframes? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="misc_options.uucss_keyframes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -152,7 +154,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font"> CSS Animation keyframes</h1>
+                  <h1 @click="misc_options.uucss_keyframes = !misc_options.uucss_keyframes" class="font-normal text-base text-black-font cursor-pointer"> CSS Animation keyframes</h1>
                   <p class="text-sm text-gray-font">Remove unused keyframe animations</p>
                 </div>
               </div>
@@ -164,7 +166,7 @@
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="misc_options.uucss_fontface = !misc_options.uucss_fontface" :class="misc_options.uucss_fontface? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="misc_options.uucss_fontface" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -174,7 +176,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">CSS @font-face rules</h1>
+                  <h1 @click="misc_options.uucss_fontface = !misc_options.uucss_fontface" class="font-normal text-base text-black-font cursor-pointer">CSS @font-face rules</h1>
                   <p class="text-sm text-gray-font">Remove unused @font-face rules</p>
                 </div>
               </div>
@@ -185,7 +187,7 @@
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="misc_options.uucss_include_inline_css = !misc_options.uucss_include_inline_css"
                          :class="misc_options.uucss_include_inline_css? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="misc_options.uucss_include_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                            fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -195,7 +197,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Inline CSS</h1>
+                  <h1 @click="misc_options.uucss_include_inline_css = !misc_options.uucss_include_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline CSS</h1>
                   <p class="text-sm text-gray-font">Optimize Inline CSS</p>
                 </div>
               </div>
@@ -207,7 +209,7 @@
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="misc_options.uucss_cache_busting_v2 = !misc_options.uucss_cache_busting_v2"
                          :class="misc_options.uucss_cache_busting_v2? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="misc_options.uucss_cache_busting_v2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                            fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -217,7 +219,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 class="font-normal text-base text-black-font">Cache Busting</h1>
+                  <h1 @click="misc_options.uucss_cache_busting_v2 = !misc_options.uucss_cache_busting_v2" class="font-normal text-base text-black-font cursor-pointer">Cache Busting</h1>
                   <p class="text-sm text-gray-font">Enable RapidLoad crawler to view pages with a random query string</p>
                 </div>
               </div>
