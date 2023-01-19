@@ -12,10 +12,11 @@
         </div>
         <div class="flex mt-1">
           <div>
-            <h1 class="font-medium text-base text-black-font">General Settings</h1>
+
 
             <div class="inline-flex">
-              <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>
+              <h1 class="font-medium text-base text-black-font">General Settings</h1>
+
               <a :href="'https://docs.rapidload.io/features/general-settings'" class="focus:outline-none" target="_blank">
                 <div class="cursor-pointer leading-[15px] ml-2 -mt-[3px] text-xsss font-medium flex mb-1 transition duration-300 bg-purple text-white py-1 px-3 border border-purple rounded-full">
                   <svg class="mr-2 mt-[3px]"  width="10" height="10" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,6 +30,7 @@
               </a>
 
             </div>
+            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>
           </div>
         </div>
       </div>
