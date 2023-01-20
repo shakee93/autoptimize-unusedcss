@@ -390,7 +390,7 @@ export default {
           'Content-Type':'multipart/form-data'
         }
       }).then((response)=>{
-        console.log(response.data.data)
+        //console.log(response.data.data)
         if(response.data?.success){
           window.location.href = '?token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
           this.license_loading = false;
@@ -442,7 +442,7 @@ export default {
     update(toggle, module){
 
       if(!this.license_information.licensed_domain){
-        console.log("return true");
+        //console.log("return true");
         return;
 
       }
