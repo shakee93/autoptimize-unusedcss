@@ -92,7 +92,7 @@
                   </div>
                 </div>
                 <div class="mt-2.5">
-                  <h1 @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer inline Javascript</h1>
+                  <h1 @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>
 <!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
                 </div>
               </div>

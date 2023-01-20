@@ -97,7 +97,7 @@
 
             <div :class="!uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
-                <h1 class="font-normal text-base text-black-font">Exclude Above-the-fold images from Lazy Load</h1>
+                <h1 class="font-normal text-base text-black-font">Exclude Above-the-fold Images from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">Choose the image count to exclude from above-the-fold</p>
 
 

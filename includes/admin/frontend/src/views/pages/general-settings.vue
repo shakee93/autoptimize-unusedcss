@@ -111,7 +111,7 @@
               </div>
             </div>
             <div>
-              <h1 class="font-normal text-base text-black-font">Queue options</h1>
+              <h1 class="font-normal text-base text-black-font">Queue Options</h1>
               <p class="text-sm text-gray-font">More advanced options for pro users</p>
             </div>
           </div>
@@ -189,9 +189,9 @@
                 </svg>
               </div>
             </div>
-            <div>
-              <h1 class="font-normal text-base text-black-font">Misc options</h1>
-              <p class="text-sm text-gray-font">More advanced options for pro users</p>
+            <div class="mt-2.5">
+              <h1 class="font-normal text-base text-black-font">Legacy Options</h1>
+<!--              <p class="text-sm text-gray-font">More advanced options for pro users</p>-->
             </div>
           </div>
 
@@ -199,7 +199,7 @@
               <div class="">
                 <button @click="ruleSettings"
                         class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
-                  Settings
+                  Legacy Dashboard
                 </button>
               </div>
           </div>
@@ -299,7 +299,7 @@ export default {
 
     },
     ruleSettings() {
-      window.location.href = window.uucss_global.setting_url+'&dev_mode';
+      window.location.href = window.uucss_global.setting_url+'&dev_mode&uucss_jobs';
     },
     doc(){
       window.open('https://docs.rapidload.io/features/general-settings', '_blank');
