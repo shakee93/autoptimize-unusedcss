@@ -26,7 +26,7 @@
                 Documentation
               </div>
             </div>
-            <p class="text-sm text-gray-font">Deliver CSS files by removing unused CSS and prioritizing critical CSS</p>
+            <p class="text-sm text-gray-font">Deliver CSS files by removing unused CSS and prioritizing critical CSS.</p>
 
           </div>
         </div>
@@ -51,7 +51,7 @@
               </div>
               <div>
                 <h1 @click="uucss_minify = !uucss_minify" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
-                <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files</p>
+                <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files.</p>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@
               </div>
               <div>
                 <h1 @click="critical_css.status = !critical_css.status" class="font-normal text-base text-black-font cursor-pointer">Critical CSS</h1>
-                <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS</p>
+                <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS.</p>
               </div>
             </div>
 
@@ -113,7 +113,7 @@
                 </div>
                 <div>
                   <h1 @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css" class="font-normal text-base text-black-font cursor-pointer">Mobile Critical CSS</h1>
-                  <p class="text-sm text-gray-font">Extract Critical CSS for mobile screens</p>
+                  <p class="text-sm text-gray-font">Extract critical CSS for mobile screens.</p>
                 </div>
               </div>
 
@@ -128,7 +128,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='above'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Paste the CSS content you would like to merge with Critical CSS</p>
+                    <p class="text-sm text-dark-gray-font">Paste the CSS content you would like to merge with critical CSS.</p>
                   </div>
                 </div>
               </div>

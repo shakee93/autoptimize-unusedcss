@@ -25,7 +25,7 @@
                 Documentation
               </div>
             </div>
-            <p class="text-sm text-gray-font">Optimize all your images on-the-fly with modern formats (AVIF, WEBP)</p>
+            <p class="text-sm text-gray-font">Optimize all your images on-the-fly with modern formats (AVIF, WEBP).</p>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
       <div>
         <div class="p-4 pl-32 pr-72">
             <h1 class="font-normal text-base text-black-font">Compression Level</h1>
-            <p class="text-sm pb-3 text-gray-font">Choose the image compression level</p>
+            <p class="text-sm pb-3 text-gray-font">Choose the image compression level.</p>
             <button v-on:click="compression_level = 'lossy'"
                     :class="{ active: compression_level === 'lossy' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple	rounded-l-lg">
@@ -91,7 +91,7 @@
               </div>
               <div>
                 <h1  @click="uucss_lazy_load_images.status = !uucss_lazy_load_images.status" class="font-normal text-base text-black-font cursor-pointer">Lazy Load</h1>
-                <p class="text-sm text-gray-font">Lazy load images and iframes</p>
+                <p class="text-sm text-gray-font">Lazy load images and iframes.</p>
               </div>
             </div>
 
@@ -125,14 +125,14 @@
                 </div>
                 <div>
                   <h1 @click="uucss_lazy_load_images.uucss_lazy_load_iframes = !uucss_lazy_load_images.uucss_lazy_load_iframes" class="font-normal text-base text-black-font cursor-pointer">Iframes Lazy Load</h1>
-                  <p class="text-sm text-gray-font">Lazy load all iframes in your website</p>
+                  <p class="text-sm text-gray-font">Lazy load all iframes in your website.</p>
                 </div>
               </div>
 
               <div class="mt-5">
 
                 <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>
-                <p class="text-sm pb-3 text-gray-font">These Images/Iframes will be excluded from lazy-loading</p>
+                <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
                 <textarea
                     v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
                     @focus="focus='exclude'" @blur="focus = null"
@@ -140,7 +140,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Exclude Images/Iframes from RapidLoad enter each file in new line</p>
+                    <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>
                   </div>
 
               </div>
@@ -165,7 +165,7 @@
                 </div>
                 <div>
                   <h1 @click="uucss_set_width_and_height = !uucss_set_width_and_height" class="font-normal text-base text-black-font cursor-pointer">Add Width and Height Attributes</h1>
-                  <p class="text-sm text-gray-font">Include Width and Height attributes for these images</p>
+                  <p class="text-sm text-gray-font">Include width and height attributes for these images.</p>
                 </div>
               </div>
             </div>
@@ -190,7 +190,7 @@
           <div class="grid">
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
-              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN</p>
+              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN.</p>
               <textarea
                   v-model="uucss_exclude_images"
                   @focus="focus='exclude-images'" @blur="focus = null"
@@ -198,7 +198,7 @@
                   id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-images'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Exclude these images from RapidLoad enter each file in new line</p>
+                <p class="text-sm text-dark-gray-font">Exclude these images from RapidLoad enter each file in new line.</p>
               </div>
             </div>
           </div>

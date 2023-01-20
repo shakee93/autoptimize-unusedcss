@@ -113,7 +113,7 @@
             </div>
             <div>
               <h1 class="font-normal text-base text-black-font">Misc Options</h1>
-              <p class="text-sm text-gray-font">RapidLoad crawler will use following options for optimization</p>
+              <p class="text-sm text-gray-font">RapidLoad crawler will use following options for optimization.</p>
             </div>
           </div>
 
@@ -134,7 +134,7 @@
                 </div>
                 <div>
                   <h1 @click="misc_options.uucss_variables = !misc_options.uucss_variables" class="font-normal text-base text-black-font cursor-pointer">CSS Variables</h1>
-                  <p class="text-sm text-gray-font">Remove unused CSS variables</p>
+                  <p class="text-sm text-gray-font">Remove unused CSS variables.</p>
                 </div>
               </div>
             </div>
@@ -155,7 +155,7 @@
                 </div>
                 <div>
                   <h1 @click="misc_options.uucss_keyframes = !misc_options.uucss_keyframes" class="font-normal text-base text-black-font cursor-pointer"> CSS Animation keyframes</h1>
-                  <p class="text-sm text-gray-font">Remove unused keyframe animations</p>
+                  <p class="text-sm text-gray-font">Remove unused keyframe animations.</p>
                 </div>
               </div>
             </div>
@@ -177,7 +177,7 @@
                 </div>
                 <div>
                   <h1 @click="misc_options.uucss_fontface = !misc_options.uucss_fontface" class="font-normal text-base text-black-font cursor-pointer">CSS @font-face rules</h1>
-                  <p class="text-sm text-gray-font">Remove unused @font-face rules</p>
+                  <p class="text-sm text-gray-font">Remove unused @font-face rules.</p>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
                 </div>
                 <div>
                   <h1 @click="misc_options.uucss_include_inline_css = !misc_options.uucss_include_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline CSS</h1>
-                  <p class="text-sm text-gray-font">Optimize Inline CSS</p>
+                  <p class="text-sm text-gray-font">Optimize inline CSS.</p>
                 </div>
               </div>
             </div>
@@ -220,7 +220,7 @@
                 </div>
                 <div>
                   <h1 @click="misc_options.uucss_cache_busting_v2 = !misc_options.uucss_cache_busting_v2" class="font-normal text-base text-black-font cursor-pointer">Cache Busting</h1>
-                  <p class="text-sm text-gray-font">Enable RapidLoad crawler to view pages with a random query string</p>
+                  <p class="text-sm text-gray-font">Enable RapidLoad crawler to view pages with a random query string.</p>
                 </div>
               </div>
             </div>
