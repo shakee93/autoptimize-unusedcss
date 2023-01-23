@@ -25,7 +25,7 @@
                 Documentation
               </div>
             </div>
-            <p class="text-sm text-gray-font">Minify and deliver Javascript files with best practices</p>
+            <p class="text-sm text-gray-font">Minify and deliver javascript files with best practices.</p>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div>
                   <h1 @click="minify_js = !minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
-                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files</p>
+                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files.</p>
                 </div>
               </div>
             </div>
@@ -73,7 +73,7 @@
               </div>
               <div>
                 <h1 @click="uucss_load_js_method.status = !uucss_load_js_method.status" class="font-normal text-base text-black-font cursor-pointer">Defer JavaScript</h1>
-                <p class="text-sm text-gray-font">Render-blocking JS on website can be resolved with Defer JavaScript.</p>
+                <p class="text-sm text-gray-font">Render-blocking JS on website can be resolved with defer javaScript.</p>
               </div>
             </div>
 
@@ -148,7 +148,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">JS files to be delayed On User Interaction from RapidLoad enter each file in new line</p>
+                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
                   </div>
                 </div>
 
@@ -166,7 +166,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization enter each file in new line</p>
+                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization enter each file in new line.</p>
               </div>
           </div>
 

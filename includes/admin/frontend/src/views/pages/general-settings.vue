@@ -29,7 +29,7 @@
                   Documentation
                 </div>
             </div>
-            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>
+            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin.</p>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
 
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude URLs</h1>
-            <p class="text-sm pb-3 text-gray-font">URLs that needs to be excluded from the whole RapidLoad optimization</p>
+            <p class="text-sm pb-3 text-gray-font">URLs that needs to be excluded from the whole RapidLoad optimization.</p>
 
                 <textarea
                     v-model="uucss_excluded_links"
@@ -112,7 +112,7 @@
             </div>
             <div>
               <h1 class="font-normal text-base text-black-font">Queue Options</h1>
-              <p class="text-sm text-gray-font">More advanced options for pro users</p>
+              <p class="text-sm text-gray-font">More advanced options for pro users.</p>
             </div>
           </div>
 
