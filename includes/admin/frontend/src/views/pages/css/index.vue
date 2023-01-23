@@ -324,7 +324,7 @@ export default {
     }
 
     const href = new URL(window.location.href);
-    href.searchParams.set('page', 'uucss');
+    href.searchParams.set('page', 'uucss_legacy');
     this.uucss_url = href.toString();
 
 

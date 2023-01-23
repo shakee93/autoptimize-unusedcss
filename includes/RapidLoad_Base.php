@@ -127,7 +127,7 @@ class RapidLoad_Base
 
             $url = $this->get_current_url();
 
-            if(strpos($url, 'page=uucss') !== false || strpos($url, 'page=rapidload') !== false){
+            if(strpos($url, 'page=uucss_legacy') !== false || strpos($url, 'page=rapidload') !== false){
                 return false;
             }
 
@@ -203,7 +203,7 @@ class RapidLoad_Base
             wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery', 'wp-util' ], UUCSS_VERSION );
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
-                'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+                'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
                 'on_board_complete' => apply_filters('uucss/on-board/complete', false),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
