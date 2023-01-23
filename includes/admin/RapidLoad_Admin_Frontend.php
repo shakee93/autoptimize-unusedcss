@@ -754,7 +754,7 @@ class RapidLoad_Admin_Frontend
 
         global $submenu;
 
-        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss', function () {
+        add_submenu_page( 'options-general.php', 'RapidLoad', 'RapidLoad', 'manage_options', 'uucss_legacy', function () {
             wp_enqueue_script( 'post' );
 
             ?>
@@ -804,7 +804,7 @@ class RapidLoad_Admin_Frontend
 
     public function is_rapidload_legacy_page()
     {
-        return isset($_GET['page']) && $_GET['page'] === 'uucss';
+        return isset($_GET['page']) && $_GET['page'] === 'uucss_legacy';
     }
 
     public function load_scripts()
@@ -892,7 +892,7 @@ class RapidLoad_Admin_Frontend
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
             'url' => site_url(),
             'ajax_url'          => admin_url( 'admin-ajax.php' ),
-            'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+            'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
             'on_board_complete' => apply_filters('uucss/on-board/complete', false),
             'api_key_verified' => RapidLoad_Base::is_api_key_verified(),
             'notifications' => $this->getNotifications(),

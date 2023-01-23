@@ -68,7 +68,7 @@ class UnusedCSS
     {
         add_meta_box(
             'uucss-options',
-            __( 'RapidLoad Options', 'uucss' ),
+            __( 'RapidLoad Options', 'uucss_legacy' ),
             [$this, 'meta_box'],
             get_post_types(),
             'side'
@@ -145,7 +145,7 @@ class UnusedCSS
             return;
         }
 
-        if(get_current_screen() && (get_current_screen()->base == 'settings_page_uucss' || get_current_screen()->base == 'toplevel_page_rapidload')){
+        if(get_current_screen() && (get_current_screen()->base == 'settings_page_uucss_legacy' || get_current_screen()->base == 'toplevel_page_rapidload')){
             return;
         }
 

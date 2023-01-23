@@ -574,7 +574,7 @@ class RapidLoad_Admin
 
     public function validate_domain() {
 
-        if ( get_current_screen() && (get_current_screen()->base != 'settings_page_uucss' && get_current_screen()->base != 'toplevel_page_rapidload')) {
+        if ( get_current_screen() && (get_current_screen()->base != 'settings_page_uucss_legacy' && get_current_screen()->base != 'toplevel_page_rapidload')) {
             return;
         }
 
