@@ -299,7 +299,7 @@ export default {
 
     },
     ruleSettings() {
-      window.location.href = window.uucss_global.setting_url+'&dev_mode&uucss_jobs';
+      window.location.href = window.uucss_global.setting_url+'&uucss_jobs';
     },
     doc(){
       window.open('https://docs.rapidload.io/features/general-settings', '_blank');

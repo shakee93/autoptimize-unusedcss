@@ -189,7 +189,7 @@
             </div>
           </div>
 
-          <div :class="turn_on_group_by_pages || devmode? '': 'hidden'" class="mb-5">
+          <div :class="turn_on_group_by_pages" class="mb-5">
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
@@ -245,7 +245,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">CSS file/s to be excluded one CSS file per line.</p>
+                <p class="text-sm text-dark-gray-font">CSS file(s) to be excluded one CSS file per line.</p>
               </div>
             </div>
 

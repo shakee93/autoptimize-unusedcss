@@ -25,7 +25,7 @@
                 Documentation
               </div>
             </div>
-            <p class="text-sm text-gray-font">Load resource files faster by using 112 edge locations with only 27ms latency</p>
+            <p class="text-sm text-gray-font">Load resources files faster by using 112 edge locations with only 27ms latency</p>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
             <div class="mb-3">
               <div class="pr-1 mr-5">
                   <h1 class="font-normal text-base text-black-font">Clear CDN Cache</h1>
-                  <p class="text-sm text-gray-font">Clear resource caches across the CDN network</p>
+                  <p class="text-sm text-gray-font">Clear resources caches across the CDN network</p>
               </div>
             </div>
             <div>
@@ -55,7 +55,7 @@
 
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">CDN Endpoint</h1>
-            <p class="text-sm pb-3 text-gray-font">Your CDN endpoint to store and serve all your resource across the CDN network</p>
+            <p class="text-sm pb-3 text-gray-font">Your CDN endpoint to store and serve all your resources across the CDN network</p>
             <div class="flex">
 
               <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''|| !devmode? 'pointer-events-none cursor-default disabled':''"

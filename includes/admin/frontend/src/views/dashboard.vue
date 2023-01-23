@@ -77,20 +77,20 @@
       </div>
 
 
-      <div class="-mt-[63px] -ml-[215px] flex">
+      <div class="-mt-[63px] -ml-[295px] flex">
         <div class="mr-1">
           <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
             <button @click=""
-                    class="bg-white hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
-              Feedback
+                    class="bg-white border border-gray-button-border hover:border-transparent hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
+              2.0 Feedback
             </button>
           </a>
         </div>
         <div class="mr-2">
           <a :href="docs" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
             <button @click=""
-                    class="bg-white hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
-              Doc
+                    class="bg-white border border-gray-button-border hover:border-transparent hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
+              Documentation
             </button>
           </a>
 
@@ -98,13 +98,18 @@
         <div class="mr-2">
           <RouterLink :class="{disableBlock: !license_information.licensed_domain}"
                       to="/settings">
-            <button>
+            <button  @mouseover="general_hover = true"
+                     @mouseleave="general_hover = false">
               <svg height="25" viewBox="0 0 512 512" width="25" xmlns="http://www.w3.org/2000/svg" fill="#7F54B3">
                 <path
                     d="M262.29,192.31a64,64,0,1,0,57.4,57.4A64.13,64.13,0,0,0,262.29,192.31ZM416.39,256a154.34,154.34,0,0,1-1.53,20.79l45.21,35.46A10.81,10.81,0,0,1,462.52,326l-42.77,74a10.81,10.81,0,0,1-13.14,4.59l-44.9-18.08a16.11,16.11,0,0,0-15.17,1.75A164.48,164.48,0,0,1,325,400.8a15.94,15.94,0,0,0-8.82,12.14l-6.73,47.89A11.08,11.08,0,0,1,298.77,470H213.23a11.11,11.11,0,0,1-10.69-8.87l-6.72-47.82a16.07,16.07,0,0,0-9-12.22,155.3,155.3,0,0,1-21.46-12.57,16,16,0,0,0-15.11-1.71l-44.89,18.07a10.81,10.81,0,0,1-13.14-4.58l-42.77-74a10.8,10.8,0,0,1,2.45-13.75l38.21-30a16.05,16.05,0,0,0,6-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16,16,0,0,0-6.07-13.94l-38.19-30A10.81,10.81,0,0,1,49.48,186l42.77-74a10.81,10.81,0,0,1,13.14-4.59l44.9,18.08a16.11,16.11,0,0,0,15.17-1.75A164.48,164.48,0,0,1,187,111.2a15.94,15.94,0,0,0,8.82-12.14l6.73-47.89A11.08,11.08,0,0,1,213.23,42h85.54a11.11,11.11,0,0,1,10.69,8.87l6.72,47.82a16.07,16.07,0,0,0,9,12.22,155.3,155.3,0,0,1,21.46,12.57,16,16,0,0,0,15.11,1.71l44.89-18.07a10.81,10.81,0,0,1,13.14,4.58l42.77,74a10.8,10.8,0,0,1-2.45,13.75l-38.21,30a16.05,16.05,0,0,0-6.05,14.08C416.17,247.67,416.39,251.83,416.39,256Z"/>
               </svg>
             </button>
           </RouterLink>
+          <div :class="general_hover ? 'rl-Show' : 'rl-Hide'" class="-mt-[4px] mr-6 px-2 absolute -ml-[48px]" >
+            <div class="arrow-top-copied font-medium text-xsmm relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
+              General Settings</div>
+          </div>
         </div>
       </div>
     </div>
@@ -499,6 +504,7 @@ export default {
       docs: ' https://docs.rapidload.io/',
       improvetips_count: 0,
       focus: null,
+      general_hover: false,
       license_information:
           {
             name: '',
@@ -545,7 +551,7 @@ export default {
         {
           id : "css",
           title: "CSS Delivery",
-          description: 'Deliver CSS files by removing unused CSS and prioritizing critical CSS',
+          description: 'Deliver CSS files by removing unused CSS and prioritizing critical CSS.',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#7F54B3"/> <path d="M16.4048 24.8452V23.5028C17.0298 23.5028 17.4631 23.3821 17.7045 23.1406C17.946 22.8956 18.0668 22.5121 18.0668 21.9901V21.1591C18.0668 20.392 18.1857 19.799 18.4237 19.38C18.6651 18.9574 18.9883 18.6555 19.3931 18.4744C19.8015 18.2933 20.2631 18.185 20.7781 18.1495C21.293 18.1104 21.8239 18.0909 22.3707 18.0909V20.2216C21.9446 20.2216 21.6286 20.2695 21.4226 20.3654C21.2166 20.4613 21.0817 20.6069 21.0178 20.8022C20.9538 20.9975 20.9219 21.2443 20.9219 21.5426V22.7145C20.9219 22.9808 20.8615 23.2418 20.7408 23.4975C20.6236 23.7496 20.4052 23.9769 20.0856 24.1793C19.766 24.3817 19.3097 24.5433 18.7166 24.6641C18.1236 24.7848 17.353 24.8452 16.4048 24.8452ZM22.3707 31.4716C21.8239 31.4716 21.293 31.4521 20.7781 31.413C20.2631 31.3775 19.8015 31.2692 19.3931 31.0881C18.9883 30.907 18.6651 30.6051 18.4237 30.1825C18.1857 29.7635 18.0668 29.1705 18.0668 28.4034V27.5724C18.0668 27.0504 17.946 26.6687 17.7045 26.4272C17.4631 26.1822 17.0298 26.0597 16.4048 26.0597V24.7173C17.353 24.7173 18.1236 24.7777 18.7166 24.8984C19.3097 25.0192 19.766 25.1808 20.0856 25.3832C20.4052 25.5856 20.6236 25.8146 20.7408 26.0703C20.8615 26.3224 20.9219 26.5817 20.9219 26.848V28.0199C20.9219 28.3146 20.9538 28.5614 21.0178 28.7603C21.0817 28.9556 21.2166 29.1012 21.4226 29.1971C21.6286 29.293 21.9446 29.3409 22.3707 29.3409V31.4716ZM16.4048 26.0597V23.5028H18.7486V26.0597H16.4048ZM31.795 24.7173V26.0597C31.1736 26.0597 30.7403 26.1822 30.4953 26.4272C30.2538 26.6687 30.1331 27.0504 30.1331 27.5724V28.4034C30.1331 29.1705 30.0123 29.7635 29.7709 30.1825C29.5329 30.6051 29.2098 30.907 28.8014 31.0881C28.3966 31.2692 27.9367 31.3775 27.4218 31.413C26.9104 31.4521 26.3795 31.4716 25.8291 31.4716V29.3409C26.2552 29.3409 26.5713 29.293 26.7773 29.1971C26.9832 29.1012 27.1182 28.9556 27.1821 28.7603C27.246 28.5614 27.278 28.3146 27.278 28.0199V26.848C27.278 26.5817 27.3366 26.3224 27.4537 26.0703C27.5745 25.8146 27.7947 25.5856 28.1143 25.3832C28.4339 25.1808 28.8902 25.0192 29.4832 24.8984C30.0763 24.7777 30.8469 24.7173 31.795 24.7173ZM25.8291 18.0909C26.3795 18.0909 26.9104 18.1104 27.4218 18.1495C27.9367 18.185 28.3966 18.2933 28.8014 18.4744C29.2098 18.6555 29.5329 18.9574 29.7709 19.38C30.0123 19.799 30.1331 20.392 30.1331 21.1591V21.9901C30.1331 22.5121 30.2538 22.8956 30.4953 23.1406C30.7403 23.3821 31.1736 23.5028 31.795 23.5028V24.8452C30.8469 24.8452 30.0763 24.7848 29.4832 24.6641C28.8902 24.5433 28.4339 24.3817 28.1143 24.1793C27.7947 23.9769 27.5745 23.7496 27.4537 23.4975C27.3366 23.2418 27.278 22.9808 27.278 22.7145V21.5426C27.278 21.2443 27.246 20.9975 27.1821 20.8022C27.1182 20.6069 26.9832 20.4613 26.7773 20.3654C26.5713 20.2695 26.2552 20.2216 25.8291 20.2216V18.0909ZM31.795 23.5028V26.0597H29.4513V23.5028H31.795Z" fill="white"/></svg>',
           link: '/css',
           status: false,
@@ -554,7 +560,7 @@ export default {
         {
           id : "javascript",
           title: "Javascript Delivery",
-          description: 'Minify and deliver Javascript files with best practices',
+          description: 'Minify and deliver Javascript files with best practices.',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#FDC20A"/><path d="M12.2358 26.8466V24.2898L20.1619 21.1151V23.7997L15.1122 25.5469L15.1974 25.419V25.7173L15.1122 25.5895L20.1619 27.3366V30.0213L12.2358 26.8466ZM27.4941 18.5795L23.9785 31.6406H21.4856L25.0012 18.5795H27.4941ZM36.744 26.8466L28.8178 30.0213V27.3366L33.8675 25.5895L33.7823 25.7173V25.419L33.8675 25.5469L28.8178 23.7997V21.1151L36.744 24.2898V26.8466Z" fill="white"/></svg>',
           link: '/javascript',
           status: false,
@@ -563,7 +569,7 @@ export default {
         {
           id : "image-delivery",
           title: "Image Delivery",
-          description: 'Optimize all your images on-the-fly with modern formats (AVIF, WEBP)',
+          description: 'Optimize all your images on-the-fly with modern formats (AVIF, WEBP).',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#0EBFE6"/><circle cx="21" cy="28" r="7.5" stroke="white" stroke-width="3"/><circle cx="33" cy="16" r="3.75" stroke="white" stroke-width="2.5"/></svg>',
           link: '/image',
           status: false,
@@ -572,7 +578,7 @@ export default {
         {
           id : "font",
           title: "Font Delivery",
-          description: 'Locally host and optimize your fonts for faster page load times',
+          description: 'Optimize and host your fonts locally for faster page load times.',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="9" fill="#3476D8"/><path d="M20 31C20 33.4148 21.7909 34 24 34C27.7587 34 29 31.5 26.5 26.5C23 31 22.5 24 23 22C21.5 25 20 27.8177 20 31Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M24 34C29.0495 34 32 31.0956 32 26.125C32 21.1544 24 16 24 16C24 16 16 21.1544 16 26.125C16 31.0956 18.9505 34 24 34Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           link: '/font',
           status: false,
@@ -581,7 +587,7 @@ export default {
         {
           id : "cdn",
           title: "Cloud Delivery (CDN)",
-          description: 'Load resource files faster by using 112 edge locations with only 27ms latency',
+          description: 'Load resource files faster by using 112 edge locations with only 27ms latency.',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"/><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"/><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           link: '/cdn',
           status: false,

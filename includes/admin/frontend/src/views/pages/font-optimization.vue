@@ -25,7 +25,7 @@
                 Documentation
               </div>
             </div>
-            <p class="text-sm text-gray-font">Locally host and optimize your fonts for faster page load times.</p>
+            <p class="text-sm text-gray-font">Optimize and host your fonts locally for faster page load times.</p>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
                 </div>
                 <div>
                   <h1 @click="self_host_google_font = !self_host_google_font" class="font-normal text-base text-black-font cursor-pointer">Self Host Google Fonts</h1>
-                  <p class="text-sm text-gray-font">Self host all your google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.</p>
+                  <p class="text-sm text-gray-font">Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.</p>
                 </div>
               </div>
             </div>
