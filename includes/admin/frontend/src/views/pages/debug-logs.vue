@@ -12,10 +12,10 @@
             </button>
           </RouterLink>
         </div>
-        <div class="flex mt-1">
+        <div class="flex mt-3">
           <div>
-            <h1 class="font-medium text-base text-black-font">General Settings</h1>
-            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>
+            <h1 class="font-medium text-base text-black-font">Debug Logs</h1>
+<!--            <p class="text-sm text-gray-font">Set of options that applies for overall RapidLoad plugin</p>-->
           </div>
         </div>
       </div>

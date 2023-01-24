@@ -5,6 +5,36 @@
 <template>
 
   <main>
+    <div class="flex">
+    <div class="grid">
+      <div class="flex">
+      <button class="w-11 h-11 rounded-full border-4 transition duration-300 border-gray-button-border"
+              :class="count===1? 'bg-white border-purple' : 'bg-gray-lite-background'
+              && count>1? 'bg-purple border-purple text-white' : 'bg-gray-lite-background'">
+        1
+      </button>
+        <h4 class="mt-2 ml-2 text-black font-medium text-base opacity-80">Analyze</h4>
+
+      </div>
+
+      <div class="mt-5 mb-5 border-2 border-l-2 border-gray-button-border max-w-[45px] rotate-90 transition duration-300"
+           :class="count===2? 'bg-white border-purple' : 'bg-gray-lite-background'
+              && count>2? 'bg-purple border-purple text-white' : 'bg-gray-lite-background'"></div>
+      <button class="w-11 h-11 rounded-full border-4 transition duration-300 border-gray-button-border"
+              :class="count===2? 'bg-white border-purple' : 'bg-gray-lite-background'
+              && count>2? 'bg-purple border-purple text-white' : 'bg-gray-lite-background'">
+        2
+      </button>
+      <div class="mt-5 mb-5 border-2 border-l-2 border-gray-button-border max-w-[45px] rotate-90 transition duration-300"
+           :class="count===3? 'bg-white border-purple' : 'border-gray-button-border bg-gray-lite-background'
+              && count>3? 'bg-purple border-purple text-white' : 'bg-gray-lite-background'"></div>
+      <button class="w-11 h-11 rounded-full border-4 transition duration-300 border-gray-button-border"
+              :class="count===3? 'bg-white border-purple' : ' bg-gray-lite-background'
+              && count>3? 'bg-purple border-purple text-white' : 'bg-gray-lite-background'">
+        3
+      </button>
+    </div>
+      <div class="ml-32">
     <div class="ml-4 mb-4">
     <h1 class="text-3xl font-bold">Analyze & Connect</h1>
     <h5 class="text-sm font-normal">Analyze your website up-front to see how RapidLoad can improve your page speed.</h5>
@@ -20,7 +50,7 @@
         </div>
       <div class="flex justify-end">
         <div class="mr-20">
-          <button @click==="next"
+          <button @click="next"
                        class="text-[13px] disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
           Analyze Website
         </button>
@@ -29,12 +59,53 @@
       </div>
 
 
-      <div v-if="count=2">
+      <div v-if="count===2">
         <div class="content grid p-9 pb-6 pt-16 place-content-center place-items-center	">
           <span v-html="image1"></span>
           <h4 class="mt-10 text-black font-medium text-base opacity-80">Analyze & connect with RapidLoad.io engine to start automatic optimization <br> of your website and watch your page speed and speed scores spike up.</h4>
 
         </div>
+        <div class="flex justify-end">
+          <div class="mr-20">
+            <button @click="next"
+                    class="text-[13px] disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
+              Connect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="count===3">
+        <div class="content grid p-9 pb-6 pt-16 place-content-center place-items-center	">
+          <span v-html="image1"></span>
+          <h4 class="mt-10 text-black font-medium text-base opacity-80">Analyze & connect with RapidLoad.io engine to start automatic optimization <br> of your website and watch your page speed and speed scores spike up.</h4>
+
+        </div>
+        <div class="flex justify-end">
+          <div class="mr-20">
+            <button @click="next"
+                    class="text-[13px] disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
+              Connect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="count===4">
+        <div v-for="item in items" :key="item.id" class="flex flex-row bg-gray-lite-background m-2.5 rounded-xl border border-gray-border-line">
+          <div class="basis-10/12">
+            <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
+            <p class="mb-1 mt-1 text-xm text-black leading-db-lh">{{ item.description }}</p>
+          </div>
+          <div class="basis-1/6">
+            <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
+              <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">
+              <div
+                  class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+            </label>
+          </div>
+        </div>
+
         <div class="flex justify-end">
           <div class="mr-20">
             <button @click="next"
@@ -58,7 +129,8 @@
       </div>
 
       </div>
-
+        </div>
+    </div>
   </main>
 </template>
 
@@ -184,51 +256,51 @@ export default {
   //
   //   },
   //
-  //   update(toggle, module){
-  //
-  //     if(!this.license_information.licensed_domain){
-  //       console.log("return true");
-  //       return;
-  //
-  //     }
-  //     if(module==='cdn'){
-  //       this.loading = true;
-  //     }
-  //
-  //     if(!toggle){
-  //       toggle = "on";
-  //     } else{
-  //       toggle = "off";
-  //     }
-  //
-  //     if(this.axios_request){
-  //       this.axios_request.cancel("");
-  //       this.axios_request = null;
-  //     }
-  //
-  //     this.axios_request = axios.CancelToken.source();
-  //     const cancelToken = this.axios_request.token;
-  //
-  //     axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle, {}, {
-  //       cancelToken: cancelToken
-  //     })
-  //         .then(response => {
-  //           response.data
-  //           window.uucss_global.active_modules = response.data.data
-  //
-  //           this.loading = false;
-  //
-  //           this.items.map((item)=>{
-  //             item.status = response.data.data[item.id].status === "on";
-  //           })
-  //         })
-  //         .catch(error => {
-  //           this.errorMessage = error.message;
-  //           console.error("There was an error!", error);
-  //         });
-  //
-  //   },
-  //
+    update(toggle, module){
+
+      if(!this.license_information.licensed_domain){
+        console.log("return true");
+        return;
+
+      }
+      if(module==='cdn'){
+        this.loading = true;
+      }
+
+      if(!toggle){
+        toggle = "on";
+      } else{
+        toggle = "off";
+      }
+
+      // if(this.axios_request){
+      //   this.axios_request.cancel("");
+      //   this.axios_request = null;
+      // }
+      //
+      // this.axios_request = axios.CancelToken.source();
+      // const cancelToken = this.axios_request.token;
+      //
+      // axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle, {}, {
+      //   cancelToken: cancelToken
+      // })
+      //     .then(response => {
+      //       response.data
+      //       window.uucss_global.active_modules = response.data.data
+      //
+      //       this.loading = false;
+      //
+      //       this.items.map((item)=>{
+      //         item.status = response.data.data[item.id].status === "on";
+      //       })
+      //     })
+      //     .catch(error => {
+      //       this.errorMessage = error.message;
+      //       console.error("There was an error!", error);
+      //     });
+
+    },
+
   },
 
   data() {
