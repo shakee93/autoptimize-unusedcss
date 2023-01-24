@@ -20,7 +20,7 @@
         </div>
       <div class="flex justify-end">
         <div class="mr-20">
-          <button @click==="next"
+          <button @click="next"
                        class="text-[13px] disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-5 rounded-full">
           Analyze Website
         </button>
