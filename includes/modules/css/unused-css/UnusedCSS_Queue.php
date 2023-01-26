@@ -38,7 +38,7 @@ class UnusedCSS_Queue
 
                     $job_data = new RapidLoad_Job_Data($job, 'uucss');
 
-                    $store = new UnusedCSS_Store($job_data, []);
+                    $store = new UnusedCSS_Store($job_data, apply_filters('rapidload/purge/args', []));
                     $store->purge_css();
 
                 }else{

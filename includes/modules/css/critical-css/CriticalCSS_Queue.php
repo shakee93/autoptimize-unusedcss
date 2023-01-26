@@ -37,7 +37,7 @@ class CriticalCSS_Queue
 
                     $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-                    $store = new CriticalCSS_Store($job_data, []);
+                    $store = new CriticalCSS_Store($job_data, apply_filters('rapidload/purge/args', []));
                     $store->purge_css();
 
                 }else{
