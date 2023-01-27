@@ -67,7 +67,8 @@ class UnusedCSS_Store
                         'url' => $this->job_data->job->url,
                         'priority' => isset($this->args['priority']),
                         'wp_nonce' => wp_create_nonce('uucss_job_hook'),
-                        'hook_end_point' => trailingslashit(get_site_url())
+                        'hook_end_point' => trailingslashit(get_site_url()),
+                        'immediate' => true
                     ]
                 ) );
 
@@ -90,6 +91,15 @@ class UnusedCSS_Store
                 $this->job_data->queue_job_id = $result->id;
                 $this->job_data->status = 'waiting';
                 $this->job_data->save();
+
+            }else if($result->completed){
+
+                $this->result       = $result;
+                $this->purged_css = $result->data;
+
+                $this->cache_files($this->purged_css);
+                $this->uucss_cached($this->job_data->job->url);
+
             }
 
         }
