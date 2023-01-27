@@ -122,14 +122,14 @@ class UnusedCSS_Queue
             $path->job_id = $result->id;
             $path->save();
 
-        }else if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+        }else if(isset($result->meta) && isset($result->meta->completed) && $result->meta->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
 
             $uucss_store = new RapidLoad_Store(null, $url,null);
             $files = $uucss_store->cache_files($result->data);
             $uucss_store->add_link($files, $result);
             $uucss_store->uucss_cached();
 
-        }else if(isset($result->completed) && $result->completed){
+        }else if(isset($result->meta) && isset($result->meta->completed) && $result->meta->completed){
 
             $uucss_store = new RapidLoad_Store(null, $url,null);
             $uucss_store->add_link(null, $result);
@@ -179,14 +179,14 @@ class UnusedCSS_Queue
             $rule->job_id = $result->id;
             $rule->save();
 
-        }else if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+        }else if(isset($result->meta) && isset($result->meta->completed) && $result->meta->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
 
             $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
             $files = $uucss_store->cache_files($result->data);
             $uucss_store->add_rule($files, $result);
             $uucss_store->uucss_cached();
 
-        }else if(isset($result->completed) && $result->completed){
+        }else if(isset($result->meta) && isset($result->meta->completed) && $result->meta->completed){
 
             $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
             $uucss_store->add_rule(null, $result);
