@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.7.0 - 27/01/2023 =
+ * feat: new improved and faster serverless architecture deployed for optimization jobs
+
 = 1.6.36 - 10/01/2023 =
  * fix: potential vulnerability check added for rule-based-injection
 
