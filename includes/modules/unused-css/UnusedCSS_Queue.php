@@ -100,7 +100,7 @@ class UnusedCSS_Queue
 
         $result = $uucss_api->post( 's/unusedcss',
             array_merge( $uucss->api_options($post_id),
-                [ 'url' => $url ]
+                [ 'url' => $url, 'immediate' => true ]
             ));
 
         if($uucss_api->is_error($result)){
@@ -121,6 +121,19 @@ class UnusedCSS_Queue
 
             $path->job_id = $result->id;
             $path->save();
+
+        }else if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+
+            $uucss_store = new RapidLoad_Store(null, $url,null);
+            $files = $uucss_store->cache_files($result->data);
+            $uucss_store->add_link($files, $result);
+            $uucss_store->uucss_cached();
+
+        }else if(isset($result->completed) && $result->completed){
+
+            $uucss_store = new RapidLoad_Store(null, $url,null);
+            $uucss_store->add_link(null, $result);
+
         }
 
     }
@@ -144,7 +157,7 @@ class UnusedCSS_Queue
 
         $result = $uucss_api->post( 's/unusedcss',
             array_merge( $uucss->api_options($post_id),
-                [ 'url' => $rule->url ]
+                [ 'url' => $rule->url, 'immediate' => true ]
             ));
 
         if($uucss_api->is_error($result)){
@@ -165,6 +178,19 @@ class UnusedCSS_Queue
 
             $rule->job_id = $result->id;
             $rule->save();
+
+        }else if(isset($result->completed) && $result->completed && isset($result->data) && is_array($result->data) && count($result->data) > 0){
+
+            $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
+            $files = $uucss_store->cache_files($result->data);
+            $uucss_store->add_rule($files, $result);
+            $uucss_store->uucss_cached();
+
+        }else if(isset($result->completed) && $result->completed){
+
+            $uucss_store = new RapidLoad_Store(null, $rule->url,null, $rule);
+            $uucss_store->add_rule(null, $result);
+
         }
 
     }
