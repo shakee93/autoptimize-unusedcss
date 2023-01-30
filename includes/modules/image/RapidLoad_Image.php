@@ -78,7 +78,7 @@ class RapidLoad_Image
             $cdn = self::$image_indpoint;
         }
 
-        $options = 'ret_img';
+        $options = 'ret_blank';
 
         if(isset($args['optimize_level'])){
             $options .= ',q_' . $args['optimize_level'];
