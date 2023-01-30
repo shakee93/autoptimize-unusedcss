@@ -20,7 +20,7 @@ class RapidLoad_Image
 
         self::$image_indpoint = "https://images.rapidload-cdn.io/spai/";
 
-        add_action('wp_head', [$this, 'enqueue_frontend_js']);
+        add_action('wp_head', [$this, 'enqueue_frontend_js'], 90);
 
         add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
             foreach ($a as $index => $src){
