@@ -81,9 +81,9 @@ class RapidLoad_Image
         $options = 'ret_blank';
 
         if(isset($args['optimize_level'])){
-            $options .= ',q_' . $args['optimize_level'];
+            //$options .= ',q_' . $args['optimize_level'];
         }else if(isset(self::$instance->options['uucss_image_optimize_level'])){
-            $options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
+            //$options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
         }
 
         if(isset(self::$instance->options['uucss_support_next_gen_formats']) && self::$instance->options['uucss_support_next_gen_formats'] == "1"){
