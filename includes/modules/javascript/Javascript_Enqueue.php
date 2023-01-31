@@ -94,7 +94,7 @@ class Javascript_Enqueue
 
     public function load_scripts_on_user_interaction($link){
 
-        if(!self::is_js($link) || self::is_file_excluded($link->src)){
+        if(!isset($link->src) || self::is_file_excluded($link->src)){
             return;
         }
 
