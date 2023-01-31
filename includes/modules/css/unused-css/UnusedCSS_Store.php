@@ -33,7 +33,19 @@ class UnusedCSS_Store
 
         if(isset($this->args['immediate'])){
 
-            $uucss_config = apply_filters('uucss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+            $api_options = ( isset( $this->args['options'] ) ) ? $this->args['options'] : [];
+
+            if(empty($api_options)){
+
+                $uucss = RapidLoad_Base::get()->modules()->get_module_instance('unused-css');
+
+                if($uucss){
+                    $api_options = $uucss->api_options(url_to_postid($this->job_data->job->url));
+                }
+
+            }
+
+            $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
             $result = $uucss_api->post( 'purger',
                 array_merge( $uucss_config,
@@ -59,7 +71,19 @@ class UnusedCSS_Store
 
         }else{
 
-            $uucss_config = apply_filters('uucss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+            $api_options = ( isset( $this->args['options'] ) ) ? $this->args['options'] : [];
+
+            if(empty($api_options)){
+
+                $uucss = RapidLoad_Base::get()->modules()->get_module_instance('unused-css');
+
+                if($uucss){
+                    $api_options = $uucss->api_options(url_to_postid($this->job_data->job->url));
+                }
+
+            }
+
+            $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss_config,

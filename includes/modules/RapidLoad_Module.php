@@ -4,6 +4,7 @@
 class RapidLoad_Module
 {
     public $modules = [];
+    public $modules_instances = [];
 
     public function __construct()
     {
@@ -85,6 +86,10 @@ class RapidLoad_Module
 
     }
 
+    function get_module_instance($id){
+        return isset($this->modules_instances[$id]) ? $this->modules_instances[$id] : false;
+    }
+
     function load_modules(){
 
         global $uucss;
@@ -96,8 +101,9 @@ class RapidLoad_Module
             if(class_exists($class_object) && $module['status'] == 'on'){
                 if($module['global'] == 'uucss'){
                     $uucss = new $class_object();
+                    $this->modules_instances[$module['id']] = $uucss;
                 }else{
-                    new $class_object();
+                    $this->modules_instances[$module['id']] = new $class_object();
                 }
             }
 
