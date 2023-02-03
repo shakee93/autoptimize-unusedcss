@@ -147,6 +147,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if(isset($sheet->id) && $this->str_contains($sheet->id, 'rapidload-google-font')){
+                continue;
+            }
+
             $sheet->onload = "this.onload=null;this.rel='stylesheet'";
             $sheet->rel = "preload";
             $sheet->as = "style";
