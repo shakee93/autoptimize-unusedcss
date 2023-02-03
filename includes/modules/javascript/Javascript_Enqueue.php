@@ -191,7 +191,7 @@ class Javascript_Enqueue
                     if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
                         $link->defer = true;
                         unset($link->async);
-                    }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js'])){
+                    }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js']) && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
                         if(isset($link->{"data-rapidload-delayed"})){
                             unset($link->{"data-rapidload-delayed"});
                             $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
