@@ -148,6 +148,8 @@ class RapidLoad_Font_Enqueue
                     $google_font->{'data-id'} = $google_font->id;
                     $google_font->id = 'rapidload-google-font-' . $version;
                     $google_font->onload = null;
+                    $google_font->as = null;
+                    $google_font->rel = 'stylesheet';
                 }
             }
         }
