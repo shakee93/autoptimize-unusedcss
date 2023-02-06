@@ -80,7 +80,7 @@ class CriticalCSS_Enqueue
         }
 
         if(!$file_exist &&
-            $this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400) {
+            ($this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400)) {
             $this->job_data->requeue();
             $this->job_data->save();
             //$this->inject->successfully_injected = false;
