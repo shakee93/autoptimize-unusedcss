@@ -33,7 +33,19 @@ class UnusedCSS_Store
 
         if(isset($this->args['immediate'])){
 
-            $uucss_config = apply_filters('uucss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+            $api_options = ( isset( $this->args['options'] ) ) ? $this->args['options'] : [];
+
+            if(empty($api_options)){
+
+                $uucss = RapidLoad_Base::get()->modules()->get_module_instance('unused-css');
+
+                if($uucss){
+                    $api_options = $uucss->api_options(url_to_postid($this->job_data->job->url));
+                }
+
+            }
+
+            $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
             $result = $uucss_api->post( 'purger',
                 array_merge( $uucss_config,
@@ -59,7 +71,19 @@ class UnusedCSS_Store
 
         }else{
 
-            $uucss_config = apply_filters('uucss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
+            $api_options = ( isset( $this->args['options'] ) ) ? $this->args['options'] : [];
+
+            if(empty($api_options)){
+
+                $uucss = RapidLoad_Base::get()->modules()->get_module_instance('unused-css');
+
+                if($uucss){
+                    $api_options = $uucss->api_options(url_to_postid($this->job_data->job->url));
+                }
+
+            }
+
+            $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss_config,
@@ -67,7 +91,8 @@ class UnusedCSS_Store
                         'url' => $this->job_data->job->url,
                         'priority' => isset($this->args['priority']),
                         'wp_nonce' => wp_create_nonce('uucss_job_hook'),
-                        'hook_end_point' => trailingslashit(get_site_url())
+                        'hook_end_point' => trailingslashit(get_site_url()),
+                        'immediate' => true
                     ]
                 ) );
 
@@ -90,6 +115,15 @@ class UnusedCSS_Store
                 $this->job_data->queue_job_id = $result->id;
                 $this->job_data->status = 'waiting';
                 $this->job_data->save();
+
+            }else if($result->completed){
+
+                $this->result       = $result;
+                $this->purged_css = $result->data;
+
+                $this->cache_files($this->purged_css);
+                $this->uucss_cached($this->job_data->job->url);
+
             }
 
         }

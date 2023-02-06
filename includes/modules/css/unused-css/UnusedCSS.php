@@ -364,6 +364,10 @@ class UnusedCSS
             $this->job_data->save();
         }
 
+        if(!isset($args['options'])){
+            $args['options'] = $this->api_options(isset($args['post_id']) ? $args['post_id'] : null);
+        }
+
         $this->async = apply_filters('uucss/purge/async',true);
 
         if (! $this->async ) {
@@ -580,5 +584,58 @@ class UnusedCSS
             $this->file_system->delete( self::$base_dir, true );
         }
 
+    }
+
+    public function api_options( $post_id = null ) {
+
+        $whitelist_packs = [ 'wp' ];
+
+        if ( isset( $this->options['whitelist_packs'] ) ) {
+
+            foreach ( $this->options['whitelist_packs'] as $whitelist_pack ) {
+
+                // 9:wordpress
+                $pack              = $name = explode( ':', $whitelist_pack );
+                $whitelist_packs[] = $pack[0];
+
+            }
+
+        }
+
+        $post_options = $post_id ? RapidLoad_Base::get_page_options( $post_id ) : [];
+
+        $safelist = isset( $this->options['uucss_safelist'] ) ? json_decode( $this->options['uucss_safelist'] ) : [];
+
+        $blocklist = isset( $this->options['uucss_blocklist'] ) ? json_decode( $this->options['uucss_blocklist'] ) : [];
+
+        // merge post and global safelists
+        if ( ! empty( $post_options['safelist'] ) ) {
+            $safelist = array_merge( $safelist, json_decode( $post_options['safelist'] ) );
+        }
+
+        if ( ! empty( $post_options['blocklist'] ) ) {
+            $blocklist = array_merge( $blocklist, json_decode( $post_options['blocklist'] ) );
+        }
+
+        $cacheBusting = false;
+
+        if(isset($this->options['uucss_cache_busting_v2'])){
+
+            $cacheBusting = apply_filters('uucss/cache/bust',[]);
+
+        }
+
+        return apply_filters('uucss/api/options', [
+            "keyframes"         => isset( $this->options['uucss_keyframes'] ),
+            "fontFace"          => isset( $this->options['uucss_fontface'] ),
+            "variables"         => isset( $this->options['uucss_variables'] ),
+            "minify"            => isset( $this->options['uucss_minify'] ),
+            "analyzeJavascript" => isset( $this->options['uucss_analyze_javascript'] ),
+            "inlineCss"          => isset( $this->options['uucss_include_inline_css'] ),
+            "whitelistPacks"    => $whitelist_packs,
+            "safelist"          => $safelist,
+            "blocklist"          => $blocklist,
+            "cacheBusting"          => $cacheBusting,
+        ]);
     }
 }

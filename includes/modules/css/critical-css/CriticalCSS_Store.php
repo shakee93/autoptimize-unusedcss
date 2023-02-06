@@ -68,7 +68,10 @@ class CriticalCSS_Store
                         'priority' => isset($this->args['priority']),
                         'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1",
                         'wp_nonce' => wp_create_nonce('uucss_job_hook'),
-                        'hook_end_point' => trailingslashit(get_site_url())]
+                        'hook_end_point' => trailingslashit(get_site_url()),
+                        'immediate' => true
+                    ]
+
                 ) );
 
             if($uucss_api->is_error($result)){
@@ -90,6 +93,15 @@ class CriticalCSS_Store
                 $this->job_data->queue_job_id = $result->id;
                 $this->job_data->status = 'waiting';
                 $this->job_data->save();
+
+            }else if($result->completed){
+
+                $this->result       = $result;
+                $this->purged_css = $result->data;
+
+                $this->cache_file($this->purged_css, $result->data_mobile);
+                $this->cpcss_cached($this->job_data->job->url);
+
             }
 
         }

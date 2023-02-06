@@ -20,7 +20,7 @@ class RapidLoad_Image
 
         self::$image_indpoint = "https://images.rapidload-cdn.io/spai/";
 
-        add_action('wp_head', [$this, 'enqueue_frontend_js']);
+        add_action('wp_head', [$this, 'enqueue_frontend_js'], 90);
 
         add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
             foreach ($a as $index => $src){
@@ -78,12 +78,12 @@ class RapidLoad_Image
             $cdn = self::$image_indpoint;
         }
 
-        $options = 'ret_img';
+        $options = 'ret_blank';
 
         if(isset($args['optimize_level'])){
-            $options .= ',q_' . $args['optimize_level'];
+            //$options .= ',q_' . $args['optimize_level'];
         }else if(isset(self::$instance->options['uucss_image_optimize_level'])){
-            $options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
+            //$options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
         }
 
         if(isset(self::$instance->options['uucss_support_next_gen_formats']) && self::$instance->options['uucss_support_next_gen_formats'] == "1"){

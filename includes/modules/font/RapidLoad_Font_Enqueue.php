@@ -144,6 +144,13 @@ class RapidLoad_Font_Enqueue
 
             if (is_file($file_path)) {
                 $google_font->href = $file_url;
+                if(isset($google_font->id)){
+                    $google_font->{'data-id'} = $google_font->id;
+                    $google_font->id = 'rapidload-google-font-' . $version;
+                    $google_font->onload = null;
+                    $google_font->as = null;
+                    $google_font->rel = 'stylesheet';
+                }
             }
         }
 
