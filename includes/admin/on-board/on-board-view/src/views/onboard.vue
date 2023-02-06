@@ -183,7 +183,7 @@
             </div>
             <div class="flex justify-end">
               <div class="mr-2.5">
-                <button @click="window.location.href = window.location.hostname+'/wp-admin/options-general.php?page=rapidload';"
+                <button @click="dashboard"
                         class="text-[13px] min-w-[190px] justify-center disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-4 rounded-full">
                   To Dashboard
                 </button>
@@ -412,6 +412,10 @@ export default {
           });
 
     },
+
+    dashboard(){
+      window.location.href = '/wp-admin/options-general.php?page=rapidload';
+    }
 
   },
 
