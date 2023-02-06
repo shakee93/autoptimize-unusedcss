@@ -21,6 +21,24 @@ body .rapidload{
 
 
 @layer components {
+    .disableBlock{
+        pointer-events: none;
+        cursor: default;
+        opacity: 30%;
+        transition: visibility 0s, opacity 0.5s linear;
+        /*background-color: #F0F0F1 !important;*/
+    }
+    .rl-Show{
+        visibility: visible;
+        opacity: 1;
+        transition: all 0.1s ease-in;
+    }
+
+    .rl-Hide{
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.1s ease-out;
+    }
     .dotstyle ul {
         position: relative;
         display: inline-block;
@@ -252,4 +270,43 @@ body .rapidload{
         border-radius: 8px;
     }
 
+
+}
+.enter-from{
+    animation: moveToLeft 0.3s ease-in;
+}
+
+@keyframes moveToLeft {
+    0% {
+        transform: translateX(60px);
+        opacity:0;
+        transition: all 0.3s ease-out;
+    }
+    100% {
+        transform: translateX(0px);
+        opacity:1;
+    }
+}
+
+/*top arrow*/
+
+.arrow-top:before{
+    position: absolute;
+    top: -8px;
+    left: 20%;
+    margin-left: 0px;
+    content: "";
+    display: block;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #FFF2F2;
+    transform: rotate(0deg);
+}
+
+.arrow-top-right:before{
+    margin-left: 100px !important;
+}
+
+.arrow-top-copied:before{
+    border-bottom: 10px solid #F2EEF7 !important;
 }
