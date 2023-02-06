@@ -210,6 +210,7 @@ class RapidLoad_Base
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
                 'active_modules' => (array)self::get()->modules()->active_modules(),
                 'activation_url' => self::activation_url('authorize' ),
+                'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
                 'total_jobs' => RapidLoad_DB::get_total_job_count()
             );

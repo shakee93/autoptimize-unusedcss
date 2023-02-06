@@ -350,6 +350,23 @@ trait RapidLoad_Utils {
             ] );
     }
 
+    public static function onboard_activation_url( $action, $to = 'options-general.php?page=rapidload-on-board' ) {
+
+        if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
+            define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
+        }
+
+        return UUCSS_ACTIVATION_URL . '?' . build_query( [
+                'action' => $action,
+                'nonce'  => wp_create_nonce( 'uucss_activation' ),
+                'site'   => trailingslashit(get_site_url()),
+                'back'   => admin_url( $to ),
+                'goto'   => UUCSS_ACTIVATION_URL,
+                'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
+                'utm_medium' => 'plugin'
+            ] );
+    }
+
     public static function serialize($data){
         if(isset($data)){
             return serialize($data);
