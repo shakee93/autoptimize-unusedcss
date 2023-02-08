@@ -96,7 +96,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 1.7.1 - 27/01/2023 =
+= 1.7.1 - 08/02/2023 =
  * improve: critical css jobs queue process
 
 = 1.7.0 - 27/01/2023 =
