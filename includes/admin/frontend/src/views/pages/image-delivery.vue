@@ -74,6 +74,27 @@
               </div>
             </div>
 
+          <div class="mb-5 mt-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <div @click="uucss_generate_blurry_place_holder = !uucss_generate_blurry_place_holder" :class="uucss_generate_blurry_place_holder? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                      <svg v-if="uucss_generate_blurry_place_holder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+                  <h1 @click="uucss_generate_blurry_place_holder = !uucss_generate_blurry_place_holder" class="font-normal text-base text-black-font cursor-pointer">Low Quality Image placeholders (LQIP)</h1>
+                  <p class="text-sm text-gray-font">Generate low quality blurry SVG image placeholders.</p>
+                </div>
+              </div>
+            </div>
+
 
           <div class="mb-5">
             <div class="flex">
@@ -259,6 +280,7 @@ export default {
           this.uucss_lazy_load_images.image_count = options.uucss_exclude_above_the_fold_image_count
           this.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_iframes
           this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
+          this.uucss_generate_blurry_place_holder = options.uucss_generate_blurry_place_holder
           this.uucss_preload_lcp_image = options.uucss_preload_lcp_image
           this.uucss_set_width_and_height = options.uucss_set_width_and_height
           this.uucss_exclude_images = options.uucss_exclude_images
@@ -287,6 +309,7 @@ export default {
         uucss_lazy_load_images: this.uucss_lazy_load_images.status,
         uucss_exclude_above_the_fold_image_count: this.uucss_lazy_load_images.image_count,
         uucss_lazy_load_iframes: this.uucss_lazy_load_images.uucss_lazy_load_iframes,
+        uucss_generate_blurry_place_holder: this.uucss_generate_blurry_place_holder,
         uucss_exclude_images_from_lazy_load : this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load,
         uucss_preload_lcp_image : this.uucss_preload_lcp_image,
         uucss_set_width_and_height : this.uucss_set_width_and_height,
@@ -332,6 +355,7 @@ export default {
         uucss_exclude_images_from_lazy_load: [],
       },
       uucss_set_width_and_height: false,
+      uucss_generate_blurry_place_holder: false,
       uucss_preload_lcp_image: [],
 
     }

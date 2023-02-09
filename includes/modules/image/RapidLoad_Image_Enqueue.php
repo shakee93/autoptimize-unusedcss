@@ -76,8 +76,18 @@ class RapidLoad_Image_Enqueue
 
             }
 
+        }
 
+        $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
 
+        foreach ($data_attributes as $data_attribute){
+
+            $_data_attribute = $this->dom->find( 'div[' . $data_attribute . ']' );
+
+            if(!empty($_data_attribute) && isset($_data_attribute[0])){
+                $_data_attribute = $_data_attribute[0];
+                $_data_attribute->{$data_attribute} = RapidLoad_Image::get_replaced_url($_data_attribute->{$data_attribute}, null, null, null, ['retina' => 'ret_img']);
+            }
         }
 
         $inline_styles = $this->dom->find( '[style]' );

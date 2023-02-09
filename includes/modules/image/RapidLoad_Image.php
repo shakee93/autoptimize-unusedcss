@@ -80,10 +80,20 @@ class RapidLoad_Image
 
         $options = 'ret_blank';
 
-        if(isset($args['optimize_level'])){
-            //$options .= ',q_' . $args['optimize_level'];
+        if(isset($args['retina'])){
+            $options = $args['retina'];
+        }
+
+        $enamble_blurry_place_holder = isset(self::$instance->options['uucss_generate_blurry_place_holder']) && self::$instance->options['uucss_generate_blurry_place_holder'] == "1";
+
+        if($enamble_blurry_place_holder){
+            $options = 'ret_img';
+        }
+
+        if(isset($args['optimize_level']) && $enamble_blurry_place_holder){
+            $options .= ',q_' . $args['optimize_level'];
         }else if(isset(self::$instance->options['uucss_image_optimize_level'])){
-            //$options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
+            $options .= ',q_' . self::$instance->options['uucss_image_optimize_level'];
         }
 
         if(isset(self::$instance->options['uucss_support_next_gen_formats']) && self::$instance->options['uucss_support_next_gen_formats'] == "1"){
