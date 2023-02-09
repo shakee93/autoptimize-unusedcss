@@ -345,6 +345,7 @@ export default {
       update_license(){
         axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
           if(response.data?.data){
+            console.log(response.data.data)
             if(!response.data?.data?.licensedDomain){
               this.disconnect_license();
               localStorage.clear();

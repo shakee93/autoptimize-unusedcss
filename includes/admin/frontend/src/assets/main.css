@@ -28,6 +28,11 @@ body .rapidload {
     .rapidload h1{
         margin: 0px !important;
     }
+    .rapidload p{
+        margin: 0px !important;
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
     .active{
         background-color: #7F54B3 !important;
         color: white !important;
