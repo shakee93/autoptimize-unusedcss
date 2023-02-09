@@ -14,7 +14,11 @@
                     if(window.rapidload_io_data.support_next_gen_format){
                         options += ",to_auto"
                     }
-                    options += ',w_' + $(value).width()
+                    if($(value).width() !== 0){
+                        options += ',w_' + $(value).width()
+                    }else if($(value).attr('width')){
+                        options += ',w_' + $(value).attr('width')
+                    }
                     url = window.rapidload_io_data.image_endpoint + options + '/' + url
                     if($(value).attr('src').toString() !== url){
                         $(value).attr('src', url);
