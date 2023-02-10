@@ -315,6 +315,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_generate_blurry_place_holder'])){
+
+                $options['uucss_generate_blurry_place_holder'] = ($_REQUEST['uucss_generate_blurry_place_holder'] == 'true' ? "1" : null);
+
+            }
+
             if(isset($_REQUEST['uucss_exclude_images'])){
 
                 $options['uucss_exclude_images'] = $_REQUEST['uucss_exclude_images'];
