@@ -28,7 +28,7 @@
         <div class="col-end-7 col-span-2">
           <a :href="support" target="_blank">
             <button @click=""
-                class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">
+                class="text-xsss mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">
               Get Help</button>
           </a>
         </div>
@@ -68,7 +68,7 @@
             </a>
 
               <button @click="tipsimprovenext"
-                      class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">
+                      class="text-xsss mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">
                 Next</button>
 
           </div>
