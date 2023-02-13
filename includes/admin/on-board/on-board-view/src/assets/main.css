@@ -310,3 +310,12 @@ body .rapidload{
 .arrow-top-copied:before{
     border-bottom: 10px solid #F2EEF7 !important;
 }
+.rapidload .dashboard-p p{
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.rapidload p{
+    margin-top: 0;
+    margin-bottom: 0;
+}
