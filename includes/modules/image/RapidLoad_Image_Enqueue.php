@@ -18,7 +18,7 @@ class RapidLoad_Image_Enqueue
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
-        $this->imgExt = ["jpg", "jpeg", "png"];
+        $this->imgExt = ["jpg", "jpeg", "png", "webp"];
         $this->cdn = RapidLoad_Image::$image_indpoint;
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
@@ -174,10 +174,10 @@ class RapidLoad_Image_Enqueue
             foreach ( $images as $index => $img ) {
 
                 if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
-                    continue;
-                }
-
-                if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
+                    $img->loading = "eager";
+                    $img->decoding = "sync";
+                    $img->fetchpriority = "high";
+                }else if(($index + 1) <= $this->options['uucss_exclude_above_the_fold_image_count']){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -215,7 +215,7 @@ class RapidLoad_Image_Enqueue
                         $img->width = $dimension['width'];
                     }
 
-                    if (!isset($img->height)) {
+                    if (!isset($img->height) || $img->height == "auto") {
                         $img->height = $dimension['height'];
                     }
 
