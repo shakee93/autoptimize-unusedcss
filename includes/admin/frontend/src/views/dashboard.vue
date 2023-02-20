@@ -420,16 +420,22 @@ export default {
 
     },
     update_license(){
+
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
         if(response.data?.data){
           if(!response.data?.data?.licensedDomain){
-            this.disconnect_license();
-            localStorage.clear();
-            this.license_information.name = null
-            this.license_information.exp_date = null
-            this.license_information.license = null
-            this.license_information.licensed_domain = null
-            this.license_information.key = ''
+            this.licenseReqCount++;
+            this.update_license();
+            if(this.licenseReqCount<3){
+              this.disconnect_license();
+              localStorage.clear();
+              this.license_information.name = null
+              this.license_information.exp_date = null
+              this.license_information.license = null
+              this.license_information.licensed_domain = null
+              this.license_information.key = ''
+            }
+
           }else{
             const licenseData = []
             licenseData.push(response.data?.data)
@@ -505,6 +511,7 @@ export default {
       improvetips_count: 0,
       focus: null,
       general_hover: false,
+      licenseReqCount:0,
       license_information:
           {
             name: '',

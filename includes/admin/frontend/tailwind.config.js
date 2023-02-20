@@ -42,6 +42,7 @@ module.exports = {
       'tips-green-head': '#2ECC71',
       'tips-dark-green': '#1F9A53',
       'tips-dark-green-font': '#37793E',
+      'performance-green-bg': '#09B42F',
     },
     extend: {
       fontFamily: {

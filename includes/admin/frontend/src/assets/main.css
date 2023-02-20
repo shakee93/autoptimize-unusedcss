@@ -193,6 +193,33 @@ body .rapidload {
     /*    stroke: rgb(127 84 179) !important;*/
     /*    transition: 0.3s;*/
     /*}*/
+
+
+
+    .performance-circle .inner-circle {
+        stroke: #ECECED;
+        /*stroke-width: 26px;*/
+        stroke-dasharray: 0;
+        fill: none;
+    }
+
+
+    .progress-bar {
+        fill: none;
+        /*stroke-width: 27px;*/
+        /*stroke: #09B42F;*/
+        stroke-linecap: round;
+        stroke-dasharray: 0 502.4;
+        stroke-dashoffset: 0;
+        transform-origin: center center;
+        transform: rotate(270deg);
+    }
+
+    /*.progress-text {*/
+    /*    font-size: 28px;*/
+    /*    font-weight: bold;*/
+    /*    fill: #666;*/
+    /*}*/
 }
 
 /*config tags packages style, these style will not work without import tags*/
@@ -302,6 +329,12 @@ body .rapidload {
 
 .arrow-top-copied:before{
     border-bottom: 10px solid #F2EEF7 !important;
+}
+.arrow-top-performance:before{
+    border-bottom: 10px solid #09B42F !important;
+    transform: rotate(90deg);
+    left: 103%;
+    margin-left: -13px;
 }
 
 .text-color-grey{

@@ -9,6 +9,7 @@ import imageDelivery from '../views/pages/image-delivery.vue'
 import font from '../views/pages/font-optimization.vue'
 import cdn from '../views/pages/cdn.vue'
 import debugLogs from '../views/pages/debug-logs.vue'
+import optimization from '../views/optimization.vue'
 
 const router = createRouter({
 
@@ -108,6 +109,11 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: debugLogs
+    },
+    {
+      path: '/optimization',
+      name: 'optimization',
+      component: optimization
     },
   ]
 })
