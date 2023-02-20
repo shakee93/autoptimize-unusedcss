@@ -28,7 +28,7 @@
         <div class="col-end-7 col-span-2">
           <a :href="support" target="_blank">
             <button @click=""
-                class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">
+                class="text-xsss mb-3 text-black-font transition duration-300 bg-purple font-semibold text-white py-[6px] px-8 border border-purple hover:border-transparent rounded-lg">
               Get Help</button>
           </a>
         </div>
@@ -68,7 +68,7 @@
             </a>
 
               <button @click="tipsimprovenext"
-                      class="text-xsss bg-transparent mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">
+                      class="text-xsss mb-3 text-black-font transition duration-300 bg-tips-dark-green font-semibold text-white py-[6px] px-8 border border-tips-dark-green hover:border-transparent rounded-lg">
                 Next</button>
 
           </div>
@@ -126,7 +126,7 @@
             <span v-html="item.image"></span>
 
             <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
-            <p class="mb-1 mt-1 text-xm text-black leading-db-lh">{{ item.description }}</p>
+            <p class="dashboard-p text-xm text-black leading-db-lh">{{ item.description }}</p>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
@@ -167,7 +167,7 @@
               <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                 <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value="" :id="'toggle'+item.title" class="sr-only peer">
                 <div
-                    class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+                    class="w-11 h-6 bg-gray peer-focus:outline-none outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
               </label>
             </div>
 

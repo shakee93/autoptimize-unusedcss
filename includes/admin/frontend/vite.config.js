@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  alias: {
+    '@tailwindcss': 'tailwindcss/tailwind.css',
+  },
   plugins: [
       vue(),
     dynamicBase({
@@ -16,7 +19,8 @@ export default defineConfig({
   mode: 'es2015',
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@tailwindcss': 'tailwindcss/tailwind.css',
     }
   },
   build: {
