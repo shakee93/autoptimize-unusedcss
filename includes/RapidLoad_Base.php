@@ -138,7 +138,7 @@ class RapidLoad_Base
 
                 'main_action' => [
                     'key'   => 'Get Started',
-                    'value' => admin_url( 'options-general.php?page=rapidload-onboarding' )
+                    'value' => admin_url( 'options-general.php?page=rapidload-on-board' )
                 ],
                 'type'        => 'warning'
             ];
@@ -562,7 +562,7 @@ class RapidLoad_Base
     public static function display_get_start_link() {
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
             $_links = array(
-                '<a href="' . admin_url( 'options-general.php?page=rapidload-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
+                '<a href="' . admin_url( 'options-general.php?page=rapidload-on-board' ) . '">Get Started <span>⚡️</span> </a>',
             );
 
             return array_merge( $_links, $links );

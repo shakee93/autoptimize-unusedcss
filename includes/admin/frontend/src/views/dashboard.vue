@@ -425,7 +425,6 @@ export default {
         if(response.data?.data){
           if(!response.data?.data?.licensedDomain){
             this.licenseReqCount++;
-            this.update_license();
             if(this.licenseReqCount>3){
               console.log("license disconnected")
               this.disconnect_license();
@@ -435,6 +434,10 @@ export default {
               this.license_information.license = null
               this.license_information.licensed_domain = null
               this.license_information.key = ''
+            }else{
+              setTimeout(function (){
+                this.update_license();
+              },5000)
             }
 
           }else{

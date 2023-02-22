@@ -103,12 +103,12 @@ class RapidLoad_Onboard{
     }
 
     function redirect() {
-        if ( strpos( home_url( $_SERVER['REQUEST_URI'] ), '/options-general.php?page=rapidload-onboarding' ) &&
-            self::on_board_completed() ) {
+        if ( strpos( home_url( $_SERVER['REQUEST_URI'] ), '/options-general.php?page=rapidload-on-board' ) &&
+            self::on_board_completed() && !strpos( home_url( $_SERVER['REQUEST_URI'] ), 'nonce' )) {
             wp_redirect( admin_url( 'admin.php?page=rapidload' ) );
         } else if ( RapidLoad_Base::get_option( 'rapidload_do_activation_redirect' ) ) {
             RapidLoad_Base::delete_option( 'rapidload_do_activation_redirect' );
-            wp_redirect( '/wp-admin/options-general.php?page=rapidload-onboarding' );
+            wp_redirect( '/wp-admin/options-general.php?page=rapidload-on-board' );
         }
     }
 
@@ -352,7 +352,7 @@ class RapidLoad_Onboard{
     public static function display_get_start_link() {
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
             $_links = array(
-                '<a href="' . admin_url( 'options-general.php?page=rapidload-onboarding' ) . '">Get Started <span>⚡️</span> </a>',
+                '<a href="' . admin_url( 'options-general.php?page=rapidload-on-board' ) . '">Get Started <span>⚡️</span> </a>',
             );
 
             return array_merge( $_links, $links );

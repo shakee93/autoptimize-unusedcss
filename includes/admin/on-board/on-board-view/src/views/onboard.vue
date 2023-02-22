@@ -276,8 +276,7 @@ export default {
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
         axios.post(window.uucss_global.api_url + '/preview', {
-          // url: uucss_global.home_url
-          url: 'https://rapidload.io/'
+          url: uucss_global.home_url
         }).then((response) => {
           //console.log(response.data);
           localStorage.clear();
