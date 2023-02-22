@@ -224,8 +224,8 @@
           <div class="actions pl-2 pr-4 pb-2 grid grid-cols-2 gap-4">
 
             <div class="col-end-7 col-span-2">
-              <button @click="connect_license" :disabled="license_loading" :class="license_loading? 'bg-purple text-white' : ''"
-                      class="disabled:opacity-50 flex text-xs bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+              <button @click="connect_license" :disabled="license_loading" :class="license_loading? 'bg-purple text-white' : 'bg-transparent '"
+                      class="disabled:opacity-50 flex text-xs text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-1.5 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
               >
                 <svg :class="license_loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -423,22 +423,15 @@ export default {
 
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
         if(response.data?.data){
-          if(!response.data?.data?.licensedDomain){
-            this.licenseReqCount++;
-            if(this.licenseReqCount>3){
-              console.log("license disconnected")
-              this.disconnect_license();
-              localStorage.clear();
-              this.license_information.name = null
-              this.license_information.exp_date = null
-              this.license_information.license = null
-              this.license_information.licensed_domain = null
-              this.license_information.key = ''
-            }else{
-              setTimeout(function (){
-                this.update_license();
-              },5000)
-            }
+
+          if(response.data?.data === 'License key authentication failed'){
+            this.disconnect_license();
+            localStorage.clear();
+            this.license_information.name = null
+            this.license_information.exp_date = null
+            this.license_information.license = null
+            this.license_information.licensed_domain = null
+            this.license_information.key = ''
 
           }else{
             const licenseData = []
