@@ -298,16 +298,27 @@ export default {
       },
 
       chartData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['','12:00', '16:00', '20:00', '00:00', '04:00', '08:00'],
         datasets: [
           {
             label: 'Sales',
             borderColor: '#3e95cd',
-            data: [86, 67, 91, 89, 66, 97, 87]
+            data: [0, 0.5, 1.5, 1, 0.5, 3],
           }
         ]
       },
       chartOptions: {
+        scales: {
+          // yAxes: [{
+          //   ticks: {
+          //     beginAtZero: true,
+          //     callback: function(value, index, values) {
+          //       return value + 's';
+          //     }
+          //   }
+          // }]
+        },
+
         title: {
           display: true,
           text: 'Sales by Month'
