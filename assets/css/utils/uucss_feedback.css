@@ -3,6 +3,10 @@ tr[data-slug="unusedcss"] span.deactivate{
     position: relative;
 }
 
+tr[data-slug="unusedcss"] .row-actions img{
+    float: none;
+}
+
 .uucss-feedback {
     background: #fff;
     max-width: 400px;
