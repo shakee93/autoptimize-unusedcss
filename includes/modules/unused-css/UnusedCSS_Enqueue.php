@@ -399,7 +399,7 @@ class UnusedCSS_Enqueue {
             $source_media = 'data-media="'. $sheet->media . '"';
         }
 
-        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name .' '. $source_file .' '. $source_media .'>'. htmlspecialchars($inline['content']) .'</style>');
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name .' '. $source_file .' '. $source_media .'>'. $inline['content'] .'</style>');
     }
 
     private function get_inline_content( $file_name ) {
