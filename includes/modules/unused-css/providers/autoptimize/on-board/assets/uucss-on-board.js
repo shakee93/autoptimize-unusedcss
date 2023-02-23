@@ -227,6 +227,7 @@
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;
@@ -266,6 +267,7 @@
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;
@@ -299,6 +301,7 @@
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;
@@ -330,6 +333,7 @@
                 type: 'GET',
                 data: {
                     action: 'ao_installed',
+                    nonce : uucss_global.nonce
                 },
                 success: function (response) {
                     if (response.data) {
@@ -348,6 +352,7 @@
                 type: 'GET',
                 data: {
                     action: 'run_first_job',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;

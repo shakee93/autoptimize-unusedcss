@@ -172,6 +172,7 @@
                 type: 'GET',
                 data: {
                     action: 'rapidload_configured',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;
@@ -201,6 +202,7 @@
                 type: 'GET',
                 data: {
                     action: 'run_first_job',
+                    nonce : uucss_global.nonce
                 },
                 beforeSend: function () {
                     ajax_pending = true;

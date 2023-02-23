@@ -49,6 +49,8 @@ class UnusedCSS_Autoptimize_Onboard {
 
 	function run_first_job(){
 
+        self::verify_nonce();
+
 		if(!UnusedCSS_Autoptimize_Admin::ao_active()){
             wp_send_json_error(false);
         }
@@ -91,6 +93,7 @@ class UnusedCSS_Autoptimize_Onboard {
     }
 
     function ao_installed(){
+        self::verify_nonce();
         $status = [];
         $status['installed'] = UnusedCSS_Autoptimize_Admin::ao_installed();
         $status['active'] = UnusedCSS_Autoptimize_Admin::ao_active();

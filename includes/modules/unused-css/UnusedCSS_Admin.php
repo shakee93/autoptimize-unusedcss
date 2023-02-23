@@ -113,6 +113,8 @@ abstract class UnusedCSS_Admin {
 
     function queue_posts(){
 
+        self::verify_nonce();
+
         if(!isset($_REQUEST['post_type'])) {
             wp_send_json_error('post type not found');
         }
@@ -360,6 +362,8 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_update_rule(){
 
+        self::verify_nonce();
+
         if( !isset($_REQUEST['rule']) || empty($_REQUEST['rule']) ||
             !isset($_REQUEST['url']) || empty($_REQUEST['url'])
         ){
@@ -442,6 +446,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function attach_rule(){
+
+        self::verify_nonce();
 
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
@@ -639,6 +645,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_connect(){
+
+        self::verify_nonce();
 
         if ( ! isset( $_REQUEST['license_key'] ) || empty( $_REQUEST['license_key'] ) ) {
             wp_send_json_error( 'License Key required' );

@@ -938,7 +938,7 @@
 
                                             $('#update-attach-rule').click(function(){
 
-                                                wp.ajax.post('attach_rule',{ url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
+                                                wp.ajax.post('attach_rule',{ nonce : uucss.nonce, url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
 
                                                     $.uucssAlert(i, 'success')
                                                     var currentFeather = $.featherlight.current();
@@ -955,7 +955,7 @@
                                     break;
                                 }
                                 case 'detach_from_rule':{
-                                    wp.ajax.post('attach_rule',{ url : data.url, type : 'detach' }).then(function (i) {
+                                    wp.ajax.post('attach_rule',{ nonce : uucss.nonce, url : data.url, type : 'detach' }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -2348,7 +2348,7 @@
                     $target.text('Connecting...');
                     $target.removeAttr('href');
 
-                    wp.ajax.post('uucss_connect',{ license_key : license_key }).then(function (i) {
+                    wp.ajax.post('uucss_connect',{ license_key : license_key, nonce : uucss.nonce }).then(function (i) {
 
                         if(i.success){
                             window.location.href = window.location.href + '&token=' + license_key + '&nonce=' + i.activation_nonce
@@ -2419,7 +2419,8 @@
                 old_rule : $model_content.data('old_rule'),
                 old_url : $model_content.data('old_base_url'),
                 old_regex : $model_content.data('old_rule_regex'),
-                requeue : $regenerate.is(':checked') ? "1" : "0"
+                requeue : $regenerate.is(':checked') ? "1" : "0",
+                nonce : uucss.nonce
             }).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();

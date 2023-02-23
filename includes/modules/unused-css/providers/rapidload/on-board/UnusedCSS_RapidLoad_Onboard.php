@@ -38,6 +38,8 @@ class UnusedCSS_RapidLoad_Onboard{
 
     function run_first_job(){
 
+        self::verify_nonce();
+
         if(!UnusedCSS_Admin::is_api_key_verified()){
             wp_send_json_error(false);
         }
@@ -53,6 +55,8 @@ class UnusedCSS_RapidLoad_Onboard{
     }
 
     function rapidload_configured(){
+
+        self::verify_nonce();
         $status = [];
         $status['rapidload_connected'] = UnusedCSS_Admin::is_api_key_verified();
         $status['uucss_first_job_done'] = (bool)RapidLoad_Settings::get_first_link();
