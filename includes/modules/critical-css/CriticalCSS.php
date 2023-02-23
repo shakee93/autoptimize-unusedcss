@@ -200,6 +200,7 @@ class CriticalCSS
 
     function cpcss_purge_url()
     {
+        self::verify_nonce();
 
         if (isset($_REQUEST['url']) && !empty($_REQUEST['url'])) {
 

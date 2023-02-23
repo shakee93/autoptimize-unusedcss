@@ -565,4 +565,10 @@ trait RapidLoad_Utils {
 
         return true;
     }
+
+    static function verify_nonce(){
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
+            wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
+        }
+    }
 }

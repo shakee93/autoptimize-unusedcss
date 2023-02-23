@@ -167,6 +167,8 @@ abstract class RapidLoad_DB
 
     static function update_db(){
 
+        self::verify_nonce();
+
         if ( self::$current_version < self::$db_version ) {
 
             try{

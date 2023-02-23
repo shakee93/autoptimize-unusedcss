@@ -136,6 +136,8 @@ class RapidLoad_Admin
 
     public function upload_rules(){
 
+        self::verify_nonce();
+
         if(!isset($_REQUEST['rules'])){
             wp_send_json_error('rules required');
         }
@@ -161,11 +163,15 @@ class RapidLoad_Admin
 
     public function get_all_rules(){
 
+        self::verify_nonce();
+
         wp_send_json_success(RapidLoad_Job::all());
 
     }
 
     public function get_robots_text(){
+
+        self::verify_nonce();
 
         $robotsUrl = trailingslashit(get_site_url()) . "robots.txt";
 
@@ -208,6 +214,8 @@ class RapidLoad_Admin
     }
 
     public function rapidload_purge_all(){
+
+        self::verify_nonce();
 
         $job_type = isset($_REQUEST['job_type']) ? $_REQUEST['job_type'] : 'all';
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;

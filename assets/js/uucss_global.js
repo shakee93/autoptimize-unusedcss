@@ -28,6 +28,7 @@
                 type : log.type,
                 url : log.url,
                 log : log.log,
+                nonce : uucss_global.nonce
             },
             success : function(response){
 
@@ -204,7 +205,7 @@
                 container.addClass('loading');
             }
 
-            wp.ajax.post('uucss_license').then(function (i) {
+            wp.ajax.post('uucss_license', { nonce : uucss_global.nonce }).then(function (i) {
                 if(container.length){
                     $('.license-info ul').show();
 
@@ -282,7 +283,8 @@
                 url : uucss_global.ajax_url,
                 method : 'POST',
                 data : {
-                    action : 'rapidload_db_update'
+                    action : 'rapidload_db_update',
+                    nonce : uucss_global.nonce
                 },
                 success : function(response){
                     if(response.success){

@@ -64,7 +64,7 @@
 
             container.find('#uucss-faq-read').click(function (e) {
                 e.preventDefault();
-                wp.ajax.post('mark_faqs_read',{}).then(function (i) {
+                wp.ajax.post('mark_faqs_read',{ nonce : uucss.nonce}).then(function (i) {
                     container.find('.uucss-notification.uucss-notification-faq').remove();
                 }).fail(function (i) {
 
@@ -112,7 +112,7 @@
 
         var $sitemap_input = $('input.site-map-url');
 
-        wp.ajax.post('get_robots_text').done(function (data){
+        wp.ajax.post('get_robots_text', { nonce : uucss.nonce }).done(function (data){
             if(data && data.sitemap){
                 $sitemap_input.data('sitemap_url', data.sitemap);
             }
@@ -200,7 +200,7 @@
             var oldText = $button.val()
 
             $button.val('loading..')
-            wp.ajax.post('suggest_whitelist_packs').done(function (data) {
+            wp.ajax.post('suggest_whitelist_packs', { nonce : uucss.nonce }).done(function (data) {
 
                 $button.val(oldText)
 
@@ -897,7 +897,7 @@
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : data.url, nonce : uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -971,7 +971,8 @@
                                     wp.ajax.post('rapidload_purge_all',{
                                         job_type : 'url',
                                         url : data.url,
-                                        clear : true
+                                        clear : true,
+                                        nonce : window.uucss_global?.nonce
                                     }).then(function (i) {
 
                                     }).done(function(){
@@ -981,7 +982,7 @@
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, nonce : uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1003,6 +1004,7 @@
                                         url: wp.ajax.settings.url + '?action=uucss_test_url',
                                         data : {
                                             url: data.url,
+                                            nonce : uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1540,7 +1542,7 @@
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : url }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : url, nonce : uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -1582,7 +1584,8 @@
                                         job_type : 'rule',
                                         rule : rule,
                                         regex : regex,
-                                        clear : true
+                                        clear : true,
+                                        nonce : window.uucss_global?.nonce
                                     }).then(function (i) {
 
                                     }).done(function(){
@@ -1592,7 +1595,7 @@
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex, nonce : uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1616,7 +1619,8 @@
                                             url: data.url,
                                             type: 'rule',
                                             rule : rule,
-                                            regex : regex
+                                            regex : regex,
+                                            nonce : uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1763,6 +1767,7 @@
                 post_type : post_type,
                 type : type,
                 job_type : type,
+                nonce : window.uucss_global?.nonce
             }
 
             wp.ajax.post('uucss_queue',data_).then(function (i) {
@@ -1781,7 +1786,7 @@
 
             });
 
-            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
+            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type, nonce : uucss.nonce });
 
         }
 
@@ -1835,7 +1840,7 @@
 
                     switch (action) {
                         case 'rule-stats':{
-                            wp.ajax.post('uucss_rule_stats').then(function (i) {
+                            wp.ajax.post('uucss_rule_stats', {nonce : uucss.nonce}).then(function (i) {
                                 if(i){
 
                                     var $ruleStatsContent = $('<div class="rule-stats-cont"><ol class="duplicates"></ol></div>');
@@ -1951,7 +1956,7 @@
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', nonce : uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1962,7 +1967,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : uucss.nonce}).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2104,7 +2109,7 @@
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule' }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule', nonce : uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -2115,7 +2120,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : uucss.nonce}).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2137,7 +2142,7 @@
                         }
                         case 'export_all':{
 
-                            wp.ajax.post('get_all_rules',{}).then(function (i) {
+                            wp.ajax.post('get_all_rules',{ nonce : uucss.nonce }).then(function (i) {
                                 if(i){
                                     var exportLink = document.createElement('a');
                                     exportLink.download = 'rapidload-rules-' + Date.now();
@@ -2158,7 +2163,8 @@
                                 var fileReader = new FileReader();
                                 fileReader.onload = function(){
                                     wp.ajax.post('upload_rules',{
-                                        rules : fileReader.result
+                                        rules : fileReader.result,
+                                        nonce : uucss.nonce
                                     }).then(function (i) {
                                         $.uucssAlert(i)
                                     }).fail(function (i) {
@@ -2285,7 +2291,7 @@
             let $this = $(this)
             $this.text('deactivating...');
 
-            wp.ajax.post('uucss_deactivate').done(function (r) {
+            wp.ajax.post('uucss_deactivate' , { nonce : uucss.nonce }).done(function (r) {
                 $this.text('deactivated');
                 window.location.reload()
             })
@@ -2452,7 +2458,8 @@
             var data_ = {
                 post_type : $model_content.find('#model-requeue-post-type').val(),
                 job_type : $model_content.find('#model-requeue-post-type').val(),
-                url : $model_content.find('input.site-map-url').val()
+                url : $model_content.find('input.site-map-url').val(),
+                nonce: uucss.nonce,
             }
 
             wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
@@ -2509,7 +2516,7 @@
         $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
 */
         function updateRapidLoadStatus(){
-            wp.ajax.post('uucss_status').then(function(res){
+            wp.ajax.post('uucss_status', { nonce : uucss.nonce }).then(function(res){
                 if(res){
                     var $status = $('li.rapidload-status')
                     var total = res.total;
@@ -2541,7 +2548,9 @@
     });
 
     function updateNotices() {
-        wp.ajax.post('rapidload_notifications', {}).then(function (response) {
+        wp.ajax.post('rapidload_notifications', {
+            nonce : window.uucss_global?.nonce
+        }).then(function (response) {
             if(response){
                 window.uucss.faqs = response.faqs;
                 window.uucss.public_notices = response.notifications;

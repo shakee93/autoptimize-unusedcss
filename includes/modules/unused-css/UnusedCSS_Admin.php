@@ -102,6 +102,8 @@ abstract class UnusedCSS_Admin {
 
     function rapidload_notifications(){
 
+        self::verify_nonce();
+
         wp_send_json_success([
             'faqs' => $this->get_faqs(),
             'notifications' => $this->get_public_notices()
@@ -327,6 +329,8 @@ abstract class UnusedCSS_Admin {
 
     public function uucss_rule_stats(){
 
+        self::verify_nonce();
+
         wp_send_json_success([
             'duplicateFiles' => UnusedCSS_DB::get_duplicate_files()
         ]);
@@ -334,6 +338,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_status(){
+
+        self::verify_nonce();
 
         $job_counts = UnusedCSS_DB::get_job_counts();
 
@@ -661,6 +667,8 @@ abstract class UnusedCSS_Admin {
 
     public function ajax_deactivate() {
 
+        self::verify_nonce();
+
         $options = self::get_site_option( 'autoptimize_uucss_settings' );
 
         $cache_key = 'pand-' . md5( 'first-uucss-job' );
@@ -905,6 +913,8 @@ abstract class UnusedCSS_Admin {
 
     public function run_gpsi_status_check_for_all(){
 
+        self::verify_nonce();
+
         $spawned = wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
 
         wp_send_json_success([
@@ -972,6 +982,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_test_url(){
+
+        self::verify_nonce();
 
         global $uucss;
 
@@ -1046,6 +1058,9 @@ abstract class UnusedCSS_Admin {
     }
 
     public function clear_uucss_logs(){
+
+        self::verify_nonce();
+
         $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
@@ -1057,6 +1072,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function uucss_logs(){
+
+        self::verify_nonce();
 
         $file_system = new RapidLoad_FileSystem();
 
@@ -1077,6 +1094,8 @@ abstract class UnusedCSS_Admin {
 
     public function frontend_logs(){
 
+        self::verify_nonce();
+
         $args = [];
 
         $args['type'] = isset($_REQUEST['type']) && !empty($_REQUEST['type']) ? $_REQUEST['type'] : 'frontend';
@@ -1089,6 +1108,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function mark_faqs_read(){
+
+        self::verify_nonce();
 
         self::update_site_option('rapidload_faqs_read', true);
         wp_send_json_success(true);
@@ -1106,6 +1127,8 @@ abstract class UnusedCSS_Admin {
     }
 
     public function clear_page_cache(){
+
+        self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
         $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
@@ -1226,6 +1249,8 @@ abstract class UnusedCSS_Admin {
 
 	public static function suggest_whitelist_packs() {
 
+        self::verify_nonce();
+
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
@@ -1255,6 +1280,8 @@ abstract class UnusedCSS_Admin {
 
 	public function uucss_license() {
 
+        self::verify_nonce();
+
 		$api = new RapidLoad_Api();
 
 		$data = $api->get( 'license', [
@@ -1283,6 +1310,8 @@ abstract class UnusedCSS_Admin {
 	}
 
 	public function verify_api_key() {
+
+        self::verify_nonce();
 
 		if ( ! isset( $_POST['api_key'] ) ) {
 			wp_send_json_error();
