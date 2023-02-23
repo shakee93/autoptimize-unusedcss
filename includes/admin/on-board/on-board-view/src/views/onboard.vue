@@ -142,7 +142,7 @@
                   <p class="mt-1 leading-4 text-xm text-black leading-db-lh text-[11px]">{{ item.description }}</p>
                 </div>
                 <div class="col-end-7 col-span-2 mr-7 pt-5">
-                  <label :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
+                  <label :class="{disableBlock: item.id==='css'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
                     <div
@@ -239,7 +239,7 @@ export default {
 
   mounted() {
 
-    this.update(false, 'css')
+
     //console.log("updated")
     if (window.location.href.indexOf("nonce") > -1) {
       this.count = 3;
@@ -247,19 +247,45 @@ export default {
       this.subheading= 'Recommended options are already enabled for you... Go on and tweak it yourself.';
       this.update_license();
 
-      const optimizeData = JSON.parse(localStorage.getItem("rapidLoadOptimize"));
-      if(optimizeData){
-        Object.keys(optimizeData).forEach((a) => {
-          const data = optimizeData[a];
-          this.stats.after = data?.stats.after;
-          this.stats.before = data?.stats.before;
-          this.stats.beforeFileCount = data?.stats.beforeFileCount;
-          this.stats.afterFileCount = data?.stats.afterFileCount;
-          this.stats.reduction = data?.stats.reduction;
-          // this.loading = !data;
-        })
 
+      const activeModules = [];
+
+      Object.keys(window.uucss_global.active_modules).forEach((a) => {
+        activeModules.push(window.uucss_global.active_modules[a])
+      });
+
+      this.items_data = activeModules
+
+      if (this.items_data) {
+        Object.keys(this.items_data).map((key) => {
+          this.items.map((val) => {
+            if (val.id === this.items_data[key].id) {
+              val.status = this.items_data[key].status === 'on';
+
+            }
+          })
+        });
+
+        this.items[0].status = true;
       }
+
+      setTimeout(()=>{
+        this.update(false, 'css');
+      },8000)
+
+      // const optimizeData = JSON.parse(localStorage.getItem("rapidLoadOptimize"));
+      // if(optimizeData){
+      //   Object.keys(optimizeData).forEach((a) => {
+      //     const data = optimizeData[a];
+      //     this.stats.after = data?.stats.after;
+      //     this.stats.before = data?.stats.before;
+      //     this.stats.beforeFileCount = data?.stats.beforeFileCount;
+      //     this.stats.afterFileCount = data?.stats.afterFileCount;
+      //     this.stats.reduction = data?.stats.reduction;
+      //     // this.loading = !data;
+      //   })
+      //
+      // }
     }
 
   },
@@ -276,7 +302,8 @@ export default {
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
         axios.post(window.uucss_global.api_url + '/preview', {
-          url: uucss_global.home_url
+          url: 'https://rapidload.io/'
+          //url: uucss_global.home_url
         }).then((response) => {
           //console.log(response.data);
           localStorage.clear();
@@ -312,12 +339,18 @@ export default {
         this.heading = 'Recommended Settings';
         this.subheading= 'Recommended options are already enabled for you... Go on and tweak it yourself.';
 
+
+
       }
       if (this.count === 4) {
+        this.loading = true;
+
+        this.runFirstJob();
+        this.message = 'Waiting for your First Job....';
+        this.loading_header = 'Running First Job';
         this.heading = 'Congratulations';
         this.subheading= 'You have successfully completed your optimization. Your page speed increased by ' + this.stats.reduction +'%';
-        this.loading = false;
-        this.progress();
+
 
       }
 
@@ -344,7 +377,7 @@ export default {
       update_license(){
         axios.post(window.uucss_global.ajax_url + '?action=uucss_license').then((response)=>{
           if(response.data?.data){
-            console.log(response.data.data)
+            //console.log(response.data.data)
             if(!response.data?.data?.licensedDomain){
               this.disconnect_license();
               localStorage.clear();
@@ -368,7 +401,6 @@ export default {
       },
 
     update(toggle, module) {
-
 
       if(!this.license_information.licensed_domain){
         //console.log("return true");
@@ -400,8 +432,6 @@ export default {
             response.data
             window.uucss_global.active_modules = response.data.data
 
-            // this.loading = false;
-
             this.items.map((item) => {
               item.status = response.data.data[item.id].status === "on";
             })
@@ -415,7 +445,45 @@ export default {
 
     dashboard(){
       window.location.href = '/wp-admin/options-general.php?page=rapidload';
-    }
+    },
+
+    runFirstJob(){
+     // console.log("first job triggered");
+      axios.get(window.uucss_global.ajax_url + '?action=run_first_job')
+          .then(response => {
+           response.data.data;
+            this.rapidloadConfigured();
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    },
+    rapidloadConfigured(){
+     // console.log("rapidload config");
+      axios.get(window.uucss_global.ajax_url + '?action=rapidload_configured')
+          .then(response => {
+           // console.log(response.data?.data);
+            if(response.data?.data?.uucss_first_job_done){
+              const data = response.data?.data?.uucss_first_job.meta.stats;
+              this.stats.reduction  = data.reduction;
+              this.stats.before  = data.before;
+              this.stats.after  = data.after;
+              this.loading = false;
+              this.progress();
+            }else{
+              setTimeout(() =>{
+                this.rapidloadConfigured();
+              }, 3000);
+
+            }
+
+          })
+          .catch(error => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+          });
+    },
 
   },
 
@@ -453,7 +521,7 @@ export default {
           id: "css",
           title: "CSS Delivery",
           description: 'Analyze & connect with RapidLoad.io engine to start automatic optimization of your website and watch your page speed and speed scores spike up.',
-          status: true,
+          status: false,
           isDisabled: false,
         },
         {
