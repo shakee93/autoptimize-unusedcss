@@ -470,6 +470,7 @@ export default {
               this.stats.before  = data.before;
               this.stats.after  = data.after;
               this.loading = false;
+              this.subheading= 'You have successfully completed your optimization. Your page speed increased by '+ this.stats.reduction + '%' ;
               this.progress();
             }else{
               setTimeout(() =>{
