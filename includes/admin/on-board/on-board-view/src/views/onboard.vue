@@ -214,13 +214,13 @@
 
           <div v-if="!loading &&!error" class="dotstyle dotstyle-dotmove place-content-center place-items-center flex">
             <ul>
-              <li @click="count =1" :class="count === 1? 'current': ''"><a :class="count === 1? '': 'dotstyle-bg'"></a>
+              <li :class="count === 1? 'current': ''"><a :class="count === 1? '': 'dotstyle-bg'"></a>
               </li>
-              <li @click="count =2" :class="count === 2? 'current': ''"><a :class="count === 2? '': 'dotstyle-bg'"></a>
+              <li :class="count === 2? 'current': ''"><a :class="count === 2? '': 'dotstyle-bg'"></a>
               </li>
-              <li @click="count =3" :class="count === 3? 'current': ''"><a :class="count === 3? '': 'dotstyle-bg'"></a>
+              <li :class="count === 3? 'current': ''"><a :class="count === 3? '': 'dotstyle-bg'"></a>
               </li>
-              <li @click="count =4" :class="count === 4? 'current': ''"><a :class="count === 4? '': 'dotstyle-bg'"></a>
+              <li :class="count === 4? 'current': ''"><a :class="count === 4? '': 'dotstyle-bg'"></a>
               </li>
               <!--          <li @click="count =5" :class=" count === 5? 'current': ''"><a :class="count === 5? '': 'dotstyle-bg'" ></a></li>-->
               <!--          <li @click="count =6" :class="count === 6? 'current': ''"><a :class="count === 6? '': 'dotstyle-bg'" ></a></li>-->
