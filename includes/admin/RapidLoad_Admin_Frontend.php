@@ -830,9 +830,9 @@ class RapidLoad_Admin_Frontend
     public function load_on_board_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.css', null, '1.2');
+        wp_enqueue_style( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.css', null, '1.22');
 
-        wp_register_script( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.js', null, '1.2');
+        wp_register_script( 'rapidload_admin_on_board', UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist/assets/index.js', null, '1.22');
 
         $data = array(
             'on_board_base' => UUCSS_PLUGIN_URL .  'includes/admin/on-board/on-board-view/dist'
