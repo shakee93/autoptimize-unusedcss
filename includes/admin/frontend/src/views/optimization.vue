@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="flex ml-4 mt-12">
+    <div class="flex mt-4">
 
 
        <div class="w-[285px] h-[384px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
@@ -53,7 +53,7 @@
        </div>
 
         <div class="ml-8 w-[675px] h-[440px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white flex">
-          <div class="m-4 w-[215px] h-[405px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+          <div class="performance m-4 w-[215px] h-[405px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
             <div @click="selected('FirstContent')" :class="performanceSelect==='FirstContent'? 'bg-performance-green-bg text-white':''" class="content p-2 pt-1.5 pb-1 pl-5 pr-5 rounded-t-xl transition duration-300  hover:bg-performance-green-bg hover:text-white">
               <div :class="performanceSelect==='FirstContent'? 'rl-Show':'rl-Hide'" class="before:top-[35px] transition duration-300 arrow-top-performance arrow-top"></div>
               <p class="mb-0 mt-2 text-sm font-normal">First Contentful Paint</p>
@@ -146,7 +146,7 @@
                     <svg width="35" height="35">
                       <circle class="inner-circle" cx="17.5" cy="17.5" r="14" stroke-width="5px"/>
                       <circle ref="FirstContentfulPaint" class="progress-bar" cx="17.5" cy="17.5" r="14" stroke-width="5px" :stroke="this.performanceColor" />
-                      <text x="50%" y="50%" text-anchor="middle" dy=".4em" class="text-[10px] text-black" >{{ progress }}</text>
+                      <text x="50%" y="50%" text-anchor="middle" dy=".4em" class="text-[10px]" >{{ progress }}</text>
                     </svg>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default {
 
   mounted(){
     this.animateProgressBar();
-
+    this.selected('FirstContent')
   },
   methods:{
 
@@ -287,11 +287,11 @@ export default {
     return {
       progress: 0,
       performanceColor: '#09B42F',
-      performanceSelect: 'FirstContent',
+      performanceSelect: '',
       select:{
-        status: 'good',
-        heading: 'First Content Paint Loading time 0.934s.',
-        content: 'When the browser renders the first bit of content from the DOM, providing the first feedback to the user that the page is actually loading. Learn More.',
+        status: '',
+        heading: '',
+        content: '',
         fcp_by_last_day:'',
         fcp:'',
         production: '',
@@ -303,7 +303,7 @@ export default {
           {
             label: 'Sales',
             borderColor: '#3e95cd',
-            data: [0, 0.5, 1.5, 1, 0.5, 3],
+            data: [0, 0.5, 1.5, 1, 0.5, 3, 1],
           }
         ]
       },
