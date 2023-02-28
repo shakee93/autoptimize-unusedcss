@@ -296,7 +296,7 @@ export default {
 
       setTimeout(()=>{
         this.update(false, 'css');
-      },8000)
+      },6000)
 
       // const optimizeData = JSON.parse(localStorage.getItem("rapidLoadOptimize"));
       // if(optimizeData){
