@@ -114,7 +114,7 @@
       </div>
     </div>
 
-
+<!--    <optimization class="mb-10"></optimization>-->
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
 
@@ -328,12 +328,14 @@ import config from "../config";
 import axios from 'axios';
 import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
+import optimization from "./optimization.vue";
 
 export default {
 
   components: {
     Vue3TagsInput,
     messageBox,
+    optimization,
   },
 
   mounted() {
