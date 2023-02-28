@@ -182,6 +182,8 @@ class UnusedCSS_Store
 
                 $file->css = apply_filters('rapidload/cache_file_creating/css', $file->css);
 
+                $file->css = $this->handleFontFace($file->css);
+
                 $file_location = $this->append_cache_file_dir( $file->file, $file->css );
 
                 $files[] = [
@@ -288,5 +290,19 @@ class UnusedCSS_Store
             $this->cache_files($result->data, $result);
 
         }
+    }
+
+    function handleFontFace($content){
+
+        if(isset($this->options['uucss_enable_font_optimization']) || $this->options['uucss_enable_font_optimization'] == "1"){
+            $content = preg_replace(
+                '/font-display:\s?(auto|block|fallback|optional)/',
+                'font-display:swap',
+                $content
+            );
+            return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
+        }
+        return  $content;
+
     }
 }
