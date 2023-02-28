@@ -80,7 +80,7 @@
               </div>
             </div>
             <div class="flex justify-end">
-              <div class="mr-2.5 flex">
+              <div v-if="count!==2" class="mr-2.5 flex">
                 <a :href="support">
                 <button class="text-[13px] min-w-[220px] mr-3 justify-center disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-4 rounded-full">
                   Contact Support Team
@@ -88,7 +88,13 @@
                 </a>
                 <button @click="dashboard"
                         class="text-[13px] min-w-[120px] justify-center disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-4 rounded-full">
-                  Skip
+                  Dashboard
+                </button>
+              </div>
+              <div v-if="count===2" class="mr-2.5 flex">
+                <button @click="next ('connect')"
+                        class="text-[13px] min-w-[120px] justify-center disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-4 rounded-full">
+                  Connect
                 </button>
               </div>
             </div>
@@ -260,8 +266,6 @@ export default {
 
   mounted() {
 
-
-    //console.log("updated")
     if (window.location.href.indexOf("nonce") > -1) {
       this.count = 3;
       this.heading = 'Recommended Settings';
