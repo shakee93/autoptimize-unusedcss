@@ -20,7 +20,7 @@
                         options += ',w_' + $(value).attr('width')
                     }
                     url = window.rapidload_io_data.image_endpoint + options + '/' + url
-                    if($(value).attr('src').toString() !== url){
+                    if($(value).attr('src')?.toString() !== url){
                         $(value).attr('src', url);
                     }
                 }
