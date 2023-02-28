@@ -41,6 +41,8 @@ class RapidLoad_CDN
 
             $result = wp_remote_get($this->options['uucss_cdn_url']);
 
+            error_log('running here');
+
             if(!is_wp_error($result)){
                 $this->options['cdn_url_verified'] = "1";
                 RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options );
