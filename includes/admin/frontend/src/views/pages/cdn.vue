@@ -164,7 +164,6 @@ export default {
       Object.keys(this.cdn_config).map((key) => {
         if (this.id === this.cdn_config[key].id) {
           const option = this.cdn_config[key].options;
-          console.log(option)
           this.uucss_cdn_dns_id = option.uucss_cdn_dns_id;
           this.uucss_cdn_url= option.uucss_cdn_url;
           this.uucss_cdn_zone_id = option.uucss_cdn_zone_id;
