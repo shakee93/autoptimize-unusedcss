@@ -350,7 +350,7 @@ class UnusedCSS_Enqueue
         $data_href = isset($sheet->{'data-href'}) ? ' data-href="'. $sheet->{'data-href'} . '" ' : ' ';
         $data_media = isset($sheet->{'data-media'}) ? ' data-media="'. $sheet->{'data-media'} . '" ' : ' ';
 
-        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name . $data_href . $data_media .'>'. htmlspecialchars($inline['content']) .'</style>');
+        $sheet->__set('outertext', '<style '. $file_name .' '. $tag_name . $data_href . $data_media .'>'. $inline['content'] .'</style>');
 
     }
 

@@ -385,18 +385,18 @@ trait RapidLoad_Utils {
 
     public function is_file_excluded( $options, $file ) {
 
-        if ( isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ) {
-            $files = apply_filters('uucss/css/excluded-files',explode( ',', $options['uucss_excluded_files'] ));
+        $files = isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ? explode( ',', $options['uucss_excluded_files'] ) : [];
 
-            foreach ( $files as $excluded_file ) {
+        $files = apply_filters('uucss/excluded-files', $files);
 
-                if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
-                    return true;
-                }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
-                    return true;
-                }
+        foreach ( $files as $excluded_file ) {
 
+            if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
+                return true;
+            }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
+                return true;
             }
+
         }
 
         return false;

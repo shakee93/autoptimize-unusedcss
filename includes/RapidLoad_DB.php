@@ -513,7 +513,7 @@ abstract class RapidLoad_DB
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['rule'] = $job_url->rule;
             $data['base'] = $job_url->url;
-            if($data['regex'] == "/"){
+            if($data['regex'] == "/" && $data['rule'] == "is_url"){
                 $data['status'] = 'rule-based';
             }
         }
