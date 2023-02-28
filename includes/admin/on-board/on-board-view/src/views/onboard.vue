@@ -449,7 +449,7 @@ export default {
           .then(response => {
             response.data
             window.uucss_global.active_modules = response.data.data
-            this.error= false;
+            // this.error= false;
             this.items.map((item) => {
               item.status = response.data.data[item.id].status === "on";
             })
@@ -457,7 +457,7 @@ export default {
           .catch(error =>{
             this.errorMessage = error.message;
             console.error("There was an error!", error);
-            this.error= true;
+            // this.error= true;
             this.loading=false;
           });
     },
