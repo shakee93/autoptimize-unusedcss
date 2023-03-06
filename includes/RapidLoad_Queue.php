@@ -55,6 +55,16 @@ class RapidLoad_Queue
             'product',
         ));
 
+        register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'unschedule_cron' ] );
+    }
+
+    function unschedule_cron(){
+
+        $timestamp = wp_next_scheduled( 'cron_uucss_process_queue' );
+        if(isset($timestamp)){
+            wp_unschedule_event( $timestamp, 'cron_uucss_process_queue' );
+        }
+
     }
 
     function cron_exist($cron_name = 'cron_uucss_process_queue'){
