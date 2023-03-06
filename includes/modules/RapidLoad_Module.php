@@ -285,7 +285,6 @@ class RapidLoad_Module
                     'uucss_cdn_url' => isset($options['uucss_cdn_url']) ? $options['uucss_cdn_url'] : null,
                     'uucss_cdn_dns_id' => isset($options['uucss_cdn_dns_id']) ? $options['uucss_cdn_dns_id'] : null,
                     'uucss_cdn_zone_id' => isset($options['uucss_cdn_zone_id']) ? $options['uucss_cdn_zone_id'] : null,
-                    'cdn_url_verified' => isset($options['cdn_url_verified']) && $options['cdn_url_verified'] == "1" ? true : false,
                 ]
             ],
             'font' => [

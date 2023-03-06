@@ -88,6 +88,7 @@
                             });
                     }
                 });
+                window.dispatchEvent(new Event('resize'));
             },
             { rootMargin: '300px' },
         );
