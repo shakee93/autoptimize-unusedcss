@@ -221,6 +221,9 @@ body .rapidload {
         padding-top: 0px !important;
         padding-bottom: 0px !important;
     }
+    .rapidload p{
+        margin: 0px;
+    }
 
 }
 

@@ -126,7 +126,7 @@
             <span v-html="item.image"></span>
 
             <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
-            <p class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</p>
+            <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
