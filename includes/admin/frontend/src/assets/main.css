@@ -217,6 +217,10 @@ body .rapidload {
         transform-origin: center center;
         transform: rotate(270deg);
     }
+    .dashboard-p{
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
 
 }
 
