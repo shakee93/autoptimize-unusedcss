@@ -222,7 +222,7 @@ body .rapidload {
         padding-bottom: 0px !important;
     }
     .rapidload p{
-        margin: 0px;
+        margin: 0px !important;
     }
 
 }
