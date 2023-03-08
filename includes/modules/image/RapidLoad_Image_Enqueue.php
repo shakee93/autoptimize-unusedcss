@@ -56,6 +56,10 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $images as $img ) {
 
+            if($this->str_contains($img->src, RapidLoad_Image::$image_indpoint)){
+                continue;
+            }
+
             if($this->is_file_excluded($img->src)){
                 continue;
             }
