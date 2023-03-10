@@ -870,7 +870,7 @@ class UnusedCSS_DB extends RapidLoad_DB
 
                     foreach ( $links as $key => $value ) {
 
-                        if ( isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
+                        if ( isset($item['uucss']) && is_array($item['uucss']) && isset($value['files']) && in_array( $item['uucss'], array_column( $value['files'], 'uucss' ) ) ) {
                             $used[] = $item['uucss'];
                             break;
                         }
