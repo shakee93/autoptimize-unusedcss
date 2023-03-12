@@ -207,8 +207,7 @@ abstract class UnusedCSS {
         }
 
         foreach ($taxonomies as $key => $value){
-            if(( $key = array_search($value, array_column($rules, 'name')) ) === false){
-
+            if ( (( $key = array_search($value, array_column($rules, 'name')) ) === false) && (! in_array($value, array( 'category', 'post_tag' )) ) ) {
                 $rules[] = [
                     'name' => $value,
                     'rule' => 'is_' . $value,
@@ -321,6 +320,26 @@ abstract class UnusedCSS {
             },
         ];
 
+        $rules[] = [
+            'name' => 'tag',
+            'rule' => 'is_tag',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_tag();
+            },
+        ];
+
+        $rules[] = [
+            'name' => 'category',
+            'rule' => 'is_category',
+            'category' => 'Standard Conditional Tags',
+            'priority' => 10,
+            'callback' => function(){
+                return is_category();
+            },
+        ];
+
         return $rules;
     }
 
@@ -402,10 +421,6 @@ abstract class UnusedCSS {
 	    }
 
 	    if ( $this->is_cli() ) {
-		    return false;
-	    }
-
-	    if ( is_search() ) {
 		    return false;
 	    }
 
@@ -811,7 +826,7 @@ abstract class UnusedCSS {
 
 	public function init_base_dir() {
 
-		self::$base_dir = WP_CONTENT_DIR . $this->base;
+		self::$base_dir = get_option('upload_path', WP_CONTENT_DIR) . $this->base;
 
 		if ( $this->file_system->exists( self::$base_dir ) ) {
 			return true;
@@ -943,13 +958,7 @@ abstract class UnusedCSS {
 	public function get_cached_file( $file_url, $cdn = null ) {
 
 		if ( ! $cdn || empty( $cdn ) ) {
-			$cdn = content_url();
-		} else {
-
-            $url_parts = parse_url( content_url() );
-
-			$cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
-
+			$cdn = get_option('upload_url_path',WP_CONTENT_URL);
 		}
 
 		return implode( '/', [
