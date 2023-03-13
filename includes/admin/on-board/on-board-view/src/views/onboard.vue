@@ -502,6 +502,11 @@ export default {
             }else{
               setTimeout(() =>{
                 this.rapidloadConfigured();
+                this.rapidload_config ++;
+                if(this.rapidload_config > 10){
+                  this.error= true;
+                  this.loading=false;
+                }
               }, 3000);
             }
           })
@@ -530,6 +535,7 @@ export default {
       message: 'Please wait....',
       loading_header: '',
       percentage: 100,
+      rapidload_config: 1,
       license_information:
           {
             name: '',
