@@ -126,6 +126,7 @@ class RapidLoad_Module
 
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : false;
         $active = isset($_REQUEST['active']) ? $_REQUEST['active'] : 'off';
+        $onboard = isset($_REQUEST['onboard']) ? $_REQUEST['onboard'] : false;
 
         if(!$module){
             wp_send_json_error('Rapidload module required');
@@ -134,6 +135,9 @@ class RapidLoad_Module
         switch ($module){
             case 'css' : {
                 $options['uucss_enable_css'] = $active == "on" ? "1" : "";
+                if($onboard){
+                    $options['uucss_enable_uucss'] = "1";
+                }
                 break;
             }
             case 'javascript' : {
