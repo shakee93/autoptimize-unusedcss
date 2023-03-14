@@ -85,10 +85,3 @@ class WP_HTML_Compression {
         return $str;
     }
 }
-function wp_html_compression_finish($html) {
-    return new WP_HTML_Compression($html);
-}
-function wp_html_compression_start() {
-    ob_start( 'wp_html_compression_finish' );
-}
-add_action( 'get_header', 'wp_html_compression_start' );
