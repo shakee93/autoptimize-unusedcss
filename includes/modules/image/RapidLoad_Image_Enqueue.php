@@ -21,7 +21,7 @@ class RapidLoad_Image_Enqueue
         $this->imgExt = ["jpg", "jpeg", "png", "webp"];
         $this->cdn = RapidLoad_Image::$image_indpoint;
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 50);
     }
 
     public function update_content($state){
@@ -98,7 +98,7 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $inline_styles as $inline_style ) {
 
-            preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg))/', $inline_style->style, $matches, PREG_SET_ORDER);
+            preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
 
             if(!empty($matches)){
 
