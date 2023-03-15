@@ -821,7 +821,7 @@
 <!--                    <p><a href="https://rapidload.io/referral/?utm_source=rapidload_plugin&utm_medium=sidebar-banner" target="_blank">Learn More</a></p>-->
                 </div>
                 <div class="banner-footer">
-                    <a style="border-radius: 30px;" href="https://rapidload.io/" class="button button-primary" target="_blank">Get RapidLoad</a>
+                    <a style="border-radius: 30px;" href="https://rapidload.io/beta/" class="button button-primary" target="_blank">Get RapidLoad</a>
                 </div>
             </div>
         </div>
