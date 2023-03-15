@@ -109,6 +109,8 @@ class RapidLoad_Module
 
         }
 
+        new RapidLoad_HTML_Minifier();
+
     }
 
     function is_active($module){
@@ -124,6 +126,7 @@ class RapidLoad_Module
 
         $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : false;
         $active = isset($_REQUEST['active']) ? $_REQUEST['active'] : 'off';
+        $onboard = isset($_REQUEST['onboard']) ? $_REQUEST['onboard'] : false;
 
         if(!$module){
             wp_send_json_error('Rapidload module required');
@@ -132,6 +135,9 @@ class RapidLoad_Module
         switch ($module){
             case 'css' : {
                 $options['uucss_enable_css'] = $active == "on" ? "1" : "";
+                if($onboard){
+                    $options['uucss_enable_uucss'] = "1";
+                }
                 break;
             }
             case 'javascript' : {
@@ -211,6 +217,7 @@ class RapidLoad_Module
                 'id' => 'general',
                 'options' => [
                     'uucss_excluded_links' => isset($options['uucss_excluded_links']) ? $options['uucss_excluded_links'] : null,
+                    'rapidload_minify_html' => isset($options['rapidload_minify_html']) && $options['rapidload_minify_html'] == "1" ? true : false,
                     'uucss_query_string' => isset($options['uucss_query_string']) && $options['uucss_query_string'] == "1" ? true : false,
                     'uucss_enable_debug' => isset($options['uucss_enable_debug']) && $options['uucss_enable_debug'] == "1" ? true : false,
                     'uucss_jobs_per_queue' => isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : 1,

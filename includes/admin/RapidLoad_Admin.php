@@ -239,6 +239,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['rapidload_minify_html'])){
+
+            $options['rapidload_minify_html'] = ($_REQUEST['rapidload_minify_html'] == 'true' ? "1" : null);
+
+        }
+
         if(isset($_REQUEST['uucss_enable_debug'])){
 
             $options['uucss_enable_debug'] = ($_REQUEST['uucss_enable_debug'] == 'true' ? "1" : null);

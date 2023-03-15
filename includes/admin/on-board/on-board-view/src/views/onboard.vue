@@ -447,7 +447,7 @@ export default {
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle, {}, {
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1', {}, {
         cancelToken: cancelToken
       })
           .then(response => {

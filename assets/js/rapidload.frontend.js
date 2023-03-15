@@ -27,6 +27,7 @@
                 let link = file.cloneNode()
                 link.href = original.original
                 link.rel  = 'preload';
+                link.as  = 'style';
                 link.removeAttribute('data-href')
                 link.removeAttribute('data-media')
                 if(window.rapidload && window.rapidload.frontend_debug === "1"){
@@ -35,6 +36,7 @@
                 }
                 link.prev = file
                 link.addEventListener('load',function (e) {
+                    this.rel = 'stylesheet';
                     if (this.prev) this.prev.remove();
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);

@@ -60,6 +60,29 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
+                    <div @click="rapidload_minify_html = !rapidload_minify_html" :class="rapidload_minify_html? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                      <svg v-if="rapidload_minify_html" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+                  <h1 @click="rapidload_minify_html = !rapidload_minify_html" class="font-normal text-base text-black-font cursor-pointer">Minify Html</h1>
+                  <p class="text-sm text-gray-font">Consider minify html.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
                     <div @click="uucss_query_string = !uucss_query_string" :class="uucss_query_string? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="uucss_query_string" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
@@ -264,6 +287,7 @@ export default {
           this.uucss_enable_debug = option.uucss_enable_debug;
           this.uucss_excluded_links = option.uucss_excluded_links?.replace(/,/g, '\n');
           this.uucss_query_string = option.uucss_query_string;
+          this.rapidload_minify_html = option.rapidload_minify_html;
           this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
           this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
 
@@ -325,6 +349,7 @@ export default {
       const data = {
         uucss_enable_debug : this.uucss_enable_debug,
         uucss_query_string : this.uucss_query_string,
+        rapidload_minify_html : this.rapidload_minify_html,
         uucss_excluded_links : this.uucss_excluded_links?.replace(/\n/g, ","),
         uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue?.replace(/\D/g,''),
         uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
@@ -363,6 +388,7 @@ export default {
       debug_logs_settings: '/debug-logs',
       uucss_enable_debug: false,
       uucss_query_string: false,
+      rapidload_minify_html: false,
       uucss_excluded_links: [],
       queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
       jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],

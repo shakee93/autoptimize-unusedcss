@@ -414,10 +414,12 @@ class RapidLoad_Enqueue {
     function enabled_frontend() {
 
         if ( is_user_logged_in() ) {
+            error_log('here 1');
             return false;
         }
 
         if ( is_admin() ) {
+            error_log('admin 2');
             return false;
         }
 
