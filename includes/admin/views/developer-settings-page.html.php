@@ -743,7 +743,7 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
 do_action('uucss/options/after_render_form');
 ?>
 
-<div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight">
+<div id="add_rule_featherlight_content" class="main-content uucss-update-form-fetherlight" >
     <div class="action-content">
         <div>
             <label for="model-uucss-rules">
@@ -795,7 +795,7 @@ do_action('uucss/options/after_render_form');
                 <strong>Base URL</strong>
             </label>
             <input type="text" class="rule-base-url"
-                   placeholder="<?php echo trailingslashit(get_site_url())?>" >
+                   placeholder="<?php echo trailingslashit(get_site_url())?>" value="<?php echo trailingslashit(get_site_url())?>">
         </div>
         <div>
             <label for="rule-url-regex">
@@ -840,7 +840,7 @@ do_action('uucss/options/after_render_form');
             </select>
         </div>
         <div>
-            <input type="text" class="site-map-url show" placeholder="<?php echo trailingslashit(get_site_url())?>" data-site_url="<?php echo trailingslashit(get_site_url())?>" data-sitemap_url="<?php
+            <input type="text" class="site-map-url show" value="<?php echo trailingslashit(get_site_url())?>" placeholder="<?php echo trailingslashit(get_site_url())?>" data-site_url="<?php echo trailingslashit(get_site_url())?>" data-sitemap_url="<?php
             /*$robots = UnusedCSS_Admin::get_robots_text(get_site_url());
             if($robots && isset($robots->sitemap)){
                 echo apply_filters('uucss/sitemap-path', $robots->sitemap);
