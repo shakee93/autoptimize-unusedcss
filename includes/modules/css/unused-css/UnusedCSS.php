@@ -343,6 +343,10 @@ class UnusedCSS
         $this->job_data = new RapidLoad_Job_Data($job, 'uucss');
 
         if(!isset($this->job_data->id)){
+            self::log([
+                'log' =>  'requeue-> uucss job added to queue',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->save();
         }
 
