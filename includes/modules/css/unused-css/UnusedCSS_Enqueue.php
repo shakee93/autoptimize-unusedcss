@@ -194,8 +194,6 @@ class UnusedCSS_Enqueue
 
                         if(!in_array($link, array_column($this->warnings, 'file'))){
 
-                            $this->log_action('file not found warning added for <a href="' . $link . '" target="_blank">'. $link . '</a>');
-
                             $warning = [
                                 "file" => $link,
                                 "message" => "RapidLoad optimized version for the file missing."
@@ -312,23 +310,21 @@ class UnusedCSS_Enqueue
                 $this->dom->find( 'body' )[0]->uucss = true;
             }
 
-            $this->log_action(' 🟢 UnusedCSS_Enqueue->enqueue_completed:successfully_injected');
-
         }else if(
             !isset($this->options['uucss_disable_add_to_re_queue']) &&
             !$this->inject->successfully_injected &&
             ($this->job_data->attempts <= 2 || ($time_diff > 86400)) &&
             apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
+            self::log([
+                'log' =>  'requeue-> uucss requeue due to warnings',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->requeue();
-
-            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:requeue');
 
         }else{
 
             $this->job_data->set_warnings($this->warnings);
-
-            $this->log_action('UnusedCSS_Enqueue->enqueue_completed:set_warnings');
 
         }
 

@@ -30,33 +30,13 @@ class RapidLoad_Enqueue {
 
             if($this->enabled($this->url)){
 
-                self::log([
-                    'log' => 'RapidLoad_Enqueue->enabled',
-                    'type' => 'injection' ,
-                    'url' => $this->url
-                ]);
-
                 if(RapidLoad_Base::get()->rules_enabled()){
 
                     $this->rule = $this->get_current_rule();
 
-                    self::log([
-                        'log' => 'RapidLoad_Enqueue->rules_enabled-' . json_encode($this->rule),
-                        'type' => 'injection' ,
-                        'url' => $this->url
-                    ]);
-
                 }
 
                 $this->handle_job($this->url, []);
-
-            }else{
-
-                self::log([
-                    'log' => 'RapidLoad_Enqueue->enabled:failed',
-                    'type' => 'injection' ,
-                    'url' => $this->url
-                ]);
 
             }
 
@@ -66,17 +46,7 @@ class RapidLoad_Enqueue {
     public function replace_css($job)
     {
         $buffer = apply_filters('uucss/enqueue/buffer','rapidload_buffer');
-        self::log([
-            'log' => 'RapidLoad_Enqueue->replace_css:'. $buffer,
-            'type' => 'injection' ,
-            'url' => $job->url
-        ]);
         add_filter( $buffer, function ( $html ) use($job){
-            self::log([
-                'log' => 'RapidLoad_Enqueue->replace_css:apply_filter-uucss/enqueue/content',
-                'type' => 'injection' ,
-                'url' => $job->url
-            ]);
             return apply_filters('uucss/enqueue/content', $html, $job);
         }, 10 );
     }
@@ -84,11 +54,6 @@ class RapidLoad_Enqueue {
     public function the_content($html, $job){
 
         if ( ! class_exists( \simplehtmldom\HtmlDocument::class ) ) {
-            self::log([
-                'log' => 'RapidLoad_Enqueue->the_content:dom_parser_not_found',
-                'type' => 'injection' ,
-                'url' => $job->url
-            ]);
             return $html;
         }
 
@@ -110,12 +75,6 @@ class RapidLoad_Enqueue {
 
         if ( $dom ) {
 
-            self::log([
-                'log' => 'RapidLoad_Enqueue->the_content:dom_parsed',
-                'type' => 'injection' ,
-                'url' => $job->url
-            ]);
-
             $inject = (object) [
                 "parsed_html"           => false,
                 "found_sheets"          => false,
@@ -127,12 +86,6 @@ class RapidLoad_Enqueue {
             ];
 
             $inject->parsed_html = true;
-
-            self::log([
-                'log' => 'RapidLoad_Enqueue->the_content:apply_filter-uucss/enqueue/content/update',
-                'type' => 'injection' ,
-                'url' => $job->url
-            ]);
 
             $state = apply_filters('uucss/enqueue/content/update',[
                 'dom' => $dom,
@@ -156,12 +109,6 @@ class RapidLoad_Enqueue {
             if(self::$frontend_debug){
                 header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
             }
-
-            self::log([
-                'log' => 'RapidLoad_Enqueue->the_content:return_buffer',
-                'type' => 'injection' ,
-                'url' => $job->url
-            ]);
 
             return $dom;
         }
@@ -305,11 +252,6 @@ class RapidLoad_Enqueue {
 
             $this->rule = $this->get_current_rule();
 
-            self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job-' . json_encode($this->rule),
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
         }
 
         $job = new RapidLoad_Job([
@@ -329,20 +271,6 @@ class RapidLoad_Enqueue {
             $job->parent = $rule;
             $job->save();
 
-            self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:added_url_for_rule-' . $this->rule->rule,
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
-
-        }else if($this->rule){
-
-            self::log([
-                'log' => 'RapidLoad_Enqueue->handle_job:url_exist_for_rule_' . $this->rule->rule,
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
-
         }
 
         $front_end_enabled = [];
@@ -354,11 +282,7 @@ class RapidLoad_Enqueue {
             if(!isset($job->id)){
 
                 $job->save();
-                self::log([
-                    'log' => 'RapidLoad_Enqueue->handle_job:job_saved-' . json_encode($job),
-                    'type' => 'injection' ,
-                    'url' => $url
-                ]);
+
             }
         }
 
@@ -369,18 +293,7 @@ class RapidLoad_Enqueue {
         $front_end_enabled['no_uucss'] = !isset( $_REQUEST['no_uucss'] );
 
         if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled'] && $front_end_enabled['no_uucss']){
-            self::log([
-                'log' => 'RapidLoad_Enqueue->replace_css:called-' . json_encode($job),
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
             $this->replace_css($job);
-        }else{
-            self::log([
-                'log' => 'RapidLoad_Enqueue->replace_css:not-called-' . json_encode($front_end_enabled),
-                'type' => 'injection' ,
-                'url' => $url
-            ]);
         }
 
     }

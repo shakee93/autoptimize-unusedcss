@@ -301,12 +301,6 @@ class UnusedCSS
             $this->job_data = new RapidLoad_Job_Data($job, 'uucss');
         }
 
-        self::log([
-            'log' => 'UnusedCSS->enqueue_uucss',
-            'url' => $job->url,
-            'type' => 'injection'
-        ]);
-
         new UnusedCSS_Enqueue($this->job_data);
 
     }
@@ -357,6 +351,10 @@ class UnusedCSS
         }
 
         if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+            self::log([
+                'log' =>  'requeue-> uucss requeue manually or page accessed',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
             if(isset( $args['immediate'])){
                 $this->job_data->status = 'processing';
@@ -493,6 +491,10 @@ class UnusedCSS
             if(isset($job_data->id)){
 
                 $this->clear_files($job_data);
+                self::log([
+                    'log' =>  'requeue-> clear cache by job id manually',
+                    'url' => $this->job_data->job->url,
+                ]);
                 $job_data->requeue();
                 $job_data->save();
 
