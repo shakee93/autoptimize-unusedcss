@@ -58,6 +58,12 @@ class RapidLoad_Admin_Frontend
 
         }
 
+        if($this->is_rapidload_page_optimizer()){
+
+            $this->load_optimizer_scripts();
+
+        }
+
         if(is_admin()){
 
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
@@ -834,6 +840,11 @@ class RapidLoad_Admin_Frontend
         return isset($_GET['page']) && $_GET['page'] === 'rapidload-on-board';
     }
 
+    public function is_rapidload_page_optimizer()
+    {
+        return isset($_GET['page']) && $_GET['page'] === 'page-optimizer';
+    }
+
     public function is_rapidload_legacy_page()
     {
         return isset($_GET['page']) && $_GET['page'] === 'uucss_legacy';
@@ -853,6 +864,25 @@ class RapidLoad_Admin_Frontend
         wp_localize_script( 'rapidload_admin_frontend', 'rapidload_admin', $data );
 
         wp_enqueue_script( 'rapidload_admin_frontend' );
+
+
+
+    }
+
+    public function load_optimizer_scripts()
+    {
+
+        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.71');
+
+        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.71');
+
+        $data = array(
+            'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'
+        );
+
+        wp_localize_script( 'rapidload_page_optimizer', 'rapidload_page_optimizer', $data );
+
+        wp_enqueue_script( 'rapidload_page_optimizer' );
 
 
 
