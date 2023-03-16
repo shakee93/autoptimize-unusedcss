@@ -316,6 +316,10 @@ class UnusedCSS_Enqueue
             ($this->job_data->attempts <= 2 || ($time_diff > 86400)) &&
             apply_filters('uucss/enqueue/re-queue-on-fail', true)){
 
+            self::log([
+                'log' =>  'requeue-> uucss requeue due to warnings',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->requeue();
 
         }else{

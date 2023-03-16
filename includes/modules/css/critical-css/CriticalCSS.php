@@ -167,6 +167,10 @@ class CriticalCSS
             if(isset($job_data->id)){
 
                 $this->clear_files($job_data);
+                self::log([
+                    'log' =>  'requeue-> cpcss clear cache by id manually',
+                    'url' => $this->job_data->job->url,
+                ]);
                 $job_data->requeue();
                 $job_data->save();
 
@@ -320,6 +324,10 @@ class CriticalCSS
         }
 
         if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+            self::log([
+                'log' =>  'requeue-> cpcss requeue manually or page accessed',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
             $this->job_data->save();
         }

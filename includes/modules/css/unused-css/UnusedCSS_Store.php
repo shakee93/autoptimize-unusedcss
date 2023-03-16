@@ -245,6 +245,10 @@ class UnusedCSS_Store
 
             if(isset($error['message']) && ($error['message'] == 'Job processing failed in queue' || $error['message'] == 'Error')){
 
+                self::log([
+                    'log' =>  'requeue-> uucss job processing failed in queue',
+                    'url' => $this->job_data->job->url,
+                ]);
                 $this->job_data->requeue();
                 $this->job_data->save();
 

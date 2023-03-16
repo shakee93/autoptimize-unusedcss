@@ -62,6 +62,10 @@ class CriticalCSS_Enqueue
 
         if(!$file_exist &&
             ($this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400)) {
+            self::log([
+                'log' =>  'requeue-> critical css file not found and attempts less than two or last generated days more than one',
+                'url' => $this->job_data->job->url,
+            ]);
             $this->job_data->requeue();
             $this->job_data->save();
             //$this->inject->successfully_injected = false;
