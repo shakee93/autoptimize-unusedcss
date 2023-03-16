@@ -62,6 +62,7 @@ class RapidLoad_Admin_Frontend
 
             add_action( 'admin_menu', array( $this, 'add_developer_settings_page' ) );
             add_action( 'admin_menu', array( $this, 'add_rapidload_onboard_page' ) );
+            add_action( 'admin_menu', array( $this, 'add_page_optimizer_page' ) );
             add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
 
         }
@@ -778,7 +779,38 @@ class RapidLoad_Admin_Frontend
             return;
         }
 
-        $key = array_search(["RapidLoad","manage_options","uucss","RapidLoad"], $submenu['options-general.php']);
+        $key = array_search(["RapidLoad","manage_options","uucss_legacy","RapidLoad"], $submenu['options-general.php']);
+
+        if(isset($submenu['options-general.php'][$key])){
+            unset($submenu['options-general.php'][$key]);
+        }
+
+    }
+
+    public function add_page_optimizer_page() {
+
+        global $submenu;
+
+        add_submenu_page( 'options-general.php', 'RapidLoad Optimizer', 'RapidLoad Optimizer', 'manage_options', 'page-optimizer', function () {
+            wp_enqueue_script( 'post' );
+
+            ?>
+            <div id="rapidload-page-optimizer">
+
+            </div>
+
+            <?php
+        });
+
+        register_setting('autoptimize_uucss_settings', 'autoptimize_uucss_settings');
+
+        $key = null;
+
+        if(!isset($submenu['options-general.php'])){
+            return;
+        }
+
+        $key = array_search(["RapidLoad Optimizer","manage_options","page-optimizer","RapidLoad Optimizer"], $submenu['options-general.php']);
 
         if(isset($submenu['options-general.php'][$key])){
             unset($submenu['options-general.php'][$key]);
