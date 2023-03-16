@@ -56,39 +56,15 @@ class CriticalCSS_Enqueue
 
         if($this->is_mobile){
             $this->data = str_replace(".css","-mobile.css", $this->data);
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-mobile'
-            ]);
-        }else{
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-desktop'
-            ]);
         }
 
         $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data);
-
-        if(!$file_exist){
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-failed-file-not-exist'
-            ]);
-        }
 
         if(!$file_exist &&
             ($this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400)) {
             $this->job_data->requeue();
             $this->job_data->save();
             //$this->inject->successfully_injected = false;
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-failed'
-            ]);
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
@@ -105,14 +81,6 @@ class CriticalCSS_Enqueue
                 'inject' => $this->inject,
                 'options' => $this->options
             ];
-        }else{
-
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-file_not_exist'
-            ]);
-
         }
 
         return $state;
@@ -174,12 +142,6 @@ class CriticalCSS_Enqueue
 
         if(empty($critical_css_content)){
 
-            self::log([
-                'type' => 'injection',
-                'url' => $this->job_data->job->url,
-                'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-content_empty'
-            ]);
-
             return;
         }
 
@@ -210,12 +172,6 @@ class CriticalCSS_Enqueue
             $body->appendChild($node);
 
         }
-
-        self::log([
-            'type' => 'injection',
-            'url' => $this->job_data->job->url,
-            'log' =>  'CriticalCSS_Enqueue->enqueue_cpcss-success'
-        ]);
 
     }
 

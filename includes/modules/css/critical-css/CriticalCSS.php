@@ -356,12 +356,6 @@ class CriticalCSS
             $this->job_data = new RapidLoad_Job_Data($job, 'cpcss');
         }
 
-        self::log([
-            'log' => 'CriticalCSS->enqueue_cpcss',
-            'url' => $job->url,
-            'type' => 'injection'
-        ]);
-
         new CriticalCSS_Enqueue($this->job_data);
 
     }

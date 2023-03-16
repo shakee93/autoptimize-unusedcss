@@ -301,12 +301,6 @@ class UnusedCSS
             $this->job_data = new RapidLoad_Job_Data($job, 'uucss');
         }
 
-        self::log([
-            'log' => 'UnusedCSS->enqueue_uucss',
-            'url' => $job->url,
-            'type' => 'injection'
-        ]);
-
         new UnusedCSS_Enqueue($this->job_data);
 
     }
