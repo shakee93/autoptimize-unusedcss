@@ -56,6 +56,28 @@
             </div>
           </div>
 
+          <div class="grid">
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <div @click="preload_internal_links = !preload_internal_links" :class="preload_internal_links? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                      <svg v-if="preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h1 @click="preload_internal_links = !preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>
+                  <p class="text-sm text-gray-font">Preload Links</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
           <div class="mb-5">
             <div class="flex">
@@ -223,6 +245,7 @@ export default {
           const options = this.javascript[key].options;
           this.uucss_load_js_method.defer_inline_js = options.defer_inline_js
           this.minify_js = options.minify_js
+          this.preload_internal_links = options.preload_internal_links
           this.delay_javascript = options.delay_javascript
           this.uucss_excluded_js_files = options.uucss_excluded_js_files
           this.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
@@ -248,6 +271,7 @@ export default {
       const data = {
         defer_inline_js: this.uucss_load_js_method.defer_inline_js,
         minify_js: this.minify_js,
+        preload_internal_links: this.preload_internal_links,
         delay_javascript: this.delay_javascript,
         uucss_excluded_js_files: this.uucss_excluded_js_files,
         uucss_load_js_method: this.uucss_load_js_method.status ? 'defer' : 'none',
@@ -284,6 +308,7 @@ export default {
       focus: null,
       js_optimization: false,
       minify_js: false,
+      preload_internal_links: false,
       delay_javascript: false,
       back: '/',
       loading: false,

@@ -207,6 +207,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['preload_internal_links'])){
+
+            $options['preload_internal_links'] = ($_REQUEST['preload_internal_links'] == 'true' ? "1" : null);
+
+        }
+
         if(isset($_REQUEST['delay_javascript'])){
 
             $options['delay_javascript'] = ($_REQUEST['delay_javascript'] == 'true' ? "1" : null);
