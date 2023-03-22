@@ -476,6 +476,8 @@ class RapidLoad_Admin_Frontend
 
     public function run_gpsi_status_check_for_all(){
 
+        self::verify_nonce();
+
         $spawned = wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
 
         wp_send_json_success([

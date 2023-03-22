@@ -112,7 +112,7 @@
 
         var $sitemap_input = $('input.site-map-url');
 
-        wp.ajax.post('get_robots_text').done(function (data){
+        wp.ajax.post('get_robots_text', { nonce : window.uucss.nonce }).done(function (data){
             if(data && data.sitemap){
                 $sitemap_input.data('sitemap_url', data.sitemap);
             }
@@ -899,7 +899,7 @@
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : data.url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -940,7 +940,7 @@
 
                                             $('#update-attach-rule').click(function(){
 
-                                                wp.ajax.post('attach_rule',{ url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
+                                                wp.ajax.post('attach_rule',{ nonce : window.uucss.nonce, url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
 
                                                     $.uucssAlert(i, 'success')
                                                     var currentFeather = $.featherlight.current();
@@ -957,7 +957,7 @@
                                     break;
                                 }
                                 case 'detach_from_rule':{
-                                    wp.ajax.post('attach_rule',{ url : data.url, type : 'detach' }).then(function (i) {
+                                    wp.ajax.post('attach_rule',{ url : data.url, type : 'detach', nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -983,7 +983,7 @@
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1543,7 +1543,7 @@
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : url }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -1595,7 +1595,7 @@
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1955,7 +1955,7 @@
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings' }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', nonce : window.uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1966,7 +1966,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : window.uucss.nonce }).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2104,7 +2104,7 @@
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule' }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule', nonce : window.uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -2115,7 +2115,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : window.uucss.nonce }).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2305,7 +2305,7 @@
             let $this = $(this)
             $this.text('deactivating...');
 
-            wp.ajax.post('uucss_deactivate').done(function (r) {
+            wp.ajax.post('uucss_deactivate', { nonce : window.uucss.nonce }).done(function (r) {
                 $this.text('deactivated');
                 window.location.reload()
             })
@@ -2362,7 +2362,7 @@
                     $target.text('Connecting...');
                     $target.removeAttr('href');
 
-                    wp.ajax.post('uucss_connect',{ license_key : license_key }).then(function (i) {
+                    wp.ajax.post('uucss_connect',{ license_key : license_key, nonce : window.uucss.nonce }).then(function (i) {
 
                         if(i.success){
                             window.location.href = window.location.href + '&token=' + license_key + '&nonce=' + i.activation_nonce

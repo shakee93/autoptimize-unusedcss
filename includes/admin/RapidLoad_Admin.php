@@ -38,6 +38,8 @@ class RapidLoad_Admin
 
     public function purge_rapidload_cdn(){
 
+        self::verify_nonce();
+
         $options = RapidLoad_Base::fetch_options();
 
         if(!isset($options['uucss_cdn_zone_id']) || $options['uucss_cdn_zone_id'] != "1"){
@@ -52,6 +54,8 @@ class RapidLoad_Admin
     }
 
     public function update_rapidload_settings(){
+
+        self::verify_nonce();
 
         $options = RapidLoad_Base::fetch_options();
 
@@ -400,6 +404,7 @@ class RapidLoad_Admin
     }
 
     public function list_module(){
+        self::verify_nonce();
         wp_send_json_success(RapidLoad_Base::get()->modules()->active_modules());
     }
 
@@ -410,6 +415,8 @@ class RapidLoad_Admin
     }
 
     public function attach_rule(){
+
+        self::verify_nonce();
 
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : false;
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
@@ -458,6 +465,10 @@ class RapidLoad_Admin
 
     public function verify_api_key() {
 
+        if(is_ajax()){
+            self::verify_nonce();
+        }
+
         if ( ! isset( $_POST['api_key'] ) ) {
             wp_send_json_error();
 
@@ -478,6 +489,9 @@ class RapidLoad_Admin
     }
 
     public function clear_rapidload_logs(){
+
+        self::verify_nonce();
+
         $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
@@ -489,6 +503,8 @@ class RapidLoad_Admin
     }
 
     public function rapidload_logs(){
+
+        self::verify_nonce();
 
         $file_system = new RapidLoad_FileSystem();
 
@@ -508,6 +524,8 @@ class RapidLoad_Admin
     }
 
     public function clear_page_cache(){
+
+        self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
         $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
@@ -563,6 +581,8 @@ class RapidLoad_Admin
     }
 
     public function uucss_connect(){
+
+        self::verify_nonce();
 
         if ( ! isset( $_REQUEST['license_key'] ) || empty( $_REQUEST['license_key'] ) ) {
             wp_send_json_error( 'License Key required' );
@@ -888,6 +908,8 @@ class RapidLoad_Admin
 
     public function uucss_license() {
 
+        self::verify_nonce();
+
         $api = new RapidLoad_Api();
 
         $disconnect = isset($_REQUEST['disconnect']);
@@ -935,6 +957,8 @@ class RapidLoad_Admin
     }
 
     public function frontend_logs(){
+
+        self::verify_nonce();
 
         $args = [];
 
@@ -1058,6 +1082,8 @@ class RapidLoad_Admin
     }
 
     public function get_robots_text(){
+
+        self::verify_nonce();
 
         $robotsUrl = trailingslashit(get_site_url()) . "robots.txt";
 

@@ -23,7 +23,7 @@
                 }
             });
             $('#clear-uucss-log').click(function () {
-                wp.ajax.post('clear_uucss_logs',{  }).then(function (i) {
+                wp.ajax.post('clear_uucss_logs',{ nonce : window.uucss.nonce }).then(function (i) {
                     if(i){
                         $table.ajax.reload(null, false);
                     }
@@ -123,7 +123,7 @@
                 ajax : {
                     url: wp.ajax.settings.url + '?action=uucss_logs',
                     data: function (d) {
-
+                        d.nonce = window.uucss.nonce
                         return d;
                     },
                     dataSrc: function (i) {
