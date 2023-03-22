@@ -98,7 +98,40 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $inline_styles as $inline_style ) {
 
-            preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
+            $style_lines = explode(";",$inline_style->style);
+            $_style_lines = [];
+
+            foreach ($style_lines as $style_line){
+
+                if(!$this->str_contains($style_line, "background-image")){
+                    $_style_lines[] = $style_line;
+                }else{
+                    preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $style_line, $matches, PREG_SET_ORDER);
+
+                    if(!empty($matches)){
+
+                        foreach ($matches as $match) {
+                            $url = $this->extractUrl($match[1]);
+                            error_log($url);
+                            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                            if (in_array($urlExt, $this->imgExt)) {
+                                $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
+                                $inline_style->{'data-rapidload-lazy-bg'} = $replace_url;
+                                $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
+                                $inline_style->{'data-rapidload-lazy-attributes'} = 'bg';
+                            }
+                        }
+
+                    }else{
+                        $_style_lines[] = $style_line;
+                    }
+                }
+
+            }
+
+            $inline_style->style = implode(";",$_style_lines);
+
+            /*preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
 
             if(!empty($matches)){
 
@@ -115,7 +148,7 @@ class RapidLoad_Image_Enqueue
                 $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
                 $inline_style->{'data-rapidload-lazy-attributes'} = 'style';
                 unset($inline_style->style);
-            }
+            }*/
 
         }
 
@@ -135,7 +168,7 @@ class RapidLoad_Image_Enqueue
                     }
                 }
             }
-            $style->__set('innertext', $cssDocument->render());
+            //$style->__set('innertext', $cssDocument->render());
         }
 
         return $state;

@@ -264,6 +264,7 @@ class RapidLoad_Module
                     'uucss_load_js_method' => isset($options['uucss_load_js_method']) ? $options['uucss_load_js_method'] : 'none',
                     'defer_inline_js' => isset($options['defer_inline_js']) && $options['defer_inline_js'] == "1" ? true : false,
                     'minify_js' => isset($options['minify_js']) && $options['minify_js'] == "1" ? true : false,
+                    'preload_internal_links' => isset($options['preload_internal_links']) && $options['preload_internal_links'] == "1" ? true : false,
                     'delay_javascript' => isset($options['delay_javascript']) && $options['delay_javascript'] == "1" ? true : false,
                     'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
                     'uucss_excluded_js_files_from_defer' => isset($options['uucss_excluded_js_files_from_defer']) ? $options['uucss_excluded_js_files_from_defer'] : null,

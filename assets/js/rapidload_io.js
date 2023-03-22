@@ -84,7 +84,8 @@
                             .split(',')
                             .forEach(function (attribute) {
                                 const value = element.target.getAttribute('data-rapidload-lazy-'.concat(attribute));
-                                element.target.setAttribute(attribute, value);
+                                console.log($(element.target))
+                                $(element.target).css('background-image',"url(" + value.replace("ret_blank","ret_img") + ")");
                             });
                     }
                 });

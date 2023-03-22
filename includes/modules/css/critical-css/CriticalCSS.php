@@ -325,7 +325,7 @@ class CriticalCSS
 
         if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
             self::log([
-                'log' =>  'requeue-> cpcss requeue manually or page accessed',
+                'log' =>  'requeue-> cpcss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
             $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);

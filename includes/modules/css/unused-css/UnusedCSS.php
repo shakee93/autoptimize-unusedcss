@@ -352,7 +352,7 @@ class UnusedCSS
 
         if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
             self::log([
-                'log' =>  'requeue-> uucss requeue manually or page accessed',
+                'log' =>  'requeue-> uucss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
             $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
