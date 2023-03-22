@@ -44,7 +44,8 @@
                 data: {
                     url: url,
                     post_id : rapidload_js_optimizer.post_id,
-                    include_matrix: true
+                    include_matrix: true,
+                    nonce : window.uucss.nonce
                 },
                 success: function (result) {
                     renderInsightResults(result.data);

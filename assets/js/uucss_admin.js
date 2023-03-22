@@ -64,7 +64,7 @@
 
             container.find('#uucss-faq-read').click(function (e) {
                 e.preventDefault();
-                wp.ajax.post('mark_faqs_read',{}).then(function (i) {
+                wp.ajax.post('mark_faqs_read',{ nonce : window.uucss.nonce}).then(function (i) {
                     container.find('.uucss-notification.uucss-notification-faq').remove();
                 }).fail(function (i) {
 
@@ -90,7 +90,8 @@
             e.preventDefault();
             var $this = $(this);
             wp.ajax.post('mark_notice_read',{
-                notice_id : $this.data('notice_id')
+                notice_id : $this.data('notice_id'),
+                nonce : window.uucss.nonce
             }).then(function (i) {
                 $this.parents('li:first').remove();
             }).fail(function (i) {
@@ -200,7 +201,7 @@
             var oldText = $button.val()
 
             $button.val('loading..')
-            wp.ajax.post('suggest_whitelist_packs').done(function (data) {
+            wp.ajax.post('suggest_whitelist_packs', { nonce : window.uucss.nonce }).done(function (data) {
 
                 $button.val(oldText)
 
@@ -1005,6 +1006,7 @@
                                         url: wp.ajax.settings.url + '?action=uucss_test_url',
                                         data : {
                                             url: data.url,
+                                            nonce : window.uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1619,7 +1621,8 @@
                                             url: data.url,
                                             type: 'rule',
                                             rule : rule,
-                                            regex : regex
+                                            regex : regex,
+                                            nonce : window.uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1767,6 +1770,7 @@
                 post_type : post_type,
                 type : type,
                 job_type : type,
+                nonce : window.uucss.nonce
             }
 
             /*wp.ajax.post('uucss_queue',data_).then(function (i) {
@@ -1919,7 +1923,7 @@
                                 url : '',
                                 clear : true,
                                 job_type: 'url',
-                                nonce: uucss.nonce
+                                nonce: window.uucss.nonce,
                             }
 
                             if(action === 'remove_selected'){
@@ -2065,7 +2069,7 @@
                             var data = {
                                 url : '',
                                 clear : true,
-                                nonce: uucss.nonce,
+                                nonce: window.uucss.nonce,
                                 job_type: 'rule',
                                 args: {
                                     type : 'rule'
@@ -2137,7 +2141,7 @@
                         }
                         case 'export_all':{
 
-                            wp.ajax.post('get_all_rules',{}).then(function (i) {
+                            wp.ajax.post('get_all_rules',{ nonce : window.uucss.nonce}).then(function (i) {
                                 if(i){
                                     var exportLink = document.createElement('a');
                                     exportLink.download = 'rapidload-rules-' + Date.now();
@@ -2158,6 +2162,7 @@
                                 var fileReader = new FileReader();
                                 fileReader.onload = function(){
                                     wp.ajax.post('upload_rules',{
+                                        nonce : window.uucss.nonce,
                                         rules : fileReader.result
                                     }).then(function (i) {
                                         $.uucssAlert(i)
@@ -2200,7 +2205,7 @@
             var _data = {
                 url: data.url,
                 clear: isClear,
-                nonce: uucss.nonce,
+                nonce: window.uucss.nonce,
             }
 
             if(args.rule && args.regex){
@@ -2433,7 +2438,8 @@
                 old_rule : $model_content.data('old_rule'),
                 old_url : $model_content.data('old_base_url'),
                 old_regex : $model_content.data('old_rule_regex'),
-                requeue : $regenerate.is(':checked') ? "1" : "0"
+                requeue : $regenerate.is(':checked') ? "1" : "0",
+                nonce : window.uucss.nonce
             }).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();
@@ -2472,7 +2478,8 @@
             var data_ = {
                 post_type : $model_content.find('#model-requeue-post-type').val(),
                 job_type : $model_content.find('#model-requeue-post-type').val(),
-                url : $model_content.find('input.site-map-url').val()
+                url : $model_content.find('input.site-map-url').val(),
+                nonce : window.uucss.nonce,
             }
 
             wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
@@ -2529,7 +2536,7 @@
         $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
 */
         function updateRapidLoadStatus(){
-            wp.ajax.post('uucss_status').then(function(res){
+            wp.ajax.post('uucss_status', { nonce : window.uucss.nonce }).then(function(res){
                 if(res){
                     var $status = $('li.rapidload-status')
                     var total = res.total;
@@ -2561,7 +2568,7 @@
     });
 
     function updateNotices() {
-        wp.ajax.post('rapidload_notifications', {}).then(function (response) {
+        wp.ajax.post('rapidload_notifications', { nonce : window.uucss.nonce }).then(function (response) {
             if(response){
                 window.uucss.faqs = response.faqs;
                 window.uucss.public_notices = response.notifications;

@@ -111,6 +111,8 @@ class JavaScript
 
     public function page_speed_insights(){
 
+        self::verify_nonce();
+
         if(!isset($_REQUEST['url'])){
             wp_send_json_error('url missing');
         }
@@ -240,6 +242,8 @@ class JavaScript
     }
 
     public function update_js_settings(){
+
+        self::verify_nonce();
 
         $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : null;
         $settings = isset($_REQUEST['settings']) ? $_REQUEST['settings'] : [];
