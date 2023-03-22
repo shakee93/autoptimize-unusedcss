@@ -27,6 +27,7 @@ body .rapidload {
     }
     .rapidload h1{
         margin: 0px !important;
+        line-height: 24px !important;
     }
 
     .active{

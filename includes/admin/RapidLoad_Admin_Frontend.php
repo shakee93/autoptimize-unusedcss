@@ -62,6 +62,16 @@ class RapidLoad_Admin_Frontend
 
             $this->load_optimizer_scripts();
 
+            // TODO: temporary should be removed so it supports all the browsers
+            add_filter('script_loader_tag', function ($tag, $handle) {
+
+                if ( 'rapidload_page_optimizer' !== $handle )
+                    return $tag;
+
+                return str_replace( ' src', ' type="module" src', $tag );
+
+            }, 10, 2);
+
         }
 
         if(is_admin()){
@@ -828,7 +838,7 @@ class RapidLoad_Admin_Frontend
 
         global $submenu;
 
-        add_submenu_page( 'options-general.php', 'RapidLoad Optimizer', 'RapidLoad Optimizer', 'manage_options', 'page-optimizer', function () {
+        add_submenu_page( 'options-general.php', 'RapidLoad Optimizer', 'RapidLoad Optimizer', 'manage_options', 'rapidload-page-optimizer', function () {
             wp_enqueue_script( 'post' );
 
             ?>
@@ -847,7 +857,7 @@ class RapidLoad_Admin_Frontend
             return;
         }
 
-        $key = array_search(["RapidLoad Optimizer","manage_options","page-optimizer","RapidLoad Optimizer"], $submenu['options-general.php']);
+        $key = array_search(["RapidLoad Optimizer","manage_options","rapidload-page-optimizer","RapidLoad Optimizer"], $submenu['options-general.php']);
 
         if(isset($submenu['options-general.php'][$key])){
             unset($submenu['options-general.php'][$key]);
@@ -873,7 +883,7 @@ class RapidLoad_Admin_Frontend
 
     public function is_rapidload_page_optimizer()
     {
-        return isset($_GET['page']) && $_GET['page'] === 'page-optimizer';
+        return isset($_GET['page']) && $_GET['page'] === 'rapidload-page-optimizer';
     }
 
     public function is_rapidload_legacy_page()
@@ -903,15 +913,15 @@ class RapidLoad_Admin_Frontend
     public function load_optimizer_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],'1.71');
+        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],'1.71');
 
-        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], '1.71');
+        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], '1.71');
 
         $data = array(
-            'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'
+            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist'
         );
 
-        wp_localize_script( 'rapidload_page_optimizer', 'rapidload_page_optimizer', $data );
+        wp_localize_script( 'rapidload_page_optimizer', 'rapidload_admin', $data );
 
         wp_enqueue_script( 'rapidload_page_optimizer' );
 

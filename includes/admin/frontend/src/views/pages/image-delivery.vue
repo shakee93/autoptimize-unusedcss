@@ -315,6 +315,7 @@ export default {
         uucss_set_width_and_height : this.uucss_set_width_and_height,
         uucss_exclude_images: this.uucss_exclude_images,
         uucss_enable_image_delivery : true,
+        nonce: window.uucss.nonce
       }
 
       await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data, {

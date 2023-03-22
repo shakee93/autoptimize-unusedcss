@@ -150,6 +150,7 @@ export default {
         uucss_preload_font_urls : this.preload_font_urls.replace(/\n/g, ","),
         uucss_self_host_google_fonts : this.self_host_google_font,
         uucss_enable_font_optimization : true,
+        nonce: window.uucss.nonce,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {

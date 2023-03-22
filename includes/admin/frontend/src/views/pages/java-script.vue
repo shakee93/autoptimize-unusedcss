@@ -277,6 +277,7 @@ export default {
         uucss_load_js_method: this.uucss_load_js_method.status ? 'defer' : 'none',
         uucss_load_scripts_on_user_interaction: this.uucss_load_scripts_on_user_interaction,
         uucss_excluded_js_files_from_defer: this.uucss_load_js_method.uucss_excluded_js_files_from_defer,
+        nonce: window.uucss.nonce,
       }
 
       await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
