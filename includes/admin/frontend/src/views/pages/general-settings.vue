@@ -303,7 +303,7 @@ export default {
       this.misc_option=!this.misc_option;
       const data = {
         uucss_enable_rules: this.misc_option,
-
+        nonce: window.uucss.nonce
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
         headers: {
@@ -355,6 +355,7 @@ export default {
         uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
         uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,
         uucss_disable_add_to_re_queue : this.queue_option.uucss_disable_add_to_re_queue,
+        nonce: window.uucss.nonce
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
         headers: {

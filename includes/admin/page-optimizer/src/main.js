@@ -11,4 +11,4 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.mount('#page-optimizer')
+app.mount('#rapidload-page-optimizer')
