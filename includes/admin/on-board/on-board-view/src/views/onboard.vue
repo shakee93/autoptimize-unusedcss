@@ -399,16 +399,7 @@ export default {
         axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {nonce: window.uucss.nonce}).then((response)=>{
           if(response.data?.data){
             //console.log(response.data.data)
-            if(!response.data?.data?.licensedDomain){
-              this.disconnect_license();
-              localStorage.clear();
-              this.license_information.name = null
-              this.license_information.exp_date = null
-              this.license_information.license = null
-              this.license_information.licensed_domain = null
-              this.license_information.key = ''
-              this.error= false;
-            }else{
+            if(response.data?.data?.licensedDomain){
               this.error= false;
               const licenseData = []
               licenseData.push(response.data?.data)
