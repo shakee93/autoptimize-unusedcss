@@ -28,7 +28,7 @@
                 type : log.type,
                 url : log.url,
                 log : log.log,
-                nonce : window.uucss.nonce
+                nonce : window.uucss_global.nonce
             },
             success : function(response){
 
@@ -206,7 +206,7 @@
             }
 
             // TODO fix this
-            wp.ajax?.post('uucss_license', { nonce : window.uucss.nonce }).then(function (i) {
+            wp.ajax?.post('uucss_license', { nonce : window.uucss_global.nonce }).then(function (i) {
                 if(container.length){
                     $('.license-info ul').show();
 
@@ -285,7 +285,7 @@
                 method : 'POST',
                 data : {
                     action : 'rapidload_db_update',
-                    nonce : window.uucss.nonce
+                    nonce : window.uucss_global.nonce
                 },
                 success : function(response){
                     if(response.success){
