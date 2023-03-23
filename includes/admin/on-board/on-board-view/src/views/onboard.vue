@@ -396,7 +396,8 @@ export default {
         })
       },
       update_license(){
-        axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {nonce: window.uucss.nonce}).then((response)=>{
+        axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce=' + window.uucss.nonce, {nonce: window.uucss.nonce}).then((response)=>{
+          console.log(response.data)
           if(response.data?.data){
             //console.log(response.data.data)
             if(response.data?.data?.licensedDomain){
@@ -421,7 +422,8 @@ export default {
     update(toggle, module) {
 
       if(!this.license_information.licensed_domain){
-        //console.log("return true");
+        console.log(this.license_information)
+        console.log("return true");
         return;
       }
       if (module === 'cdn') {
