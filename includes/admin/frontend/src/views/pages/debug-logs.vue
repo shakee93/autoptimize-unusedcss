@@ -48,7 +48,13 @@
           <div v-if="!loading && !table">
             <p class="text-sm text-gray-font">No Logs found...</p>
           </div>
-
+          <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"
+                 ref="cdn_url"
+                 @focus="focus='cdn-endpoint'"
+                 @blur="focus=''"
+                 style="padding-left:15px"
+                 class="pointer-events-none cursor-default disabled cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                 id="cdn-url" type="text" placeholder="">
           <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
 
             <button @click="clearLogs" :disabled="loading" :class="!table? 'hidden': 'block'"
