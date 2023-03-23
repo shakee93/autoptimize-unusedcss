@@ -320,10 +320,8 @@ export default {
     loadWhitelistPacks() {
       this.refresh_element = true;
       this.focus='tag';
-      const data = {
-        nonce: window.uucss.nonce
-      }
-      axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs', data)
+
+      axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs&nonce='+window.uucss_global.nonce)
           .then(response => {
            // this.whitelist_packs = ['1:Elementor','2:pluginone']
             this.whitelist_packs = response.data.data.map((value) => {
@@ -366,12 +364,12 @@ export default {
         uucss_safelist: this.uucss_safelist,
         uucss_blocklist: this.uucss_blocklist,
         whitelist_packs: this.whitelist_packs,
-        nonce: window.uucss.nonce,
+
       }
 
       //console.log(this.whitelist_packs);
 
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

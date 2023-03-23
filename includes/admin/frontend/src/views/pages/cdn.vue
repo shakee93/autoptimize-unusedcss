@@ -193,10 +193,8 @@ export default {
     },
     purgeCach(){
       this.loading = true;
-      const data = {
-        nonce: window.uucss.nonce
-      }
-      axios.post(window.uucss_global.ajax_url + '?action=purge_rapidload_cdn' ,data , {
+
+      axios.post(window.uucss_global.ajax_url + '?action=purge_rapidload_cdn&nonce='+window.uucss_global.nonce , {
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -222,9 +220,8 @@ export default {
         uucss_cdn_dns_id : this.uucss_cdn_dns_id,
         uucss_cdn_url : this.uucss_cdn_url,
         uucss_cdn_zone_id : this.uucss_cdn_zone_id,
-        nonce: window.uucss.nonce
       }
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings' , data,{
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce , data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }

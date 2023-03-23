@@ -196,10 +196,8 @@ export default {
     },
     clearLogs(){
       this.loading = true;
-      const data = {
-        nonce: window.uucss.nonce
-      }
-      axios.post(window.uucss_global.ajax_url + '?action=clear_uucss_logs', data)
+
+      axios.post(window.uucss_global.ajax_url + '?action=clear_uucss_logs&nonce='+window.uucss_global.nonce)
           .then(response => {
             response.data;
 

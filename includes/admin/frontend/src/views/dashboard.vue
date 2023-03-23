@@ -394,9 +394,9 @@ export default {
       this.connect_with_license_error = "";
       const data = {
         license_key:this.license_information.key,
-        nonce: window.uucss.nonce
+
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_connect', data,{
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_connect&nonce='+window.uucss_global.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -420,9 +420,8 @@ export default {
     disconnect_license(){
       const data = {
         disconnect:true,
-        nonce: window.uucss.nonce
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', data,{
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -430,10 +429,8 @@ export default {
 
     },
     update_license(){
-      const data = {
-        nonce: window.uucss.nonce
-      }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license', data).then((response)=>{
+
+      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce).then((response)=>{
         if(response.data?.data){
 
           if(response.data?.data === 'License key authentication failed'){
@@ -484,10 +481,7 @@ export default {
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
 
-      const data = {
-        nonce: window.uucss.nonce
-      }
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle, data, {
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global.nonce, {
         cancelToken: cancelToken
       })
           .then(response => {
