@@ -326,7 +326,7 @@ export default {
 
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
-        axios.post(window.uucss_global.api_url + '/preview&nonce='+ window.uucss.nonce, {
+        axios.post(window.uucss_global.api_url + '/preview&nonce='+ window.uucss_global.nonce, {
           //url: 'https://rapidload.io/'
           url: uucss_global.home_url,
           //nonce: window.uucss.nonce
@@ -389,14 +389,14 @@ export default {
 
 
       disconnect_license(){
-        axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {disconnect:true, nonce: window.uucss.nonce},{
+        axios.post(window.uucss_global.ajax_url + '?action=uucss_license', {disconnect:true, nonce: window.uucss_global.nonce},{
           headers: {
             'Content-Type':'multipart/form-data'
           }
         })
       },
       update_license(){
-        axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+ window.uucss.nonce).then((response)=>{
+        axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+ window.uucss_global.nonce).then((response)=>{
           if(response.data?.data){
             //console.log(response.data.data)
             if(response.data?.data?.licensedDomain){
@@ -439,7 +439,7 @@ export default {
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss.nonce, {
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss_global.nonce, {
         cancelToken: cancelToken
       })
           .then(response => {
