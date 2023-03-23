@@ -169,7 +169,7 @@
                   <p class="mt-1 leading-4 text-xm text-black leading-db-lh text-[11px]">{{ item.description }}</p>
                 </div>
                 <div class="col-end-7 col-span-2 mr-7 pt-5">
-                  <label :class="{disableBlock: item.id==='css'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
+                  <label :class="{disableBlock: item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
                     <div
