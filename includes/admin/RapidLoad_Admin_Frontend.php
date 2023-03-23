@@ -131,10 +131,13 @@ class RapidLoad_Admin_Frontend
     }
 
     public function suggest_whitelist_packs(){
+        self::verify_nonce();
         RapidLoad_Base::suggest_whitelist_packs();
     }
 
     public function mark_notice_read(){
+
+        self::verify_nonce();
 
         $notice_id = isset($_REQUEST['notice_id']) ? $_REQUEST['notice_id'] : false;
 
@@ -147,11 +150,15 @@ class RapidLoad_Admin_Frontend
 
     public function mark_faqs_read(){
 
+        self::verify_nonce();
+
         RapidLoad_Base::update_option('rapidload_faqs_read', true);
         wp_send_json_success(true);
     }
 
     public function uucss_update_rule(){
+
+        self::verify_nonce();
 
         if( !isset($_REQUEST['rule']) || empty($_REQUEST['rule']) ||
             !isset($_REQUEST['url']) || empty($_REQUEST['url'])
@@ -237,6 +244,8 @@ class RapidLoad_Admin_Frontend
 
     function rapidload_notifications(){
 
+        self::verify_nonce();
+
         wp_send_json_success([
             'faqs' => $this->get_faqs(),
             'notifications' => $this->get_public_notices()
@@ -313,6 +322,8 @@ class RapidLoad_Admin_Frontend
 
     public function uucss_test_url(){
 
+        self::verify_nonce();
+
         global $uucss;
 
         if(!isset($_REQUEST['url'])){
@@ -349,9 +360,7 @@ class RapidLoad_Admin_Frontend
 
     public function uucss_data(){
 
-        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
-            wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
-        }
+        self::verify_nonce();
 
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'path';
 
@@ -447,6 +456,8 @@ class RapidLoad_Admin_Frontend
 
     public function uucss_status(){
 
+        self::verify_nonce();
+
         $job_counts = RapidLoad_DB::get_job_counts();
 
         wp_send_json_success([
@@ -485,6 +496,8 @@ class RapidLoad_Admin_Frontend
     }
 
     public function run_gpsi_status_check_for_all(){
+
+        self::verify_nonce();
 
         $spawned = wp_schedule_single_event( time() + 5, 'uucss_run_gpsi_test_for_all');
 
@@ -531,6 +544,8 @@ class RapidLoad_Admin_Frontend
     }
 
     public function rapidload_purge_all(){
+
+        self::verify_nonce();
 
         $job_type = isset($_REQUEST['job_type']) ? $_REQUEST['job_type'] : 'all';
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
@@ -720,6 +735,8 @@ class RapidLoad_Admin_Frontend
 
     public function upload_rules(){
 
+        self::verify_nonce();
+
         if(!isset($_REQUEST['rules'])){
             wp_send_json_error('rules required');
         }
@@ -744,6 +761,8 @@ class RapidLoad_Admin_Frontend
     }
 
     public function get_all_rules(){
+
+        self::verify_nonce();
 
         wp_send_json_success(RapidLoad_Job::all());
 

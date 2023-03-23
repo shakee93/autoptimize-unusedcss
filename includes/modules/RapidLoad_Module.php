@@ -3,6 +3,8 @@
 
 class RapidLoad_Module
 {
+    use RapidLoad_Utils;
+
     public $modules = [];
     public $modules_instances = [];
 
@@ -121,6 +123,8 @@ class RapidLoad_Module
     }
 
     function activate_module(){
+
+        self::verify_nonce();
 
         $options = RapidLoad_Base::fetch_options();
 

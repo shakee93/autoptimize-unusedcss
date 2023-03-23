@@ -34,6 +34,8 @@ class RapidLoad_Onboard{
 
     function run_first_job(){
 
+        self::verify_nonce();
+
         if(!RapidLoad_Base::is_api_key_verified()){
             wp_send_json_error(false);
         }
@@ -60,6 +62,9 @@ class RapidLoad_Onboard{
     }
 
     function rapidload_configured(){
+
+        self::verify_nonce();
+
         $status = [];
         $status['rapidload_connected'] = RapidLoad_Base::is_api_key_verified();
         $status['uucss_first_job_done'] = (bool)RapidLoad_DB::get_first_link();
