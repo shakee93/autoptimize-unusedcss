@@ -271,32 +271,33 @@ export default {
       this.heading = 'Recommended Settings';
       this.subheading= 'Recommended options are already enabled for you... Go on and tweak it yourself.';
       this.update_license();
-
+      this.items[0].status = true;
+      setTimeout(()=>{
+        this.update(false, 'css');
+      },3000)
 
       const activeModules = [];
 
-      Object.keys(window.uucss_global.active_modules).forEach((a) => {
-        activeModules.push(window.uucss_global.active_modules[a])
-      });
+      // Object.keys(window.uucss_global.active_modules).forEach((a) => {
+      //   activeModules.push(window.uucss_global.active_modules[a])
+      // });
+      //
+      // this.items_data = activeModules
+      //
+      // if (this.items_data) {
+      //   Object.keys(this.items_data).map((key) => {
+      //     this.items.map((val) => {
+      //       if (val.id === this.items_data[key].id) {
+      //         val.status = this.items_data[key].status === 'on';
+      //
+      //       }
+      //     })
+      //   });
+      //
+      //   this.items[0].status = true;
+      // }
 
-      this.items_data = activeModules
 
-      if (this.items_data) {
-        Object.keys(this.items_data).map((key) => {
-          this.items.map((val) => {
-            if (val.id === this.items_data[key].id) {
-              val.status = this.items_data[key].status === 'on';
-
-            }
-          })
-        });
-
-        this.items[0].status = true;
-      }
-
-      setTimeout(()=>{
-        this.update(false, 'css');
-      },6000)
 
       // const optimizeData = JSON.parse(localStorage.getItem("rapidLoadOptimize"));
       // if(optimizeData){
@@ -326,9 +327,9 @@ export default {
 
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
-        axios.post(window.uucss_global.api_url + '/preview&nonce='+ window.uucss_global.nonce, {
-          //url: 'https://rapidload.io/'
-          url: uucss_global.home_url,
+        axios.post(window.uucss_global.api_url + '/preview', {
+          url: 'https://rapidload.io/'
+          //url: uucss_global.home_url,
           //nonce: window.uucss.nonce
         }).then((response) => {
           //console.log(response.data);
@@ -446,6 +447,7 @@ export default {
             response.data
             window.uucss_global.active_modules = response.data.data
             // this.error= false;
+
             this.items.map((item) => {
               item.status = response.data.data[item.id].status === "on";
             })

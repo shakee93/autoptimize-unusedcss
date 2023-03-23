@@ -348,9 +348,8 @@ export default {
         uucss_minify: this.uucss_minify,
         uucss_enable_uucss: this.remove_unused_css,
         uucss_inline_css: this.uucss_inline_css,
-        nonce: window.uucss.nonce,
       }
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -380,9 +379,8 @@ export default {
       this.uucss_enable_rules = !this.uucss_enable_rules
       const data = {
         uucss_enable_rules: this.uucss_enable_rules,
-        nonce: window.uucss.nonce
       }
-      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings', data, {
+      axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
