@@ -48,13 +48,25 @@
           <div v-if="!loading && !table">
             <p class="text-sm text-gray-font">No Logs found...</p>
           </div>
-          <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"
-                 ref="cdn_url"
-                 @focus="focus='cdn-endpoint'"
-                 @blur="focus=''"
-                 style="padding-left:15px"
-                 class="pointer-events-none cursor-default disabled cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                 id="cdn-url" type="text" placeholder="">
+<!--          <div class="flex mb-3">-->
+<!--          <h1 class="font-medium text-base text-black-font">Filter By:</h1>-->
+<!--          <h1 class="font-medium text-base text-black-font">Date</h1>-->
+<!--            <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
+<!--                   ref="cdn_url"-->
+<!--                   @focus="focus='cdn-endpoint'"-->
+<!--                   @blur="focus=''"-->
+<!--                   style="padding-left:15px"-->
+<!--                   class="pointer-events-none cursor-default cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
+<!--                   type="text" placeholder="">-->
+<!--          <h1 class="font-medium text-base text-black-font">Url</h1>-->
+<!--            <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
+<!--                 ref="cdn_url"-->
+<!--                 @focus="focus='cdn-endpoint'"-->
+<!--                 @blur="focus=''"-->
+<!--                 style="padding-left:15px"-->
+<!--                 class="pointer-events-none cursor-default cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
+<!--                 type="text" placeholder="">-->
+<!--          </div>-->
           <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
 
             <button @click="clearLogs" :disabled="loading" :class="!table? 'hidden': 'block'"
@@ -141,7 +153,7 @@ export default {
 
   mounted() {
 
-    axios.get(window.uucss_global.ajax_url + '?action=uucss_logs')
+    axios.get(window.uucss_global.ajax_url + '?action=uucss_logs&nonce='+window.uucss_global.nonce)
         .then(response => {
           this.debug_log = response.data.data;
           this.table = this.debug_log? this.debug_log.length > 0: false;

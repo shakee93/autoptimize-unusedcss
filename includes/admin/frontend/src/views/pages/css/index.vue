@@ -60,6 +60,27 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
+                  <div @click="rapidload_aggregate_css = !rapidload_aggregate_css" :class="rapidload_aggregate_css? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                    <svg v-if="rapidload_aggregate_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+
+                </div>
+              </div>
+              <div>
+                <h1 @click="rapidload_aggregate_css = !rapidload_aggregate_css" class="font-normal text-base text-black-font cursor-pointer">Aggregate CSS</h1>
+                <p class="text-sm text-gray-font">Aggregate CSS files.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
                   <div @click="uucss_inline_css = !uucss_inline_css" :class="uucss_inline_css? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
@@ -318,6 +339,7 @@ export default {
           this.uucss_minify = option.uucss_minify;
           this.turn_on_group_by_pages = window.uucss_global.total_jobs > 200;
           this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
+          this.rapidload_aggregate_css = option.rapidload_aggregate_css;
         }
 
       });
@@ -348,6 +370,7 @@ export default {
         uucss_minify: this.uucss_minify,
         uucss_enable_uucss: this.remove_unused_css,
         uucss_inline_css: this.uucss_inline_css,
+        rapidload_aggregate_css: this.rapidload_aggregate_css,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
@@ -413,6 +436,7 @@ export default {
       saved: false,
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
       uucss_minify: false,
+      rapidload_aggregate_css: false,
       remove_unused_css: false,
       uucss_excluded_files: '',
       uucss_inline_css: false,
