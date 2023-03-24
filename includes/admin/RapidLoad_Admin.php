@@ -67,6 +67,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['rapidload_aggregate_css'])){
+
+            $options['rapidload_aggregate_css'] = ($_REQUEST['rapidload_aggregate_css'] == 'true' ? "1" : null);
+
+        }
+
         if(isset($_REQUEST['uucss_inline_css'])){
 
             $options['uucss_inline_css'] = ($_REQUEST['uucss_inline_css'] == 'true' ? "1" : null);

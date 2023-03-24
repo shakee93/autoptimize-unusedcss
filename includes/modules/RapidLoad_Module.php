@@ -235,6 +235,7 @@ class RapidLoad_Module
                 'id' => 'css',
                 'options' => [
                     'uucss_minify' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ? true : false,
+                    'rapidload_aggregate_css' => isset($options['rapidload_aggregate_css']) && $options['rapidload_aggregate_css'] == "1" ? true : false,
                     'critical_css' => [
                         'status' => isset($options['uucss_enable_cpcss']) && $options['uucss_enable_cpcss'] == "1" ? "on" : "off",
                         'options' => [
