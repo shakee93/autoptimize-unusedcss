@@ -453,7 +453,7 @@ export default {
 
     runFirstJob(){
      // console.log("first job triggered");
-      axios.get(window.uucss_global.ajax_url + '?action=run_first_job')
+      axios.get(window.uucss_global.ajax_url + '?action=run_first_job&nonce='+ window.uucss_global.nonce)
           .then(response => {
            response.data.data;
             this.rapidloadConfigured();
@@ -468,7 +468,7 @@ export default {
     },
     rapidloadConfigured(){
      // console.log("rapidload config");
-      axios.get(window.uucss_global.ajax_url + '?action=rapidload_configured')
+      axios.get(window.uucss_global.ajax_url + '?action=rapidload_configured&nonce='+ window.uucss_global.nonce)
           .then(response => {
            // console.log(response.data?.data);
             if(response.data?.data?.uucss_first_job_done){
