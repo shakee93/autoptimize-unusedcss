@@ -82,7 +82,11 @@ class RapidLoad_CDN_Enqueue
         $first_child = $head->first_child();
         $first_child->__set('outertext', $preconnect . $first_child->outertext);
 
-        return $state;
+        return [
+            'dom' => $this->dom,
+            'inject' => $this->inject,
+            'options' => $this->options
+        ];
 
     }
 

@@ -171,7 +171,11 @@ class RapidLoad_Image_Enqueue
             //$style->__set('innertext', $cssDocument->render());
         }
 
-        return $state;
+        return [
+            'dom' => $this->dom,
+            'inject' => $this->inject,
+            'options' => $this->options
+        ];
     }
 
     public function preload_images(){

@@ -97,7 +97,11 @@ class Javascript_Enqueue
             $body->appendChild($node);
         }
 
-        return $state;
+        return [
+            'dom' => $this->dom,
+            'inject' => $this->inject,
+            'options' => $this->options
+        ];
     }
 
     public function load_scripts_on_user_interaction($link){
