@@ -47,7 +47,11 @@ class RapidLoad_Font_Enqueue
 
         $this->load_web_fonts_on_user_interaction();
 
-        return $state;
+        return [
+            'dom' => $this->dom,
+            'inject' => $this->inject,
+            'options' => $this->options
+        ];
     }
 
     public function load_web_fonts_on_user_interaction(){

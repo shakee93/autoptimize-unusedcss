@@ -20,8 +20,6 @@ class RapidLoad_HTML_Minifier_Enqueue
 
     public function update_content($state){
 
-        error_log('running');
-
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }

@@ -51,7 +51,11 @@ class MinifyCSS_Enqueue
 
         }
 
-        return $state;
+        return [
+            'dom' => $this->dom,
+            'inject' => $this->inject,
+            'options' => $this->options
+        ];
     }
 
     public function minify_css($link){

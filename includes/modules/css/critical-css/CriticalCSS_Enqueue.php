@@ -25,7 +25,7 @@ class CriticalCSS_Enqueue
         $this->data = $job_data->data;
         $this->warnings = $this->job_data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
     }
 
     function update_content($state){
@@ -176,6 +176,10 @@ class CriticalCSS_Enqueue
             $body->appendChild($node);
 
         }
+
+        add_filter('uucss/enqueue/content/cpcss/handled', function (){
+            return true;
+        });
 
     }
 
