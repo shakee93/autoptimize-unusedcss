@@ -299,19 +299,6 @@ export default {
 
 
 
-      // const optimizeData = JSON.parse(localStorage.getItem("rapidLoadOptimize"));
-      // if(optimizeData){
-      //   Object.keys(optimizeData).forEach((a) => {
-      //     const data = optimizeData[a];
-      //     this.stats.after = data?.stats.after;
-      //     this.stats.before = data?.stats.before;
-      //     this.stats.beforeFileCount = data?.stats.beforeFileCount;
-      //     this.stats.afterFileCount = data?.stats.afterFileCount;
-      //     this.stats.reduction = data?.stats.reduction;
-      //     // this.loading = !data;
-      //   })
-      //
-      // }
     }
 
   },
