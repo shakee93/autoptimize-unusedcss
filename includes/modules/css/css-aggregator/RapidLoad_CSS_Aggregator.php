@@ -18,7 +18,7 @@ class RapidLoad_CSS_Aggregator
         $this->options = RapidLoad_Base::fetch_options();
 
         if(!isset($this->options['rapidload_aggregate_css']) || $this->options['rapidload_aggregate_css'] == "" ){
-            //return;
+            return;
         }
 
         $this->file_system = new RapidLoad_FileSystem();
