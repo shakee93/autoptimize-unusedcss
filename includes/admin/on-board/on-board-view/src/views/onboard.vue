@@ -92,10 +92,12 @@
                 </button>
               </div>
               <div v-if="count===2" class="mr-2.5 flex">
+                <a :href="license_information.connect_link">
                 <button @click="next ('connect')"
                         class="text-[13px] min-w-[120px] justify-center disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mt-4 rounded-full">
                   Connect
                 </button>
+                </a>
               </div>
             </div>
           </div>
@@ -170,7 +172,7 @@
                 </div>
                 <div class="col-end-7 col-span-2 mr-7 pt-5">
                   <label :class="{disableBlock: item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
-                    <input type="checkbox" v-model="item.status" @click="update(item.status, item.id)" value=""
+                    <input type="checkbox" v-model="item.status" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
                     <div
                         class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
@@ -311,6 +313,10 @@ export default {
       if (this.count === 5) {
         this.count = 1;
       }
+      if(step === "connect"){
+        this.error= false;
+        this.loading = true;
+      }
 
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
@@ -406,30 +412,26 @@ export default {
         });
       },
 
+
     update(toggle, module) {
 
       if(!this.license_information.licensed_domain){
-        //console.log("return true");
         return;
       }
-      if (module === 'cdn') {
-        // this.loading = true;
-      }
+
       if (!toggle) {
         toggle = "on";
       } else {
         toggle = "off";
       }
-      if (this.axios_request) {
-        this.axios_request.cancel("");
-        this.axios_request = null;
-      }
-      this.axios_request = axios.CancelToken.source();
-      const cancelToken = this.axios_request.token;
+      // if (this.axios_request) {
+      //   this.axios_request.cancel("");
+      //   this.axios_request = null;
+      // }
+      // this.axios_request = axios.CancelToken.source();
+      // const cancelToken = this.axios_request.token;
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss_global.nonce, {
-        cancelToken: cancelToken
-      })
+      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss_global.nonce)
           .then(response => {
             response.data
             window.uucss_global.active_modules = response.data.data
@@ -450,9 +452,15 @@ export default {
     dashboard(){
       window.location.href = '/wp-admin/options-general.php?page=rapidload';
     },
+    saveRun(){
 
+    },
     runFirstJob(){
      // console.log("first job triggered");
+      this.items.forEach(function(item) {
+        this.update( item.status, item.id);
+        console.log(item.id + ': '+ item.status)
+      });
       axios.get(window.uucss_global.ajax_url + '?action=run_first_job&nonce='+ window.uucss_global.nonce)
           .then(response => {
            response.data.data;
