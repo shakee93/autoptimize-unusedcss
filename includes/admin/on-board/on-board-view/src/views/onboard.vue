@@ -274,9 +274,9 @@ export default {
       this.subheading= 'Recommended options are already enabled for you... Go on and tweak it yourself.';
       this.update_license();
       this.items[0].status = true;
-      setTimeout(()=>{
-        this.update(false, 'css');
-      },3000)
+      // setTimeout(()=>{
+      //   this.update(false, 'css');
+      // },3000)
 
       const activeModules = [];
 
@@ -305,7 +305,9 @@ export default {
 
   },
   methods: {
-
+    toogleTrigger(id, status){
+      console.log(id + ': ' + status);
+    },
 
     next(step, localData) {
       this.loading = true;
@@ -321,8 +323,8 @@ export default {
       if (step === "analyze" && !localData) {
         this.message = 'Connecting your domain with RapidLoad....';
         axios.post(window.uucss_global.api_url + '/preview', {
-          // url: 'https://rapidload.io/'
-          url: uucss_global.home_url,
+           url: 'https://rapidload.io/'
+         // url: uucss_global.home_url,
           //nonce: window.uucss.nonce
         }).then((response) => {
           //console.log(response.data);
@@ -365,7 +367,7 @@ export default {
       if (this.count === 4) {
         this.loading = true;
 
-        this.runFirstJob();
+        this.saveRun();
         this.message = 'Waiting for your First Job....';
         this.loading_header = 'Running First Job';
         this.heading = 'Congratulations';
@@ -418,8 +420,9 @@ export default {
       if(!this.license_information.licensed_domain){
         return;
       }
-
-      if (!toggle) {
+      if (module === 'css' && toggle) {
+        toggle = "on";
+      } else if (!toggle) {
         toggle = "on";
       } else {
         toggle = "off";
@@ -453,14 +456,20 @@ export default {
       window.location.href = '/wp-admin/options-general.php?page=rapidload';
     },
     saveRun(){
-
+      Promise.all(this.items.map((item, index) => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            this.update(item.status, item.id);
+            console.log(item.id + ': ' + item.status);
+            resolve();
+          }, index * 5000);
+        });
+      })).then(() => {
+        this.runFirstJob();
+      });
     },
     runFirstJob(){
-     // console.log("first job triggered");
-      this.items.forEach(function(item) {
-        this.update( item.status, item.id);
-        console.log(item.id + ': '+ item.status)
-      });
+
       axios.get(window.uucss_global.ajax_url + '?action=run_first_job&nonce='+ window.uucss_global.nonce)
           .then(response => {
            response.data.data;
