@@ -403,7 +403,7 @@ export default {
       }).then((response)=>{
         //console.log(response.data.data)
         if(response.data?.success){
-          window.location.href = '?token=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
+          window.location.href = '?rapidload_license=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
           this.license_loading = false;
         }else{
           this.license_loading = false;
