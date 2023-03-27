@@ -49,23 +49,30 @@
             <p class="text-sm text-gray-font">No Logs found...</p>
           </div>
 <!--          <div class="flex mb-3">-->
-<!--          <h1 class="font-medium text-base text-black-font">Filter By:</h1>-->
-<!--          <h1 class="font-medium text-base text-black-font">Date</h1>-->
-<!--            <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
-<!--                   ref="cdn_url"-->
-<!--                   @focus="focus='cdn-endpoint'"-->
-<!--                   @blur="focus=''"-->
-<!--                   style="padding-left:15px"-->
-<!--                   class="pointer-events-none cursor-default cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
-<!--                   type="text" placeholder="">-->
-<!--          <h1 class="font-medium text-base text-black-font">Url</h1>-->
-<!--            <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
-<!--                 ref="cdn_url"-->
-<!--                 @focus="focus='cdn-endpoint'"-->
-<!--                 @blur="focus=''"-->
-<!--                 style="padding-left:15px"-->
-<!--                 class="pointer-events-none cursor-default cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
-<!--                 type="text" placeholder="">-->
+<!--            <div>-->
+<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Filter By:</h1>-->
+<!--            </div>-->
+<!--            <div class="flex">-->
+<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Date</h1>-->
+<!--              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
+<!--                     ref="cdn_url"-->
+<!--                     @focus="focus='cdn-endpoint'"-->
+<!--                     @blur="focus=''"-->
+<!--                     style="padding-left:15px"-->
+<!--                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
+<!--                     type="text" placeholder="">-->
+<!--            </div>-->
+<!--            <div class="flex">-->
+<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Url</h1>-->
+<!--              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
+<!--                     ref="cdn_url"-->
+<!--                     @focus="focus='cdn-endpoint'"-->
+<!--                     @blur="focus=''"-->
+<!--                     style="padding-left:15px"-->
+<!--                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
+<!--                     type="text" placeholder="">-->
+<!--            </div>-->
+
 <!--          </div>-->
           <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
 
@@ -169,7 +176,7 @@ export default {
   methods:{
 
     filterDate(date){
-      const dateFormat= new Date(date);
+      const dateFormat= new Date(date*1000);
       return dateFormat.getDate()+
           "/"+(dateFormat.getMonth()+1)+
           "/"+dateFormat.getFullYear()+
