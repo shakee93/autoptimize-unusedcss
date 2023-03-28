@@ -48,68 +48,68 @@
           <div v-if="!loading && !table">
             <p class="text-sm text-gray-font">No Logs found...</p>
           </div>
-<!--          <div class="flex mb-3">-->
-<!--            <div>-->
-<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Filter By:</h1>-->
-<!--            </div>-->
-<!--            <div class="flex">-->
-<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Date</h1>-->
-<!--              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
-<!--                     ref="cdn_url"-->
-<!--                     @focus="focus='cdn-endpoint'"-->
-<!--                     @blur="focus=''"-->
-<!--                     style="padding-left:15px"-->
-<!--                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
-<!--                     type="text" placeholder="">-->
-<!--            </div>-->
-<!--            <div class="flex">-->
-<!--              <h1 class="font-medium text-base text-black-font pt-1.5">Url</h1>-->
-<!--              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"-->
-<!--                     ref="cdn_url"-->
-<!--                     @focus="focus='cdn-endpoint'"-->
-<!--                     @blur="focus=''"-->
-<!--                     style="padding-left:15px"-->
-<!--                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
-<!--                     type="text" placeholder="">-->
-<!--            </div>-->
 
-<!--          </div>-->
           <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
 
-            <button @click="clearLogs" :disabled="loading" :class="!table? 'hidden': 'block'"
-                    class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mb-5 rounded-lg">
-              <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <svg :class="saved ? 'block' : 'hidden'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                   class="transform scale-125 w-5 h-3.5 mt-1 mr-3 -ml-1">
-                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-              </svg>
+            <div class="flex mb-3 mt-1">
+              <div>
+                <button @click="clearLogs" :disabled="loading" :class="!table? 'hidden': 'block'"
+                        class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent mb-5 rounded-lg">
+                  <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                       xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <svg :class="saved ? 'block' : 'hidden'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                       class="transform scale-125 w-5 h-3.5 mt-1 mr-3 -ml-1">
+                    <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                  </svg>
 
-              Clear Logs
-            </button>
+                  Clear Logs
+                </button>
+              </div>
 
-            <table  class="table-auto border border-gray-border-line">
-              <thead>
-              <tr>
-                <th class="p-0.5">Date</th>
-                <th class="p-0.5">Url</th>
-                <th class="p-0.5">Log</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(logs, index) in paginated" :key="index">
-                <td class="border border-gray-border-line p-0.5 min-w-[125px]">{{filterDate(logs.time)}}</td>
-<!--                <td class="border border-gray-border-line p-0.5 min-w-[250px]">{{ logs.url.length < 35? logs.url : logs.url.substring(0,35)+".." }}</td>-->
-<!--                <td class="border border-gray-border-line p-0.5 min-w-[350px]">{{ logs.log.length < 35? logs.log : logs.log.substring(0,35)+".." }}</td>-->
-                <td class="border border-gray-border-line p-0.5">{{ logs.url}}</td>
-                <td class="border border-gray-border-line p-0.5">{{ logs.log}}</td>
-              </tr>
-              </tbody>
-            </table>
+              <div class="pl-5">
+                <h1 class="font-medium text-base text-black-font pt-1.5">Filter By:</h1>
+              </div>
+              <div class="pl-5 flex">
+                <h1 class="pr-1 font-medium text-base text-black-font pt-1.5">Date</h1>
+                <date-picker class="max-w-[100px]" v-model="selectedDate" @update:selectedDate="updateSelectedDate"></date-picker>
+
+              </div>
+              <div class="pl-5 flex">
+
+                <h1 class="pr-1 font-medium text-base text-black-font pt-1.5">Url</h1>
+                <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"
+                       ref="cdn_url"
+                       v-model="searchUrl"
+                       @focus="focus='cdn-endpoint'"
+                       @blur="focus=''"
+                       style="padding-left:15px"
+                       class="min-w-[400px] cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                       type="text" placeholder="">
+              </div>
+
+            </div>
+            <div class="table-container">
+              <table :class="{'scroll-table': shouldEnableScroll}">
+                <thead>
+                <tr>
+                  <th class="date-column">Date</th>
+                  <th class="url-column">Url</th>
+                  <th class="log-column">Log</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(logs, index) in paginated" :key="index">
+                  <td>{{ filterDate(logs.time) }}</td>
+                  <td>{{ logs.url }}</td>
+                  <td>{{ logs.log }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
 
@@ -148,7 +148,7 @@ import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
-
+import DatePicker from '../../components/calander.vue';
 
 export default {
   name: "general-settings",
@@ -156,6 +156,7 @@ export default {
   components: {
     Vue3TagsInput,
     messageBox,
+    DatePicker,
   },
 
   mounted() {
@@ -174,11 +175,17 @@ export default {
   },
 
   methods:{
+    updateSelectedDate(selectedDate) {
+      this.selectedDate = selectedDate;
+    },
+    date(){
+        console.log("this log date"+ this.selectedDate);
 
+    },
     filterDate(date){
       const dateFormat= new Date(date*1000);
-      return dateFormat.getDate()+
-          "/"+(dateFormat.getMonth()+1)+
+      return (dateFormat.getMonth()+1)+
+          "/"+dateFormat.getDate()+
           "/"+dateFormat.getFullYear()+
           " "+dateFormat.getHours()+
           ":"+dateFormat.getMinutes()+
@@ -235,6 +242,9 @@ export default {
   },
 
   computed: {
+    shouldEnableScroll() {
+      return this.paginated.length > this.maxEntriesBeforeScroll;
+    },
     indexStart() {
       return (this.current - 1) * this.pageSize;
     },
@@ -242,10 +252,25 @@ export default {
       return this.indexStart + this.pageSize;
     },
     paginated() {
-      if(this.debug_log){
-        return this.debug_log.slice(this.indexStart, this.indexEnd);
+      const filteredLogs = this.debug_log.filter(log => {
+        const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
+
+        const selectedDate = this.selectedDate;
+        const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
+        return urlMatch && dateMatch;
+      });
+      if (filteredLogs.length > 0) {
+        return filteredLogs.slice(this.indexStart, this.indexEnd);
+      } else {
+        return [];
       }
     },
+    formattedDate() {
+      if (!this.selectedDate) {
+        return '';
+      }
+      return new Date(this.selectedDate).toLocaleDateString();
+    }
 
   },
   data() {
@@ -262,8 +287,9 @@ export default {
       table: false,
       current: 1,
       pageSize: 10,
-
-
+      searchUrl: '',
+      selectedDate: null,
+      maxEntriesBeforeScroll: 10,
     }
   },
 
@@ -272,5 +298,47 @@ export default {
 </script>
 
 <style scoped>
+.table-container {
+  overflow-x: auto;
+  max-width: 800px;
+}
 
+.scroll-table {
+  overflow-y: scroll;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+}
+
+.date-column {
+  width: 125px;
+  max-width: 125px;
+}
+
+.url-column {
+  width: 250px;
+  max-width: 250px;
+  word-wrap: break-word;
+}
+
+.log-column {
+  width: 350px;
+  max-width: 350px;
+  word-wrap: break-word;
+}
 </style>
