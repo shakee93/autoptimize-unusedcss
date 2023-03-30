@@ -164,7 +164,19 @@ body .rapidload {
         top: 96px;
         right: 64px;
     }
-
+    .rapidload .current-page {
+        background-color: #7F54B3;
+        color: white;
+        border-radius: 4px;
+        padding: 0 6px 0 6px;
+        margin-top: 3px;
+        margin-right: 6px;
+    }
+    .rapidload .page {
+        padding: 0 6px 0 6px;
+        margin-top: 3px;
+        margin-right: 6px;
+    }
     .rapidload .tips-hidden {
         position: absolute;
         transition: 0.3s;

@@ -85,7 +85,7 @@
                        @focus="focus='cdn-endpoint'"
                        @blur="focus=''"
                        style="padding-left:15px"
-                       class="min-w-[400px] cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                       class="min-w-[445px] cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                        type="text" placeholder="">
               </div>
 
@@ -116,15 +116,20 @@
 
 
             <div v-if="!loading && table" class="flex justify-center mt-3">
-              <div class="grid grid-cols-3 gap-3">
-                <div><svg @click="prev" class="cursor-pointer" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+              <div class="flex">
+                <div class="pr-2"><svg @click="prev" class="cursor-pointer" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                           xmlns="http://www.w3.org/2000/svg">
                   <path
                       d="M2.30928 19.1134C2.41237 20.4536 3.4433 21.5876 4.8866 21.6907C6.94845 21.8969 9.83505 22 12 22C14.1649 22 17.0515 21.8969 19.1134 21.6907C19.8351 21.6907 20.4536 21.3814 20.866 20.866C21.2784 20.3505 21.5876 19.8351 21.6907 19.1134C21.8969 17.0515 22 14.1649 22 12C22 9.83505 21.7938 6.94845 21.6907 4.8866C21.5876 3.54639 20.5567 2.41237 19.1134 2.30928C17.0515 2.10309 14.1649 2 12 2C9.83505 2 6.94845 2.20619 4.8866 2.30928C3.54639 2.41237 2.41237 3.4433 2.30928 4.8866C2.10309 6.94846 2 9.83505 2 12C2 14.165 2.10309 17.0515 2.30928 19.1134ZM7.05155 12.0347L10.7629 7.36083C10.866 7.15464 11.0722 7.05155 11.3814 7.05155C11.5876 7.05155 11.6907 7.15464 11.8969 7.25773C12.2062 7.56701 12.3093 7.97938 12 8.28866L9.52577 11.1753L16.1237 11.1753C16.5361 11.1753 16.9485 11.4845 16.9485 12C16.9485 12.5155 16.6392 12.8247 16.1237 12.8247L9.62887 12.8247L12.1031 15.7113C12.4124 16.0206 12.3093 16.5361 12 16.7423C11.6907 17.0515 11.1753 16.9485 10.9691 16.6392L7.05155 12.0347Z"
                       fill="#7F54B3"/>
                 </svg></div>
 
-                <div><span class="mr-2 ml-2">{{ current }}</span></div>
+<!--                <div><span class="mr-2 ml-2">{{ current }}</span></div>-->
+                <div v-for="pageNumber in pageNumbers" :key="pageNumber">
+                  <button v-if="pageNumber === '...'" disabled>...</button>
+                  <button v-else-if="pageNumber === current" :class="{ 'current-page': true }" disabled>{{ pageNumber }}</button>
+                  <button :class="{ 'current-page': pageNumber === current, 'page': pageNumber !== current }" v-else @click="goToPage(pageNumber)">{{ pageNumber }}</button>
+                </div>
                 <div><svg @click="next()" class="cursor-pointer" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
                           xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -205,7 +210,9 @@ export default {
       }
       this.current++;
     },
-
+    goToPage(pageNumber) {
+      this.current = pageNumber;
+    },
     dataSaved(){
       this.saved = true;
       setTimeout(() => this.saved = false, 2000)
@@ -244,6 +251,38 @@ export default {
   },
 
   computed: {
+    pageNumbers() {
+      const pageCount = Math.ceil(this.filteredLogs.length / this.pageSize);
+      let startPage = 1;
+      let endPage = pageCount;
+      if (pageCount > 10) {
+        if (this.current <= 6) {
+          endPage = 10;
+        } else if (this.current + 4 >= pageCount) {
+          startPage = pageCount - 9;
+        } else {
+          startPage = this.current - 5;
+          endPage = this.current + 4;
+        }
+      }
+      const pageNumbers = [];
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+      if (endPage < pageCount) {
+        pageNumbers.push('...');
+        pageNumbers.push(pageCount);
+      }
+      return pageNumbers;
+    },
+    filteredLogs() {
+      return this.debug_log.filter(log => {
+        const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
+        const selectedDate = this.selectedDate;
+        const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
+        return urlMatch && dateMatch;
+      });
+    },
     shouldEnableScroll() {
       return this.paginated.length > this.maxEntriesBeforeScroll;
     },
@@ -302,7 +341,7 @@ export default {
 <style scoped>
 .table-container {
   overflow-x: auto;
-  max-width: 800px;
+  max-width: 850px;
 }
 
 .scroll-table {
