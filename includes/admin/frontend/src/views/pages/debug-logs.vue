@@ -48,9 +48,7 @@
           <div v-if="!loading && !table">
             <p class="text-sm text-gray-font">No Logs found...</p>
           </div>
-
-          <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
-
+          <div v-if="!loading && table" class="">
             <div class="flex mb-3 mt-1">
               <div>
                 <button @click="clearLogs" :disabled="loading" :class="!table? 'hidden': 'block'"
@@ -92,6 +90,10 @@
               </div>
 
             </div>
+          </div>
+          <div v-if="!loading && table" class="overflow-auto max-w-[900px] min-h-[450px] max-h-[450px] min-w-[900px]">
+
+
             <div class="table-container">
               <table :class="{'scroll-table': shouldEnableScroll}">
                 <thead>
