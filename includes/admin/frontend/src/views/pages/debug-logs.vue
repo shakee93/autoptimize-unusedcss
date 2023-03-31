@@ -294,6 +294,7 @@ export default {
     },
     paginated() {
       const filteredLogs = this.debug_log.filter(log => {
+        console.log('');
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
 
         const selectedDate = this.selectedDate;
