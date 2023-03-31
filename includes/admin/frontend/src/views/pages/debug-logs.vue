@@ -277,6 +277,9 @@ export default {
     },
     filteredLogs() {
       return this.debug_log.filter(log => {
+        if(!log.url){
+          return;
+        }
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
         const selectedDate = this.selectedDate;
         const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
