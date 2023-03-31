@@ -170,8 +170,8 @@
                   <h4 class="text-black font-medium leading-3 text-sm">{{ item.title }}</h4>
                   <p class="mt-1 leading-4 text-xm text-black leading-db-lh text-[11px]">{{ item.description }}</p>
                 </div>
-                <div class="col-end-7 col-span-2 mr-7 pt-5">
-                  <label :class="{disableBlock: item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
+                <div :class="{'cursor-not-allowed': item.id==='css' || item.id==='cdn'}" class="col-end-7 col-span-2 mr-7 pt-5">
+                  <label :class="{'disableBlock cursor-not-allowed': item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" v-model="item.status" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
                     <div
@@ -305,9 +305,6 @@ export default {
 
   },
   methods: {
-    toogleTrigger(id, status){
-      console.log(id + ': ' + status);
-    },
 
     next(step, localData) {
       this.loading = true;
@@ -460,7 +457,7 @@ export default {
         return new Promise(resolve => {
           setTimeout(() => {
             this.update(item.status, item.id);
-            console.log(item.id + ': ' + item.status);
+           // console.log(item.id + ': ' + item.status);
             resolve();
           }, index * 5000);
         });

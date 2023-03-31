@@ -21,6 +21,7 @@ body .rapidload{
 
 
 @layer components {
+
     .disableBlock{
         pointer-events: none;
         cursor: default;
