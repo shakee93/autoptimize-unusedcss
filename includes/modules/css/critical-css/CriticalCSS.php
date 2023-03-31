@@ -165,7 +165,7 @@ class CriticalCSS
 
             $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
-            if(isset($job_data->id)){
+            if(isset($job_data->id) && (!isset($job_data->job->rule_id) && $job_data->job->rule == "is_url" || isset($job_data->job->rule_id) && $job_data->job->rule != "is_url")){
 
                 $this->clear_files($job_data);
                 self::log([
