@@ -277,9 +277,7 @@ export default {
     },
     filteredLogs() {
       return this.debug_log.filter(log => {
-        if(!log.url){
-          return;
-        }
+        if (!log.url) return;
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
         const selectedDate = this.selectedDate;
         const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
@@ -299,15 +297,13 @@ export default {
     paginated() {
 
       const filteredLogs = this.debug_log.filter(log => {
-        if(!log.url){
-          return;
-        }
+        if (!log.url) return;
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
 
         const selectedDate = this.selectedDate;
         const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
         return urlMatch && dateMatch;
-      });
+      }).sort((a, b) => new Date(b.time) - new Date(a.time));
       if (filteredLogs.length > 0) {
         return filteredLogs.slice(this.indexStart, this.indexEnd);
       } else {
