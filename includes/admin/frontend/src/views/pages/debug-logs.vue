@@ -68,24 +68,24 @@
                 </button>
               </div>
 
-              <div class="pl-5">
-                <h1 class="font-medium text-base text-black-font pt-1.5">Filter By:</h1>
-              </div>
+<!--              <div class="pl-5">-->
+<!--                <h1 class="font-medium text-base text-black-font pt-1.5">Filter By:</h1>-->
+<!--              </div>-->
               <div class="pl-5 flex">
-                <h1 class="pr-1 font-medium text-base text-black-font pt-1.5">Date</h1>
+                <h1 class="pr-1 font-medium text-base text-black-font pt-1 pr-3">Date</h1>
                 <date-picker class="max-w-[100px]" v-model="selectedDate" @update:selectedDate="updateSelectedDate"></date-picker>
 
               </div>
               <div class="pl-5 flex">
 
-                <h1 class="pr-1 font-medium text-base text-black-font pt-1.5">Url</h1>
+                <h1 class="pr-1 font-medium text-base text-black-font pt-1 pr-3">Url</h1>
                 <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''"
                        ref="cdn_url"
                        v-model="searchUrl"
                        @focus="focus='cdn-endpoint'"
                        @blur="focus=''"
                        style="padding-left:15px"
-                       class="min-w-[445px] cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                       class="min-w-[520px] cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.2rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                        type="text" placeholder="">
               </div>
 
@@ -280,6 +280,7 @@ export default {
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
         const selectedDate = this.selectedDate;
         const dateMatch = selectedDate ? this.filterDate(log.time).startsWith(selectedDate) : true;
+
         return urlMatch && dateMatch;
       });
     },
@@ -293,8 +294,11 @@ export default {
       return this.indexStart + this.pageSize;
     },
     paginated() {
+
       const filteredLogs = this.debug_log.filter(log => {
-        console.log('');
+        if(!log.url){
+          return;
+        }
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
 
         const selectedDate = this.selectedDate;

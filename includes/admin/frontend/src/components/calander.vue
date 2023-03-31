@@ -3,7 +3,7 @@
     <input type="text"
            :class="focus==='date'? 'date': ''"
            @blur="focus=''"
-           class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent" v-model="selectedDate" @focus="showCalendar" />
+           class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.2rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent" v-model="selectedDate" @focus="showCalendar" />
     <div class="calendar" v-if="show">
       <div class="calendar-header">
         <button @click="previousMonth">&lt;</button>
