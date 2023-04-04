@@ -172,8 +172,8 @@
                   <label :class="{'disableBlock cursor-not-allowed': item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" v-model="item.status" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
-                    <div
-                        class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+                    <div :class="item.id==='cdn' ? 'bg-[red]': 'bg-gray'"
+                        class="w-11 h-6 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
                   </label>
                 </div>
               </div>
@@ -371,11 +371,15 @@ export default {
     },
 
     progress(){
-      for (let i=100 ; this.stats.reduction <= i; i--){
-        setTimeout(function() {
-          document.getElementById("progress").style.width = i +'%';
-        },500);
-      }
+      let i = 100;
+      const intervalId = setInterval(() => {
+        if (this.stats.reduction > i) {
+          clearInterval(intervalId);
+        } else {
+          document.getElementById("progress").style.width = i + '%';
+          i--;
+        }
+      }, 50);
     },
 
 
@@ -411,7 +415,7 @@ export default {
 
 
     update(toggle, module) {
-
+      console.log(module + " : " + toggle);
       if(!this.license_information.licensed_domain){
         return;
       }
@@ -422,6 +426,7 @@ export default {
       } else {
         toggle = "off";
       }
+
       // if (this.axios_request) {
       //   this.axios_request.cancel("");
       //   this.axios_request = null;
