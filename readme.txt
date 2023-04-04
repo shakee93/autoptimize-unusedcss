@@ -96,6 +96,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 1.7.3 - 04/04/2023 =
+ * fix: UnusedCSS - Malformed Request Detected error
+
 = 1.7.2 - 10/03/2023 =
  * fix: potential vulnerability in AJAX requests verified with nonce
 
