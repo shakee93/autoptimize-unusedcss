@@ -19,6 +19,9 @@ if(isset($_REQUEST['no_rapidload'])){
 define( 'UUCSS_VERSION', '2.0.8' );
 define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
+if(!defined('RAPIDLOAD_PLUGIN_DIR')){
+    define( 'RAPIDLOAD_PLUGIN_DIR', __DIR__ );
+}
 define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
 define( 'UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
 

@@ -71,6 +71,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_CDN_Enqueue' => __DIR__ . '/../..' . '/includes/modules/cdn/RapidLoad_CDN_Enqueue.php',
         'RapidLoad_CSS_Aggregator' => __DIR__ . '/../..' . '/includes/modules/css/css-aggregator/RapidLoad_CSS_Aggregator.php',
         'RapidLoad_CSS_Aggregator_Enqueue' => __DIR__ . '/../..' . '/includes/modules/css/css-aggregator/RapidLoad_CSS_Aggregator_Enqueue.php',
+        'RapidLoad_Cache' => __DIR__ . '/../..' . '/includes/modules/cache/RapidLoad_Cache.php',
         'RapidLoad_DB' => __DIR__ . '/../..' . '/includes/RapidLoad_DB.php',
         'RapidLoad_Enqueue' => __DIR__ . '/../..' . '/includes/RapidLoad_Enqueue.php',
         'RapidLoad_Feedback' => __DIR__ . '/../..' . '/includes/utils/Feedback/RapidLoad_Feedback.php',

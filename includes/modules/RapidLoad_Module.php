@@ -86,6 +86,16 @@ class RapidLoad_Module
             'global' => 'font'
         ];
 
+        $this->modules['cache'] = [
+            'id' => 'cache',
+            'title' => 'Cache',
+            'description' => 'Cache',
+            'group' => 'cache',
+            'status' => 'on',
+            'class' => RapidLoad_Cache::class,
+            'global' => 'font'
+        ];
+
     }
 
     function get_module_instance($id){
@@ -206,6 +216,14 @@ class RapidLoad_Module
 
                 break;
             }
+            case 'cache': {
+
+                $options['uucss_enable_cache'] = $active == "on" ? "1" : "";
+
+                RapidLoad_Cache::setup_cache($options['uucss_enable_cache']);
+
+                break;
+            }
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
@@ -309,6 +327,10 @@ class RapidLoad_Module
                     'uucss_self_host_google_fonts' => isset($options['uucss_self_host_google_fonts']) && $options['uucss_self_host_google_fonts'] == "1" ? true : false,
                 ]
             ],
+            'cache' => [
+                'id' => 'cache',
+                'status' => isset($options['uucss_enable_cache']) && $options['uucss_enable_cache'] == "1" ? "on" : "off",
+            ]
         ];
     }
 

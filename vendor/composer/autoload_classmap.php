@@ -43,6 +43,7 @@ return array(
     'RapidLoad_CDN_Enqueue' => $baseDir . '/includes/modules/cdn/RapidLoad_CDN_Enqueue.php',
     'RapidLoad_CSS_Aggregator' => $baseDir . '/includes/modules/css/css-aggregator/RapidLoad_CSS_Aggregator.php',
     'RapidLoad_CSS_Aggregator_Enqueue' => $baseDir . '/includes/modules/css/css-aggregator/RapidLoad_CSS_Aggregator_Enqueue.php',
+    'RapidLoad_Cache' => $baseDir . '/includes/modules/cache/RapidLoad_Cache.php',
     'RapidLoad_DB' => $baseDir . '/includes/RapidLoad_DB.php',
     'RapidLoad_Enqueue' => $baseDir . '/includes/RapidLoad_Enqueue.php',
     'RapidLoad_Feedback' => $baseDir . '/includes/utils/Feedback/RapidLoad_Feedback.php',
