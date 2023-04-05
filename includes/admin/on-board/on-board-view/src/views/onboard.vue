@@ -272,9 +272,9 @@ export default {
       this.subheading= 'Recommended options are already enabled for you... Go on and tweak it yourself.';
       this.update_license();
       this.items[0].status = true;
-      // setTimeout(()=>{
-      //   this.update(false, 'css');
-      // },3000)
+      setTimeout(()=>{
+        this.update(true, 'css');
+      },3000)
 
       const activeModules = [];
 
@@ -415,13 +415,14 @@ export default {
 
 
     update(toggle, module) {
-    //  console.log(module + " : " + toggle);
+      console.log(module + " : " + toggle);
       if(!this.license_information.licensed_domain){
         return;
       }
-      if (module === 'css' && toggle) {
-        toggle = "on";
-      } else if (!toggle) {
+      // if(module === 'css'){
+      //   return;
+      // }
+      if (toggle) {
         toggle = "on";
       } else {
         toggle = "off";
@@ -437,12 +438,12 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss_global.nonce)
           .then(response => {
             response.data
-            window.uucss_global.active_modules = response.data.data
+           // window.uucss_global.active_modules = response.data.data
             // this.error= false;
 
-            this.items.map((item) => {
-              item.status = response.data.data[item.id].status === "on";
-            })
+            // this.items.map((item) => {
+            //   item.status = response.data.data[item.id].status === "on";
+            // })
           })
           .catch(error =>{
             this.errorMessage = error.message;
@@ -462,7 +463,7 @@ export default {
             this.update(item.status, item.id);
            // console.log(item.id + ': ' + item.status);
             resolve();
-          }, index * 5000);
+          }, index * 1000);
         });
       })).then(() => {
         this.runFirstJob();
@@ -501,11 +502,12 @@ export default {
               setTimeout(() =>{
                 this.rapidloadConfigured();
                 this.rapidload_config ++;
-                if(this.rapidload_config > 10){
+                if(this.rapidload_config > 5){
                   this.error= true;
                   this.loading=false;
+
                 }
-              }, 3000);
+              }, 2000);
             }
           })
           .catch(error =>{
