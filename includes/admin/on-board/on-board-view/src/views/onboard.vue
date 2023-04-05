@@ -47,9 +47,7 @@
 <!--              </div>-->
               <div v-if="!loading" class="content grid place-content-center place-items-center">
                 <span v-html="image1"></span>
-                <h4 class="mt-10 text-black font-medium text-base opacity-80">Analyze & connect with RapidLoad.io engine
-                  to start automatic optimization <br> of your website and watch your page speed and speed scores spike
-                  up.</h4>
+                <h4 class="mt-10 text-black font-medium text-base opacity-80">Analyze & connect with RapidLoad.io engine to start automatic optimization <br> and witness the impact of RapidLoad on your website's page speed scores...</h4>
               </div>
             </div>
             <div class="flex justify-end">
@@ -170,12 +168,12 @@
                   <h4 class="text-black font-medium leading-3 text-sm">{{ item.title }}</h4>
                   <p class="mt-1 leading-4 text-xm text-black leading-db-lh text-[11px]">{{ item.description }}</p>
                 </div>
-                <div :class="{'cursor-not-allowed': item.id==='css' || item.id==='cdn'}" class="col-end-7 col-span-2 mr-7 pt-5">
+                <div :class="{'cursor-not-allowed': item.id==='css' || item.id==='cdn'}" class="col-end-7 col-span-2 mr-7 pt-3.5">
                   <label :class="{'disableBlock cursor-not-allowed': item.id==='css' || item.id==='cdn'}" :for="'toggle'+item.title" class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" v-model="item.status" value=""
                            :id="'toggle'+item.title" class="sr-only peer">
-                    <div
-                        class="w-11 h-6 bg-gray peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+                    <div :class="item.id==='cdn' ? 'bg-[red]': 'bg-gray'"
+                        class="w-11 h-6 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
                   </label>
                 </div>
               </div>
@@ -346,13 +344,13 @@ export default {
 
       if (this.count === 1) {
         this.heading = 'Analyze & Connect';
-        this.subheading= 'Analyze your website up-front to see how RapidLoad can improve your page speed.';
+        this.subheading= 'Catch a glimpse of how RapidLoad can impact your page speed.';
       }
 
       if (this.count === 2) {
         this.loading_header = 'Connecting your website with RapidLoad';
         this.heading = 'Pagespeed results';
-        this.subheading= 'Take a look at your page-speed results with how much CSS you can save.';
+        this.subheading= 'Look at the results with how much CSS you can save.';
       }
 
       if (this.count === 3) {
@@ -368,16 +366,20 @@ export default {
         this.message = 'Waiting for your First Job....';
         this.loading_header = 'Running First Job';
         this.heading = 'Congratulations';
-        this.subheading= 'You have successfully completed your optimization. Your page speed increased by ' + this.stats.reduction +'%';
+        this.subheading= 'First RapidLoad job is a success. Your page speed has increased by ' + this.stats.reduction +'%';
       }
     },
 
     progress(){
-      for (let i=100 ; this.stats.reduction <= i; i--){
-        setTimeout(function() {
-          document.getElementById("progress").style.width = i +'%';
-        },500);
-      }
+      let i = 100;
+      const intervalId = setInterval(() => {
+        if (this.stats.reduction > i) {
+          clearInterval(intervalId);
+        } else {
+          document.getElementById("progress").style.width = i + '%';
+          i--;
+        }
+      }, 50);
     },
 
 
@@ -413,7 +415,7 @@ export default {
 
 
     update(toggle, module) {
-
+      console.log(module + " : " + toggle);
       if(!this.license_information.licensed_domain){
         return;
       }
@@ -424,6 +426,7 @@ export default {
       } else {
         toggle = "off";
       }
+
       // if (this.axios_request) {
       //   this.axios_request.cancel("");
       //   this.axios_request = null;
@@ -526,7 +529,7 @@ export default {
       support: 'https://rapidload.zendesk.com/hc/en-us/requests/new',
       axios_request: null,
       heading: 'Analyze & Connect',
-      subheading: 'Analyze your website up-front to see how RapidLoad can improve your page speed.',
+      subheading: 'Catch a glimpse of how RapidLoad can impact your page speed.',
       message: 'Please wait....',
       loading_header: '',
       percentage: 100,
@@ -551,7 +554,7 @@ export default {
         {
           id: "css",
           title: "CSS Delivery",
-          description: 'Analyze & connect with RapidLoad.io engine to start automatic optimization of your website and watch your page speed and speed scores spike up.',
+          description: 'Deliver CSS files through RapidLoad by removing unused CSS and prioritizing critical CSS.',
           status: false,
           isDisabled: false,
         },
