@@ -53,9 +53,8 @@ class RapidLoad_Onboard{
             $job_data->save();
         }
 
-        global $uucss;
-
-        $uucss->init_async_store($job_data, [ 'immediate' => true ]);
+        $store = new UnusedCSS_Store($job_data, [ 'immediate' => true ]);
+        $store->purge_css();
 
         $this->rapidload_configured();
 
