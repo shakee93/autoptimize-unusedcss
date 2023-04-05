@@ -41,10 +41,6 @@
 
           <div v-if="count===1 &&!error" class="m-12 mt-11 mb-1 transition duration-300">
             <div class="max-h-[356px] min-h-[356px] grid h-screen place-items-center">
-<!--              <div class="mt-16" v-if="loading">-->
-<!--                <span v-html="loading_svg"></span>-->
-<!--                <h4 class="mt-5 text-black font-medium text-base opacity-80">{{ this.message }}</h4>-->
-<!--              </div>-->
               <div v-if="!loading" class="content grid place-content-center place-items-center">
                 <span v-html="image1"></span>
                 <h4 class="mt-10 text-black font-medium text-base opacity-80">Analyze & connect with RapidLoad.io engine to start automatic optimization <br> and witness the impact of RapidLoad on your website's page speed scores...</h4>
@@ -256,12 +252,10 @@
 
 import config from "../config";
 import axios from 'axios';
-// import messageBox from "../components/messageBox.vue";
 
 export default {
 
   components: {
-    // messageBox,
   },
 
   mounted() {
@@ -275,29 +269,6 @@ export default {
       setTimeout(()=>{
         this.update(true, 'css');
       },3000)
-
-      const activeModules = [];
-
-      // Object.keys(window.uucss_global.active_modules).forEach((a) => {
-      //   activeModules.push(window.uucss_global.active_modules[a])
-      // });
-      //
-      // this.items_data = activeModules
-      //
-      // if (this.items_data) {
-      //   Object.keys(this.items_data).map((key) => {
-      //     this.items.map((val) => {
-      //       if (val.id === this.items_data[key].id) {
-      //         val.status = this.items_data[key].status === 'on';
-      //
-      //       }
-      //     })
-      //   });
-      //
-      //   this.items[0].status = true;
-      // }
-
-
 
     }
 
@@ -320,9 +291,7 @@ export default {
         axios.post(window.uucss_global.api_url + '/preview', {
           // url: 'https://rapidload.io/'
           url: uucss_global.home_url,
-          //nonce: window.uucss.nonce
         }).then((response) => {
-          //console.log(response.data);
           this.error= false;
           localStorage.clear();
           this.stats.after = response.data?.data?.stats.after;
@@ -415,19 +384,15 @@ export default {
 
 
     update(toggle, module) {
-      console.log(module + " : " + toggle);
+
       if(!this.license_information.licensed_domain){
         return;
       }
-      // if(module === 'css'){
-      //   return;
-      // }
       if (toggle) {
         toggle = "on";
       } else {
         toggle = "off";
       }
-
       // if (this.axios_request) {
       //   this.axios_request.cancel("");
       //   this.axios_request = null;
@@ -438,17 +403,10 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=activate_module&module=' + module + '&active=' + toggle + '&onboard=1&nonce='+window.uucss_global.nonce)
           .then(response => {
             response.data
-           // window.uucss_global.active_modules = response.data.data
-            // this.error= false;
-
-            // this.items.map((item) => {
-            //   item.status = response.data.data[item.id].status === "on";
-            // })
           })
           .catch(error =>{
             this.errorMessage = error.message;
             console.error("There was an error!", error);
-            // this.error= true;
             this.loading=false;
           });
     },
@@ -485,10 +443,9 @@ export default {
           });
     },
     rapidloadConfigured(){
-     // console.log("rapidload config");
+
       axios.get(window.uucss_global.ajax_url + '?action=rapidload_configured&nonce='+ window.uucss_global.nonce)
           .then(response => {
-           // console.log(response.data?.data);
             if(response.data?.data?.uucss_first_job_done){
               const data = response.data?.data?.uucss_first_job.meta.stats;
               this.stats.reduction  = data.reduction;
