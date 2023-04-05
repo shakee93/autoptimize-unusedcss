@@ -7,7 +7,9 @@
           <RouterLink :to="back">
             <button
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
-              <img :src="base+'/arrow-left.svg'" alt="Back">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </button>
           </RouterLink>
         </div>
@@ -71,8 +73,8 @@
                 </div>
               </div>
               <div>
-                <h1 @click="rapidload_aggregate_css = !rapidload_aggregate_css" class="font-normal text-base text-black-font cursor-pointer">Aggregate CSS</h1>
-                <p class="text-sm text-gray-font">Aggregate CSS files.</p>
+                <h1 @click="rapidload_aggregate_css = !rapidload_aggregate_css" class="font-normal text-base text-black-font cursor-pointer">Combined CSS</h1>
+                <p class="text-sm text-gray-font">This combines multiple CSS files into a single file. If HTTP/2 is enabled on your server disable this option.</p>
               </div>
             </div>
           </div>
@@ -215,7 +217,7 @@
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
                   <div @click="saveRuleBased" :class="uucss_enable_rules? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200">
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                     <svg v-if="uucss_enable_rules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -224,7 +226,7 @@
                 </div>
               </div>
               <div>
-                <h1 class="font-normal text-base text-black-font">Group by Pages</h1>
+                <h1 @click="uucss_enable_rules = !uucss_enable_rules" class="font-normal text-base text-black-font cursor-pointer">Group by Pages</h1>
                 <p class="text-sm text-gray-font">Define rules to group pages that have the same page structure.</p>
               </div>
             </div>

@@ -592,7 +592,7 @@ export default {
           id : "font",
           title: "Font Delivery",
           description: 'Optimize and host your fonts locally for faster page load times.',
-          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="9" fill="#3476D8"/><path d="M20 31C20 33.4148 21.7909 34 24 34C27.7587 34 29 31.5 26.5 26.5C23 31 22.5 24 23 22C21.5 25 20 27.8177 20 31Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M24 34C29.0495 34 32 31.0956 32 26.125C32 21.1544 24 16 24 16C24 16 16 21.1544 16 26.125C16 31.0956 18.9505 34 24 34Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#295ECF"/><path d="M15.4 32H18.32L19.36 26.66H23.7L24.16 24.24H19.84L20.38 21.46H25.26L25.74 19H17.94L15.4 32ZM25.6228 32.06C25.5028 32.64 25.3228 33.02 25.0428 33.22C24.7628 33.42 24.2628 33.5 23.5428 33.5L23.4628 35.94C24.9428 35.94 26.0628 35.68 26.8228 35.12C27.5628 34.56 28.0628 33.62 28.3428 32.26L29.8628 24.44H31.5628L32.1228 22.4H30.2628L30.5028 21.24C30.6228 20.56 31.0628 20.2 31.8228 20.2C32.3028 20.2 32.7228 20.28 33.0428 20.4L33.8828 18.24C33.2428 17.98 32.5028 17.84 31.6628 17.84C30.6828 17.84 29.8428 18.16 29.1228 18.76C28.4028 19.36 27.9428 20.14 27.7628 21.1L27.5028 22.4H25.9228L25.5228 24.44H27.1028L25.6228 32.06Z" fill="white"/></svg>',
           link: '/font',
           status: false,
           isDisabled: true
