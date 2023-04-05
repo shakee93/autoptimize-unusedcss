@@ -415,7 +415,7 @@ export default {
 
 
     update(toggle, module) {
-      console.log(module + " : " + toggle);
+    //  console.log(module + " : " + toggle);
       if(!this.license_information.licensed_domain){
         return;
       }
