@@ -363,7 +363,7 @@ export default {
     });
 
     this.items_data = activeModules
-
+    console.log(activeModules);
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
@@ -491,7 +491,7 @@ export default {
             this.loading = false;
 
             this.items.map((item)=>{
-              item.status = response.data.data[item.id].status === "on";
+             // item.status = response.data.data[item.id].status === "on";
             })
           })
           .catch(error => {
