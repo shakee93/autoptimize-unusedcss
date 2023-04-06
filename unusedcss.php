@@ -22,6 +22,9 @@ define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 if(!defined('RAPIDLOAD_PLUGIN_DIR')){
     define( 'RAPIDLOAD_PLUGIN_DIR', __DIR__ );
 }
+if(!defined('RAPIDLOAD_CONSTANT_FILE')){
+    define( 'RAPIDLOAD_CONSTANT_FILE', __DIR__ . '/constants.php' );
+}
 define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
 define( 'UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
 
