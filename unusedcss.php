@@ -16,17 +16,12 @@ if(isset($_REQUEST['no_rapidload'])){
     return;
 }
 
-define( 'UUCSS_VERSION', '2.0.8' );
-define( 'UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+require __DIR__ . '/constants.php';
+
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
-if(!defined('RAPIDLOAD_PLUGIN_DIR')){
-    define( 'RAPIDLOAD_PLUGIN_DIR', __DIR__ );
-}
-if(!defined('RAPIDLOAD_CONSTANT_FILE')){
-    define( 'RAPIDLOAD_CONSTANT_FILE', __DIR__ . '/constants.php' );
-}
-define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
-define( 'UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
+define('UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ));
+define('UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
+define('RAPIDLOAD_BASE',  ( function_exists( 'wp_normalize_path' ) ) ? plugin_basename( __DIR__ . '/' . basename(__FILE__) ) : null);
 
 if ( is_multisite() ) {
     $blog_id = get_current_blog_id();
