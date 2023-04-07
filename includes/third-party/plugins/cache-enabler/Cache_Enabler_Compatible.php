@@ -32,7 +32,7 @@ class Cache_Enabler_Compatible  extends RapidLoad_ThirdParty {
 
             if($url){
 
-                //Cache_Enabler::clear_page_cache_by_url( $url );
+                Cache_Enabler::clear_page_cache_by_url( $url );
 
             }
 
