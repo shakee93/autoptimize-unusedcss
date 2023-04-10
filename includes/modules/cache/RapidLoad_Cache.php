@@ -84,10 +84,10 @@ class RapidLoad_Cache
         $value     = self::upgrade_settings( $old_value );
         $value     = self::validate_settings( $value );
 
-        update_option( 'cache_enabler', $value );
+        update_option( 'rapidload_cache', $value );
 
         if ( has_action( 'update_option', array( __CLASS__, 'on_update_option' ) ) === false ) {
-            self::on_update_backend( 'cache_enabler', $value );
+            self::on_update_backend( 'rapidload_cache', $value );
         }
 
         return $value;
@@ -122,12 +122,10 @@ class RapidLoad_Cache
             return $settings;
         }
 
-        // < 1.5.0
         if ( isset( $settings['expires'] ) && $settings['expires'] > 0 ) {
             $settings['cache_expires'] = 1;
         }
 
-        // < 1.5.0
         if ( isset( $settings['minify_html'] ) && $settings['minify_html'] === 2 ) {
             $settings['minify_html'] = 1;
             $settings['minify_inline_css_js'] = 1;
@@ -305,7 +303,7 @@ class RapidLoad_Cache
             $args['subpages']['exclude'] = self::get_root_blog_exclusions();
 
             if ( ! isset( $args['hooks']['include'] ) ) {
-                $args['hooks']['include'] = 'cache_enabler_complete_cache_cleared,cache_enabler_site_cache_cleared';
+                $args['hooks']['include'] = 'rapidload_cache_complete_cache_cleared,rapidload_cache_site_cache_cleared';
             }
         }
 
@@ -454,7 +452,7 @@ class RapidLoad_Cache
 
     private static function is_rapidload_active() {
 
-        if ( in_array( CACHE_ENABLER_BASE, (array) get_option( 'active_plugins', array() ), true ) ) {
+        if ( in_array( RAPIDLOAD_BASE, (array) get_option( 'active_plugins', array() ), true ) ) {
             return true;
         }
 
@@ -494,7 +492,7 @@ class RapidLoad_Cache
         restore_current_blog();
 
         if ( ( $force_restart || self::is_rapidload_active() ) && $restart_engine ) {
-            Cache_Enabler_Engine::start( true );
+            RapidLoad_Cache_Engine::start( true );
         }
 
         return true;

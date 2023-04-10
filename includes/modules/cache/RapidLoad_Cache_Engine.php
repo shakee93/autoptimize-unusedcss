@@ -156,18 +156,6 @@ class RapidLoad_Cache_Engine
 
     private static function exclude_search() {
 
-        /**
-         * Filters whether search queries should be excluded from the cache.
-         *
-         * This requires pretty search URLs. For example, https://example.com/search/query/
-         * instead of https://example.com/?s=query. The search cache will not be
-         * automatically cleared.
-         *
-         * @since  1.6.0
-         *
-         * @param  bool  $exclude_search  True if search queries should be excluded from the cache, false if not. Default
-         *                                is the value returned by is_search().
-         */
         $exclude_search = apply_filters( 'rapidload_exclude_search', is_search() );
 
         return $exclude_search;

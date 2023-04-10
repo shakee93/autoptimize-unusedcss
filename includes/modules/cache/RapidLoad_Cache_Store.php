@@ -283,27 +283,12 @@ class RapidLoad_Cache_Store
             $site_cleared_url = user_trailingslashit( home_url() );
             $site_cleared_id  = get_current_blog_id();
 
-            /**
-             * Fires after the site cache has been cleared.
-             *
-             * @since  1.6.0
-             * @since  1.8.0  The `$cache_cleared_index` parameter was added.
-             *
-             * @param  string   $site_cleared_url     Full URL of the site cleared.
-             * @param  int      $site_cleared_id      Post ID of the site cleared.
-             * @param  array[]  $cache_cleared_index  Index of the cache cleared.
-             */
             do_action( 'rapidload_site_cache_cleared', $site_cleared_url, $site_cleared_id, $cache_cleared_index );
         }
 
         if ( in_array( 'rapidload_complete_cache_cleared', $hooks_to_fire, true ) && ! is_dir( RAPIDLOAD_CACHE_DIR ) ) {
-            /**
-             * Fires after the complete cache has been cleared.
-             *
-             * @since  1.6.0
-             */
+
             do_action( 'rapidload_complete_cache_cleared' );
-            do_action( 'ce_action_cache_cleared' ); // Deprecated in 1.6.0.
         }
     }
 
@@ -732,14 +717,6 @@ class RapidLoad_Cache_Store
 
     private static function mkdir_p( $dir ) {
 
-        /**
-         * Filters the mode assigned to directories on creation.
-         *
-         * @since   1.7.2
-         *
-         * @param  int  $mode  Mode that defines the access permissions for the created directory. The mode
-         *                     must be an octal number, which means it should have a leading zero. Default is 0755.
-         */
         $mode_octal  = (int) apply_filters( 'rapidload_mkdir_mode', 0755 );
         $mode_string = decoct( $mode_octal ); // Get the last three digits (e.g. '755').
         $parent_dir  = dirname( $dir );
@@ -1010,15 +987,6 @@ class RapidLoad_Cache_Store
             $cache_created_index[ $new_cache_file_dir ]['id']  = $page_created_id;
             $cache_created_index[ $new_cache_file_dir ]['versions'][ $new_cache_file_name ] = $new_cache_file_created;
 
-            /**
-             * Fires after the page cache has been created.
-             *
-             * @since  1.8.0
-             *
-             * @param  string   $page_created_url     Full URL of the page created.
-             * @param  int      $page_created_id      Post ID of the page created.
-             * @param  array[]  $cache_created_index  Index of the cache created.
-             */
             do_action( 'rapdiload_page_cache_created', $page_created_url, $page_created_id, $cache_created_index );
         }
     }
@@ -1029,13 +997,6 @@ class RapidLoad_Cache_Store
             return $html;
         }
 
-        /**
-         * Filters the HTML tags to ignore during HTML minification.
-         *
-         * @since   1.6.0
-         *
-         * @param  string[]  $ignore_tags  The names of HTML tags to ignore. Default are 'textarea', 'pre', and 'code'.
-         */
         $ignore_tags = (array) apply_filters( 'rapidload_minify_html_ignore_tags', array( 'textarea', 'pre', 'code' ) );
         $ignore_tags = (array) apply_filters_deprecated( 'cache_minify_ignore_tags', array( $ignore_tags ), UUCSS_VERSION, 'rapidload_minify_html_ignore_tags' );
 
@@ -1089,38 +1050,15 @@ class RapidLoad_Cache_Store
 
     private static function converter( $page_contents ) {
 
-        /**
-         * Filters the HTML attributes to convert during the WebP conversion.
-         *
-         * @since  1.6.1
-         *
-         * @param  string[]  $attributes  HTML attributes to convert during the WebP conversion. Default are 'src',
-         *                                'srcset', and 'data-*'.
-         */
         $attributes       = (array) apply_filters( 'rapidload_convert_webp_attributes', array( 'src', 'srcset', 'data-[^=]+' ) );
         $attributes_regex = implode( '|', $attributes );
 
-        /**
-         * Filters whether inline image URLs with query strings should be ignored during the WebP conversion.
-         *
-         * @since  1.6.1
-         *
-         * @param  bool  $ignore_query_strings  True if inline image URLs with query strings should be ignored during the WebP
-         *                                      conversion, false if not. Default true.
-         */
         if ( apply_filters( 'rapidload_convert_webp_ignore_query_strings', true ) ) {
             $image_urls_regex = '#(?:(?:(' . $attributes_regex . ')\s*=|(url)\()\s*[\'\"]?\s*)\K(?:[^\?\"\'\s>]+)(?:\.jpe?g|\.png)(?:\s\d+[wx][^\"\'>]*)?(?=\/?[\"\'\s\)>])(?=[^<{]*(?:\)[^<{]*\}|>))#i';
         } else {
             $image_urls_regex = '#(?:(?:(' . $attributes_regex . ')\s*=|(url)\()\s*[\'\"]?\s*)\K(?:[^\"\'\s>]+)(?:\.jpe?g|\.png)(?:\s\d+[wx][^\"\'>]*)?(?=\/?[\?\"\'\s\)>])(?=[^<{]*(?:\)[^<{]*\}|>))#i';
         }
 
-        /**
-         * Filters the page contents after the inline image URLs were maybe converted to WebP.
-         *
-         * @since  1.6.0
-         *
-         * @param  string  $page_contents  Page contents from the cache engine as raw HTML.
-         */
         $converted_page_contents = (string) apply_filters( 'rapidload_page_contents_after_webp_conversion', preg_replace_callback( $image_urls_regex, 'self::convert_webp', $page_contents ) );
         $converted_page_contents = (string) apply_filters_deprecated( 'rapdiload_disk_webp_converted_data', array( $converted_page_contents ), UUCSS_VERSION, 'radpiload_page_contents_after_webp_conversion' );
 
@@ -1159,5 +1097,19 @@ class RapidLoad_Cache_Store
         $conversion = implode( ', ', $image_urls );
 
         return $conversion;
+    }
+
+    private static function get_image_path( $image_url ) {
+
+        // In case there is an intrinsic width or density descriptor.
+        $image_pieces = explode( ' ', $image_url );
+        $image_url    = $image_pieces[0];
+
+        // In case installation is in a subdirectory.
+        $image_url_path   = ltrim( parse_url( $image_url, PHP_URL_PATH ), '/' );
+        $installation_dir = ltrim( parse_url( site_url( '/' ), PHP_URL_PATH ), '/' );
+        $image_path       = str_replace( $installation_dir, '', ABSPATH ) . $image_url_path;
+
+        return $image_path;
     }
 }
