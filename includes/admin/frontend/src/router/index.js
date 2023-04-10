@@ -10,6 +10,7 @@ import font from '../views/pages/font-optimization.vue'
 import cdn from '../views/pages/cdn.vue'
 import debugLogs from '../views/pages/debug-logs.vue'
 import optimization from '../views/optimization.vue'
+import cache from '../views/pages/cache.vue'
 
 const router = createRouter({
 
@@ -114,6 +115,11 @@ const router = createRouter({
       path: '/optimization',
       name: 'optimization',
       component: optimization
+    },
+    {
+      path: '/cache',
+      name: 'cache',
+      component: cache
     },
   ]
 })
