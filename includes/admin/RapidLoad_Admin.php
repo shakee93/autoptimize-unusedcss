@@ -404,6 +404,36 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_enable_cache'])){
+
+            $args = [
+                'cache_expires' => 0,
+                'cache_expiry_time' => 0,
+                'mobile_cache' => 0,
+            ];
+
+            if(isset($_REQUEST['cache_expires'])){
+
+                $args['cache_expires'] = ($_REQUEST['cache_expires'] == 'true' ? 1 : 0);
+
+            }
+
+            if(isset($_REQUEST['cache_expiry_time'])){
+
+                $args['cache_expiry_time'] = (float)$_REQUEST['cache_expiry_time'];
+
+            }
+
+            if(isset($_REQUEST['mobile_cache'])){
+
+                $args['mobile_cache'] = ($_REQUEST['mobile_cache'] == 'true' ? 1 : 0);
+
+            }
+
+            RapidLoad_Cache::update_settings($args);
+
+        }
+
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
         wp_send_json_success(RapidLoad_Base::get()->modules()->active_modules());

@@ -235,7 +235,7 @@ class RapidLoad_Module
 
         $options = RapidLoad_Base::fetch_options();
 
-        return [
+        $options = [
             'general' => [
                 'id' => 'general',
                 'options' => [
@@ -332,6 +332,8 @@ class RapidLoad_Module
                 'status' => isset($options['uucss_enable_cache']) && $options['uucss_enable_cache'] == "1" ? "on" : "off",
             ]
         ];
+
+        return apply_filters('rapidload/active-module/options', $options);
     }
 
 }

@@ -22,6 +22,18 @@ class RapidLoad_Cache
 
         add_filter('uucss/enqueue/content/update', [$this, 'cache_page'], 100);
 
+        add_filter('rapidload/active-module/options', [$this, 'update_module_options']);
+
+    }
+
+    public function update_module_options($options){
+
+        if(isset($options['cache'])){
+            $options['cache']['options'] = self::get_settings();
+        }
+
+        return $options;
+
     }
 
     public function cache_page($state){
@@ -91,6 +103,20 @@ class RapidLoad_Cache
         }
 
         return $value;
+    }
+
+    public static function update_settings($args){
+
+        $settings = self::get_default_settings();
+
+        foreach($args as $key => $val){
+
+            $settings[$key] = $val;
+
+        }
+
+        self::on_update_backend('', $settings);
+
     }
 
     public static function on_update_backend( $option, $value ) {
