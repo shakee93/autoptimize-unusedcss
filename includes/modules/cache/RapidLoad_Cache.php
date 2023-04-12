@@ -676,6 +676,7 @@ class RapidLoad_Cache
 
         }
 
+        update_option( 'rapidload_cache', $settings );
         self::on_update_backend('', $settings);
 
     }
