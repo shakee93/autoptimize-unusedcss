@@ -30,7 +30,479 @@ class RapidLoad_Cache
 
         add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
+        add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
+
+        add_action( 'wp_uninitialize_site', array( __CLASS__, 'uninstall_later' ) );
+
+        add_action( 'upgrader_process_complete', array( __CLASS__, 'on_upgrade' ), 10, 2 );
+        add_action( 'save_post', array( __CLASS__, 'on_save_trash_post' ) );
+        add_action( 'pre_post_update', array( __CLASS__, 'on_pre_post_update' ), 10, 2 );
+        add_action( 'wp_trash_post', array( __CLASS__, 'on_save_trash_post' ) );
+        add_action( 'comment_post', array( __CLASS__, 'on_comment_post' ), 99, 2 );
+        add_action( 'edit_comment', array( __CLASS__, 'on_edit_comment' ), 10, 2 );
+        add_action( 'transition_comment_status', array( __CLASS__, 'on_transition_comment_status' ), 10, 3 );
+        add_action( 'saved_term', array( __CLASS__, 'on_saved_delete_term' ), 10, 3 );
+        add_action( 'edit_terms', array( __CLASS__, 'on_edit_terms' ), 10, 2 );
+        add_action( 'delete_term', array( __CLASS__, 'on_saved_delete_term' ), 10, 3 );
+        add_action( 'user_register', array( __CLASS__, 'on_register_update_delete_user' ) );
+        add_action( 'profile_update', array( __CLASS__, 'on_register_update_delete_user' ) );
+        add_action( 'delete_user', array( __CLASS__, 'on_register_update_delete_user' ) );
+        add_action( 'deleted_user', array( __CLASS__, 'on_deleted_user' ), 10, 2 );
+
         self::process_clear_cache_request();
+    }
+
+    public static function on_deleted_user( $user_id, $reassign ) {
+
+        if ( $reassign ) {
+            self::clear_cache_on_user_save( $reassign );
+        }
+    }
+
+    public static function clear_cache_on_user_save( $user ) {
+
+        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_user'] ) {
+            self::clear_site_cache();
+        } else {
+            self::clear_user_cache( $user );
+        }
+    }
+
+    public static function clear_page_cache_by_user( $user, $args = array() ) {
+
+        if ( is_numeric( $user ) ) {
+            $user = get_userdata( $user );
+        }
+
+        if ( ! $user instanceof WP_User ) {
+            return;
+        }
+
+        $post_query_args = array(
+            'author'        => $user->ID,
+            'post_type'     => 'any',
+            'post_status'   => 'publish',
+            'numberposts'   => -1,
+            'fields'        => 'ids',
+            'order'         => 'none',
+            'cache_results' => false,
+            'no_found_rows' => true,
+        );
+
+        $post_ids = get_posts( $post_query_args );
+
+        $comment_query_args = array(
+            'status'  => 'approve',
+            'user_id' => $user->ID,
+        );
+
+        $comments = get_comments( $comment_query_args );
+
+        foreach ( $comments as $comment ) {
+            $comment_post_id = (int) $comment->comment_post_ID;
+
+            if ( ! in_array( $comment_post_id, $post_ids, true ) ) {
+                $post_ids[] = $comment_post_id;
+            }
+        }
+
+        foreach ( $post_ids as $post_id ) {
+            self::clear_page_cache_by_post( $post_id, $args );
+        }
+    }
+
+    public static function clear_user_cache( $user = null ) {
+
+        if ( empty( $user ) ) {
+            $user = wp_get_current_user();
+        } elseif ( is_numeric( $user ) ) {
+            $user = get_userdata( $user );
+        }
+
+        if ( $user instanceof WP_User ) {
+            self::clear_page_cache_by_user( $user, 'pagination' );
+            self::clear_author_archive_cache( $user );
+        }
+    }
+
+    public static function on_register_update_delete_user( $user_id ) {
+
+        self::clear_cache_on_user_save( $user_id );
+    }
+
+    public static function on_edit_terms( $term_id, $taxonomy ) {
+
+        if ( is_taxonomy_viewable( $taxonomy ) ) {
+            self::clear_cache_on_term_save( $term_id, $taxonomy );
+        }
+    }
+
+    public static function clear_term_cache( $term, $taxonomy = '' ) {
+
+        $term = get_term( $term, $taxonomy );
+
+        if ( $term instanceof WP_Term ) {
+            self::clear_page_cache_by_term( $term, '', 'pagination' );
+            self::clear_term_archive_cache( $term );
+
+            if ( is_taxonomy_hierarchical( $term->taxonomy ) ) {
+                self::clear_term_children_archives_cache( $term );
+                self::clear_term_parents_archives_cache( $term );
+            }
+        }
+    }
+
+    public static function clear_term_children_archives_cache( $term, $taxonomy = '' ) {
+
+        $term = get_term( $term, $taxonomy );
+
+        if ( $term instanceof WP_Term ) {
+            $child_ids = get_term_children( $term->term_id, $term->taxonomy );
+
+            if ( is_array( $child_ids ) ) {
+                foreach ( $child_ids as $child_id ) {
+                    self::clear_term_archive_cache( $child_id, $term->taxonomy );
+                }
+            }
+        }
+    }
+
+    public static function clear_term_parents_archives_cache( $term, $taxonomy = '' ) {
+
+        $term = get_term( $term, $taxonomy );
+
+        if ( $term instanceof WP_Term ) {
+            $parent_ids = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
+
+            foreach ( $parent_ids as $parent_id ) {
+                self::clear_term_archive_cache( $parent_id, $term->taxonomy );
+            }
+        }
+    }
+
+    public static function clear_term_archive_cache( $term, $taxonomy = '' ) {
+
+        $term = get_term( $term, $taxonomy );
+
+        if ( $term instanceof WP_Term ) {
+            if ( ! is_taxonomy_viewable( $term->taxonomy ) ) {
+                return; // Term archive cache does not exist.
+            }
+
+            $term_archive_url = get_term_link( $term );
+
+            if ( ! is_wp_error( $term_archive_url ) && strpos( $term_archive_url, '?' ) === false ) {
+                self::clear_page_cache_by_url( $term_archive_url, 'pagination' );
+            }
+        }
+    }
+
+    public static function clear_page_cache_by_term( $term, $taxonomy = '', $args = array() ) {
+
+        $term = get_term( $term, $taxonomy );
+
+        if ( ! $term instanceof WP_Term ) {
+            return;
+        }
+
+        $post_query_args = array(
+            'post_type'     => 'any',
+            'post_status'   => 'publish',
+            'numberposts'   => -1,
+            'order'         => 'none',
+            'cache_results' => false,
+            'no_found_rows' => true,
+            'tax_query'     => array(
+                array(
+                    'taxonomy' => $term->taxonomy,
+                    'terms'    => $term->term_id,
+                ),
+            ),
+        );
+
+        $posts = get_posts( $post_query_args );
+
+        foreach ( $posts as $post ) {
+            self::clear_page_cache_by_post( $post, $args );
+        }
+    }
+
+    public static function clear_cache_on_term_save( $term, $taxonomy = '' ) {
+
+        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_term'] ) {
+            self::clear_site_cache();
+        } else {
+            self::clear_term_cache( $term, $taxonomy );
+        }
+    }
+
+    public static function on_saved_delete_term( $term_id, $tt_id, $taxonomy ) {
+
+        if ( is_taxonomy_viewable( $taxonomy ) ) {
+            self::clear_cache_on_term_save( $term_id, $taxonomy );
+        }
+    }
+
+    public static function on_transition_comment_status( $new_status, $old_status, $comment ) {
+
+        if ( $old_status === 'approved' || $new_status === 'approved' ) {
+            self::clear_cache_on_comment_save( $comment );
+        }
+    }
+
+    public static function on_edit_comment( $comment_id, $comment_data ) {
+
+        $comment_approved = (int) $comment_data['comment_approved'];
+
+        if ( $comment_approved === 1 ) {
+            self::clear_cache_on_comment_save( $comment_id );
+        }
+    }
+
+    public static function on_comment_post( $comment_id, $comment_approved ) {
+
+        if ( $comment_approved === 1 ) {
+            self::clear_cache_on_comment_save( $comment_id );
+        }
+    }
+
+    public static function clear_cache_on_comment_save( $comment ) {
+
+        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_comment'] ) {
+            self::clear_site_cache();
+        } else {
+            self::clear_comment_cache( $comment );
+        }
+    }
+
+    public static function clear_comment_cache( $comment = null ) {
+
+        $comment = get_comment( $comment );
+
+        if ( $comment instanceof WP_Comment ) {
+            self::clear_page_cache_by_comment( $comment, 'pagination' );
+        }
+    }
+
+    public static function clear_page_cache_by_comment( $comment, $args = array() ) {
+
+        $comment = get_comment( $comment );
+
+        if ( $comment instanceof WP_Comment ) {
+            if ( $comment->comment_approved !== '1' ) {
+                return; // Page cache does not exist.
+            }
+
+            self::clear_page_cache_by_post( (int) $comment->comment_post_ID, $args );
+        }
+    }
+
+    public static function on_pre_post_update( $post_id, $post_data ) {
+
+        $old_post_status = get_post_status( $post_id );
+        $new_post_status = $post_data['post_status'];
+
+        if ( $old_post_status === 'publish' && $new_post_status !== 'trash' ) {
+            self::clear_cache_on_post_save( $post_id );
+        }
+    }
+
+    public static function on_save_trash_post( $post_id ) {
+
+        $post_status = get_post_status( $post_id );
+
+        if ( $post_status === 'publish' ) {
+            self::clear_cache_on_post_save( $post_id );
+        }
+    }
+
+    public static function clear_cache_on_post_save( $post ) {
+
+        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post'] ) {
+            self::clear_site_cache();
+        } else {
+            self::clear_post_cache( $post );
+        }
+    }
+
+    public static function clear_post_cache( $post = null ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            self::clear_page_cache_by_post( $post, 'pagination' );
+            self::clear_post_type_archive_cache( $post );
+            self::clear_post_terms_archives_cache( $post );
+
+            if ( $post->post_type === 'post' ) {
+                self::clear_post_author_archive_cache( $post );
+                self::clear_post_date_archives_cache( $post );
+            }
+        }
+    }
+
+    public static function clear_post_author_archive_cache( $post = null ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            self::clear_author_archive_cache( (int) $post->post_author );
+        }
+    }
+
+    public static function clear_author_archive_cache( $author = null ) {
+
+        if ( empty( $author ) ) {
+            $author = wp_get_current_user();
+        } elseif ( is_numeric( $author ) ) {
+            $author = get_userdata( $author );
+        }
+
+        if ( $author instanceof WP_User ) {
+            if ( empty( $author->user_nicename ) ) {
+                return; // Author archive cache does not exist.
+            }
+
+            $author_archive_url = get_author_posts_url( $author->ID, $author->user_nicename );
+
+            if ( strpos( $author_archive_url, '?' ) === false ) {
+                self::clear_page_cache_by_url( $author_archive_url, 'pagination' );
+            }
+        }
+    }
+
+    public static function clear_post_date_archives_cache( $post = null ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            $date_archive_day    = get_the_date( 'd', $post );
+            $date_archive_month  = get_the_date( 'm', $post );
+            $date_archive_year   = get_the_date( 'Y', $post );
+            $date_archive_urls[] = get_day_link( $date_archive_year, $date_archive_month, $date_archive_day );
+            $date_archive_urls[] = get_month_link( $date_archive_year, $date_archive_month );
+            $date_archive_urls[] = get_year_link( $date_archive_year );
+
+            foreach ( $date_archive_urls as $date_archive_url ) {
+                if ( strpos( $date_archive_url, '?' ) === false ) {
+                    self::clear_page_cache_by_url( $date_archive_url, 'pagination' );
+                }
+            }
+        }
+    }
+
+    public static function clear_post_terms_archives_cache( $post = null ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            $terms = wp_get_post_terms( $post->ID, get_taxonomies() );
+
+            if ( is_array( $terms ) ) {
+                foreach ( $terms as $term ) {
+                    self::clear_term_archive_cache( $term );
+
+                    if ( is_taxonomy_hierarchical( $term->taxonomy ) ) {
+                        self::clear_term_parents_archives_cache( $term ); // Post can be in the term's parents' archives.
+                    }
+                }
+            }
+        }
+    }
+
+    public static function clear_post_type_archive_cache( $post = null ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            $post_type_archive_url = get_post_type_archive_link( $post->post_type );
+
+            if ( $post_type_archive_url !== false && strpos( $post_type_archive_url, '?' ) === false ) {
+                self::clear_page_cache_by_url( $post_type_archive_url, 'pagination' );
+            }
+        }
+    }
+
+    public static function clear_page_cache_by_post( $post, $args = array() ) {
+
+        $post = get_post( $post );
+
+        if ( $post instanceof WP_Post ) {
+            if ( $post->post_status !== 'publish' ) {
+                return; // Page cache does not exist.
+            }
+
+            $post_url = get_permalink( $post );
+
+            if ( $post_url !== false && strpos( $post_url, '?' ) === false ) {
+                self::clear_page_cache_by_url( $post_url, $args );
+            }
+        }
+    }
+
+    public static function on_upgrade( $upgrader, $data ) {
+
+        if ( $data['action'] !== 'update' ) {
+            return;
+        }
+
+        if ( $data['type'] === 'core' ) {
+            self::clear_complete_cache();
+        }
+
+        if ( $data['type'] === 'theme' && isset( $data['themes'] ) ) {
+            $updated_themes = (array) $data['themes'];
+            $sites_themes   = self::each_site( is_multisite(), 'wp_get_theme' );
+
+            foreach ( $sites_themes as $blog_id => $site_theme ) {
+                // Clear the site cache if the active or parent theme has been updated.
+                if ( in_array( $site_theme->stylesheet, $updated_themes, true ) || in_array( $site_theme->template, $updated_themes, true ) ) {
+                    self::clear_page_cache_by_site( $blog_id );
+                }
+            }
+        }
+
+        if ( $data['type'] === 'plugin' && isset( $data['plugins'] ) ) {
+            $updated_plugins = (array) $data['plugins'];
+            $network_plugins = is_multisite() ? array_flip( (array) get_site_option( 'active_sitewide_plugins', array() ) ) : array();
+
+            // Clear the complete cache if a network activated plugin has been updated.
+            if ( ! empty( array_intersect( $updated_plugins, $network_plugins ) ) ) {
+                self::clear_complete_cache();
+            } else {
+                $sites_plugins = self::each_site( is_multisite(), 'get_option', array( 'active_plugins', array() ) );
+
+                foreach ( $sites_plugins as $blog_id => $site_plugins ) {
+                    // Clear the site cache if an activated plugin has been updated.
+                    if ( ! empty( array_intersect( $updated_plugins, (array) $site_plugins ) ) ) {
+                        self::clear_page_cache_by_site( $blog_id );
+                    }
+                }
+            }
+        }
+    }
+
+    public static function clear_complete_cache() {
+
+        self::each_site( is_multisite(), 'self::clear_site_cache', array(), true );
+    }
+
+    public static function uninstall_later( $old_site ) {
+
+        RapidLoad_Cache_Store::clean();
+
+        self::clear_page_cache_by_site( (int) $old_site->blog_id );
+    }
+
+    public static function install_later( $new_site ) {
+
+        if ( ! is_plugin_active_for_network( RAPIDLOAD_BASE ) ) {
+            return;
+        }
+
+        self::switch_to_blog( (int) $new_site->blog_id );
+        self::update_backend();
+        self::restore_current_blog();
     }
 
     public function clear_cache($args){
