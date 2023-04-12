@@ -553,7 +553,7 @@ class RapidLoad_Cache
                     '_cache'  => 'rapidload-cache',
                     '_action' => 'clear',
                 ) ), 'rapidload_cache_clear_cache_nonce' ),
-                'parent' => 'top-secondary',
+                'parent' => 'rapidload',
                 'title'  => '<span class="ab-item">' . $title . '</span>',
                 'meta'   => array( 'title' => $title ),
             )
@@ -567,7 +567,7 @@ class RapidLoad_Cache
                         '_cache'  => 'rapidload-cache',
                         '_action' => 'clearurl',
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
-                    'parent' => 'top-secondary',
+                    'parent' => 'rapidload',
                     'title'  => '<span class="ab-item">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
                     'meta'   => array( 'title' => esc_html__( 'Clear Page Cache', 'rapidload-cache' ) ),
                 )

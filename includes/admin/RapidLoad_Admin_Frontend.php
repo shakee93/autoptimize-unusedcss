@@ -92,19 +92,22 @@ class RapidLoad_Admin_Frontend
 
         if(apply_filters('rapidload/tool-bar-menu',true)){
 
-            /*$wp_admin_bar->add_node( array(
+            $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
-                'title' => '<img src="'. UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg' . '" alt="rapidload"><span class="ab-label">' . __( 'RapidLoad', 'rapidload' ) . '</span>',
+                'title' => '<span class="ab-icon"></span>'.__( 'RapidLoad', 'rapidload' ),
                 'href'  => admin_url( 'admin.php?page=rapidload' ),
-                'meta'  => array( 'class' => 'bullet-green rapidload' ),
-            ));*/
+                'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
+            ));
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload-clear-cache',
-                'title' => '<span class="ab-label">' . __( 'Clear Optimizations', 'clear_optimization' ) . '</span>',
-                'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+                'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
+                //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+                'href'   => wp_nonce_url( add_query_arg( array(
+                    '_action' => 'rapidload_purge_all',
+                ) ), 'uucss_nonce', 'nonce' ),
                 'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
-                'parent' => 'top-secondary'
+                'parent' => 'rapidload'
             ));
         }
 

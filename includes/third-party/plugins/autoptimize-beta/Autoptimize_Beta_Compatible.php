@@ -25,7 +25,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
         add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
-        add_action( 'admin_bar_menu', function () {
+        /*add_action( 'admin_bar_menu', function () {
 
             wp_enqueue_script( 'wp-util' );
 
@@ -38,7 +38,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
                 'tag'    => 'div'
             ) );
 
-        }, 1 );
+        }, 1 );*/
 
         if(apply_filters('uucss/autoptimize/clear-on-purge', false)){
 
@@ -77,7 +77,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
             return autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
         }, 10 , 1);
 
-        add_filter('rapidload/tool-bar-menu','__return_false');
+        //add_filter('rapidload/tool-bar-menu','__return_false');
     }
 
     public function addNotifications($notifications) {
