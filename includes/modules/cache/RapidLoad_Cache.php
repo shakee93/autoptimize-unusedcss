@@ -49,7 +49,25 @@ class RapidLoad_Cache
         add_action( 'delete_user', array( __CLASS__, 'on_register_update_delete_user' ) );
         add_action( 'deleted_user', array( __CLASS__, 'on_deleted_user' ), 10, 2 );
 
+        add_action( 'rapidload_cache_clear_complete_cache', array( __CLASS__, 'clear_complete_cache' ) );
+        add_action( 'rapidload_cache_clear_site_cache', array( __CLASS__, 'clear_site_cache' ) );
+        add_action( 'rapidload_cache_clear_expired_cache', array( __CLASS__, 'clear_expired_cache' ) );
+        add_action( 'rapidload_cache_clear_page_cache_by_post', array( __CLASS__, 'clear_page_cache_by_post' ) );
+        add_action( 'rapidload_cache_clear_page_cache_by_url', array( __CLASS__, 'clear_page_cache_by_url' ) );
+
+        add_action( 'rapidload_cache_page_cache_created', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
+        add_action( 'rapidload_cache_site_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
+        add_action( 'rapidload_cache_page_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
+
         self::process_clear_cache_request();
+    }
+
+    public static function clear_expired_cache( $site = null ) {
+
+        $args['expired'] = 1;
+        $args['hooks']['include'] = 'rapidload_cache_page_cache_cleared';
+
+        self::clear_page_cache_by_site( $site, $args );
     }
 
     public static function on_deleted_user( $user_id, $reassign ) {
@@ -699,7 +717,7 @@ class RapidLoad_Cache
 
     private static function get_events() {
 
-        $events = array( 'rapidload_clear_expired_cache' => 'hourly' );
+        $events = array( 'rapidload_cache_clear_expired_cache' => 'hourly' );
 
         return $events;
     }
@@ -818,7 +836,7 @@ class RapidLoad_Cache
 
     public static function validate_settings( $settings ) {
 
-        $settings = (array) apply_filters( 'rapidload_settings_before_validation', $settings );
+        $settings = (array) apply_filters( 'rapidload_cache_settings_before_validation', $settings );
         $settings = wp_parse_args( $settings, self::get_default_settings( 'user' ) );
 
         $validated_settings = wp_parse_args( array(
@@ -904,7 +922,7 @@ class RapidLoad_Cache
             $args['clear'] = 1;
 
             if ( ! isset( $args['hooks']['include'] ) ) {
-                $args['hooks']['include'] = 'rapidload_page_cache_cleared';
+                $args['hooks']['include'] = 'rapidload_cache_page_cache_cleared';
             }
         }
 
@@ -993,10 +1011,10 @@ class RapidLoad_Cache
     public static function update_disk() {
 
         if ( is_multisite() ) {
-            if ( get_site_transient( 'rapidload_disk_updated' ) !== UUCSS_VERSION ) {
+            if ( get_site_transient( 'rapidload_cache_disk_updated' ) !== UUCSS_VERSION ) {
                 self::each_site( true, 'RapidLoad_Cash_Store::clean' );
                 RapidLoad_Cache_Store::setup();
-                set_site_transient( 'rapidload_disk_updated', UUCSS_VERSION, HOUR_IN_SECONDS );
+                set_site_transient( 'rapidload_cache_disk_updated', UUCSS_VERSION, HOUR_IN_SECONDS );
             }
         } else {
             RapidLoad_Cache_Store::clean();
