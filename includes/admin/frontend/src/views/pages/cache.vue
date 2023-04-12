@@ -144,9 +144,9 @@ export default {
       Object.keys(this.cache).map((key) => {
         if (this.id === this.cache[key].id) {
           const options = this.cache[key].options;
-          this.cache_expires= options.cache_expires
+          options.cache_expires === 1 && (this.cache_expires = true);
+          options.mobile_cache === 1 && (this.mobile_cache = true);
           this.cache_expiry_time= options.cache_expiry_time
-          this.mobile_cache = options.mobile_cache
 
         }
 
