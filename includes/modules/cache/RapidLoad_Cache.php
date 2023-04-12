@@ -24,6 +24,95 @@ class RapidLoad_Cache
 
         add_filter('rapidload/active-module/options', [$this, 'update_module_options']);
 
+        add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_items' ), 90 );
+
+        add_action( 'uucss/cached', [$this, 'clear_cache'], 10, 2 );
+
+        add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
+
+        self::process_clear_cache_request();
+    }
+
+    public function clear_cache($args){
+
+        if ( isset( $args['url'] ) ) {
+            self::clear_page_cache_by_url( $args['url'] );
+        }
+
+    }
+
+    private static function user_can_clear_cache() {
+
+        $can_clear_cache = apply_filters( 'rapidload_cache_user_can_clear_cache', current_user_can( 'manage_options' ) );
+
+        return $can_clear_cache;
+    }
+
+    public static function add_admin_bar_items( $wp_admin_bar ) {
+
+        if ( ! self::user_can_clear_cache() ) {
+            return;
+        }
+
+        $title = ( is_multisite() && is_network_admin() ) ? esc_html__( 'Clear Network Cache', 'cache-enabler' ) : esc_html__( 'Clear Site Cache', 'cache-enabler' );
+
+        $wp_admin_bar->add_menu(
+            array(
+                'id'     => 'rapidload_cache_clear_cache',
+                'href'   => wp_nonce_url( add_query_arg( array(
+                    '_cache'  => 'rapidload-cache',
+                    '_action' => 'clear',
+                ) ), 'rapidload_cache_clear_cache_nonce' ),
+                'parent' => 'top-secondary',
+                'title'  => '<span class="ab-item">' . $title . '</span>',
+                'meta'   => array( 'title' => $title ),
+            )
+        );
+
+        if ( ! is_admin() ) {
+            $wp_admin_bar->add_menu(
+                array(
+                    'id'     => 'rapidload_cache_clear_page_cache',
+                    'href'   => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clearurl',
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'parent' => 'top-secondary',
+                    'title'  => '<span class="ab-item">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
+                    'meta'   => array( 'title' => esc_html__( 'Clear Page Cache', 'rapidload-cache' ) ),
+                )
+            );
+        }
+    }
+
+    public static function process_clear_cache_request() {
+
+        if ( empty( $_GET['_cache'] ) || empty( $_GET['_action'] ) || $_GET['_cache'] !== 'rapidload-cache' || ( $_GET['_action'] !== 'clear' && $_GET['_action'] !== 'clearurl' ) ) {
+            return;
+        }
+
+        if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'rapidload_cache_clear_cache_nonce' ) ) {
+            return;
+        }
+
+        if ( ! self::user_can_clear_cache() ) {
+            return;
+        }
+
+        if ( $_GET['_action'] === 'clearurl' ) {
+            self::clear_page_cache_by_url( RapidLoad_Cache_Engine::$request_headers['Host'] . RapidLoad_Cache_Engine::sanitize_server_input($_SERVER['REQUEST_URI'], false) );
+        } elseif ( $_GET['_action'] === 'clear' ) {
+            self::each_site( ( is_multisite() && is_network_admin() ), 'self::clear_site_cache', array(), true );
+        }
+
+        // Redirect to the same page.
+        wp_safe_redirect( remove_query_arg( array( '_cache', '_action', '_wpnonce' ) ) );
+
+        if ( is_admin() ) {
+            set_transient( self::get_cache_cleared_transient_name(), 1 );
+        }
+
+        exit;
     }
 
     public function update_module_options($options){
