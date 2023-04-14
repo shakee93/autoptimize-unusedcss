@@ -495,7 +495,7 @@ class UnusedCSS
                 $this->clear_files($job_data);
                 self::log([
                     'log' =>  'requeue-> clear cache by job id manually',
-                    'url' => $this->job_data->job->url,
+                    'url' => $job_data->job->url,
                 ]);
                 $job_data->requeue();
                 $job_data->save();
