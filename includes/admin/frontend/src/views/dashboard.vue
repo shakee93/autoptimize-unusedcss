@@ -290,7 +290,10 @@
             <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
           </div>
           <div class="col-end-7 col-span-2">
-            <img class="mt-2" v-if="tick_image" :src="base + tick_image" :alt="tick_image">
+            <svg class="mt-2" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
+              <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
+            </svg>
           </div>
         </div>
 
@@ -363,7 +366,7 @@ export default {
     });
 
     this.items_data = activeModules
-
+    console.log(activeModules);
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
@@ -491,7 +494,7 @@ export default {
             this.loading = false;
 
             this.items.map((item)=>{
-              item.status = response.data.data[item.id].status === "on";
+             // item.status = response.data.data[item.id].status === "on";
             })
           })
           .catch(error => {

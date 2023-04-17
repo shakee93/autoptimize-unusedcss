@@ -22,6 +22,65 @@ body .rapidload{
 
 @layer components {
 
+    .head-shake {
+        animation: rotate-face 2s infinite;
+        transform-origin: 80% 30%;
+    }
+
+    @keyframes rotate-face {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(-2deg); }
+        100% { transform: rotate(0deg); }
+    }
+    .error-icon {
+        animation: move-right 2s ease-in-out infinite;
+    }
+
+    @keyframes move-right {
+        0% {
+            transform: translateX(0);
+        }
+        50% {
+            transform: translateX(20px);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+    .hifi {
+        animation: rotate-face 2s infinite;
+        transform-origin: 50% 50%;
+    }
+
+    @keyframes rotate-face {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(-2deg); }
+        100% { transform: rotate(0deg); }
+    }
+    .hifi {
+        animation: rotate-face 2s infinite;
+        transform-origin: 50% 50%;
+    }
+    .hifi-girl {
+        animation: rotate-face 2s infinite;
+        transform-origin: 30% 40%;
+    }
+    @keyframes rotate-face {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(-5deg); }
+        100% { transform: rotate(0deg); }
+    }
+    .clock-hand {
+        transform-origin: 50% 100%;
+        animation: rotate-clockwise 2s ease-in-out infinite;
+    }
+
+    @keyframes rotate-clockwise {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(5deg); }
+        100% { transform: rotate(0deg); }
+    }
+
     .disableBlock{
         pointer-events: none;
         cursor: default;
