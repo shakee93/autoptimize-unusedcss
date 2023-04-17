@@ -1032,7 +1032,7 @@ class RapidLoad_Cache
         foreach ( $blog_ids as $blog_id ) {
             self::switch_to_blog( $blog_id, $restart_engine, $skip_active_check );
 
-            if ( $skip_active_check || self::is_rapidload_active() ) {
+            if ( ($skip_active_check || self::is_rapidload_active()) && is_callable($callback)) {
                 $callback_return[ $blog_id ] = call_user_func_array( $callback, $callback_params );
             }
 
@@ -1111,5 +1111,50 @@ class RapidLoad_Cache
         $cache_index = $cache['index'];
 
         return $cache_index;
+    }
+
+    public static function on_cache_created_cleared( $url, $id, $index ) {
+
+        if ( is_multisite() && ! wp_is_site_initialized( get_current_blog_id() ) ) {
+            return;
+        }
+
+        $current_cache_size = get_transient( 'rapidload_page_cache_size' );
+
+        if ( count( $index ) > 1 ) {
+            if ( $current_cache_size !== false ) {
+                // Prevent an incorrect cache size being built when the cache cleared index is not the entire site.
+                delete_transient( 'rapidload_page_cache_size' );
+            }
+        } else {
+            // The changed cache size is negative when the cache is cleared.
+            $changed_cache_size = array_sum( current( $index )['versions'] );
+
+            if ( $current_cache_size === false ) {
+                if ( $changed_cache_size > 0 ) {
+                    self::get_cache_size();
+                }
+            } else {
+                $new_cache_size = $current_cache_size + $changed_cache_size;
+                $new_cache_size = ( $new_cache_size >= 0 ) ? $new_cache_size : 0;
+
+                set_transient( 'rapidload_page_cache_size', $new_cache_size, DAY_IN_SECONDS );
+            }
+        }
+    }
+
+    public static function get_cache_size() {
+
+        $cache_size = get_transient( 'rapidload_page_cache_size' );
+
+        if ( $cache_size === false ) {
+            $args['subpages']['exclude'] = self::get_root_blog_exclusions();
+            $cache = RapidLoad_Cache_Store::cache_iterator( home_url(), $args );
+            $cache_size = $cache['size'];
+
+            set_transient( 'rapidload_page_cache_size', $cache_size, DAY_IN_SECONDS );
+        }
+
+        return $cache_size;
     }
 }
