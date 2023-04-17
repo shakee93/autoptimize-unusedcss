@@ -544,7 +544,7 @@ class RapidLoad_Cache
             return;
         }
 
-        $title = ( is_multisite() && is_network_admin() ) ? esc_html__( 'Clear Network Cache', 'cache-enabler' ) : esc_html__( 'Clear Site Cache', 'cache-enabler' );
+        $title = ( is_multisite() && is_network_admin() ) ? esc_html__( 'Clear Network Cache', 'rapidload-cache' ) : esc_html__( 'Clear Site Cache', 'rapidload-cache' );
 
         $wp_admin_bar->add_menu(
             array(
