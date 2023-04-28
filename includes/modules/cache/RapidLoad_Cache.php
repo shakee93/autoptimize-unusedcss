@@ -34,6 +34,8 @@ class RapidLoad_Cache
 
         add_action( 'wp_uninitialize_site', array( __CLASS__, 'uninstall_later' ) );
 
+        add_filter('uucss/notifications', [$this, 'add_notification'], 10 , 1);
+
         add_action( 'upgrader_process_complete', array( __CLASS__, 'on_upgrade' ), 10, 2 );
         add_action( 'save_post', array( __CLASS__, 'on_save_trash_post' ) );
         add_action( 'pre_post_update', array( __CLASS__, 'on_pre_post_update' ), 10, 2 );
@@ -60,6 +62,19 @@ class RapidLoad_Cache
         add_action( 'rapidload_cache_page_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
 
         self::process_clear_cache_request();
+    }
+
+    public function add_notification($notifications)
+    {
+        if(defined('WP_CACHE') && !WP_CACHE){
+            $notifications[] = [
+                "title" => "WP_CACHE Constant",
+                "message" => "Please set the value to true of the WP_CACHE constant in WP-Config.php file",
+                "type" => "error"
+            ];
+        }
+
+        return $notifications;
     }
 
     public static function clear_expired_cache( $site = null ) {

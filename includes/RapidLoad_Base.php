@@ -209,6 +209,7 @@ class RapidLoad_Base
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
                 'active_modules' => (array)self::get()->modules()->active_modules(),
+                'notifications' => apply_filters('uucss/notifications', []),
                 'activation_url' => self::activation_url('authorize' ),
                 'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
