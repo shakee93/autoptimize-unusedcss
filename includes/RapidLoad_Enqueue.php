@@ -16,7 +16,7 @@ class RapidLoad_Enqueue {
     {
         $this->options = RapidLoad_Base::fetch_options();
 
-        if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1"){
+        if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1" || apply_filters('rapidload/enable/frontend_rapidload_debug', false)){
             self::$frontend_debug = true;
         }
 
