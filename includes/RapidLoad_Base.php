@@ -301,11 +301,11 @@ class RapidLoad_Base
 
         if(is_multisite()){
 
-            self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
+            self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', self::get_default_options());
 
         }else{
 
-            self::$options = get_site_option( 'autoptimize_uucss_settings', false );
+            self::$options = get_site_option( 'autoptimize_uucss_settings', self::get_default_options() );
         }
 
         return self::$options;
@@ -356,9 +356,8 @@ class RapidLoad_Base
         return delete_site_option( $name );
     }
 
-    public static function uucss_activate() {
-
-        $default_options = self::get_option('autoptimize_uucss_settings',[
+    public static function get_default_options(){
+        return [
             'uucss_enable_css' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
@@ -368,7 +367,12 @@ class RapidLoad_Base
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
-        ]);
+        ];
+    }
+
+    public static function uucss_activate() {
+
+        $default_options = self::get_option('autoptimize_uucss_settings',self::get_default_options());
 
         if(!isset($default_options['uucss_api_key'])){
             self::update_option('autoptimize_uucss_settings', $default_options);
@@ -428,7 +432,7 @@ class RapidLoad_Base
             return;
         }
 
-        $options = self::get_option( 'autoptimize_uucss_settings' , []);
+        $options = self::fetch_options();
 
         if ( ! isset( $options ) || empty( $options ) || ! $options ) {
             $options = [];
@@ -440,10 +444,10 @@ class RapidLoad_Base
 
         self::update_option( 'autoptimize_uucss_settings', $options );
 
-        if(!isset($options['whitelist_packs'])){
+        if(!isset($options['whitelist_packs']) || isset($options['whitelist_packs']) && empty($options['whitelist_packs'])){
 
             $data        = self::suggest_whitelist_packs();
-            $white_packs = isset($data->data) ? $data->data : [];
+            $white_packs = isset($data) ? $data : [];
 
             $options['whitelist_packs'] = array();
             foreach ( $white_packs as $white_pack ) {
@@ -453,12 +457,12 @@ class RapidLoad_Base
             self::update_option( 'autoptimize_uucss_settings', $options );
         }
 
-        self::$options = self::fetch_options(false);
+        self::fetch_options(false);
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
     }
 
-    public static function suggest_whitelist_packs() {
+    public static function suggest_whitelist_packs($from = null) {
 
         if ( ! function_exists( 'get_plugins' ) ) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -484,7 +488,7 @@ class RapidLoad_Base
             wp_send_json_success( $data->data );
         }
 
-        return isset($data) && is_array($data) ? $data : [];
+        return isset($data) && isset($data->data) && is_array($data->data) ? $data->data : [];
     }
 
     public function rules_enabled(){
