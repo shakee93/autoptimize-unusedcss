@@ -34,6 +34,7 @@ abstract class UnusedCSS {
     public function __construct()
     {
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
+        add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
 
         $this->file_system = new RapidLoad_FileSystem();
 
@@ -113,6 +114,15 @@ abstract class UnusedCSS {
         }, 10 , 2);
 
         new UnusedCSS_Queue();
+    }
+
+
+    function rapidload_display_global_notification() {
+        ?>
+        <div class="rapidload-notification notice notice-success is-dismissible">
+            <p>This is a Rapidload notification!</p>
+        </div>
+        <?php
     }
 
     function get_current_rule($url)
