@@ -26,7 +26,7 @@
 
                 let link = file.cloneNode()
                 link.href = original.original
-                link.rel  = 'preload';
+                link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.removeAttribute('data-href')
                 link.removeAttribute('data-media')
@@ -36,7 +36,6 @@
                 }
                 link.prev = file
                 link.addEventListener('load',function (e) {
-                    this.rel = 'stylesheet';
                     if (this.prev) this.prev.remove();
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);
@@ -65,7 +64,7 @@
                 }
 
                 var link  = document.createElement('link');
-                link.rel  = 'preload';
+                link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.type = 'text/css';
                 link.href = original.original;
@@ -73,7 +72,6 @@
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
-                    this.rel = 'stylesheet';
                     if (this.prev) this.prev.remove()
                 });
 
