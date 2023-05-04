@@ -74,7 +74,7 @@
                 </div>
                 <div>
                   <h1 @click="rapidload_minify_html = !rapidload_minify_html" class="font-normal text-base text-black-font cursor-pointer">Minify Html</h1>
-                  <p class="text-sm text-gray-font">Consider minify html.</p>
+                  <p class="text-sm text-gray-font">Minify the html output of your pages.</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div>
                   <h1 @click="uucss_query_string = !uucss_query_string" class="font-normal text-base text-black-font cursor-pointer">Query String</h1>
-                  <p class="text-sm text-gray-font">Consider URLs with query strings as separate URLs.</p>
+                  <p class="text-sm text-gray-font">Identify URLs with query strings as separate URLs.</p>
                 </div>
               </div>
             </div>

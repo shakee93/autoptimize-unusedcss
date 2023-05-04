@@ -94,7 +94,7 @@ class RapidLoad_Admin_Frontend
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
-                'title' => '<span class="ab-icon"></span>'.__( 'RapidLoad', 'rapidload' ),
+                'title' => '<img src="http://dev.rapidload.local/wp-content/plugins/autoptimize-unusedcss/assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
                 'href'  => admin_url( 'admin.php?page=rapidload' ),
                 'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
             ));
