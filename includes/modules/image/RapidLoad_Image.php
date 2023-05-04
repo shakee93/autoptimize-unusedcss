@@ -49,11 +49,11 @@ class RapidLoad_Image
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
-                }
+                };
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
                 s.async = true;
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_image.min.js?v=24' . UUCSS_VERSION ?>"
+                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_image.min.js?v=24' . UUCSS_VERSION ?>";
                 b.appendChild(s);
             }(window, document));
 
