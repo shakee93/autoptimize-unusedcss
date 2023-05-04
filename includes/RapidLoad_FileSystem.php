@@ -20,7 +20,7 @@ class RapidLoad_FileSystem
             return true;
         }
         try{
-            return mkdir($dir, 0755, true);
+            return @mkdir($dir, 0755, true);
         }catch(Exception $exception){
             error_log(json_encode($dir));
             return false;

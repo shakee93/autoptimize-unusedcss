@@ -1040,7 +1040,7 @@ class RapidLoad_Cache_Store
 
         $cache_signature = sprintf(
             '<!-- %s @ %s (%s) -->',
-            'RapidLoad by BunnyCDN',
+            'RapidLoad',
             self::get_current_time(),
             $cache_file_name
         );

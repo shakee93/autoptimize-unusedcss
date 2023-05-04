@@ -65,9 +65,7 @@ class WP_HTML_Compression {
                     }
                 }
             }
-            if ( $strip ) {
-                $content = $this->removeWhiteSpace($content);
-            }
+            $content = $this->removeWhiteSpace($content);
             $html .= $content;
         }
         return $html;

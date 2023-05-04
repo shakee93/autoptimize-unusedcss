@@ -634,7 +634,11 @@ class RapidLoad_Cache
 
         if(isset($state['dom']) && RapidLoad_Cache_Engine::$to_be_cached){
 
-            $content = $state['dom']->__toString();
+            if(gettype($state['dom']) == "string"){
+                $content = $state['dom'];
+            }else{
+                $content = $state['dom']->__toString();
+            }
 
             if (RapidLoad_Cache_Engine::is_cacheable( $content ) && !RapidLoad_Cache_Engine::bypass_cache()) {
 
@@ -810,7 +814,7 @@ class RapidLoad_Cache
             'convert_image_urls_to_webp'         => 0,
             'mobile_cache'                       => 0,
             'compress_cache'                     => 0,
-            'minify_html'                        => 0,
+            'minify_html'                        => 1,
             'minify_inline_css_js'               => 0,
             'excluded_post_ids'                  => '',
             'excluded_page_paths'                => '',
