@@ -880,6 +880,8 @@ body.settings_page_rapidload-onboarding{
     border-radius: 15px;
     background: #7F54B31A;
     max-width: 1000px;
+    min-height: 240px;
+    padding-left: 20px;
 }
 .rapidload-notification .update-now{
     background: #7F54B3;
@@ -887,6 +889,7 @@ body.settings_page_rapidload-onboarding{
     border-radius: 7px;
     border: none;
     padding: 4px 20px 7px 20px;
+    margin-left: -5px;
 }
 .rapidload-notification .learn-more{
     background: transparent;
@@ -896,13 +899,28 @@ body.settings_page_rapidload-onboarding{
     padding-right: 20px;
 }
 
+.rapidload-notification .update-now:hover{
+    cursor: pointer;
+}
+.rapidload-notification .learn-more:hover{
+    cursor: pointer;
+}
+.rapidload-notification .action-footer{
+    margin-top: 10px;
+}
 .rapidload-notification .notify-buttons{
     padding-bottom: 10px;
+    position: absolute;
+    right: 0;
+    padding-right: 50px;
 }
 
 .rapidload-notification p{
     color:#553779 !important;
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    padding-left: 0px !important;
 }
 .rapidload-notification h2{
     font-weight: 600;
@@ -915,7 +933,7 @@ body.settings_page_rapidload-onboarding{
 .rapidload-notification .top-header{
     margin-top: 10px;
     max-width: 180px;
-    background: #7F54B3;
+    background: #553779;
     color: white;
     padding: 5px 0px 5px 10px;
     border-radius: 50px;

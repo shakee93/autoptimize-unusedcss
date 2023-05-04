@@ -143,7 +143,7 @@ abstract class UnusedCSS {
                             We're confident that the new features will take your website to the next level, giving you a competitive edge in the online world. We urge you to update to RapidLoad 2.0 and experience the benefits for yourself.</p>
                     </div>
                 </div>
-                <div class="actions pl-6 pr-6 pb-2 grid grid-cols-2 gap-4">
+                <div class="action-footer">
                     <div class="notify-buttons">
                         <a href="https://docs.rapidload.io/features/image-delivery" target="_blank">
                             <button class="learn-more"> Learn more</button>
