@@ -172,6 +172,7 @@ class RapidLoad_Cache_Store
 
                 if ( $args['clear'] ) {
 
+
                     if ( ! @unlink( $cache_object ) ) {
                         // Skip to the next object because the file deletion failed.
                         continue;
