@@ -873,3 +873,50 @@ body.settings_page_rapidload-onboarding{
     color: #ffc107;
     font-size: 14px;
 }
+
+.rapidload-notification.notice{
+    border-color: #7F54B3;
+    border-width: 2px !important;
+    border-radius: 15px;
+    background: #7F54B31A;
+    max-width: 1000px;
+}
+.rapidload-notification .update-now{
+    background: #7F54B3;
+    color: white;
+    border-radius: 7px;
+    border: none;
+    padding: 4px 20px 7px 20px;
+}
+.rapidload-notification .learn-more{
+    background: transparent;
+    border: none;
+    color: #7F54B3;
+    font-weight: 600;
+    padding-right: 20px;
+}
+
+.rapidload-notification .notify-buttons{
+    padding-bottom: 10px;
+}
+
+.rapidload-notification p{
+    color:#553779 !important;
+    font-size: 14px;
+}
+.rapidload-notification h2{
+    font-weight: 600;
+    color:#553779 !important;
+    margin-bottom: 2px !important;
+    margin-top: 10px !important;
+    font-size: 16px;
+}
+
+.rapidload-notification .top-header{
+    margin-top: 10px;
+    max-width: 180px;
+    background: #7F54B3;
+    color: white;
+    padding: 5px 0px 5px 10px;
+    border-radius: 50px;
+}

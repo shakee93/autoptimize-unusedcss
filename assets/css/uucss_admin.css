@@ -1531,9 +1531,3 @@ table#uucss-options tbody tr td{
     padding: 5px;
 }
 
-.rapidload-notification.notice{
-    border-color: #7F54B3;
-    border-width: 2px !important;
-    border-radius: 30px;
-    background: #7F54B31A;
-}
