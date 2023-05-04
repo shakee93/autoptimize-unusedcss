@@ -298,7 +298,7 @@ class UnusedCSS_Store
 
     function handleFontFace($content){
 
-        if(isset($this->options['uucss_enable_font_optimization']) || $this->options['uucss_enable_font_optimization'] == "1"){
+        if(isset($this->options['uucss_enable_font_optimization']) && $this->options['uucss_enable_font_optimization'] == "1"){
             $content = preg_replace(
                 '/font-display:\s?(auto|block|fallback|optional)/',
                 'font-display:swap',

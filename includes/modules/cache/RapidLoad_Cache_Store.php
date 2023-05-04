@@ -259,7 +259,7 @@ class RapidLoad_Cache_Store
         if ( isset( $hooks['include'] ) ) {
             $hooks_to_fire = $hooks['include'];
         } else {
-            $hooks_to_fire = array( 'rapidload_complete_cache_cleared', 'rapidload_site_cache_cleared', 'rapidload_page_cache_cleared' );
+            $hooks_to_fire = array( 'rapidload_cache_complete_cache_cleared', 'rapidload_cache_site_cache_cleared', 'rapidload_cache_page_cache_cleared' );
         }
 
         if ( ! empty( $hooks['exclude'] ) ) {
@@ -270,21 +270,21 @@ class RapidLoad_Cache_Store
             return;
         }
 
-        if ( in_array( 'rapidload_page_cache_cleared', $hooks_to_fire, true ) ) {
+        if ( in_array( 'rapidload_cache_page_cache_cleared', $hooks_to_fire, true ) ) {
             foreach ( $cache_cleared_index as $cache_cleared_dir => $cache_cleared_data ) {
                 $page_cleared_url = $cache_cleared_data['url'];
                 $page_cleared_id  = $cache_cleared_data['id'];
 
-                do_action( 'rapidload_page_cache_cleared', $page_cleared_url, $page_cleared_id, $cache_cleared_index );
-                do_action( 'rapidload_action_cache_by_url_cleared', $page_cleared_url ); // Deprecated in 1.6.0.
+                do_action( 'rapidload_cache_page_cache_cleared', $page_cleared_url, $page_cleared_id, $cache_cleared_index );
+                do_action( 'rapidload_cache_action_cache_by_url_cleared', $page_cleared_url ); // Deprecated in 1.6.0.
             }
         }
 
-        if ( in_array( 'rapidload_site_cache_cleared', $hooks_to_fire, true ) && empty( RapidLoad_Cache::get_cache_index() ) ) {
+        if ( in_array( 'rapidload_cache_site_cache_cleared', $hooks_to_fire, true ) && empty( RapidLoad_Cache::get_cache_index() ) ) {
             $site_cleared_url = user_trailingslashit( home_url() );
             $site_cleared_id  = get_current_blog_id();
 
-            do_action( 'rapidload_site_cache_cleared', $site_cleared_url, $site_cleared_id, $cache_cleared_index );
+            do_action( 'rapidload_cache_site_cache_cleared', $site_cleared_url, $site_cleared_id, $cache_cleared_index );
         }
 
         if ( in_array( 'rapidload_complete_cache_cleared', $hooks_to_fire, true ) && ! is_dir( RAPIDLOAD_CACHE_DIR ) ) {
@@ -365,7 +365,7 @@ class RapidLoad_Cache_Store
             $args_template = $args;
             $args = array(
                 'clear' => 1,
-                'hooks' => array( 'include' => 'rapidload_page_cache_cleared' ),
+                'hooks' => array( 'include' => 'rapidload_cache_page_cache_cleared' ),
             );
 
             switch ( $args_template ) {
@@ -988,7 +988,7 @@ class RapidLoad_Cache_Store
             $cache_created_index[ $new_cache_file_dir ]['id']  = $page_created_id;
             $cache_created_index[ $new_cache_file_dir ]['versions'][ $new_cache_file_name ] = $new_cache_file_created;
 
-            do_action( 'rapdiload_page_cache_created', $page_created_url, $page_created_id, $cache_created_index );
+            do_action( 'rapidload_cache_page_cache_created', $page_created_url, $page_created_id, $cache_created_index );
         }
     }
 

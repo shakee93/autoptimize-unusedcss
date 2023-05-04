@@ -290,7 +290,10 @@
             <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
           </div>
           <div class="col-end-7 col-span-2">
-            <img class="mt-2" v-if="tick_image" :src="base + tick_image" :alt="tick_image">
+            <svg class="mt-2" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
+              <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
+            </svg>
           </div>
         </div>
 
@@ -363,7 +366,7 @@ export default {
     });
 
     this.items_data = activeModules
-
+    console.log(activeModules);
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
@@ -491,7 +494,7 @@ export default {
             this.loading = false;
 
             this.items.map((item)=>{
-              item.status = response.data.data[item.id].status === "on";
+             // item.status = response.data.data[item.id].status === "on";
             })
           })
           .catch(error => {
@@ -608,9 +611,9 @@ export default {
         },
         {
           id : "cache",
-          title: "Cache",
-          description: 'Cache enabler feature',
-          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"/><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"/><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          title: "Page Cache",
+          description: 'Optimize and cache static HTML pages to provide a snappier page experience.',
+          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#FF7D00"/><path d="M27 24L22.1146 27.4804L24.0943 28.7715L22 32L26.8854 28.5691L24.9083 27.2825L27 24Z" fill="white"/><rect x="10.5" y="12.5" width="28" height="24" rx="4.5" stroke="white" stroke-width="3" stroke-linejoin="bevel"/><circle cx="16" cy="17" r="1" transform="rotate(-180 16 17)" fill="white"/><circle cx="19" cy="17" r="1" transform="rotate(-180 19 17)" fill="white"/><circle cx="22" cy="17" r="1" transform="rotate(-180 22 17)" fill="white"/><path d="M11 20.5H38.5" stroke="white" stroke-width="2"/></svg>',
           link: '/cache',
           status: false,
           isDisabled: true

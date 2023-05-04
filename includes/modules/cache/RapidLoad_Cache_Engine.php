@@ -156,7 +156,7 @@ class RapidLoad_Cache_Engine
 
     private static function exclude_search() {
 
-        $exclude_search = apply_filters( 'rapidload_exclude_search', is_search() );
+        $exclude_search = apply_filters( 'rapidload_cache_exclude_search', is_search() );
 
         return $exclude_search;
     }
