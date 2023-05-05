@@ -879,8 +879,8 @@ body.settings_page_rapidload-onboarding{
     border-width: 2px !important;
     border-radius: 15px;
     background: #7F54B31A;
-    max-width: 1000px;
-    min-height: 240px;
+    /*max-width: 1000px;*/
+    min-height: 225px;
     padding-left: 20px;
 }
 .rapidload-notification .update-now{
@@ -912,7 +912,11 @@ body.settings_page_rapidload-onboarding{
     padding-bottom: 10px;
     position: absolute;
     right: 0;
-    padding-right: 50px;
+    bottom: 0;
+    padding-right: 250px;
+}
+.rapidload-notification .container {
+    display: flex;
 }
 
 .rapidload-notification p{
@@ -937,4 +941,7 @@ body.settings_page_rapidload-onboarding{
     color: white;
     padding: 5px 0px 5px 10px;
     border-radius: 50px;
+}
+.rapidload-notification .right-column svg{
+    padding-top: 35px;
 }
