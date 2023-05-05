@@ -247,7 +247,6 @@ class RapidLoad_Cache_Engine
     public static function is_cacheable( $contents ) {
 
         if ( ! is_string( $contents ) ) {
-            error_log('not string');
             return false;
         }
 
