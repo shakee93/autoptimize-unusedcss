@@ -33,17 +33,28 @@ class RapidLoad_Base
 
     public function __construct()
     {
-        self::activateByLicenseKey();
-
         self::fetch_options();
 
         add_action('init', function (){
 
+            RapidLoad_DB::update_db_version();
+
+            self::activateByLicenseKey();
+            self::activate();
+
+            if(is_admin()){
+
+                new RapidLoad_Onboard();
+
+            }
+
+            $this->check_dependencies();
+
+            $this->init_log_dir();
+
             RapidLoad_ThirdParty::initialize();
 
             register_deactivation_hook( UUCSS_PLUGIN_FILE, [ $this, 'vanish' ] );
-
-            add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
 
             add_filter('uucss/cache-base-dir', function ($dir){
 
@@ -65,21 +76,26 @@ class RapidLoad_Base
 
             }, 10 , 1);
 
-            $this->add_plugin_update_message();
-
-            RapidLoad_DB::update_db_version();
-
             if(is_admin()){
-                RapidLoad_DB::check_db_updates();
-            }
 
-            self::enqueueGlobalScript();
+                add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+                add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+                    $this,
+                    'add_plugin_action_link'
+                ] );
+
+                $this->add_plugin_update_message();
+
+                RapidLoad_DB::check_db_updates();
+
+                self::enqueueGlobalScript();
+            }
 
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
-            if(RapidLoad_DB::$current_version > 1.2){
-                $this->container['admin'] = new RapidLoad_Admin();
-            }
+            $this->container['admin'] = new RapidLoad_Admin();
+            $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
 
         });
 
@@ -92,6 +108,70 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    public function add_plugin_action_link( $links ) {
+
+        $_links = array(
+            '<a href="' . admin_url( 'admin.php?page=rapidload' ) . '">Settings</a>',
+        );
+
+        return array_merge( $_links, $links );
+    }
+
+    public function check_dependencies() {
+
+        if(self::is_api_key_verified()) {
+            return true;
+        }else {
+
+            $url = $this->get_current_url();
+
+            if(strpos($url, 'page=uucss_legacy') !== false || strpos($url, 'page=rapidload') !== false){
+                return false;
+            }
+
+            $notice = [
+                'action'  => 'on-board',
+                'title'   => 'RapidLoad Power Up',
+                'message' => 'Complete on-boarding steps, it only takes 2 minutes.',
+
+                'main_action' => [
+                    'key'   => 'Get Started',
+                    'value' => admin_url( 'options-general.php?page=rapidload-on-board' )
+                ],
+                'type'        => 'warning'
+            ];
+            self::add_advanced_admin_notice($notice);
+            self::display_get_start_link();
+        }
+
+        return false;
+    }
+
+    public function init_log_dir(){
+
+        if(!self::get_log_option()){
+            return false;
+        }
+
+        $file_system = self::get_log_instance();
+
+        if ( $file_system->exists( UUCSS_LOG_DIR ) ) {
+            return true;
+        }
+
+        if( $file_system->is_writable( UUCSS_LOG_DIR ) ){
+            return false;
+        }
+
+        $created = $file_system->mkdir( UUCSS_LOG_DIR , 0755, !$file_system->exists( wp_get_upload_dir()['basedir'] . '/rapidload/' ));
+
+        if (!$created || ! $file_system->is_writable( UUCSS_LOG_DIR ) || ! $file_system->is_readable( UUCSS_LOG_DIR ) ) {
+            return false;
+        }
+
+        return true;
     }
 
     public function modules(){
@@ -123,11 +203,17 @@ class RapidLoad_Base
             wp_register_script( 'uucss_global_admin_script', UUCSS_PLUGIN_URL . 'assets/js/uucss_global.js', [ 'jquery', 'wp-util' ], UUCSS_VERSION );
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
-                'setting_url'       => admin_url( 'options-general.php?page=uucss' ),
+                'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
                 'on_board_complete' => apply_filters('uucss/on-board/complete', false),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                'active_modules' => (array)self::get()->modules()->active_modules(),
+                'notifications' => apply_filters('uucss/notifications', []),
+                'activation_url' => self::activation_url('authorize' ),
+                'onboard_activation_url' => self::onboard_activation_url('authorize' ),
+                'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
+                'total_jobs' => RapidLoad_DB::get_total_job_count()
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
@@ -135,23 +221,6 @@ class RapidLoad_Base
 
         }, apply_filters('uucss/scripts/global/priority', 90));
 
-        add_action('init', function (){
-
-            if(!is_admin()){
-                return;
-            }
-
-            global $post;
-
-            $data = array(
-                'post_id'         => ($post) ? $post->ID : null,
-                'post_link'       => ($post) ? get_permalink($post) : null,
-            );
-
-            wp_register_script( 'uucss_admin_bar_script', UUCSS_PLUGIN_URL . 'assets/js/admin_bar.js', [ 'jquery' ], UUCSS_VERSION );
-            wp_localize_script( 'uucss_admin_bar_script', 'uucss_admin_bar', $data );
-            wp_enqueue_script( 'uucss_admin_bar_script' );
-        });
     }
 
     function add_plugin_update_message(){
@@ -269,17 +338,17 @@ class RapidLoad_Base
 
         if(is_multisite()){
 
-            self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', false);
+            self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', self::get_default_options());
 
         }else{
 
-            self::$options = get_site_option( 'autoptimize_uucss_settings', false );
+            self::$options = get_site_option( 'autoptimize_uucss_settings', self::get_default_options() );
         }
 
         return self::$options;
     }
 
-    public static function get_option($name, $default)
+    public static function get_option($name, $default = null)
     {
         if(is_multisite()){
 
@@ -314,7 +383,7 @@ class RapidLoad_Base
         return update_site_option( $name, $default );
     }
 
-    public static function delete_option($name, $default)
+    public static function delete_option($name)
     {
         if(is_multisite()){
 
@@ -324,12 +393,23 @@ class RapidLoad_Base
         return delete_site_option( $name );
     }
 
+    public static function get_default_options(){
+        return [
+            'uucss_enable_css' => "1",
+            'uucss_enable_uucss' => "1",
+            'uucss_minify' => "1",
+            'uucss_inline_css' => "1",
+            'uucss_support_next_gen_formats' => "1",
+            'uucss_set_width_and_height' => "1",
+            'uucss_self_host_google_fonts' => "1",
+            'uucss_image_optimize_level' => "lossless",
+            'uucss_exclude_above_the_fold_image_count' => 3,
+        ];
+    }
+
     public static function uucss_activate() {
 
-        $default_options = self::get_option('autoptimize_uucss_settings',[
-            'uucss_load_original' => "1",
-            'uucss_enable_rules' => "1",
-        ]);
+        $default_options = self::get_option('autoptimize_uucss_settings',self::get_default_options());
 
         if(!isset($default_options['uucss_api_key'])){
             self::update_option('autoptimize_uucss_settings', $default_options);
@@ -363,7 +443,7 @@ class RapidLoad_Base
 
             self::update_option( 'autoptimize_uucss_settings', $options );
 
-            header( 'Location: ' . admin_url( 'options-general.php?page=uucss') );
+            header( 'Location: ' . admin_url( 'admin.php?page=rapidload') );
             exit;
         }
 
@@ -389,7 +469,7 @@ class RapidLoad_Base
             return;
         }
 
-        $options = self::get_option( 'autoptimize_uucss_settings' , []);
+        $options = self::fetch_options();
 
         if ( ! isset( $options ) || empty( $options ) || ! $options ) {
             $options = [];
@@ -401,19 +481,51 @@ class RapidLoad_Base
 
         self::update_option( 'autoptimize_uucss_settings', $options );
 
-        $data        = UnusedCSS_Admin::suggest_whitelist_packs();
-        $white_packs = isset($data->data) ? $data->data : [];
+        if(!isset($options['whitelist_packs']) || isset($options['whitelist_packs']) && empty($options['whitelist_packs'])){
 
-        $options['whitelist_packs'] = array();
-        foreach ( $white_packs as $white_pack ) {
-            $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+            $data        = self::suggest_whitelist_packs();
+            $white_packs = isset($data) ? $data : [];
+
+            $options['whitelist_packs'] = array();
+            foreach ( $white_packs as $white_pack ) {
+                $options['whitelist_packs'][] = $white_pack->id . ':' . $white_pack->name;
+            }
+
+            self::update_option( 'autoptimize_uucss_settings', $options );
         }
 
-        self::update_option( 'autoptimize_uucss_settings', $options );
-
-        self::$options = self::fetch_options(false);
+        self::fetch_options(false);
 
         self::add_admin_notice( 'RapidLoad : 🙏 Thank you for using our plugin. if you have any questions feel free to contact us.', 'success' );
+    }
+
+    public static function suggest_whitelist_packs($from = null) {
+
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $plugins        = get_plugins();
+        $active_plugins = array_map( function ( $key, $item ) {
+
+            $item['slug'] = $key;
+
+            return $item;
+        }, array_keys( $plugins ), $plugins );
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->post( 'whitelist-packs/wp-suggest', [
+            'plugins' => $active_plugins,
+            'theme'   => get_template(),
+            'url'     => site_url()
+        ] );
+
+        if ( wp_doing_ajax() ) {
+            wp_send_json_success( $data->data );
+        }
+
+        return isset($data) && isset($data->data) && is_array($data->data) ? $data->data : [];
     }
 
     public function rules_enabled(){
@@ -446,6 +558,11 @@ class RapidLoad_Base
         return $this->applicable_rule;
     }
 
+    public static function is_domain_verified(){
+        $options = self::fetch_options();
+        return  $options['valid_domain'];
+    }
+
     public function get_pre_defined_rules($with_permalink = false){
 
         if(!$this->defined_rules){
@@ -454,5 +571,43 @@ class RapidLoad_Base
         }
 
         return $this->defined_rules;
+    }
+
+    public static function cache_file_count(){
+        $uucss_files = isset(UnusedCSS::$base_dir) && !empty(UnusedCSS::$base_dir) ? scandir(UnusedCSS::$base_dir) : [];
+        if(is_array($uucss_files)){
+            $uucss_files = array_filter($uucss_files, function ($file){
+                return false !== strpos($file, '.css');
+            });
+        }else{
+            $uucss_files = [];
+        }
+        $cpcss_files = isset(CriticalCSS::$base_dir) && !empty(CriticalCSS::$base_dir) ? scandir(CriticalCSS::$base_dir) : [];
+        if(is_array($cpcss_files)){
+            $cpcss_files = array_filter($cpcss_files, function ($file){
+                return false !== strpos($file, '.css');
+            });
+        }else{
+            $cpcss_files = [];
+        }
+        return count($uucss_files) + count($cpcss_files);
+    }
+
+    public static function is_api_key_verified() {
+
+        $api_key_status = isset( self::$options['uucss_api_key_verified'] ) ? self::$options['uucss_api_key_verified'] : '';
+
+        return $api_key_status == '1';
+
+    }
+
+    public static function display_get_start_link() {
+        add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
+            $_links = array(
+                '<a href="' . admin_url( 'options-general.php?page=rapidload-on-board' ) . '">Get Started <span>⚡️</span> </a>',
+            );
+
+            return array_merge( $_links, $links );
+        } );
     }
 }

@@ -333,7 +333,7 @@ trait RapidLoad_Utils {
 		return preg_match( '/uucss\/uucss-[a-z0-9]{32}-/', $url );
 	}
 
-    public static function activation_url( $action, $to = 'options-general.php?page=uucss' ) {
+    public static function activation_url( $action, $to = 'options-general.php?page=rapidload' ) {
 
 	    if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
 		    define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
@@ -347,6 +347,23 @@ trait RapidLoad_Utils {
 			    'goto'   => UUCSS_ACTIVATION_URL,
                 'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
 		        'utm_medium' => 'plugin'
+            ] );
+    }
+
+    public static function onboard_activation_url( $action, $to = 'options-general.php?page=rapidload-on-board' ) {
+
+        if ( ! defined( 'UUCSS_ACTIVATION_URL' ) ) {
+            define( 'UUCSS_ACTIVATION_URL', 'https://app.rapidload.io/activate' );
+        }
+
+        return UUCSS_ACTIVATION_URL . '?' . build_query( [
+                'action' => $action,
+                'nonce'  => wp_create_nonce( 'uucss_activation' ),
+                'site'   => trailingslashit(get_site_url()),
+                'back'   => admin_url( $to ),
+                'goto'   => UUCSS_ACTIVATION_URL,
+                'utm_source' => RapidLoad_ThirdParty::plugin_exists('autoptimize') ? 'connect_autoptimize' : 'connect_rapidload',
+                'utm_medium' => 'plugin'
             ] );
     }
 
@@ -368,18 +385,18 @@ trait RapidLoad_Utils {
 
     public function is_file_excluded( $options, $file ) {
 
-        if ( isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ) {
-            $files = explode( ',', $options['uucss_excluded_files'] );
+        $files = isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ? explode( ',', $options['uucss_excluded_files'] ) : [];
 
-            foreach ( $files as $excluded_file ) {
+        $files = apply_filters('uucss/excluded-files', $files);
 
-                if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
-                    return true;
-                }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
-                    return true;
-                }
+        foreach ( $files as $excluded_file ) {
 
+            if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
+                return true;
+            }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
+                return true;
             }
+
         }
 
         return false;
@@ -441,14 +458,18 @@ trait RapidLoad_Utils {
     public function size() {
 
 	    $file_system = new RapidLoad_FileSystem();
+        $uucss_size = 0;
+        $cpcss_size = 0;
 
-        if ( ! $file_system || ! $file_system->exists( UnusedCSS::$base_dir ) ) {
-            return "0 KB";
+        if ( $file_system->exists( UnusedCSS::$base_dir ) ) {
+            $uucss_size = $this->dirSize( UnusedCSS::$base_dir );
         }
 
-        $size = $this->dirSize( UnusedCSS::$base_dir );
+        if ( $file_system->exists( CriticalCSS::$base_dir ) ) {
+            $cpcss_size = $this->dirSize( CriticalCSS::$base_dir );
+        }
 
-        return $this->human_file_size( $size );
+        return $this->human_file_size( $uucss_size + $cpcss_size );
     }
 
     protected function is_doing_api_fetch(){
@@ -566,9 +587,57 @@ trait RapidLoad_Utils {
         return true;
     }
 
-    static function verify_nonce(){
-        if ( ! isset( $_REQUEST['nonce'] ) || (! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) && !wp_verify_nonce($_REQUEST['nonce'], 'uucss_activation')) ) {
-            wp_send_json_error( 'UnusedCSS - Malformed Request Detected, Contact Support.' );
+    function is_regex_expression($string) {
+        return @preg_match($string, '') !== FALSE;
+    }
+
+    public static function get_file_path_from_url($url)
+    {
+        $file_relative_path = parse_url($url, PHP_URL_PATH);
+        $site_path = parse_url(site_url(), PHP_URL_PATH);
+        $file_path = UUCSS_ABSPATH . preg_replace("$^$site_path$", '', $file_relative_path);
+        return str_replace("//","/", $file_path);
+    }
+
+    public static function get_width_height($file_path){
+
+        if (!is_file($file_path)) {
+            return false;
+        }
+
+        if (pathinfo($file_path, PATHINFO_EXTENSION) === 'svg') {
+            $xml = @simplexml_load_file($file_path);
+            $attr = $xml->attributes();
+            $viewbox = explode(' ', $attr->viewBox);
+            $width =
+                isset($attr->width) && preg_match('/\d+/', $attr->width, $value)
+                    ? (int) $value[0]
+                    : (count($viewbox) == 4
+                    ? (int) $viewbox[2]
+                    : null);
+            $height =
+                isset($attr->height) && preg_match('/\d+/', $attr->height, $value)
+                    ? (int) $value[0]
+                    : (count($viewbox) == 4
+                    ? (int) $viewbox[3]
+                    : null);
+            if ($width && $height) {
+                return ['width' => $width, 'height' => $height];
+            }
+        }
+
+        // Get image size by checking the file
+        list($width, $height) = getimagesize($file_path);
+
+        if ($width && $height) {
+            return ['width' => $width, 'height' => $height];
+        }
+
+    }
+
+    public static function verify_nonce(){
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
+            wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
     }
 }
