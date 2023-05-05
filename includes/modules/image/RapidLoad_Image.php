@@ -52,7 +52,8 @@ class RapidLoad_Image
                 };
                 var b = d.getElementsByTagName('head')[0];
                 var s = d.createElement("script");
-                s.async = true;
+                s.defer = true;
+                s.type = "text/javascript";
                 s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION ?>";
                 b.appendChild(s);
             }(window, document));
