@@ -94,7 +94,7 @@ class RapidLoad_Admin_Frontend
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
-                'title' => '<img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
+                'title' => '<img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
                 'href'  => admin_url( 'admin.php?page=rapidload' ),
                 'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
             ));

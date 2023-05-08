@@ -1,9 +1,8 @@
-
 window.rapidload_replace_image_src = function () {
-    var images = document.getElementsByTagName("img");
+    var images = document.getElementsByTagName('img');
     for (var i = 0; i < images.length; i++) {
         var image = images[i];
-        var url = image.getAttribute("data-original-src");
+        var url = image.getAttribute('data-original-src');
         if (window.rapidload_io_data && url) {
             var options = "ret_img";
             if (window.rapidload_io_data.optimize_level) {
@@ -67,15 +66,14 @@ var callback = function (mutationList, observer) {
 };
 var observer = new MutationObserver(callback);
 observer.observe(targetNode, config);
-var observer_bg = new IntersectionObserver(
-    function (elements) {
+var observer_bg = new IntersectionObserver(function (elements) {
         elements.forEach(function (element) {
             if (element.isIntersecting) {
                 observer_bg.unobserve(element.target);
                 var attributes = element.target.getAttribute("data-rapidload-lazy-attributes").split(",");
                 attributes.forEach(function (attribute) {
                     var value = element.target.getAttribute("data-rapidload-lazy-" + attribute);
-                    element.target.style.backgroundImage = "url(' + value.replace(“ret_blank”, “ret_img”) + ')";
+                    element.target.style.backgroundImage = 'url(' + value.replace("ret_blank", "ret_img") + ')';
                 });
             }
         });
@@ -85,13 +83,15 @@ var observer_bg = new IntersectionObserver(
         rootMargin: "300px"
     }
 );
-var lazyElements = document.querySelectorAll("[data-rapidload-lazy-method=‘viewport’]");
-lazyElements.forEach(function (element) {
-    observer_bg.observe(element);
-});
 document.addEventListener("DOMContentLoaded", function () {
     window.rapidload_replace_image_src();
 });
 window.onresize = function (event) {
     window.rapidload_replace_image_src();
 };
+var lazyElements = document.querySelectorAll('[data-rapidload-lazy-method="viewport"]');
+if(lazyElements && lazyElements.length){
+    lazyElements.forEach(function (element) {
+        observer_bg.observe(element);
+    });
+}

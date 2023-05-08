@@ -112,7 +112,6 @@ class RapidLoad_Image_Enqueue
 
                         foreach ($matches as $match) {
                             $url = $this->extractUrl($match[1]);
-                            error_log($url);
                             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
                             if (in_array($urlExt, $this->imgExt)) {
                                 $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
