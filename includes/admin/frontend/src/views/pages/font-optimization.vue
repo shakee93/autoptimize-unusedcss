@@ -165,7 +165,7 @@ export default {
           } )
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           }).finally(()=>{
         this.loading = false;
         this.dataSaved();

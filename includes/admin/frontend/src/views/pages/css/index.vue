@@ -331,7 +331,7 @@ export default {
       Object.keys(this.css_config).map((key) => {
         if (this.id === this.css_config[key].id) {
           const option = this.css_config[key].options;
-          console.log(option)
+
           this.critical_css.status = option.critical_css.status === 'on';
           this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
           this.critical_css.remove_cpcss_on_user_interaction = option.critical_css.options.remove_cpcss_on_user_interaction;
@@ -387,7 +387,7 @@ export default {
           })
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           }).finally(()=>{
         this.loading = false;
         this.dataSaved();
@@ -419,7 +419,7 @@ export default {
           })
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           });
 
     },

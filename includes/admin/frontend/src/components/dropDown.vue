@@ -48,7 +48,7 @@ export default {
   methods:{
     triggerClick(){
       if(this.selected){
-        console.log(this.selected)
+
       }
 
     }

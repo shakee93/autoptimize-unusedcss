@@ -366,7 +366,7 @@ export default {
     });
 
     this.items_data = activeModules
-    console.log(activeModules);
+
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
         this.items.map((val) => {
@@ -404,7 +404,7 @@ export default {
           'Content-Type':'multipart/form-data'
         }
       }).then((response)=>{
-        //console.log(response.data.data)
+
         if(response.data?.success){
           window.location.href = '?rapidload_license=' + this.license_information.key + '&nonce=' + response.data.data.activation_nonce +'&page=rapidload#/'
           this.license_loading = false;
@@ -462,7 +462,7 @@ export default {
     update(toggle, module){
 
       if(!this.license_information.licensed_domain){
-        //console.log("return true");
+
         return;
 
       }
@@ -499,7 +499,7 @@ export default {
           })
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           });
 
     },

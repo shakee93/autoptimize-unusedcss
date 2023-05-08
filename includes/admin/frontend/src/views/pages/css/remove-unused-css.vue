@@ -335,7 +335,7 @@ export default {
           })
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           });
 
     },
@@ -369,7 +369,7 @@ export default {
 
       }
 
-      //console.log(this.whitelist_packs);
+
 
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
@@ -382,7 +382,7 @@ export default {
           })
           .catch(error => {
             this.errorMessage = error.message;
-            console.error("There was an error!", error);
+
           }).finally(() => {
               this.loading = false;
               this.dataSaved();
