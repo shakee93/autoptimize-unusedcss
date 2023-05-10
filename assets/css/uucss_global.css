@@ -891,3 +891,21 @@ a.toplevel_page_rapidload img{
     margin-right: 5px;
     margin-bottom: 1px;
 }
+
+.rapidload-major-update-message{
+    display: flex;
+}
+
+.rapidload-major-update-message-icon span{
+    padding-right: 5px;
+    font-size: 17px;
+    color: #D6363C;
+}
+
+.rapidload-major-update-message-content-title{
+    margin-bottom: 10px;
+}
+
+.rapidload-major-update-message-content-description ol{
+    list-style: initial;
+}

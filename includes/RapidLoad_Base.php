@@ -276,28 +276,18 @@ class RapidLoad_Base
             </div>
             <div class="rapidload-major-update-message-content">
                 <div class="rapidload-major-update-message-content-title">
-                    Heads up, Please backup before upgrade!
+                    <strong>Heads up, New RapidLoad comes in as ALL-IN-ONE solution for page-speed optimization.</strong>
                 </div>
                 <div class="rapidload-major-update-message-content-description">
-                    The latest update includes some substantial changes across different areas of the plugin. We highly
-                    recommend you backup your site before upgrading, and make sure you first update in a staging
-                    environment
-                </div>
-            </div>
-        </div>
-        <hr class="rapidload-major-update-separator"/>
-        <div class="rapidload-major-update-message">
-            <div class="rapidload-major-update-message-icon">
-                <span class="dashicons dashicons-info-outline"></span>
-            </div>
-            <div class="rapidload-major-update-message-content">
-                <div class="rapidload-major-update-message-content-title">
-                    Compatibility Alert
-                </div>
-                <div class="rapidload-major-update-message-content-description">
-                    Some of the plugins you’re using have not been tested with the
-                    latest version of Elementor Pro (3.12.3). To avoid issues, make sure they are all up to date and
-                    compatible before updating Elementor Pro.
+                    RapidLoad 2.0 is getting back into the game with a new kit and it is loaded with exciting features:
+                    <ol>
+                        <li>Unused CSS + Critical CSS</li>
+                        <li>On-the-fly Image Optimization</li>
+                        <li>Built in CDN</li>
+                        <li>Font Optimization</li>
+                        <li>JS Optimization</li>
+                        <li>Page Cache</li>
+                    </ol>
                 </div>
             </div>
         </div>
