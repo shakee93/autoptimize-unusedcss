@@ -90,7 +90,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="mobile_cache = !mobile_cache" class="font-normal text-base text-black-font cursor-pointer">Create a cached version for mobile </h1>
+                  <h1 @click="mobile_cache = !mobile_cache" class="font-normal text-base text-black-font cursor-pointer">Mobile Cache</h1>
                   <p class="text-sm text-gray-font">Create a cached version for mobile devices.</p>
                 </div>
               </div>
