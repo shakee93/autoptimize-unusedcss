@@ -52,17 +52,22 @@
                 </div>
                 <div>
                   <h1 @click="cache_expires = !cache_expires" class="font-normal text-base text-black-font cursor-pointer">Cached pages expire</h1>
-<!--                  <p class="text-sm text-gray-font">Cached pages expire</p>-->
+                  <p class="text-sm text-gray-font pb-3">Cached pages expire</p>
                   <div class="flex">
-                    <input
-                        id="numeric-input"
-                        type="number"
-                        v-model="cache_expiry_time"
-                        :min="0"
-                        :max="100"
-                        step="1"
-                    />
-                    <p class="text-sm text-gray-font pr-3 pt-1">hours after being created.</p>
+<!--                    <input-->
+<!--                        id="numeric-input"-->
+<!--                        type="number"-->
+<!--                        v-model="cache_expiry_time"-->
+<!--                        :min="0"-->
+<!--                        :max="100"-->
+<!--                        step="1"-->
+<!--                    />-->
+
+                    <button v-for="button in 5" v-on:click="cache_expiry_time = button"
+                            :class="['rl-btn',(button === Number(cache_expiry_time) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
+                            class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-l-2 border-y-2 border-purple">
+                      {{ button === 1 ? 'Never' : (button === 2 ? '2 hours' : (button === 3 ? '6 hours' : (button === 4 ? '12 hours' : (button === 5 ? '24 hours' : button + ' hours'))))  }}
+                    </button>
 
                   </div>
                 </div>
@@ -146,7 +151,19 @@ export default {
           const options = this.cache[key].options;
           options.cache_expires === 1 && (this.cache_expires = true);
           options.mobile_cache === 1 && (this.mobile_cache = true);
-          this.cache_expiry_time= options.cache_expiry_time
+
+          if(options.cache_expiry_time === 0){
+            this.cache_expiry_time = 1;
+          }else if(this.cache_expiry_time === 2){
+            this.cache_expiry_time = 2;
+          }else if(this.cache_expiry_time === 6){
+            this.cache_expiry_time = 3;
+          }else if(this.cache_expiry_time === 12){
+            this.cache_expiry_time = 4;
+          }else if(this.cache_expiry_time === 24){
+            this.cache_expiry_time = 5;
+          }
+
 
         }
 
@@ -154,6 +171,7 @@ export default {
     }
   },
   methods: {
+
     doc(){
       window.open('https://docs.rapidload.io/features/cache', '_blank');
     },
@@ -165,6 +183,17 @@ export default {
 
     async saveSettings() {
       this.loading = true;
+
+      if(this.cache_expiry_time === 1){
+        this.cache_expiry_time = 0;
+      }else if(this.cache_expiry_time === 3){
+        this.cache_expiry_time = 6;
+      }else if(this.cache_expiry_time === 4){
+        this.cache_expiry_time = 12;
+      }else if(this.cache_expiry_time === 5){
+        this.cache_expiry_time = 24;
+      }
+
       const data = {
         cache_expires: this.cache_expires,
         cache_expiry_time: this.cache_expiry_time,
