@@ -143,7 +143,7 @@ export default {
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
     });
-    console.log(activeModules);
+   // console.log(activeModules);
     this.cache = activeModules
     if (this.cache) {
       Object.keys(this.cache).map((key) => {
