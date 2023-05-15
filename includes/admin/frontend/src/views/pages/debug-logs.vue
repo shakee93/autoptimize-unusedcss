@@ -188,7 +188,7 @@ export default {
       this.selectedDate = selectedDate;
     },
     date(){
-        console.log("this log date"+ this.selectedDate);
+        //console.log("this log date"+ this.selectedDate);
 
     },
     filterDate(date){
