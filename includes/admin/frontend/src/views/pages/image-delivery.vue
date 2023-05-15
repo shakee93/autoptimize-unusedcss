@@ -347,7 +347,7 @@ export default {
       focus: null,
       image_delivery: [],
       id: 'image-delivery',
-      compression_level: 'lossy',
+      compression_level: 'lossless',
       next_gen_image: false,
       uucss_exclude_images: [],
       uucss_lazy_load_images:{

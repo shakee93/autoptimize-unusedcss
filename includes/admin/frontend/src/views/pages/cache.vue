@@ -143,26 +143,37 @@ export default {
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
     });
-    console.log(activeModules);
+   // console.log(activeModules);
     this.cache = activeModules
     if (this.cache) {
       Object.keys(this.cache).map((key) => {
         if (this.id === this.cache[key].id) {
           const options = this.cache[key].options;
-          options.cache_expires === 1 && (this.cache_expires = true);
-          options.mobile_cache === 1 && (this.mobile_cache = true);
+          if(options && options.cache_expires){
+            options.cache_expires === 1 && (this.cache_expires = true);
+            options.mobile_cache === 1 && (this.mobile_cache = true);
 
-          if(options.cache_expiry_time === 0){
+            if(options.cache_expiry_time === 0){
+              this.cache_expiry_time = 1;
+            }else if(this.cache_expiry_time === 2){
+              this.cache_expiry_time = 2;
+            }else if(this.cache_expiry_time === 6){
+              this.cache_expiry_time = 3;
+            }else if(this.cache_expiry_time === 12){
+              this.cache_expiry_time = 4;
+            }else if(this.cache_expiry_time === 24){
+              this.cache_expiry_time = 5;
+            }
+          }else{
+            this.cache_expires = false;
+            this.mobile_cache = false;
             this.cache_expiry_time = 1;
-          }else if(this.cache_expiry_time === 2){
-            this.cache_expiry_time = 2;
-          }else if(this.cache_expiry_time === 6){
-            this.cache_expiry_time = 3;
-          }else if(this.cache_expiry_time === 12){
-            this.cache_expiry_time = 4;
-          }else if(this.cache_expiry_time === 24){
-            this.cache_expiry_time = 5;
+
+
           }
+
+
+
 
 
         }
