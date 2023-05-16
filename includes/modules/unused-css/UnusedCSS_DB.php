@@ -270,7 +270,7 @@ class UnusedCSS_DB extends RapidLoad_DB
     static function link_exists($url){
         global $wpdb;
 
-        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status IN('success','processing','waiting','rule-based')", OBJECT);
+        $result = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_uucss_job WHERE url = '" . $url . "' AND status = 'success' OR status = 'processing' OR status = 'waiting' OR status = 'rule-based'", OBJECT);
 
         $error = $wpdb->last_error;
 

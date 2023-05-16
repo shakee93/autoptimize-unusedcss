@@ -74,7 +74,7 @@ class UnusedCSS_Path extends UnusedCSS_Job {
         }
     }
 
-    public function save(){
+    public function save($exclude = []){
 
         if(isset($this->id)){
 
@@ -86,6 +86,12 @@ class UnusedCSS_Path extends UnusedCSS_Job {
 
             unset($data['id']);
             unset($data['type']);
+
+            foreach ($exclude as $value){
+                if(isset($data[$value])){
+                    unset($data[$value]);
+                }
+            }
 
             if(isset($data['warnings'])){
                 $data['warnings'] = serialize($data['warnings']);

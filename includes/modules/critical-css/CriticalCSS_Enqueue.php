@@ -194,7 +194,7 @@ class CriticalCSS_Enqueue
             }
 
             $this->job_data->mark_as_successful_hit();
-            $this->job_data->save();
+            $this->job_data->save(['data','stats']);
 
         self::log([
             'type' => 'injection',

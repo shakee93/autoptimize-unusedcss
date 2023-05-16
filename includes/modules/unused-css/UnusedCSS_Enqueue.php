@@ -168,10 +168,10 @@ class UnusedCSS_Enqueue {
 
         }
 
-        $this->data->save();
+        $this->data->save(['files','stats']);
         if($this->data->is_type('Rule') && $this->link){
 
-            $this->link->save();
+            $this->link->save(['files','stats']);
         }
 
     }
