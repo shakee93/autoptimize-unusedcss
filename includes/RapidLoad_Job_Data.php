@@ -54,13 +54,19 @@ class RapidLoad_Job_Data{
 
     }
 
-    public function save(){
+    public function save($exclude = []){
 
         global $wpdb;
         $data = (array) $this;
 
         unset($data['id']);
         unset($data['job']);
+
+        foreach ($exclude as $value){
+            if(isset($data[$value])){
+                unset($data[$value]);
+            }
+        }
 
         if(isset($this->id)){
 

@@ -328,7 +328,7 @@ class UnusedCSS_Enqueue
 
         }
 
-        $this->job_data->save();
+        $this->job_data->save(['data', 'stats']);
 
     }
 

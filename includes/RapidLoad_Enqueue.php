@@ -248,11 +248,11 @@ class RapidLoad_Enqueue {
             $args['post_id'] = url_to_postid($url);
         }
 
-        if(RapidLoad_Base::get()->rules_enabled() && !$this->rule){
+        /*if(RapidLoad_Base::get()->rules_enabled() && !$this->rule){
 
             $this->rule = $this->get_current_rule();
 
-        }
+        }*/
 
         $job = new RapidLoad_Job([
             'url' => $url
