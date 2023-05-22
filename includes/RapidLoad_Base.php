@@ -171,6 +171,8 @@ class RapidLoad_Base
             return false;
         }
 
+        @file_put_contents(wp_get_upload_dir()['basedir'] . '/rapidload/.htaccess','Require all denied' . PHP_EOL . 'Options -Indexes');
+
         return true;
     }
 
