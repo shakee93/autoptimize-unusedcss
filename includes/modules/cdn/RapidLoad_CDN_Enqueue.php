@@ -67,6 +67,10 @@ class RapidLoad_CDN_Enqueue
 
         foreach ($images as $image){
 
+            if($this->str_contains($image->src, RapidLoad_Image::$image_indpoint)){
+                continue;
+            }
+
             if($this->str_contains($image->src, site_url())){
 
                 if($this->is_cdn_enabled()){
