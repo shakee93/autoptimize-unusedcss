@@ -65,20 +65,100 @@ global $post;
 
         window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
     </script>
-    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=uucss' ) ?>">RapidLoad</a>
+    <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=rapidload' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">
         <span class="uucss-stats__size">Size: <?php echo $this->size(); ?></span>
     </div>
     <div class="uucss-stats__actions">
 
 		<?php if ( $post ) {
-			$exists = RapidLoad_Settings::link_exists( get_permalink( $post ) );?>
-            <div id="button-uucss-clear" <?php if ( ! $exists ) echo 'class="hidden"' ?> title="clear page cache">remove
+			$exists =  new RapidLoad_Job([
+                'url' => get_permalink( $post )
+            ]);
+            ?>
+            <div id="button-uucss-clear" <?php if ( ! isset($exists->id) ) echo 'class="hidden"' ?> title="clear page cache">remove
             </div>
-            <div id="button-uucss-purge" <?php if ( $exists ) echo 'class="hidden"' ?> title="generate page cache">optimize
+            <div id="button-uucss-purge" <?php if ( isset($exists->id) ) echo 'class="hidden"' ?> title="generate page cache">optimize
             </div>
 		<?php } ?>
         <div id="button-uucss-clear-all" title="remove all RapidLoad optimizations">remove all</div>
     </div>
 
 </div>
+
+<script>
+
+    (function ($) {
+
+
+        <?php if($post) : ?>
+
+        $('#button-uucss-purge').click(function (e) {
+            e.preventDefault();
+            var $this = $(this);
+
+            $this.text('loading...');
+
+            var data = {
+                url: '<?php echo get_permalink($post) ?>',
+                nonce: window.uucss.nonce,
+                args: {
+                    post_id: <?php echo $post->ID ?>
+                }
+            }
+
+            wp.ajax.post('rapidload_purge_all', data).done(function (d) {
+                $this.text('generate')
+                $this.hide();
+                $('#button-uucss-clear').css('display', 'inline-block')
+            }).fail(function () {
+                $this.text('failed!')
+            });
+        });
+
+        $('#button-uucss-clear').click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            $this.text('loading...');
+            wp.ajax.post('rapidload_purge_all', {
+                clear: true,
+                url: '<?php echo get_permalink($post) ?>',
+                nonce: window.uucss.nonce,
+                args: {
+                    post_id: <?php echo $post->ID ?>
+                }
+            }).done(function (d) {
+                $this.text('clear')
+                $this.hide();
+                $('#button-uucss-purge').css('display', 'inline-block')
+            })
+
+        });
+
+        <?php endif ?>
+
+        $('#button-uucss-clear-all').click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            $this.text('loading...');
+            wp.ajax.post('rapidload_purge_all', {
+                clear: true,
+                nonce: window.uucss.nonce,
+                url: null,
+            }).done(function (d) {
+                $this.text('cleared all')
+                $('#button-uucss-purge').css('display', 'inline-block')
+                $('#button-uucss-clear').hide()
+                $('.uucss-stats__size').text('Total Size : 0.00KB')
+
+            })
+
+        });
+
+    })(jQuery)
+
+</script>

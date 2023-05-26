@@ -1330,6 +1330,7 @@ li.uucss-history .dataTables_wrapper .dataTables_info .uucss-url-search-wrap,
     height: 230px;
     width: 400px;
     padding: 20px 20px;
+
 }
 
 .featherlight.add-site-rule-model .featherlight-content #force-requeue-rule{
@@ -1530,4 +1531,15 @@ table#uucss-options tbody tr td{
 .cf-table td{
     padding: 5px;
 }
-
+.featherlight.add-site-rule-model .featherlight-content{
+    min-height: 240px;
+    min-width: 450px;
+    padding: 20px 20px;
+    border-bottom: 0;
+}
+.featherlight.add-site-url-model .featherlight-content{
+    width: 310px;
+    height: 170px !important;
+    padding: 20px 20px;
+    border-bottom: 0;
+}

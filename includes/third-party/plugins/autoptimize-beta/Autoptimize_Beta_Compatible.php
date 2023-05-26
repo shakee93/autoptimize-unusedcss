@@ -15,9 +15,9 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
     public function init_hooks(){
 
-        add_filter('uucss/cache-base-dir', function ($value){
+        /*add_filter('uucss/cache-base-dir', function ($value){
             return trailingslashit(defined('AUTOPTIMIZE_CACHE_CHILD_DIR') ? AUTOPTIMIZE_CACHE_CHILD_DIR : '/cache/autoptimize/');
-        });
+        });*/
 
         add_action('uucss/options/before_render_form', [$this, 'render_option_page_ao_admin_tabs']);
 
@@ -25,7 +25,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
 
         add_filter('uucss/notifications', [$this, 'addNotifications'], 10, 1);
 
-        add_action( 'admin_bar_menu', function () {
+        /*add_action( 'admin_bar_menu', function () {
 
             wp_enqueue_script( 'wp-util' );
 
@@ -38,9 +38,9 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
                 'tag'    => 'div'
             ) );
 
-        }, 1 );
+        }, 1 );*/
 
-        if(apply_filters('uucss/autoptimize/clear-on-purge', true)){
+        if(apply_filters('uucss/autoptimize/clear-on-purge', false)){
 
             add_action( 'autoptimize_action_cachepurged', function (){
                 do_action('uucss/clear');
@@ -76,6 +76,8 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
         add_filter('uucss/enqueue/cache-file-url/cdn', function ($default){
             return autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );
         }, 10 , 1);
+
+        //add_filter('rapidload/tool-bar-menu','__return_false');
     }
 
     public function addNotifications($notifications) {
@@ -121,7 +123,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
             $tab = 'RapidLoad';
 
             $args = array_merge( $args, array(
-                'uucss' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>' . $tab . '</span></span>', 'autoptimize' ),
+                'rapidload' => __( '<span class="uucss-tab-title"><img src="' . UUCSS_PLUGIN_URL . '/assets/images/logo-icon.svg' . '" width="15" alt="RapidLoad.io logo"><span>' . $tab . '</span></span>', 'autoptimize' ),
             ) );
 
             return $args;

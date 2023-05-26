@@ -71,6 +71,14 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
             return false;
         }
 
+        if(function_exists('is_cart') && is_cart()){
+            return false;
+        }
+
+        if(function_exists('is_checkout') && is_checkout()){
+            return false;
+        }
+
         $excludable_urls = [];
 
         if(class_exists('WC_Order')){
