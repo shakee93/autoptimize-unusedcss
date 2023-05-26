@@ -64,7 +64,7 @@
 
             container.find('#uucss-faq-read').click(function (e) {
                 e.preventDefault();
-                wp.ajax.post('mark_faqs_read',{ nonce : uucss.nonce}).then(function (i) {
+                wp.ajax.post('mark_faqs_read',{ nonce : window.uucss.nonce}).then(function (i) {
                     container.find('.uucss-notification.uucss-notification-faq').remove();
                 }).fail(function (i) {
 
@@ -90,7 +90,8 @@
             e.preventDefault();
             var $this = $(this);
             wp.ajax.post('mark_notice_read',{
-                notice_id : $this.data('notice_id')
+                notice_id : $this.data('notice_id'),
+                nonce : window.uucss.nonce
             }).then(function (i) {
                 $this.parents('li:first').remove();
             }).fail(function (i) {
@@ -112,7 +113,7 @@
 
         var $sitemap_input = $('input.site-map-url');
 
-        wp.ajax.post('get_robots_text', { nonce : uucss.nonce }).done(function (data){
+        wp.ajax.post('get_robots_text', { nonce : window.uucss.nonce }).done(function (data){
             if(data && data.sitemap){
                 $sitemap_input.data('sitemap_url', data.sitemap);
             }
@@ -200,7 +201,7 @@
             var oldText = $button.val()
 
             $button.val('loading..')
-            wp.ajax.post('suggest_whitelist_packs', { nonce : uucss.nonce }).done(function (data) {
+            wp.ajax.post('suggest_whitelist_packs', { nonce : window.uucss.nonce }).done(function (data) {
 
                 $button.val(oldText)
 
@@ -636,19 +637,21 @@
                             if(rowData.cpcss){
                                 if(rowData.cpcss.status === 'success'){
                                     $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                                 }
                             }
 
                         }
 
                         if(!window.uucss || !window.uucss.uucss_enable_debug){
-                            rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
-                                return !w.message.toString().includes('optimized version for the file missing')
-                            })
+                            if(rowData.meta?.warnings?.length){
+                                rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
+                                    return !w.message.toString().includes('optimized version for the file missing')
+                                })
+                            }
                         }
 
-                            if(rowData.meta.warnings && rowData.meta.warnings.length){
+                            if(rowData.meta && rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
@@ -668,9 +671,9 @@
                         var attemptsString = '';
 
                         if((rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
-                            attemptsString = 'Hits : ' + rowData.success_count
+                            attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
-                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts
                         }else if(Number(rowData.attempts) !== 0) {
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
@@ -791,9 +794,9 @@
                     render: function (data, type, row, meta) {
                         var _render = '';
 
-                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-update"></span></button>'
+                        _render += '<button data-uucss-optimize data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '" data-regex="' + row.regex + '"><span class="dashicons dashicons-update"></span></button>'
 
-                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '"><span class="dashicons dashicons-ellipsis"></span></button>';
+                        _render += '<button data-uucss-options data-url="' + data + '" data-rule="' + row.rule + '" data-rule_id="' + row.rule_id + '" data-regex="' + row.regex + '" ><span class="dashicons dashicons-ellipsis"></span></button>';
 
                         return _render;
                     },
@@ -892,12 +895,12 @@
 
                             switch (action) {
                                 case 'requeue_url':{
-                                    requeue('url', {url : data.url})
+                                    requeue('current', {url : data.url},null, 'url')
                                     break;
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : data.url, nonce : uucss.nonce }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : data.url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -938,7 +941,7 @@
 
                                             $('#update-attach-rule').click(function(){
 
-                                                wp.ajax.post('attach_rule',{ nonce : uucss.nonce, url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
+                                                wp.ajax.post('attach_rule',{ nonce : window.uucss.nonce, url : data.url, type : 'attach', rule_id : $('#attach-rule-item').val() }).then(function (i) {
 
                                                     $.uucssAlert(i, 'success')
                                                     var currentFeather = $.featherlight.current();
@@ -955,7 +958,7 @@
                                     break;
                                 }
                                 case 'detach_from_rule':{
-                                    wp.ajax.post('attach_rule',{ nonce : uucss.nonce, url : data.url, type : 'detach' }).then(function (i) {
+                                    wp.ajax.post('attach_rule',{ url : data.url, type : 'detach', nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -968,21 +971,20 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data)
-                                    wp.ajax.post('rapidload_purge_all',{
+                                    /*wp.ajax.post('rapidload_purge_all',{
                                         job_type : 'url',
                                         url : data.url,
-                                        clear : true,
-                                        nonce : window.uucss_global?.nonce
+                                        clear : true
                                     }).then(function (i) {
 
                                     }).done(function(){
 
-                                    });
+                                    });*/
                                     break;
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url, nonce : uucss.nonce }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1004,7 +1006,7 @@
                                         url: wp.ajax.settings.url + '?action=uucss_test_url',
                                         data : {
                                             url: data.url,
-                                            nonce : uucss.nonce
+                                            nonce : window.uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1116,20 +1118,21 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
+                    var regex = $(this).data('regex');
                     var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id, regex : regex})
 
                 });
 
-                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, {immediate : true})
 
-                });*/
+                });
             }
         });
 
@@ -1281,7 +1284,7 @@
                             if(rowData.cpcss){
                                 if(rowData.cpcss.status === 'success'){
                                     $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated</span>');
+                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                                 }
                             }
 
@@ -1313,9 +1316,9 @@
                         var attemptsString = '';
 
                         if(rowData.success_count > 0){
-                            attemptsString = 'Hits : ' + rowData.success_count
+                            attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts;
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
-                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count
+                            attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts;
                         }else if(Number(rowData.attempts) !== 0){
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
@@ -1533,7 +1536,7 @@
 
                             switch (action) {
                                 case 'requeue_rule':{
-                                    requeue('url', {
+                                    requeue('current', {
                                         url : url,
                                         rule : rule,
                                         regex : regex
@@ -1542,7 +1545,7 @@
                                 }
                                 case 'regenerate_cpcss':{
 
-                                    wp.ajax.post('cpcss_purge_url',{ url : url, nonce : uucss.nonce }).then(function (i) {
+                                    wp.ajax.post('cpcss_purge_url',{ url : url, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'success')
 
@@ -1580,22 +1583,21 @@
                                 }
                                 case 'remove':{
                                     uucss_purge_url(data.url, true, row, dataIndex, data, { rule : rule, regex : regex })
-                                    wp.ajax.post('rapidload_purge_all',{
+                                    /*wp.ajax.post('rapidload_purge_all',{
                                         job_type : 'rule',
                                         rule : rule,
                                         regex : regex,
-                                        clear : true,
-                                        nonce : window.uucss_global?.nonce
+                                        clear : true
                                     }).then(function (i) {
 
                                     }).done(function(){
 
-                                    });
+                                    });*/
                                     break;
                                 }
                                 case 'purge-url':{
 
-                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex, nonce : uucss.nonce }).then(function (i) {
+                                    wp.ajax.post('clear_page_cache',{ url : data.url, rule : rule, regex : regex, nonce : window.uucss.nonce }).then(function (i) {
 
                                         $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1620,7 +1622,7 @@
                                             type: 'rule',
                                             rule : rule,
                                             regex : regex,
-                                            nonce : uucss.nonce
+                                            nonce : window.uucss.nonce
                                         },
                                         beforeSend(){
                                             $this.data('fetching', true);
@@ -1732,20 +1734,21 @@
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
                     var rule = $(this).data('rule');
+                    var regex = $(this).data('regex');
                     var rule_id = $(this).data('rule_id');
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id})
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, { rule : rule, rule_id : rule_id, regex : regex})
 
                 });
 
-                /*$(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
+                $(row).find('button[data-uucss-optimize]').off('click').click(function (e) {
                     e.preventDefault()
 
                     var is_clear = (typeof $(this).data().uucssClear === 'string')
 
-                    uucss_purge_url(data.url, is_clear, row, dataIndex, data)
+                    uucss_purge_url(data.url, is_clear, row, dataIndex, data, {immediate : true})
 
-                });*/
+                });
             }
         });
 
@@ -1757,7 +1760,7 @@
             e.preventDefault();
         });
 
-        function requeue(post_type, data = {}, list = [], type = 'path'){
+        function requeue(post_type, data = {}, list = [], type = 'requeue_all_url'){
 
             var data_ = {
                 url_list : list,
@@ -1767,10 +1770,10 @@
                 post_type : post_type,
                 type : type,
                 job_type : type,
-                nonce : window.uucss_global?.nonce
+                nonce : window.uucss.nonce
             }
 
-            wp.ajax.post('uucss_queue',data_).then(function (i) {
+            /*wp.ajax.post('uucss_queue',data_).then(function (i) {
                 if(table && type === 'path'){
                     table.ajax.reload(null, false);
                 }else if(rule_table && type === 'rule'){
@@ -1778,15 +1781,15 @@
                 }
             }).done(function () {
                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
-            });
+            });*/
 
             wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
 
             }).done(function(){
-
+                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select');
             });
 
-            wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type, nonce : uucss.nonce });
+            //wp.ajax.post('cpcss_purge_url',{ url : data.url, post_type : post_type });
 
         }
 
@@ -1814,7 +1817,7 @@
 
                 if(window.uucss && window.uucss.dev_mode === "1"){
                     $content.find('ul').append('<li data-action_name="run_gpsi_test"><a data-action_name="run_gpsi_test" href="#">Run GPSI Test</a></li>');
-                    $content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
+                    //$content.find('ul').append('<li class="rule-stats" data-action_name="rule-stats"><a data-action_name="rule-stats" href="#">Find Duplicate Files</a></li>');
                 }
 
                 if($('#thirtd_part_cache_plugins').val() === "1"){
@@ -1840,7 +1843,7 @@
 
                     switch (action) {
                         case 'rule-stats':{
-                            wp.ajax.post('uucss_rule_stats', {nonce : uucss.nonce}).then(function (i) {
+                            wp.ajax.post('uucss_rule_stats').then(function (i) {
                                 if(i){
 
                                     var $ruleStatsContent = $('<div class="rule-stats-cont"><ol class="duplicates"></ol></div>');
@@ -1895,22 +1898,22 @@
                             var requeue_url_list = [];
                             if(table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    requeue_url_list.push(table_row_value.url)
+                                    requeue_url_list.push(table_row_value.id)
                                 });
                             }
-                            requeue('current', {}, requeue_url_list);
+                            requeue('current', {}, requeue_url_list, 'requeue_all_url');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
-                            requeue('warnings');
+                            requeue('warnings', {}, requeue_url_list, 'requeue_all_url_warnings');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
-                            requeue('failed');
+                            requeue('failed', {}, requeue_url_list, 'requeue_all_url_failed');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
-                            requeue('processing');
+                            requeue('processing', {}, requeue_url_list, 'requeue_all_url_processing');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }
@@ -1920,14 +1923,14 @@
                                 url : '',
                                 clear : true,
                                 job_type: 'url',
-                                nonce: uucss.nonce
+                                nonce: window.uucss.nonce,
                             }
 
                             if(action === 'remove_selected'){
                                 var url_list = [];
                                 if(table.rows('.selected').data().length){
                                     $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                        url_list.push(table_row_value.url)
+                                        url_list.push(table_row_value.id)
                                     });
                                 }
                                 if(url_list.length){
@@ -1935,7 +1938,7 @@
                                 }
                             }
 
-                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
+                            /*wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(table){
                                     table.ajax.reload(null, false);
                                     $.uucssAlert('Successfully removed links from the table', 'info');
@@ -1947,16 +1950,16 @@
 
                             }).done(function(){
 
-                            });
+                            });*/
                             wp.ajax.post('rapidload_purge_all',data).then(function (i) {
 
                             }).done(function(){
-
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings', nonce : uucss.nonce }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', nonce : window.uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -1967,7 +1970,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : uucss.nonce}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : window.uucss.nonce }).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2042,26 +2045,22 @@
                             var requeue_url_list = [];
                             if(rule_table.rows('.selected').data().length){
                                 $.each(table.rows('.selected').data(), function(table_row_index, table_row_value){
-                                    requeue_url_list.push({
-                                        url : table_row_value.url,
-                                        rule : table_row_value.rule,
-                                        regex : table_row_value.regex
-                                    })
+                                    requeue_url_list.push(table_row_value.id)
                                 });
                             }
-                            requeue('current', {}, requeue_url_list, 'rule');
+                            requeue('current', {}, requeue_url_list, 'requeue_all_rule');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_warnings':{
-                            requeue('warnings', {},  null, 'rule');
+                            requeue('warnings', {},  null, 'requeue_all_rule_warnings');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_failed':{
-                            requeue('failed', {}, null, 'rule');
+                            requeue('failed', {}, null, 'requeue_all_rule_failed');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }case 'requeue_processing':{
-                            requeue('processing', {}, null, 'rule');
+                            requeue('processing', {}, null, 'requeue_all_rule_processing');
                             $.uucssAlert('Successfully added links added to the queue');
                             break;
                         }
@@ -2070,7 +2069,7 @@
                             var data = {
                                 url : '',
                                 clear : true,
-                                nonce: uucss.nonce,
+                                nonce: window.uucss.nonce,
                                 job_type: 'rule',
                                 args: {
                                     type : 'rule'
@@ -2093,23 +2092,23 @@
                                 }
                             }
 
-                            wp.ajax.post('uucss_purge_url',data).then(function (i) {
+                            /*wp.ajax.post('uucss_purge_url',data).then(function (i) {
                                 if(rule_table){
                                     rule_table.ajax.reload(null, false);
                                     $.uucssAlert('Successfully removed links from the table', 'info');
                                 }
                             }).done(function(){
                                 $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
-                            });
+                            });*/
                             wp.ajax.post('rapidload_purge_all',data).then(function (i) {
 
                             }).done(function(){
-
+                                $('#uucss-wrapper li.uucss-history').hasClass('multi-select') && $('#uucss-wrapper li.uucss-history').removeClass('multi-select')
                             });
                             break;
                         }
                         case 'clear_warnings_cache':{
-                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule', nonce : uucss.nonce }).then(function (i) {
+                            wp.ajax.post('clear_page_cache',{ status : 'warnings', type : 'rule', nonce : window.uucss.nonce }).then(function (i) {
 
                                 $.uucssAlert(i, 'Successfully cleared your page cache')
 
@@ -2120,7 +2119,7 @@
                             break;
                         }
                         case 'run_gpsi_test':{
-                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : uucss.nonce}).then(function (i) {
+                            wp.ajax.post('uucss_run_gpsi_status_check_for_all',{ nonce : window.uucss.nonce }).then(function (i) {
                                 $.uucssAlert('GPSI test run started')
                             }).fail(function (i) {
 
@@ -2142,7 +2141,7 @@
                         }
                         case 'export_all':{
 
-                            wp.ajax.post('get_all_rules',{ nonce : uucss.nonce }).then(function (i) {
+                            wp.ajax.post('get_all_rules',{ nonce : window.uucss.nonce}).then(function (i) {
                                 if(i){
                                     var exportLink = document.createElement('a');
                                     exportLink.download = 'rapidload-rules-' + Date.now();
@@ -2163,8 +2162,8 @@
                                 var fileReader = new FileReader();
                                 fileReader.onload = function(){
                                     wp.ajax.post('upload_rules',{
-                                        rules : fileReader.result,
-                                        nonce : uucss.nonce
+                                        nonce : window.uucss.nonce,
+                                        rules : fileReader.result
                                     }).then(function (i) {
                                         $.uucssAlert(i)
                                     }).fail(function (i) {
@@ -2203,15 +2202,35 @@
                 $(this).hide();
             }
 
+            var _data = {
+                url: data.url,
+                clear: isClear,
+                nonce: window.uucss.nonce,
+            }
+
+            if(args.rule && args.regex){
+                _data.rule = args.rule
+                _data.regex = args.regex
+            }
+
+            if(args.immediate){
+                _data.immediate = true;
+            }
+
+            if(_data.clear || _data.immediate){
+                if(_data.rule && _data.regex){
+                    _data.job_type = 'rule'
+                }else if(_data.url){
+                    _data.job_type = 'url'
+                }
+            }
+
+
+
             $.ajax({
                 method : 'POST',
-                url: wp.ajax.settings.url + '?action=uucss_purge_url',
-                data : {
-                    url: data.url,
-                    clear: isClear,
-                    nonce: uucss.nonce,
-                    args : args
-                },
+                url: wp.ajax.settings.url + '?action=rapidload_purge_all',
+                data : _data,
                 success : function(response){
 
                     if(!args.rule){
@@ -2291,7 +2310,7 @@
             let $this = $(this)
             $this.text('deactivating...');
 
-            wp.ajax.post('uucss_deactivate' , { nonce : uucss.nonce }).done(function (r) {
+            wp.ajax.post('uucss_deactivate', { nonce : window.uucss.nonce }).done(function (r) {
                 $this.text('deactivated');
                 window.location.reload()
             })
@@ -2348,7 +2367,7 @@
                     $target.text('Connecting...');
                     $target.removeAttr('href');
 
-                    wp.ajax.post('uucss_connect',{ license_key : license_key, nonce : uucss.nonce }).then(function (i) {
+                    wp.ajax.post('uucss_connect',{ license_key : license_key, nonce : window.uucss.nonce }).then(function (i) {
 
                         if(i.success){
                             window.location.href = window.location.href + '&token=' + license_key + '&nonce=' + i.activation_nonce
@@ -2420,7 +2439,7 @@
                 old_url : $model_content.data('old_base_url'),
                 old_regex : $model_content.data('old_rule_regex'),
                 requeue : $regenerate.is(':checked') ? "1" : "0",
-                nonce : uucss.nonce
+                nonce : window.uucss.nonce
             }).then(function (i) {
                 $.uucssAlert(i);
                 var currentFeather = $.featherlight.current();
@@ -2460,7 +2479,7 @@
                 post_type : $model_content.find('#model-requeue-post-type').val(),
                 job_type : $model_content.find('#model-requeue-post-type').val(),
                 url : $model_content.find('input.site-map-url').val(),
-                nonce: uucss.nonce,
+                nonce : window.uucss.nonce,
             }
 
             wp.ajax.post('rapidload_purge_all',data_).then(function (i) {
@@ -2517,7 +2536,7 @@
         $updateRuleForm.find('input.rule-base-url').val($updateRuleForm.find('option[data-type="'+ $updateRuleForm.find('select').val() + '"]').data('permalink'));
 */
         function updateRapidLoadStatus(){
-            wp.ajax.post('uucss_status', { nonce : uucss.nonce }).then(function(res){
+            wp.ajax.post('uucss_status', { nonce : window.uucss.nonce }).then(function(res){
                 if(res){
                     var $status = $('li.rapidload-status')
                     var total = res.total;
@@ -2543,15 +2562,13 @@
             })
         }
 
-        setInterval(updateRapidLoadStatus, 60000);
+        //setInterval(updateRapidLoadStatus, 60000);
 
         updateSitemapUrl();
     });
 
     function updateNotices() {
-        wp.ajax.post('rapidload_notifications', {
-            nonce : window.uucss_global?.nonce
-        }).then(function (response) {
+        wp.ajax.post('rapidload_notifications', { nonce : window.uucss.nonce }).then(function (response) {
             if(response){
                 window.uucss.faqs = response.faqs;
                 window.uucss.public_notices = response.notifications;

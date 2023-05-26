@@ -140,14 +140,62 @@ class RapidLoad_Job_Data{
     }
 
     public function mark_as_successful_hit(){
+        $this->attempts = 0;
         $this->hits++;
         $this->error = NULL;
     }
 
     public function get_warnings(){
         if(isset($this->warnings)){
-            return $this->warnings;
+            return unserialize($this->warnings);
         }
         return [];
+    }
+
+    public function get_files(){
+        if(isset($this->data) && !empty($this->data)){
+            return unserialize($this->data);
+        }
+        return [];
+    }
+
+    public function get_stats(){
+        if(isset($this->stats) && !empty($this->stats)){
+            return unserialize($this->stats);
+        }
+        return [];
+    }
+
+    public function get_error(){
+        if(isset($this->error) && !empty($this->error)){
+            return unserialize($this->error);
+        }
+        return [
+            'code' => null,
+            'message' => null
+        ];
+    }
+
+    public static function find_or_fail($id, $job_type){
+        global $wpdb;
+        $job_data = false;
+
+        $exist = $wpdb->get_row("SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = '". $job_type ."' AND id = '" . $id . "' ORDER BY id LIMIT 1", OBJECT);
+
+        if($exist){
+            $job = RapidLoad_Job::find_or_fail($exist->job_id);
+            $job_data = new RapidLoad_Job_Data($job, $job_type);
+        }
+
+        return $job_data;
+    }
+
+    public function set_warnings($warnings){
+        if(isset($warnings) && count($warnings) > 0){
+            $this->hits = 0;
+            $this->warnings = serialize($warnings);
+        }else{
+            $this->warnings = null;
+        }
     }
 }

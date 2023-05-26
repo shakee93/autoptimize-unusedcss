@@ -28,7 +28,7 @@
                 type : log.type,
                 url : log.url,
                 log : log.log,
-                nonce : uucss_global.nonce
+                nonce : window.uucss_global.nonce
             },
             success : function(response){
 
@@ -205,7 +205,8 @@
                 container.addClass('loading');
             }
 
-            wp.ajax.post('uucss_license', { nonce : uucss_global.nonce }).then(function (i) {
+            // TODO fix this
+            wp.ajax?.post('uucss_license', { nonce : window.uucss_global.nonce }).then(function (i) {
                 if(container.length){
                     $('.license-info ul').show();
 
@@ -284,7 +285,7 @@
                 method : 'POST',
                 data : {
                     action : 'rapidload_db_update',
-                    nonce : uucss_global.nonce
+                    nonce : window.uucss_global.nonce
                 },
                 success : function(response){
                     if(response.success){
@@ -301,6 +302,19 @@
                 }
             })
         })
+
+        $('.rapidload-clear-all').click(function (e) {
+            e.preventDefault();
+
+            wp.ajax.post('rapidload_purge_all', {
+                clear: true,
+                nonce: uucss_global.nonce,
+                url: null,
+            }).done(function (d) {
+                window.location.reload();
+            })
+
+        });
 
         updateLicenseInfo();
     });

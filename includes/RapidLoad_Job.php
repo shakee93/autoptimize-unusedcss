@@ -173,4 +173,46 @@ class RapidLoad_Job{
         return RapidLoad_DB::get_rules_where();
 
     }
+
+    function delete(){
+
+        global $wpdb;
+
+        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id = " . $this->id);
+        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job WHERE id = " . $this->id);
+
+    }
+
+    function get_urls(){
+
+        if($this->rule == "is_url"){
+            return [];
+        }
+
+        global $wpdb;
+
+        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule_id = " . $this->id . " AND rule = 'is_url'" , ARRAY_A);
+
+        if(!empty($data))
+        {
+            return array_column($data, 'url');
+        }
+
+        return [];
+    }
+
+    function attach_rule($rule_id = false , $rule = null){
+        if(!$rule_id){
+            $this->rule_id = NULL;
+            $this->rule = 'is_url';
+            $this->regex = '/';
+            $this->rule_note = 'detached';
+            $this->status = 'queued';
+        }else{
+            $this->rule_id = $rule_id;
+            $this->rule_note = NULL;
+            $this->status = 'rule-based';
+        }
+
+    }
 }
