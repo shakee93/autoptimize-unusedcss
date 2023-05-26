@@ -90,6 +90,8 @@ class RapidLoad_Base
                 RapidLoad_DB::check_db_updates();
 
                 self::enqueueGlobalScript();
+
+                add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
             }
 
             $this->container['modules'] = new RapidLoad_Module();
@@ -109,6 +111,45 @@ class RapidLoad_Base
 
         });
     }
+
+    function rapidload_display_global_notification() {
+        ?>
+        <div class="rapidload-notification notice notice-success is-dismissible">
+            <div class="pl-6 pr-6 mt-3 inline-flex">
+                <div class="top-header">
+
+                    <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.09375 10.9999C9.01772 10.8361 11.2733 8.38012 11.1063 5.51477C11.0784 5.05086 10.9949 4.61424 10.8556 4.17761L10.7721 4.23219C10.9113 4.66881 10.9949 5.13273 10.9949 5.59664C10.9949 8.10723 8.90633 10.1266 6.34438 10.1266C6.26083 10.1266 6.17729 10.1266 6.09375 10.1266V10.9999Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.44336 8.73506C2.39017 10.0995 3.94962 10.9455 5.62045 11V10.0722C4.31163 9.8539 3.19774 9.28084 2.47371 8.16199L1.44336 8.73506Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.969516 3.46814C0.301182 5.0509 0.384723 6.82469 1.19229 8.32558L2.25049 7.72522C1.72139 6.60638 1.74924 5.32379 2.33403 4.23223L0.969516 3.46814Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.61865 0.0571289C3.72504 0.275441 2.0542 1.39429 1.16309 3.03163L2.55545 3.82301C3.25163 2.81332 4.36552 2.18567 5.59081 2.1038V0.0571289H5.61865Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.884 2.24019C9.74222 0.79387 7.95999 -0.0520888 6.12207 0.00248924V2.07645C7.12457 2.13103 8.04353 2.51308 8.76756 3.1953L10.884 2.24019Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.87016 4.99634C6.39926 4.99634 6.84482 5.40567 6.84482 5.95145C6.84482 6.46994 6.42711 6.90657 5.87016 6.90657C5.34106 6.90657 4.89551 6.49723 4.89551 5.95145C4.89551 5.43296 5.34106 4.99634 5.87016 4.99634Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9976 2.51294L9.10147 4.45046L6.20535 6.36069L5.95473 5.92406L5.7041 5.48744L8.85085 4.01383L11.9976 2.51294Z" fill="white"/>
+                    </svg>
+                    Introducing RapidLoad 2.0
+                </div>
+            </div>
+            <div class="content pl-6 pr-6 pt-1 min-h-[76px] flex">
+                <div class="tips-slide">
+                    <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold">Introducing New Features!</h2>
+                    <p class="text-xsmm text-tips-dark-green-font font-normal">We're thrilled to announce that RapidLoad 2.0 is set to launched, and it's packed with exciting new features to enhance your website's performance. This new version brings several optimizations, including JS optimization, image optimization, font delivery, CDN, cache, and much more, all aimed at improving your website's speed and providing a better user experience.
+                        <br><br>
+                        We're confident that the new features will take your website to the next level, giving you a competitive edge in the online world. We urge you to update to RapidLoad 2.0 and experience the benefits for yourself.</p>
+                </div>
+            </div>
+            <div class="action-footer">
+                <div class="notify-buttons">
+                    <a href="https://docs.rapidload.io/features/image-delivery" target="_blank">
+                        <button class="learn-more"> Learn more</button>
+                    </a>
+                    <button class="update-now"> Update Now</button>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
 
     public function add_plugin_action_link( $links ) {
 
