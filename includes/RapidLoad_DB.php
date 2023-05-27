@@ -178,11 +178,15 @@ abstract class RapidLoad_DB
 
         $rules = $wpdb->get_results("SELECT url, rule, regex FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url' ORDER BY id", OBJECT);
 
-        error_log(json_encode($rules));
-
         foreach ($rules as $rule){
 
-            error_log(json_encode($rule));
+            $job = new RapidLoad_Job([
+                'url' => $rule->url,
+                'rule' => $rule->rule,
+                'regex' => $rule->regex
+            ]);
+
+           (new RapidLoad_Job_Data($job, 'uucss'))->save();
 
         }
 
