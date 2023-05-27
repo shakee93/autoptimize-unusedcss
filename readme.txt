@@ -154,6 +154,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.9 - 27/05/2023 =
+ * Added JS optimization, image optimization, built-in CDN, page cache, and font optimization features for enhanced performance and bring you 95+ scores in page speed.
+
 = 1.7.3 - 04/04/2023 =
  * fix: UnusedCSS - Malformed Request Detected error
 
