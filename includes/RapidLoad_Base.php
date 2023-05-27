@@ -314,7 +314,7 @@ class RapidLoad_Base
 
     function render_update_message($plugin_data, $r ){
 
-        $data = file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
+        $data = @file_get_contents( 'https://raw.githubusercontent.com/shakee93/autoptimize-unusedcss/master/readme.txt?format=txt' );
 
         $changelog  = stristr( $data, '== Changelog ==' );
 
