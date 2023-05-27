@@ -115,36 +115,63 @@ class RapidLoad_Base
     function rapidload_display_global_notification() {
         ?>
         <div class="rapidload-notification notice notice-success is-dismissible">
-            <div class="pl-6 pr-6 mt-3 inline-flex">
-                <div class="top-header">
 
-                    <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.09375 10.9999C9.01772 10.8361 11.2733 8.38012 11.1063 5.51477C11.0784 5.05086 10.9949 4.61424 10.8556 4.17761L10.7721 4.23219C10.9113 4.66881 10.9949 5.13273 10.9949 5.59664C10.9949 8.10723 8.90633 10.1266 6.34438 10.1266C6.26083 10.1266 6.17729 10.1266 6.09375 10.1266V10.9999Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.44336 8.73506C2.39017 10.0995 3.94962 10.9455 5.62045 11V10.0722C4.31163 9.8539 3.19774 9.28084 2.47371 8.16199L1.44336 8.73506Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.969516 3.46814C0.301182 5.0509 0.384723 6.82469 1.19229 8.32558L2.25049 7.72522C1.72139 6.60638 1.74924 5.32379 2.33403 4.23223L0.969516 3.46814Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.61865 0.0571289C3.72504 0.275441 2.0542 1.39429 1.16309 3.03163L2.55545 3.82301C3.25163 2.81332 4.36552 2.18567 5.59081 2.1038V0.0571289H5.61865Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.884 2.24019C9.74222 0.79387 7.95999 -0.0520888 6.12207 0.00248924V2.07645C7.12457 2.13103 8.04353 2.51308 8.76756 3.1953L10.884 2.24019Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.87016 4.99634C6.39926 4.99634 6.84482 5.40567 6.84482 5.95145C6.84482 6.46994 6.42711 6.90657 5.87016 6.90657C5.34106 6.90657 4.89551 6.49723 4.89551 5.95145C4.89551 5.43296 5.34106 4.99634 5.87016 4.99634Z" fill="white"/>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9976 2.51294L9.10147 4.45046L6.20535 6.36069L5.95473 5.92406L5.7041 5.48744L8.85085 4.01383L11.9976 2.51294Z" fill="white"/>
-                    </svg>
-                    Introducing RapidLoad 2.0
-                </div>
+            <div class="column-40"></div>
+            <div class="column-60">
+
+            <div class="heading-col pl-6 pr-6 mt-3">
+                 <div class="column-header-10">
+                     <svg width="57" height="50" viewBox="0 0 57 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M25.3281 49.9995C38.6189 49.2553 48.8718 38.0916 48.1123 25.0673C47.9857 22.9586 47.606 20.9739 46.9731 18.9893L46.5934 19.2373C47.2263 21.222 47.606 23.3307 47.606 25.4394C47.606 36.8512 38.1126 46.0302 26.4673 46.0302C26.0876 46.0302 25.7079 46.0302 25.3281 46.0302V49.9995Z" fill="#B59CD3"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M4.18945 39.7045C8.49313 45.9065 15.5815 49.7518 23.1763 49.9999V45.7825C17.2271 44.7902 12.1639 42.1853 8.87287 37.0996L4.18945 39.7045Z" fill="#A080C6"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M2.03651 15.7646C-1.00138 22.959 -0.621642 31.0217 3.04914 37.844L7.85914 35.1151C5.45414 30.0294 5.58072 24.1994 8.23887 19.2378L2.03651 15.7646Z" fill="#9572C0"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M23.1745 0.259766C14.5671 1.25209 6.9724 6.33778 2.92188 13.7802L9.25081 17.3774C12.4153 12.7879 17.4784 9.93497 23.0479 9.56285V0.259766H23.1745Z" fill="#8B64B9"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M47.0981 10.1827C41.9084 3.60851 33.8073 -0.236768 25.4531 0.0113147V9.43844C30.01 9.68652 34.1871 11.4231 37.4781 14.5241L47.0981 10.1827Z" fill="#7F54B3"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M24.316 22.7107C26.721 22.7107 28.7463 24.5713 28.7463 27.0521C28.7463 29.4089 26.8476 31.3936 24.316 31.3936C21.911 31.3936 19.8857 29.533 19.8857 27.0521C19.8857 24.6954 21.911 22.7107 24.316 22.7107Z" fill="#51555F"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M52.1634 11.4229L38.9993 20.2298L25.8351 28.9126L24.6958 26.928L23.5566 24.9433L37.86 18.2451L52.1634 11.4229Z" fill="#51555F"/>
+                         <path fill-rule="evenodd" clip-rule="evenodd" d="M56.5923 9.06623L52.9215 12.7875H52.7949L52.6684 12.6634C52.5418 12.1673 52.4152 11.6711 52.162 11.299C51.9089 10.9268 51.6557 10.5547 51.276 10.1826C51.1494 10.1826 51.1494 10.0586 51.1494 9.93452C51.1494 9.93452 51.1494 9.93452 51.276 9.81048L56.4657 8.57007C56.5923 8.57007 56.5923 8.57007 56.5923 8.69411C56.7189 8.94219 56.7189 9.06623 56.5923 9.06623Z" fill="#7F54B3"/>
+                     </svg>
+                 </div>
+                 <div class="column-header-90">
+                     <div class="top-header">
+                         Heads up, New RapidLoad comes in as ALL-IN-ONE solution for<br> page-speed optimization.
+                         <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold">RapidLoad 2.0 is getting back into the game with a new kit and it is loaded with exciting features:</h2>
+                     </div>
+
+                     <div class="tips-slide">
+                         <ul class="rapidload-icon-list-items">
+                             <li class="icon-list-item">
+                                 <span class="list-text">Unused CSS + Critical CSS</span>
+                             </li>
+                             <li class="icon-list-item">
+                                 <span class="list-text">On-the-fly Image Optimization</span>
+                             </li>
+                             <li class="icon-list-item">
+                                 <span class="list-text">Font Optimization</span>
+                             </li>
+                             <li class="icon-list-item">
+                                 <span class="list-text">JS Optimization</span>
+                             </li>
+                             <li class="icon-list-item">
+                                 <span class="list-text">Page Cache</span>
+                             </li>
+
+                         </ul>
+                     </div>
+                 </div>
+
             </div>
             <div class="content pl-6 pr-6 pt-1 min-h-[76px] flex">
-                <div class="tips-slide">
-                    <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold">Introducing New Features!</h2>
-                    <p class="text-xsmm text-tips-dark-green-font font-normal">We're thrilled to announce that RapidLoad 2.0 is set to launched, and it's packed with exciting new features to enhance your website's performance. This new version brings several optimizations, including JS optimization, image optimization, font delivery, CDN, cache, and much more, all aimed at improving your website's speed and providing a better user experience.
-                        <br><br>
-                        We're confident that the new features will take your website to the next level, giving you a competitive edge in the online world. We urge you to update to RapidLoad 2.0 and experience the benefits for yourself.</p>
-                </div>
+
             </div>
             <div class="action-footer">
                 <div class="notify-buttons">
-                    <a href="https://docs.rapidload.io/features/image-delivery" target="_blank">
-                        <button class="learn-more"> Learn more</button>
+                    <a href="<?php echo admin_url( 'admin.php?page=rapidload' )?>">
+                        <button class="update-now"> Dashboard</button>
                     </a>
-                    <button class="update-now"> Update Now</button>
+
                 </div>
+            </div>
             </div>
         </div>
         <?php
