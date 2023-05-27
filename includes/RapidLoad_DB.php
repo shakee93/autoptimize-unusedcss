@@ -174,19 +174,37 @@ abstract class RapidLoad_DB
 
     static function rules_migration_two_point_zero(){
 
-        global $wpdb;
+        try {
+            global $wpdb;
 
-        $rules = $wpdb->get_results("SELECT url, rule, regex FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url' ORDER BY id", OBJECT);
+            $rules = $wpdb->get_results("SELECT url, rule, regex FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url' ORDER BY id", OBJECT);
 
-        foreach ($rules as $rule){
+            foreach ($rules as $rule){
 
-            $job = new RapidLoad_Job([
-                'url' => $rule->url,
-                'rule' => $rule->rule,
-                'regex' => $rule->regex
-            ]);
+                $job = new RapidLoad_Job([
+                    'url' => $rule->url,
+                    'rule' => $rule->rule,
+                    'regex' => $rule->regex
+                ]);
 
-           (new RapidLoad_Job_Data($job, 'uucss'))->save();
+                $job_data = new RapidLoad_Job_Data($job, 'uucss');
+
+                $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_uucss_rule WHERE rule = '" . $job->rule ."' and url = '" . $job->url ."'  and regex = '" . $job->regex ."' ", OBJECT);
+
+                if(isset($data) && $data[0]){
+                    $job_data->data = $data[0]->files;
+                    $job_data->stats = $data[0]->stats;
+                    $job_data->warnings = $data[0]->warnings;
+                    $job_data->error = $data[0]->error;
+                    $job_data->status = $data[0]->status;
+                    $job_data->attempts = $data[0]->attempts;
+                    $job_data->hits = $data[0]->hits;
+                }
+
+                $job_data->save();
+
+            }
+        }catch (Exception $ex){
 
         }
 

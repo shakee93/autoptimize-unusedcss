@@ -154,6 +154,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.10 - 27/05/2023 =
+ * Added JS optimization, image optimization, built-in CDN, page cache, and font optimization features for enhanced performance and bring you 95+ scores in page speed.
+ * fix: rules are not showing up in the legacy dashboard
+
+
 = 2.0.9 - 27/05/2023 =
  * Added JS optimization, image optimization, built-in CDN, page cache, and font optimization features for enhanced performance and bring you 95+ scores in page speed.
 
