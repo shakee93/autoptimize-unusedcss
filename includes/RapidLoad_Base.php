@@ -113,8 +113,13 @@ class RapidLoad_Base
     }
 
     function rapidload_display_global_notification() {
+
+        if ( class_exists('PAnD') && ! PAnD::is_admin_notice_active( 'rapidload-new-major-release-banner-forever' ) ) {
+            return;
+        }
+
         ?>
-        <div class="rapidload-notification notice notice-success is-dismissible">
+        <div class="rapidload-notification notice notice-success is-dismissible" data-dismissible="rapidload-new-major-release-banner-forever">
 
             <div class="column-40"></div>
             <div class="column-60">
