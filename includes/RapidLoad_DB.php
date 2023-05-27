@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.4";
+    static $db_version = "1.5";
     static $db_option = "rapidload_migration";
     static $current_version = "1.4";
     static $map_key = 'uucss_map';
@@ -162,6 +162,28 @@ abstract class RapidLoad_DB
             ];
             self::add_advanced_admin_notice($notice);
             add_action( "wp_ajax_rapidload_db_update", 'RapidLoad_DB::update_db' );
+        }
+
+        if(self::$current_version < self::$db_version){
+
+            self::rules_migration_two_point_zero();
+
+        }
+
+    }
+
+    static function rules_migration_two_point_zero(){
+
+        global $wpdb;
+
+        $rules = $wpdb->get_results("SELECT url, rule, regex FROM {$wpdb->prefix}rapidload_job WHERE rule != 'is_url' ORDER BY id", OBJECT);
+
+        error_log(json_encode($rules));
+
+        foreach ($rules as $rule){
+
+            error_log(json_encode($rule));
+
         }
 
     }
