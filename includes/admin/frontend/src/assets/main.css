@@ -362,7 +362,7 @@ body .rapidload {
 .text-color-grey{
     color: #757575;
 }
-
-
-
+.rapidload .fb-gs{
+    display: flex;
+}
 
