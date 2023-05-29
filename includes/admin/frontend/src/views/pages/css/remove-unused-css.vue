@@ -338,7 +338,6 @@ export default {
             this.focus=null;
           })
           .catch(error => {
-            console.log(error.message)
             this.errorMessage = error.message;
             this.refresh_element = false;
             this.focus=null;
