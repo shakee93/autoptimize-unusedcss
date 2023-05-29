@@ -326,15 +326,22 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs&nonce='+window.uucss_global.nonce)
           .then(response => {
            // this.whitelist_packs = ['1:Elementor','2:pluginone']
-            this.whitelist_packs = response.data.data.map((value) => {
-              return value.id + ':' + value.name;
-            })
 
+            if(response.data?.data?.errors[0]?.detail){
+              this.errorMessage = response.data?.data?.errors[0].detail;
+            }else if(response.data?.data){
+              this.whitelist_packs = response.data?.data?.map((value) => {
+                return value.id + ':' + value.name;
+              })
+            }
             this.refresh_element = false;
             this.focus=null;
           })
           .catch(error => {
+            console.log(error.message)
             this.errorMessage = error.message;
+            this.refresh_element = false;
+            this.focus=null;
 
           });
 

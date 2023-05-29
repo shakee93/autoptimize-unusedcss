@@ -586,8 +586,14 @@ class RapidLoad_Base
             'url'     => site_url()
         ] );
 
-        if ( wp_doing_ajax() ) {
-            wp_send_json_success( $data->data );
+        if ( wp_doing_ajax()) {
+
+            if(isset($data) && isset($data->data) && is_array($data->data)){
+                wp_send_json_success( $data->data );
+            }else{
+                wp_send_json_error($data);
+            }
+
         }
 
         return isset($data) && isset($data->data) && is_array($data->data) ? $data->data : [];
