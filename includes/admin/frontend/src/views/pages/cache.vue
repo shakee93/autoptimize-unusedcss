@@ -196,19 +196,20 @@ export default {
     async saveSettings() {
       this.loading = true;
 
+      let cash_expire = 0;
       if(this.cache_expiry_time === 1){
-        this.cache_expiry_time = 0;
+        cash_expire = 0;
       }else if(this.cache_expiry_time === 3){
-        this.cache_expiry_time = 6;
+        cash_expire = 6;
       }else if(this.cache_expiry_time === 4){
-        this.cache_expiry_time = 12;
+        cash_expire = 12;
       }else if(this.cache_expiry_time === 5){
-        this.cache_expiry_time = 24;
+        cash_expire = 24;
       }
 
       const data = {
         cache_expires: this.cache_expires,
-        cache_expiry_time: this.cache_expiry_time,
+        cache_expiry_time: cash_expire,
         mobile_cache: this.mobile_cache,
         uucss_enable_cache: true,
       }
