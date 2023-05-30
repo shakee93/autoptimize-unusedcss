@@ -155,13 +155,14 @@ export default {
 
             if(options.cache_expiry_time === 0){
               this.cache_expiry_time = 1;
-            }else if(this.cache_expiry_time === 2){
+
+            }else if(options.cache_expiry_time === 2){
               this.cache_expiry_time = 2;
-            }else if(this.cache_expiry_time === 6){
+            }else if(options.cache_expiry_time === 6){
               this.cache_expiry_time = 3;
-            }else if(this.cache_expiry_time === 12){
+            }else if(options.cache_expiry_time === 12){
               this.cache_expiry_time = 4;
-            }else if(this.cache_expiry_time === 24){
+            }else if(options.cache_expiry_time === 24){
               this.cache_expiry_time = 5;
             }
           }else{
