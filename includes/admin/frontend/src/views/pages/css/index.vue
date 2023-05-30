@@ -58,7 +58,7 @@
             </div>
           </div>
 
-          <div class="mb-5">
+<!--          <div class="mb-5">
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
@@ -77,7 +77,7 @@
                 <p class="text-sm text-gray-font">This combines multiple CSS files into a single file. If HTTP/2 is enabled on your server disable this option.</p>
               </div>
             </div>
-          </div>
+          </div>-->
 
           <div class="mb-5">
             <div class="flex">

@@ -115,11 +115,7 @@ Read it here : [https://rapidload.io/terms-conditions/](https://rapidload.io/ter
 
 = How does this plugin speed up my site? =
 
-RapidLoad analyzes the content of your Wordpress pages and the CSS files used by your themes and plugins. It checks for CSS that is being loaded, but not applied and removes those unused CSS selectors from your files, reducing the overall file size and page weight. Smaller files = faster sites!
-
-= Still seeing remove unused css flag in Google page speed insights ? =
-
-Run a GPSI status test on your optimization url to confirm whether RapidLoad optimizations are properly reflected to public users. if it is pending it is because of the page cache in your site. clear your page cache and try again.
+It optimizes your site's loading speed by leveraging advanced caching mechanisms, minimizing server requests, and optimizing the delivery of static assets like images, CSS, and JavaScript files. Additionally, RapidLoad utilizes techniques like lazy loading, which defers the loading of non-critical elements until they are needed, further enhancing the overall speed and efficiency of your site. Smaller files = faster sites!
 
 = My Site is broken after using RapidLoad. What can i do ? =
 
@@ -154,10 +150,14 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.11 - 29/05/2023 =
+ * fix: remove aggregate css option
+ * fix: bug in loading selector packs
+ * chore: updated banner
+
 = 2.0.10 - 27/05/2023 =
  * Added JS optimization, image optimization, built-in CDN, page cache, and font optimization features for enhanced performance and bring you 95+ scores in page speed.
  * fix: rules are not showing up in the legacy dashboard
-
 
 = 2.0.9 - 27/05/2023 =
  * Added JS optimization, image optimization, built-in CDN, page cache, and font optimization features for enhanced performance and bring you 95+ scores in page speed.

@@ -148,6 +148,12 @@ abstract class RapidLoad_DB
 
         add_action('wp_uninitialize_site', [get_called_class(), 'uninitialize_site'], 10, 1);
 
+        if(self::$current_version < 1.5){
+
+            self::rules_migration_two_point_zero();
+
+        }
+
         if (self::$current_version  < self::$db_version ) {
             $notice = [
                 'action'  => 'rapidload-db-update',
@@ -162,12 +168,6 @@ abstract class RapidLoad_DB
             ];
             self::add_advanced_admin_notice($notice);
             add_action( "wp_ajax_rapidload_db_update", 'RapidLoad_DB::update_db' );
-        }
-
-        if(self::$current_version < self::$db_version){
-
-            self::rules_migration_two_point_zero();
-
         }
 
     }
@@ -204,6 +204,10 @@ abstract class RapidLoad_DB
                 $job_data->save();
 
             }
+
+            RapidLoad_Base::update_option( self::$db_option, self::$db_version );
+            self::$current_version = self::$db_version;
+
         }catch (Exception $ex){
 
         }
