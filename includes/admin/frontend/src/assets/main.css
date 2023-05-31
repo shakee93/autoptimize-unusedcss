@@ -362,6 +362,8 @@ body .rapidload {
 .text-color-grey{
     color: #757575;
 }
-.rapidload .fb-gs{
-    display: flex;
+.rapidload .flex{
+    display: flex !important;
+    margin-bottom: auto !important;
+    align-items: start !important;
 }
