@@ -87,7 +87,7 @@ class CriticalCSS_DB extends RapidLoad_DB{
             $where .= " AND job_type='cpcss' ";
         }
 
-        $data = $wpdb->get_results( "SELECT {$select} FROM {$wpdb->prefix}rapidload_job_data {$where} ORDER BY {$order_by} LIMIT " . $limit, OBJECT);
+        $data = $wpdb->get_results( "SELECT {$select} FROM {$wpdb->prefix}rapidload_job_data {$where} ORDER BY {$order_by} LIMIT " . round($limit, 0), OBJECT);
 
         $error = $wpdb->last_error;
 
