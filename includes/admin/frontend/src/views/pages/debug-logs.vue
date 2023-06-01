@@ -300,7 +300,7 @@ export default {
 
       const filteredLogs = this.debug_log.filter(log => {
         if (!log.url) {
-          log.url="null";
+          log.url="";
         }
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
 
