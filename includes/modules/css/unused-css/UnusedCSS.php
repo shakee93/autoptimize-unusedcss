@@ -114,11 +114,11 @@ class UnusedCSS
     public function uucss_notfound_fallback(){
 
         $original_request = strtok( $_SERVER['REQUEST_URI'], '?' );
-        $original_path = WP_CONTENT_DIR . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' . "/" . basename($original_request);
+        $original_path = self::get_wp_content_dir() . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' . "/" . basename($original_request);
 
         $options = RapidLoad_Base::fetch_options(false);
 
-        if ( strpos( $original_request, wp_basename( WP_CONTENT_DIR ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
+        if ( strpos( $original_request, wp_basename( self::get_wp_content_dir() ) . apply_filters('uucss/cache-base-dir', UUCSS_CACHE_CHILD_DIR)  . 'uucss' ) !== false
             && !file_exists($original_path)
             //&& isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1"
         ) {
@@ -558,7 +558,7 @@ class UnusedCSS
 
     public function init_base_dir() {
 
-        self::$base_dir = WP_CONTENT_DIR . $this->base;
+        self::$base_dir = self::get_wp_content_dir() . $this->base;
 
         if ( $this->file_system->exists( self::$base_dir ) ) {
             return true;

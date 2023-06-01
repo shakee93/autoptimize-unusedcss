@@ -400,7 +400,7 @@ class CriticalCSS
 
     public function init_base_dir() {
 
-        self::$base_dir = WP_CONTENT_DIR . $this->base;
+        self::$base_dir = self::get_wp_content_dir() . $this->base;
 
         if ( $this->file_system->exists( self::$base_dir ) ) {
             return true;
