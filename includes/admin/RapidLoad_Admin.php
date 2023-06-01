@@ -530,11 +530,11 @@ class RapidLoad_Admin
 
         $file_system = new RapidLoad_FileSystem();
 
-        if(!$file_system->exists(WP_CONTENT_DIR . '/uploads/rapidload/')){
+        if(!$file_system->exists(self::get_wp_content_dir() . '/uploads/rapidload/')){
             wp_send_json_success(true);
         }
 
-        $file_system->delete_folder(WP_CONTENT_DIR . '/uploads/rapidload/');
+        $file_system->delete_folder(self::get_wp_content_dir() . '/uploads/rapidload/');
         wp_send_json_success(true);
     }
 

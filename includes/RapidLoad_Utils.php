@@ -640,4 +640,9 @@ trait RapidLoad_Utils {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
     }
+
+    public static function get_wp_content_dir(){
+        return apply_filters('rapidload/root-dir', WP_CONTENT_DIR);
+    }
+
 }

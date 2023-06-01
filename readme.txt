@@ -150,6 +150,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.12 - 29/05/2023 =
+ * fix: minor UI improvements
+ * fix: typecast job limit to integer
+ * fix: purge admin area styles and javascript on plugin update
+ * chore: update WordPress compatibility
+ * feat: add filter to change the RapidLoad root dir
+
 = 2.0.11 - 29/05/2023 =
  * fix: remove aggregate css option
  * fix: bug in loading selector packs
