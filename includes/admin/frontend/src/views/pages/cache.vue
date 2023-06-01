@@ -118,7 +118,7 @@
       <div class="pb-6">
       </div>
     </div>
-
+<!--    <popup></popup>-->
   </main>
 
 </template>
@@ -128,6 +128,7 @@ import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
+import popup from "../../components/popup.vue";
 
 export default {
   name: "cache",
@@ -135,6 +136,7 @@ export default {
   components: {
     Vue3TagsInput,
     messageBox,
+    popup,
   },
 
   mounted() {
@@ -237,12 +239,11 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     next();
-    // if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
-    //   console.log("has changes");
-    // } else {
-    //   // No changes, allow navigating back
-    //   next();
-    // }
+   //  if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
+   //    console.log("has changes");
+   //  } else {
+   //    next();
+   //  }
 
   },
 
