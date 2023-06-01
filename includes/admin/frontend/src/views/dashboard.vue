@@ -122,7 +122,7 @@
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
           <div class="content p-4 pb-6">
-<!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->in
+<!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->
             <span v-html="item.image"></span>
 
             <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
