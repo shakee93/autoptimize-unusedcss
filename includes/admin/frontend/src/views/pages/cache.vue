@@ -41,9 +41,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="cache_expires = !cache_expires" :class="cache_expires? 'bg-purple':''"
+                    <div @click="onData.cache_expires = !onData.cache_expires" :class="onData.cache_expires? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="cache_expires" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.cache_expires" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="cache_expires = !cache_expires" class="font-normal text-base text-black-font cursor-pointer">Cache Expiration</h1>
+                  <h1 @click="onData.cache_expires = !onData.cache_expires" class="font-normal text-base text-black-font cursor-pointer">Cache Expiration</h1>
                   <p class="text-sm text-gray-font pb-3">Cached pages expire</p>
                   <div class="flex">
 <!--                    <input-->
@@ -63,8 +63,8 @@
 <!--                        step="1"-->
 <!--                    />-->
 
-                    <button v-for="button in 5" v-on:click="cache_expiry_time = button"
-                            :class="['rl-btn',(button === Number(cache_expiry_time) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
+                    <button v-for="button in 5" v-on:click="onData.cache_expiry_time = button"
+                            :class="['rl-btn',(button === Number(onData.cache_expiry_time) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
                             class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-l-2 border-y-2 border-purple">
                       {{ button === 1 ? 'Never' : (button === 2 ? '2 hours' : (button === 3 ? '6 hours' : (button === 4 ? '12 hours' : (button === 5 ? '24 hours' : button + ' hours'))))  }}
                     </button>
@@ -80,9 +80,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="mobile_cache = !mobile_cache" :class="mobile_cache? 'bg-purple':''"
+                    <div @click="onData.mobile_cache = !onData.mobile_cache" :class="onData.mobile_cache? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="mobile_cache" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.mobile_cache" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -90,7 +90,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="mobile_cache = !mobile_cache" class="font-normal text-base text-black-font cursor-pointer">Mobile Cache</h1>
+                  <h1 @click="onData.mobile_cache = !onData.mobile_cache" class="font-normal text-base text-black-font cursor-pointer">Mobile Cache</h1>
                   <p class="text-sm text-gray-font">Create a cached version for mobile devices.</p>
                 </div>
               </div>
@@ -144,45 +144,47 @@ export default {
       activeModules.push(window.uucss_global.active_modules[a])
     });
    // console.log(activeModules);
-    this.cache = activeModules
+    this.cache = activeModules;
+
     if (this.cache) {
       Object.keys(this.cache).map((key) => {
         if (this.id === this.cache[key].id) {
           const options = this.cache[key].options;
+          this.originalData = options;
+
           if(options && options.cache_expires){
-            options.cache_expires === 1 && (this.cache_expires = true);
-            options.mobile_cache === 1 && (this.mobile_cache = true);
+            options.cache_expires === 1 && (this.onData.cache_expires = true);
+            options.mobile_cache === 1 && (this.onData.mobile_cache = true);
 
             if(options.cache_expiry_time === 0){
-              this.cache_expiry_time = 1;
+              this.onData.cache_expiry_time = 1;
 
             }else if(options.cache_expiry_time === 2){
-              this.cache_expiry_time = 2;
+              this.onData.cache_expiry_time = 2;
             }else if(options.cache_expiry_time === 6){
-              this.cache_expiry_time = 3;
+              this.onData.cache_expiry_time = 3;
             }else if(options.cache_expiry_time === 12){
-              this.cache_expiry_time = 4;
+              this.onData.cache_expiry_time = 4;
             }else if(options.cache_expiry_time === 24){
-              this.cache_expiry_time = 5;
+              this.onData.cache_expiry_time = 5;
             }
           }else{
-            this.cache_expires = false;
-            this.mobile_cache = false;
-            this.cache_expiry_time = 1;
+            this.onData.cache_expires = false;
+            this.onData.mobile_cache = false;
+            this.onData.cache_expiry_time = 1;
 
 
           }
-
-
-
-
-
         }
 
       });
+      this.originalData = JSON.parse(JSON.stringify(this.onData));
     }
   },
   methods: {
+    hasChanges() {
+      return JSON.stringify(this.originalData) !== JSON.stringify(this.cache);
+    },
 
     doc(){
       window.open('https://docs.rapidload.io/features/cache', '_blank');
@@ -197,20 +199,20 @@ export default {
       this.loading = true;
 
       let cash_expire = 0;
-      if(this.cache_expiry_time === 1){
+      if(this.onData.cache_expiry_time === 1){
         cash_expire = 0;
-      }else if(this.cache_expiry_time === 3){
+      }else if(this.onData.cache_expiry_time === 3){
         cash_expire = 6;
-      }else if(this.cache_expiry_time === 4){
+      }else if(this.onData.cache_expiry_time === 4){
         cash_expire = 12;
-      }else if(this.cache_expiry_time === 5){
+      }else if(this.onData.cache_expiry_time === 5){
         cash_expire = 24;
       }
 
       const data = {
-        cache_expires: this.cache_expires,
+        cache_expires: this.onData.cache_expires,
         cache_expiry_time: cash_expire,
-        mobile_cache: this.mobile_cache,
+        mobile_cache: this.onData.mobile_cache,
         uucss_enable_cache: true,
       }
 
@@ -233,13 +235,26 @@ export default {
           });
     }
   },
+  beforeRouteLeave(to, from, next) {
+    next();
+    // if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
+    //   console.log("has changes");
+    // } else {
+    //   // No changes, allow navigating back
+    //   next();
+    // }
+
+  },
 
   data() {
     return {
       cache: [],
-      cache_expiry_time: 0,
-      cache_expires: false,
-      mobile_cache: false,
+      onData:{
+        cache_expiry_time: 0,
+        cache_expires: false,
+        mobile_cache: false,
+      },
+
       id: 'cache',
       saved: false,
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
@@ -247,7 +262,7 @@ export default {
 
       back: '/',
       loading: false,
-
+      originalData: {},
     }
   },
 

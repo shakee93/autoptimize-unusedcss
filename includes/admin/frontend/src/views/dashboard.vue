@@ -77,7 +77,7 @@
       </div>
 
 
-      <div class="-mt-[63px] -ml-[295px] fb-gs">
+      <div class="-mt-[63px] -ml-[295px] flex">
         <div class="mr-1">
           <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
             <button @click=""
