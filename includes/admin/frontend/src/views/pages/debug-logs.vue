@@ -299,7 +299,9 @@ export default {
     paginated() {
 
       const filteredLogs = this.debug_log.filter(log => {
-        if (!log.url) return;
+        if (!log.url) {
+          log.url="null";
+        }
         const urlMatch = log.url.toLowerCase().includes(this.searchUrl.toLowerCase());
 
         const selectedDate = this.selectedDate;
