@@ -118,7 +118,7 @@
       <div class="pb-6">
       </div>
     </div>
-<!--    <popup></popup>-->
+<!--    <popup v-if="popupVisible" ref="popup" @confirm="handleConfirm" @cancel="handleCancel"></popup>-->
   </main>
 
 </template>
@@ -140,6 +140,7 @@ export default {
   },
 
   mounted() {
+
 
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
@@ -184,6 +185,16 @@ export default {
     }
   },
   methods: {
+
+    handleConfirm() {
+      this.confirmStatus = true;
+
+    },
+
+    handleCancel() {
+      this.popupVisible= false;
+    },
+
     hasChanges() {
       return JSON.stringify(this.originalData) !== JSON.stringify(this.cache);
     },
@@ -236,16 +247,34 @@ export default {
             this.dataSaved();
           });
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    next();
-   //  if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
-   //    console.log("has changes");
-   //  } else {
-   //    next();
-   //  }
+
 
   },
+
+  // beforeRouteLeave(to, from, next) {
+  //   this.$refs.popup.$once('confirm', () => {
+  //     // Yes button clicked, proceed to the next route
+  //     next();
+  //   });
+  //
+  // if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
+  //     // In case you want to show the popup before leaving
+  //     this.popupVisible = true;
+  //     this.confirmStatus = false;
+  //   }
+  //
+  //
+  //
+  //   if(this.popupVisible){
+  //
+  //     next(false);
+  //   }else{
+  //     next();
+  //   }
+  //
+  // },
+
+
 
   data() {
     return {
@@ -264,6 +293,8 @@ export default {
       back: '/',
       loading: false,
       originalData: {},
+      popupVisible: false,
+      confirmStatus: false,
     }
   },
 

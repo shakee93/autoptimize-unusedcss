@@ -378,3 +378,6 @@ body .rapidload {
     align-items: center;
     justify-content: center;
 }
+.mt-2{
+    margin-top: 8px !important;
+}
