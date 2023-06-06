@@ -635,14 +635,18 @@ trait RapidLoad_Utils {
 
     }
 
-    public static function verify_nonce(){
-        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'uucss_nonce' ) ) {
+    public static function verify_nonce($nonce = 'uucss_nonce' ){
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) ) {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
     }
 
     public static function get_wp_content_dir(){
         return apply_filters('rapidload/root-dir', WP_CONTENT_DIR);
+    }
+
+    public static function get_wp_content_url($path = ''){
+        return apply_filters('rapidload/root-url', content_url($path));
     }
 
 }

@@ -36,7 +36,17 @@ class RapidLoad_Image
             }, 90);
         }
 
+        //add_action('wp_ajax_nopriv_register_lcp_images', [$this, 'register_lcp_images']);
+
         self::$instance = $this;
+    }
+
+    public function register_lcp_images(){
+
+        self::verify_nonce("rapidload_image");
+
+
+
     }
 
     public function enqueue_frontend_js(){
@@ -46,6 +56,8 @@ class RapidLoad_Image
 
             (function(w, d){
                 w.rapidload_io_data = {
+                    nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
+                    ajax_url : "<?php echo admin_url( 'admin-ajax.php' ) ?>",
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>

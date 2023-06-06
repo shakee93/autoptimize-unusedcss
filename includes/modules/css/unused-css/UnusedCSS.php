@@ -254,10 +254,10 @@ class UnusedCSS
     public function get_cached_file( $file_url, $cdn = null ) {
 
         if ( ! $cdn || empty( $cdn ) ) {
-            $cdn = content_url();
+            $cdn = self::get_wp_content_url();
         } else {
 
-            $url_parts = parse_url( content_url() );
+            $url_parts = parse_url( self::get_wp_content_url() );
 
             $cdn = rtrim( $cdn, '/' ) . (isset($url_parts['path']) ? rtrim( $url_parts['path'], '/' ) : '/wp-content');
 

@@ -112,7 +112,7 @@ class RapidLoad_Font
     public function init_base_dir() {
 
         self::$base_dir = self::get_wp_content_dir() . $this->base;
-        self::$base_url = apply_filters('uucss/enqueue/cdn',untrailingslashit(content_url($this->base)));
+        self::$base_url = apply_filters('uucss/enqueue/cdn',untrailingslashit(self::get_wp_content_url($this->base)));
 
         if ( $this->file_system->exists( self::$base_dir ) ) {
             return true;
