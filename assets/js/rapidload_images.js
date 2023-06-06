@@ -97,7 +97,7 @@ if(lazyElements && lazyElements.length){
         observer_bg.observe(element);
     });
 }
-
+window.rapidload_replace_image_src();
 window.rapidload_lcp_images = function (){
 
     var isChrome = /Chrome/.test(navigator.userAgent);

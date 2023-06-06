@@ -70,7 +70,7 @@ class Javascript_Enqueue
                 ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
                     var listener = function () {
                         removeEventListener(event, listener);
-                        document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) })
+                        document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) });
                         Array.from(document.getElementsByTagName('noscript')).forEach(function(e){
                             var tag = e.getAttribute('data-rapidload-delayed');
                             if(tag !== null && tag !== undefined) {
@@ -80,7 +80,7 @@ class Javascript_Enqueue
                                 e.parentNode.insertBefore(newScript, e);
                             }}
                         );
-                    }
+                    };
                     addEventListener(event, listener);
                 });
             });");
