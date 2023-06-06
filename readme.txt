@@ -150,7 +150,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 2.0.13 - 02/06/2023 =
+= 2.0.13 - 06/06/2023 =
  * feat: add filter to change the RapidLoad root url
  * fix: minor UI improvements
 
