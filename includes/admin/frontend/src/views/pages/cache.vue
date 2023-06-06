@@ -5,7 +5,7 @@
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
-            <button
+            <button id="rp-back"
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -118,7 +118,7 @@
       <div class="pb-6">
       </div>
     </div>
-<!--    <popup v-if="popupVisible" ref="popup" @confirm="handleConfirm" @cancel="handleCancel"></popup>-->
+    <popup v-if="popupVisible" ref="popup" @confirm="handleConfirm" @cancel="handleCancel"></popup>
   </main>
 
 </template>
@@ -141,7 +141,6 @@ export default {
 
   mounted() {
 
-
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
       activeModules.push(window.uucss_global.active_modules[a])
@@ -153,9 +152,8 @@ export default {
       Object.keys(this.cache).map((key) => {
         if (this.id === this.cache[key].id) {
           const options = this.cache[key].options;
-          this.originalData = options;
 
-          if(options && options.cache_expires){
+          if(options){
             options.cache_expires === 1 && (this.onData.cache_expires = true);
             options.mobile_cache === 1 && (this.onData.mobile_cache = true);
 
@@ -175,20 +173,22 @@ export default {
             this.onData.cache_expires = false;
             this.onData.mobile_cache = false;
             this.onData.cache_expiry_time = 1;
-
-
           }
+
         }
 
       });
       this.originalData = JSON.parse(JSON.stringify(this.onData));
+
     }
   },
   methods: {
 
     handleConfirm() {
       this.confirmStatus = true;
-
+      this.popupVisible= false;
+      const back = document.getElementById('rp-back');
+      back.click();
     },
 
     handleCancel() {
@@ -214,7 +214,10 @@ export default {
       let cash_expire = 0;
       if(this.onData.cache_expiry_time === 1){
         cash_expire = 0;
-      }else if(this.onData.cache_expiry_time === 3){
+      }else if(this.onData.cache_expiry_time === 2){
+        cash_expire = 2;
+      }
+      else if(this.onData.cache_expiry_time === 3){
         cash_expire = 6;
       }else if(this.onData.cache_expiry_time === 4){
         cash_expire = 12;
@@ -246,33 +249,38 @@ export default {
             this.loading = false;
             this.dataSaved();
           });
+
+      const setdata = {
+        cache_expires: this.onData.cache_expires,
+        cache_expiry_time: this.onData.cache_expiry_time,
+        mobile_cache: this.onData.mobile_cache,
+      }
+      this.originalData = JSON.parse(JSON.stringify(setdata));
+      this.onData = JSON.parse(JSON.stringify(setdata));
+
     }
 
 
   },
 
-  // beforeRouteLeave(to, from, next) {
-  //   this.$refs.popup.$once('confirm', () => {
-  //     // Yes button clicked, proceed to the next route
-  //     next();
-  //   });
-  //
-  // if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData)){
-  //     // In case you want to show the popup before leaving
-  //     this.popupVisible = true;
-  //     this.confirmStatus = false;
-  //   }
-  //
-  //
-  //
-  //   if(this.popupVisible){
-  //
-  //     next(false);
-  //   }else{
-  //     next();
-  //   }
-  //
-  // },
+  beforeRouteLeave(to, from, next) {
+
+  if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData) && !this.confirmStatus){
+
+      this.popupVisible = true;
+      this.confirmStatus = false;
+    }
+
+
+
+    if(this.popupVisible){
+
+      next(false);
+    }else{
+      next();
+    }
+
+  },
 
 
 

@@ -9,12 +9,14 @@
               <p class="text-sm text-gray-font">Are you sure you want to discard these changes? Your settings will be lost.</p>
             </div>
             <div class="flex justify-center mt-2">
+
               <button
                   class="disabled:opacity-50 flex mb-3 mr-6 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent rounded-lg"
                   @click="handleYesClick"
               >
                 Yes
               </button>
+
               <button
                   class="disabled:opacity-50 flex mb-3 cursor-pointer transition duration-300 bg-purple font-semibold text-white py-2 px-4 border border-purple hover:border-transparent rounded-lg"
                   @click="handleCancelClick"
@@ -35,12 +37,18 @@ export default {
   methods: {
     handleYesClick() {
       this.$emit("confirm");
+
     },
     handleCancelClick() {
       this.$emit("cancel");
 
     },
   },
+  data(){
+    return{
+      back: '/',
+    }
+  }
 };
 </script>
 
