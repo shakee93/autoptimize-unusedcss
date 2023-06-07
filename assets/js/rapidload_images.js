@@ -97,31 +97,4 @@ if(lazyElements && lazyElements.length){
         observer_bg.observe(element);
     });
 }
-
-window.rapidload_lcp_images = function (){
-
-    var isChrome = /Chrome/.test(navigator.userAgent);
-
-    var lcp_image_urls = []
-
-    if (isChrome && 'PerformanceObserver' in window) {
-        new PerformanceObserver((entryList) => {
-            for (const entry of entryList.getEntries()) {
-                entry.url && lcp_image_urls.push(entry.url);
-            }
-        }).observe({type: 'largest-contentful-paint', buffered: true});
-    }
-
-    /*var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', window.rapidload_io_data.ajax_url, true);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.responseType = 'json';
-
-    var requestData = {
-
-    };*/
-
-}
+window.rapidload_replace_image_src();
