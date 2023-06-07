@@ -36,17 +36,7 @@ class RapidLoad_Image
             }, 90);
         }
 
-        //add_action('wp_ajax_nopriv_register_lcp_images', [$this, 'register_lcp_images']);
-
         self::$instance = $this;
-    }
-
-    public function register_lcp_images(){
-
-        self::verify_nonce("rapidload_image");
-
-
-
     }
 
     public function enqueue_frontend_js(){
