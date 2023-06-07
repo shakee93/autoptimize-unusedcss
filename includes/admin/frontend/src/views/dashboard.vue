@@ -125,7 +125,7 @@
 <!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->
             <span v-html="item.image"></span>
 
-            <h4 class="mt-2 heading-margin text-black font-medium text-base opacity-80">{{ item.title }}</h4>
+            <h4 class="heading-margin text-black font-medium text-base opacity-80">{{ item.title }}</h4>
             <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
@@ -243,7 +243,7 @@
         <!--        ends here-->
 
         <div class="content pl-4 pr-4 pb-2 pt-2">
-          <h4 class="mt-2 heading-margin text-gray-h text-base font-semibold">Connect your website</h4>
+          <h4 class="heading-margin text-gray-h text-base font-semibold">Connect your website</h4>
         </div>
 
         <hr class="border-gray-border-line border-b-0">
@@ -287,10 +287,10 @@
 
         <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
           <div class="col-start-1 col-end-3" >
-            <h4 class="mt-2 heading-margin text-gray-h text-base font-semibold">License Information</h4>
+            <h4 class="heading-margin text-gray-h text-base font-semibold">License Information</h4>
           </div>
           <div class="col-end-7 col-span-2">
-            <svg class="mt-2 heading-margin" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="heading-margin" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
               <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
             </svg>
