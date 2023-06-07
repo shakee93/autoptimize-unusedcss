@@ -32,6 +32,12 @@
 
           </div>
         </div>
+        <div class="ml-[285px]">
+          <button @click="ruleSettingsLegacy"
+                  class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
+            Legacy Dashboard
+          </button>
+        </div>
       </div>
 
       <div>
@@ -426,8 +432,10 @@ export default {
 
     ruleSettings() {
       window.location.href = window.uucss_global.setting_url;
-    }
-
+    },
+    ruleSettingsLegacy() {
+      window.location.href = window.uucss_global.setting_url+'&uucss_jobs';
+    },
   },
 
   data() {
