@@ -125,7 +125,7 @@
 <!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->
             <span v-html="item.image"></span>
 
-            <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
+            <h4 class="mt-2 heading-margin text-black font-medium text-base opacity-80">{{ item.title }}</h4>
             <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
@@ -243,7 +243,7 @@
         <!--        ends here-->
 
         <div class="content pl-4 pr-4 pb-2 pt-2">
-          <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
+          <h4 class="mt-2 heading-margin text-gray-h text-base font-semibold">Connect your website</h4>
         </div>
 
         <hr class="border-gray-border-line border-b-0">
@@ -287,10 +287,10 @@
 
         <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
           <div class="col-start-1 col-end-3" >
-            <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
+            <h4 class="mt-2 heading-margin text-gray-h text-base font-semibold">License Information</h4>
           </div>
           <div class="col-end-7 col-span-2">
-            <svg class="mt-2" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="mt-2 heading-margin" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
               <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
             </svg>
@@ -321,7 +321,7 @@
     </ul>
 
 
-
+<!--    <popupModel v-if="popupModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
   </main>
 </template>
 
@@ -332,6 +332,7 @@ import axios from 'axios';
 import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
 import optimization from "./optimization.vue";
+import popupModel from "../components/popupModel.vue";
 
 export default {
 
@@ -339,6 +340,7 @@ export default {
     Vue3TagsInput,
     messageBox,
     optimization,
+    popupModel,
   },
 
   mounted() {
@@ -353,7 +355,16 @@ export default {
         this.license_information.license = data.plan
         this.license_information.licensed_domain = data.licensedDomain
       })
-      this.update_license()
+      this.update_license();
+
+      const lastExecutionDate = localStorage.getItem('lastExecutionDate');
+      const currentDate = new Date().toLocaleDateString();
+      if (lastExecutionDate !== currentDate) {
+        this.popupModel = !localStorage.getItem('popupModel');
+
+      }
+
+
     }else{
       this.update_license()
     }
@@ -376,6 +387,7 @@ export default {
         })
       });
     }
+
   },
   methods:{
 
@@ -386,6 +398,15 @@ export default {
     //   }
     //
     // },
+    handleCancel(){
+      this.popupModel = false;
+      const currentDate = new Date().toLocaleDateString();
+      localStorage.setItem('lastExecutionDate', currentDate);
+    },
+    handleDont(){
+      this.popupModel = false;
+      localStorage.setItem('popupModel', 'dontshow')
+    },
     tipsimprovenext(){
       this.improvetips_count++;
       if(this.improvetips_count===5){
@@ -508,6 +529,7 @@ export default {
 
   data() {
     return {
+      popupModel: false,
       axios_request : null,
       tick_image: 'license-information.svg',
       whats_new: 'tips-whats.svg',
