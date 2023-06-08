@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <div class="content pl-6 pr-6 pt-1 min-h-[76px] flex">
+        <div class="pl-6 pr-6 pt-1 min-h-[76px] flex">
           <div  :class="improvetips_count=== improvetips_count? 'tips-slide':'tips-hidden'">
             <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold" >{{tips[improvetips_count].title}}</h2>
             <p class="text-xsmm text-tips-dark-green-font font-normal" v-html="tips[improvetips_count].description"></p>
@@ -121,7 +121,7 @@
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
-          <div class="content p-4 pb-6">
+          <div class="p-4 pb-6">
 <!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->
             <span v-html="item.image"></span>
 
@@ -193,13 +193,13 @@
 
           <hr class="border-gray-border-line border-b-0">
 
-          <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+          <div class="p-2 pl-4 pr-4 pb-1 font-normal">
             <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
               bounce rates</b> and one of the root causes of
               <b>poor Google Rankings.</b></p>
           </div>
 
-          <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1 mt-4">
+          <div class="p-2 pl-4 pr-4 pb-2.5 pt-1 mt-4">
 
             <div class="grid">
 <!--              <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="mt-0.5 license-error-popup" >-->
@@ -242,13 +242,13 @@
 
         <!--        ends here-->
 
-        <div class="content pl-4 pr-4 pb-2 pt-2">
+        <div class="pl-4 pr-4 pb-2 pt-2">
           <h4 class="heading-margin text-gray-h text-base font-semibold">Connect your website</h4>
         </div>
 
         <hr class="border-gray-border-line border-b-0">
 
-        <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+        <div class="p-2 pl-4 pr-4 pb-1 font-normal">
           <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
             bounce rates</b> and one of the root causes of
             <b>poor Google Rankings.</b></p>
@@ -285,7 +285,7 @@
 
       <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
 
-        <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+        <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
           <div class="col-start-1 col-end-3" >
             <h4 class="heading-margin text-gray-h text-base font-semibold">License Information</h4>
           </div>
@@ -299,7 +299,7 @@
 
         <hr class="border-gray-border-line border-b-0">
 
-        <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
+        <div class="p-2 pl-4 pr-4 pb-1 pt-6">
           <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
           <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
           <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
