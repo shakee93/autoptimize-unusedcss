@@ -18,7 +18,7 @@
       </div>
       </div>
 
-      <div class="content pl-6 pr-6 pt-1 min-h-[76px]">
+      <div class="pl-6 pr-6 pt-1 min-h-[76px]">
         <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">RapidLoad support is here</h2>
         <p class="text-xsmm text-purple-tips-text font-normal">If you need an extra hand, We are here to help. Take a look at our knowledge base or feel free to reach us.</p>
       </div>
