@@ -321,7 +321,7 @@
     </ul>
 
 
-<!--    <popupModel v-if="popupModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
+    <popupModel v-if="popupModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
   </main>
 </template>
 
