@@ -357,10 +357,10 @@ export default {
       })
       this.update_license();
 
-      const lastExecutionDate = localStorage.getItem('lastExecutionDate');
+      const lastExecutionDate = localStorage.getItem('RapidLoadDashboardPopupModellastExecutionDate');
       const currentDate = new Date().toLocaleDateString();
       if (lastExecutionDate !== currentDate) {
-        this.popupModel = !localStorage.getItem('popupModel');
+        this.popupModel = !localStorage.getItem('RapidLoadDashboardPopupModel');
 
       }
 
@@ -401,11 +401,11 @@ export default {
     handleCancel(){
       this.popupModel = false;
       const currentDate = new Date().toLocaleDateString();
-      localStorage.setItem('lastExecutionDate', currentDate);
+      localStorage.setItem('RapidLoadDashboardPopupModellastExecutionDate', currentDate);
     },
     handleDont(){
       this.popupModel = false;
-      localStorage.setItem('popupModel', 'dontshow')
+      localStorage.setItem('RapidLoadDashboardPopupModel', 'false')
     },
     tipsimprovenext(){
       this.improvetips_count++;

@@ -118,7 +118,7 @@
       <div class="pb-6">
       </div>
     </div>
-    <popup v-if="popupVisible" ref="popup" @confirm="handleConfirm" @cancel="handleCancel"></popup>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
   </main>
 
 </template>
@@ -185,12 +185,16 @@ export default {
   methods: {
 
     handleConfirm() {
+      this.saveSettings();
+      this.handleDontSave();
+    },
+
+    handleDontSave(){
       this.confirmStatus = true;
       this.popupVisible= false;
       const back = document.getElementById('rp-back');
       back.click();
     },
-
     handleCancel() {
       this.popupVisible= false;
     },
