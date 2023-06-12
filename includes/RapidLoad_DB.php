@@ -205,8 +205,8 @@ abstract class RapidLoad_DB
 
             }
 
-            RapidLoad_Base::update_option( self::$db_option, self::$db_version );
-            self::$current_version = self::$db_version;
+            //RapidLoad_Base::update_option( self::$db_option, self::$db_version );
+            //self::$current_version = self::$db_version;
 
         }catch (Exception $ex){
 
