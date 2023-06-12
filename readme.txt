@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.15 - 12/06/2023 =
+ * fix: migration tables not creating on update
+
 = 2.0.14 - 09/06/2023 =
  * fix: minor UI improvements
 
