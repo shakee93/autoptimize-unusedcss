@@ -128,7 +128,7 @@ class Javascript_Enqueue
             return;
         }
 
-        $file_path = self::get_file_path_from_url($link->src);
+        $file_path = self::get_file_path_from_url(apply_filters('uucss/enqueue/js-url', $link->src));
 
         if(!file_exists($file_path)){
             return;
@@ -144,7 +144,7 @@ class Javascript_Enqueue
             return;
         }
 
-        $filename = basename(preg_replace('/\?.*/', '', $link->src));
+        $filename = basename(preg_replace('/\?.*/', '', apply_filters('uucss/enqueue/js-url', $link->src)));
 
         if(!$filename){
             return;
