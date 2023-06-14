@@ -365,7 +365,7 @@ body .rapidload {
 .rapidload .flex{
     display: flex !important;
     margin-bottom: auto !important;
-    align-items: start !important;
+    /*align-items: start !important;*/
 }
 .popup-confirmation{
     position: fixed;

@@ -268,22 +268,15 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-
   if(JSON.stringify(this.originalData) !== JSON.stringify(this.onData) && !this.confirmStatus){
-
       this.popupVisible = true;
       this.confirmStatus = false;
     }
-
-
-
     if(this.popupVisible){
-
       next(false);
     }else{
       next();
     }
-
   },
 
 

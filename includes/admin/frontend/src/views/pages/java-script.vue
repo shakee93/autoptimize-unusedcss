@@ -5,7 +5,7 @@
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
-            <button
+            <button id="rp-back"
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -41,9 +41,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="minify_js = !minify_js" :class="minify_js? 'bg-purple':''"
+                    <div @click="onData.minify_js = !onData.minify_js" :class="onData.minify_js? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="minify_js = !minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
+                  <h1 @click="onData.minify_js = !onData.minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
                   <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files.</p>
                 </div>
               </div>
@@ -63,9 +63,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="preload_internal_links = !preload_internal_links" :class="preload_internal_links? 'bg-purple':''"
+                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -73,7 +73,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="preload_internal_links = !preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>
+                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>
                   <p class="text-sm text-gray-font">Preload Links</p>
                 </div>
               </div>
@@ -85,9 +85,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="uucss_load_js_method.status = !uucss_load_js_method.status" :class="uucss_load_js_method.status? 'bg-purple':''"
+                  <div @click="onData.uucss_load_js_method.status = !onData.uucss_load_js_method.status" :class="onData.uucss_load_js_method.status? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="uucss_load_js_method.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_load_js_method.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -96,18 +96,18 @@
                 </div>
               </div>
               <div>
-                <h1 @click="uucss_load_js_method.status = !uucss_load_js_method.status" class="font-normal text-base text-black-font cursor-pointer">Defer JavaScript</h1>
+                <h1 @click="onData.uucss_load_js_method.status = !onData.uucss_load_js_method.status" class="font-normal text-base text-black-font cursor-pointer">Defer JavaScript</h1>
                 <p class="text-sm text-gray-font">Render-blocking JS on website can be resolved with defer javaScript.</p>
               </div>
             </div>
 
-            <div :class="!uucss_load_js_method.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.uucss_load_js_method.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" :class="uucss_load_js_method.defer_inline_js? 'bg-purple':''"
+                    <div @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" :class="onData.uucss_load_js_method.defer_inline_js? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -116,7 +116,7 @@
                   </div>
                 </div>
                 <div class="mt-2.5">
-                  <h1 @click="uucss_load_js_method.defer_inline_js = !uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>
+                  <h1 @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>
 <!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
                 </div>
               </div>
@@ -127,9 +127,9 @@
 
                 <div class="grid mb-5">
                 <textarea
-                    v-model="uucss_load_js_method.uucss_excluded_js_files_from_defer"
+                    v-model="onData.uucss_load_js_method.uucss_excluded_js_files_from_defer"
                     @focus="focus='exclude'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -147,9 +147,9 @@
             <div class="flex mb-5">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="delay_javascript = !delay_javascript" :class="delay_javascript? 'bg-purple':''"
+                  <div @click="onData.delay_javascript = !onData.delay_javascript" :class="onData.delay_javascript? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="delay_javascript" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.delay_javascript" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -158,17 +158,17 @@
                 </div>
               </div>
               <div class="mt-2.5">
-                <h1 @click="delay_javascript = !delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascripts to Load on User Interaction</h1>
+                <h1 @click="onData.delay_javascript = !onData.delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascripts to Load on User Interaction</h1>
 <!--                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>-->
               </div>
             </div>
-            <div :class="!delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div>
                 <div class="grid">
                 <textarea
-                    v-model="uucss_load_scripts_on_user_interaction"
+                    v-model="onData.uucss_load_scripts_on_user_interaction"
                     @focus="focus='delay'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -184,9 +184,9 @@
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
             <p class="text-sm pb-3 text-gray-font">These JS files will be forcefully excluded from optimization.</p>
                 <textarea
-                    v-model="uucss_excluded_js_files"
+                    v-model="onData.uucss_excluded_js_files"
                     @focus="focus='exclude-js'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -214,6 +214,7 @@
       <div class="pb-6">
       </div>
     </div>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
 
   </main>
 
@@ -224,6 +225,7 @@ import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
+import popup from "../../components/popup.vue";
 
 export default {
   name: "java-script",
@@ -231,6 +233,7 @@ export default {
   components: {
     Vue3TagsInput,
     messageBox,
+    popup,
   },
 
   mounted() {
@@ -245,20 +248,40 @@ export default {
       Object.keys(this.javascript).map((key) => {
         if (this.id === this.javascript[key].id) {
           const options = this.javascript[key].options;
-          this.uucss_load_js_method.defer_inline_js = options.defer_inline_js
-          this.minify_js = options.minify_js
-          this.preload_internal_links = options.preload_internal_links
-          this.delay_javascript = options.delay_javascript
-          this.uucss_excluded_js_files = options.uucss_excluded_js_files
-          this.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
-          this.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
-          this.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
+          this.onData.uucss_load_js_method.defer_inline_js = options.defer_inline_js
+          this.onData.minify_js = options.minify_js
+          this.onData.preload_internal_links = options.preload_internal_links
+          this.onData.delay_javascript = options.delay_javascript
+          this.onData.uucss_excluded_js_files = options.uucss_excluded_js_files
+          this.onData.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
+          this.onData.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
+          this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
         }
 
       });
+
+      this.beforeSave = this.onData;
+      this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
   },
   methods: {
+
+    handleConfirm() {
+      this.saveSettings();
+      this.handleDontSave();
+    },
+
+    handleDontSave(){
+      this.confirmStatus = true;
+      this.popupVisible= false;
+      const back = document.getElementById('rp-back');
+      back.click();
+    },
+    handleCancel() {
+      this.popupVisible= false;
+    },
+
+
     doc(){
       window.open('https://docs.rapidload.io/features/javascript-delivery', '_blank');
     },
@@ -271,14 +294,14 @@ export default {
     async saveSettings() {
       this.loading = true;
       const data = {
-        defer_inline_js: this.uucss_load_js_method.defer_inline_js,
-        minify_js: this.minify_js,
-        preload_internal_links: this.preload_internal_links,
-        delay_javascript: this.delay_javascript,
-        uucss_excluded_js_files: this.uucss_excluded_js_files,
-        uucss_load_js_method: this.uucss_load_js_method.status ? 'defer' : 'none',
-        uucss_load_scripts_on_user_interaction: this.uucss_load_scripts_on_user_interaction,
-        uucss_excluded_js_files_from_defer: this.uucss_load_js_method.uucss_excluded_js_files_from_defer,
+        defer_inline_js: this.onData.uucss_load_js_method.defer_inline_js,
+        minify_js: this.onData.minify_js,
+        preload_internal_links: this.onData.preload_internal_links,
+        delay_javascript: this.onData.delay_javascript,
+        uucss_excluded_js_files: this.onData.uucss_excluded_js_files,
+        uucss_load_js_method: this.onData.uucss_load_js_method.status ? 'defer' : 'none',
+        uucss_load_scripts_on_user_interaction: this.onData.uucss_load_scripts_on_user_interaction,
+        uucss_excluded_js_files_from_defer: this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer,
 
       }
 
@@ -299,6 +322,20 @@ export default {
             this.loading = false;
             this.dataSaved();
           });
+      this.originalData = JSON.parse(JSON.stringify(data));
+      this.beforeSave = JSON.parse(JSON.stringify(data));
+    }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if(JSON.stringify(this.originalData) !== JSON.stringify(this.beforeSave) && !this.confirmStatus){
+      this.popupVisible = true;
+      this.confirmStatus = false;
+    }
+    if(this.popupVisible){
+      next(false);
+    }else{
+      next();
     }
   },
 
@@ -309,19 +346,27 @@ export default {
       saved: false,
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
       focus: null,
-      js_optimization: false,
-      minify_js: false,
-      preload_internal_links: false,
-      delay_javascript: false,
       back: '/',
       loading: false,
-      uucss_load_js_method: {
-        status: false,
-        defer_inline_js: false,
-        uucss_excluded_js_files_from_defer: [],
+
+      onData: {
+        js_optimization: false,
+        minify_js: false,
+        preload_internal_links: false,
+        delay_javascript: false,
+        uucss_load_js_method: {
+          status: false,
+          defer_inline_js: false,
+          uucss_excluded_js_files_from_defer: [],
+        },
+        uucss_excluded_js_files: [],
+        uucss_load_scripts_on_user_interaction: [],
       },
-      uucss_excluded_js_files: [],
-      uucss_load_scripts_on_user_interaction: [],
+
+      beforeSave:{},
+      originalData: {},
+      popupVisible: false,
+      confirmStatus: false,
 
     }
   },
