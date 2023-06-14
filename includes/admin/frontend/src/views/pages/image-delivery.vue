@@ -5,7 +5,7 @@
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
-            <button
+            <button id="rp-back"
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -36,19 +36,19 @@
         <div class="p-4 pl-32 pr-72">
             <h1 class="font-normal text-base text-black-font">Compression Level</h1>
             <p class="text-sm pb-3 text-gray-font">Choose the image compression level.</p>
-            <button v-on:click="compression_level = 'lossy'"
-                    :class="{ active: compression_level === 'lossy' }"
+            <button v-on:click="onData.compression_level = 'lossy'"
+                    :class="{ active: onData.compression_level === 'lossy' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple	rounded-l-lg">
               LOSSY
             </button>
 
-            <button v-on:click="compression_level = 'glossy'"
-                    :class="{ active: compression_level === 'glossy' }"
+            <button v-on:click="onData.compression_level = 'glossy'"
+                    :class="{ active: onData.compression_level === 'glossy' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y-2 border-purple">
               GLOSSY
             </button>
-            <button v-on:click="compression_level = 'lossless'"
-                    :class="{ active: compression_level === 'lossless' }"
+            <button v-on:click="onData.compression_level = 'lossless'"
+                    :class="{ active: onData.compression_level === 'lossless' }"
                     class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple rounded-r-lg">
               LOSSLESS
             </button>
@@ -59,9 +59,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="next_gen_image = !next_gen_image" :class="next_gen_image? 'bg-purple':''"
+                    <div @click="onData.next_gen_image = !onData.next_gen_image" :class="onData.next_gen_image? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="next_gen_image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.next_gen_image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -70,7 +70,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="next_gen_image = !next_gen_image" class="font-normal text-base text-black-font cursor-pointer">Serve next-gen Images (AVIF, WEBP)</h1>
+                  <h1 @click="onData.next_gen_image = !onData.next_gen_image" class="font-normal text-base text-black-font cursor-pointer">Serve next-gen Images (AVIF, WEBP)</h1>
                   <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
                 </div>
               </div>
@@ -80,9 +80,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_generate_blurry_place_holder = !uucss_generate_blurry_place_holder" :class="uucss_generate_blurry_place_holder? 'bg-purple':''"
+                    <div @click="onData.uucss_generate_blurry_place_holder = !onData.uucss_generate_blurry_place_holder" :class="uucss_generate_blurry_place_holder? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_generate_blurry_place_holder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.uucss_generate_blurry_place_holder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -91,7 +91,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="uucss_generate_blurry_place_holder = !uucss_generate_blurry_place_holder" class="font-normal text-base text-black-font cursor-pointer">Low Quality Image placeholders (LQIP)</h1>
+                  <h1 @click="onData.uucss_generate_blurry_place_holder = !onData.uucss_generate_blurry_place_holder" class="font-normal text-base text-black-font cursor-pointer">Low Quality Image placeholders (LQIP)</h1>
                   <p class="text-sm text-gray-font">Generate low quality blurry SVG image placeholders.</p>
                 </div>
               </div>
@@ -102,9 +102,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="uucss_lazy_load_images.status = !uucss_lazy_load_images.status" :class="uucss_lazy_load_images.status? 'bg-purple':''"
+                  <div @click="onData.uucss_lazy_load_images.status = !onData.uucss_lazy_load_images.status" :class="onData.uucss_lazy_load_images.status? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="uucss_lazy_load_images.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_lazy_load_images.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -113,19 +113,19 @@
                 </div>
               </div>
               <div>
-                <h1  @click="uucss_lazy_load_images.status = !uucss_lazy_load_images.status" class="font-normal text-base text-black-font cursor-pointer">Lazy Load</h1>
+                <h1  @click="onData.uucss_lazy_load_images.status = !onData.uucss_lazy_load_images.status" class="font-normal text-base text-black-font cursor-pointer">Lazy Load</h1>
                 <p class="text-sm text-gray-font">Lazy load images and iframes.</p>
               </div>
             </div>
 
-            <div :class="!uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.uucss_lazy_load_images.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude Above-the-fold Images from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">Choose the image count to exclude from above-the-fold</p>
 
 
-                  <button v-for="button in 5" v-on:click="uucss_lazy_load_images.image_count = button"
-                          :class="['rl-btn',(button === Number(uucss_lazy_load_images.image_count) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
+                  <button v-for="button in 5" v-on:click="onData.uucss_lazy_load_images.image_count = button"
+                          :class="['rl-btn',(button === Number(onData.uucss_lazy_load_images.image_count) ? 'active' : ''), (button ===1? 'rounded-l-lg' : ''), (button ===5? 'rounded-r-lg border-r-2' : '')]"
                           class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-l-2 border-y-2 border-purple">
                     {{ button }}
                   </button>
@@ -135,10 +135,10 @@
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_lazy_load_images.uucss_lazy_load_iframes = !uucss_lazy_load_images.uucss_lazy_load_iframes"
-                         :class="uucss_lazy_load_images.uucss_lazy_load_iframes? 'bg-purple':''"
+                    <div @click="onData.uucss_lazy_load_images.uucss_lazy_load_iframes = !onData.uucss_lazy_load_images.uucss_lazy_load_iframes"
+                         :class="onData.uucss_lazy_load_images.uucss_lazy_load_iframes? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_lazy_load_images.uucss_lazy_load_iframes" xmlns="http://www.w3.org/2000/svg"
+                      <svg v-if="onData.uucss_lazy_load_images.uucss_lazy_load_iframes" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -147,7 +147,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="uucss_lazy_load_images.uucss_lazy_load_iframes = !uucss_lazy_load_images.uucss_lazy_load_iframes" class="font-normal text-base text-black-font cursor-pointer">Iframes Lazy Load</h1>
+                  <h1 @click="onData.uucss_lazy_load_images.uucss_lazy_load_iframes = !onData.uucss_lazy_load_images.uucss_lazy_load_iframes" class="font-normal text-base text-black-font cursor-pointer">Iframes Lazy Load</h1>
                   <p class="text-sm text-gray-font">Lazy load all iframes in your website.</p>
                 </div>
               </div>
@@ -157,9 +157,9 @@
                 <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
                 <textarea
-                    v-model="uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
+                    v-model="onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"
                     @focus="focus='exclude'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -176,9 +176,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_set_width_and_height = !uucss_set_width_and_height" :class="uucss_set_width_and_height? 'bg-purple':''"
+                    <div @click="onData.uucss_set_width_and_height = !onData.uucss_set_width_and_height" :class="onData.uucss_set_width_and_height? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_set_width_and_height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.uucss_set_width_and_height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -187,7 +187,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="uucss_set_width_and_height = !uucss_set_width_and_height" class="font-normal text-base text-black-font cursor-pointer">Add Width and Height Attributes</h1>
+                  <h1 @click="onData.uucss_set_width_and_height = !onData.uucss_set_width_and_height" class="font-normal text-base text-black-font cursor-pointer">Add Width and Height Attributes</h1>
                   <p class="text-sm text-gray-font">Include width and height attributes for these images.</p>
                 </div>
               </div>
@@ -199,9 +199,9 @@
               <h1 class="font-normal text-base text-black-font">Priority LCP Images</h1>
               <p class="text-sm pb-3 text-gray-font">Preload critical above-the-fold images to prioritize its loading. These images will not be lazy loaded</p>
                 <textarea
-                    v-model="uucss_preload_lcp_image"
+                    v-model="onData.uucss_preload_lcp_image"
                     @focus="focus='preload'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                 <div :class="focus==='preload'? 'bg-purple-lite':'bg-gray-lite-background'"
                      class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -215,9 +215,9 @@
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
               <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN.</p>
               <textarea
-                  v-model="uucss_exclude_images"
+                  v-model="onData.uucss_exclude_images"
                   @focus="focus='exclude-images'" @blur="focus = null"
-                  class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                  class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                   id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude-images'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -247,6 +247,7 @@
       <div class="pb-6">
       </div>
     </div>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
 
   </main>
 
@@ -257,6 +258,7 @@ import config from "../../config";
 import Vue3TagsInput from 'vue3-tags-input';
 import axios from "axios";
 import messageBox from "../../components/messageBox.vue";
+import popup from "../../components/popup.vue";
 
 export default {
   name: "image-delivery",
@@ -264,6 +266,7 @@ export default {
   components: {
     Vue3TagsInput,
     messageBox,
+    popup,
   },
 
   mounted() {
@@ -276,24 +279,38 @@ export default {
       Object.keys(this.image_delivery).map((key) => {
         if (this.id === this.image_delivery[key].id) {
           const options = this.image_delivery[key].options;
-          this.compression_level = options.uucss_image_optimize_level
-          this.next_gen_image = options.uucss_support_next_gen_formats
-          this.uucss_lazy_load_images.status= options.uucss_lazy_load_images
-          this.uucss_lazy_load_images.image_count = options.uucss_exclude_above_the_fold_image_count
-          this.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_iframes
-          this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
-          this.uucss_generate_blurry_place_holder = options.uucss_generate_blurry_place_holder
-          this.uucss_preload_lcp_image = options.uucss_preload_lcp_image
-          this.uucss_set_width_and_height = options.uucss_set_width_and_height
-          this.uucss_exclude_images = options.uucss_exclude_images
+          this.onData.compression_level = options.uucss_image_optimize_level
+          this.onData.next_gen_image = options.uucss_support_next_gen_formats
+          this.onData.uucss_lazy_load_images.status= options.uucss_lazy_load_images
+          this.onData.uucss_lazy_load_images.image_count = options.uucss_exclude_above_the_fold_image_count
+          this.onData.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_iframes
+          this.onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
+          this.onData.uucss_generate_blurry_place_holder = options.uucss_generate_blurry_place_holder
+          this.onData.uucss_preload_lcp_image = options.uucss_preload_lcp_image
+          this.onData.uucss_set_width_and_height = options.uucss_set_width_and_height
+          this.onData.uucss_exclude_images = options.uucss_exclude_images
         }
       });
-
+      this.beforeSave = this.onData;
+      this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
   },
 
   methods:{
+    handleConfirm() {
+      this.saveSettings();
+      this.handleDontSave();
+    },
 
+    handleDontSave(){
+      this.confirmStatus = true;
+      this.popupVisible= false;
+      const back = document.getElementById('rp-back');
+      back.click();
+    },
+    handleCancel() {
+      this.popupVisible= false;
+    },
     doc(){
       window.open('https://docs.rapidload.io/features/image-delivery', '_blank');
     },
@@ -306,16 +323,16 @@ export default {
     async saveSettings(){
       this.loading = true;
       const data = {
-        uucss_image_optimize_level: this.compression_level,
-        uucss_support_next_gen_formats: this.next_gen_image,
-        uucss_lazy_load_images: this.uucss_lazy_load_images.status,
-        uucss_exclude_above_the_fold_image_count: this.uucss_lazy_load_images.image_count,
-        uucss_lazy_load_iframes: this.uucss_lazy_load_images.uucss_lazy_load_iframes,
-        uucss_generate_blurry_place_holder: this.uucss_generate_blurry_place_holder,
-        uucss_exclude_images_from_lazy_load : this.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load,
-        uucss_preload_lcp_image : this.uucss_preload_lcp_image,
-        uucss_set_width_and_height : this.uucss_set_width_and_height,
-        uucss_exclude_images: this.uucss_exclude_images,
+        uucss_image_optimize_level: this.onData.compression_level,
+        uucss_support_next_gen_formats: this.onData.next_gen_image,
+        uucss_lazy_load_images: this.onData.uucss_lazy_load_images.status,
+        uucss_exclude_above_the_fold_image_count: this.onData.uucss_lazy_load_images.image_count,
+        uucss_lazy_load_iframes: this.onData.uucss_lazy_load_images.uucss_lazy_load_iframes,
+        uucss_generate_blurry_place_holder: this.onData.uucss_generate_blurry_place_holder,
+        uucss_exclude_images_from_lazy_load : this.onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load,
+        uucss_preload_lcp_image : this.onData.uucss_preload_lcp_image,
+        uucss_set_width_and_height : this.onData.uucss_set_width_and_height,
+        uucss_exclude_images: this.onData.uucss_exclude_images,
         uucss_enable_image_delivery : true,
       }
 
@@ -335,9 +352,21 @@ export default {
             this.loading = false;
             this.dataSaved();
           });
+      this.originalData = JSON.parse(JSON.stringify(data));
+      this.beforeSave = JSON.parse(JSON.stringify(data));
     }
   },
-
+  beforeRouteLeave(to, from, next) {
+    if(JSON.stringify(this.originalData) !== JSON.stringify(this.beforeSave) && !this.confirmStatus){
+      this.popupVisible = true;
+      this.confirmStatus = false;
+    }
+    if(this.popupVisible){
+      next(false);
+    }else{
+      next();
+    }
+  },
   data() {
     return {
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
@@ -347,18 +376,26 @@ export default {
       focus: null,
       image_delivery: [],
       id: 'image-delivery',
-      compression_level: 'lossless',
-      next_gen_image: false,
-      uucss_exclude_images: [],
-      uucss_lazy_load_images:{
-        status: false,
-        image_count: 3,
-        uucss_lazy_load_iframes: false,
-        uucss_exclude_images_from_lazy_load: [],
+
+      onData: {
+        compression_level: 'lossless',
+        next_gen_image: false,
+        uucss_exclude_images: [],
+        uucss_lazy_load_images: {
+          status: false,
+          image_count: 3,
+          uucss_lazy_load_iframes: false,
+          uucss_exclude_images_from_lazy_load: [],
+        },
+        uucss_set_width_and_height: false,
+        uucss_generate_blurry_place_holder: false,
+        uucss_preload_lcp_image: [],
       },
-      uucss_set_width_and_height: false,
-      uucss_generate_blurry_place_holder: false,
-      uucss_preload_lcp_image: [],
+
+      beforeSave:{},
+      originalData: {},
+      popupVisible: false,
+      confirmStatus: false,
 
     }
   },
