@@ -206,6 +206,26 @@ class RapidLoad_Image_Enqueue
                     continue;
                 }
 
+                if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
+                    continue;
+                }
+
+                if ($iframe->srcdoc) {
+                    $iframe->{'data-rapidload-lazy-srcdoc'} = $iframe->srcdoc;
+                    $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
+                    $iframe->{'data-rapidload-lazy-method'} = 'viewport';
+                    $iframe->{'data-rapidload-lazy-attributes'} = 'srcdoc,src';
+                    unset($iframe->{'data-src'});
+                    unset($iframe->{'srcdoc'});
+                    unset($iframe->{'src'});
+                }else{
+                    $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
+                    $iframe->{'data-rapidload-lazy-method'} = 'viewport';
+                    $iframe->{'data-rapidload-lazy-attributes'} = 'src';
+                    unset($iframe->{'data-src'});
+                    unset($iframe->{'src'});
+                }
+
                 $iframe->loading = "lazy";
             }
         }

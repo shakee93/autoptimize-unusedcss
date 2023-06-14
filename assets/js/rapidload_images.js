@@ -74,8 +74,12 @@ var observer_bg = new IntersectionObserver(function (elements) {
                 observer_bg.unobserve(element.target);
                 var attributes = element.target.getAttribute("data-rapidload-lazy-attributes").split(",");
                 attributes.forEach(function (attribute) {
-                    var value = element.target.getAttribute("data-rapidload-lazy-" + attribute);
-                    element.target.style.backgroundImage = 'url(' + value.replace("ret_blank", "ret_img") + ')';
+                    if(element.target.tagName === 'IFRAME'){
+                        element.target.setAttribute(attribute, element.target.getAttribute("data-rapidload-lazy-" + attribute))
+                    }else{
+                        var value = element.target.getAttribute("data-rapidload-lazy-" + attribute);
+                        element.target.style.backgroundImage = 'url(' + value.replace("ret_blank", "ret_img") + ')';
+                    }
                 });
             }
         });
