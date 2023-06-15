@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.16 - 15/06/2023 =
+ * feat: improved iframe lazy-loading
+
 = 2.0.15 - 12/06/2023 =
  * fix: migration tables not creating on update
 
