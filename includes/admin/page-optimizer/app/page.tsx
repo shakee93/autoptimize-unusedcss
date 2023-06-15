@@ -4,11 +4,12 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import PageSpeedScore from "@/components/performance-widgets/PageSpeedScore";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
+import ThemeSwitcher from "@/components/parts/theme-switcher";
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState("attention_required");
     const [togglePerformance, setTogglePerformance] = useState(false);
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState("https://rapidload.io/home");
 
     const audits = [
         {
@@ -72,8 +73,8 @@ export default function Home() {
     };
 
     return (
-        <main className="flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-[#202123] bg-[#F7F9FA]">
-            <Header url="https://rapidload.io/home" />
+        <main className="flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
+            <Header url={url} />
 
             <section className="container grid grid-cols-12 gap-8 mt-12">
                 {togglePerformance && (
@@ -102,7 +103,9 @@ export default function Home() {
                 </article>
             </section>
 
-            <footer></footer>
+            <footer className='fixed bottom-10 right-10'>
+                <ThemeSwitcher></ThemeSwitcher>
+            </footer>
         </main>
     );
 }
