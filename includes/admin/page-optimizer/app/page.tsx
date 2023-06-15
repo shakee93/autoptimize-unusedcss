@@ -3,9 +3,11 @@ import { useState } from "react";
 
 import Header from "@/components/Header";
 import PageSpeedScore from "@/components/performance-widgets/PageSpeedScore";
+import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState("attention_required");
+    const [togglePerformance, setTogglePerformance] = useState(false);
     const [url, setUrl] = useState("");
 
     const audits = [
@@ -74,14 +76,21 @@ export default function Home() {
             <Header url="https://rapidload.io/home" />
 
             <section className="container grid grid-cols-12 gap-8 mt-12">
-                <aside className="col-span-4">
-                    <h2 className="text-lg ml-5">Performance</h2>
-                    <div className="widgets pt-4 flex">
-                        <PageSpeedScore />
-                    </div>
-                </aside>
-                <article className="col-span-8">
-                    <h2 className="text-lg ml-5">Fix Performance issues</h2>
+                {togglePerformance && (
+                    <aside className="col-span-4">
+                        <h2 className="text-lg ml-5">Performance</h2>
+                        <div className="widgets pt-4 flex">
+                            <PageSpeedScore />
+                        </div>
+                    </aside>
+                )}
+                <article className={`${togglePerformance ? 'col-span-8' : 'col-span-12'}`}>
+                    <h2 className="text-lg ml-5 flex gap-2 items-center">
+                        <span className='cursor-pointer' onClick={() => { setTogglePerformance(prev => !prev) }}>
+                            {(togglePerformance) ? <ArrowLeftOnRectangleIcon className="h-4 w-4 text-gray-500" /> : <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500" /> }
+
+                        </span>
+                        Fix Performance issues</h2>
                     <div className="tabs pt-4 flex">
                         <div className="bg-white border w-full rounded-2xl px-6 flex gap-4 cursor-pointer">
                             {renderTabs()}
