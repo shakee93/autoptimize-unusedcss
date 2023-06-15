@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import PageSpeedScore from "@/components/performance-widgets/PageSpeedScore";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 import ThemeSwitcher from "@/components/parts/theme-switcher";
+import Card from "@/components/parts/card";
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState("attention_required");
@@ -93,12 +94,14 @@ export default function Home() {
                         </span>
                         Fix Performance issues</h2>
                     <div className="tabs pt-4 flex">
-                        <div className="bg-white border w-full rounded-2xl px-6 flex gap-4 cursor-pointer">
+                        <Card cls='flex py-0 px-6 cursor-pointer select-none'>
                             {renderTabs()}
-                        </div>
+                        </Card>
                     </div>
                     <div className="audits pt-4 flex">
-                        <div className="bg-white border w-full rounded-2xl p-4">all audits comes here</div>
+                        <Card>
+                            hello
+                        </Card>
                     </div>
                 </article>
             </section>

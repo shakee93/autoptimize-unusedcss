@@ -49,7 +49,7 @@ const ThemeSwitcher = () => {
     }
 
     return (
-        <div className="cursor-pointer user-select-none" onClick={changeTheme}>
+        <div className="cursor-pointer select-none" onClick={changeTheme}>
             { theme === 'dark' ? (
                 <MoonIcon className="h-6 w-6 text-gray-500" />
             ) : theme === 'light' ? (
