@@ -13,7 +13,7 @@ const Header = ({ url = null}: { url: string|null}) => {
 
     return (
 
-        <header className='w-full px-4 p-4 flex justify-between dark:border-b-zinc-700 border-b'>
+        <header className='w-full p-6 flex justify-between dark:border-b-zinc-700 border-b'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <Image className='w-36' src={Logo} alt='RapidLoad - #1 to unlock breakneck page speed'/>

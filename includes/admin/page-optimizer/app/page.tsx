@@ -6,16 +6,17 @@ import PageSpeedScore from "@/components/performance-widgets/PageSpeedScore";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 import ThemeSwitcher from "@/components/parts/theme-switcher";
 import Card from "@/components/parts/card";
+import Audits from "@/components/Audits";
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState("attention_required");
     const [togglePerformance, setTogglePerformance] = useState(false);
     const [url, setUrl] = useState("https://rapidload.io/home");
 
-    const audits = [
+    const audits: Audit[] = [
         {
             name: "Eliminate render-blocking resources",
-            icon: "",
+            icon: "pass",
             files: [],
             settings: [
                 {
@@ -64,7 +65,7 @@ export default function Home() {
             return (
                 <div
                     onClick={() => changeTab(tab)}
-                    className={`px-4 py-4 text-sm  ${isActive}`}
+                    className={`px-4 py-3 text-sm  ${isActive}`}
                     key={tab.key}
                 >
                     {tab.name}
@@ -99,9 +100,7 @@ export default function Home() {
                         </Card>
                     </div>
                     <div className="audits pt-4 flex">
-                        <Card>
-                            hello
-                        </Card>
+                        <Audits audits={audits}/>
                     </div>
                 </article>
             </section>
