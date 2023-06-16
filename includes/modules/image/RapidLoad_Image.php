@@ -100,7 +100,7 @@ class RapidLoad_Image
         }
 
         if(isset(self::$instance->options['uucss_support_next_gen_formats']) && self::$instance->options['uucss_support_next_gen_formats'] == "1"){
-            $options .= ',to_auto';
+            $options .= ',to_avif';
         }
 
         if($width && $height){
