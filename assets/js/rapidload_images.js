@@ -9,7 +9,7 @@ window.rapidload_replace_image_src = function () {
                 options += ",q_" + window.rapidload_io_data.optimize_level;
             }
             if (window.rapidload_io_data.support_next_gen_format) {
-                options += ",to_auto";
+                options += ",to_avif";
             }
             if (image.width !== 0) {
                 options += ",w_" + image.width;
@@ -51,7 +51,7 @@ var callback = function (mutationList, observer) {
                                     options += ",q_" + window.rapidload_io_data.optimize_level;
                                 }
                                 if (window.rapidload_io_data.support_next_gen_format) {
-                                    options += ",to_auto";
+                                    options += ",to_avif";
                                 }
                                 if(img.getBoundingClientRect().width !== 0){
                                     options += ",w_" + img.getBoundingClientRect().width;
