@@ -4,10 +4,9 @@ import Audit from "@/components/parts/Audit";
 interface AuditsProps {
     audits: Audit[],
     activeTab: AuditTypes,
-    tableData?: any[];
 }
 
-const Audits = ({ audits, activeTab, tableData }: AuditsProps) => {
+const Audits = ({ audits, activeTab }: AuditsProps) => {
 
     const filtered_audits = audits.filter(audit => {
         return audit.tags.includes(activeTab)

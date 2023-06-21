@@ -6,10 +6,9 @@ import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/re
 interface AuditProps {
     audit?: Audit;
     priority?: boolean;
-    tableData?: any[];
 }
 
-const Audit = ({audit, priority = true, tableData }: AuditProps) => {
+const Audit = ({audit, priority = true }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
 
     if (!audit?.name) {
