@@ -11,11 +11,6 @@ interface AuditProps {
 
 const Audit = ({audit, priority = true, tableData }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
-    // const tableData = [
-    //     { id: 1, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css" , trasnsfer_size: '136.4 KiB', potential_savings: '134 KiB' , actions: ''},
-    //     { id: 2, file_type: "CSS", urls: "https://rapidload.io/" , trasnsfer_size: '100 KiB', potential_savings: '136.4 KiB' , actions: ''},
-    //     { id: 3, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css", trasnsfer_size: '200.6 KiB' , potential_savings: '300.7 KiB' , actions: ''},
-    // ];
 
     if (!audit?.name) {
         return;
@@ -69,7 +64,7 @@ const Audit = ({audit, priority = true, tableData }: AuditProps) => {
                         </tr>
                         </thead>
                             <tbody className={'divide-y divide-gray-200 dark:divide-gray-700'}>
-                            {tableData?.map((data, index) => (
+                            {audit.files?.map((data, index) => (
                                 <tr key={index}>
                                     <td className='px-6 py-4 whitespace-nowrap'>
                                         <div className='text-sm text-gray-900 dark:text-white'>{data.file_type}</div>
