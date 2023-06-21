@@ -19,12 +19,21 @@ interface AuditSettings {
     status: string,
 }
 
+interface Files{
+    id: number,
+    file_type: string,
+    urls: string,
+    trasnsfer_size: string,
+    potential_savings: string,
+    actions: string,
+}
+
 type AuditTypes = "attention_required" | "opportunity"| "diagnostics" | "passed_audits"
 
 interface Audit {
     name: string,
     icon: 'pass' | 'fail' | 'average',
-    files: [],
+    files: Files[],
     settings: AuditSettings[],
     tags: Array<AuditTypes>,
 }

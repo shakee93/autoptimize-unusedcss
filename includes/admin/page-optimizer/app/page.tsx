@@ -14,16 +14,39 @@ export default function Home() {
     const [url, setUrl] = useState("https://rapidload.io/home");
 
     const tableData = [
-        { id: 1, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css", trasnsfer_size: '136.4 KiB', potential_savings: '134 KiB', actions: '' },
-        { id: 2, file_type: "CSS", urls: "https://rapidload.io/", trasnsfer_size: '100 KiB', potential_savings: '136.4 KiB', actions: '' },
-        { id: 3, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css", trasnsfer_size: '200.6 KiB', potential_savings: '300.7 KiB', actions: '' },
+
     ];
 
     const audits: Audit[] = [
         {
             name: "Eliminate render-blocking resources",
             icon: "pass",
-            files: [],
+            files: [
+                {
+                    id: 1,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '136.4 KiB',
+                    potential_savings: '134 KiB',
+                    actions: '',
+                },
+                {
+                    id: 2,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/",
+                    trasnsfer_size: '100 KiB',
+                    potential_savings: '136.4 KiB',
+                    actions: '',
+                },
+                {
+                    id: 3,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '200.6 KiB',
+                    potential_savings: '300.7 KiB',
+                    actions: '',
+                },
+            ],
             settings: [
                 {
                     category: "css",
@@ -124,7 +147,7 @@ export default function Home() {
                         </Card>
                     </div>
                     <div className="audits pt-4 flex">
-                        <Audits activeTab={activeTab} audits={audits} tableData={tableData}/>
+                        <Audits activeTab={activeTab} audits={audits} tableData={audits[0].files}/>
                     </div>
                 </article>
             </section>

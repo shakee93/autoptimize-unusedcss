@@ -3,14 +3,19 @@ import {InformationCircleIcon, PlusCircleIcon, XCircleIcon} from "@heroicons/rea
 import {useState} from "react";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 
+interface AuditProps {
+    audit?: Audit;
+    priority?: boolean;
+    tableData?: any[];
+}
 
-const Audit = ({audit, priority = true}: { audit?: Audit, priority?: boolean }) => {
+const Audit = ({audit, priority = true, tableData }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
-    const tableData = [
-        { id: 1, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css" , trasnsfer_size: '136.4 KiB', potential_savings: '134 KiB' , actions: ''},
-        { id: 2, file_type: "CSS", urls: "https://rapidload.io/" , trasnsfer_size: '100 KiB', potential_savings: '136.4 KiB' , actions: ''},
-        { id: 3, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css", trasnsfer_size: '200.6 KiB' , potential_savings: '300.7 KiB' , actions: ''},
-    ];
+    // const tableData = [
+    //     { id: 1, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css" , trasnsfer_size: '136.4 KiB', potential_savings: '134 KiB' , actions: ''},
+    //     { id: 2, file_type: "CSS", urls: "https://rapidload.io/" , trasnsfer_size: '100 KiB', potential_savings: '136.4 KiB' , actions: ''},
+    //     { id: 3, file_type: "CSS", urls: "https://rapidload.io/..../autoptimize.css", trasnsfer_size: '200.6 KiB' , potential_savings: '300.7 KiB' , actions: ''},
+    // ];
 
     if (!audit?.name) {
         return;
@@ -63,22 +68,34 @@ const Audit = ({audit, priority = true}: { audit?: Audit, priority?: boolean }) 
                             </th>
                         </tr>
                         </thead>
-                        <tbody className={'divide-y divide-gray-200 dark:divide-gray-700'}>
-                        {tableData.map((row) => (
-                            <tr key={row.id}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{row.file_type}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{row.urls}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{row.trasnsfer_size}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{row.potential_savings}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{row.actions}
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
+                            <tbody className={'divide-y divide-gray-200 dark:divide-gray-700'}>
+                            {tableData?.map((data, index) => (
+                                <tr key={index}>
+                                    <td className='px-6 py-4 whitespace-nowrap'>
+                                        <div className='text-sm text-gray-900 dark:text-white'>{data.file_type}</div>
+                                    </td>
+                                    <td className='px-6 py-4 whitespace-nowrap'>
+                                        <div className='text-sm text-gray-900 dark:text-white'>{data.urls}</div>
+                                    </td>
+                                    <td className='px-6 py-4 whitespace-nowrap'>
+                                        <div className='text-sm text-gray-900 dark:text-white'>{data.trasnsfer_size}</div>
+                                    </td>
+                                    <td className='px-6 py-4 whitespace-nowrap'>
+                                        <div className='text-sm text-gray-900 dark:text-white'>{data.potential_savings}</div>
+                                    </td>
+                                    <td className='px-6 py-4 whitespace-nowrap'>
+                                        <div className='flex items-center space-x-2'>
+                                            <button className='text-zinc-900'>
+                                                <ArrowLeftOnRectangleIcon className='w-6 h-6' />
+                                            </button>
+                                            <button className='text-zinc-900'>
+                                                <ArrowRightOnRectangleIcon className='w-6 h-6' />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
                     </table>
                         </div>
                     </div>
