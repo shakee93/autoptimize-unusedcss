@@ -24,23 +24,25 @@ class RapidLoad_Optimizer
             if(method_exists( 'RapidLoad_Optimizer','add_actions_' . str_replace("-", "_", $metric))){
                 add_filter('page-optimizer/actions/opportunity/'. $metric , [$this, 'add_actions_' . str_replace("-", "_", $metric)]);
             }
-            if(method_exists( 'RapidLoad_Optimizer','add_actions_' . str_replace("-", "_", $metric))){
-                add_action('wp_ajax_server_response_time', [$this, 'handle_action_' . str_replace("-", "_", $metric)]);
-            }
         }
+
+        add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_enable_cache']);
     }
 
     public function fetch_page_speed(){
 
         $api = new RapidLoad_Api();
 
+        $size = isset($_REQUEST['size']) && $_REQUEST['size'] == 'mobile';
+
         $result = $api->post('page-speed', [
-            'url' => 'https://www.kathrein-ds.com/'
+            'url' => 'https://www.kathrein-ds.com/',
+            'mobile' => $size
         ]);
 
         $opportunities = [];
 
-        foreach ($result->desktop->Opportunities as $key => $opportunity){
+        foreach ($result->Opportunities as $key => $opportunity){
             $opp = apply_filters('page-optimizer/actions/opportunity/' . $opportunity->id, $opportunity);
             array_push($opportunities, $opp);
         }
@@ -58,15 +60,20 @@ class RapidLoad_Optimizer
 
         $opp->{'actions'} = [
             (object)[
-                'ajax_action' => 'server_response_time'
+                'ajax_action' => 'optimizer_enable_cache',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_param' => 'status'
             ]
         ];
 
         return $opp;
     }
 
-    public function handle_action_server_response_time(){
+    public function optimizer_enable_cache(){
 
-        wp_send_json_success('done');
+        $status = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : "";
+
+        RapidLoad_Cache::setup_cache($status);
     }
 }
