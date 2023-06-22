@@ -16,7 +16,11 @@ class RapidLoad_Optimizer
         'largest-contentful-paint-element'
     ];
 
+    static $options;
+
     public function __construct(){
+
+        self::$options = RapidLoad_Base::fetch_options();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
 
@@ -27,6 +31,7 @@ class RapidLoad_Optimizer
         }
 
         add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_enable_cache']);
+        add_action('wp_ajax_optimizer_serve_next_gen_images', [$this,'optimizer_serve_next_gen_images']);
     }
 
     public function fetch_page_speed(){
@@ -63,7 +68,7 @@ class RapidLoad_Optimizer
                 'ajax_action' => 'optimizer_enable_cache',
                 'control_type' => 'checkbox',
                 'control_values' => ['on', 'off'],
-                'control_param' => 'status'
+                'control_payload' => 'status'
             ]
         ];
 
@@ -75,6 +80,42 @@ class RapidLoad_Optimizer
         $status = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : "";
 
         RapidLoad_Cache::setup_cache($status);
+
+    }
+
+    public function add_actions_modern_image_formats($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+        return $opp;
+    }
+
+    public function optimizer_serve_next_gen_images(){
+
+        self::$options['uucss_enable_image_delivery'] = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+        $api = new RapidLoad_Api();
+        if(self::$options['uucss_enable_image_delivery'] == "1"){
+            $api->post('spai-associate-host',[
+                'url' => trailingslashit(site_url()),
+                'action' => 'add-domain'
+            ]);
+            self::$options['uucss_support_next_gen_formats'] = "1";
+        }else{
+            $api->post('spai-associate-host',[
+                'url' => trailingslashit(site_url()),
+                'action' => 'revoke-domain'
+            ]);
+            self::$options['uucss_support_next_gen_formats'] = null;
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
     }
 }
