@@ -100,22 +100,31 @@ class RapidLoad_Optimizer
     public function optimizer_serve_next_gen_images(){
 
         self::$options['uucss_enable_image_delivery'] = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-        $api = new RapidLoad_Api();
         if(self::$options['uucss_enable_image_delivery'] == "1"){
+            $this->associate_domain(false);
+            self::$options['uucss_support_next_gen_formats'] = "1";
+        }else{
+            $this->associate_domain(true);
+            self::$options['uucss_support_next_gen_formats'] = null;
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+    }
+
+    public function associate_domain($revoke){
+        $api = new RapidLoad_Api();
+        if(!$revoke){
             $api->post('spai-associate-host',[
                 'url' => trailingslashit(site_url()),
                 'action' => 'add-domain'
             ]);
-            self::$options['uucss_support_next_gen_formats'] = "1";
         }else{
             $api->post('spai-associate-host',[
                 'url' => trailingslashit(site_url()),
                 'action' => 'revoke-domain'
             ]);
-            self::$options['uucss_support_next_gen_formats'] = null;
         }
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
     }
 }
