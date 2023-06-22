@@ -75,5 +75,6 @@ class RapidLoad_Optimizer
         $status = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : "";
 
         RapidLoad_Cache::setup_cache($status);
+
     }
 }
