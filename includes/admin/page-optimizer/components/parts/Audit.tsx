@@ -25,18 +25,23 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 <div className='flex gap-2'>
                     {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-200'/>
                 </div>
-                <div>
-                    <button onClick={() => {
+
+                <div className={'flex'}>
+                    <div className={'border rounded-xl items-center flex pl-4 pr-4 mr-6'}>Generate critical CSS</div>
+                    <div> <button onClick={() => {
                         setToggleFiles(prev => !prev)
                     }}
-                            className='cursor-pointer flex items-center gap-2 border pl-4 pr-2 py-2 text-sm rounded-xl bg-zinc-50'>
+                                  className='cursor-pointer flex items-center gap-2 border pl-4 pr-2 py-2 text-sm rounded-xl bg-zinc-50'>
                         {(toggleFiles) ?
                             <span className='contents'> Close <XCircleIcon className='w-6 h-6 text-zinc-900'/></span> :
                             <span className='contents'>View Files <PlusCircleIcon
                                 className='w-6 h-6 text-zinc-900'/> </span>}
                     </button>
+                    </div>
+
 
                 </div>
+
             </Card>
             <div>
                 {toggleFiles && (
