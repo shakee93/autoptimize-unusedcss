@@ -80,7 +80,7 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.uucss_generate_blurry_place_holder = !onData.uucss_generate_blurry_place_holder" :class="uucss_generate_blurry_place_holder? 'bg-purple':''"
+                    <div @click="onData.uucss_generate_blurry_place_holder = !onData.uucss_generate_blurry_place_holder" :class="onData.uucss_generate_blurry_place_holder? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
                       <svg v-if="onData.uucss_generate_blurry_place_holder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
