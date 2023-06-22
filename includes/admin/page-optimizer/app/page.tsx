@@ -13,11 +13,82 @@ export default function Home() {
     const [togglePerformance, setTogglePerformance] = useState(false);
     const [url, setUrl] = useState("https://rapidload.io/home");
 
+
     const audits: Audit[] = [
         {
             name: "Eliminate render-blocking resources",
             icon: "pass",
-            files: [],
+            files: [
+                {
+                    id: 1,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '136.4 KiB',
+                    potential_savings: '134 KiB',
+                    actions: '',
+                },
+                {
+                    id: 2,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/",
+                    trasnsfer_size: '100 KiB',
+                    potential_savings: '136.4 KiB',
+                    actions: '',
+                },
+                {
+                    id: 3,
+                    file_type: "CSS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '200.6 KiB',
+                    potential_savings: '300.7 KiB',
+                    actions: '',
+                },
+            ],
+            settings: [
+                {
+                    category: "css",
+                    name: "Remove unused CSS",
+                    ajax_action: "rapidload/settings/css/uucss",
+                    action: [
+                        {
+                            type: "checkbox",
+                        },
+                    ],
+                    settings: true,
+                    status: "progress",
+                },
+            ],
+            tags: ["attention_required", "opportunity", "diagnostics"],
+        },
+        {
+            name: "Reduce unused CSS",
+            icon: "pass",
+            files: [
+                {
+                    id: 1,
+                    file_type: "JS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '136.4 KiB',
+                    potential_savings: '134 KiB',
+                    actions: '',
+                },
+                {
+                    id: 2,
+                    file_type: "JS",
+                    urls: "https://rapidload.io/",
+                    trasnsfer_size: '100 KiB',
+                    potential_savings: '136.4 KiB',
+                    actions: '',
+                },
+                {
+                    id: 3,
+                    file_type: "JS",
+                    urls: "https://rapidload.io/..../autoptimize.css",
+                    trasnsfer_size: '200.6 KiB',
+                    potential_savings: '300.7 KiB',
+                    actions: '',
+                },
+            ],
             settings: [
                 {
                     category: "css",
