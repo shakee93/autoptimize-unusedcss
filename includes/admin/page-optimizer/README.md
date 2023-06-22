@@ -1,34 +1,105 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align='center'>
+  <img src='https://i.imgur.com/KVmyXyo.png' alt='Vital - Vite Starter Template' width='600'/>
+</p>
 
-## Getting Started
+<p align='center'>
+Mocking up web app with <b>Vital</b><sup><em>(speed)</em></sup><br>
+</p>
 
-First, run the development server:
+<br>
+
+<p align='center'>
+<a href="https://vital.josepvidal.dev">Live Demo</a>
+</p>
+
+<br>
+
+## Features
+
+- ⚡️ [React 18](https://beta.reactjs.org/)
+- 🦾 TypeScript, of course
+- 🫀 [Jest](https://jestjs.io/) - unitary testing made easy
+- 🎨 [Tailwind with JIT](https://tailwindcss.com/) - next generation utility-first CSS
+- 🪢 [CSS Modules](https://github.com/css-modules/css-modules)
+- 👑 [Atomic Design organization](https://bradfrost.com/blog/post/atomic-web-design/)
+- 🗂 [Absolute imports](https://github.com/vitejs/vite/issues/88#issuecomment-762415200)
+- 😃 [Hero icons](https://heroicons.com/)
+- ☁️ Deploy on Netlify, zero-config
+
+### Coding Style
+
+- [ESLint](https://eslint.org/) - configured for React/Hooks & TypeScript
+- [Prettier](https://prettier.io/)
+
+### Dev tools
+
+- [TypeScript](https://www.typescriptlang.org/)
+- [Commit lint](https://github.com/conventional-changelog/commitlint) - helps your team adhering to a commit convention
+- [Netlify](https://www.netlify.com/) - zero-config deployment
+
+## Try it now!
+
+### GitHub Template
+
+[Create a repo from this template on GitHub](https://github.com/jvidalv/vital/generate).
+
+### Clone to local
+
+If you prefer to do it manually with the cleaner git history
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npx degit jvidalv/vital my-vital-app
+cd my-vital-app
+yarn # If you don't have yarn installed, run: npm install -g yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Checklist
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+When you use this template, try follow the checklist to update your info properly
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- [ ] Rename `name` and `author` fields in `package.json`
+- [ ] Change the author name in `LICENSE`
+- [ ] Change the title in `index.html`
+- [ ] Change the favicon in `public`
+- [ ] Modify the manifest in `public`
+- [ ] Clean up the README's
 
-## Learn More
+And, enjoy :)
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Development
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Just run and visit http://localhost:3000
 
-## Deploy on Vercel
+```bash
+yarn start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To build the App, run
+
+```bash
+yarn build
+```
+
+And you will see the generated file in `dist` that ready to be served.
+
+### Deploy on Netlify
+
+Go to [Netlify](https://app.netlify.com/start) and select your repository, `OK` along the way, and your App will be live in a minute.
+
+### Issues
+
+#### Husky
+
+If pre-commit hooks are not working be sure that you have installed husky: `husky install`.
+
+By default this command should be triggered after yarn/npm deps are installed.
+
+## Why
+
+I have created several React apps recently. Setting the configs up is kinda the bottleneck for me to make the ideas simply come true within a very short time.
+
+So I made this starter template for myself to create apps more easily, along with some good practices that I have learned from making those apps. Feel free to tweak it or even maintains your own forks.
