@@ -1,4 +1,4 @@
-import { ReactNode, SVGProps } from 'react';
+
 
 interface Tab {
     key: AuditTypes;
@@ -39,6 +39,3 @@ interface Audit {
     tags: Array<AuditTypes>,
 }
 
-interface Settings {
-    uucss_img: ReactNode | SVGProps<SVGSVGElement>;
-}

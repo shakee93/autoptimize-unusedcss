@@ -2,6 +2,15 @@ import Card from "@/components/parts/card";
 import {InformationCircleIcon, PlusCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {useState} from "react";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
+import {
+    CSSDelivery,
+    JavascriptDelivery,
+    ImageDeliverySVG,
+    FontDelivery,
+    CloudDelivery,
+    PageCache,
+    Test
+} from '../parts/icon-svg.tsx';
 
 interface AuditProps {
     audit?: Audit;
@@ -27,7 +36,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
 
                 <div className={'flex'}>
-                    <div className={'border rounded-xl items-center flex pl-4 pr-4 mr-6'}>Generate critical CSS</div>
+                    <div className={'border rounded-xl items-center flex pl-4 pr-4 mr-6'}><Test />Generate critical CSS</div>
                     <div> <button onClick={() => {
                         setToggleFiles(prev => !prev)
                     }}

@@ -12,12 +12,33 @@ export default function Home() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
     const [togglePerformance, setTogglePerformance] = useState(false);
     const [url, setUrl] = useState("https://rapidload.io/home");
-    const settings: Settings = {
-        uucss_img: (
-            <svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="49" height="49" rx="15" fill="#7F54B3"></rect>
-            </svg>
-        ),
+    const [response, setResponse] = useState(null);
+
+    const fetchData = async () => {
+        try {
+            const requestData = {
+                url: 'https://rapidload.io/',
+
+            };
+
+            const response = await fetch('fetch_page_speed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error: ' + response.status);
+            }
+
+            const responseData = await response.json();
+            setResponse(responseData);
+            console.log(responseData); // Handle the response data here
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const audits: Audit[] = [
@@ -176,6 +197,12 @@ export default function Home() {
                     </div>
                     <div className="audits pt-4 flex">
                         <Audits activeTab={activeTab} audits={audits}/>
+                        {/*<div>*/}
+                        {/*    <button onClick={fetchData}>Fetch Data</button>*/}
+                        {/*    {response && (*/}
+                        {/*        <pre>{JSON.stringify(response, null, 2)}</pre>*/}
+                        {/*    )}*/}
+                        {/*</div>*/}
                     </div>
                 </article>
             </section>
@@ -185,4 +212,9 @@ export default function Home() {
             </footer>
         </main>
     );
+}
+
+
+export async function getStaticProps() {
+
 }
