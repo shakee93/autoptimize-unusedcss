@@ -1,14 +1,11 @@
 {
   "cssImports": {
-    "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/app/layout.tsx": [
-      "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/node_modules/next/font/google/target.css?{\"path\":\"app/layout.tsx\",\"import\":\"Lexend\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"lexend\"}",
-      "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/app/globals.css"
+    "C:\\Users\\Shakeel\\Local Sites\\rapidload\\app\\public\\wp-content\\plugins\\autoptimize-unusedcss\\includes\\admin\\page-optimizer\\app\\layout.tsx": [
+      "C:\\Users\\Shakeel\\Local Sites\\rapidload\\app\\public\\wp-content\\plugins\\autoptimize-unusedcss\\includes\\admin\\page-optimizer\\node_modules\\next\\font\\google\\target.css?{\"path\":\"app\\\\layout.tsx\",\"import\":\"Lexend\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"lexend\"}",
+      "C:\\Users\\Shakeel\\Local Sites\\rapidload\\app\\public\\wp-content\\plugins\\autoptimize-unusedcss\\includes\\admin\\page-optimizer\\app\\globals.css"
     ]
   },
   "cssModules": {
-    "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/app/page": [
-      "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/app/globals.css",
-      "/Users/azeez/Local Sites/devrapidlaodlcoal/app/public/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/node_modules/next/font/google/target.css?{\"path\":\"app/layout.tsx\",\"import\":\"Lexend\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"lexend\"}"
-    ]
+    "C:\\Users\\Shakeel\\Local Sites\\rapidload\\app\\public\\wp-content\\plugins\\autoptimize-unusedcss\\includes\\admin\\page-optimizer\\app\\page": []
   }
 }

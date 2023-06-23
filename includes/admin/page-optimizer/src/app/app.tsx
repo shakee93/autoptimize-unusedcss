@@ -11,10 +11,34 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
   const [togglePerformance, setTogglePerformance] = useState(false);
   const [url, setUrl] = useState("https://rapidload.io/home");
+  const [response, setResponse] = useState(null);
 
-  const tableData = [
+  const fetchData = async () => {
+    try {
+      const requestData = {
+        url: 'https://rapidload.io/',
 
-  ];
+      };
+
+      const response = await fetch('fetch_page_speed', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error: ' + response.status);
+      }
+
+      const responseData = await response.json();
+      setResponse(responseData);
+      console.log(responseData); // Handle the response data here
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const audits: Audit[] = [
     {
@@ -65,7 +89,32 @@ export default function Home() {
     {
       name: "Reduce unused CSS",
       icon: "pass",
-      files: [],
+      files: [
+        {
+          id: 1,
+          file_type: "JS",
+          urls: "https://rapidload.io/..../autoptimize.css",
+          trasnsfer_size: '136.4 KiB',
+          potential_savings: '134 KiB',
+          actions: '',
+        },
+        {
+          id: 2,
+          file_type: "JS",
+          urls: "https://rapidload.io/",
+          trasnsfer_size: '100 KiB',
+          potential_savings: '136.4 KiB',
+          actions: '',
+        },
+        {
+          id: 3,
+          file_type: "JS",
+          urls: "https://rapidload.io/..../autoptimize.css",
+          trasnsfer_size: '200.6 KiB',
+          potential_savings: '300.7 KiB',
+          actions: '',
+        },
+      ],
       settings: [
         {
           category: "css",
@@ -146,7 +195,7 @@ export default function Home() {
               </Card>
             </div>
             <div className="audits pt-4 flex">
-              <Audits activeTab={activeTab} audits={audits} tableData={audits[0].files}/>
+              <Audits activeTab={activeTab} audits={audits}/>
             </div>
           </article>
         </section>
