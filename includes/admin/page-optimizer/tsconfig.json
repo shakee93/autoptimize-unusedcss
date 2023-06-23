@@ -3,10 +3,14 @@
     "baseUrl": ".",
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "skipLibCheck": false,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -15,12 +19,31 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "paths": {
-      "app/*": ["src/app/*"],
-      "components/*": ["src/components/*"],
-      "hooks/*": ["src/hooks/*"]
-    }
+      "app/*": [
+        "src/app/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "hooks/*": [
+        "src/hooks/*"
+      ]
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["./src", "types/**.ts"]
+  "include": [
+    "./src",
+    "types/**.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
