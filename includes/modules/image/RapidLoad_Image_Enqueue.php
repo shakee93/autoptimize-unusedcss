@@ -77,6 +77,7 @@ class RapidLoad_Image_Enqueue
                 //$this->get_placeholder($img);
 
                 $img->$data_src = $url;
+                unset($img->{'srcset'});
 
             }
 
@@ -292,6 +293,12 @@ class RapidLoad_Image_Enqueue
     }
 
     public function extractUrl($url){
+
+        $parsedUrl = parse_url($url);
+
+        if (!isset($parsedUrl['scheme'])) {
+            $url = "https:" . $url;
+        }
 
         if(!$this->isAbsolute($url)){
             $url = untrailingslashit(site_url()) . $url;
