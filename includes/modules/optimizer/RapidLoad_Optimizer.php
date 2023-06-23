@@ -32,6 +32,12 @@ class RapidLoad_Optimizer
 
         add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_enable_cache']);
         add_action('wp_ajax_optimizer_serve_next_gen_images', [$this,'optimizer_serve_next_gen_images']);
+        add_action('wp_ajax_optimizer_enable_font', [$this,'optimizer_enable_font']);
+        add_action('wp_ajax_optimizer_set_image_width_and_height', [$this,'optimizer_set_image_width_and_height']);
+        add_action('wp_ajax_optimizer_set_unminified_css', [$this,'optimizer_set_unminified_css']);
+        add_action('wp_ajax_optimizer_set_unminified_javascript', [$this,'optimizer_set_unminified_javascript']);
+        add_action('wp_ajax_optimizer_set_unused_css_rules', [$this,'optimizer_set_unused_css_rules']);
+        add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
     }
 
     public function fetch_page_speed(){
@@ -77,9 +83,15 @@ class RapidLoad_Optimizer
 
     public function optimizer_enable_cache(){
 
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
         $status = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : "";
 
         RapidLoad_Cache::setup_cache($status);
+
+        wp_send_json_success(true);
 
     }
 
@@ -91,6 +103,12 @@ class RapidLoad_Optimizer
                 'control_type' => 'checkbox',
                 'control_values' => ['on', 'off'],
                 'control_payload' => 'status'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'options',
+                'control_values' => ['lossy', 'glossy', 'lossless'],
+                'control_payload' => 'compression_level'
             ]
         ];
 
@@ -99,17 +117,37 @@ class RapidLoad_Optimizer
 
     public function optimizer_serve_next_gen_images(){
 
-        self::$options['uucss_enable_image_delivery'] = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-        if(self::$options['uucss_enable_image_delivery'] == "1"){
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_success('param missing');
+        }
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        if(!isset($_REQUEST['compression_level'])){
+            wp_send_json_success('param missing');
+        }
+
+        $job = new RapidLoad_Job([
+           'url' => $_REQUEST['url']
+        ]);
+
+        if(!$job->exist()){
+            $job->save(true);
+        }
+
+        self::$options['uucss_support_next_gen_formats'] = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+        self::$options['uucss_image_optimize_level'] = isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_support_next_gen_formats'] == "1"){
             $this->associate_domain(false);
-            self::$options['uucss_support_next_gen_formats'] = "1";
-        }else{
-            $this->associate_domain(true);
-            self::$options['uucss_support_next_gen_formats'] = null;
+            self::$options['uucss_enable_image_delivery'] = "1";
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
+        wp_send_json_success(true);
     }
 
     public function associate_domain($revoke){
@@ -127,4 +165,232 @@ class RapidLoad_Optimizer
         }
 
     }
+
+    public function add_actions_uses_optimized_images($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'options',
+                'control_values' => ['lossy', 'glossy', 'lossless'],
+                'control_payload' => 'compression_level'
+            ]
+        ];
+
+        return $opp;
+    }
+
+    public function add_actions_uses_responsive_images($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_serve_next_gen_images',
+                'control_type' => 'options',
+                'control_values' => ['lossy', 'glossy', 'lossless'],
+                'control_payload' => 'compression_level'
+            ]
+        ];
+
+        return $opp;
+    }
+
+    public function add_actions_enable_font($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_enable_font',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_enable_font(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_self_host_google_fonts'] == "1"){
+            self::$options['uucss_enable_font_optimization'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+    }
+
+    public function add_actions_unsized_images($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_set_image_width_and_height',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_set_image_width_and_height(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_set_width_and_height'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_set_width_and_height'] == "1"){
+            self::$options['uucss_enable_image_delivery'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+    }
+
+    public function add_actions_unminified_css($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_set_unminified_css',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_set_unminified_css(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_minify'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_minify'] == "1"){
+            self::$options['uucss_enable_css'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+    public function add_actions_unminified_javascript($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_set_unminified_javascript',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_set_unminified_javascript(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['minify_js'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['minify_js'] == "1"){
+            self::$options['uucss_enable_javascript'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+    public function add_actions_unused_css_rules($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_set_unused_css_rules',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_set_unused_css_rules(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_enable_uucss'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_enable_uucss'] == "1"){
+            self::$options['uucss_enable_css'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+    public function add_actions_render_blocking_resources($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_render_blocking_resources',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
+
+    }
+
+    public function optimizer_render_blocking_resources(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_enable_cpcss'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+
+        if(self::$options['uucss_enable_cpcss'] == "1"){
+            self::$options['uucss_enable_css'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+
+
+
 }
