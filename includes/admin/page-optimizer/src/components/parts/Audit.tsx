@@ -1,6 +1,6 @@
 import Card from "components/parts/card";
-import {InformationCircleIcon, PlusCircleIcon, XCircleIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
-import {useState} from "react";
+import {InformationCircleIcon, PlusCircleIcon, XCircleIcon, Cog8ToothIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
+import {useState, useRef, useEffect} from "react";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 import {
     CSSDelivery,
@@ -18,6 +18,23 @@ interface AuditProps {
 
 const Audit = ({audit, priority = true }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
+    const divHeightRef = useRef<HTMLDivElement>(null);
+    const [divHeight, setDivHeight] = useState<number | null>(45);
+
+    useEffect(() => {
+        console.log('Div height:', divHeight);
+    }, [divHeight]);
+
+    const viewFilesButtonClick = () => {
+        const timer = setTimeout(() => {
+        if (divHeightRef.current) {
+            const getHeight = divHeightRef.current.offsetHeight;
+            setDivHeight(getHeight + 45);
+        }
+        }, 10);
+        return () => clearTimeout(timer);
+    };
+
 
     if (!audit?.name) {
         return <></>;
@@ -29,6 +46,9 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 <div className='absolute left-5 text-center mt-2'>
                     <span
                         className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full ${priority ? 'bg-zinc-200' : 'bg-white'}`}></span>
+
+                    <span style={{height: `${divHeight}px`}}
+                        className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight -ml-[13px] mt-[28px] absolute`}></span>
                 </div>
                 <div className='flex gap-2'>
                     {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-highlight'/>
@@ -44,12 +64,13 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         </div>
                     <div> <button onClick={() => {
                         setToggleFiles(prev => !prev)
+                        viewFilesButtonClick();
                     }}
-                                  className='cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl bg-zinc-50'>
-                        {(toggleFiles) ?
-                            <span className='contents'> Close <XCircleIcon className='w-6 h-6 text-zinc-900'/></span> :
-                            <span className='contents'>View Files <PlusCircleIcon
-                                className='w-6 h-6 text-zinc-900'/> </span>}
+                                  className={`hover:bg-gray-button cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl  ${toggleFiles ? 'bg-gray-button': 'bg-purple-button'}`}>
+                        View Files {(toggleFiles) ?
+                            <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
+                           <PlusCircleIcon
+                                className='w-6 h-6 text-zinc-900'/>}
                     </button>
                     </div>
 
@@ -57,7 +78,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
 
             </Card>
-            <div>
+            <div ref={divHeightRef}>
                 {toggleFiles && (
                     <div className={`py-2 px-4 w-full dark:bg-zinc-700 bg-white border-gray-border border w-full rounded-2xl ${toggleFiles ? 'rounded-t-none' : ''}`}>
                         <div className="border rounded-2xl overflow-hidden border-gray-border mt-3 mb-3">
