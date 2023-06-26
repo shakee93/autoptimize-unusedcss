@@ -562,10 +562,10 @@ trait RapidLoad_Utils {
                 }
 
                 if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped glob matched : ' . $url );
                     return false;
                 }else if ( self::str_contains( urldecode($url), $pattern ) ) {
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped str contains: ' . $url );
                     return false;
                 }
 
@@ -575,12 +575,12 @@ trait RapidLoad_Utils {
         $url_parts = parse_url( $url );
 
         if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped  query contains : ' . $url );
             return false;
         }
 
         if(!apply_filters('uucss/url/exclude', $url)){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped  url exclude : ' . $url );
             return false;
         }
 
