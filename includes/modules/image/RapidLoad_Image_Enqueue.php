@@ -83,6 +83,37 @@ class RapidLoad_Image_Enqueue
 
         }
 
+        $images = $this->dom->find( 'img[data-src]' );
+
+        foreach ( $images as $img ) {
+
+            if($this->str_contains($img->{'data-src'}, RapidLoad_Image::$image_indpoint)){
+                continue;
+            }
+
+            if($this->is_file_excluded($img->{'data-src'})){
+                continue;
+            }
+
+            $url = $this->extractUrl($img->{'data-src'});
+
+            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+            if (in_array($urlExt, $this->imgExt)) {
+
+                $data_src = 'data-original-src';
+                $img->{'data-src'} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                    'optimize_level' => 'lqip'
+                ]);
+                //$this->get_placeholder($img);
+
+                $img->$data_src = $url;
+                unset($img->{'srcset'});
+
+            }
+
+        }
+
         $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
 
         foreach ($data_attributes as $data_attribute){
@@ -270,6 +301,33 @@ class RapidLoad_Image_Enqueue
                 }
 
                 $url = $this->extractUrl($img->src);
+
+                $file_path = self::get_file_path_from_url($url);
+
+                $dimension = self::get_width_height($file_path);
+
+                if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                    if (!isset($img->width)) {
+                        $img->width = $dimension['width'];
+                    }
+
+                    if (!isset($img->height) || $img->height == "auto") {
+                        $img->height = $dimension['height'];
+                    }
+
+                }
+            }
+
+            $images = $this->dom->find( 'img[data-src]' );
+
+            foreach ( $images as $img ) {
+
+                if($this->is_file_excluded($img->{'data-src'})){
+                    continue;
+                }
+
+                $url = $this->extractUrl($img->{'data-src'});
 
                 $file_path = self::get_file_path_from_url($url);
 
