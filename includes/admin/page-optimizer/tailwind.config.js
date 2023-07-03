@@ -68,6 +68,9 @@ module.exports = {
       'tips-dark-green': '#1F9A53',
       'tips-dark-green-font': '#37793E',
       'performance-green-bg': '#09B42F',
+      'red': '#CC0001',
+      'green': '#008800',
+      'gray-light-font': '#959595',
     },
 
   },
