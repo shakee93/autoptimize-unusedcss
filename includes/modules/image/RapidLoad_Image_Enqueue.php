@@ -97,6 +97,36 @@ class RapidLoad_Image_Enqueue
             }
         }
 
+        $videos = $this->dom->find( 'video[poster]' );
+
+        foreach ( $videos as $video ) {
+
+            if($this->str_contains($video->{'poster'}, RapidLoad_Image::$image_indpoint)){
+                continue;
+            }
+
+            if($this->is_file_excluded($video->{'poster'})){
+                continue;
+            }
+
+            $url = $this->extractUrl($video->{'poster'});
+
+            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+            if (in_array($urlExt, $this->imgExt)) {
+
+                $data_src = 'data-original-poster';
+                $video->{'poster'} = RapidLoad_Image::get_replaced_url($url, null, $video->width, $video->height, [
+                    'optimize_level' => 'lqip'
+                ]);
+                //$this->get_placeholder($img);
+
+                $video->$data_src = $url;
+
+            }
+
+        }
+
         $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
 
         foreach ($data_attributes as $data_attribute){
