@@ -667,4 +667,25 @@ trait RapidLoad_Utils {
         return apply_filters('rapidload/root-url', content_url($path));
     }
 
+    public static function get_relative_url($fullUrl) {
+        $parsedUrl = parse_url($fullUrl);
+
+        if ( strpos( $fullUrl, site_url() ) === false ) {
+            return $fullUrl;
+        }
+
+        // Get the path of the URL
+        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+
+        // Get the query string of the URL
+        $queryString = isset($parsedUrl['query']) ? $parsedUrl['query'] : '';
+
+        // Combine the path and query string to get the relative URL
+        $relativeUrl = $path;
+        if ($queryString !== '') {
+            $relativeUrl .= '?' . $queryString;
+        }
+
+        return $relativeUrl;
+    }
 }
