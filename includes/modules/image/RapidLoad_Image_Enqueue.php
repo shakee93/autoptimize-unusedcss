@@ -52,66 +52,49 @@ class RapidLoad_Image_Enqueue
 
         // replacing urls
 
-        $images = $this->dom->find( 'img[src]' );
+        $attributes = [
+            [
+                'tag' => 'img',
+                'attr' => 'src'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-src'
+            ]
+        ];
 
-        foreach ( $images as $img ) {
+        foreach ($attributes as $attribute){
 
-            if($this->str_contains($img->src, RapidLoad_Image::$image_indpoint)){
-                continue;
-            }
+            $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
 
-            if($this->is_file_excluded($img->src)){
-                continue;
-            }
+            foreach ( $images as $img ) {
 
-            $url = $this->extractUrl($img->src);
+                if($this->str_contains($img->{$attribute['attr']}, RapidLoad_Image::$image_indpoint)){
+                    continue;
+                }
 
-            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                if($this->is_file_excluded($img->{$attribute['attr']})){
+                    continue;
+                }
 
-            if (in_array($urlExt, $this->imgExt)) {
+                $url = $this->extractUrl($img->{$attribute['attr']});
 
-                $data_src = 'data-original-src';
-                $img->src = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
-                    'optimize_level' => 'lqip'
-                ]);
-                //$this->get_placeholder($img);
+                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
-                $img->$data_src = $url;
-                unset($img->{'srcset'});
+                if (in_array($urlExt, $this->imgExt)) {
 
-            }
+                    $data_src = 'data-original-src';
+                    $img->{$attribute['attr']} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                        'optimize_level' => 'lqip'
+                    ]);
+                    //$this->get_placeholder($img);
 
-        }
+                    $img->$data_src = $url;
+                    unset($img->{'srcset'});
 
-        $images = $this->dom->find( 'img[data-src]' );
-
-        foreach ( $images as $img ) {
-
-            if($this->str_contains($img->{'data-src'}, RapidLoad_Image::$image_indpoint)){
-                continue;
-            }
-
-            if($this->is_file_excluded($img->{'data-src'})){
-                continue;
-            }
-
-            $url = $this->extractUrl($img->{'data-src'});
-
-            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-
-            if (in_array($urlExt, $this->imgExt)) {
-
-                $data_src = 'data-original-src';
-                $img->{'data-src'} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
-                    'optimize_level' => 'lqip'
-                ]);
-                //$this->get_placeholder($img);
-
-                $img->$data_src = $url;
-                unset($img->{'srcset'});
+                }
 
             }
-
         }
 
         $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
@@ -290,60 +273,48 @@ class RapidLoad_Image_Enqueue
 
     public function set_width_and_height(){
 
+        $attributes = [
+            [
+                'tag' => 'img',
+                'attr' => 'src'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-src'
+            ]
+        ];
+
         if(isset($this->options['uucss_set_width_and_height']) && $this->options['uucss_set_width_and_height'] == "1"){
 
-            $images = $this->dom->find( 'img[src]' );
+            foreach ($attributes as $attribute){
 
-            foreach ( $images as $img ) {
+                $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
 
-                if($this->is_file_excluded($img->src)){
-                    continue;
-                }
+                foreach ( $images as $img ) {
 
-                $url = $this->extractUrl($img->src);
-
-                $file_path = self::get_file_path_from_url($url);
-
-                $dimension = self::get_width_height($file_path);
-
-                if ($dimension && isset($dimension['width']) && $dimension['height']) {
-
-                    if (!isset($img->width)) {
-                        $img->width = $dimension['width'];
+                    if($this->is_file_excluded($img->{$attribute['attr']})){
+                        continue;
                     }
 
-                    if (!isset($img->height) || $img->height == "auto") {
-                        $img->height = $dimension['height'];
+                    $url = $this->extractUrl($img->{$attribute['attr']});
+
+                    $file_path = self::get_file_path_from_url($url);
+
+                    $dimension = self::get_width_height($file_path);
+
+                    if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                        if (!isset($img->width)) {
+                            $img->width = $dimension['width'];
+                        }
+
+                        if (!isset($img->height) || $img->height == "auto") {
+                            $img->height = $dimension['height'];
+                        }
+
                     }
-
-                }
-            }
-
-            $images = $this->dom->find( 'img[data-src]' );
-
-            foreach ( $images as $img ) {
-
-                if($this->is_file_excluded($img->{'data-src'})){
-                    continue;
                 }
 
-                $url = $this->extractUrl($img->{'data-src'});
-
-                $file_path = self::get_file_path_from_url($url);
-
-                $dimension = self::get_width_height($file_path);
-
-                if ($dimension && isset($dimension['width']) && $dimension['height']) {
-
-                    if (!isset($img->width)) {
-                        $img->width = $dimension['width'];
-                    }
-
-                    if (!isset($img->height) || $img->height == "auto") {
-                        $img->height = $dimension['height'];
-                    }
-
-                }
             }
 
         }
