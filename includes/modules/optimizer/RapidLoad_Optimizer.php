@@ -436,11 +436,13 @@ class RapidLoad_Optimizer
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_enable_image_delivery'] =  "on";
+        self::$options['uucss_lazy_load_images'] =  $_REQUEST['status'] == "on" ? "1" : null;
+        self::$options['uucss_exclude_above_the_fold_image_count'] =  $_REQUEST['exclude_above_the_fold'];
+        self::$options['uucss_lazy_load_iframes'] =  $_REQUEST['status_iframe_lazyload'] == "on" ? "1" : null;
 
-        if(self::$options['uucss_enable_cpcss'] == "1"){
-            self::$options['uucss_enable_css'] = "1";
-        }
+        self::$options['uucss_enable_image_delivery'] = "1";
+
+        $this->associate_domain(false);
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
