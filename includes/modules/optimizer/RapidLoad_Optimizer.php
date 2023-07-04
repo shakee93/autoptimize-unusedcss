@@ -219,6 +219,7 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
     }
 
     public function optimizer_enable_font(){
@@ -249,6 +250,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_set_image_width_and_height(){
@@ -278,6 +281,8 @@ class RapidLoad_Optimizer
                 'control_payload' => 'status'
             ]
         ];
+
+        return $opp;
 
     }
 
@@ -310,6 +315,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_set_unminified_javascript(){
@@ -340,6 +347,8 @@ class RapidLoad_Optimizer
                 'control_payload' => 'status'
             ]
         ];
+
+        return $opp;
 
     }
 
@@ -372,6 +381,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_render_blocking_resources(){
@@ -392,7 +403,18 @@ class RapidLoad_Optimizer
 
     }
 
+    public function add_action_offscreen_images($opp){
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_render_blocking_resources',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ]
+        ];
 
+        return $opp;
+    }
 
 
 }
