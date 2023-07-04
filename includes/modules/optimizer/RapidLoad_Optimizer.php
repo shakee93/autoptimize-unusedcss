@@ -23,6 +23,7 @@ class RapidLoad_Optimizer
         self::$options = RapidLoad_Base::fetch_options();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
+        add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         foreach (self::$metrics as $metric){
             if(method_exists( 'RapidLoad_Optimizer','add_actions_' . str_replace("-", "_", $metric))){
@@ -45,9 +46,10 @@ class RapidLoad_Optimizer
         $api = new RapidLoad_Api();
 
         $size = isset($_REQUEST['size']) && $_REQUEST['size'] == 'mobile';
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
         $result = $api->post('page-speed', [
-            'url' => 'https://www.kathrein-ds.com/',
+            'url' => $url,
             'mobile' => $size
         ]);
 
