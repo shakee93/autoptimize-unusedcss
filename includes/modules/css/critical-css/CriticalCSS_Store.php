@@ -39,7 +39,8 @@ class CriticalCSS_Store
                     [
                         'url' => $this->job_data->job->url,
                         'service' => true,
-                        'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1"
+                        'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1",
+                        "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
                     ]
                 ) );
 
@@ -69,7 +70,8 @@ class CriticalCSS_Store
                         'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1",
                         'wp_nonce' => wp_create_nonce('uucss_job_hook'),
                         'hook_end_point' => trailingslashit(get_site_url()),
-                        'immediate' => true
+                        'immediate' => true,
+                        "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
                     ]
 
                 ) );

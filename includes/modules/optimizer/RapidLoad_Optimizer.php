@@ -23,6 +23,7 @@ class RapidLoad_Optimizer
         self::$options = RapidLoad_Base::fetch_options();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
+        add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         foreach (self::$metrics as $metric){
             if(method_exists( 'RapidLoad_Optimizer','add_actions_' . str_replace("-", "_", $metric))){
@@ -38,6 +39,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_set_unminified_javascript', [$this,'optimizer_set_unminified_javascript']);
         add_action('wp_ajax_optimizer_set_unused_css_rules', [$this,'optimizer_set_unused_css_rules']);
         add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
+        add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
     }
 
     public function fetch_page_speed(){
@@ -45,9 +47,10 @@ class RapidLoad_Optimizer
         $api = new RapidLoad_Api();
 
         $size = isset($_REQUEST['size']) && $_REQUEST['size'] == 'mobile';
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
         $result = $api->post('page-speed', [
-            'url' => 'https://www.kathrein-ds.com/',
+            'url' => $url,
             'mobile' => $size
         ]);
 
@@ -217,6 +220,7 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
     }
 
     public function optimizer_enable_font(){
@@ -247,6 +251,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_set_image_width_and_height(){
@@ -276,6 +282,8 @@ class RapidLoad_Optimizer
                 'control_payload' => 'status'
             ]
         ];
+
+        return $opp;
 
     }
 
@@ -308,6 +316,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_set_unminified_javascript(){
@@ -338,6 +348,8 @@ class RapidLoad_Optimizer
                 'control_payload' => 'status'
             ]
         ];
+
+        return $opp;
 
     }
 
@@ -370,6 +382,8 @@ class RapidLoad_Optimizer
             ]
         ];
 
+        return $opp;
+
     }
 
     public function optimizer_render_blocking_resources(){
@@ -390,7 +404,50 @@ class RapidLoad_Optimizer
 
     }
 
+    public function add_action_offscreen_images($opp){
 
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_lazyload',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_exclude_above_the_fold',
+                'control_type' => 'number',
+                'control_values' => ['1', '2','3','4','5'],
+                'control_payload' => 'exclude_above_the_fold'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_lazyload_iframes',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status_iframe_lazyload'
+            ],
+        ];
 
+        return $opp;
+    }
+
+    public function optimizer_offscreen_images(){
+
+        if(!isset($_REQUEST['status']) || !isset($_REQUEST['exclude_above_the_fold']) || !isset($_REQUEST['status_iframe_lazyload'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_lazy_load_images'] =  $_REQUEST['status'] == "on" ? "1" : null;
+        self::$options['uucss_exclude_above_the_fold_image_count'] =  $_REQUEST['exclude_above_the_fold'];
+        self::$options['uucss_lazy_load_iframes'] =  $_REQUEST['status_iframe_lazyload'] == "on" ? "1" : null;
+
+        self::$options['uucss_enable_image_delivery'] = "1";
+
+        $this->associate_domain(false);
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
 
 }
