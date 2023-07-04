@@ -37,6 +37,8 @@ module.exports = {
       'white': '#ffffff',
       'purple': '#7F54B3',
       'purple-p': '#867C92',
+      'purple-button': '#F9F7FA',
+      'gray-button': '#EDEDED',
       'purple-tips-text': '#553779',
       'purple-lite': '#F2EEF7',
       'tips-purple': '#E1DDE7',
@@ -66,6 +68,9 @@ module.exports = {
       'tips-dark-green': '#1F9A53',
       'tips-dark-green-font': '#37793E',
       'performance-green-bg': '#09B42F',
+      'red': '#CC0001',
+      'green': '#008800',
+      'gray-light-font': '#959595',
     },
 
   },

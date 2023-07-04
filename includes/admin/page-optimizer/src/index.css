@@ -8,3 +8,21 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+.performance-circle .inner-circle {
+  stroke: #ECECED;
+  /*stroke-width: 26px;*/
+  stroke-dasharray: 0;
+  fill: none;
+}
+.performance .bg-performance-green-bg .performance-circle text{
+  fill: #FFFFFF;
+  transition-duration: 300ms;
+}
+.progress-bar {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 0 502.4;
+  stroke-dashoffset: 0;
+  transform-origin: center center;
+  transform: rotate(270deg);
+}
