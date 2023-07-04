@@ -6,6 +6,11 @@ const PageSpeedScore = () => {
     const [performanceColor, setPerformanceColor] = useState('#ECECED');
     const [strokeDasharray, setStrokeDasharray] = useState(0);
     const [strokeDashoffset, setStrokeDashoffset] = useState(0);
+    const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
+
+    const handleCoreWebClick = () => {
+        setCoreWebIsClicked(!isCoreWebClicked);
+    };
 
     const animateProgressBar = () => {
         const radius = 65;
@@ -187,19 +192,106 @@ const PageSpeedScore = () => {
                 </div>
             </div>
 
-            <div className="w-[285px] h-[195px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white p-5 pl-6">
-                <div className={"flex"}>
+            <div onClick={handleCoreWebClick} className="w-[285px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white ">
+                <div className={`flex p-5 pl-6 border-b-[1px] border-gray-border-line cursor-pointer`}>
                     <div>
-                        <p className="text-[16px] font-medium text-black">Core Web Vitals (28 days)
-                        </p>
-                        <p className="text-[12px] font-medium text-gray-light-font">Real user experience from Google
-                        </p>
+                        <p className="text-[16px] font-medium text-black">Core Web Vitals (28 days)</p>
+                        <p className="text-[12px] font-medium text-gray-light-font">Real user experience from Google</p>
                     </div>
                     <div>
-                            <CheckBadgeIcon/>
+                            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green'/>
                     </div>
                 </div>
+                <div className={`${isCoreWebClicked ? 'visible h-[270px]' : 'invisible h-[0px]'}`}>
+                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-[8px] mt-[1px]">LCP</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
+                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
+                        </svg>
+                        </span>
+                        </div>
 
+                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
+                    </div>
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-3 mt-[1px]">FID</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
+                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                            <rect width="9" height="9" fill="#FFAA33"></rect>
+                        </svg>
+                        </span>
+                        </div>
+                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
+                    </div>
+
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
+                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
+                        </svg>
+                        </span>
+                        </div>
+                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
+                    </div>
+
+                </div>
+                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-2 mt-[1px]">FCP</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
+                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
+                        </svg>
+                        </span>
+                        </div>
+
+                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
+                    </div>
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-2 mt-[1px]">INP</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
+                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                            <rect width="9" height="9" fill="#FFAA33"></rect>
+                        </svg>
+                        </span>
+                        </div>
+                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
+                    </div>
+
+                    <div>
+                        <div className="flex">
+                            <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
+                            <span
+                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
+                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
+                        </svg>
+                        </span>
+                        </div>
+                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
+                    </div>
+
+                </div>
+                </div>
 
             </div>
             </div>

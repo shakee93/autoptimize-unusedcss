@@ -22,7 +22,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     const [divHeight, setDivHeight] = useState<number | null>(45);
 
     useEffect(() => {
-        console.log('Div height:', divHeight);
+       // console.log('Div height:', divHeight);
     }, [divHeight]);
 
     const viewFilesButtonClick = () => {
