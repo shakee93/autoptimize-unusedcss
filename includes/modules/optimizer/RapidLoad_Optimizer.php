@@ -39,6 +39,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_set_unminified_javascript', [$this,'optimizer_set_unminified_javascript']);
         add_action('wp_ajax_optimizer_set_unused_css_rules', [$this,'optimizer_set_unused_css_rules']);
         add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
+        add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
     }
 
     public function fetch_page_speed(){
@@ -404,17 +405,47 @@ class RapidLoad_Optimizer
     }
 
     public function add_action_offscreen_images($opp){
+
         $opp->{'actions'} = [
             (object)[
-                'ajax_action' => 'optimizer_render_blocking_resources',
+                'ajax_action' => 'optimizer_offscreen_images_lazyload',
                 'control_type' => 'checkbox',
                 'control_values' => ['on', 'off'],
                 'control_payload' => 'status'
-            ]
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_exclude_above_the_fold',
+                'control_type' => 'number',
+                'control_values' => ['1', '2','3','4','5'],
+                'control_payload' => 'exclude_above_the_fold'
+            ],
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_lazyload_iframes',
+                'control_type' => 'checkbox',
+                'control_values' => ['on', 'off'],
+                'control_payload' => 'status_iframe_lazyload'
+            ],
         ];
 
         return $opp;
     }
 
+    public function optimizer_offscreen_images(){
+
+        if(!isset($_REQUEST['status']) || !isset($_REQUEST['exclude_above_the_fold']) || !isset($_REQUEST['status_iframe_lazyload'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_enable_image_delivery'] =  "on";
+
+        if(self::$options['uucss_enable_cpcss'] == "1"){
+            self::$options['uucss_enable_css'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
 
 }
