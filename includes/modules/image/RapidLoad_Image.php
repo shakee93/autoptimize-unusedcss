@@ -36,7 +36,27 @@ class RapidLoad_Image
             }, 90);
         }
 
+        add_filter('rapidload/cache_file_creating/css', [$this, 'optimize_css_file_images'], 10 , 1);
+
         self::$instance = $this;
+    }
+
+    public function optimize_css_file_images($css){
+
+        $parser = new \Sabberworm\CSS\Parser($css);
+        $cssDocument = $parser->parse();
+        foreach ($cssDocument->getAllValues() as $value) {
+            if( $value instanceof \Sabberworm\CSS\Value\URL){
+                $url = $this->extractUrl($value->getURL()->getString());
+                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                if (in_array($urlExt, ["jpg", "jpeg", "png", "webp"])) {
+                    $replace_url = RapidLoad_Image::get_replaced_url($url,self::$image_indpoint);
+                    $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                }
+            }
+        }
+
+        return $cssDocument->render();
     }
 
     public function enqueue_frontend_js(){
@@ -109,6 +129,29 @@ class RapidLoad_Image
         }
 
         return $cdn . $options . '/' . $url;
+    }
+
+    public function extractUrl($url){
+
+        $parsedUrl = parse_url($url);
+
+        if (!isset($parsedUrl['scheme'])) {
+            $url = "https:" . $url;
+        }
+
+        if(!$this->isAbsolute($url)){
+            $url = untrailingslashit(site_url()) . $url;
+        }
+
+        if(strpos($url,"//", 0) === 0){
+            $url = "https:" . $url;
+        }
+
+        return $url;
+    }
+
+    function isAbsolute($url) {
+        return isset(parse_url($url)['host']);
     }
 
 }

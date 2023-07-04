@@ -189,6 +189,7 @@ class UnusedCSS_Store
                 $files[] = [
                     'original' => $file->file,
                     'uucss'    => $this->hashed_file_name( $file->file, $file->css ),
+                    'original_relative' => self::get_relative_url($file->file)
                 ];
 
                 $css = '';

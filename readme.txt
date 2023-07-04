@@ -150,6 +150,12 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.17 - 03/07/2023 =
+ * feat: add support for data-src tag on image optimization
+ * feat: load original css with relative path urls
+ * feat: update new documentation link
+ * improve: mobile critical css to eliminate reduce unused css
+
 = 2.0.16 - 15/06/2023 =
  * feat: improved iframe lazy-loading
 

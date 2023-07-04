@@ -375,7 +375,7 @@ class RapidLoad_Base
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
     {
         if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://docs.rapidload.io/" target="_blank">Documentation</a>';
             $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
         }
         return $plugin_meta;

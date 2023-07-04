@@ -25,7 +25,7 @@
                 }
 
                 let link = file.cloneNode()
-                link.href = original.original
+                link.href = original.original_relative
                 link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.removeAttribute('data-href')
@@ -67,7 +67,7 @@
                 link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.type = 'text/css';
-                link.href = original.original;
+                link.href = original.original_relative;
                 link.media = inlines_style.getAttribute('data-media');
                 link.prev = inlines_style
 

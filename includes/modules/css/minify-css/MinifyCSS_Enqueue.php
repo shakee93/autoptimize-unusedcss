@@ -87,9 +87,9 @@ class MinifyCSS_Enqueue
         }
 
         if($this->str_contains($filename, ".min.css")){
-            $filename = str_replace(".min.css","-{$version}.rapidload.min.css", $filename);
+            $filename = str_replace(".min.css","-{$version}.min.css", $filename);
         }else if($this->str_contains($filename, ".css")){
-            $filename = str_replace(".css","-{$version}.rapidload.min.css", $filename);
+            $filename = str_replace(".css","-{$version}.min.css", $filename);
         }
 
         $minified_file = MinifyCSS::$base_dir . '/' . $filename;
@@ -111,7 +111,7 @@ class MinifyCSS_Enqueue
 
         $version = substr(md5($style->innertext), 0, 12);
 
-        $filename = $version . 'rapidload.min.css';
+        $filename = $version . '.min.css';
 
         $minified_file = MinifyCSS::$base_dir . '/' . $filename;
 
