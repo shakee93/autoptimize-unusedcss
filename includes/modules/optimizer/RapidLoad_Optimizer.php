@@ -40,6 +40,8 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_set_unused_css_rules', [$this,'optimizer_set_unused_css_rules']);
         add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
         add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
+        add_action('wp_ajax_optimizer_offscreen_images_exclude_above_the_fold', [$this,'optimizer_offscreen_images_exclude_above_the_fold']);
+        add_action('wp_ajax_optimizer_offscreen_images_lazyload_iframes', [$this,'optimizer_offscreen_images_lazyload_iframes']);
     }
 
     public function fetch_page_speed(){
@@ -423,7 +425,7 @@ class RapidLoad_Optimizer
                 'ajax_action' => 'optimizer_offscreen_images_lazyload_iframes',
                 'control_type' => 'checkbox',
                 'control_values' => ['on', 'off'],
-                'control_payload' => 'status_iframe_lazyload'
+                'control_payload' => 'status'
             ],
         ];
 
@@ -432,13 +434,12 @@ class RapidLoad_Optimizer
 
     public function optimizer_offscreen_images(){
 
-        if(!isset($_REQUEST['status']) || !isset($_REQUEST['exclude_above_the_fold']) || !isset($_REQUEST['status_iframe_lazyload'])){
+        if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
         }
 
         self::$options['uucss_lazy_load_images'] =  $_REQUEST['status'] == "on" ? "1" : null;
-        self::$options['uucss_exclude_above_the_fold_image_count'] =  $_REQUEST['exclude_above_the_fold'];
-        self::$options['uucss_lazy_load_iframes'] =  $_REQUEST['status_iframe_lazyload'] == "on" ? "1" : null;
+        self::$options['uucss_exclude_above_the_fold_image_count'] =  "5";
 
         self::$options['uucss_enable_image_delivery'] = "1";
 
@@ -447,6 +448,57 @@ class RapidLoad_Optimizer
         RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
         wp_send_json_success(true);
+
+    }
+
+    public function optimizer_offscreen_images_exclude_above_the_fold(){
+
+        if(!isset($_REQUEST['exclude_above_the_fold'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_exclude_above_the_fold_image_count'] =  $_REQUEST['exclude_above_the_fold'];
+
+        self::$options['uucss_enable_image_delivery'] = "1";
+
+        $this->associate_domain(false);
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+    public function optimizer_offscreen_images_lazyload_iframes(){
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['uucss_lazy_load_iframes'] =  $_REQUEST['status'] == "on" ? "1" : null;
+
+        self::$options['uucss_enable_image_delivery'] = "1";
+
+        $this->associate_domain(false);
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+
+        wp_send_json_success(true);
+
+    }
+
+    public function add_action_preload_lcp_image($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_exclude_above_the_fold',
+                'control_type' => 'number',
+                'control_values' => ['1', '2','3','4','5'],
+                'control_payload' => 'exclude_above_the_fold'
+            ],
+        ];
+
+        return $opp;
 
     }
 
