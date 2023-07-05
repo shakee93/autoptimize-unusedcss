@@ -502,5 +502,20 @@ class RapidLoad_Optimizer
 
     }
 
+    public function add_action_lcp_lazy_loaded($opp){
+
+        $opp->{'actions'} = [
+            (object)[
+                'ajax_action' => 'optimizer_offscreen_images_exclude_above_the_fold',
+                'control_type' => 'number',
+                'control_values' => ['1', '2','3','4','5'],
+                'control_payload' => 'exclude_above_the_fold'
+            ],
+        ];
+
+        return $opp;
+
+    }
+
 
 }
