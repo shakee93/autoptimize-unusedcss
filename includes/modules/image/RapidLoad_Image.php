@@ -67,7 +67,6 @@ class RapidLoad_Image
             (function(w, d){
                 w.rapidload_io_data = {
                     nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
-                    ajax_url : "<?php echo admin_url( 'admin-ajax.php' ) ?>",
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
@@ -76,7 +75,7 @@ class RapidLoad_Image
                 var s = d.createElement("script");
                 s.defer = true;
                 s.type = "text/javascript";
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION ?>";
+                s.src = "<?php echo self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION) ?>";
                 b.appendChild(s);
             }(window, document));
 
