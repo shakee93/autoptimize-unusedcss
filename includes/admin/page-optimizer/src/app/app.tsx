@@ -14,30 +14,27 @@ export default function Home() {
   const [url, setUrl] = useState("https://rapidload.io/");
   const [response, setResponse] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-       setUrl('https://rapidload.io/');
+  const fetchData = async () => {
+    try {
 
-        const response = await fetch(`http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${url} `, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const response = await fetch(`http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${encodeURI(url)}`, {
+        method: 'GET',
+      });
 
-        });
-
-        if (!response.ok) {
-          throw new Error('Error: ' + response.status);
-        }
-
-        const responseData = await response.json();
-        setResponse(responseData);
-        console.log("Data: " + responseData); // Handle the response data here
-      } catch (error) {
-        console.error('Error:', error);
+      if (!response.ok) {
+        throw new Error('Error: ' + response.status);
       }
-    };
+
+      const responseData = await response.json();
+      setResponse(responseData);
+      console.log("Data: " + responseData); // Handle the response data here
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    setUrl('https://rapidload.io/');
 
     fetchData();
   }, []);
@@ -221,7 +218,9 @@ export default function Home() {
   return (
       <main className="flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
         <Header url={url} />
-
+        <div>
+          <button onClick={fetchData}>Call</button>
+        </div>
         <section className="container grid grid-cols-12 gap-8 mt-12">
           {togglePerformance && (
               <aside className="col-span-3">
