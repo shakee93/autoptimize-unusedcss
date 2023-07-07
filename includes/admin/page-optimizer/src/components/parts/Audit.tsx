@@ -26,10 +26,9 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     const settingsToggle = ['Generate critical CSS', 'Remove unused CSS', 'Image compression level', 'Font optimization', 'Javascript'];
 
     const options = [
-        { id: 1, label: 'Option 1' },
-        { id: 2, label: 'Option 2' },
-        { id: 3, label: 'Option 3' },
-        { id: 4, label: 'Option 4' },
+        { id: 1, label: 'None' },
+        { id: 2, label: 'Defer' },
+        { id: 3, label: 'User Interaction' },
     ];
 
     useEffect(() => {
@@ -68,13 +67,13 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
                 <div className='flex gap-2 font-medium text-[16px]'>
                     <span
-                        className={`border-4 border-purple-table-header inline-block w-7 h-7 rounded-full bg-purple-table-header`}>
-                             <svg className="mt-[5px] ml-[6px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-purple-100`}>
+                             <svg className="" width="9" height="9" viewBox="0 0 9 9" fill="none"
                                   xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
                             </svg>
                             </span>
-                    {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-highlight'/>
+                    {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-350'/>
                 </div>
 
                 <div className={'flex'}>
@@ -94,7 +93,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                             className="sr-only peer"
                                             value=""
                                         />
-                                        <div className="w-11 h-6 bg-gray peer-focus:outline-none outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+                                        <div className="w-11 h-6 bg-gray-400 peer-focus:outline-none outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
                                     </label>
                                     <Cog8ToothIcon className="w-6 h-6 text-gray-highlight ml-2 cursor-pointer" />
                                 </div>
@@ -105,7 +104,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         setToggleFiles(prev => !prev)
                         viewFilesButtonClick();
                     }}
-                                  className={`hover:bg-gray-button cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl  ${toggleFiles ? 'bg-gray-button': 'bg-purple-button'}`}>
+                                  className={`transition duration-300 hover:bg-gray-200 cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl  ${toggleFiles ? 'bg-gray-200': ''}`}>
                         View Files {(toggleFiles) ?
                             <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
                            <PlusCircleIcon
@@ -127,7 +126,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                             >
                                 {data === 'Generate critical CSS' ? (
                                     <span
-                                        className="mr-2 inline-block w-9 h-5 rounded-full bg-purple-pro text-white text-[11px] pl-[8px] pt-[2px]">PRO</span>
+                                        className="mr-2 inline-block w-9 h-5 rounded-full bg-purple-750 text-white text-[11px] pl-[8px] pt-[2px]">PRO</span>
                                 ) : data === 'Remove unused CSS' ? (
                                     <CSSDelivery />
                                 ) : data === 'Image compression level' ? (
@@ -148,12 +147,12 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                         className="sr-only peer"
                                         value=""
                                     />
-                                    <div className="w-[33px] h-[18px] bg-gray-toggle peer-focus:outline-none outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-[14px] after:w-[14px] transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple"></div>
+                                    <div className="w-[33px] h-[18px] bg-gray-350 peer-focus:outline-none outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-[14px] after:w-[14px] transition duration-300 after:transition-all dark:border-gray peer-checked:bg-purple-750"></div>
                                 </label>
-                                <Cog8ToothIcon className="w-6 h-6 hover:text-purple text-gray-toggle ml-2 cursor-pointer" />
-                                <ArrowPathIcon className="w-6 h-6 text-green-refresh ml-2 cursor-pointer"/>
+                                <Cog8ToothIcon className="w-6 h-6 transition duration-300 hover:text-purple-750 text-gray-350 ml-2 cursor-pointer" />
+                                <ArrowPathIcon className="w-6 h-6 text-green-500 ml-2 cursor-pointer"/>
                                 <span
-                                    className="ml-2 border-4 border-green-refresh inline-block w-3 h-3 rounded-full bg-green-refresh"></span>
+                                    className="ml-2 inline-block w-3 h-3 rounded-full bg-green-500"></span>
                             </div>
                         ))}
                     </div>
