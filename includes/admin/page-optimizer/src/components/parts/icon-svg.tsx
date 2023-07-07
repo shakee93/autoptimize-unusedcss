@@ -9,7 +9,7 @@ export const JavascriptDelivery = () => (
 );
 
 export const ImageDeliverySVG = () => (
-    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#0EBFE6"></rect><circle cx="21" cy="28" r="7.5" stroke="white" stroke-width="3"></circle><circle cx="33" cy="16" r="3.75" stroke="white" stroke-width="2.5"></circle></svg>
+    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#0EBFE6"></rect><circle cx="21" cy="28" r="7.5" stroke="white" strokeWidth="3"></circle><circle cx="33" cy="16" r="3.75" stroke="white" strokeWidth="2.5"></circle></svg>
 );
 
 export const FontDelivery = () => (
@@ -17,9 +17,9 @@ export const FontDelivery = () => (
 );
 
 export const CloudDelivery = () => (
-    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"></rect><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" stroke-width="1.5" stroke-linejoin="round"></path><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"></rect><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"></rect><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" strokeWidth="1.5" stroke-linejoin="round"></path><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"></rect><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
 );
 
 export const PageCache = () => (
-    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#FF7D00"></rect><path d="M27 24L22.1146 27.4804L24.0943 28.7715L22 32L26.8854 28.5691L24.9083 27.2825L27 24Z" fill="white"></path><rect x="10.5" y="12.5" width="28" height="24" rx="4.5" stroke="white" stroke-width="3" stroke-linejoin="bevel"></rect><circle cx="16" cy="17" r="1" transform="rotate(-180 16 17)" fill="white"></circle><circle cx="19" cy="17" r="1" transform="rotate(-180 19 17)" fill="white"></circle><circle cx="22" cy="17" r="1" transform="rotate(-180 22 17)" fill="white"></circle><path d="M11 20.5H38.5" stroke="white" stroke-width="2"></path></svg>
+    <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#FF7D00"></rect><path d="M27 24L22.1146 27.4804L24.0943 28.7715L22 32L26.8854 28.5691L24.9083 27.2825L27 24Z" fill="white"></path><rect x="10.5" y="12.5" width="28" height="24" rx="4.5" stroke="white" strokeWidth="3" stroke-linejoin="bevel"></rect><circle cx="16" cy="17" r="1" transform="rotate(-180 16 17)" fill="white"></circle><circle cx="19" cy="17" r="1" transform="rotate(-180 19 17)" fill="white"></circle><circle cx="22" cy="17" r="1" transform="rotate(-180 22 17)" fill="white"></circle><path d="M11 20.5H38.5" stroke="white" strokeWidth="2"></path></svg>
 );

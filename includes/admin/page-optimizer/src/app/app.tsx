@@ -27,7 +27,7 @@ export default function Home() {
 
       const responseData = await response.json();
       setResponse(responseData);
-      console.log("Data: " + responseData); // Handle the response data here
+      console.log("Data: ", responseData); // Handle the response data here
     } catch (error) {
       console.error('Error:', error);
     }
