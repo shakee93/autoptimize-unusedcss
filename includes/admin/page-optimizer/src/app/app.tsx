@@ -6,39 +6,41 @@ import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/re
 import ThemeSwitcher from "components/parts/theme-switcher";
 import Card from "components/parts/card";
 import Audits from "components/Audits";
+import { useEffect } from 'react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
   const [togglePerformance, setTogglePerformance] = useState(false);
-  const [url, setUrl] = useState("https://rapidload.io/home");
+  const [url, setUrl] = useState("https://rapidload.io/");
   const [response, setResponse] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const requestData = {
-        url: 'https://rapidload.io/',
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+       setUrl('https://rapidload.io/');
 
-      };
+        const response = await fetch(`http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${url} `, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
 
-      const response = await fetch('fetch_page_speed', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      });
+        });
 
-      if (!response.ok) {
-        throw new Error('Error: ' + response.status);
+        if (!response.ok) {
+          throw new Error('Error: ' + response.status);
+        }
+
+        const responseData = await response.json();
+        setResponse(responseData);
+        console.log("Data: " + responseData); // Handle the response data here
+      } catch (error) {
+        console.error('Error:', error);
       }
+    };
 
-      const responseData = await response.json();
-      setResponse(responseData);
-      console.log(responseData); // Handle the response data here
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+    fetchData();
+  }, []);
 
   const audits: Audit[] = [
     {
@@ -202,11 +204,11 @@ export default function Home() {
 
   const renderTabs = () => {
     return tabs.map((tab) => {
-      const isActive = activeTab === tab.key ? "font-normal border-b border-b-[#9471c0]" : "font-light";
+      const isActive = activeTab === tab.key ? "font-medium border-b border-b-[#9471c0] gray-tab text-black" : "text-gray-tab";
       return (
           <div
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-3 text-sm ${isActive}`}
+              className={`px-4 py-3 text-sm font-medium  ${isActive}`}
               key={tab.key}
           >
             {tab.name}
@@ -230,7 +232,7 @@ export default function Home() {
               </aside>
           )}
           <article className={`${togglePerformance ? 'col-span-9' : 'col-span-12'}`}>
-            <h2 className="text-lg ml-5 flex gap-2 items-center">
+            <h2 className="text-lg ml-5 flex gap-2 font-medium items-center">
                         <span className='cursor-pointer' onClick={() => { setTogglePerformance(prev => !prev) }}>
                             {(togglePerformance) ? <ArrowLeftOnRectangleIcon className="h-4 w-4 text-gray-500" /> : <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500" /> }
                         </span>

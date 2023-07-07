@@ -111,8 +111,8 @@ const PageSpeedScore = () => {
                              <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
                                   xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                        </svg>
-                        </span>
+                            </svg>
+                            </span>
                         </div>
 
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>

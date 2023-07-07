@@ -18,11 +18,11 @@ const Header = ({ url = null}: { url: string|null}) => {
                 </div>
                 <div className='flex flex-column items-center gap-4'>
                     <div className='flex gap-2 dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>
-                        <div className='flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 bg-white border-gray-border border rounded-2xl'>
-                            <ComputerDesktopIcon className="h-6 w-6  dark:text-zinc-500 text-[#7f54b3]" /> Desktop
+                        <div className='flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 bg-white font-medium border-gray-border border rounded-2xl'>
+                            <ComputerDesktopIcon className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
                         </div>
-                        <div className='flex flex-column gap-2 pl-4 pr-8 py-3'>
-                            <DevicePhoneMobileIcon className="h-6 w-6 dark:text-zinc-500 text-[#7f54b3]" /> Mobile
+                        <div className='flex flex-column gap-2 pl-4 pr-8 py-3 font-medium'>
+                            <DevicePhoneMobileIcon className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>
 
