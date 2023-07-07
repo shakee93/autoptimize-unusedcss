@@ -2,6 +2,8 @@ import Card from "components/parts/card";
 import {InformationCircleIcon, PlusCircleIcon, ArrowPathIcon, Cog8ToothIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
 import React, {useState, useRef, useEffect} from "react";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
+import SelectionBox from "./selectionbox";
+
 import {
     CSSDelivery,
     JavascriptDelivery,
@@ -22,6 +24,13 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     const divSettingsRef = useRef<HTMLDivElement>(null);
     const [divHeight, setDivHeight] = useState<number | null>(45);
     const settingsToggle = ['Generate critical CSS', 'Remove unused CSS', 'Image compression level', 'Font optimization', 'Javascript'];
+
+    const options = [
+        { id: 1, label: 'Option 1' },
+        { id: 2, label: 'Option 2' },
+        { id: 3, label: 'Option 3' },
+        { id: 4, label: 'Option 4' },
+    ];
 
     useEffect(() => {
         if(settingsToggle.length > 1){
@@ -195,12 +204,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='flex items-center space-x-2'>
-                                                <button className='text-zinc-900'>
-                                                    <ArrowLeftOnRectangleIcon className='w-6 h-6' />
-                                                </button>
-                                                <button className='text-zinc-900'>
-                                                    <ArrowRightOnRectangleIcon className='w-6 h-6' />
-                                                </button>
+                                                <SelectionBox options={options} />
                                             </div>
                                         </td>
                                     </tr>
