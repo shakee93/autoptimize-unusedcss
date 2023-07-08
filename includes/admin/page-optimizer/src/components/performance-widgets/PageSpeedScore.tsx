@@ -176,7 +176,7 @@ const PageSpeedScore = () => {
                             <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                     </div>
                 </div>
-                <div className={`${isCoreWebClicked ? 'visible h-[270px]' : 'invisible h-[0px]'}`}>
+                <div className={`${isCoreWebClicked ? 'visible h-[180px]' : 'invisible h-[0px]'}`}>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     <div>
                         <div className="flex">

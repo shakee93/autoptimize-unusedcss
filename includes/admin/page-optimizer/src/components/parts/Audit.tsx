@@ -161,22 +161,22 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                     <div className={`py-2 px-4 w-full dark:bg-zinc-700 bg-white border-gray-border border w-full rounded-2xl ${toggleFiles ? 'rounded-t-none shadow-bottom' : ''}`}>
                         <div className="border rounded-2xl overflow-hidden border-gray-border mt-3 mb-3">
                             <table className={'min-w-full divide-y divide-gray-border dark:divide-gray-border'}>
-                                <thead className={'bg-gray-50 dark:bg-gray-700 bg-purple-table-header'}>
+                                <thead className={'text-sm font-bold text-slate-800 bg-gray-50 dark:bg-gray-700 bg-purple-200/25'}>
                                 <tr>
                                     <th scope="col"
-                                        className="text-[15px] px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400">File Type
+                                        className="px-6 py-3 text-left dark:text-gray-400">File Type
                                     </th>
                                     <th scope="col"
-                                        className="text-[15px] px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400">URLs
+                                        className="px-6 py-3 text-left dark:text-gray-400">URLs
                                     </th>
                                     <th scope="col"
-                                        className="text-[15px] px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400">Transfer Size
+                                        className="px-6 py-3 text-left dark:text-gray-400">Transfer Size
                                     </th>
                                     <th scope="col"
-                                        className="text-[15px] px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400">Potential Savings
+                                        className="px-6 py-3 text-left dark:text-gray-400">Potential Savings
                                     </th>
                                     <th scope="col"
-                                        className="text-[15px] px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400">Actions
+                                        className="px-6 py-3 text-left dark:text-gray-400">Actions
                                     </th>
                                 </tr>
                                 </thead>
