@@ -51,6 +51,9 @@ export default function Home() {
           trasnsfer_size: '136.4 KiB',
           potential_savings: '134 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 2,
@@ -59,6 +62,9 @@ export default function Home() {
           trasnsfer_size: '100 KiB',
           potential_savings: '136.4 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 3,
@@ -67,6 +73,9 @@ export default function Home() {
           trasnsfer_size: '200.6 KiB',
           potential_savings: '300.7 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
       ],
       settings: [
@@ -96,6 +105,9 @@ export default function Home() {
           trasnsfer_size: '136.4 KiB',
           potential_savings: '134 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 2,
@@ -104,6 +116,9 @@ export default function Home() {
           trasnsfer_size: '100 KiB',
           potential_savings: '136.4 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 3,
@@ -112,6 +127,9 @@ export default function Home() {
           trasnsfer_size: '200.6 KiB',
           potential_savings: '300.7 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
 
       ],
@@ -142,6 +160,9 @@ export default function Home() {
           trasnsfer_size: '136.4 KiB',
           potential_savings: '134 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 2,
@@ -150,6 +171,9 @@ export default function Home() {
           trasnsfer_size: '100 KiB',
           potential_savings: '136.4 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
         {
           id: 3,
@@ -158,6 +182,9 @@ export default function Home() {
           trasnsfer_size: '200.6 KiB',
           potential_savings: '300.7 KiB',
           actions: '',
+          options: [ { id: 1, label: 'None' },
+            { id: 2, label: 'Defer' },
+            { id: 3, label: 'User Interaction' }],
         },
 
       ],
@@ -201,7 +228,7 @@ export default function Home() {
 
   const renderTabs = () => {
     return tabs.map((tab) => {
-      const isActive = activeTab === tab.key ? "font-medium border-b border-b-[#9471c0] gray-tab text-black" : "text-gray-tab";
+      const isActive = activeTab === tab.key ? "font-medium border-b border-b-[#9471c0] gray-tab text-black" : "text-gray-500";
       return (
           <div
               onClick={() => setActiveTab(tab.key)}

@@ -25,12 +25,6 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     const [divHeight, setDivHeight] = useState<number | null>(45);
     const settingsToggle = ['Generate critical CSS', 'Remove unused CSS', 'Image compression level', 'Font optimization', 'Javascript'];
 
-    const options = [
-        { id: 1, label: 'None' },
-        { id: 2, label: 'Defer' },
-        { id: 3, label: 'User Interaction' },
-    ];
-
     useEffect(() => {
         if(settingsToggle.length > 1){
            // setDivHeight(150);
@@ -65,7 +59,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                     <span style={{height: `${divHeight}px`}}
                         className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight -ml-[13px] mt-[28px] absolute`}></span>
                 </div>
-                <div className='flex gap-2 font-medium text-[16px]'>
+                <div className='flex gap-2 font-medium text-base'>
                     <span
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-purple-100`}>
                              <svg className="" width="9" height="9" viewBox="0 0 9 9" fill="none"
@@ -122,11 +116,11 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         {settingsToggle.map((data, index) => (
                             <div
                                 key={index}
-                                className="font-semibold text-[14px] border w-fit border-gray-border rounded-2xl items-center flex p-1.5 mr-6 mb-4"
+                                className="font-semibold text-sm border w-fit border-gray-border rounded-2xl items-center flex p-1.5 mr-6 mb-4"
                             >
                                 {data === 'Generate critical CSS' ? (
                                     <span
-                                        className="mr-2 inline-block w-9 h-5 rounded-full bg-purple-750 text-white text-[11px] pl-[8px] pt-[2px]">PRO</span>
+                                        className="mr-2 inline-block w-9 h-5 rounded-full bg-purple-750 text-white text-xs pl-2 pt-0.5">PRO</span>
                                 ) : data === 'Remove unused CSS' ? (
                                     <CSSDelivery />
                                 ) : data === 'Image compression level' ? (
@@ -203,7 +197,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                         </td>
                                         <td className='px-6 py-4 whitespace-nowrap'>
                                             <div className='flex items-center space-x-2'>
-                                                <SelectionBox options={options} />
+                                                <SelectionBox options={data.options} />
                                             </div>
                                         </td>
                                     </tr>

@@ -1,5 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {CheckBadgeIcon} from "@heroicons/react/24/solid";
+import {
+    Pass,
+    Fail,
+    Average,
+} from '../parts/icon-svg';
 
 const PageSpeedScore = () => {
     const [progress, setProgress] = useState(0);
@@ -13,10 +18,10 @@ const PageSpeedScore = () => {
     };
 
     const animateProgressBar = () => {
-        const radius = 65;
+        const radius = 62;
         const circumference = 2 * Math.PI * radius;
         let currentProgress = 0;
-        const performance = 20;
+        const performance = 60;
 
         setStrokeDasharray(circumference);
         setStrokeDashoffset(circumference);
@@ -28,6 +33,7 @@ const PageSpeedScore = () => {
         } else if (performance < 101) {
             setPerformanceColor('#09B42F');
         }
+
 
         const interval = setInterval(() => {
             if (currentProgress >= performance) {
@@ -49,7 +55,7 @@ const PageSpeedScore = () => {
     return (
 
         <div>
-            <div className="w-[285px] h-[340px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+            <div className="w-[285px] h-[280px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
                     <div className="performance-circle">
                         <svg width="155" height="155">
@@ -72,46 +78,29 @@ const PageSpeedScore = () => {
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                         <div className="flex">
-                            <svg className="mt-[5px] mr-1" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                            </svg>
+                            <Fail cls="mt-2 mr-1"/>
                             <p className="text-xm font-normal">0-49</p>
                         </div>
                         <div className="flex">
-                            <svg className="mt-[5px] mr-1" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <rect width="9" height="9" fill="#FFAA33"></rect>
-                            </svg>
+                            <Average cls="mt-2 mr-1"/>
                             <p className="text-xm font-normal">50-89</p>
                         </div>
                         <div className="flex">
-                            <svg className="mt-[5px] mr-1" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
-                            </svg>
+                            <Pass cls="mt-2 mr-1"/>
                             <p className="text-xm font-normal">89-100</p>
                         </div>
                     </div>
-                    <div
-                        className="mt-2 ml-[26px] mr-[26px] border-t-2 border-gray-border-line content grid place-content-center place-items-center">
-                        <p className="mt-1.5 text-xm font-normal text-center">Values are estimated and may vary. The
-                            performance score is calculated directly from these metrics.</p>
-                        {/*<button className="text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-1 px-3 border border-gray-button-border hover:border-transparent mt-3 rounded-full">27 data points</button>*/}
-                    </div>
+
                 </div>
             </div>
-            <div className="w-[285px] h-[195px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+            <div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     <div>
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-[8px] mt-[1px]">LCP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                            </svg>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Fail/>
                             </span>
                         </div>
 
@@ -121,12 +110,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-3 mt-[1px]">FID</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <rect width="9" height="9" fill="#FFAA33"></rect>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Average/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
@@ -135,12 +121,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Pass/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>
@@ -151,12 +134,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-2 mt-[1px]">FCP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Fail/>
+                            </span>
                         </div>
 
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
@@ -165,12 +145,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-2 mt-[1px]">INP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <rect width="9" height="9" fill="#FFAA33"></rect>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Average/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
@@ -179,12 +156,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Pass/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>
@@ -192,14 +166,14 @@ const PageSpeedScore = () => {
                 </div>
             </div>
 
-            <div onClick={handleCoreWebClick} className="w-[285px] drop-shadow-sm rounded-xl border border-gray-border-line bg-white ">
-                <div className={`flex p-5 pl-6 border-b-[1px] border-gray-border-line cursor-pointer`}>
+            <div onClick={handleCoreWebClick} className="w-[285px] drop-shadow-sm rounded-xl border border-gray-200 bg-white ">
+                <div className={`flex p-5 pl-6 border-b-[1px] border-gray-200 cursor-pointer`}>
                     <div>
                         <p className="text-[16px] font-medium text-black">Core Web Vitals (28 days)</p>
                         <p className="text-[12px] font-medium text-gray-light-font">Real user experience from Google</p>
                     </div>
                     <div>
-                            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green'/>
+                            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                     </div>
                 </div>
                 <div className={`${isCoreWebClicked ? 'visible h-[270px]' : 'invisible h-[0px]'}`}>
@@ -208,12 +182,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-[8px] mt-[1px]">LCP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Fail/>
+                            </span>
                         </div>
 
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
@@ -222,12 +193,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-3 mt-[1px]">FID</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <rect width="9" height="9" fill="#FFAA33"></rect>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Average/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
@@ -236,12 +204,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Pass/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>
@@ -252,12 +217,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-2 mt-[1px]">FCP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6 rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 9H0L4.5 0L9 9Z" fill="#FF3333"></path>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Fail/>
+                            </span>
                         </div>
 
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
@@ -266,12 +228,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-2 mt-[1px]">INP</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                             <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                            <rect width="9" height="9" fill="#FFAA33"></rect>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Average/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
@@ -280,12 +239,9 @@ const PageSpeedScore = () => {
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
                             <span
-                                className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full bg-gray-highlight`}>
-                            <svg className="mt-[3px] ml-[4px]" width="9" height="9" viewBox="0 0 9 9" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
-                        </svg>
-                        </span>
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <Pass/>
+                            </span>
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>

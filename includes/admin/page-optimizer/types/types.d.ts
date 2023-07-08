@@ -21,6 +21,10 @@ interface AuditSettings {
 
 type AuditTypes = "attention_required" | "opportunity"| "diagnostics" | "passed_audits"
 
+interface Options{
+    id: number,
+    label: string,
+}
 interface AuditFile  {
     id: number,
     file_type: string,
@@ -28,6 +32,7 @@ interface AuditFile  {
     trasnsfer_size: string,
     potential_savings: string,
     actions: string,
+    options: Options[],
 }
 
 interface Audit {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 
 interface Option {
     id: number;
@@ -9,7 +9,7 @@ interface SelectionBoxProps {
     options: Option[];
 }
 
-const SelectionBox: React.FC<SelectionBoxProps> = ({ options }) => {
+const SelectionBox: FC<SelectionBoxProps> = ({ options }) => {
     const [selectedOption, setSelectedOption] = useState<Option | undefined>(undefined);
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
