@@ -64,7 +64,7 @@ class Javascript_Enqueue
 
         }
 
-        if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
+        /*if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
                 ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
@@ -94,7 +94,7 @@ class Javascript_Enqueue
 
             $node->setAttribute('type', 'text/javascript');
             $body->appendChild($node);
-        }
+        }*/
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
             $body = $this->dom->find('body', 0);
