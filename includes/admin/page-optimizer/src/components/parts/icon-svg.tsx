@@ -28,6 +28,13 @@ export const PageCache = () => (
     <svg className={'pr-2'} width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#FF7D00"></rect><path d="M27 24L22.1146 27.4804L24.0943 28.7715L22 32L26.8854 28.5691L24.9083 27.2825L27 24Z" fill="white"></path><rect x="10.5" y="12.5" width="28" height="24" rx="4.5" stroke="white" strokeWidth="3" stroke-linejoin="bevel"></rect><circle cx="16" cy="17" r="1" transform="rotate(-180 16 17)" fill="white"></circle><circle cx="19" cy="17" r="1" transform="rotate(-180 19 17)" fill="white"></circle><circle cx="22" cy="17" r="1" transform="rotate(-180 22 17)" fill="white"></circle><path d="M11 20.5H38.5" stroke="white" strokeWidth="2"></path></svg>
 );
 
+export const IconLink = () => (
+    <svg className={'hover:cursor-pointer'} width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.941162" y="0.5" width="17.8709" height="12" rx="6" stroke="#212427"/>
+        <path d="M7.16168 8.36771C6.76155 7.70709 6.99965 6.86006 7.69269 6.47866L9.31383 5.58648L8.86924 4.85246L7.2481 5.74464C6.12952 6.36024 5.74582 7.72523 6.39164 8.79149C7.03745 9.85775 8.46943 10.2235 9.58802 9.60789L11.2092 8.71571L10.7646 7.98169L9.14343 8.87387C8.4504 9.25528 7.5618 9.02832 7.16168 8.36771ZM9.05734 7.83955L12.2996 6.05518L11.8316 5.28253L8.58935 7.06689L9.05734 7.83955ZM11.301 3.51419L9.67981 4.40637L10.1244 5.14039L11.7455 4.2482C12.4386 3.8668 13.3272 4.09376 13.7273 4.75437C14.1274 5.41499 13.8893 6.26202 13.1963 6.64342L11.5751 7.5356L12.0197 8.26962L13.6409 7.37744C14.7595 6.76184 15.1431 5.39685 14.4973 4.33059C13.8515 3.26433 12.4195 2.89858 11.301 3.51419Z" fill="#212427"/>
+    </svg>
+);
+
 export const Pass:FC<SvgProps> = ({cls}) => (
     <svg className={`${cls}`} width="9" height="9" viewBox="0 0 9 9" fill="none"
          xmlns="http://www.w3.org/2000/svg">

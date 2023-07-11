@@ -1,12 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {CheckBadgeIcon} from "@heroicons/react/24/solid";
+
 import {
     Pass,
     Fail,
     Average,
 } from '../parts/icon-svg';
+import Icon from '../parts/Icon';
 
-const PageSpeedScore = () => {
+
+
+interface PageSpeedScoreProps {
+    pagespeed?: PageSpeed;
+    priority?: boolean;
+}
+
+const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [progress, setProgress] = useState(0);
     const [performanceColor, setPerformanceColor] = useState('#ECECED');
     const [strokeDasharray, setStrokeDasharray] = useState(0);
@@ -21,7 +30,7 @@ const PageSpeedScore = () => {
         const radius = 62;
         const circumference = 2 * Math.PI * radius;
         let currentProgress = 0;
-        const performance = 60;
+        const performance = pagespeed?.performance?? 0;
 
         setStrokeDasharray(circumference);
         setStrokeDashoffset(circumference);
@@ -95,74 +104,18 @@ const PageSpeedScore = () => {
             </div>
             <div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                    {pagespeed?.metrics.map((data, index) => (
                     <div>
                         <div className="flex">
-                            <p className="text-[13px] font-medium mr-[8px] mt-[1px]">LCP</p>
+                            <p className="text-[13px] font-medium mr-[8px] mt-[1px]">{data.title}</p>
                             <span
                                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Fail/>
+                                <Icon icon={data.icon }/>
                             </span>
                         </div>
-
-                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
+                        <p className="text-[22px] font-medium mr-2 text-red">{data.displayValue}</p>
                     </div>
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-3 mt-[1px]">FID</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Average/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
-                    </div>
-
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Pass/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
-                    </div>
-
-                </div>
-                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-2 mt-[1px]">FCP</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Fail/>
-                            </span>
-                        </div>
-
-                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
-                    </div>
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-2 mt-[1px]">INP</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Average/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
-                    </div>
-
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Pass/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
-                    </div>
-
+                    ))}
                 </div>
             </div>
 

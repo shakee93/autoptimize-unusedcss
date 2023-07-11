@@ -35,10 +35,24 @@ interface AuditFile  {
     options: Options[],
 }
 
+interface  Metrics{
+    id : string,
+    title : string,
+    description : string,
+    displayValue : string,
+    icon: string,
+}
+
+interface PageSpeed{
+    performance: number
+    metrics : Metrics[],
+}
+
 interface Audit {
     name: string,
     icon: 'pass' | 'fail' | 'average',
     files: AuditFile[],
     settings: AuditSettings[],
     tags: Array<AuditTypes>,
+
 }
