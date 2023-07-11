@@ -276,7 +276,7 @@ class Javascript_Enqueue
         $inner_text = $link->innertext();
         if(!empty($inner_text)){
 
-            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'jQuery|\$\.\(|\$\(|wp\.' );
+            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'jQuery|\$\.\(|\$\(' );
 
             if ( isset($link->type) && preg_match( '/(application\/ld\+json)/i', $link->type ) ) {
                 return;
