@@ -246,11 +246,7 @@ class Javascript_Enqueue
                             unset($link->{"data-rapidload-delayed"});
                             $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
                         }else{
-                            $inner_text = $link->innertext();
-                            if(!empty($inner_text)){
-                                //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-                                $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-                            }
+                            $this->defer_inline_js($link);
                         }
                     }else{
                         if(isset($link->{"data-rapidload-delayed"})){
@@ -273,6 +269,28 @@ class Javascript_Enqueue
                 }
             }
         }
+
+    }
+
+    public function defer_inline_js($link){
+        $inner_text = $link->innertext();
+        if(!empty($inner_text)){
+
+            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'jQuery|\$\.\(|\$\(' );
+
+            if ( isset($link->type) && preg_match( '/(application\/ld\+json)/i', $link->type ) ) {
+                return;
+            }
+
+            if ( ! empty( $jquery_patterns ) && ! preg_match( "/({$jquery_patterns})/msi", $inner_text ) ) {
+                return;
+            }
+
+            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
+            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
+            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript"> window.addEventListener("DOMContentLoaded", function() { ' . $inner_text . ' }); </script>');
+        }
+
 
     }
 
