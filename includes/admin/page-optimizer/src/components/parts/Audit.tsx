@@ -101,7 +101,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
             <div ref={divHeightRef}>
                 {toggleFiles && (
                     <div className={`py-2 px-4 w-full dark:bg-zinc-700 bg-white border-gray-border border w-full rounded-2xl ${toggleFiles ? 'rounded-t-none shadow-bottom' : ''}`}>
-                        <div className="border rounded-2xl overflow-hidden border-gray-border mt-3 mb-3">
+                        <div className="border rounded-2xl border-gray-border mt-3 mb-3">
                             <table className={'min-w-full divide-y divide-gray-border dark:divide-gray-border'}>
                                 <thead className={'text-sm font-bold text-slate-800 bg-gray-50 dark:bg-gray-700 bg-purple-200/[.2]'}>
                                 <tr>
