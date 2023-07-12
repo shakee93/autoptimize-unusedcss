@@ -62,7 +62,7 @@ class RapidLoad_CDN
 
     public function replace_cdn_html($job){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_cdn'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_cdn'] )){
             return false;
         }
 

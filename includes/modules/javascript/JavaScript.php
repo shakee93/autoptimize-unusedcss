@@ -317,7 +317,7 @@ class JavaScript
 
     public function optimize_javascript($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_js'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_js'] )){
             return false;
         }
 

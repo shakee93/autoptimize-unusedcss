@@ -86,7 +86,7 @@ class RapidLoad_Image
 
     public function optimize_image($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_image'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_image'] )){
             return false;
         }
 
