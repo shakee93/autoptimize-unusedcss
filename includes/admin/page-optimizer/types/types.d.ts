@@ -44,15 +44,19 @@ interface  Metrics{
 }
 
 interface PageSpeed{
-    performance: number
+    performance: number,
     metrics : Metrics[],
 }
-
+interface Help{
+    help: boolean,
+    title : string,
+    content: string,
+}
 interface Audit {
     name: string,
     icon: 'pass' | 'fail' | 'average',
     files: AuditFile[],
     settings: AuditSettings[],
     tags: Array<AuditTypes>,
-
+    help: Help[],
 }

@@ -18,7 +18,7 @@ const SettingItem = ({data, index}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="font-semibold text-sm border w-fit border-gray-border rounded-2xl items-center flex p-1.5 mr-6 mb-4"
+            className="font-semibold text-sm border w-fit border-gray-border rounded-2xl items-center flex p-1.5 mr-6"
         >
             {data.name === 'Generate critical CSS' ? (
                 <div className="flex mr-2 w-8 h-4 rounded-full bg-purple-750 text-white text-[10px] mt-1.5 mb-1.5">

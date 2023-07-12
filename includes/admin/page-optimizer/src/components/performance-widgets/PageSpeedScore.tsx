@@ -68,8 +68,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 <div className="content grid place-content-center place-items-center mt-[30px]">
                     <div className="performance-circle">
                         <svg width="155" height="155">
-                            <circle className="inner-circle" cx="77.5" cy="77.5" r="62" strokeWidth="23"></circle>
-                            <circle className="progress-bar" cx="77.5" cy="77.5" r="62" strokeWidth="23"
+                            <circle className="inner-circle" cx="77.5" cy="77.5" r="62" strokeWidth="10"></circle>
+                            <circle className="progress-bar" cx="77.5" cy="77.5" r="62" strokeWidth="10"
                                     stroke={performanceColor} style={{
                                 strokeDasharray: strokeDasharray,
                                 strokeDashoffset: strokeDashoffset
@@ -103,17 +103,17 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 </div>
             </div>
             <div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
-                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                <div className="p-5 grid grid-cols-3 gap-3">
                     {pagespeed?.metrics.map((data, index) => (
-                    <div>
+                    <div className={'justify-center grid'}>
                         <div className="flex">
-                            <p className="text-[13px] font-medium mr-[8px] mt-[1px]">{data.title}</p>
+                            <p className="text-sm font-medium mr-2 mt-[1px]">{data.title}</p>
                             <span
                                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
                                 <Icon icon={data.icon }/>
                             </span>
                         </div>
-                        <p className="text-[22px] font-medium mr-2 text-red">{data.displayValue}</p>
+                        <p className="text-2xl font-medium text-red">{data.displayValue}</p>
                     </div>
                     ))}
                 </div>
@@ -133,7 +133,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     <div>
                         <div className="flex">
-                            <p className="text-[13px] font-medium mr-[8px] mt-[1px]">LCP</p>
+                            <p className="text-xs font-medium mr-[8px] mt-[1px]">LCP</p>
                             <span
                                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
                                 <Fail/>

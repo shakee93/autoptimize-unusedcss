@@ -85,6 +85,11 @@ export default function Home() {
     {
       name: "Eliminate render-blocking resources",
       icon: "fail",
+      help: [{
+        help: false,
+        title: 'How to fix properly size images ?',
+        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
+      }],
       files: [
         {
           id: 1,
@@ -140,6 +145,14 @@ export default function Home() {
     {
       name: "Reduce unused CSS",
       icon: "average",
+      help: [
+          {
+        help: false,
+        title: 'How to fix properly size images ?',
+        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
+      },
+
+      ],
       files: [
         {
           id: 1,
@@ -207,6 +220,18 @@ export default function Home() {
     {
       name: "Properly Sized Image",
       icon: "pass",
+      help: [
+          {
+        help: true,
+        title: 'How to fix properly size images ?',
+        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
+        },
+        {
+          help: false,
+          title: 'How to fix properly size images ?',
+          content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
+        }
+      ],
       files: [
         {
           id: 1,
