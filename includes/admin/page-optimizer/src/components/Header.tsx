@@ -5,9 +5,16 @@ import {
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/parts/theme-switcher";
+import {useState} from "react";
 
 
 const Header = ({ url = null}: { url: string|null}) => {
+
+    const [isDesktop, setIsDesktop] = useState(true);
+
+    const desktopButtonClick = (isDesktop: boolean) => {
+        setIsDesktop(isDesktop);
+    };
 
     return (
 
@@ -17,12 +24,12 @@ const Header = ({ url = null}: { url: string|null}) => {
                     <img className='w-36' src='/logo.svg' alt='RapidLoad - #1 to unlock breakneck page speed'/>
                 </div>
                 <div className='flex flex-column items-center gap-4'>
-                    <div className='flex gap-2 dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>
-                        <div className='flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 bg-white border-gray-border border rounded-2xl'>
-                            <ComputerDesktopIcon className="h-6 w-6  dark:text-zinc-500 text-[#7f54b3]" /> Desktop
+                    <div className='flex dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>
+                        <div onClick={() => desktopButtonClick(true)} className={`flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 font-medium rounded-2xl border ${isDesktop? 'bg-white border-gray-300':'border-[#eff1f5] '}`}>
+                            <ComputerDesktopIcon  className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
                         </div>
-                        <div className='flex flex-column gap-2 pl-4 pr-8 py-3'>
-                            <DevicePhoneMobileIcon className="h-6 w-6 dark:text-zinc-500 text-[#7f54b3]" /> Mobile
+                        <div onClick={() => desktopButtonClick(false)} className={`flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 font-medium rounded-2xl  border ${isDesktop? 'border-[#eff1f5]':'bg-white border-gray-300'}`}>
+                            <DevicePhoneMobileIcon  className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>
 

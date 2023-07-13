@@ -17,6 +17,10 @@ class RapidLoad_Admin_Frontend
 
         add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
+        // add styles to admin bar menu
+        add_action( 'admin_head', [$this,'rapidload_admin_bar_css'] );
+        add_action( 'wp_head', [$this,'rapidload_admin_bar_css'] );
+
         if($this->is_rapidload_legacy_page()){
 
             $this->load_legacy_scripts();
@@ -124,6 +128,31 @@ class RapidLoad_Admin_Frontend
 
         }
 
+    }
+
+    public function rapidload_admin_bar_css()
+    {
+        if ( is_admin_bar_showing() ) { ?>
+
+
+            <style>
+
+                #wp-admin-bar-rapidload .rl-node-wrapper {
+                    display: flex;
+                    gap: 6px;
+                }
+
+                #wp-admin-bar-rapidload .rl-icon {
+                    display: inline-flex;
+                }
+
+                #wp-admin-bar-rapidload .rl-icon img {
+                    margin: 0 !important;
+                }
+
+            </style>
+
+        <?php }
     }
 
     public function load_legacy_ajax(){
