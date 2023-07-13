@@ -17,7 +17,7 @@ export default function Home() {
   const fetchData = async () => {
     try {
 
-      const response = await fetch(`http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${encodeURI(url)}`, {
+      const response = await fetch(`/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${encodeURI(url)}`, {
         method: 'GET',
       });
 
