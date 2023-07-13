@@ -17,9 +17,10 @@ export default function Home() {
   const fetchData = async () => {
     try {
 
-      const response = await fetch(`/wp-admin/admin-ajax.php?action=fetch_page_speed&url=${encodeURI(url)}`, {
+      const response = await fetch(`${window.uucss_global.ajax_url}?action=fetch_page_speed&url=${encodeURI(url)}`, {
         method: 'GET',
       });
+
 
       if (!response.ok) {
         throw new Error('Error: ' + response.status);

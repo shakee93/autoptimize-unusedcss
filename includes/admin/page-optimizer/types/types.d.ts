@@ -60,3 +60,10 @@ interface Audit {
     tags: Array<AuditTypes>,
     help: Help[],
 }
+interface Window {
+    uucss_global: {
+        ajax_url: string;
+        nonce: string;
+
+    };
+}
