@@ -43,7 +43,7 @@ class MinifyCSS
 
     public function minify_css($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_mincss'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_mincss'] )){
             return false;
         }
 

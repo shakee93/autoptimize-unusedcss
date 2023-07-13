@@ -20,7 +20,7 @@ class RapidLoad_HTML_Minifier
 
     public function minify_html($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_html'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_html_minify'] )){
             return false;
         }
 

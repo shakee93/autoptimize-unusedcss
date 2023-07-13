@@ -64,6 +64,38 @@ class Javascript_Enqueue
 
         }
 
+        /*if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
+            $body = $this->dom->find('body', 0);
+            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
+                ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
+                    var listener = function () {
+                        const scriptElements = document.getElementsByTagName('script');
+                        for (let i = 0; i < scriptElements.length; i++) {
+                          const script = scriptElements[i];
+                            if (script.type === 'rapidload/lazyscript') {
+                            const newScript = document.createElement('script');
+                            newScript.type = 'text/javascript';
+                            if (script.id) {
+                              newScript.src = script.id;
+                            }
+                            if (script.src) {
+                              newScript.src = script.src;
+                            } else {
+                              const inlineScript = document.createTextNode(script.textContent || script.innerText);
+                              newScript.appendChild(inlineScript);
+                            }
+                            script.parentNode.replaceChild(newScript, script);
+                          }
+                        }
+                    };
+                    addEventListener(event, listener);
+                });
+            });");
+
+            $node->setAttribute('type', 'text/javascript');
+            $body->appendChild($node);
+        }*/
+
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
@@ -150,6 +182,10 @@ class Javascript_Enqueue
             return;
         }
 
+        if(preg_match('/\.min\.js/', $filename)){
+            return;
+        }
+
         if($this->str_contains($filename, ".min.js")){
             $filename = str_replace(".min.js","-{$version}.min.js", $filename);
         }else if($this->str_contains($filename, ".js" )){
@@ -210,10 +246,7 @@ class Javascript_Enqueue
                             unset($link->{"data-rapidload-delayed"});
                             $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
                         }else{
-                            $inner_text = $link->innertext();
-                            if(!empty($inner_text)){
-                                $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-                            }
+                            $this->defer_inline_js($link);
                         }
                     }else{
                         if(isset($link->{"data-rapidload-delayed"})){
@@ -236,6 +269,28 @@ class Javascript_Enqueue
                 }
             }
         }
+
+    }
+
+    public function defer_inline_js($link){
+        $inner_text = $link->innertext();
+        if(!empty($inner_text)){
+
+            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'jQuery|\$\.\(|\$\(' );
+
+            if ( isset($link->type) && preg_match( '/(application\/ld\+json)/i', $link->type ) ) {
+                return;
+            }
+
+            if ( ! empty( $jquery_patterns ) && ! preg_match( "/({$jquery_patterns})/msi", $inner_text ) ) {
+                return;
+            }
+
+            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
+            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
+            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript"> window.addEventListener("DOMContentLoaded", function() { ' . $inner_text . ' }); </script>');
+        }
+
 
     }
 

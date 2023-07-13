@@ -336,6 +336,10 @@ class UnusedCSS
             return false;
         }
 
+        if(isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" && !wp_doing_ajax()){
+            return false;
+        }
+
         if(!$this->is_url_allowed($job->url, $args)){
             return false;
         }

@@ -87,6 +87,10 @@
                 return;
             }
 
+            if(window.rapidload.do_not_load_original_css){
+                return;
+            }
+
             ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
                 var listener = function () {
                     load_css(window.rapidload.files)
