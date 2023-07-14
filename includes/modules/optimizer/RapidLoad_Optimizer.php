@@ -152,6 +152,10 @@ class RapidLoad_Optimizer
             wp_send_json_success('param missing');
         }
 
+        if(!isset($_REQUEST['strategy'])){
+            wp_send_json_success('param missing');
+        }
+
         $job = new RapidLoad_Job([
            'url' => $_REQUEST['url']
         ]);
