@@ -257,19 +257,36 @@ class RapidLoad_Optimizer
 
     public function optimizer_enable_font(){
 
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url param missing');
+        }
+
         if(!isset($_REQUEST['status'])){
-            wp_send_json_success('param missing');
+            wp_send_json_error('status param missing');
         }
 
-        self::$options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+        $job = new RapidLoad_Job([
+            'url' => $_REQUEST['url']
+        ]);
 
-        if(self::$options['uucss_self_host_google_fonts'] == "1"){
-            self::$options['uucss_enable_font_optimization'] = "1";
+        $options = $_REQUEST['strategy'] == "desktop" ? $job->get_desktop_options() : $job->get_mobile_options();
+
+        if(empty($options)){
+            $options = self::$options;
         }
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        $options['uucss_enable_font_optimization'] = "1";
+        $options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
 
-        wp_send_json_success(true);
+        if($_REQUEST['strategy'] == "desktop"){
+            $job->set_desktop_options($options);
+        }else{
+            $job->set_mobile_options($options);
+        }
+
+        $job->save(!$job->exist());
+
+        wp_send_json_success($options);
     }
 
     public function add_actions_unsized_images($opp){
@@ -289,8 +306,12 @@ class RapidLoad_Optimizer
 
     public function optimizer_set_image_width_and_height(){
 
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url param missing');
+        }
+
         if(!isset($_REQUEST['status'])){
-            wp_send_json_success('param missing');
+            wp_send_json_error('status param missing');
         }
 
         self::$options['uucss_set_width_and_height'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
