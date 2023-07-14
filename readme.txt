@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.22 - 14/07/2023 =
+ * feat: add filter to prevent load original css on user interaction
+
 = 2.0.21 - 11/07/2023 =
  * feat: improve inline js optimization
 
