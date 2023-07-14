@@ -145,6 +145,7 @@ class RapidLoad_Image_Enqueue
 
             $style_lines = explode(";",$inline_style->style);
             $_style_lines = [];
+            $background_image_found = false;
 
             foreach ($style_lines as $style_line){
 
@@ -157,8 +158,14 @@ class RapidLoad_Image_Enqueue
 
                         foreach ($matches as $match) {
                             $url = $this->extractUrl($match[1]);
+
+                            if($this->is_file_excluded($url)){
+                                continue;
+                            }
+
                             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
                             if (in_array($urlExt, $this->imgExt)) {
+                                $background_image_found = true;
                                 $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
                                 $inline_style->{'data-rapidload-lazy-bg'} = $replace_url;
                                 $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
@@ -173,7 +180,9 @@ class RapidLoad_Image_Enqueue
 
             }
 
-            $inline_style->style = implode(";",$_style_lines);
+            if($background_image_found){
+                $inline_style->style = implode(";",$_style_lines);
+            }
 
             /*preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
 
