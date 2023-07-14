@@ -14,6 +14,8 @@ class RapidLoad_Job{
     public $rule_id = null;
     public $rule_note;
     public $created_at;
+    public $desktop_options;
+    public $mobile_options;
 
     public $parent;
 
@@ -50,6 +52,8 @@ class RapidLoad_Job{
             $this->rule_id = $exist->rule_id;
             $this->rule_note = $exist->rule_note;
             $this->created_at = $exist->created_at;
+            $this->desktop_options = isset($exist->desktop_options) ? $exist->desktop_options : null;
+            $this->mobile_options = isset($exist->mobile_options) ? $exist->mobile_options : null;
 
             if(isset($this->rule_id) && $this->rule_id != $this->id && $this->rule == 'is_url'){
                 $this->parent = RapidLoad_Job::find_or_fail($this->rule_id);
@@ -215,4 +219,40 @@ class RapidLoad_Job{
         }
 
     }
+
+    function get_desktop_options(){
+
+        if(isset($this->desktop_options)){
+            return unserialize($this->desktop_options);
+        }
+        return [];
+    }
+
+    function get_mobile_options(){
+
+        if(isset($this->mobile_options)){
+            return unserialize($this->mobile_options);
+        }
+        return [];
+    }
+
+    function set_desktop_options($options){
+
+        if(isset($options) && is_array($options) && !empty($options)){
+            $this->desktop_options = serialize($options);
+        }else{
+            $this->desktop_options = null;
+        }
+    }
+
+    function set_mobile_options($options){
+
+        if(isset($options) && is_array($options) && !empty($options)){
+            $this->mobile_options = serialize($options);
+        }else{
+            $this->mobile_options = null;
+        }
+    }
+
+
 }
