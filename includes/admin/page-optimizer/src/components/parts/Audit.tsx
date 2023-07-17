@@ -6,6 +6,7 @@ import SelectionBox from "./selectionbox";
 import SettingItem from './SettingItem';
 import Icon from './Icon';
 import {IconLink} from './icon-svg';
+import ShrinkString from './ShrinkString';
 
 interface AuditProps {
     audit?: Audit;
@@ -39,7 +40,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     };
 
 
-    if (!audit?.name) {
+    if (!audit?.id) {
         return <></>;
     }
 
@@ -59,7 +60,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-purple-100`}>
                             <Icon icon={audit.icon }/>
                             </span>
-                    {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-300'/>
+                    {audit.title} <InformationCircleIcon className='w-6 h-6 text-gray-300/75'/>
                 </div>
 
                 <div className={'flex'}>
@@ -147,21 +148,23 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                 </thead>
                                 <tbody className={'divide-y divide-gray-border dark:divide-gray-border'}>
                                 {audit.files?.map((data, index) => (
+
+
                                     <tr key={index}>
                                         <td className='px-6 py-3 whitespace-nowrap'>
                                             <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.file_type}</div>
                                         </td>
                                         <td className='px-6 py-3 whitespace-nowrap'>
                                             <div className='text-sm font-medium text-gray-900 dark:text-white flex items-center'>
-                                                <span className='mr-2'>{data.urls}</span>
+                                                <span className='mr-2'><ShrinkString text={data.url} /></span>
                                                 <IconLink/>
                                             </div>
                                         </td>
                                         <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.trasnsfer_size}</div>
+                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.totalBytes}</div>
                                         </td>
                                         <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.potential_savings}</div>
+                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.wastedMs}</div>
                                         </td>
                                         <td className='px-6 py-3 whitespace-nowrap'>
                                             <div className='flex items-center space-x-2'>
@@ -169,6 +172,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                             </div>
                                         </td>
                                     </tr>
+
                                 ))}
                                 </tbody>
                             </table>
