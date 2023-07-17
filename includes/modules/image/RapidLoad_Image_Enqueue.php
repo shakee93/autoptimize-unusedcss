@@ -158,6 +158,11 @@ class RapidLoad_Image_Enqueue
 
                         foreach ($matches as $match) {
                             $url = $this->extractUrl($match[1]);
+
+                            if($this->is_file_excluded($url)){
+                                continue;
+                            }
+
                             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
                             if($this->is_file_excluded($url)){
