@@ -76,16 +76,16 @@ class RapidLoad_Base
 
             }, 10 , 1);
 
+            add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+            add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+                $this,
+                'add_plugin_action_link'
+            ] );
+
+            $this->add_plugin_update_message();
+
             if(is_admin()){
-
-                add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-                add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
-                    $this,
-                    'add_plugin_action_link'
-                ] );
-
-                $this->add_plugin_update_message();
 
                 RapidLoad_DB::check_db_updates();
 
@@ -374,7 +374,7 @@ class RapidLoad_Base
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
     {
         if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://docs.rapidload.io/" target="_blank">Documentation</a>';
             $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
         }
         return $plugin_meta;

@@ -36,7 +36,27 @@ class RapidLoad_Image
             }, 90);
         }
 
+        add_filter('rapidload/cache_file_creating/css', [$this, 'optimize_css_file_images'], 10 , 1);
+
         self::$instance = $this;
+    }
+
+    public function optimize_css_file_images($css){
+
+        $parser = new \Sabberworm\CSS\Parser($css);
+        $cssDocument = $parser->parse();
+        foreach ($cssDocument->getAllValues() as $value) {
+            if( $value instanceof \Sabberworm\CSS\Value\URL){
+                $url = $this->extractUrl($value->getURL()->getString());
+                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                if (in_array($urlExt, ["jpg", "jpeg", "png", "webp"])) {
+                    $replace_url = RapidLoad_Image::get_replaced_url($url,self::$image_indpoint);
+                    $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                }
+            }
+        }
+
+        return $cssDocument->render();
     }
 
     public function enqueue_frontend_js(){
@@ -47,7 +67,6 @@ class RapidLoad_Image
             (function(w, d){
                 w.rapidload_io_data = {
                     nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
-                    ajax_url : "<?php echo admin_url( 'admin-ajax.php' ) ?>",
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
@@ -56,7 +75,7 @@ class RapidLoad_Image
                 var s = d.createElement("script");
                 s.defer = true;
                 s.type = "text/javascript";
-                s.src = "<?php echo UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION ?>";
+                s.src = "<?php echo self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION) ?>";
                 b.appendChild(s);
             }(window, document));
 
@@ -67,7 +86,7 @@ class RapidLoad_Image
 
     public function optimize_image($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_image'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_image'] )){
             return false;
         }
 
@@ -109,6 +128,29 @@ class RapidLoad_Image
         }
 
         return $cdn . $options . '/' . $url;
+    }
+
+    public function extractUrl($url){
+
+        $parsedUrl = parse_url($url);
+
+        if (!isset($parsedUrl['scheme'])) {
+            $url = "https:" . $url;
+        }
+
+        if(!$this->isAbsolute($url)){
+            $url = untrailingslashit(site_url()) . $url;
+        }
+
+        if(strpos($url,"//", 0) === 0){
+            $url = "https:" . $url;
+        }
+
+        return $url;
+    }
+
+    function isAbsolute($url) {
+        return isset(parse_url($url)['host']);
     }
 
 }

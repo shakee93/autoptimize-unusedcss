@@ -130,7 +130,7 @@ class RapidLoad_Font
 
     public function optimize_font($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_font'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_font'] )){
             return false;
         }
 

@@ -90,11 +90,11 @@ class RapidLoad_Admin_Frontend
 
     public function add_rapidload_admin_bar_menu($wp_admin_bar){
 
-        if(apply_filters('rapidload/tool-bar-menu',true)){
+        if(apply_filters('rapidload/tool-bar-menu',true) && current_user_can( 'manage_options' )){
 
             $wp_admin_bar->add_node( array(
                 'id'    => 'rapidload',
-                'title' => '<img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
+                'title' => '<img src="'. UUCSS_PLUGIN_URL .'assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
                 'href'  => admin_url( 'admin.php?page=rapidload' ),
                 'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
             ));
@@ -109,6 +109,7 @@ class RapidLoad_Admin_Frontend
                 'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
                 'parent' => 'rapidload'
             ));
+
         }
 
     }

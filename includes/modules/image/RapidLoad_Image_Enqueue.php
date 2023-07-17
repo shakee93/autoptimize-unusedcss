@@ -52,31 +52,76 @@ class RapidLoad_Image_Enqueue
 
         // replacing urls
 
-        $images = $this->dom->find( 'img[src]' );
+        $attributes = [
+            [
+                'tag' => 'img',
+                'attr' => 'src'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-src'
+            ]
+        ];
 
-        foreach ( $images as $img ) {
+        foreach ($attributes as $attribute){
 
-            if($this->str_contains($img->src, RapidLoad_Image::$image_indpoint)){
+            $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
+
+            foreach ( $images as $img ) {
+
+                if($this->str_contains($img->{$attribute['attr']}, RapidLoad_Image::$image_indpoint)){
+                    continue;
+                }
+
+                if($this->is_file_excluded($img->{$attribute['attr']})){
+                    continue;
+                }
+
+                $url = $this->extractUrl($img->{$attribute['attr']});
+
+                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+                if (in_array($urlExt, $this->imgExt)) {
+
+                    $data_src = 'data-original-src';
+                    $img->{$attribute['attr']} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                        'optimize_level' => 'lqip'
+                    ]);
+                    //$this->get_placeholder($img);
+
+                    $img->$data_src = $url;
+                    unset($img->{'srcset'});
+
+                }
+
+            }
+        }
+
+        $videos = $this->dom->find( 'video[poster]' );
+
+        foreach ( $videos as $video ) {
+
+            if($this->str_contains($video->{'poster'}, RapidLoad_Image::$image_indpoint)){
                 continue;
             }
 
-            if($this->is_file_excluded($img->src)){
+            if($this->is_file_excluded($video->{'poster'})){
                 continue;
             }
 
-            $url = $this->extractUrl($img->src);
+            $url = $this->extractUrl($video->{'poster'});
 
             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
             if (in_array($urlExt, $this->imgExt)) {
 
-                $data_src = 'data-original-src';
-                $img->src = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                $data_src = 'data-original-poster';
+                $video->{'poster'} = RapidLoad_Image::get_replaced_url($url, null, $video->width, $video->height, [
                     'optimize_level' => 'lqip'
                 ]);
                 //$this->get_placeholder($img);
 
-                $img->$data_src = $url;
+                $video->$data_src = $url;
 
             }
 
@@ -100,6 +145,7 @@ class RapidLoad_Image_Enqueue
 
             $style_lines = explode(";",$inline_style->style);
             $_style_lines = [];
+            $background_image_found = false;
 
             foreach ($style_lines as $style_line){
 
@@ -112,8 +158,14 @@ class RapidLoad_Image_Enqueue
 
                         foreach ($matches as $match) {
                             $url = $this->extractUrl($match[1]);
+
+                            if($this->is_file_excluded($url)){
+                                continue;
+                            }
+
                             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
                             if (in_array($urlExt, $this->imgExt)) {
+                                $background_image_found = true;
                                 $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
                                 $inline_style->{'data-rapidload-lazy-bg'} = $replace_url;
                                 $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
@@ -128,7 +180,9 @@ class RapidLoad_Image_Enqueue
 
             }
 
-            $inline_style->style = implode(";",$_style_lines);
+            if($background_image_found){
+                $inline_style->style = implode(";",$_style_lines);
+            }
 
             /*preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
 
@@ -258,33 +312,48 @@ class RapidLoad_Image_Enqueue
 
     public function set_width_and_height(){
 
+        $attributes = [
+            [
+                'tag' => 'img',
+                'attr' => 'src'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-src'
+            ]
+        ];
+
         if(isset($this->options['uucss_set_width_and_height']) && $this->options['uucss_set_width_and_height'] == "1"){
 
-            $images = $this->dom->find( 'img[src]' );
+            foreach ($attributes as $attribute){
 
-            foreach ( $images as $img ) {
+                $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
 
-                if($this->is_file_excluded($img->src)){
-                    continue;
-                }
+                foreach ( $images as $img ) {
 
-                $url = $this->extractUrl($img->src);
-
-                $file_path = self::get_file_path_from_url($url);
-
-                $dimension = self::get_width_height($file_path);
-
-                if ($dimension && isset($dimension['width']) && $dimension['height']) {
-
-                    if (!isset($img->width)) {
-                        $img->width = $dimension['width'];
+                    if($this->is_file_excluded($img->{$attribute['attr']})){
+                        continue;
                     }
 
-                    if (!isset($img->height) || $img->height == "auto") {
-                        $img->height = $dimension['height'];
-                    }
+                    $url = $this->extractUrl($img->{$attribute['attr']});
 
+                    $file_path = self::get_file_path_from_url($url);
+
+                    $dimension = self::get_width_height($file_path);
+
+                    if ($dimension && isset($dimension['width']) && $dimension['height']) {
+
+                        if (!isset($img->width)) {
+                            $img->width = $dimension['width'];
+                        }
+
+                        if (!isset($img->height) || $img->height == "auto") {
+                            $img->height = $dimension['height'];
+                        }
+
+                    }
                 }
+
             }
 
         }
@@ -292,6 +361,12 @@ class RapidLoad_Image_Enqueue
     }
 
     public function extractUrl($url){
+
+        $parsedUrl = parse_url($url);
+
+        if (!isset($parsedUrl['scheme'])) {
+            $url = "https:" . $url;
+        }
 
         if(!$this->isAbsolute($url)){
             $url = untrailingslashit(site_url()) . $url;

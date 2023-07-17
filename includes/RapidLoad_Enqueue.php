@@ -164,10 +164,10 @@ class RapidLoad_Enqueue {
                 }
 
                 if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped glob pattern match : ' . $url );
                     return false;
                 }else if ( self::str_contains( urldecode($url), $pattern ) ) {
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped string contains : ' . $url );
                     return false;
                 }
 
@@ -177,12 +177,12 @@ class RapidLoad_Enqueue {
         $url_parts = parse_url( $url );
 
         if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped query contains: ' . $url );
             return false;
         }
 
         if(!apply_filters('uucss/url/exclude', $url)){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped url exclude : ' . $url );
             return false;
         }
 
@@ -277,13 +277,11 @@ class RapidLoad_Enqueue {
         $front_end_enabled['add_queue_enabled'] = !isset( $this->options['uucss_disable_add_to_queue'] ) ||
             isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] != "1";
 
-        if ( $front_end_enabled['add_queue_enabled'] || $this->rule)
-        {
-            if(!isset($job->id)){
 
-                $job->save();
+        if(!isset($job->id)){
 
-            }
+            $job->save();
+
         }
 
         do_action('rapidload/job/handle', $job, $args);

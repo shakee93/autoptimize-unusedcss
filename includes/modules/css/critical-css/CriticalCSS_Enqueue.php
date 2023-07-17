@@ -123,9 +123,17 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            $sheet->onload = "this.onload=null;this.rel='stylesheet'";
-            $sheet->rel = "preload";
-            $sheet->as = "style";
+            if(!$this->is_mobile){
+                $sheet->onload = "this.onload=null;this.rel='stylesheet'";
+                $sheet->rel = "preload";
+                $sheet->as = "style";
+            }else{
+                if(!apply_filters('rapidload/frontend/do-not-load/original-css', false)){
+                    unset($sheet->href);
+                }
+            }
+
+
 
         }
     }

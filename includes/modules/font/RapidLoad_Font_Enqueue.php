@@ -147,14 +147,23 @@ class RapidLoad_Font_Enqueue
             }
 
             if (is_file($file_path)) {
-                $google_font->href = $file_url;
-                if(isset($google_font->id)){
-                    $google_font->{'data-id'} = $google_font->id;
-                    $google_font->id = 'rapidload-google-font-' . $version;
-                    $google_font->onload = null;
-                    $google_font->as = null;
-                    $google_font->rel = 'stylesheet';
+
+                if(apply_filters('uucss/enqueue/inline/google-font', false)){
+                    $content = @file_get_contents($file_path);
+                    $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
+                    $title_content = $this->dom->find( 'title' )[0]->outertext;
+                    $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
+                }else{
+                    $google_font->href = $file_url;
+                    if(isset($google_font->id)){
+                        $google_font->{'data-id'} = $google_font->id;
+                        $google_font->id = 'rapidload-google-font-' . $version;
+                        $google_font->onload = null;
+                        $google_font->as = null;
+                        $google_font->rel = 'stylesheet';
+                    }
                 }
+
             }
         }
 
