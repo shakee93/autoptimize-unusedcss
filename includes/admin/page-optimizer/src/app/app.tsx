@@ -13,304 +13,117 @@ export default function Home() {
   const [togglePerformance, setTogglePerformance] = useState(false);
   const [url, setUrl] = useState("https://rapidload.io/");
   const [response, setResponse] = useState(null);
+  const [opportunities, setOpportunities] = useState(null);
+  const [metrics, setMetrics] = useState<Metrics[]>([]);
+  const [audits, setAudits] = useState<Audit[]>([]);
+
 
   const fetchData = async () => {
     try {
 
-      const response = await fetch(`${window.uucss_global.ajax_url}?action=fetch_page_speed&url=${encodeURI(url)}`, {
+      const fetchResponse = await fetch(`${window.uucss_global.ajax_url}?action=fetch_page_speed&url=${encodeURI(url)}`, {
         method: 'GET',
       });
 
 
-      if (!response.ok) {
-        throw new Error('Error: ' + response.status);
+      if (!fetchResponse.ok) {
+        throw new Error('Error: ' + fetchResponse.status);
       }
 
-      const responseData = await response.json();
+      const responseData = await fetchResponse.json();
       setResponse(responseData);
-      console.log("Data: ", responseData); // Handle the response data here
+      setOpportunities(responseData?.data?.opportunities)
+      setMetrics(responseData?.data?.result?.Metrics)
     } catch (error) {
       console.error('Error:', error);
     }
+
   };
 
   useEffect(() => {
     setUrl('https://rapidload.io/');
-
     fetchData();
-  }, []);
 
-  const pagespeed: PageSpeed[] = [
-    {
-      performance: 90,
-      metrics: [
-        {
-          id: "first-contentful-paint",
-          title: "LCP",
-          description: "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
-          displayValue: "1.9 s",
-          icon: 'pass',
-        },
-        {
-          id: "speed-index",
-          title: "FID",
-          description: "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
-          displayValue: "4.0 s",
-          icon: 'fail',
-        },
-        {
-          id: "total-blocking-time",
-          title: "CLS",
-          description: "Sum of all time periods between FCP and Time to Interactive, when task length exceeded 50ms, expressed in milliseconds. [Learn more about the Total Blocking Time metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/).",
-          displayValue: "6.0 s",
-          icon: 'average',
-        },
-        {
-          id: "largest-contentful-paint",
-          title: "FCP",
-          description: "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
-          displayValue: "2.5 s",
-          icon: 'fail',
-        },
-        {
-          id: "cumulative-layout-shift",
-          title: "INP",
-          description: "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/cls/).",
-          displayValue: "0",
-          icon: 'fail',
-        }
-      ],
+  },  []);
+
+  useEffect(() => {
+    console.log("Data: ", response);
+    if (opportunities) {
+      const updatedAudits = (opportunities as any[]).map((item: any) => {
+        const audit: Audit = {
+          id: item.id,
+          title: item.title,
+          icon: item?.icon,
+          files: item.details.items.map((subItem: any) => {
+            return {
+              file_type : 'css',
+                  totalBytes: subItem.totalBytes,
+                url:subItem.url,
+                wastedMs: subItem.wastedMs,
+                options: [ { id: 1, label: 'None' },
+              { id: 2, label: 'Defer' },
+              { id: 3, label: 'User Interaction' }],
+
+            }
+          }),
+
+          tags: ["attention_required", "opportunity", "diagnostics"],
+          settings: [
+            {
+              category: "css",
+              name: "Generate critical CSS",
+              ajax_action: "rapidload/settings/css/uucss",
+              action: [
+                {
+                  type: "checkbox",
+                },
+              ],
+              settings: true,
+              status: "progress",
+            },
+          ],
+          help: [
+            {
+              help: false,
+              title: "How to fix properly size images ?",
+              content:
+                  "Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.",
+            },
+          ],
+        };
+
+        return audit;
+      });
+
+      setAudits(updatedAudits);
+
+
     }
-  ];
-  const audits: Audit[] = [
-    {
-      name: "Eliminate render-blocking resources",
-      icon: "fail",
-      help: [{
-        help: false,
-        title: 'How to fix properly size images ?',
-        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
-      }],
-      files: [
-        {
-          id: 1,
-          file_type: "CSS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '136.4 KiB',
-          potential_savings: '134 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 2,
-          file_type: "CSS",
-          urls: "https://rapidload.io/",
-          trasnsfer_size: '100 KiB',
-          potential_savings: '136.4 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 3,
-          file_type: "CSS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '200.6 KiB',
-          potential_savings: '300.7 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-      ],
-      settings: [
-        {
-          category: "css",
-          name: "Generate critical CSS",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "progress",
-        },
 
-      ],
-      tags: ["attention_required", "opportunity", "diagnostics"],
-    },
-    {
-      name: "Reduce unused CSS",
-      icon: "average",
-      help: [
-          {
-        help: false,
-        title: 'How to fix properly size images ?',
-        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
-      },
+  },  [response, opportunities]);
 
-      ],
-      files: [
-        {
-          id: 1,
-          file_type: "JS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '136.4 KiB',
-          potential_savings: '134 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 2,
-          file_type: "JS",
-          urls: "https://rapidload.io/",
-          trasnsfer_size: '100 KiB',
-          potential_savings: '136.4 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 3,
-          file_type: "JS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '200.6 KiB',
-          potential_savings: '300.7 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
+  useEffect(()=>{
+    if(audits.length > 0){
+      console.log('Audits Data : ', audits);
+    }
+  }, [audits])
 
-      ],
-      settings: [
-        {
-          category: "css",
-          name: "Remove unused CSS",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "progress",
-        },
-        {
-          category: "image",
-          name: "Image compression level",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "live",
-        },
-      ],
-      tags: ["attention_required", "opportunity", "diagnostics"],
-    },
-    {
-      name: "Properly Sized Image",
-      icon: "pass",
-      help: [
-          {
-        help: true,
-        title: 'How to fix properly size images ?',
-        content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
-        },
-        {
-          help: false,
-          title: 'How to fix properly size images ?',
-          content: 'Page speed and properly sized images present a valuable opportunity for improving website performance and user experience. Loading time plays a crucial role in web performance, and optimizing page load speed can significantly enhance site responsiveness. Image optimization techniques such as compression, resizing, and format selection can effectively reduce file sizes, resulting in faster load times. By leveraging lazy loading and content delivery networks (CDNs), images can be loaded only when necessary, improving overall site speed.',
-        }
-      ],
-      files: [
-        {
-          id: 1,
-          file_type: "JS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '136.4 KiB',
-          potential_savings: '134 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 2,
-          file_type: "JS",
-          urls: "https://rapidload.io/",
-          trasnsfer_size: '100 KiB',
-          potential_savings: '136.4 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
-        {
-          id: 3,
-          file_type: "JS",
-          urls: "https://rapidload.io/..../autoptimize.css",
-          trasnsfer_size: '200.6 KiB',
-          potential_savings: '300.7 KiB',
-          actions: '',
-          options: [ { id: 1, label: 'None' },
-            { id: 2, label: 'Defer' },
-            { id: 3, label: 'User Interaction' }],
-        },
+  const pagespeed: PageSpeed[] = [];
 
-      ],
-      settings: [
-        {
-          category: "css",
-          name: "Properly Sized Image",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "progress",
-        },
-        {
-          category: "css",
-          name: "Properly Sized Image",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "live",
-        },
-        {
-          category: "css",
-          name: "Properly Sized Image",
-          ajax_action: "rapidload/settings/css/uucss",
-          action: [
-            {
-              type: "checkbox",
-            },
-          ],
-          settings: true,
-          status: "progress",
-        },
+  useEffect(() => {
 
-      ],
-      tags: ["attention_required", "opportunity"],
-    },
-  ];
+      if(metrics){
+
+        pagespeed.push(
+        {
+          performance: 90,
+          metrics: metrics,
+        })
+      console.log("PageSpeed: ", pagespeed);
+      }
+  },  [metrics]);
+
+  // const audits: Audit[] = [];
 
   const tabs: Tab[] = [
     {
@@ -375,7 +188,8 @@ export default function Home() {
               </Card>
             </div>
             <div className="audits pt-4 flex">
-              <Audits activeTab={activeTab} audits={audits}/>
+              {audits.length > 0 &&
+              <Audits activeTab={activeTab} audits={audits}/>}
             </div>
           </article>
         </section>

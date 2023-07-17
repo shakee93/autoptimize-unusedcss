@@ -25,13 +25,12 @@ interface Options{
     id: number,
     label: string,
 }
+
 interface AuditFile  {
-    id: number,
-    file_type: string,
-    urls: string,
-    trasnsfer_size: string,
-    potential_savings: string,
-    actions: string,
+    totalBytes: number,
+    url: string,
+    wastedMs: number,
+    file_type : string,
     options: Options[],
 }
 
@@ -45,20 +44,32 @@ interface  Metrics{
 
 interface PageSpeed{
     performance: number,
-    metrics : Metrics[],
+    metrics : Metrics[] | undefined,
 }
 interface Help{
     help: boolean,
     title : string,
     content: string,
 }
-interface Audit {
-    name: string,
-    icon: 'pass' | 'fail' | 'average',
+// interface Audit {
+//     id: string,
+//     title: string,
+//     icon: 'pass' | 'fail' | 'average',
+//     files: AuditFile[],
+//     settings: AuditSettings[],
+//     tags: Array<AuditTypes>,
+//     help: Help[],
+// }
+
+interface Audit{
+    id: string,
+    title: string,
+    icon: string,
     files: AuditFile[],
-    settings: AuditSettings[],
     tags: Array<AuditTypes>,
+    settings: AuditSettings[],
     help: Help[],
+
 }
 interface Window {
     uucss_global: {
