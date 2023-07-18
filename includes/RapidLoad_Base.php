@@ -586,14 +586,13 @@ class RapidLoad_Base
             'url'     => site_url()
         ] );
 
-        if ( wp_doing_ajax()) {
+        if(isset($data) && isset($data->data) && is_array($data->data)){
+            self::$options['suggested_whitelist_packs'] = $data->data;
+            self::update_option( 'autoptimize_uucss_settings', self::$options );
 
-            if(isset($data) && isset($data->data) && is_array($data->data)){
-                wp_send_json_success( $data->data );
-            }else{
-                wp_send_json_error($data);
+            if(wp_doing_ajax()){
+                wp_send_json_success( $data->data);
             }
-
         }
 
         return isset($data) && isset($data->data) && is_array($data->data) ? $data->data : [];
