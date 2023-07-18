@@ -64,7 +64,7 @@
           <h1 class="font-normal text-base text-black-font">Selector Packs (formally Safelist Packs)</h1>
           <p class="text-sm pb-3 text-gray-font">Selector packs contain predefined force exclude and include rules for plugins and themes.</p>
           <div class="grid mb-5">
-            <div class="flex text-sm">
+            <div class="flex text-sm z-10">
               <vue3-tags-input :tags="whitelist_render"
                                @on-tags-changed="handleChangeTag"
                                @keydown.enter.prevent
@@ -96,7 +96,7 @@
 
 
             <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
-              <p class="text-sm text-dark-gray-font flex"> Click &nbsp;<svg class="fill-none transition ease-in-out" width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 13"><g class="" clip-path="url(#clip0_49_525)"><path d="M11.466 4.33334C10.6301 2.42028 8.72122 1.08334 6.5 1.08334C3.6913 1.08334 1.38187 3.22113 1.11011 5.95834" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9.20825 4.33333H11.5916C11.7711 4.33333 11.9166 4.18783 11.9166 4.00833V1.625" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M1.56079 8.66666C2.39665 10.5797 4.30557 11.9167 6.52676 11.9167C9.33546 11.9167 11.6449 9.77886 11.9167 7.04166" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3.81844 8.66666H1.43511C1.25562 8.66666 1.11011 8.81215 1.11011 8.99166V11.375" stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>&nbsp; to load packs.</p>
+              <p class="text-sm text-dark-gray-font flex"> Click on reload or type and select to load packs.</p>
             </div>
           </div>
 
@@ -347,12 +347,12 @@ export default {
           .then(response => {
            // this.whitelist_packs = ['1:Elementor','2:pluginone']
 
-            if(response.data?.data?.errors[0]?.detail){
-              this.errorMessage = response.data?.data?.errors[0].detail;
-            }else if(response.data?.data){
+             if(response.data?.data){
               this.onData.whitelist_packs = response.data?.data?.map((value) => {
                 return value.id + ':' + value.name;
               })
+            }else if(response.data?.data?.errors[0]?.detail){
+              this.errorMessage = response.data?.data?.errors[0].detail;
             }
             this.refresh_element = false;
             this.focus=null;
