@@ -60,13 +60,13 @@
             <p class="text-sm pb-3 text-gray-font">Your CDN endpoint to store and serve all your resources across the CDN network</p>
             <div class="flex">
 
-              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''|| !devmode? 'pointer-events-none cursor-default disabled':''"
+              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''|| devmode? '':'pointer-events-none cursor-default disabled'"
                      ref="cdn_url"
                      v-model="uucss_cdn_url"
                      @focus="focus='cdn-endpoint'"
                      @blur="focus=''"
                      style="padding-left:15px"
-                     class="pointer-events-none cursor-default disabled cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                     class="cursor-default cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                      id="cdn-url" type="text" placeholder="">
               <div class="relative z-50">
               <button @click="copy" :disabled="loading"
