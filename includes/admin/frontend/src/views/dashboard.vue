@@ -457,7 +457,7 @@ export default {
       axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce).then((response)=>{
         if(response.data?.data){
 
-          if(response.data?.data === 'License key authentication failed'){
+          if(response.data?.data === 'License key authentication failed' || response.data?.data?.licensed_domain === null){
             this.disconnect_license();
             localStorage.clear();
             this.license_information.name = null
@@ -466,7 +466,7 @@ export default {
             this.license_information.licensed_domain = null
             this.license_information.key = ''
 
-          }else{
+          }else if(response.data?.data !== "cURL error 6: Could not resolve host: api.rapidload.io"){
             const licenseData = []
             licenseData.push(response.data?.data)
             localStorage.setItem('rapidLoadLicense', JSON.stringify(licenseData))

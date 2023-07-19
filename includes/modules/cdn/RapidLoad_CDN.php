@@ -22,6 +22,49 @@ class RapidLoad_CDN
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('wp_ajax_validate_cdn', [$this, 'validate_cdn']);
+
+    }
+
+    public function validate_cdn(){
+
+        $api = new RapidLoad_Api();
+
+        $response = $api->post('cdn',[
+            'url' => trailingslashit(site_url())
+        ]);
+
+        if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
+
+            if(isset($this->options['uucss_cdn_zone_id']) && isset($this->options['uucss_cdn_dns_id'])){
+
+                if($this->options['uucss_cdn_zone_id'] != $response->zone_id){
+
+                    $api->post('delete-cdn',[
+                        'dns_id' => $this->options['uucss_cdn_dns_id'],
+                        'zone_id' => $this->options['uucss_cdn_zone_id']
+                    ]);
+
+                }
+
+            }
+
+            $this->options['uucss_cdn_zone_id'] = $response->zone_id;
+            $this->options['uucss_cdn_dns_id'] = $response->dns_id;
+            $this->options['uucss_cdn_url'] = $response->cdn_url;
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
+
+        if(wp_doing_ajax()){
+            wp_send_json_success([
+                'uucss_cdn_zone_id' => $response->zone_id,
+                'uucss_cdn_dns_id' => $response->dns_id,
+                'uucss_cdn_url' => $response->cdn_url
+            ]);
+        }
+
+        return true;
     }
 
     public function vanish(){

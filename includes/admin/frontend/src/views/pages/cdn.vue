@@ -58,17 +58,41 @@
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">CDN Endpoint</h1>
             <p class="text-sm pb-3 text-gray-font">Your CDN endpoint to store and serve all your resources across the CDN network</p>
+            <div>
             <div class="flex">
 
-              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''|| !devmode? 'pointer-events-none cursor-default disabled':''"
+              <input :class="focus==='cdn-endpoint'? 'cdn-endpoint': ''|| devmode? '':'pointer-events-none cursor-default disabled'"
                      ref="cdn_url"
                      v-model="uucss_cdn_url"
                      @focus="focus='cdn-endpoint'"
                      @blur="focus=''"
                      style="padding-left:15px"
-                     class="pointer-events-none cursor-default disabled cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                      id="cdn-url" type="text" placeholder="">
-              <div class="relative z-50">
+
+              <div class="mt-2.5 -ml-9 cursor-pointer z-50">
+                <svg :class="{'animate-spin': refresh_element}" @click=""
+                     class="fill-none transition ease-in-out" width="20px" height="20px"
+                     xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 13 13">
+                  <g class="" clip-path="url(#clip0_49_525)">
+                    <path
+                        d="M11.466 4.33334C10.6301 2.42028 8.72122 1.08334 6.5 1.08334C3.6913 1.08334 1.38187 3.22113 1.11011 5.95834"
+                        stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9.20825 4.33333H11.5916C11.7711 4.33333 11.9166 4.18783 11.9166 4.00833V1.625"
+                          stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path
+                        d="M1.56079 8.66666C2.39665 10.5797 4.30557 11.9167 6.52676 11.9167C9.33546 11.9167 11.6449 9.77886 11.9167 7.04166"
+                        stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.81844 8.66666H1.43511C1.25562 8.66666 1.11011 8.81215 1.11011 8.99166V11.375"
+                          stroke="#7F54B3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+
+                </svg>
+              </div>
+            </div>
+
+            <div class="relative ml-2">
               <button @click="copy" :disabled="loading"
                       :class="{ 'hidden': !uucss_cdn_url }"
                       class="flex pt-2 -ml-10 transition duration-300 bg-transparent font-semibold text-black py-1.5 px-2 border border-transparent rounded-r-lg">
@@ -76,17 +100,17 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
                 </svg>
               </button>
-                <div v-if="cdn_url_verified" class="-mt-[28px] ml-[3px]">
-                  <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
-                    <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
-                  </svg>
-                </div>
+              <div v-if="cdn_url_verified" class="-mt-[28px] ml-[3px]">
+                <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
+                  <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
+                </svg>
+              </div>
               <div :class="copied ? 'rl-Show' : 'rl-Hide'" class="-mt-20 mr-6 px-2 absolute -left-10" >
                 <div class="arrow-top-copied arrow-top font-medium text-xs relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
                   Copied</div>
               </div>
-              </div>
+            </div>
 
             </div>
           </div>
@@ -95,17 +119,21 @@
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Zone</h1>
             <p class="text-sm pb-3 text-gray-font"></p>
-            <input
+            <input :class="focus==='zone'? 'zone': ''"
+                @focus="focus='zone'"
+                @blur="focus=''"
                 v-model="uucss_cdn_zone_id"
-                class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                 id="bunny-cdn" type="text" placeholder="">
           </div>
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">DNS</h1>
             <p class="text-sm pb-3 text-gray-font"></p>
-            <input
+            <input :class="focus==='dns'? 'dns': ''"
+                   @focus="focus='dns'"
+                   @blur="focus=''"
                 v-model="uucss_cdn_dns_id"
-                class="resize-none text-xs z-50 appearance-none border gray-border rounded-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                 id="clouldflare" type="text" placeholder="">
           </div>
 

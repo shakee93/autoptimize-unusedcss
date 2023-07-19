@@ -81,7 +81,9 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
 
         $excludable_urls = [];
 
-        if(class_exists('WC_Order')){
+        $permalink_structure = get_option('permalink_structure');
+
+        if(class_exists('WC_Order') && $permalink_structure){
 
             $order = new WC_Order();
 
