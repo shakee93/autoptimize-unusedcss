@@ -288,6 +288,10 @@ body .rapidload {
 .v3ti .v3ti-new-tag {
     padding: 0 4px 0 5px !important;
 }
+.v3ti--focus {
+    border-color: #7F54B3 !important;
+    box-shadow: 0 0 0 1px #7F54B3 !important;
+}
 
 
 @media (min-width: 905px) {
