@@ -10,6 +10,8 @@ class RapidLoad_CDN
     {
         $this->options = RapidLoad_Base::fetch_options();
 
+        add_action('wp_ajax_validate_cdn', [$this, 'validate_cdn']);
+
         if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] == ""){
             return;
         }
@@ -21,8 +23,6 @@ class RapidLoad_CDN
         add_filter('uucss/enqueue/cdn', [$this, 'replace_cdn_url'], 30);
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
-
-        add_action('wp_ajax_validate_cdn', [$this, 'validate_cdn']);
 
     }
 
