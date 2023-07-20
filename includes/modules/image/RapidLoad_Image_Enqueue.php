@@ -362,18 +362,8 @@ class RapidLoad_Image_Enqueue
 
     public function extractUrl($url){
 
-        $parsedUrl = parse_url($url);
-
-        if (!isset($parsedUrl['scheme'])) {
-            $url = "https:" . $url;
-        }
-
         if(!$this->isAbsolute($url)){
-            $url = untrailingslashit(site_url()) . $url;
-        }
-
-        if(strpos($url,"//", 0) === 0){
-            $url = "https:" . $url;
+            $url = $this->makeURLAbsolute($url, site_url());
         }
 
         return $url;
@@ -381,6 +371,22 @@ class RapidLoad_Image_Enqueue
 
     function isAbsolute($url) {
         return isset(parse_url($url)['host']);
+    }
+
+    function makeURLAbsolute($relative_url, $base_url) {
+
+        $parsed_base_url = parse_url($base_url);
+
+        if (strpos($relative_url, '/') !== 0) {
+            $relative_url = '/' . $relative_url;
+        }
+
+        $absolute_url = $parsed_base_url['scheme'] . '://';
+        $absolute_url .= $parsed_base_url['host'];
+        $absolute_url .= (isset($parsed_base_url['port'])) ? ':' . $parsed_base_url['port'] : '';
+        $absolute_url .= $relative_url;
+
+        return $absolute_url;
     }
 
     function get_placeholder($image)

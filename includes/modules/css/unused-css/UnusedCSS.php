@@ -242,6 +242,10 @@ class UnusedCSS
                     $link['time'] = isset( $job_data->created_at ) ? strtotime( $job_data->created_at ) : null;
                     $link['attempts'] = isset( $job_data->attempts ) ? $job_data->attempts : null;
                     $link['rule'] = $job_data->job->rule;
+
+                    if(boolval($link['meta']['warnings']) == false){
+                        $link['meta']['warnings'] = [];
+                    }
                 }
 
             }
