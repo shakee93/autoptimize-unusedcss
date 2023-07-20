@@ -20,6 +20,9 @@ class RapidLoad_Admin_Bar {
 
         // Enqueued script with localized data.
         wp_enqueue_script( 'rapidload-page-optimizer-data' );
+
+        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
+
     }
 
     public function rapidload_admin_bar_css()
