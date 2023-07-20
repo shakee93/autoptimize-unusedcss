@@ -4,9 +4,19 @@ module.exports = {
       "src/**/*.tsx"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Lexend', 'sans-serif'],
+      },
+    }
   },
   plugins: [],
-  // prefix: 'rlsp-'
+  // prefix: 'rlsp-',
+  options: {
+    safelist: ['rl-node-wrapper'],
+  },
+  corePlugins: {
+    // preflight: false
+  }
 }
 

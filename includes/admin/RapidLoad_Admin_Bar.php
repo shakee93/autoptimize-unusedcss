@@ -5,7 +5,6 @@ class RapidLoad_Admin_Bar {
     public function __construct()
     {
 
-        add_action( 'admin_head', [$this,'rapidload_admin_bar_css'] );
         add_action( 'wp_head', [$this,'rapidload_admin_bar_css'] );
         add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
@@ -22,6 +21,7 @@ class RapidLoad_Admin_Bar {
         wp_enqueue_script( 'rapidload-page-optimizer-data' );
 
         wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
+        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
     }
 
@@ -71,16 +71,16 @@ class RapidLoad_Admin_Bar {
                     'meta'  => array( 'class' => '' ),
                 ));
 
-                $wp_admin_bar->add_node( array(
-                    'id'    => 'rapidload-clear-cache',
-                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
-                    //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
-                    'href'   => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                    ) ), 'uucss_nonce', 'nonce' ),
-                    'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
-                    'parent' => 'rapidload'
-                ));
+//                $wp_admin_bar->add_node( array(
+//                    'id'    => 'rapidload-clear-cache',
+//                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
+//                    //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+//                    'href'   => wp_nonce_url( add_query_arg( array(
+//                        '_action' => 'rapidload_purge_all',
+//                    ) ), 'uucss_nonce', 'nonce' ),
+//                    'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
+//                    'parent' => 'rapidload'
+//                ));
 
             }
 

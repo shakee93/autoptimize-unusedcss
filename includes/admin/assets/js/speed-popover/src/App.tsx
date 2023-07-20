@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import SpeedInsights from "./components/speed-insights";
+import WebFont from 'webfontloader';
 
 declare global {
     interface Window {
@@ -11,10 +12,18 @@ function App() {
 
     let root = window.rapidload?.plugin_url
 
-    return (
-        <div className="rl-react-node-wrapper flex flex-col justify-center text-center cursor-pointer ">
+    useEffect(() => {
+        WebFont.load({
+            google: {
+                families: ['Lexend:wght@100;200;300;400;700&display=swap'],
+            },
+        });
+    }, [])
 
-            <SpeedInsights>
+    return (
+        <div className={`rl-react-node-wrapper font-sans cursor-pointer ${!root ? 'flex flex-col justify-center text-center ' : ''}`}>
+
+            <SpeedInsights root={root}>
                 {root && (
                     <span className="rl-icon">
                     <img src={root + "/assets/images/logo-icon-light.svg"} alt="RapidLoad logo"/>
