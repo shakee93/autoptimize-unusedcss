@@ -116,78 +116,54 @@ class RapidLoad_Optimizer
 
     public function optimizer_serve_next_gen_images(){
 
-        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
-            wp_send_json_error('url param missing');
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
         }
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_error('status param missing');
         }
 
-        if(!isset($_REQUEST['strategy'])){
-            wp_send_json_error('strategy param missing');
-        }
-
-        $job = new RapidLoad_Job([
-           'url' => $_REQUEST['url']
-        ]);
-
-        $options = $_REQUEST['strategy'] == "desktop" ? $job->get_desktop_options() : $job->get_mobile_options();
-
-        if(empty($options)){
-            $options = [];
-        }
-
-        $options['uucss_enable_image_delivery'] = "1";
-        $options['uucss_support_next_gen_formats'] = $_REQUEST['status'] == "on" ? "1" : null;
+        self::$options['uucss_enable_image_delivery'] = "1";
+        self::$options['uucss_support_next_gen_formats'] = $_REQUEST['status'] == "on" ? "1" : null;
 
         $this->associate_domain(false);
 
         if($_REQUEST['strategy'] == "desktop"){
-            $job->set_desktop_options($options);
+            self::$job->set_desktop_options(self::$options);
         }else{
-            $job->set_mobile_options($options);
+            self::$job->set_mobile_options(self::$options);
         }
 
-        $job->save(!$job->exist());
+        self::$job->save(!self::$job->exist());
 
-        wp_send_json_success($options);
+        wp_send_json_success(true);
     }
 
     public function optimizer_compression_level(){
 
-        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
-            wp_send_json_error('url param missing');
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
         }
 
         if(!isset($_REQUEST['compression_level'])){
             wp_send_json_error('status param missing');
         }
 
-        $job = new RapidLoad_Job([
-            'url' => $_REQUEST['url']
-        ]);
-
-        $options = $_REQUEST['strategy'] == "desktop" ? $job->get_desktop_options() : $job->get_mobile_options();
-
-        if(empty($options)){
-            $options = [];
-        }
-
-        $options['uucss_enable_image_delivery'] = "1";
-        $options['uucss_image_optimize_level'] = $_REQUEST['compression_level'];
+        self::$options['uucss_enable_image_delivery'] = "1";
+        self::$options['uucss_image_optimize_level'] = $_REQUEST['compression_level'];
 
         $this->associate_domain(false);
 
         if($_REQUEST['strategy'] == "desktop"){
-            $job->set_desktop_options($options);
+            self::$job->set_desktop_options(self::$options);
         }else{
-            $job->set_mobile_options($options);
+            self::$job->set_mobile_options(self::$options);
         }
 
-        $job->save(!$job->exist());
+        self::$job->save(!self::$job->exist());
 
-        wp_send_json_success($options);
+        wp_send_json_success(true);
     }
 
     public function associate_domain($revoke){
@@ -208,55 +184,40 @@ class RapidLoad_Optimizer
 
     public function optimizer_self_host_google_font(){
 
-        if(self::$job || self::$startegy){
-
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
         }
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_error('status param missing');
         }
 
-        $job = new RapidLoad_Job([
-            'url' => $_REQUEST['url']
-        ]);
-
-        $options = $_REQUEST['strategy'] == "desktop" ? $job->get_desktop_options() : $job->get_mobile_options();
-
-        if(empty($options)){
-            $options = [];
-        }
-
-        $options['uucss_enable_font_optimization'] = "1";
-        $options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+        self::$options['uucss_enable_font_optimization'] = "1";
+        self::$options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
 
         if($_REQUEST['strategy'] == "desktop"){
-            $job->set_desktop_options($options);
+            self::$job->set_desktop_options(self::$options);
         }else{
-            $job->set_mobile_options($options);
+            self::$job->set_mobile_options(self::$options);
         }
 
-        $job->save(!$job->exist());
+        self::$job->save(!self::$job->exist());
 
-        wp_send_json_success($options);
+        wp_send_json_success(true);
     }
 
     public function optimizer_set_image_width_and_height(){
 
-        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
-            wp_send_json_error('url param missing');
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
         }
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_error('status param missing');
         }
 
+        self::$options['uucss_enable_image_delivery'] = "1";
         self::$options['uucss_set_width_and_height'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-
-        if(self::$options['uucss_set_width_and_height'] == "1"){
-            self::$options['uucss_enable_image_delivery'] = "1";
-        }
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
 
         wp_send_json_success(true);
     }
