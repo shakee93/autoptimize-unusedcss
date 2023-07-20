@@ -128,7 +128,7 @@ class CriticalCSS_Enqueue
                 $sheet->rel = "preload";
                 $sheet->as = "style";
             }else{
-                if(!apply_filters('rapidload/frontend/do-not-load/original-css', false)){
+                if(!apply_filters('rapidload/frontend/do-not-load/original-css', false) && isset($sheet->{'data-href'})){
                     unset($sheet->href);
                 }
             }
