@@ -21,7 +21,7 @@ function App() {
     }, [])
 
     return (
-        <div className={`rl-react-node-wrapper font-sans cursor-pointer ${!root ? 'flex flex-col justify-center text-center ' : ''}`}>
+        <div className={`rl-react-node-wrapper font-sans ${!root ? 'flex flex-col justify-center text-center ' : ''}`}>
 
             <SpeedInsights root={root}>
                 {root && (
