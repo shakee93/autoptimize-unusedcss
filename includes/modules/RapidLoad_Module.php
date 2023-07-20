@@ -259,7 +259,7 @@ class RapidLoad_Module
                         'options' => [
                             'uucss_enable_cpcss_mobile' =>  isset($options['uucss_enable_cpcss_mobile']) && $options['uucss_enable_cpcss_mobile'] == "1" ? true : false,
                             'remove_cpcss_on_user_interaction' =>  isset($options['remove_cpcss_on_user_interaction']) && $options['remove_cpcss_on_user_interaction'] == "1" ? true : false,
-                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? $options['uucss_additional_css'] : null,
+                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? stripslashes($options['uucss_additional_css']) : null,
                         ]
                     ],
                     'unused_css' => [
