@@ -600,9 +600,6 @@ class RapidLoad_Admin_Frontend
             }else{
 
                 if($rule && $regex){
-                    self::log([
-                        'log' => 'job cleared for rule ' . $rule . ' and regex ' . $regex
-                    ]);
                     RapidLoad_DB::clear_job_data($job_type, [
                         'rule' => $rule,
                         'regex' => $regex
@@ -612,10 +609,6 @@ class RapidLoad_Admin_Frontend
                         'regex' => $regex
                     ]);
                 }elseif ($url){
-                    self::log([
-                        'log' => 'job cleared for url ' . $url,
-                        'url' => $url
-                    ]);
                     RapidLoad_DB::clear_job_data($job_type, [
                         'url' => $url
                     ]);
@@ -623,12 +616,8 @@ class RapidLoad_Admin_Frontend
                         'url' => $url
                     ]);
                 }else{
-                    self::log([
-                        'log' => 'all jobs cleared'
-                    ]);
                     RapidLoad_DB::clear_job_data($job_type);
                     RapidLoad_DB::clear_jobs($job_type);
-                    do_action('rapidload/vanish');
                 }
 
             }
