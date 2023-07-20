@@ -65,6 +65,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'PAnD' => __DIR__ . '/..' . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
         'RankMathSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
         'RapidLoad_Admin' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin.php',
+        'RapidLoad_Admin_Bar' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin_Bar.php',
         'RapidLoad_Admin_Frontend' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin_Frontend.php',
         'RapidLoad_Api' => __DIR__ . '/../..' . '/includes/RapidLoad_Api.php',
         'RapidLoad_Base' => __DIR__ . '/../..' . '/includes/RapidLoad_Base.php',
