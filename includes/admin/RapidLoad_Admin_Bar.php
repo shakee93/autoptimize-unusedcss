@@ -14,6 +14,7 @@ class RapidLoad_Admin_Bar {
         // Localize the script with new data
         $script_data_array = array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'plugin_url' => UUCSS_PLUGIN_URL
         );
         wp_localize_script( 'rapidload-page-optimizer-data', 'rapidload', $script_data_array );
 
@@ -62,9 +63,9 @@ class RapidLoad_Admin_Bar {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload',
-                    'title' => '<div class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt=""></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
+                    'title' => '<div id="rl-node-wrapper" class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt=""></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
                     'href'  => admin_url( 'admin.php?page=rapidload' ),
-                    'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
+                    'meta'  => array( 'class' => '' ),
                 ));
 
                 $wp_admin_bar->add_node( array(
