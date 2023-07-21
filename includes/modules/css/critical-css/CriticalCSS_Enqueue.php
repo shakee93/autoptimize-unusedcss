@@ -148,7 +148,7 @@ class CriticalCSS_Enqueue
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
 
-            $critical_css_content .= $this->options['uucss_additional_css'];
+            $critical_css_content .= stripslashes($this->options['uucss_additional_css']);
 
         }
 
