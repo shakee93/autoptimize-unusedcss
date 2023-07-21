@@ -23,14 +23,13 @@ class RapidLoad_Optimizer
     public function __construct(){
 
         self::$options = RapidLoad_Base::fetch_options();
-        self::init();
+        self::pre_optimizer_function();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_enable_cache']);
         add_action('wp_ajax_optimizer_serve_next_gen_images', [$this,'optimizer_serve_next_gen_images']);
-        add_action('wp_ajax_optimizer_compression_level', [$this,'optimizer_compression_level']);
         add_action('wp_ajax_optimizer_self_host_google_font', [$this,'optimizer_self_host_google_font']);
         add_action('wp_ajax_optimizer_set_image_width_and_height', [$this,'optimizer_set_image_width_and_height']);
         add_action('wp_ajax_optimizer_set_unminified_css', [$this,'optimizer_set_unminified_css']);
@@ -39,10 +38,9 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
         add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
         add_action('wp_ajax_optimizer_offscreen_images_exclude_above_the_fold', [$this,'optimizer_offscreen_images_exclude_above_the_fold']);
-        add_action('wp_ajax_optimizer_offscreen_images_lazyload_iframes', [$this,'optimizer_offscreen_images_lazyload_iframes']);
     }
 
-    public static function init(){
+    public static function pre_optimizer_function(){
         if(isset($_REQUEST['url']) && !empty($_REQUEST['url']) && filter_var($_REQUEST['url'], FILTER_VALIDATE_URL) !== false){
             self::$job = new RapidLoad_Job([
                 'url' => $_REQUEST['url']
@@ -52,6 +50,19 @@ class RapidLoad_Optimizer
             self::$strategy = $_REQUEST['strategy'];
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
         }
+    }
+
+    public static function post_optimizer_function(){
+
+        if(!isset(self::$strategy) || !isset(self::$job) || !isset(self::$options))
+
+        if(self::$strategy == "desktop"){
+            self::$job->set_desktop_options(self::$options);
+        }else{
+            self::$job->set_mobile_options(self::$options);
+        }
+
+        self::$job->save(!self::$job->exist());
     }
 
     public function fetch_page_speed(){
@@ -124,44 +135,19 @@ class RapidLoad_Optimizer
             wp_send_json_error('status param missing');
         }
 
-        self::$options['uucss_enable_image_delivery'] = "1";
-        self::$options['uucss_support_next_gen_formats'] = $_REQUEST['status'] == "on" ? "1" : null;
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_image_delivery'] = "1";
+            self::$options['uucss_support_next_gen_formats'] = "1";
+            self::$options['uucss_image_optimize_level'] = "lossless";
+        }else if(isset(self::$options['uucss_support_next_gen_formats'])){
+            unset(self::$options['uucss_enable_image_delivery']);
+            unset(self::$options['uucss_support_next_gen_formats']);
+            unset(self::$options['uucss_image_optimize_level']);
+        }
 
         $this->associate_domain(false);
 
-        if($_REQUEST['strategy'] == "desktop"){
-            self::$job->set_desktop_options(self::$options);
-        }else{
-            self::$job->set_mobile_options(self::$options);
-        }
-
-        self::$job->save(!self::$job->exist());
-
-        wp_send_json_success(true);
-    }
-
-    public function optimizer_compression_level(){
-
-        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
-            wp_send_json_error('optimizer failed');
-        }
-
-        if(!isset($_REQUEST['compression_level'])){
-            wp_send_json_error('status param missing');
-        }
-
-        self::$options['uucss_enable_image_delivery'] = "1";
-        self::$options['uucss_image_optimize_level'] = $_REQUEST['compression_level'];
-
-        $this->associate_domain(false);
-
-        if($_REQUEST['strategy'] == "desktop"){
-            self::$job->set_desktop_options(self::$options);
-        }else{
-            self::$job->set_mobile_options(self::$options);
-        }
-
-        self::$job->save(!self::$job->exist());
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
     }
@@ -192,16 +178,15 @@ class RapidLoad_Optimizer
             wp_send_json_error('status param missing');
         }
 
-        self::$options['uucss_enable_font_optimization'] = "1";
-        self::$options['uucss_self_host_google_fonts'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-
-        if($_REQUEST['strategy'] == "desktop"){
-            self::$job->set_desktop_options(self::$options);
-        }else{
-            self::$job->set_mobile_options(self::$options);
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_font_optimization'] = "1";
+            self::$options['uucss_self_host_google_fonts'] = "1";
+        }else if(isset(self::$options['uucss_self_host_google_fonts'])){
+            unset(self::$options['uucss_enable_font_optimization']);
+            unset(self::$options['uucss_self_host_google_fonts']);
         }
 
-        self::$job->save(!self::$job->exist());
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
     }
@@ -216,25 +201,38 @@ class RapidLoad_Optimizer
             wp_send_json_error('status param missing');
         }
 
-        self::$options['uucss_enable_image_delivery'] = "1";
-        self::$options['uucss_set_width_and_height'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_image_delivery'] = "1";
+            self::$options['uucss_set_width_and_height'] = "1";
+        }else if(isset(self::$options['uucss_set_width_and_height'])){
+            unset(self::$options['uucss_enable_image_delivery']);
+            unset(self::$options['uucss_set_width_and_height']);
+        }
+
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
     }
 
     public function optimizer_set_unminified_css(){
 
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_minify'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-
-        if(self::$options['uucss_minify'] == "1"){
+        if($_REQUEST['status'] == "on"){
             self::$options['uucss_enable_css'] = "1";
+            self::$options['uucss_minify'] = "1";
+        }else if(isset(self::$options['uucss_minify'])){
+            unset(self::$options['uucss_enable_css']);
+            unset(self::$options['uucss_minify']);
         }
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
@@ -242,23 +240,33 @@ class RapidLoad_Optimizer
 
     public function optimizer_set_unminified_javascript(){
 
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['minify_js'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-
-        if(self::$options['minify_js'] == "1"){
+        if($_REQUEST['status'] == "on"){
             self::$options['uucss_enable_javascript'] = "1";
+            self::$options['minify_js'] = "1";
+        }else if(isset(self::$options['minify_js'])){
+            unset(self::$options['uucss_enable_javascript']);
+            unset(self::$options['minify_js']);
         }
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
     }
 
     public function optimizer_set_unused_css_rules(){
+
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
@@ -270,7 +278,15 @@ class RapidLoad_Optimizer
             self::$options['uucss_enable_css'] = "1";
         }
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_css'] = "1";
+            self::$options['uucss_enable_uucss'] = "1";
+        }else if(isset(self::$options['uucss_enable_uucss'])){
+            unset(self::$options['uucss_enable_css']);
+            unset(self::$options['uucss_enable_uucss']);
+        }
+
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
@@ -278,17 +294,23 @@ class RapidLoad_Optimizer
 
     public function optimizer_render_blocking_resources(){
 
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_enable_cpcss'] =  isset($_REQUEST['status']) && $_REQUEST['status'] == "on" ? "1" : null;
-
-        if(self::$options['uucss_enable_cpcss'] == "1"){
+        if($_REQUEST['status'] == "on"){
             self::$options['uucss_enable_css'] = "1";
+            self::$options['uucss_enable_cpcss'] = "1";
+        }else if(isset(self::$options['uucss_enable_cpcss'])){
+            unset(self::$options['uucss_enable_css']);
+            unset(self::$options['uucss_enable_cpcss']);
         }
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
@@ -296,18 +318,29 @@ class RapidLoad_Optimizer
 
     public function optimizer_offscreen_images(){
 
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_lazy_load_images'] =  $_REQUEST['status'] == "on" ? "1" : null;
-        self::$options['uucss_exclude_above_the_fold_image_count'] =  "5";
-
-        self::$options['uucss_enable_image_delivery'] = "1";
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_image_delivery'] = "1";
+            self::$options['uucss_lazy_load_images'] = "1";
+            self::$options['uucss_lazy_load_iframes'] = "1";
+            self::$options['uucss_exclude_above_the_fold_image_count'] = "5";
+        }else if(isset(self::$options['uucss_exclude_above_the_fold_image_count'])){
+            unset(self::$options['uucss_enable_image_delivery']);
+            unset(self::$options['uucss_lazy_load_images']);
+            unset(self::$options['uucss_lazy_load_iframes']);
+            unset(self::$options['uucss_exclude_above_the_fold_image_count']);
+        }
 
         $this->associate_domain(false);
 
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
@@ -315,39 +348,23 @@ class RapidLoad_Optimizer
 
     public function optimizer_offscreen_images_exclude_above_the_fold(){
 
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
         if(!isset($_REQUEST['exclude_above_the_fold'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_exclude_above_the_fold_image_count'] =  $_REQUEST['exclude_above_the_fold'];
+        self::$options['uucss_exclude_above_the_fold_image_count'] = $_REQUEST['exclude_above_the_fold'];
 
-        self::$options['uucss_enable_image_delivery'] = "1";
-
-        $this->associate_domain(false);
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
+        self::post_optimizer_function();
 
         wp_send_json_success(true);
 
     }
 
-    public function optimizer_offscreen_images_lazyload_iframes(){
 
-        if(!isset($_REQUEST['status'])){
-            wp_send_json_success('param missing');
-        }
-
-        self::$options['uucss_lazy_load_iframes'] =  $_REQUEST['status'] == "on" ? "1" : null;
-
-        self::$options['uucss_enable_image_delivery'] = "1";
-
-        $this->associate_domain(false);
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', self::$options);
-
-        wp_send_json_success(true);
-
-    }
 
 
 }
