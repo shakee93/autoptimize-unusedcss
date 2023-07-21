@@ -66,11 +66,13 @@
           <div class="grid mb-5">
             <div class="flex text-sm z-10">
               <vue3-tags-input :tags="whitelist_render"
+                               v-model="filterText"
                                @on-tags-changed="handleChangeTag"
-                               @keydown.enter.prevent
+                               @click="focus='tag'"
                                :class="focus==='tag'? 'focus-tags': ''"
-                               class="flex resize-none appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                               placeholder="Type your plugin..."/>
+                               class="flex resize-none appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:border-transparent"
+                               placeholder=""/>
+
 
               <div class="mt-3 -ml-9 cursor-pointer">
                 <svg :class="{'animate-spin': refresh_element}" @click="loadWhitelistPacks"
@@ -98,6 +100,11 @@
             <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font flex"> Click on reload or type and select to load packs.</p>
             </div>
+<!--            <div v-if="focus === 'tag'" class="rounded-lg absolute mt-20 w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">-->
+<!--              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectTest(select)">-->
+<!--                {{ select }}-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
 
 
@@ -263,6 +270,8 @@ import dropDown from '../../../components/dropDown.vue';
 import messageBox from "../../../components/messageBox.vue";
 import axios from "axios";
 import popup from "../../../components/popup.vue";
+import { directive } from "vue3-click-away";
+
 
 export default {
   name: "remove-unused-css",
@@ -273,7 +282,9 @@ export default {
     messageBox,
     popup,
   },
-
+  directives: {
+    ClickAway: directive
+  },
   mounted() {
     const activeModules = [];
     Object.keys(window.uucss_global.active_modules).forEach((a) => {
@@ -305,7 +316,9 @@ export default {
           this.onData.uucss_safelist = this.safelist;
           this.onData.uucss_blocklist = this.blocklist;
           this.onData.whitelist_packs = option.unused_css.options.whitelist_packs;
-
+          this.onData.suggested_whitelist_packs = option.unused_css.options.suggested_whitelist_packs.map(function(packs){
+            return packs.name;
+          })
         }
       });
       this.beforeSave = this.onData;
@@ -321,7 +334,17 @@ export default {
         return item[1];
       })
 
-    }
+    },
+
+
+    filteredList() {
+      const text = this.filterText.toLowerCase().trim();
+      if (!text) {
+        return this.onData.suggested_whitelist_packs;
+      } else {
+        return this.onData.suggested_whitelist_packs.filter(item => item.toLowerCase().includes(text));
+      }
+    },
   },
   methods: {
     handleConfirm() {
@@ -345,12 +368,12 @@ export default {
 
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs&nonce='+window.uucss_global.nonce)
           .then(response => {
-           // this.whitelist_packs = ['1:Elementor','2:pluginone']
 
              if(response.data?.data){
               this.onData.whitelist_packs = response.data?.data?.map((value) => {
                 return value.id + ':' + value.name;
               })
+               // this.onData.suggested_whitelist_packs  = this.onData.whitelist_packs;
             }else if(response.data?.data?.errors[0]?.detail){
               this.errorMessage = response.data?.data?.errors[0].detail;
             }
@@ -364,6 +387,12 @@ export default {
 
           });
 
+    },
+    selectTest(selected) {
+      console.log(`Selected Test: ${selected}`);
+    },
+    clickOutside() {
+      this.focus = '';
     },
     handleChangeTag(tags) {
       if(tags){
@@ -450,13 +479,14 @@ export default {
           uucss_include_inline_css: false,
           uucss_cache_busting_v2: false,
         },
-
+        suggested_whitelist_packs: [],
         inline_small_css: false,
         uucss_safelist: '',
         uucss_blocklist: '',
         whitelist_packs: [],
-      },
 
+      },
+      filterText: '',
       beforeSave:{},
       originalData: {},
       popupVisible: false,

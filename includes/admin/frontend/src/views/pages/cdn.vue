@@ -71,7 +71,7 @@
                      id="cdn-url" type="text" placeholder="">
 
               <div class="mt-2.5 -ml-9 cursor-pointer z-50">
-                <svg :class="{'animate-spin': refresh_element}" @click=""
+                <svg :class="{'animate-spin': refresh_element}" @click="validateCDN"
                      class="fill-none transition ease-in-out" width="20px" height="20px"
                      xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 13 13">
@@ -90,25 +90,25 @@
 
                 </svg>
               </div>
-            </div>
 
-            <div class="relative ml-2">
-              <button @click="copy" :disabled="loading"
-                      :class="{ 'hidden': !uucss_cdn_url }"
-                      class="flex pt-2 -ml-10 transition duration-300 bg-transparent font-semibold text-black py-1.5 px-2 border border-transparent rounded-r-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="gray" class="w-6 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
-                </svg>
-              </button>
-              <div v-if="cdn_url_verified" class="-mt-[28px] ml-[3px]">
-                <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
-                  <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
-                </svg>
-              </div>
-              <div :class="copied ? 'rl-Show' : 'rl-Hide'" class="-mt-20 mr-6 px-2 absolute -left-10" >
-                <div class="arrow-top-copied arrow-top font-medium text-xs relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
-                  Copied</div>
+              <div class="ml-2">
+                <button @click="copy" :disabled="loading"
+                        :class="{ 'hidden': !uucss_cdn_url }"
+                        class="flex pt-2 -mr-[35px] transition duration-300 bg-transparent font-semibold text-black py-1.5 px-2 border border-transparent rounded-r-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="gray" class="w-6 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
+                  </svg>
+                </button>
+                <div v-if="cdn_url_verified" class="-mt-[28px] ml-[3px]">
+                  <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
+                    <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
+                  </svg>
+                </div>
+                <div :class="copied ? 'rl-Show' : 'rl-Hide'" class="-mt-20 px-2 -ml-[70px]" >
+                  <div class="arrow-top-copied arrow-top font-medium text-xs relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
+                    Copied</div>
+                </div>
               </div>
             </div>
 
@@ -206,6 +206,7 @@ export default {
 
   methods:{
 
+
     doc(){
       window.open('https://docs.rapidload.io/features/cloud-delivery', '_blank');
     },
@@ -232,6 +233,26 @@ export default {
           .then(response => {
             response.data;
             this.loading = false;
+          } )
+          .catch(error => {
+            this.errorMessage = error.message;
+
+          });
+    },
+    validateCDN(){
+      this.refresh_element = true;
+      axios.post(window.uucss_global.ajax_url + '?action=validate_cdn' , {
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      })
+          .then(response => {
+            response.data;
+            console.log(response.data);
+            this.uucss_cdn_dns_id = response.data.data.uucss_cdn_dns_id;
+            this.uucss_cdn_url = response.data.data.uucss_cdn_url;
+            this.uucss_cdn_zone_id = response.data.data.uucss_cdn_zone_id;
+            this.refresh_element = false;
           } )
           .catch(error => {
             this.errorMessage = error.message;
@@ -288,7 +309,7 @@ export default {
       cdn_url_verified: false,
       devmode: false,
       back: '/',
-
+      refresh_element: false,
 
     }
   },
