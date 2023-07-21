@@ -150,6 +150,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.22 - 17/07/2023 =
+ * feat: add filter to prevent load original css on user interaction
+ * fix: exclude background images being lazy loaded not working
+ * fix: display RapidLoad menu in admin bar only to users with manage options permission
+
 = 2.0.21 - 11/07/2023 =
  * feat: improve inline js optimization
 
