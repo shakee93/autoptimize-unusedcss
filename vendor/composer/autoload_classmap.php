@@ -37,6 +37,7 @@ return array(
     'PAnD' => $vendorDir . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
     'RankMathSEO_Compatible' => $baseDir . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
     'RapidLoad_Admin' => $baseDir . '/includes/admin/RapidLoad_Admin.php',
+    'RapidLoad_Admin_Bar' => $baseDir . '/includes/admin/RapidLoad_Admin_Bar.php',
     'RapidLoad_Admin_Frontend' => $baseDir . '/includes/admin/RapidLoad_Admin_Frontend.php',
     'RapidLoad_Api' => $baseDir . '/includes/RapidLoad_Api.php',
     'RapidLoad_Base' => $baseDir . '/includes/RapidLoad_Base.php',
