@@ -38,6 +38,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
         add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
         add_action('wp_ajax_optimizer_offscreen_images_exclude_above_the_fold', [$this,'optimizer_offscreen_images_exclude_above_the_fold']);
+        add_action('wp_ajax_optimizer_defer_javascript', [$this,'optimizer_defer_javascript']);
     }
 
     public static function pre_optimizer_function(){
@@ -357,6 +358,32 @@ class RapidLoad_Optimizer
         }
 
         self::$options['uucss_exclude_above_the_fold_image_count'] = $_REQUEST['exclude_above_the_fold'];
+
+        self::post_optimizer_function();
+
+        wp_send_json_success(true);
+
+    }
+
+    public function optimizer_defer_javascript(){
+
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
+        if(!isset($_REQUEST['status'])){
+            wp_send_json_success('param missing');
+        }
+
+        if($_REQUEST['status'] == "on"){
+            self::$options['uucss_enable_javascript'] = "1";
+            self::$options['uucss_load_js_method'] = "defer";
+            self::$options['defer_inline_js'] = "1";
+        }else if(isset(self::$options['uucss_load_js_method'])){
+            unset(self::$options['uucss_enable_javascript']);
+            unset(self::$options['uucss_load_js_method']);
+            unset(self::$options['defer_inline_js']);
+        }
 
         self::post_optimizer_function();
 
