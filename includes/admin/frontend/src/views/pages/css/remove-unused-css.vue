@@ -100,8 +100,8 @@
             <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font flex"> Click on reload or type and select to load packs.</p>
             </div>
-            <div v-if="focus === 'tag'" class="rounded-lg absolute mt-20 w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
-              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectTest(select)">
+            <div v-if="focus === 'tag'" class="rounded-lg -mt-[30px] w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
+              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectPacks(select)">
                 {{ select }}
               </div>
             </div>
@@ -338,6 +338,10 @@ export default {
 
 
     filteredList() {
+      // console.log(this.onData.whitelist_packs);
+      // console.log(this.onData.suggested_whitelist_packs);
+      // const suggested_whitelist_packs = this.removeDuplicates(this.onData.whitelist_packs, this.onData.suggested_whitelist_packs)
+      // console.log(suggested_whitelist_packs);
       const text = this.filterText.toLowerCase().trim();
       if (!text) {
         return this.onData.suggested_whitelist_packs.map(function (wp) {
@@ -356,6 +360,8 @@ export default {
 
   },
   methods: {
+
+
     handleConfirm() {
       this.saveSettings();
       this.handleDontSave();
@@ -373,12 +379,19 @@ export default {
 
     loadWhitelistPacks() {
       this.refresh_element = true;
-      this.focus='tag';
+     // this.focus='tag';
 
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs&nonce='+window.uucss_global.nonce)
           .then(response => {
 
              if(response.data?.data){
+               // const newItem = response.data?.data?.map((value) => {
+               //   return value.id + ':' + value.name;
+               // })
+               //
+               // if (!this.onData.suggested_whitelist_packs.includes(newItem)) {
+               //   this.onData.whitelist_packs.push(newItem);
+               // }
               this.onData.whitelist_packs = response.data?.data?.map((value) => {
                 return value.id + ':' + value.name;
               })
@@ -387,19 +400,30 @@ export default {
               this.errorMessage = response.data?.data?.errors[0].detail;
             }
             this.refresh_element = false;
-            this.focus=null;
+           // this.focus=null;
           })
           .catch(error => {
             this.errorMessage = error.message;
             this.refresh_element = false;
-            this.focus=null;
+         //   this.focus=null;
 
           });
 
     },
-    selectTest(selected) {
-      console.log(`Selected Test: ${selected}`);
-      // Find the index of the selected item in the filteredList array
+    // selectPacks(selected) {
+    //   const text = selected.toLowerCase().trim();
+    //   const foundItem = this.onData.suggested_whitelist_packs.find(function (wp) {
+    //     const item = wp.split(':');
+    //     return item[1].toLowerCase() === text;
+    //   });
+    //
+    //   if (foundItem) {
+    //     const item = foundItem.split(':');
+    //     this.onData.whitelist_packs.push(item[0] + ':' + item[1]);
+    //   }
+    // },
+
+    selectPacks(selected) {
       const text = selected.toLowerCase().trim();
       const foundItem = this.onData.suggested_whitelist_packs.find(function (wp) {
         const item = wp.split(':');
@@ -408,10 +432,17 @@ export default {
 
       if (foundItem) {
         const item = foundItem.split(':');
-        console.log(item[0] + ':' + item[1]);
-        this.onData.whitelist_packs.push(item[0] + ':' + item[1]);
+        const newItem = item[0] + ':' + item[1];
+
+        // Check if the newItem already exists in whitelist_packs
+        if (!this.onData.whitelist_packs.includes(newItem)) {
+          this.onData.whitelist_packs.push(newItem);
+        }
       }
     },
+
+
+
     clickOutside() {
       this.focus = '';
     },
