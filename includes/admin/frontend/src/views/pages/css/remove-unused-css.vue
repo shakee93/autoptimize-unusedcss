@@ -71,7 +71,7 @@
                                @click="focus='tag'"
                                :class="focus==='tag'? 'focus-tags': ''"
                                class="flex resize-none appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:border-transparent"
-                               placeholder=""/>
+                               placeholder="Type to add your plugin..."/>
 
 
               <div class="mt-3 -ml-9 cursor-pointer">
@@ -100,11 +100,11 @@
             <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font flex"> Click on reload or type and select to load packs.</p>
             </div>
-<!--            <div v-if="focus === 'tag'" class="rounded-lg absolute mt-20 w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">-->
-<!--              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectTest(select)">-->
-<!--                {{ select }}-->
-<!--              </div>-->
-<!--            </div>-->
+            <div v-if="focus === 'tag'" class="rounded-lg absolute mt-20 w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
+              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectTest(select)">
+                {{ select }}
+              </div>
+            </div>
           </div>
 
 
@@ -317,7 +317,7 @@ export default {
           this.onData.uucss_blocklist = this.blocklist;
           this.onData.whitelist_packs = option.unused_css.options.whitelist_packs;
           this.onData.suggested_whitelist_packs = option.unused_css.options.suggested_whitelist_packs.map(function(packs){
-            return packs.name;
+            return packs.id +":"+ packs.name;
           })
         }
       });
@@ -340,11 +340,20 @@ export default {
     filteredList() {
       const text = this.filterText.toLowerCase().trim();
       if (!text) {
-        return this.onData.suggested_whitelist_packs;
+        return this.onData.suggested_whitelist_packs.map(function (wp) {
+          let item = wp.split(':');
+          return item[1];
+        });
       } else {
-        return this.onData.suggested_whitelist_packs.filter(item => item.toLowerCase().includes(text));
+        return this.onData.suggested_whitelist_packs.flatMap(function (wp) {
+          let item = wp.split(':');
+          let words = item[1].split(',').map(word => word.trim());
+          return words.filter(word => word.toLowerCase().includes(text));
+        });
       }
-    },
+    }
+
+
   },
   methods: {
     handleConfirm() {
@@ -390,6 +399,18 @@ export default {
     },
     selectTest(selected) {
       console.log(`Selected Test: ${selected}`);
+      // Find the index of the selected item in the filteredList array
+      const text = selected.toLowerCase().trim();
+      const foundItem = this.onData.suggested_whitelist_packs.find(function (wp) {
+        const item = wp.split(':');
+        return item[1].toLowerCase() === text;
+      });
+
+      if (foundItem) {
+        const item = foundItem.split(':');
+        console.log(item[0] + ':' + item[1]);
+        this.onData.whitelist_packs.push(item[0] + ':' + item[1]);
+      }
     },
     clickOutside() {
       this.focus = '';
