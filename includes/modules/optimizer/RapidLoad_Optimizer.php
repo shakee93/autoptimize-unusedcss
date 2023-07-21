@@ -39,6 +39,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
         add_action('wp_ajax_optimizer_offscreen_images_exclude_above_the_fold', [$this,'optimizer_offscreen_images_exclude_above_the_fold']);
         add_action('wp_ajax_optimizer_defer_javascript', [$this,'optimizer_defer_javascript']);
+        add_action('wp_ajax_optimizer_load_javascript_file_on_user_interaction', [$this,'optimizer_load_javascript_file_on_user_interaction']);
     }
 
     public static function pre_optimizer_function(){
@@ -353,11 +354,11 @@ class RapidLoad_Optimizer
             wp_send_json_error('optimizer failed');
         }
 
-        if(!isset($_REQUEST['exclude_above_the_fold'])){
+        if(!isset($_REQUEST['count'])){
             wp_send_json_success('param missing');
         }
 
-        self::$options['uucss_exclude_above_the_fold_image_count'] = $_REQUEST['exclude_above_the_fold'];
+        self::$options['uucss_exclude_above_the_fold_image_count'] = $_REQUEST['count'];
 
         self::post_optimizer_function();
 
@@ -391,6 +392,31 @@ class RapidLoad_Optimizer
 
     }
 
+    public function optimizer_load_javascript_file_on_user_interaction(){
+
+        if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
+            wp_send_json_error('optimizer failed');
+        }
+
+        if(!isset($_REQUEST['pattern']) || !isset($_REQUEST['url']) || !isset($_REQUEST['action'])){
+            wp_send_json_success('param missing');
+        }
+
+        self::$options['rapidload_load_scripts_on_user_interaction'] = isset(self::$options['rapidload_load_scripts_on_user_interaction']) ? unserialize(self::$options['rapidload_load_scripts_on_user_interaction']) : [];
+
+        self::$options['rapidload_load_scripts_on_user_interaction'][] = [
+            'url' => $_REQUEST['url'],
+            'pattern' => $_REQUEST['pattern'],
+            'action' => $_REQUEST['action']
+        ];
+
+        self::$options['rapidload_load_scripts_on_user_interaction'] = serialize(self::$options['rapidload_load_scripts_on_user_interaction']);
+
+        self::post_optimizer_function();
+
+        wp_send_json_success(true);
+
+    }
 
 
 
