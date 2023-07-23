@@ -259,7 +259,7 @@ class RapidLoad_Module
                         'options' => [
                             'uucss_enable_cpcss_mobile' =>  isset($options['uucss_enable_cpcss_mobile']) && $options['uucss_enable_cpcss_mobile'] == "1" ? true : false,
                             'remove_cpcss_on_user_interaction' =>  isset($options['remove_cpcss_on_user_interaction']) && $options['remove_cpcss_on_user_interaction'] == "1" ? true : false,
-                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? $options['uucss_additional_css'] : null,
+                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? stripslashes($options['uucss_additional_css']) : null,
                         ]
                     ],
                     'unused_css' => [
@@ -274,6 +274,7 @@ class RapidLoad_Module
                             'uucss_safelist' => isset($options['uucss_safelist']) ? $options['uucss_safelist'] : null,
                             'uucss_blocklist' => isset($options['uucss_blocklist']) ? $options['uucss_blocklist'] : null,
                             'whitelist_packs' => isset($options['whitelist_packs']) ? $options['whitelist_packs'] : [],
+                            'suggested_whitelist_packs' => isset($options['suggested_whitelist_packs']) ? $options['suggested_whitelist_packs'] : [],
                             'uucss_inline_css' => isset($options['uucss_inline_css']) && $options['uucss_inline_css'] == "1" ? true : false,
                         ]
                     ],

@@ -156,6 +156,14 @@ body .rapidload {
         border: 1px solid #7F54B3 !important;
         box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
     }
+    .cdn.zone{
+        border: 1px solid #7F54B3 !important;
+        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
+    }
+    .cdn.dns{
+        border: 1px solid #7F54B3 !important;
+        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
+    }
     .date-picker .date{
         border: 1px solid #7F54B3 !important;
         box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
@@ -250,8 +258,8 @@ body .rapidload {
 }
 
 .v3ti .v3ti-new-tag{
-    pointer-events: none;
-    display: none;
+    /*pointer-events: none;*/
+    /*display: none;*/
 }
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
@@ -279,6 +287,10 @@ body .rapidload {
 }
 .v3ti .v3ti-new-tag {
     padding: 0 4px 0 5px !important;
+}
+.v3ti--focus {
+    border-color: #7F54B3 !important;
+    box-shadow: 0 0 0 1px #7F54B3 !important;
 }
 
 

@@ -150,6 +150,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.23 - 20/07/2023 =
+ * feat: switch cdn staging to live
+ * fix: all jobs getting cleared when all rules cleared
+ * fix: remove backslashes from additional critical css content
+ * fix: original css files not loading if mobile critical css enabled
+ * fix: extract image url with https
+
 = 2.0.22 - 17/07/2023 =
  * feat: add filter to prevent load original css on user interaction
  * fix: exclude background images being lazy loaded not working
