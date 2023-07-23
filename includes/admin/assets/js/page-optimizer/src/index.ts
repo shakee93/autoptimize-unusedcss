@@ -7,7 +7,4 @@ domReady( async function () {
 
     const pageOptimizer = new PageOptimizerData()
 
-    const data = await pageOptimizer.analyze("https://rapidload.io")
-
-    console.log(data);
 } );

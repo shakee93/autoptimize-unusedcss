@@ -1,5 +1,5 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {ReactNode, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {ChevronDown, CloudLightningIcon, FileX, XCircle} from "lucide-react";
 import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
@@ -8,9 +8,7 @@ import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 
 import 'react-circular-progressbar/dist/styles.css';
 import Loading from "./elements/loading";
 
-const Content = ({ isLoading = false}) => {
-
-    const percentage = 93;
+const Content = ({ isLoading = false, data}: { isLoading: boolean; data: null|any}) => {
 
     return (
         <div className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-4 px-4 rounded-2xl mx-16 my-2 bg-slate-50'>
@@ -23,9 +21,9 @@ const Content = ({ isLoading = false}) => {
                         <div className='mt-6'>
                             <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44' styles={buildStyles({
                                 pathColor: `#0bb42f`,
-                            })} value={percentage} >
+                            })} value={data?.data?.result.performance} >
                     <span
-                        className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{percentage}</span>
+                        className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{data?.data?.result.performance}</span>
                             </CircularProgressbarWithChildren>
                         </div>
 
@@ -77,7 +75,28 @@ const Content = ({ isLoading = false}) => {
 
 const SpeedInsights = ({children, root}: { children: ReactNode, root: string }) => {
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [data, setData] = useState(null)
+
+
+    if (window.PageOptimizerData) {
+
+        window.PageOptimizerData.onLoadingChange((value: boolean) => {
+            setIsLoading(value)
+            console.log('here in loading change');
+            setData(window.PageOptimizerData.data)
+        });
+    }
+
+    useEffect(() => {
+
+        if (!window.PageOptimizerData) {
+            return;
+        }
+
+        window.PageOptimizerData.analyze("https://rapidload.io");
+
+    }, [])
 
     return (
         <div>
@@ -97,13 +116,13 @@ const SpeedInsights = ({children, root}: { children: ReactNode, root: string }) 
                     </Tooltip.Trigger>
                     <Tooltip.Portal>
                         <Tooltip.Content className="font-sans TooltipContent" sideOffset={5}>
-                            <Content isLoading={isLoading}/>
+                            <Content data={data} isLoading={isLoading}/>
                         </Tooltip.Content>
                     </Tooltip.Portal>
                 </Tooltip.Root>
             </Tooltip.Provider>
             {!root && (
-                <Content isLoading={isLoading}/>
+                <Content data={data} isLoading={isLoading}/>
             )}
         </div>
 
