@@ -69,6 +69,10 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
+                body.rapidload-optimizer-open {
+                    overflow: hidden;
+                }
+
             </style>
 
         <?php }

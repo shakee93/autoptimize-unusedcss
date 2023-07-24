@@ -133,7 +133,7 @@ export default function PageOptimizer() {
 
 
     return (
-        <div className="fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
+        <div className="overflow-auto fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
             <Header url={url} />
             <section className="container grid grid-cols-12 gap-8 mt-12">
                 {togglePerformance && (

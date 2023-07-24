@@ -1,4 +1,4 @@
-import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from 'react';
+import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react';
 
 interface OptimizerContextProps {
     showOptimizer: boolean;
@@ -13,6 +13,19 @@ export const OptimizerProvider = ({ children } : {
 }) => {
     const [showOptimizer, setShowOptimizer] = useState(false);
     const [options, setOptions] = useState(window?.rapidload)
+
+    useEffect(() => {
+
+
+        if (showOptimizer) {
+            document.body.classList.add('rapidload-optimizer-open')
+        } else {
+            document.body.classList.remove('rapidload-optimizer-open')
+        }
+        
+        console.log('done!');
+
+    }, [showOptimizer])
 
     return (
         <OptimizerContext.Provider value={{
