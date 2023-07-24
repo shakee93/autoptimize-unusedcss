@@ -6,11 +6,13 @@ import {
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/parts/theme-switcher";
 import {useState} from "react";
+import {useOptimizerContext} from "../context/root";
 
 
 const Header = ({ url = null}: { url: string|null}) => {
 
     const [isDesktop, setIsDesktop] = useState(true);
+    const { setShowOptimizer } = useOptimizerContext()
 
     const desktopButtonClick = (isDesktop: boolean) => {
         setIsDesktop(isDesktop);
@@ -49,7 +51,9 @@ const Header = ({ url = null}: { url: string|null}) => {
                         </span>
                 </div>
                 <div>
-                    <XMarkIcon className="h-8 w-8 dark:text-zinc-300 text-zinc-600" />
+                    <button onClick={() => { setShowOptimizer(false) }}>
+                        <XMarkIcon className="h-8 w-8 dark:text-zinc-300 text-zinc-600" />
+                    </button>
                 </div>
             </div>
         </header>

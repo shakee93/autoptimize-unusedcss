@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
-
+import { ReactNode, Dispatch, SetStateAction } from 'react';
+import {useOptimizerContext} from "../../context/root";
 declare global {
     interface Window {
         rapidload: any;
     }
 }
 
-function App() {
+function SpeedPopover() {
 
-    let root = window.rapidload?.plugin_url
+    const { options } = useOptimizerContext()
 
     useEffect(() => {
         WebFont.load({
@@ -21,12 +22,12 @@ function App() {
     }, [])
 
     return (
-        <div className={`rl-react-node-wrapper font-sans ${!root ? 'flex flex-col justify-center text-center ' : ''}`}>
+        <div className={`rl-react-node-wrapper font-sans ${!options ? 'flex flex-col justify-center text-center ' : ''}`}>
 
-            <SpeedInsights root={root}>
-                {root && (
+            <SpeedInsights>
+                {options && (
                     <span className="rl-icon">
-                    <img src={root + "/assets/images/logo-icon-light.svg"} alt="RapidLoad logo"/>
+                    <img src={options?.plugin_url + "/assets/images/logo-icon-light.svg"} alt="RapidLoad logo"/>
                 </span>
                 )}
                 <span className="rl-label">RapidLoad</span>
@@ -36,4 +37,4 @@ function App() {
     );
 }
 
-export default App;
+export default SpeedPopover;

@@ -1,5 +1,5 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {ReactNode, useEffect, useState} from "react";
+import {Dispatch, ReactNode, SetStateAction, useEffect, useState} from "react";
 import {ChevronDown, CloudLightningIcon, FileX, XCircle} from "lucide-react";
 import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
@@ -7,8 +7,14 @@ import Button from "./elements/button";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Loading from "./elements/loading";
+import {useOptimizerContext} from "../../../context/root";
 
-const Content = ({ isLoading = false, data}: { isLoading: boolean; data: null|any}) => {
+const Content = ({ isLoading = false, data}: {
+    isLoading: boolean;
+    data: null|any
+}) => {
+
+    const { setShowOptimizer } = useOptimizerContext()
 
     return (
         <div className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-4 px-4 rounded-2xl mx-16 my-2 bg-slate-50'>
@@ -55,7 +61,7 @@ const Content = ({ isLoading = false, data}: { isLoading: boolean; data: null|an
                         </div>
                         <hr className='my-3 mx-6'/>
                         <div className='flex gap-3 text-sm'>
-                            <Button>
+                            <Button onClick={(e) => {setShowOptimizer(true)}}>
                                 <BoltIcon className='w-4 text-white'/> Page Optimizer
                             </Button>
                             <Button dark={false}>
@@ -73,57 +79,38 @@ const Content = ({ isLoading = false, data}: { isLoading: boolean; data: null|an
     )
 }
 
-const SpeedInsights = ({children, root}: { children: ReactNode, root: string }) => {
+const SpeedInsights = ({children}: {
+    children: ReactNode,
+}) => {
 
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const { options } = useOptimizerContext()
+
+    const root = options?.plugin_url
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [data, setData] = useState(null)
-
-
-    if (window.PageOptimizerData) {
-
-        window.PageOptimizerData.onLoadingChange((value: boolean) => {
-            setIsLoading(value)
-            console.log('here in loading change');
-            setData(window.PageOptimizerData.data)
-        });
-    }
-
-    useEffect(() => {
-
-        if (!window.PageOptimizerData) {
-            return;
-        }
-
-        window.PageOptimizerData.analyze("https://rapidload.io");
-
-    }, [])
 
     return (
         <div>
-            <Tooltip.Provider delayDuration={100}>
-                <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
-                        <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm' : 'flex gap-1 items-center'}`}>
-                            {children}
-                            {!root && (
-                                <label className='ml-4'>
-                                    <input type='checkbox' checked={isLoading} onChange={e => setIsLoading(p => !p)}/>
-                                    Loading
-                                </label>
-                            )}
+            <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                    <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm' : 'flex gap-1 items-center'}`}>
+                        {children}
+                        {!root && (
+                            <label className='ml-4'>
+                                <input type='checkbox' checked={isLoading} onChange={e => setIsLoading(p => !p)}/>
+                                Loading
+                            </label>
+                        )}
 
-                        </div>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                        <Tooltip.Content className="font-sans TooltipContent" sideOffset={5}>
-                            <Content data={data} isLoading={isLoading}/>
-                        </Tooltip.Content>
-                    </Tooltip.Portal>
-                </Tooltip.Root>
-            </Tooltip.Provider>
-            {!root && (
-                <Content data={data} isLoading={isLoading}/>
-            )}
+                    </div>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                    <Tooltip.Content className="font-sans TooltipContent" sideOffset={5}>
+                        <Content data={data} isLoading={isLoading}/>
+                    </Tooltip.Content>
+                </Tooltip.Portal>
+            </Tooltip.Root>
         </div>
 
     );

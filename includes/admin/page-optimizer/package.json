@@ -43,9 +43,14 @@
   },
   "dependencies": {
     "@heroicons/react": "2.0.13",
+    "@radix-ui/react-tooltip": "^1.0.6",
+    "@wordpress/dom-ready": "^3.38.0",
+    "lucide-react": "^0.263.0",
     "react": "18.2.0",
+    "react-circular-progressbar": "^2.1.0",
     "react-dom": "18.2.0",
-    "react-select": "^5.7.3"
+    "react-select": "^5.7.3",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@commitlint/cli": "17.4.2",
@@ -56,8 +61,10 @@
     "@types/jest": "29.2.5",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
+    "@types/webfontloader": "^1.6.35",
     "@typescript-eslint/eslint-plugin": "5.48.1",
     "@typescript-eslint/parser": "5.48.1",
+    "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "10.4.13",
     "eslint": "8.31.0",
     "eslint-plugin-import": "2.27.4",
@@ -72,8 +79,6 @@
     "prettier": "2.8.2",
     "tailwindcss": "3.2.4",
     "ts-jest": "29.0.5",
-    "typescript": "4.9.4",
-    "vite": "4.0.4",
-    "vite-preset-react": "2.3.0"
+    "typescript": "4.9.4"
   }
 }
