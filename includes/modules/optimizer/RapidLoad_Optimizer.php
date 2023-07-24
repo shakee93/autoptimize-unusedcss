@@ -107,7 +107,6 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'result' => $result,
-            'opportunities' => $opportunities
         ]);
 
 
