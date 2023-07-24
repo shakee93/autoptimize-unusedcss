@@ -102,7 +102,7 @@
             </div>
 
           </div>
-          <div v-if="focus === 'tag'" class="transition duration-300 rounded-lg -mt-[50px] w-[350px] absolute z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
+          <div v-if="focus === 'tag'" class="transition duration-300 rounded-lg -mt-[50px] w-[682px] grid absolute z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
             <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectPacks(select)">
               {{ select }}
             </div>
@@ -385,17 +385,12 @@ export default {
           .then(response => {
 
              if(response.data?.data){
-               // const newItem = response.data?.data?.map((value) => {
-               //   return value.id + ':' + value.name;
-               // })
-               //
-               // if (!this.onData.suggested_whitelist_packs.includes(newItem)) {
-               //   this.onData.whitelist_packs.push(newItem);
-               // }
-              // this.onData.whitelist_packs = response.data?.data?.map((value) => {
-              //   return value.id + ':' + value.name;
-              // })
-               // this.onData.suggested_whitelist_packs  = this.onData.whitelist_packs;
+               const newItem = response.data?.data?.map((value) => {
+                 return value.id + ':' + value.name;
+               })
+               const uniqueItems = newItem.filter(item => !this.onData.suggested_whitelist_packs.includes(item));
+               this.onData.whitelist_packs.push(...uniqueItems);
+
             }else if(response.data?.data?.errors[0]?.detail){
               this.errorMessage = response.data?.data?.errors[0].detail;
             }
