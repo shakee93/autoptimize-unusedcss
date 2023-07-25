@@ -97,13 +97,28 @@ class RapidLoad_Optimizer
             'mobile' => $size
         ]);
 
-        $opportunities = [];
+        foreach ($result->audits as $audit){
 
-        foreach ($result->Opportunities as $key => $opportunity){
-            $opp = apply_filters('page-optimizer/actions/opportunity/' . $opportunity->id, $opportunity);
-            array_push($opportunities, $opp);
+            foreach ($audit->settings as $s => $settings){
+                foreach ($settings->inputs as $i => $input){
+                    if(isset(self::$options[$input->key])){
+                        $input->value = self::$options[$input->key];
+                    }
+                }
+            }
+
+            if($audit->id == "preload-lcp-image" || $audit->id == "unused-javascript"){
+                error_log($audit->id);
+                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                    foreach ($audit->files->items as $item){
+
+                        error_log($item->url);
+                    }
+                }
+                error_log("====");
+            }
+
         }
-
 
         wp_send_json_success([
             'result' => $result,
