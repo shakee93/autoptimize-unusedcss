@@ -8,17 +8,17 @@ import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 
 import 'react-circular-progressbar/dist/styles.css';
 import Loading from "./elements/loading";
 import {useOptimizerContext} from "../../../context/root";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/reducers";
 
-const Content = ({ isLoading = false, data}: {
-    isLoading: boolean;
-    data: null|any
-}) => {
+const Content = () => {
 
     const { setShowOptimizer } = useOptimizerContext()
+    const { data, error, loading } = useSelector((state: RootState) => state.app);
 
     return (
         <div className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-4 px-4 rounded-2xl mx-16 my-2 bg-slate-50'>
-            {isLoading ? (
+            {loading ? (
                 <Loading/>
             ) : (
                 <div className='flex gap-6'>
@@ -86,28 +86,17 @@ const SpeedInsights = ({children}: {
     const { options } = useOptimizerContext()
 
     const root = options?.plugin_url
-
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [data, setData] = useState(null)
-
     return (
         <div>
             <Tooltip.Root>
                 <Tooltip.Trigger asChild>
                     <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm' : 'flex gap-1 items-center'}`}>
                         {children}
-                        {!root && (
-                            <label className='ml-4'>
-                                <input type='checkbox' checked={isLoading} onChange={e => setIsLoading(p => !p)}/>
-                                Loading
-                            </label>
-                        )}
-
                     </div>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
                     <Tooltip.Content className="font-sans TooltipContent" sideOffset={5}>
-                        <Content data={data} isLoading={isLoading}/>
+                        <Content/>
                     </Tooltip.Content>
                 </Tooltip.Portal>
             </Tooltip.Root>

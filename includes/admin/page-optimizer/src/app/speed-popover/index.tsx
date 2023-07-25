@@ -3,11 +3,9 @@ import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
 import { ReactNode, Dispatch, SetStateAction } from 'react';
 import {useOptimizerContext} from "../../context/root";
-declare global {
-    interface Window {
-        rapidload: any;
-    }
-}
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/reducers";
+
 
 function SpeedPopover() {
 

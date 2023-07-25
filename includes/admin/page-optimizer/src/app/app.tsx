@@ -29,14 +29,15 @@ const App = ({ is_popup } : {
     const popover = is_popup && popupNode ? ReactDOM.createPortal(<SpeedPopover />, popupNode) : <SpeedPopover />;
 
     const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
-    const { data, error } = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
+        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io';
 
         if (options?.ajax_url) {
-            let url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url
-            dispatch(fetchData(url));
+            url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url
         }
+
+        dispatch(fetchData(url));
 
     }, [dispatch]);
 
