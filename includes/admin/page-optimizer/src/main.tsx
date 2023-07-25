@@ -6,6 +6,8 @@ import domReady from '@wordpress/dom-ready';
 import {createRoot} from 'react-dom/client';
 import {OptimizerProvider} from "./context/root";
 import { Provider as TooltipProvider } from '@radix-ui/react-tooltip'
+import {Provider} from "react-redux";
+import store from "./store";
 
 domReady(function () {
     // page optimizer container
@@ -18,10 +20,12 @@ domReady(function () {
 
     const optimizer = createRoot(container);
     optimizer.render(
-        <OptimizerProvider>
-            <TooltipProvider delayDuration={100}>
-                <App is_popup={is_popup}/>
-            </TooltipProvider>
-        </OptimizerProvider>
+        <Provider store={store}>
+            <OptimizerProvider>
+                <TooltipProvider delayDuration={100}>
+                    <App is_popup={is_popup}/>
+                </TooltipProvider>
+            </OptimizerProvider>
+        </Provider>
     );
 });

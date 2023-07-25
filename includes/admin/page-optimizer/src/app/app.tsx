@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
 import SpeedPopover from "app/speed-popover";
 import {useOptimizerContext} from "../context/root";
+import Data from "app/data";
 
 const App = ({ is_popup } : {
     is_popup: boolean
@@ -27,6 +28,7 @@ const App = ({ is_popup } : {
     return (
         <div>
             {popover}
+            <Data/>
             { showOptimizer && <PageOptimizer/> }
         </div>
     );

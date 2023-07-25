@@ -23,8 +23,6 @@ export const OptimizerProvider = ({ children } : {
             document.body.classList.remove('rapidload-optimizer-open')
         }
         
-        console.log('done!');
-
     }, [showOptimizer])
 
     return (

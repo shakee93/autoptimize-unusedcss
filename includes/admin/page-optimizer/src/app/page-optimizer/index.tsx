@@ -122,7 +122,7 @@ export default function PageOptimizer() {
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
-                    className={`px-4 py-3 text-sm font-medium  ${isActive}`}
+                    className={`px-4 py-3 text-sm font-medium ${isActive}`}
                     key={tab.key}
                 >
                     {tab.name}
