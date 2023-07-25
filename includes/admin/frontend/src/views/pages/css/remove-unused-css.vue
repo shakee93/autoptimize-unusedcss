@@ -388,7 +388,12 @@ export default {
                const newItem = response.data?.data?.map((value) => {
                  return value.id + ':' + value.name;
                })
-               const uniqueItems = newItem.filter(item => !this.onData.suggested_whitelist_packs.includes(item));
+               const uniqueItems = newItem.filter(item => {
+                 const itemName = item.split(":")[1];
+                 return !this.onData.suggested_whitelist_packs.some(pack => pack.split(":")[1] === itemName);
+               });
+
+              // const uniqueItems = newItem.filter(item => !this.onData.suggested_whitelist_packs.includes(item));
                this.onData.whitelist_packs.push(...uniqueItems);
 
             }else if(response.data?.data?.errors[0]?.detail){
@@ -405,18 +410,6 @@ export default {
           });
 
     },
-    // selectPacks(selected) {
-    //   const text = selected.toLowerCase().trim();
-    //   const foundItem = this.onData.suggested_whitelist_packs.find(function (wp) {
-    //     const item = wp.split(':');
-    //     return item[1].toLowerCase() === text;
-    //   });
-    //
-    //   if (foundItem) {
-    //     const item = foundItem.split(':');
-    //     this.onData.whitelist_packs.push(item[0] + ':' + item[1]);
-    //   }
-    // },
 
     selectPacks(selected) {
       const text = selected.toLowerCase().trim();
