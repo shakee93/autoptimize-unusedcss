@@ -104,11 +104,7 @@ class RapidLoad_Optimizer
             array_push($opportunities, $opp);
         }
 
-
-        wp_send_json_success([
-            'result' => $result,
-            'opportunities' => $opportunities
-        ]);
+        wp_send_json_success($result);
 
 
     }

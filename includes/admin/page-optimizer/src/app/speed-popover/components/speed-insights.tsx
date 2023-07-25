@@ -27,9 +27,9 @@ const Content = () => {
                         <div className='mt-6'>
                             <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44' styles={buildStyles({
                                 pathColor: `#0bb42f`,
-                            })} value={data?.data?.result.performance} >
+                            })} value={data?.data?.performance} >
                     <span
-                        className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{data?.data?.result.performance}</span>
+                        className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{data?.data?.performance}</span>
                             </CircularProgressbarWithChildren>
                         </div>
 
@@ -86,11 +86,12 @@ const SpeedInsights = ({children}: {
     const { options } = useOptimizerContext()
 
     const root = options?.plugin_url
+
     return (
         <div>
             <Tooltip.Root>
                 <Tooltip.Trigger asChild>
-                    <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm' : 'flex gap-1 items-center'}`}>
+                    <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
                         {children}
                     </div>
                 </Tooltip.Trigger>
