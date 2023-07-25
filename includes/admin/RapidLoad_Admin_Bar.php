@@ -1,6 +1,7 @@
 <?php
 
 class RapidLoad_Admin_Bar {
+    use RapidLoad_Utils;
 
     public function __construct()
     {
@@ -40,7 +41,8 @@ class RapidLoad_Admin_Bar {
         $data = array(
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
-            'ajax_url' => admin_url( 'admin-ajax.php' )
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'optimizer_url' => $this->get_current_url()
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload', $data );

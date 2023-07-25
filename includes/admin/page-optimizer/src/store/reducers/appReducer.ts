@@ -56,17 +56,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
 export default appReducer;
 
-// Action creator to fetch data from the API
-export const fetchData = (): ThunkAction<void, AppState, unknown, AnyAction> => {
-    const {options} = useOptimizerContext();
-    let url = 'http://localhost:5173/api'
+export const fetchData = (url : string): ThunkAction<void, AppState, unknown, AnyAction> => {
 
-    if (options.ajax_url) {
-        url = options.ajax_url
-    }
-    
-    console.log(url);
-    
     return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>) => {
         try {
             const response: AxiosResponse<any> = await axios.get(url);
