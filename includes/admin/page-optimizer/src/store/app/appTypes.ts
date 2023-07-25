@@ -1,6 +1,14 @@
 
+interface OptimizerResults {
+    data : {
+        performance: number
+        audits: Audit[]
+        metrics: Metric[]
+    },
+    success: boolean
+}
 export interface AppState {
-    data: any | null; // Replace 'any' with the actual type of data you expect from the API
+    data?: OptimizerResults ; // Replace 'any' with the actual type of data you expect from the API
     error: string | null;
     loading: boolean
 }

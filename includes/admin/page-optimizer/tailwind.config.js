@@ -18,6 +18,30 @@ module.exports = {
         'gray-350': '#C0C0C0',
         'purple-750': '#7F54B3',
       },
+      animation: {
+        'rl-scale-in': 'rl-scale-in 0.1s ease-out',
+        'rl-loading-loop': 'rl-loading-loop 1.5s ease-out infinite',
+      },
+      keyframes: {
+        'rl-scale-in' : {
+          'from': {
+            opacity: 0,
+            transform: 'translateY(-5px)',
+          },
+          'to': {
+            opacity: 1,
+            transform: 'translateY(0)',
+          },
+        },
+        'rl-loading-loop' : {
+          '0%, 100%' : {
+            transform: 'translateX(-50%)'
+          },
+          '50%': {
+            transform: 'translateX(400%)'
+          }
+        }
+      }
     },
   },
   plugins: [],

@@ -61,20 +61,79 @@ interface Help{
 //     help: Help[],
 // }
 
-interface Audit{
-    id: string,
-    title: string,
-    icon: string,
-    files: AuditFile[],
-    tags: Array<AuditTypes>,
-    settings: AuditSettings[],
-    help: Help[],
+// interface Audit{
+//     id: string,
+//     title: string,
+//     icon: string,
+//     files: AuditFile[],
+//     tags: Array<AuditTypes>,
+//     settings: AuditSettings[],
+//     help: Help[],
+//
+// }
 
-}
 interface Window {
     uucss_global: {
         ajax_url: string;
         nonce: string;
 
+    };
+}
+
+
+interface File {
+    wastedBytes: number;
+    totalBytes: number;
+    url: string;
+    wastedPercent?: number;
+}
+
+interface Audit {
+    id: string;
+    name: string;
+    icon: string;
+    files: {
+        overallSavingsBytes: number;
+        items: File[];
+        type: string;
+        headings: {
+            key: string;
+            valueType?: string;
+            label?: string;
+            subItemsHeading?: {
+                key: string;
+                valueType: string;
+            };
+        }[];
+        sortedBy: string[];
+        overallSavingsMs?: number;
+    };
+    type: string;
+    score: number;
+    settings: {
+        name: string;
+        category: string;
+        ajax_action: string;
+        control_type: string;
+        control_values: string[];
+        control_payload?: string;
+    }[];
+}
+
+interface Metric {
+    id: string;
+    title: string;
+    description: string;
+    displayValue: string;
+    icon: string;
+    score: number;
+}
+
+interface MetricsData {
+    success: boolean;
+    data: {
+        metrics: Metric[];
+        audits: Audit[];
+        performance: number;
     };
 }

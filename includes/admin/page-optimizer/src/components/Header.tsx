@@ -23,7 +23,7 @@ const Header = ({ url = null}: { url: string|null}) => {
         <header className='w-full p-6 flex justify-between border-b border-gray-border'>
             <div className='flex gap-12 items-center'>
                 <div>
-                    <img className='w-36' src={ options?.page_optimizer_base + `/logo.svg`} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
                 </div>
                 <div className='flex flex-column items-center gap-4'>
                     <div className='flex dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>

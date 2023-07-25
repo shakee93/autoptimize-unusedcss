@@ -27,7 +27,7 @@ const Content = () => {
                         <div className='mt-6'>
                             <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44' styles={buildStyles({
                                 pathColor: `#0bb42f`,
-                            })} value={data?.data?.performance} >
+                            })} value={data?.data ? parseFloat(data?.data?.performance.toFixed(0)) : 0} >
                     <span
                         className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{data?.data?.performance}</span>
                             </CircularProgressbarWithChildren>
@@ -96,7 +96,7 @@ const SpeedInsights = ({children}: {
                     </div>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                    <Tooltip.Content className="font-sans TooltipContent" sideOffset={5}>
+                    <Tooltip.Content className="font-sans animate-rl-scale-in" sideOffset={5}>
                         <Content/>
                     </Tooltip.Content>
                 </Tooltip.Portal>
