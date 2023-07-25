@@ -1,6 +1,3 @@
-
-
-// Define the initial state for the reducer
 import {AppAction, AppState, FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_SUCCESS} from "./appTypes";
 
 const initialState: AppState = {
@@ -9,7 +6,6 @@ const initialState: AppState = {
     loading: false
 };
 
-// Define the reducer function
 const appReducer = (state = initialState, action: AppAction): AppState => {
     switch (action.type) {
         case FETCH_DATA_REQUEST:

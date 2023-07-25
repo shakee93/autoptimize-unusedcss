@@ -1,4 +1,3 @@
-// appActions.ts
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import axios, { AxiosResponse } from 'axios';
@@ -11,6 +10,7 @@ export const fetchData = (url : string): ThunkAction<void, AppState, unknown, An
             dispatch({ type: FETCH_DATA_REQUEST });
 
             const response: AxiosResponse<any> = await axios.get(url);
+
             dispatch({ type: FETCH_DATA_SUCCESS, payload: response.data });
         } catch (error) {
             if (error instanceof Error) {
