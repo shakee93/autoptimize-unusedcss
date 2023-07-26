@@ -1,80 +1,139 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {Dispatch, ReactNode, SetStateAction, useEffect, useState} from "react";
-import {ChevronDown, CloudLightningIcon, FileX, XCircle} from "lucide-react";
-import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon, XCircleIcon} from "@heroicons/react/24/solid";
+import {ReactNode, useEffect, useState} from "react";
+import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
 import Button from "./elements/button";
-import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 'react-circular-progressbar';
+import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import Loading from "./elements/loading";
 import {useOptimizerContext} from "../../../context/root";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/reducers";
+import {Skeleton} from "components/ui/skeleton"
 
 const Content = () => {
 
-    const { setShowOptimizer } = useOptimizerContext()
-    const { data, error, loading } = useSelector((state: RootState) => state.app);
+    const {setShowOptimizer} = useOptimizerContext()
+    const {data, error, loading} = useSelector((state: RootState) => state.app);
+    const [performance, setPerformance] = useState<number>(0)
+
+    const [on, setOn] = useState<boolean>(false)
+
+    useEffect(() => {
+        
+        if (!loading && data) {
+            let currentNumber = 0;
+
+            const timer = setInterval(() => {
+                currentNumber += 1;
+                if (currentNumber <= data.data.performance) {
+                    setPerformance(currentNumber)
+                } else {
+                    clearInterval(timer);
+                }
+            }, 10); // Change the delay (in milliseconds) as desired
+
+            return () => clearInterval(timer);
+        }
+
+
+    }, [data, loading])
+
+    const calculateOpacity = () => {
+
+        if (!data) {
+            return 0;
+        }
+
+        const targetNumber = data.data.performance;
+        const maxOpacity = 1;
+        const minOpacity = 0;
+        const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
+        return minOpacity + opacityIncrement * performance;
+    };
 
     return (
-        <div className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-4 px-4 rounded-2xl mx-16 my-2 bg-slate-50'>
-            {loading ? (
-                <Loading/>
-            ) : (
-                <div className='flex gap-6'>
-                    <div className='flex flex-col gap-3 px-4 items-center'>
+        <div
+            className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-slate-50'>
+            {/*<div className='absolute -top-8 text-white'>*/}
+            {/*    <label htmlFor="on">*/}
+            {/*        <input id='on' onClick={() => setOn(p => !p)} type="checkbox"/>*/}
+            {/*        Loading*/}
+            {/*    </label>*/}
+            {/*</div>*/}
+            <div className='flex gap-6'>
+                <div className='flex flex-col gap-3 px-4 items-center'>
 
-                        <div className='mt-6'>
-                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44' styles={buildStyles({
+                    <div className='mt-6'>
+                        {loading || on ? (
+                            <Skeleton className="w-44 h-44 rounded-full"/>
+                        ) : (
+                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
                                 pathColor: `#0bb42f`,
-                            })} value={data?.data ? parseFloat(data?.data?.performance.toFixed(0)) : 0} >
-                    <span
-                        className='text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'>{data?.data?.performance}</span>
+                                pathTransitionDuration: .5,
+                            })} value={performance}>
+                                <span
+                                    style={{
+                                        opacity: calculateOpacity()
+                                    }}
+                                    className='text-5xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
+>{performance}</span>
                             </CircularProgressbarWithChildren>
-                        </div>
-
-                        <div className="flex justify-around text-sm gap-4 font-light w-full mt-5">
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
-                                    <polygon points="5,0 0,10 10,10" fill="red" />
-                                </svg>
-                                0-49
-                            </div>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
-                                    <rect width="10" height="10" fill="orange" />
-                                </svg>
-                                50-89</div>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
-                                    <circle cx="5" cy="5" r="5" fill="green"/>
-                                </svg>
-                                89-100</div>
-                        </div>
+                        )}
                     </div>
-                    <div className='flex flex-col'>
-                        <div className='text-md font-medium text-left mb-3 ml-3'>Speed insights</div>
-                        <div className="flex flex-col gap-2">
-                            <SpeedInsightGroup title='Opportunities'  tag='4 issues'/>
-                            <SpeedInsightGroup title='Diagnostics'  tag='6 issues'/>
-                            <SpeedInsightGroup title='Passed Audits' success={true} tag='6 audits'/>
+
+                    <div className="flex justify-around text-sm gap-4 font-light w-full mt-5">
+                        <div className='flex items-center gap-1'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                                <polygon points="5,0 0,10 10,10" fill="red"/>
+                            </svg>
+                            0-49
                         </div>
-                        <hr className='my-3 mx-6'/>
-                        <div className='flex gap-3 text-sm'>
-                            <Button onClick={(e) => {setShowOptimizer(true)}}>
-                                <BoltIcon className='w-4 text-white'/> Page Optimizer
-                            </Button>
-                            <Button dark={false}>
-                                <DocumentMinusIcon className='w-4'/>
-                            </Button>
-                            <Button dark={false}>
-                                <ArchiveBoxIcon className='w-4'/>
-                            </Button>
+                        <div className='flex items-center gap-1'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                                <rect width="10" height="10" fill="orange"/>
+                            </svg>
+                            50-89
+                        </div>
+                        <div className='flex items-center gap-1'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                                <circle cx="5" cy="5" r="5" fill="green"/>
+                            </svg>
+                            89-100
                         </div>
                     </div>
                 </div>
-            )}
-
+                <div className='flex flex-col'>
+                    <div className='text-md font-medium text-left mb-3 ml-3'>Speed insights</div>
+                    {loading || on ? (
+                        <div className='flex flex-col gap-2'>
+                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                        </div>
+                    ) : (
+                        <div className='flex flex-col gap-2'>
+                            <SpeedInsightGroup title='Opportunities' items={data?.data?.grouped?.opportunities}/>
+                            <SpeedInsightGroup title='Diagnostics' items={data?.data?.grouped?.diagnostics}/>
+                            <SpeedInsightGroup title='Passed Audits' success={true}
+                                               items={data?.data?.grouped?.passed_audits}/>
+                        </div>
+                    )}
+                    <hr className='my-3 mx-6'/>
+                    <div className='flex gap-3 text-sm'>
+                        <Button onClick={(e) => {
+                            setShowOptimizer(true)
+                        }}>
+                            <BoltIcon className='w-4 text-white'/> Page Optimizer
+                        </Button>
+                        <Button dark={false}>
+                            <DocumentMinusIcon className='w-4'/>
+                        </Button>
+                        <Button dark={false}>
+                            <ArchiveBoxIcon className='w-4'/>
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
@@ -83,7 +142,7 @@ const SpeedInsights = ({children}: {
     children: ReactNode,
 }) => {
 
-    const { options } = useOptimizerContext()
+    const {options} = useOptimizerContext()
 
     const root = options?.plugin_url
 
@@ -91,7 +150,8 @@ const SpeedInsights = ({children}: {
         <div>
             <Tooltip.Root>
                 <Tooltip.Trigger asChild>
-                    <div className={`${!root ? 'bg-gray-900 text-white py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
+                    <div
+                        className={`${!root ? 'bg-gray-900 text-white py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
                         {children}
                     </div>
                 </Tooltip.Trigger>
@@ -101,6 +161,9 @@ const SpeedInsights = ({children}: {
                     </Tooltip.Content>
                 </Tooltip.Portal>
             </Tooltip.Root>
+            {/*{!root && (*/}
+            {/*    <Content/>*/}
+            {/*)}*/}
         </div>
 
     );

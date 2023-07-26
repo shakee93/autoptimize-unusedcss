@@ -31,7 +31,7 @@ const App = ({is_popup}: {
     const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
 
     useEffect(() => {
-        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io';
+        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io?no_rapidload';
 
         if (options?.ajax_url) {
             url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url

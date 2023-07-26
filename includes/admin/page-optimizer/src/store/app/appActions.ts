@@ -6,6 +6,9 @@ import {AppAction, AppState, FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_
 
 const transformData = (data: any) => {
 
+    // temp mapping
+    data.data = data.data.result
+
     data.data.performance =  data.data.performance ? parseFloat(data?.data?.performance.toFixed(0)) : 0
 
     if (data.data.screenShots) {
