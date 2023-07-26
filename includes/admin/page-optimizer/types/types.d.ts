@@ -18,69 +18,19 @@ interface AuditSettings {
     status: string,
 }
 
-
-interface Options{
-    id: number,
-    label: string,
-}
-
-interface AuditFile  {
-    totalBytes: number,
-    url: string,
-    wastedMs: number,
-    file_type : string,
-    options: Options[],
-}
-
-interface  Metrics{
-    id : string,
-    title : string,
-    description : string,
-    displayValue : string,
-    icon: string,
-}
-
-interface PageSpeed{
-    performance: number,
-    metrics : Metrics[] | undefined,
-}
 interface Help{
     help: boolean,
     title : string,
     content: string,
 }
-// interface Audit {
-//     id: string,
-//     title: string,
-//     icon: 'pass' | 'fail' | 'average',
-//     files: AuditFile[],
-//     settings: AuditSettings[],
-//     tags: Array<AuditTypes>,
-//     help: Help[],
-// }
 
-// interface Audit{
-//     id: string,
-//     title: string,
-//     icon: string,
-//     files: AuditFile[],
-//     tags: Array<AuditTypes>,
-//     settings: AuditSettings[],
-//     help: Help[],
-//
-// }
 
 interface Window {
-    uucss_global: {
-        ajax_url: string;
-        nonce: string;
-
-    };
     rapidload : WordPressOptions
 }
 
 
-interface File {
+interface AuditFile {
     wastedBytes: number;
     totalBytes: number;
     url: string;
@@ -93,7 +43,7 @@ interface Audit {
     icon: string;
     files: {
         overallSavingsBytes: number;
-        items: File[];
+        items: AuditFile[];
         type: string;
         headings: {
             key: string;
@@ -103,6 +53,8 @@ interface Audit {
                 key: string;
                 valueType: string;
             };
+            control_type: string
+            control_values: string[]
         }[];
         sortedBy: string[];
         overallSavingsMs?: number;
