@@ -385,16 +385,29 @@ export default {
           .then(response => {
 
              if(response.data?.data){
-               const newItem = response.data?.data?.map((value) => {
+               const newWhitelist = response.data?.data?.map((value) => {
                  return value.id + ':' + value.name;
                })
-               const uniqueItems = newItem.filter(item => {
-                 const itemName = item.split(":")[1];
-                 return !this.onData.suggested_whitelist_packs.some(pack => pack.split(":")[1] === itemName);
-               });
+               const uniqueWhitelist = newWhitelist.map(function (wp) {
+                 let item = wp.split(':')
+                 return item[1];
+               })
+               const uniqueSuggetested = this.onData.suggested_whitelist_packs.map(function (wp) {
+                 let item = wp.split(':')
+                 return item[1];
+               })
 
-              // const uniqueItems = newItem.filter(item => !this.onData.suggested_whitelist_packs.includes(item));
-               this.onData.whitelist_packs.push(...uniqueItems);
+               const uniqueItems = uniqueWhitelist.filter(item => !uniqueSuggetested.includes(item));
+
+               if(uniqueItems.length > 0){
+                 const foundItem = newWhitelist.find(item => item.includes(uniqueItems));
+                 console.log("Found Item: "+ foundItem);
+                 this.onData.whitelist_packs.push(foundItem);
+                 this.onData.suggested_whitelist_packs = newWhitelist;
+               }
+
+
+
 
             }else if(response.data?.data?.errors[0]?.detail){
               this.errorMessage = response.data?.data?.errors[0].detail;
