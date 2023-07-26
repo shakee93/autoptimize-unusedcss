@@ -97,14 +97,54 @@ class RapidLoad_Optimizer
             'mobile' => $size
         ]);
 
-        $opportunities = [];
-
-        foreach ($result->Opportunities as $key => $opportunity){
-            $opp = apply_filters('page-optimizer/actions/opportunity/' . $opportunity->id, $opportunity);
-            array_push($opportunities, $opp);
+        if(!isset(self::$options['unused-javascript-files'])){
+            self::$options['unused-javascript-files'] = [];
         }
 
-        wp_send_json_success($result);
+        if(!isset($result->audits)){
+            wp_send_json_error([]);
+        }
+
+        foreach ($result->audits as $audit){
+
+            foreach ($audit->settings as $settings){
+                foreach ($settings->inputs as $input){
+                    if(isset(self::$options[$input->key])){
+                        $input->value = self::$options[$input->key];
+                    }
+                }
+            }
+
+            if($audit->id == "unused-javascript"){
+
+                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                    foreach ($audit->files->items as $item){
+
+                        if(isset(self::$options['unused-javascript-files']) && is_array(self::$options['unused-javascript-files']) && !empty(self::$options['unused-javascript-files'])){
+
+                            $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+
+                            if(isset($key) && is_numeric($key)){
+
+                                $item->pattern = self::$options['unused-javascript-files'][$key]['pattern'];
+                                $item->action = self::$options['unused-javascript-files'][$key]['action'];
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        wp_send_json_success([
+            'result' => $result,
+            'options' => [
+                'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
+            ]
+        ]);
 
 
     }

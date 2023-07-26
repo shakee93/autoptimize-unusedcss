@@ -6,7 +6,7 @@ class RapidLoad_Admin_Bar {
     public function __construct()
     {
 
-        add_action( 'wp_head', [$this,'rapidload_admin_bar_css'] );
+        add_action( 'admin_bar_init', [$this,'rapidload_admin_bar_css'] );
         add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
 //        wp_register_script( 'rapidload-page-optimizer-data', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/page-optimizer/dist/page-optimizer-data.min.js', null, 111);
@@ -54,10 +54,11 @@ class RapidLoad_Admin_Bar {
     }
     public function rapidload_admin_bar_css()
     {
+
         if ( is_admin_bar_showing() ) { ?>
 
 
-            <style>
+            <style id="rapidload-admin-bar-css">
 
                 #wp-admin-bar-rapidload .rl-node-wrapper {
                     display: flex;

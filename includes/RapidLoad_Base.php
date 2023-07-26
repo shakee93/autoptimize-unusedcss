@@ -99,7 +99,7 @@ class RapidLoad_Base
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
             $this->container['page_optimizer'] = new RapidLoad_Optimizer();
-            $this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
+            //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
 
         });
 
