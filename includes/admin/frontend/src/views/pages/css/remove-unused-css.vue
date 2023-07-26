@@ -64,7 +64,7 @@
           <h1 class="font-normal text-base text-black-font">Selector Packs (formally Safelist Packs)</h1>
           <p class="text-sm pb-3 text-gray-font">Selector packs contain predefined force exclude and include rules for plugins and themes.</p>
           <div class="grid mb-5">
-            <div class="flex text-sm z-10">
+            <div class="w-[682px] flex text-sm z-10">
               <vue3-tags-input :tags="whitelist_render"
                                v-model="filterText"
                                @on-tags-changed="handleChangeTag"
