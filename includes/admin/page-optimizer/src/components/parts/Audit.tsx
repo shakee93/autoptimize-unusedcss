@@ -94,97 +94,102 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     }
 
 
-    const columns = audit.files.headings
-        .filter(heading => !['pattern', 'node'].includes(heading.key) )
-        .map((heading) => {
+    let table = null
 
-        return columnHelper.accessor(row => row[heading.key as keyof AuditFile], {
-            id: heading.key,
-            cell: info => {
+    if (audit.files && audit.files.headings) {
+        
+        const columns = audit?.files?.headings
+            .filter(heading => !['pattern', 'node'].includes(heading.key) )
+            .map((heading) => {
 
-                if (heading.valueType === 'url') {
+                return columnHelper.accessor(row => row[heading.key as keyof AuditFile], {
+                    id: heading.key,
+                    cell: info => {
 
-                    let [loaded, setLoaded] = useState<boolean>(false);
+                        if (heading.valueType === 'url') {
+
+                            let [loaded, setLoaded] = useState<boolean>(false);
 
 
-                    if (['modern-image-formats'].includes(audit.id)) {
-                        return (
-                            <TooltipProvider delayDuration={0}>
-                                <Tooltip>
-                                    <TooltipTrigger>
-                                        <div className='flex items-center gap-2'>
-                                            <div className='w-6 h-6 border rounded-md overflow-hidden'>
-                                                <img className='w-fit' src={info.getValue() as string} alt=''/>
-                                            </div>
-                                            <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent className='relative max-w-[32rem] min-w-[2rem] min-h-[2rem]'>
-                                        <img alt={info.getValue() as string} onError={() => setLoaded(true)} onLoadCapture={() => setLoaded(true)} className='max-w-[20rem]' src={info.getValue() as string}/>
+                            if (['modern-image-formats'].includes(audit.id)) {
+                                return (
+                                    <TooltipProvider delayDuration={0}>
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <div className='flex items-center gap-2'>
+                                                    <div className='w-6 h-6 border rounded-md overflow-hidden'>
+                                                        <img className='w-fit' src={info.getValue() as string} alt=''/>
+                                                    </div>
+                                                    <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent className='relative max-w-[32rem] min-w-[2rem] min-h-[2rem]'>
+                                                <img alt={info.getValue() as string} onError={() => setLoaded(true)} onLoadCapture={() => setLoaded(true)} className='max-w-[20rem]' src={info.getValue() as string}/>
 
-                                        {!loaded && (
-                                            <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>
-                                                <CircleDashed className='animate-spin text-purple-750 w-6'/>
-                                            </div>
-                                        )}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        )
-                    } else {
-                        return (
-                            <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
-                        )
-                    }
+                                                {!loaded && (
+                                                    <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>
+                                                        <CircleDashed className='animate-spin text-purple-750 w-6'/>
+                                                    </div>
+                                                )}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                )
+                            } else {
+                                return (
+                                    <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                                )
+                            }
 
-                }
+                        }
 
-                if (heading.control_type === 'dropdown') {
-                    return (
-                        <Select>
-                            <SelectTrigger className="w-[180px] capitalize">
-                                <SelectValue placeholder="Select action" />
-                            </SelectTrigger>
-                            <SelectContent className='z-[100001]'>
-                                <SelectGroup>
-                                    <SelectLabel>Actions</SelectLabel>
-                                    {heading.control_values.map(value => (
-                                        <SelectItem className='capitalize cursor-pointer' key={value} value={value}>{value}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    )
-                }
+                        if (heading.control_type === 'dropdown') {
+                            return (
+                                <Select>
+                                    <SelectTrigger className="w-[180px] capitalize">
+                                        <SelectValue placeholder="Select action" />
+                                    </SelectTrigger>
+                                    <SelectContent className='z-[100001]'>
+                                        <SelectGroup>
+                                            <SelectLabel>Actions</SelectLabel>
+                                            {heading.control_values.map(value => (
+                                                <SelectItem className='capitalize cursor-pointer' key={value} value={value}>{value}</SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }
 
-                if (heading.valueType === 'bytes') {
-                    return prettyBytes(info.getValue() as number)
-                }
+                        if (heading.valueType === 'bytes') {
+                            return prettyBytes(info.getValue() as number)
+                        }
 
-                if (heading.valueType === 'timespanMs') {
-                    return prettyMilliseconds(info.getValue() as number)
-                }
+                        if (heading.valueType === 'timespanMs') {
+                            return prettyMilliseconds(info.getValue() as number)
+                        }
 
-                if (heading.valueType === 'node') {
-                    return <pre></pre>
-                }
+                        if (heading.valueType === 'node') {
+                            return <pre></pre>
+                        }
 
-                console.log(info.getValue());
-                return <span>{info.getValue()}</span>;
-            },
-            header: () => <span>{heading.label}</span>,
-        });
+                        console.log(info.getValue());
+                        return <span>{info.getValue()}</span>;
+                    },
+                    header: () => <span>{heading.label}</span>,
+                });
 
-    });
-
-    const table =useReactTable({
-        data: audit.files.items,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    })
+            });
+        
+        table =useReactTable({
+            data: audit.files.items,
+            columns,
+            getCoreRowModel: getCoreRowModel(),
+        })
+    }
 
     return (
-        <Card padding='p-0' cls={`w-full flex flex-col items-center ${audit.settings.length > 1 ? 'border-b-0 rounded-b-none':'shadow-bottom'}`}>
+        <Card padding='p-0' cls={`w-full flex flex-col items-center`}>
             <div className='flex justify-between w-full py-2 px-3'>
                 <div className='absolute left-5 text-center mt-2'>
                     <span
@@ -205,13 +210,10 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 <div className='flex gap-2 items-center'>
 
                     {audit.settings.length > 0 &&(
-
-                        <div ref={divSettingsRef} className={`flex dark:bg-zinc-700`}>
-                            <div className="flex flex-wrap">
-                                {audit.settings.map((settings, index) => (
-                                    <SettingItem key={index} settings={settings} index={index} />
-                                ))}
-                            </div>
+                        <div ref={divSettingsRef} className="flex flex-wrap">
+                            {audit.settings.map((settings, index) => (
+                                <SettingItem key={index} settings={settings} index={index} />
+                            ))}
                         </div>
                     )}
 
@@ -239,15 +241,15 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
             </div>
 
-            {audit.files && toggleFiles && (
-                <div className='border-t w-full p-4'>
-                    <div className='w-full border rounded-[20px] overflow-hidden'>
+            {audit.files && toggleFiles && table && (
+                <div className='border-t dark:border-zinc-700 border-zinc-200 w-full p-4'>
+                    <div className='w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden'>
                         <table className='w-full'>
                             <thead>
                             {table?.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map(header => (
-                                        <th className='px-5 py-3 bg-zinc-100 font-medium text-sm text-left' key={header.id}>
+                                        <th className='px-5 py-3 dark:bg-zinc-900 bg-zinc-100 font-medium text-sm text-left' key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -263,7 +265,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                             {table?.getRowModel().rows.map(row => (
                                 <tr  key={row.id}>
                                     {row.getVisibleCells().map(cell => (
-                                        <td className='py-2 border-t px-5 text-sm h-[50px] items-center' key={cell.id}>
+                                        <td className='py-2 border-t dark:border-zinc-700 border-zinc-200 px-5 text-sm h-[50px] items-center' key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}

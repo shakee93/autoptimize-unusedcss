@@ -29,7 +29,7 @@ const SettingItem = ({settings, index}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="flex gap-2 items-center font-medium text-sm hover:bg-zinc-100 bg-zinc-50 border border-zinc-200 w-fit rounded-xl items-center px-0.5 pr-2 py-1"
+            className="flex gap-2 items-center font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 dark:border-zinc-700 border border-zinc-200 w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
             {icons[settings.category as keyof typeof icons]} {settings.name} <Switch/>
         </div>
