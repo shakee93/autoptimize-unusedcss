@@ -47,7 +47,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     return (
         <div>
             <div>
-            <Card padding='py-3 px-4' cls={`flex justify-between gap-2 items-center ${toggleFiles || audit.help[0].help ? 'border-b-0 rounded-b-none' : ''} ${audit.settings.length > 1 ? 'border-b-0 rounded-b-none':'shadow-bottom'}`}>
+            <Card padding='py-3 px-4' cls={`flex justify-between gap-2 items-center ${audit.settings.length > 1 ? 'border-b-0 rounded-b-none':'shadow-bottom'}`}>
                 <div className='absolute left-5 text-center mt-2'>
                     <span
                         className={`border-4 border-gray-highlight inline-block w-6 h-6  rounded-full ${priority ? 'bg-zinc-200' : 'bg-white'}`}></span>
@@ -60,16 +60,16 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-purple-100`}>
                             <Icon icon={audit.icon }/>
                             </span>
-                    {audit.title} <InformationCircleIcon className='w-6 h-6 text-gray-300/75'/>
+                    {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-300/75'/>
                 </div>
 
                 <div className={'flex'}>
                     <div>
-                        {audit.settings.length <= 1 ? (
-                            audit.settings?.map((data, index) => (
-                                <SettingItem key={index} data={data} index={index} />
-                            ))
-                        ) : null}
+                        {/*{audit.settings.length <= 1 ? (*/}
+                        {/*    audit.settings?.map((data, index) => (*/}
+                        {/*        <SettingItem key={index} data={data} index={index} />*/}
+                        {/*    ))*/}
+                        {/*) : null}*/}
                     </div>
                     <div> <button onClick={() => {
                         setToggleFiles(prev => !prev)
@@ -87,37 +87,37 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
 
             </Card>
-                {audit.settings.length > 1 &&(
-                <div ref={divSettingsRef} className={`${toggleFiles || audit.help[0].help ? 'border-b-0 rounded-b-none' : 'shadow-bottom'}  flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>
-                    <div className="flex flex-wrap">
-                        {audit.settings.map((data, index) => (
-                            <SettingItem key={index} data={data} index={index} />
-                        ))}
-                    </div>
-                </div>
-                )}
+                {/*{audit.settings.length > 1 &&(*/}
+                {/*<div ref={divSettingsRef} className={`${toggleFiles || audit.help[0].help ? 'border-b-0 rounded-b-none' : 'shadow-bottom'}  flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>*/}
+                {/*    <div className="flex flex-wrap">*/}
+                {/*        {audit.settings.map((data, index) => (*/}
+                {/*            <SettingItem key={index} data={data} index={index} />*/}
+                {/*        ))}*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*)}*/}
 
                 <div>
-                {audit.help[0]?.help &&(
-                <div className={`${audit.help[0].help ? 'shadow-bottom' : ''} ${toggleFiles ? 'border-b-0 rounded-b-none' : ''} flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>
-                    <div className="flex flex-wrap">
-                        {audit.help.map((data, index) => (
-                            <div key={index}>
-                                {data.help &&(
-                                    <div>
-                                <div className={`${helpClasses} border w-full rounded-b-none rounded-xl`}>
-                                    <p className="text-xs font-bold"> {data.title}</p>
-                                </div>
-                                <div className={`${helpClasses} mb-2 border-t-0 w-full rounded-t-none rounded-xl`}>
-                                    <p className="text-xs font-medium"> {data.content}</p>
-                                </div>
-                                    </div>
-                                    )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                )}
+                {/*{audit.help[0]?.help &&(*/}
+                {/*<div className={`${audit.help[0].help ? 'shadow-bottom' : ''} ${toggleFiles ? 'border-b-0 rounded-b-none' : ''} flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>*/}
+                {/*    <div className="flex flex-wrap">*/}
+                {/*        {audit.help.map((data, index) => (*/}
+                {/*            <div key={index}>*/}
+                {/*                {data.help &&(*/}
+                {/*                    <div>*/}
+                {/*                <div className={`${helpClasses} border w-full rounded-b-none rounded-xl`}>*/}
+                {/*                    <p className="text-xs font-bold"> {data.title}</p>*/}
+                {/*                </div>*/}
+                {/*                <div className={`${helpClasses} mb-2 border-t-0 w-full rounded-t-none rounded-xl`}>*/}
+                {/*                    <p className="text-xs font-medium"> {data.content}</p>*/}
+                {/*                </div>*/}
+                {/*                    </div>*/}
+                {/*                    )}*/}
+                {/*            </div>*/}
+                {/*        ))}*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*)}*/}
                     </div>
 
             </div>
@@ -147,33 +147,31 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                                 </tr>
                                 </thead>
                                 <tbody className={'divide-y divide-gray-border dark:divide-gray-border'}>
-                                {audit.files?.map((data, index) => (
+                                {/*{audit.files?.map((data, index) => (*/}
+                                {/*    <tr key={index}>*/}
+                                {/*        <td className='px-6 py-3 whitespace-nowrap'>*/}
+                                {/*            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.file_type}</div>*/}
+                                {/*        </td>*/}
+                                {/*        <td className='px-6 py-3 whitespace-nowrap'>*/}
+                                {/*            <div className='text-sm font-medium text-gray-900 dark:text-white flex items-center'>*/}
+                                {/*                <span className='mr-2'><ShrinkString text={data.url} /></span>*/}
+                                {/*                <IconLink/>*/}
+                                {/*            </div>*/}
+                                {/*        </td>*/}
+                                {/*        <td className='px-6 py-3 whitespace-nowrap'>*/}
+                                {/*            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.totalBytes}</div>*/}
+                                {/*        </td>*/}
+                                {/*        <td className='px-6 py-3 whitespace-nowrap'>*/}
+                                {/*            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.wastedMs}</div>*/}
+                                {/*        </td>*/}
+                                {/*        <td className='px-6 py-3 whitespace-nowrap'>*/}
+                                {/*            <div className='flex items-center space-x-2'>*/}
+                                {/*                <SelectionBox options={data.options} />*/}
+                                {/*            </div>*/}
+                                {/*        </td>*/}
+                                {/*    </tr>*/}
 
-
-                                    <tr key={index}>
-                                        <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.file_type}</div>
-                                        </td>
-                                        <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white flex items-center'>
-                                                <span className='mr-2'><ShrinkString text={data.url} /></span>
-                                                <IconLink/>
-                                            </div>
-                                        </td>
-                                        <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.totalBytes}</div>
-                                        </td>
-                                        <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='text-sm font-medium text-gray-900 dark:text-white'>{data.wastedMs}</div>
-                                        </td>
-                                        <td className='px-6 py-3 whitespace-nowrap'>
-                                            <div className='flex items-center space-x-2'>
-                                                <SelectionBox options={data.options} />
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                ))}
+                                {/*))}*/}
                                 </tbody>
                             </table>
                         </div>

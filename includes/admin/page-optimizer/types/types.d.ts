@@ -78,6 +78,7 @@ interface Window {
         nonce: string;
 
     };
+    rapidload : WordPressOptions
 }
 
 
@@ -136,4 +137,11 @@ interface MetricsData {
         audits: Audit[];
         performance: number;
     };
+}
+
+interface WordPressOptions {
+    ajax_url: string
+    optimizer_url: string
+    page_optimizer_base: string
+    plugin_url: string
 }
