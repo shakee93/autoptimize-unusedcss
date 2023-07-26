@@ -1,9 +1,10 @@
-import {ReactNode} from "react";
+import {ReactNode, MouseEvent} from "react";
 import {BoltIcon} from "@heroicons/react/24/solid";
 
-const Button = ({ children, dark = true}: {
+const Button = ({ children, dark = true, onClick}: {
     children?: ReactNode,
-    dark?: boolean
+    dark?: boolean,
+    onClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }) => {
 
     let styles = 'border border-slate-950 bg-slate-900 text-white'
@@ -14,6 +15,7 @@ const Button = ({ children, dark = true}: {
 
     return (
         <button
+            onClick={(e) => onClick && onClick(e)}
             className={`flex px-4 py-2 rounded-xl items-center gap-2 ${styles}`}>
             {children}
         </button>

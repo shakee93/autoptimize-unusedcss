@@ -18,13 +18,7 @@ module.exports = {
         'gray-350': '#C0C0C0',
         'purple-750': '#7F54B3',
       },
-
     },
-
-
-
   },
-
-
   plugins: [],
 }
