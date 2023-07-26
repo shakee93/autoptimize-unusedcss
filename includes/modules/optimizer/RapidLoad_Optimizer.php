@@ -101,6 +101,10 @@ class RapidLoad_Optimizer
             self::$options['unused-javascript-files'] = [];
         }
 
+        if(!isset($result->audits)){
+            wp_send_json_error([]);
+        }
+
         foreach ($result->audits as $audit){
 
             foreach ($audit->settings as $settings){

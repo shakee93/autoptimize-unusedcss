@@ -54,10 +54,11 @@ class RapidLoad_Admin_Bar {
     }
     public function rapidload_admin_bar_css()
     {
+
         if ( is_admin_bar_showing() ) { ?>
 
 
-            <style>
+            <style id="rapidload-admin-bar-css">
 
                 #wp-admin-bar-rapidload .rl-node-wrapper {
                     display: flex;
