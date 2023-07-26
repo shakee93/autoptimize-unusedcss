@@ -887,6 +887,19 @@ a.toplevel_page_rapidload img{
     margin: 0 auto;
 }
 
+#wp-admin-bar-rapidload .rl-node-wrapper {
+    display: flex;
+    gap: 6px;
+}
+
+#wp-admin-bar-rapidload .rl-icon {
+    display: inline-flex;
+}
+
+#wp-admin-bar-rapidload .rl-icon img {
+    margin: 0 !important;
+}
+
 #wp-admin-bar-rapidload a img[alt="rapidload"]{
     margin-right: 5px;
     margin-bottom: 1px;
