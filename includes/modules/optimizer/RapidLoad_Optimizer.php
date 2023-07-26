@@ -160,6 +160,24 @@ class RapidLoad_Optimizer
 
                             switch($input->control_type ){
 
+                                case 'checkbox' :{
+                                    if(isset($input->value) && isset($input->key) && $input->value == "1"){
+                                        self::$options[$input->key] = "1";
+                                    }else if(isset(self::$options[$input->key])){
+                                        unset(self::$options[$input->key]);
+                                    }
+                                    break;
+                                }
+                                case 'dropdown' :
+                                case 'text' :
+                                case 'number' :{
+                                    if(isset($input->value) && isset($input->key)){
+                                        self::$options[$input->key] = $input->value;
+                                    }else if(isset(self::$options[$input->key])){
+                                        unset(self::$options[$input->key]);
+                                    }
+                                    break;
+                                }
                             }
 
                         }
