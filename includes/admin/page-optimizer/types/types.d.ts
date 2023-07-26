@@ -1,9 +1,8 @@
 
 interface Tab {
-    key: AuditTypes;
+    key: keyof OptimizerResults['data']['grouped'];
     name: string;
 }
-
 
 interface AuditAction {
     type: 'checkbox' | 'options' ,
@@ -19,7 +18,6 @@ interface AuditSettings {
     status: string,
 }
 
-type AuditTypes = "attention_required" | "opportunity"| "diagnostics" | "passed_audits"
 
 interface Options{
     id: number,
@@ -145,3 +143,19 @@ interface WordPressOptions {
     page_optimizer_base: string
     plugin_url: string
 }
+
+interface OptimizerResults {
+    data : {
+        performance: number
+        audits: Audit[]
+        metrics: Metric[],
+        grouped: {
+            passed_audits: Audit[],
+            opportunities: Audit[],
+            diagnostics: Audit[],
+        }
+    },
+    success: boolean
+}
+
+type AuditTypes = keyof OptimizerResults["data"]['grouped']

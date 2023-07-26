@@ -13,19 +13,15 @@ import {RootState} from "../../store/reducers";
 import {useOptimizerContext} from "../../context/root";
 
 export default function PageOptimizer() {
-    const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
+    const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(false);
     const {data, error, loading} = useSelector((state: RootState) => state.app);
     const {options} = useOptimizerContext()
 
     const tabs: Tab[] = [
         {
-            key: "attention_required",
-            name: "Attention Required",
-        },
-        {
-            key: "opportunity",
-            name: "Opportunity",
+            key: "opportunities",
+            name: "Opportunities",
         },
         {
             key: "diagnostics",
@@ -78,7 +74,7 @@ export default function PageOptimizer() {
                     </div>
                     <div className="audits pt-4 flex">
                         {(data?.data && data?.data.audits.length > 0) &&
-                            <Audits activeTab={activeTab} audits={data?.data.audits}/>}
+                            <Audits activeTab={activeTab} audits={data?.data.grouped[`${activeTab}`] }/>}
                     </div>
                 </article>
             </section>

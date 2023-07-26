@@ -57,7 +57,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 </div>
                 <div className='flex gap-2 font-medium text-base'>
                     <span
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-purple-100`}>
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100`}>
                             <Icon icon={audit.icon }/>
                             </span>
                     {audit.name} <InformationCircleIcon className='w-6 h-6 text-gray-300/75'/>
@@ -75,7 +75,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         setToggleFiles(prev => !prev)
                         viewFilesButtonClick();
                     }}
-                                  className={`transition duration-300 hover:bg-gray-200 cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl  ${toggleFiles ? 'bg-gray-200': 'bg-purple-200/[.2]'}`}>
+                                  className={`transition duration-300 hover:bg-gray-200 cursor-pointer flex items-center gap-2 border border-gray-border pl-4 pr-2 py-2 text-sm rounded-xl  ${toggleFiles ? 'bg-zinc-200': 'bg-zinc-200/[.2]'}`}>
                         View Files {(toggleFiles) ?
                             <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
                            <PlusCircleIcon

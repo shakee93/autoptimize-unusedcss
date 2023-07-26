@@ -1,17 +1,5 @@
 
-interface OptimizerResults {
-    data : {
-        performance: number
-        audits: Audit[]
-        metrics: Metric[],
-        grouped: {
-            passed_audits: Audit[],
-            opportunities: Audit[],
-            diagnostics: Audit[],
-        }
-    },
-    success: boolean
-}
+
 
 export interface AppState {
     data?: OptimizerResults ; // Replace 'any' with the actual type of data you expect from the API
