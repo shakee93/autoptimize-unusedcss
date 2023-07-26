@@ -403,10 +403,15 @@ export default {
                  const foundItem = newWhitelist.find(item => item.includes(uniqueItems));
                  console.log("Found Item: "+ foundItem);
                  this.onData.whitelist_packs.push(foundItem);
+
                  this.onData.suggested_whitelist_packs = newWhitelist;
                }
+               const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
+                 const textAfterColon = item.split(":")[1];
+                 return index === arr.findIndex((i) => i.split(":")[1] === textAfterColon);
+               });
 
-
+               this.onData.whitelist_packs = uniqueWhitelistPacks;
 
 
             }else if(response.data?.data?.errors[0]?.detail){
