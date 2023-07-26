@@ -847,19 +847,6 @@ body.settings_page_rapidload-onboarding{
     background: rgba(0, 0, 0, 0.8);
 }
 
-#wp-admin-bar-rapidload .rl-node-wrapper {
-    display: flex;
-    gap: 6px;
-}
-
-#wp-admin-bar-rapidload .rl-icon {
-    display: inline-flex;
-}
-
-#wp-admin-bar-rapidload .rl-icon img {
-    margin: 0 !important;
-}
-
 #wp-admin-bar-rapidload.bullet-green.rapidload a{
     display: flex;
     align-items: center;
