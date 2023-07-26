@@ -97,31 +97,49 @@ class RapidLoad_Optimizer
             'mobile' => $size
         ]);
 
+        if(!isset(self::$options['unused-javascript-files'])){
+            self::$options['unused-javascript-files'] = [];
+        }
+
         foreach ($result->audits as $audit){
 
-            foreach ($audit->settings as $s => $settings){
-                foreach ($settings->inputs as $i => $input){
+            foreach ($audit->settings as $settings){
+                foreach ($settings->inputs as $input){
                     if(isset(self::$options[$input->key])){
                         $input->value = self::$options[$input->key];
                     }
                 }
             }
 
-            if($audit->id == "preload-lcp-image" || $audit->id == "unused-javascript"){
-                error_log($audit->id);
+            if($audit->id == "unused-javascript"){
+
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
                     foreach ($audit->files->items as $item){
 
-                        error_log($item->url);
+                        if(isset(self::$options['unused-javascript-files']) && is_array(self::$options['unused-javascript-files']) && !empty(self::$options['unused-javascript-files'])){
+
+                            $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+
+                            if(isset($key) && is_numeric($key)){
+
+                                $item->pattern = self::$options['unused-javascript-files'][$key]['pattern'];
+                                $item->action = self::$options['unused-javascript-files'][$key]['action'];
+
+                            }
+
+                        }
                     }
                 }
-                error_log("====");
+
             }
 
         }
 
         wp_send_json_success([
             'result' => $result,
+            'options' => [
+                'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
+            ]
         ]);
 
 
