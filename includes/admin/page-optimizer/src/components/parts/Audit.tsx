@@ -39,6 +39,7 @@ import {ArrowTopRightIcon} from "@radix-ui/react-icons";
 import prettyBytes from "pretty-bytes";
 import prettyMilliseconds from "pretty-ms";
 import loading from "app/speed-popover/components/elements/loading";
+import {CircleDashed} from "lucide-react";
 
 
 interface AuditProps {
@@ -105,31 +106,37 @@ const Audit = ({audit, priority = true }: AuditProps) => {
 
                     let [loaded, setLoaded] = useState<boolean>(false);
 
-                    return (
-                        <div>
-                            {['modern-image-formats'].includes(audit.id) ? (
-                                <TooltipProvider delayDuration={0}>
-                                    <Tooltip>
-                                        <TooltipTrigger>
+
+                    if (['modern-image-formats'].includes(audit.id)) {
+                        return (
+                            <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='w-6 h-6 border rounded-md overflow-hidden'>
+                                                <img className='w-fit' src={info.getValue() as string} alt=''/>
+                                            </div>
                                             <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
-                                        </TooltipTrigger>
-                                        <TooltipContent className='max-w-32'>
-                                            <img alt={info.getValue() as string} onError={() => setLoaded(true)} onLoadCapture={() => setLoaded(true)} className='max-w-[20rem]' src={info.getValue() as string}/>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className='relative max-w-[32rem] min-w-[2rem] min-h-[2rem]'>
+                                        <img alt={info.getValue() as string} onError={() => setLoaded(true)} onLoadCapture={() => setLoaded(true)} className='max-w-[20rem]' src={info.getValue() as string}/>
 
-                                            {!loaded && (
-                                                <div>
-                                                    loading image...
-                                                </div>
+                                        {!loaded && (
+                                            <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>
+                                                <CircleDashed className='animate-spin text-purple-750 w-6'/>
+                                            </div>
+                                        )}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        )
+                    } else {
+                        return (
+                            <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                        )
+                    }
 
-                                            )}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            ) : (
-                                <a className='flex gap-2' target='_blank' href={info.getValue() as string}>{truncateMiddleOfURL(info.getValue() as string, 50)} <ArrowTopRightOnSquareIcon className='w-4'/> </a>
-                            )}
-                        </div>
-                    )
                 }
 
                 if (heading.control_type === 'dropdown') {
@@ -177,126 +184,100 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     })
 
     return (
-        <div>
-            <div>
-            <Card padding='p-0' cls={`w-full flex flex-col items-center ${audit.settings.length > 1 ? 'border-b-0 rounded-b-none':'shadow-bottom'}`}>
-                <div className='flex justify-between w-full p-3'>
-                    <div className='absolute left-5 text-center mt-2'>
+        <Card padding='p-0' cls={`w-full flex flex-col items-center ${audit.settings.length > 1 ? 'border-b-0 rounded-b-none':'shadow-bottom'}`}>
+            <div className='flex justify-between w-full py-2 px-3'>
+                <div className='absolute left-5 text-center mt-2'>
                     <span
                         className={`border-2 border-zinc-300 inline-block w-5 h-5  rounded-full ${priority ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
 
-                        <span style={{height: `${divHeight}px`}}
-                              className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
-                    </div>
-                    <div className='flex gap-3 font-normal  items-center text-base'>
+                    <span style={{height: `${divHeight}px`}}
+                          className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                </div>
+                <div className='flex gap-3 font-normal  items-center text-base'>
                     <span
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100`}>
                             <Icon icon={audit.icon }/>
                             </span>
-                        {audit.name} {/*<InformationCircleIcon className='w-6 h-6 text-zinc-200'/>*/}
-                    </div>
+                    {audit.name} {/*<InformationCircleIcon className='w-6 h-6 text-zinc-200'/>*/}
 
-                    <div className={'flex'}>
-                        <div>
-                            {/*{audit.settings.length <= 1 ? (*/}
-                            {/*    audit.settings?.map((data, index) => (*/}
-                            {/*        <SettingItem key={index} data={data} index={index} />*/}
-                            {/*    ))*/}
-                            {/*) : null}*/}
-                        </div>
-                        <div> <button onClick={() => {
-                            setToggleFiles(prev => !prev)
-                            viewFilesButtonClick();
-                        }}
-                                      className={`${toggleFiles ? 'bg-zinc-100 border border-zinc-300': 'bg-zinc-200/[.2] border border-zinc-200'} transition duration-300 hover:bg-gray-200 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl`}>
-                            View Files {(toggleFiles) ?
-                            <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
-                            <PlusCircleIcon
-                                className='w-6 h-6 text-zinc-900'/>}
-                        </button>
-                        </div>
-                    </div>
                 </div>
 
-                    {audit.files && toggleFiles && (
-                        <div className='border-t w-full p-4'>
-                            <div className='w-full border rounded-[20px] overflow-hidden'>
-                                <table className='w-full'>
-                                    <thead>
-                                    {table?.getHeaderGroups().map(headerGroup => (
-                                        <tr key={headerGroup.id}>
-                                            {headerGroup.headers.map(header => (
-                                                <th className='px-5 py-3 bg-zinc-100 font-medium text-sm text-left' key={header.id}>
-                                                    {header.isPlaceholder
-                                                        ? null
-                                                        : flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext()
-                                                        )}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                    </thead>
-                                    <tbody>
-                                    {table?.getRowModel().rows.map(row => (
-                                        <tr  key={row.id}>
-                                            {row.getVisibleCells().map(cell => (
-                                                <td className='py-2 border-t px-5 text-sm h-[50px]' key={cell.id}>
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
+                <div className='flex gap-2 items-center'>
+
+                    {audit.settings.length > 0 &&(
+
+                        <div ref={divSettingsRef} className={`flex dark:bg-zinc-700`}>
+                            <div className="flex flex-wrap">
+                                {audit.settings.map((settings, index) => (
+                                    <SettingItem key={index} settings={settings} index={index} />
+                                ))}
                             </div>
-                            {/*<JsonView data={audit.files} shouldInitiallyExpand={(level) => false} />*/}
-
                         </div>
-                   )}
+                    )}
 
-            </Card>
-                {/*{audit.settings.length > 1 &&(*/}
-                {/*<div ref={divSettingsRef} className={`${toggleFiles || audit.help[0].help ? 'border-b-0 rounded-b-none' : 'shadow-bottom'}  flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>*/}
-                {/*    <div className="flex flex-wrap">*/}
-                {/*        {audit.settings.map((data, index) => (*/}
-                {/*            <SettingItem key={index} data={data} index={index} />*/}
-                {/*        ))}*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-                {/*)}*/}
-
-                <div>
-                {/*{audit.help[0]?.help &&(*/}
-                {/*<div className={`${audit.help[0].help ? 'shadow-bottom' : ''} ${toggleFiles ? 'border-b-0 rounded-b-none' : ''} flex py-3 px-4 w-full dark:bg-zinc-700 bg-white border-gray-200 border w-full rounded-2xl rounded-t-none `}>*/}
-                {/*    <div className="flex flex-wrap">*/}
-                {/*        {audit.help.map((data, index) => (*/}
-                {/*            <div key={index}>*/}
-                {/*                {data.help &&(*/}
-                {/*                    <div>*/}
-                {/*                <div className={`${helpClasses} border w-full rounded-b-none rounded-xl`}>*/}
-                {/*                    <p className="text-xs font-bold"> {data.title}</p>*/}
-                {/*                </div>*/}
-                {/*                <div className={`${helpClasses} mb-2 border-t-0 w-full rounded-t-none rounded-xl`}>*/}
-                {/*                    <p className="text-xs font-medium"> {data.content}</p>*/}
-                {/*                </div>*/}
-                {/*                    </div>*/}
-                {/*                    )}*/}
-                {/*            </div>*/}
-                {/*        ))}*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-                {/*)}*/}
+                    {/*<div>*/}
+                    {/*    <span className='text-gray-400 text-xs'>Score: {audit.score}</span>*/}
+                    {/*</div>*/}
+                    <div>
+                        {/*{audit.settings.length <= 1 ? (*/}
+                        {/*    audit.settings?.map((data, index) => (*/}
+                        {/*        <SettingItem key={index} data={data} index={index} />*/}
+                        {/*    ))*/}
+                        {/*) : null}*/}
                     </div>
-
+                    <div> <button onClick={() => {
+                        setToggleFiles(prev => !prev)
+                        viewFilesButtonClick();
+                    }}
+                                  className={`${toggleFiles ? 'bg-zinc-100 border border-zinc-300': 'bg-zinc-200/[.2] border border-zinc-200'} transition duration-300 hover:bg-zinc-200 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl`}>
+                        View Files {(toggleFiles) ?
+                        <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
+                        <PlusCircleIcon
+                            className='w-6 h-6 text-zinc-900'/>}
+                    </button>
+                    </div>
+                </div>
             </div>
 
+            {audit.files && toggleFiles && (
+                <div className='border-t w-full p-4'>
+                    <div className='w-full border rounded-[20px] overflow-hidden'>
+                        <table className='w-full'>
+                            <thead>
+                            {table?.getHeaderGroups().map(headerGroup => (
+                                <tr key={headerGroup.id}>
+                                    {headerGroup.headers.map(header => (
+                                        <th className='px-5 py-3 bg-zinc-100 font-medium text-sm text-left' key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                            </thead>
+                            <tbody>
+                            {table?.getRowModel().rows.map(row => (
+                                <tr  key={row.id}>
+                                    {row.getVisibleCells().map(cell => (
+                                        <td className='py-2 border-t px-5 text-sm h-[50px] items-center' key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/*<JsonView data={audit.settings} shouldInitiallyExpand={(level) => false} />*/}
 
+                </div>
+            )}
 
-
-        </div>
-
+        </Card>
     );
 }
 

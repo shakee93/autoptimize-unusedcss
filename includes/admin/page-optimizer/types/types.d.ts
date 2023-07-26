@@ -9,14 +9,6 @@ interface AuditAction {
     selected?: string
 }
 
-interface AuditSettings {
-    category: string,
-    name: string,
-    ajax_action: string,
-    action: AuditAction[],
-    settings: boolean,
-    status: string,
-}
 
 interface Help{
     help: boolean,
@@ -35,6 +27,15 @@ interface AuditFile {
     totalBytes: number;
     url: string;
     wastedPercent?: number;
+}
+
+interface AuditSettings {
+    name: string;
+    category: string;
+    ajax_action: string;
+    control_type: string;
+    control_values: string[];
+    control_payload?: string;
 }
 
 interface Audit {
@@ -61,14 +62,7 @@ interface Audit {
     };
     type: string;
     score: number;
-    settings: {
-        name: string;
-        category: string;
-        ajax_action: string;
-        control_type: string;
-        control_values: string[];
-        control_payload?: string;
-    }[];
+    settings: AuditSettings[];
 }
 
 interface Metric {
