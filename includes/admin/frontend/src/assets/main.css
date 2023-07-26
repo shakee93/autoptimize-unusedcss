@@ -280,7 +280,7 @@ body .rapidload {
     border-radius: 0.5rem !important;
     border-color: #CBCBCB !important;
     cursor: default;
-
+    min-width: 325px !important;
 }
 .v3ti.focus-tags {
     border: 1px solid #7F54B3 !important;
