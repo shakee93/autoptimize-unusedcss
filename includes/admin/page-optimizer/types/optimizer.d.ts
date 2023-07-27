@@ -42,7 +42,8 @@ interface AuditHeadings {
         valueType: string;
     };
     control_type: string
-    control_values: string[]
+    control_values: string[],
+    granularity: number
 }
 
 interface AuditFile {

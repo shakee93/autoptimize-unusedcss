@@ -3,14 +3,15 @@ import {Highlight, themes} from "prism-react-renderer";
 
 interface CodeProps {
     code: string
+    lang?: string
 }
 
-const Code = ({ code } : CodeProps) => {
+const Code = ({ code, lang = 'html' } : CodeProps) => {
 
     return (
         <Highlight
             theme={themes.github}
-            language='html' code={code}>
+            language={lang} code={code}>
             {({className, style, tokens, getLineProps, getTokenProps}) => (
                 <pre className={className} style={style}>
                     {tokens.map((line, i) => (

@@ -1,5 +1,4 @@
 import {ReactNode, MouseEvent} from "react";
-import {BoltIcon} from "@heroicons/react/24/solid";
 import {cn} from "lib/utils";
 
 const Button = ({ children, dark = true, onClick, className}: {

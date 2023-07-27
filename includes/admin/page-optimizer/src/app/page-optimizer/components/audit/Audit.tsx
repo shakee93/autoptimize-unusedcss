@@ -5,6 +5,9 @@ import Setting from './Setting';
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditFiles from "app/page-optimizer/components/audit/files";
+import {JsonView} from "react-json-view-lite";
+import Button from "app/speed-popover/components/elements/button";
+import {ArrowDown} from "lucide-react";
 
 interface AuditProps {
     audit?: Audit;
@@ -13,9 +16,16 @@ interface AuditProps {
 
 const Audit = ({audit, priority = true }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
+    const [showJson, setShowJson] = useState<boolean>(false)
 
     if (!audit?.id) {
         return <></>;
+    }
+
+    let icon = audit.icon
+
+    if (audit.type === 'passed_audit') {
+        icon = 'pass'
     }
 
     return (
@@ -31,7 +41,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                 <div className='flex gap-3 font-normal  items-center text-base'>
                     <span
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100`}>
-                            <PerformanceIcons icon={audit.icon }/>
+                            <PerformanceIcons icon={icon}/>
                             </span>
                     {audit.name}
                 </div>
@@ -55,9 +65,20 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         </button>
                         </div>
                     )}
+
+                    {/*<Button onClick={e => setShowJson(p => !p)} dark={false}><ArrowDown className='w-4'/></Button>*/}
+
                 </div>
+
+
+
             </div>
 
+            {showJson && (
+                <div className='w-full p-4'>
+                    <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
+                </div>
+            )}
             {audit.files && toggleFiles && (
                 <AuditFiles audit={audit}/>
             )}

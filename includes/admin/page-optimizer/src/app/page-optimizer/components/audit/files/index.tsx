@@ -104,7 +104,6 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                     </tbody>
                 </table>
             </div>
-            <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
 
         </div>
     )

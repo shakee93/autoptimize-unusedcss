@@ -1,15 +1,21 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import Code from "components/ui/code";
  
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export function isImageAudit(audit_id: string) {
-  return ['offscreen-images', 'modern-image-formats'].includes(audit_id)
+  return [
+      'offscreen-images',
+    'modern-image-formats',
+    'unsized-images',
+      'uses-responsive-images'
+  ].includes(audit_id)
 }
 
-export function truncateMiddleOfURL(url: string, maxLength: number): string {
+export function truncateMiddleOfURL(url: string, maxLength: number) {
   try {
 
     if (url === 'Unattributable') {
@@ -37,6 +43,11 @@ export function truncateMiddleOfURL(url: string, maxLength: number): string {
     return truncatedURL;
   } catch (error) {
     console.error('Invalid URL:', url);
-    return url;
+    return <Code code={url}></Code>;
   }
+}
+
+export function formatNumberWithGranularity(number: number, granularity: number = 1): string {
+  const roundedValue = Math.round(number / granularity) * granularity;
+  return roundedValue.toFixed(Math.max(0, Math.ceil(-Math.log10(granularity))));
 }

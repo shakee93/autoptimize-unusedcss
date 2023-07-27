@@ -23,7 +23,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
     } else {
         return (
             <a className='flex gap-2' target='_blank'
-               href={cell.getValue() as string}>{truncateMiddleOfURL(cell.getValue() as string, 50)}
+               href={value}>{truncateMiddleOfURL(value, 50)}
                 <ArrowTopRightOnSquareIcon className='w-4'/> </a>
         )
     }

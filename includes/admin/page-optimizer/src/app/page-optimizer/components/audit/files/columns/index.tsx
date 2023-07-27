@@ -14,7 +14,7 @@ import {
 import prettyBytes from "pretty-bytes";
 import prettyMilliseconds from "pretty-ms";
 import {CellContext} from "@tanstack/react-table";
-import {truncateMiddleOfURL} from "lib/utils";
+import {formatNumberWithGranularity, truncateMiddleOfURL} from "lib/utils";
 import AuditColumnUrl from "app/page-optimizer/components/audit/files/columns/url";
 import AuditColumnDropdown from "app/page-optimizer/components/audit/files/columns/dropdown";
 import AuditNodeColumn from "app/page-optimizer/components/audit/files/columns/node";
@@ -51,7 +51,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     }
 
     if (heading.valueType === 'numeric' && typeof value === 'number') {
-        return <span>{(value as number)}</span>
+        return <span>{formatNumberWithGranularity((value as number), heading.granularity)}</span>
     }
 
     if (heading.valueType === 'numeric' && typeof value === 'object') {
