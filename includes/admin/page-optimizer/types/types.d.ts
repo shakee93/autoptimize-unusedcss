@@ -1,8 +1,5 @@
 
-interface Tab {
-    key: keyof OptimizerResults['data']['grouped'];
-    name: string;
-}
+
 
 interface AuditAction {
     type: 'checkbox' | 'options' ,
@@ -63,6 +60,13 @@ interface Audit {
     type: string;
     score: number;
     settings: AuditSettings[];
+}
+
+interface Tab {
+    key: AuditTypes;
+    name: string;
+    color: string
+    activeColor: string
 }
 
 interface Metric {

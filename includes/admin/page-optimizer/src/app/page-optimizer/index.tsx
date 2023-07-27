@@ -11,6 +11,7 @@ import SpeedPopover from "app/speed-popover";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/reducers";
 import {useOptimizerContext} from "../../context/root";
+import {cn} from "../../lib/utils";
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
@@ -22,27 +23,51 @@ export default function PageOptimizer() {
         {
             key: "opportunities",
             name: "Opportunities",
+            color: 'border-red-400',
+            activeColor: 'bg-red-400',
         },
         {
             key: "diagnostics",
             name: "Diagnostics",
+            color: 'border-yellow-400 ',
+            activeColor: 'bg-yellow-400 '
         },
         {
             key: "passed_audits",
             name: "Passed Audits",
+            color: 'border-green-600',
+            activeColor: 'bg-green-600'
         },
     ];
 
     const renderTabs = () => {
+
+
         return tabs.map((tab) => {
             const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750 text-black" : "text-gray-500/75";
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
-                    className={`px-4 py-3 text-sm font-medium ${isActive}`}
+                    className={cn(`flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
                     key={tab.key}
                 >
                     {tab.name}
+                    {(data?.data && data.data.audits.length > 0) && (
+                        <div className={
+                            cn(
+
+                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                tab.color,
+                                (activeTab === tab.key) && tab.activeColor,
+                            )}>
+                            <span className={cn(
+                                activeTab === tab.key && 'text-white'
+                            )}>
+                                {data?.data.grouped[`${tab.key}`].length}
+                            </span>
+                        </div>
+                    )}
+
                 </div>
             );
         });

@@ -29,6 +29,7 @@ import {
 } from "components/ui/tooltip"
 
 import {
+    ColumnMeta,
     createColumnHelper,
     flexRender,
     getCoreRowModel, Table,
@@ -75,10 +76,18 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     const columnHelper = createColumnHelper<AuditFile>()
 
     function truncateMiddleOfURL(url: string, maxLength: number): string {
-
         try {
-
             const parsedURL = new URL(url);
+
+            // Check if the last part of the pathname is empty (no trailing slash)
+            const isHomepage = parsedURL.pathname.split('/').pop() === '';
+
+            if (isHomepage) {
+                // If it's a homepage, remove the trailing slash and return the URL
+                const truncatedURL = `${parsedURL.protocol}//${parsedURL.host}`;
+                return truncatedURL;
+            }
+
             const pathSegments = parsedURL.pathname.split('/');
             const penultimatePart = pathSegments[pathSegments.length - 2];
             const lastPart = pathSegments[pathSegments.length - 1];
@@ -94,6 +103,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     }
 
 
+
     let table = null
 
     if (audit.files && audit.files.headings) {
@@ -104,6 +114,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
 
                 return columnHelper.accessor(row => row[heading.key as keyof AuditFile], {
                     id: heading.key,
+                    meta: heading as ColumnMeta<Audit['files']['headings'], Audit['files']['headings']>,
                     cell: info => {
 
                         if (heading.valueType === 'url') {
@@ -188,6 +199,18 @@ const Audit = ({audit, priority = true }: AuditProps) => {
         })
     }
 
+    const cellWidth = (valueType : string) => {
+
+        switch (valueType) {
+            case 'timespanMs':
+                return '160px';
+            case 'bytes':
+                return '160px';
+            default:
+                return 'auto'
+        }
+    }
+
     return (
         <Card padding='p-0' cls={`w-full flex flex-col items-center`}>
             <div className='flex justify-between w-full py-2 px-3'>
@@ -217,20 +240,7 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                         </div>
                     )}
 
-                    {/*<div>*/}
-                    {/*    <span className='text-gray-400 text-xs'>Score: {audit.score}</span>*/}
-                    {/*</div>*/}
-                    <div>
-                        {/*{audit.settings.length <= 1 ? (*/}
-                        {/*    audit.settings?.map((data, index) => (*/}
-                        {/*        <SettingItem key={index} data={data} index={index} />*/}
-                        {/*    ))*/}
-                        {/*) : null}*/}
-                    </div>
-                    <div> <button onClick={() => {
-                        setToggleFiles(prev => !prev)
-                        viewFilesButtonClick();
-                    }}
+                    <div> <button onClick={() => setToggleFiles(prev => !prev)}
                                   className={`${toggleFiles ? 'bg-zinc-100 border border-zinc-300': 'bg-zinc-200/[.2] border border-zinc-200'} transition duration-300 hover:bg-zinc-200 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl`}>
                         View Files {(toggleFiles) ?
                         <MinusCircleIcon className='w-6 h-6 text-zinc-900'/> :
@@ -265,7 +275,9 @@ const Audit = ({audit, priority = true }: AuditProps) => {
                             {table?.getRowModel().rows.map(row => (
                                 <tr  key={row.id}>
                                     {row.getVisibleCells().map(cell => (
-                                        <td className='py-2 border-t dark:border-zinc-700 border-zinc-200 px-5 text-sm h-[50px] items-center' key={cell.id}>
+                                        <td style={{
+                                            width: cellWidth(cell.column.columnDef.meta?.valueType)
+                                        }} className='py-2 border-t dark:border-zinc-700 border-zinc-200 px-5 text-sm h-[50px] items-center' key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
                                     ))}
