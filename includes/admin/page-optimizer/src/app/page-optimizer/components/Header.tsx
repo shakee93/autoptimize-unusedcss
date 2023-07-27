@@ -40,16 +40,9 @@ const Header = ({ url = null}: { url: string|null}) => {
 
 
             <div className='flex gap-8 items-center'>
-                <div>
-                        <span className='dark:text-neutral-400 text-[#646464] flex gap-4 items-center font-light'>
-                            Last Analyzed 2 days ago... <ArrowPathIcon className="h-6 w-6 dark:text-neutral-300 text-zinc-500" />
-                        </span>
-                </div>
-                <div>
-                    <button onClick={() => { setShowOptimizer(false) }}>
-                        <XMarkIcon className="h-8 w-8 dark:text-zinc-300 text-zinc-600" />
-                    </button>
-                </div>
+                <button onClick={() => { setShowOptimizer(false) }}>
+                    <XMarkIcon className="h-6 w-6 dark:text-zinc-300 text-zinc-600" />
+                </button>
             </div>
         </header>
 

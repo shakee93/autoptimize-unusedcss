@@ -19,9 +19,12 @@ const Footer = ({ url } : FooterProps) => {
                <TooltipText text='Switch theme'>
                    <ThemeSwitcher></ThemeSwitcher>
                </TooltipText>
-               <a className='flex text-sm gap-2 items-center' rel='_blank' href={url}>
-                   {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-               </a>
+              <div className='flex flex-col'>
+                  <a className='flex text-sm gap-2 items-center' rel='_blank' href={url}>
+                      {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+                  </a>
+                  <div className='text-xxs leading-relaxed text-zinc-500'>Last Analyzed 2 days ago...</div>
+              </div>
            </div>
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-zinc-200'>
