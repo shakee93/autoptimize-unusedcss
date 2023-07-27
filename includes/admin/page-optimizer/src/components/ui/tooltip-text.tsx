@@ -10,7 +10,7 @@ interface TooltipTextProps {
 const TooltipText = ({ text, children} : TooltipTextProps) => {
     return (
         <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger className='flex items-center'>
                 {children}
             </TooltipTrigger>
             <TooltipContent>{text}</TooltipContent>

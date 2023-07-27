@@ -18,7 +18,8 @@ const Button = ({ children, dark = true, onClick, className}: {
         <button
             onClick={(e) => onClick && onClick(e)}
             className={cn(
-                `flex transition-colors px-4 py-2 rounded-[15px] items-center gap-2 ${styles}`,
+                `flex transition-colors px-4 py-2 rounded-lg items-center gap-2`,
+                styles,
                 className
             )}>
             {children}

@@ -7,6 +7,7 @@ import {
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {useState} from "react";
 import {useOptimizerContext} from "../../../context/root";
+import TooltipText from "components/ui/tooltip-text";
 
 
 const Header = ({ url = null}: { url: string|null}) => {
@@ -27,11 +28,11 @@ const Header = ({ url = null}: { url: string|null}) => {
                 </div>
                 <div className='flex flex-column items-center gap-4'>
                     <div className='flex dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>
-                        <div onClick={() => desktopButtonClick(true)} className={`flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 font-medium rounded-2xl border ${isDesktop? 'bg-white border-gray-300':'border-[#eff1f5] '}`}>
-                            <ComputerDesktopIcon  className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
+                        <div onClick={() => desktopButtonClick(true)} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl border ${isDesktop? 'bg-white border-gray-300':'border-[#eff1f5] '}`}>
+                            <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
                         </div>
-                        <div onClick={() => desktopButtonClick(false)} className={`flex flex-column gap-2 px-8 py-3 dark:bg-zinc-800 font-medium rounded-2xl  border ${isDesktop? 'border-[#eff1f5]':'bg-white border-gray-300'}`}>
-                            <DevicePhoneMobileIcon  className="h-6 w-6 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
+                        <div onClick={() => desktopButtonClick(false)} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl  border ${isDesktop? 'border-[#eff1f5]':'bg-white border-gray-300'}`}>
+                            <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>
 
@@ -40,9 +41,12 @@ const Header = ({ url = null}: { url: string|null}) => {
 
 
             <div className='flex gap-8 items-center'>
-                <button onClick={() => { setShowOptimizer(false) }}>
-                    <XMarkIcon className="h-6 w-6 dark:text-zinc-300 text-zinc-600" />
-                </button>
+                <TooltipText text='Close Optimizer'>
+                    <button onClick={() => { setShowOptimizer(false) }}>
+                        <XMarkIcon className="h-6 w-6 dark:text-zinc-300 text-zinc-600" />
+                    </button>
+                </TooltipText>
+
             </div>
         </header>
 
