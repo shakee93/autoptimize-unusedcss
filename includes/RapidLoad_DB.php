@@ -62,6 +62,7 @@ abstract class RapidLoad_DB
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
         $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
         $rapidload_job_data = $wpdb->prefix . $blog_id . 'rapidload_job_data';
+        $rapidload_job_optimizations = $wpdb->prefix . $blog_id . 'rapidload_job_optimizations';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -134,7 +135,16 @@ abstract class RapidLoad_DB
 		PRIMARY KEY  (id),
 		KEY idx_rapidload_job_data_job_id (job_id),       
 		KEY idx_rapidload_job_data_job_type (job_type)            
-	) ;";
+	) ;
+	    CREATE TABLE $rapidload_job_optimizations (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NOT NULL,
+		strategy varchar(15) NOT NULL,
+		data longtext NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id),
+		KEY idx_rapidload_job_optimizations_job_id (job_id)          
+	);";
 
         dbDelta( $sql );
         return $wpdb->last_error;
