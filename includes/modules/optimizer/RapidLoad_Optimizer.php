@@ -148,7 +148,18 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
+        self::pre_optimizer_function();
+
+        if(!isset(self::$options)){
+            wp_send_json_error();
+        }
+
         $result = $_REQUEST['page_speed'];
+        $options = $_REQUEST['options'];
+
+        if(!isset(self::$options['unused-javascript-files'])){
+            self::$options['unused-javascript-files'] = [];
+        }
 
         if(isset($result->audits) && is_array($result->audits)){
 
@@ -184,9 +195,54 @@ class RapidLoad_Optimizer
                     }
                 }
 
+                if($audit->id == "unused-javascript"){
+
+                    if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                        foreach ($audit->files->items as $item){
+
+                            if(isset($item->url)){
+
+                                $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+
+                                if(isset($key) && is_numeric($key)){
+
+                                    self::$options['unused-javascript-files'][$key]['pattern'] = $item->pattern;
+                                    self::$options['unused-javascript-files'][$key]['action'] = $item->action;
+
+                                }else{
+                                    self::$options['unused-javascript-files'][] = [
+                                        'url' => $item->url,
+                                        'pattern' => $item->pattern,
+                                        'action' => $item->action
+                                    ];
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+
             }
 
         }
+
+        if(isset($options['unused-javascript-files']) && !empty($options['unused-javascript-files'])){
+            foreach ($options['unused-javascript-files'] as $option){
+
+                $key = array_search($option['url'],array_column(self::$options['unused-javascript-files'], 'url'));
+
+                if(isset($key) && is_numeric($key)){
+                    self::$options['unused-javascript-files'][$key]['pattern'] = $option['pattern'];
+                    self::$options['unused-javascript-files'][$key]['action'] = $option['action'];
+                }
+
+            }
+        }
+
+        self::post_optimizer_function();
+
+        wp_send_json_success();
 
     }
 
