@@ -4,9 +4,9 @@ import {
     ComputerDesktopIcon,
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
-import ThemeSwitcher from "components/parts/theme-switcher";
+import ThemeSwitcher from "components/ui/theme-switcher";
 import {useState} from "react";
-import {useOptimizerContext} from "../context/root";
+import {useOptimizerContext} from "../../../context/root";
 
 
 const Header = ({ url = null}: { url: string|null}) => {

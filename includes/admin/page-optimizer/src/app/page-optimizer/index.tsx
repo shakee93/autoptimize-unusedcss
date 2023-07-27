@@ -1,17 +1,15 @@
 import {Dispatch, SetStateAction, useState} from "react";
 
-import Header from "components/Header";
-import PageSpeedScore from "components/performance-widgets/PageSpeedScore";
+import Header from "app/page-optimizer/components/Header";
+import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
-import ThemeSwitcher from "components/parts/theme-switcher";
-import Card from "components/parts/card";
-import Audits from "components/Audits";
-import { useEffect } from 'react';
-import SpeedPopover from "app/speed-popover";
+import Card from "components/ui/card";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/reducers";
 import {useOptimizerContext} from "../../context/root";
 import {cn} from "../../lib/utils";
+import Audit from "app/page-optimizer/components/audit/Audit";
+import Footer from "app/page-optimizer/components/Footer";
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
@@ -55,7 +53,6 @@ export default function PageOptimizer() {
                     {(data?.data && data.data.audits.length > 0) && (
                         <div className={
                             cn(
-
                                 'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
                                 tab.color,
                                 (activeTab === tab.key) && tab.activeColor,
@@ -75,8 +72,9 @@ export default function PageOptimizer() {
 
 
     return (
-        <div className="overflow-auto fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
-            <Header url={options.optimizer_url} />
+        <div
+            className="overflow-auto fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
+            <Header url={options.optimizer_url}/>
             <section className="container grid grid-cols-12 gap-8 mt-12">
                 {togglePerformance && (
                     <aside className="col-span-3">
@@ -88,8 +86,11 @@ export default function PageOptimizer() {
                 )}
                 <article className={`${togglePerformance ? 'col-span-9' : 'col-span-12'}`}>
                     <h2 className="text-lg ml-5 flex gap-2 font-medium items-center">
-                        <span className='cursor-pointer' onClick={() => { setTogglePerformance(prev => !prev) }}>
-                            {(togglePerformance) ? <ArrowLeftOnRectangleIcon className="h-4 w-4 text-gray-500" /> : <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500" /> }
+                        <span className='cursor-pointer' onClick={() => {
+                            setTogglePerformance(prev => !prev)
+                        }}>
+                            {(togglePerformance) ? <ArrowLeftOnRectangleIcon className="h-4 w-4 text-gray-500"/> :
+                                <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500"/>}
                         </span>
                         Fix Performance issues</h2>
                     <div className="tabs pt-4 flex">
@@ -98,15 +99,21 @@ export default function PageOptimizer() {
                         </Card>
                     </div>
                     <div className="audits pt-4 flex">
-                        {(data?.data && data?.data.audits.length > 0) &&
-                            <Audits activeTab={activeTab} audits={data?.data.grouped[`${activeTab}`] }/>}
+                        {(data?.data && data?.data.audits.length > 0) && (
+                            <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
+                                <div className='col-span-12 ml-16 flex flex-col gap-4'>
+                                    {data?.data.grouped[`${activeTab}`]
+                                        ?.sort((a, b) => a.score - b.score)
+                                        .map((audit, index) => (
+                                            <Audit priority={index == 0} key={audit.id} audit={audit}/>
+                                        ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </article>
             </section>
-
-            <footer className='fixed bottom-10 right-10'>
-                <ThemeSwitcher></ThemeSwitcher>
-            </footer>
+            <Footer/>
         </div>
     );
 }

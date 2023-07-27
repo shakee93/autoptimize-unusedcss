@@ -7,7 +7,7 @@ import {
     FontDelivery,
     CloudDelivery,
     PageCache,
-} from '../parts/icon-svg';
+} from '../icons/icon-svg';
 
 import { Switch } from "components/ui/switch"
 
@@ -16,7 +16,7 @@ interface SettingItemProps {
     index: number;
 }
 
-const SettingItem = ({settings, index}: SettingItemProps) => {
+const Setting = ({settings, index}: SettingItemProps) => {
 
     let icons = {
         cache : <PageCache/>,
@@ -36,4 +36,4 @@ const SettingItem = ({settings, index}: SettingItemProps) => {
     );
 };
 
-export default SettingItem;
+export default Setting;
