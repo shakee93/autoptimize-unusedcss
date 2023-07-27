@@ -50,6 +50,7 @@
     "@tanstack/react-table": "^8.9.3",
     "@types/react-redux": "^7.1.25",
     "@wordpress/dom-ready": "^3.38.0",
+    "axios": "^1.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "framer-motion": "^10.13.1",
