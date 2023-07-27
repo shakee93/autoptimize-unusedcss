@@ -42,7 +42,7 @@ export default function PageOptimizer() {
 
 
         return tabs.map((tab) => {
-            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750 text-black" : "text-gray-500/75";
+            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-zinc-500";
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
