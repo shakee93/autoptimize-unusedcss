@@ -28,18 +28,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
-        add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_enable_cache']);
-        add_action('wp_ajax_optimizer_serve_next_gen_images', [$this,'optimizer_serve_next_gen_images']);
-        add_action('wp_ajax_optimizer_self_host_google_font', [$this,'optimizer_self_host_google_font']);
-        add_action('wp_ajax_optimizer_set_image_width_and_height', [$this,'optimizer_set_image_width_and_height']);
-        add_action('wp_ajax_optimizer_set_unminified_css', [$this,'optimizer_set_unminified_css']);
-        add_action('wp_ajax_optimizer_set_unminified_javascript', [$this,'optimizer_set_unminified_javascript']);
-        add_action('wp_ajax_optimizer_set_unused_css_rules', [$this,'optimizer_set_unused_css_rules']);
-        add_action('wp_ajax_optimizer_render_blocking_resources', [$this,'optimizer_render_blocking_resources']);
-        add_action('wp_ajax_optimizer_offscreen_images', [$this,'optimizer_offscreen_images']);
-        add_action('wp_ajax_optimizer_offscreen_images_exclude_above_the_fold', [$this,'optimizer_offscreen_images_exclude_above_the_fold']);
-        add_action('wp_ajax_optimizer_defer_javascript', [$this,'optimizer_defer_javascript']);
-        add_action('wp_ajax_optimizer_load_javascript_file_on_user_interaction', [$this,'optimizer_load_javascript_file_on_user_interaction']);
+        add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_update_settings']);
     }
 
     public static function pre_optimizer_function(){
@@ -90,7 +79,7 @@ class RapidLoad_Optimizer
         $api = new RapidLoad_Api();
 
         $size = isset($_REQUEST['size']) && $_REQUEST['size'] == 'mobile';
-        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+        $url = "https://viajaya.ec/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
         $result = $api->post('page-speed', [
             'url' => $url,
@@ -107,10 +96,12 @@ class RapidLoad_Optimizer
 
         foreach ($result->audits as $audit){
 
-            foreach ($audit->settings as $settings){
-                foreach ($settings->inputs as $input){
-                    if(isset(self::$options[$input->key])){
-                        $input->value = self::$options[$input->key];
+            if(isset($audit->settings)){
+                foreach ($audit->settings as $settings){
+                    foreach ($settings->inputs as $input){
+                        if(isset(self::$options[$input->key])){
+                            $input->value = self::$options[$input->key];
+                        }
                     }
                 }
             }
@@ -140,7 +131,7 @@ class RapidLoad_Optimizer
         }
 
         wp_send_json_success([
-            'result' => $result,
+            'page_speed' => $result,
             'options' => [
                 'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
             ]
@@ -148,6 +139,114 @@ class RapidLoad_Optimizer
 
 
     }
+
+    public function optimizer_update_settings(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['page_speed']) || !isset($_REQUEST['options'])){
+            wp_send_json_error();
+        }
+
+        self::pre_optimizer_function();
+
+        if(!isset(self::$options)){
+            wp_send_json_error();
+        }
+
+        $result = $_REQUEST['page_speed'];
+        $options = $_REQUEST['options'];
+
+        if(!isset(self::$options['unused-javascript-files'])){
+            self::$options['unused-javascript-files'] = [];
+        }
+
+        if(isset($result->audits) && is_array($result->audits)){
+
+            foreach ($result->audits as $audit){
+
+                if(isset($audit->settings)){
+                    foreach ($audit->settings as $settings){
+                        foreach ($settings->inputs as $input){
+
+                            switch($input->control_type ){
+
+                                case 'checkbox' :{
+                                    if(isset($input->value) && isset($input->key) && $input->value == "1"){
+                                        self::$options[$input->key] = "1";
+                                    }else if(isset(self::$options[$input->key])){
+                                        unset(self::$options[$input->key]);
+                                    }
+                                    break;
+                                }
+                                case 'dropdown' :
+                                case 'text' :
+                                case 'number' :{
+                                    if(isset($input->value) && isset($input->key)){
+                                        self::$options[$input->key] = $input->value;
+                                    }else if(isset(self::$options[$input->key])){
+                                        unset(self::$options[$input->key]);
+                                    }
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                if($audit->id == "unused-javascript"){
+
+                    if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                        foreach ($audit->files->items as $item){
+
+                            if(isset($item->url)){
+
+                                $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+
+                                if(isset($key) && is_numeric($key)){
+
+                                    self::$options['unused-javascript-files'][$key]['pattern'] = $item->pattern;
+                                    self::$options['unused-javascript-files'][$key]['action'] = $item->action;
+
+                                }else{
+                                    self::$options['unused-javascript-files'][] = [
+                                        'url' => $item->url,
+                                        'pattern' => $item->pattern,
+                                        'action' => $item->action
+                                    ];
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        if(isset($options['unused-javascript-files']) && !empty($options['unused-javascript-files'])){
+            foreach ($options['unused-javascript-files'] as $option){
+
+                $key = array_search($option['url'],array_column(self::$options['unused-javascript-files'], 'url'));
+
+                if(isset($key) && is_numeric($key)){
+                    self::$options['unused-javascript-files'][$key]['pattern'] = $option['pattern'];
+                    self::$options['unused-javascript-files'][$key]['action'] = $option['action'];
+                }
+
+            }
+        }
+
+        self::post_optimizer_function();
+
+        wp_send_json_success();
+
+    }
+
+    // old ajax actions here
 
     public function optimizer_enable_cache(){
 
@@ -454,6 +553,6 @@ class RapidLoad_Optimizer
 
     }
 
-
+    // old ajax actions ends here
 
 }
