@@ -17,6 +17,7 @@ import {CellContext} from "@tanstack/react-table";
 import {truncateMiddleOfURL} from "lib/utils";
 import AuditColumnUrl from "app/page-optimizer/components/audit/files/columns/url";
 import AuditColumnDropdown from "app/page-optimizer/components/audit/files/columns/dropdown";
+import AuditNodeColumn from "app/page-optimizer/components/audit/files/columns/node";
 
 
 interface AuditColumnProps {
@@ -46,7 +47,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     }
 
     if (heading.valueType === 'node') {
-        return <span><pre></pre></span>
+        return <AuditNodeColumn cell={cell}/>
     }
 
     if (heading.valueType === 'numeric' && typeof value === 'number') {
