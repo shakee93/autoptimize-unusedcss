@@ -19,13 +19,13 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     }
 
     return (
-        <Card padding='p-0' cls={`w-full flex flex-col items-center`}>
+        <Card padding='p-0' cls={`w-full flex justify-center flex-col items-center min-h-[58px]`}>
             <div className='flex justify-between w-full py-2 px-3'>
-                <div className='absolute left-5 text-center mt-2'>
+                <div className='absolute left-2 text-center mt-2'>
                     <span
-                        className={`border-2 border-zinc-300 inline-block w-5 h-5  rounded-full ${priority ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
+                        className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${priority ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
 
-                    <span style={{height: `35px`}}
+                    <span
                           className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
                 </div>
                 <div className='flex gap-3 font-normal  items-center text-base'>

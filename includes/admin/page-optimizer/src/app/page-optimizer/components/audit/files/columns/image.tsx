@@ -26,7 +26,6 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
     }
 
     return (
-        <TooltipProvider delayDuration={0}>
             <Tooltip>
                 <TooltipTrigger>
                     <div className='flex items-center gap-3'>
@@ -61,7 +60,6 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
                 </TooltipContent>
             </Tooltip>
-        </TooltipProvider>
     )
 }
 

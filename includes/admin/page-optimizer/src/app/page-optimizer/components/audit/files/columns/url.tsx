@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "components/ui/tooltip";
-import {truncateMiddleOfURL} from "lib/utils";
+import {isImageAudit, truncateMiddleOfURL} from "lib/utils";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import {CircleDashed} from "lucide-react";
 import {CellContext} from "@tanstack/react-table";
@@ -16,7 +16,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
 
     let value = cell.getValue() as string
 
-    if (['modern-image-formats'].includes(audit.id)) {
+    if (isImageAudit(audit.id)) {
         return <AuditColumnImage cell={cell}/>
     } else if (value === 'Unattributable') {
         return <span>{value}</span>

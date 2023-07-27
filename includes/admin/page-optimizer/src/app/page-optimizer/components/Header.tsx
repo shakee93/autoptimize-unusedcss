@@ -20,7 +20,7 @@ const Header = ({ url = null}: { url: string|null}) => {
 
     return (
 
-        <header className='w-full p-6 flex justify-between border-b border-gray-border'>
+        <header className='w-full px-6 py-3 flex justify-between border-b border-gray-border'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
@@ -35,11 +35,6 @@ const Header = ({ url = null}: { url: string|null}) => {
                         </div>
                     </div>
 
-                </div>
-                <div>
-                    <h5 className='text-[#646464] flex gap-2 items-center dark:text-neutral-400 '>
-                        {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-                    </h5>
                 </div>
             </div>
 

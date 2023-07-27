@@ -9,6 +9,7 @@ import {Cell,
 import {JsonView} from "react-json-view-lite";
 import React from "react";
 import AuditColumns from "./columns";
+import {isImageAudit} from "lib/utils";
 
 
 interface AuditFileProps {
@@ -60,7 +61,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
     const shouldRender = (cell: Header<AuditFile, unknown> | Cell<AuditFile, unknown>) => {
         let col = cell.column.columnDef;
 
-        if(col.id === 'node' && audit.id === 'modern-image-formats') {
+        if(col.id === 'node' && isImageAudit(audit.id) ) {
             return false
         }
 

@@ -5,6 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function isImageAudit(audit_id: string) {
+  return ['offscreen-images', 'modern-image-formats'].includes(audit_id)
+}
 
 export function truncateMiddleOfURL(url: string, maxLength: number): string {
   try {
