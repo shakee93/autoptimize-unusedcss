@@ -1,6 +1,7 @@
 // reducers.ts
 import { combineReducers } from 'redux';
-import appReducer, { AppState } from './appReducer';
+import appReducer from '../app/appReducer';
+import {AppState} from "../app/appTypes";
 
 export interface RootState {
     app: AppState;

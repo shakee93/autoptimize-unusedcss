@@ -7,7 +7,7 @@ const Button = ({ children, dark = true, onClick}: {
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }) => {
 
-    let styles = 'border border-slate-950 bg-slate-900 text-white'
+    let styles = 'bg-slate-900 text-white'
 
     if (!dark) {
         styles = 'border border-gray-300'
@@ -16,7 +16,7 @@ const Button = ({ children, dark = true, onClick}: {
     return (
         <button
             onClick={(e) => onClick && onClick(e)}
-            className={`flex px-4 py-2 rounded-xl items-center gap-2 ${styles}`}>
+            className={`flex px-4 py-2 rounded-[15px] items-center gap-2 ${styles}`}>
             {children}
         </button>
     );

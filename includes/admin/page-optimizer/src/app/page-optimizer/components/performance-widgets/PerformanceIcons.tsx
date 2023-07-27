@@ -2,14 +2,14 @@ import {
     Pass,
     Fail,
     Average,
-} from '../parts/icon-svg';
+} from '../icons/icon-svg';
 
 
 interface IconProps {
    icon: string;
 }
 
-const Icon = ({ icon }: IconProps) => {
+const PerformanceIcons = ({ icon }: IconProps) => {
     return (
         <span >
             {icon === 'pass' ? (
@@ -23,4 +23,4 @@ const Icon = ({ icon }: IconProps) => {
     );
 };
 
-export default Icon;
+export default PerformanceIcons;

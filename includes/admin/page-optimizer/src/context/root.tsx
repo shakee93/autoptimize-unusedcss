@@ -3,7 +3,7 @@ import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffec
 interface OptimizerContextProps {
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
-    options: any
+    options: WordPressOptions
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
@@ -11,8 +11,13 @@ export const OptimizerContext = createContext<OptimizerContextProps | null>(null
 export const OptimizerProvider = ({ children } : {
     children: ReactNode
 }) => {
-    const [showOptimizer, setShowOptimizer] = useState(false);
-    const [options, setOptions] = useState(window?.rapidload)
+    const [showOptimizer, setShowOptimizer] = useState(true);
+    const [options, setOptions] = useState(window?.rapidload ? window.rapidload : {
+        optimizer_url: 'https://rapidload.io/?no_rapidload',
+        ajax_url: '',
+        page_optimizer_base: '',
+        plugin_url: ''
+    } )
 
     useEffect(() => {
 

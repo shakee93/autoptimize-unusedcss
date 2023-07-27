@@ -5,8 +5,8 @@ import {
     Pass,
     Fail,
     Average,
-} from '../parts/icon-svg';
-import Icon from '../parts/Icon';
+} from 'app/page-optimizer/components/icons/icon-svg';
+import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 
 
 
@@ -110,7 +110,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             <p className="text-sm font-medium mr-2 mt-[1px]">{data.title}</p>
                             <span
                                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Icon icon={data.icon }/>
+                                <PerformanceIcons icon={data.icon }/>
                             </span>
                         </div>
                         <p className="text-2xl font-medium text-red">{data.displayValue}</p>
