@@ -123,12 +123,12 @@ const Content = () => {
                         <Button onClick={(e) => {
                             setShowOptimizer(true)
                         }}>
-                            <BoltIcon className='w-4 text-white'/> Page Optimizer
+                            <BoltIcon className='w-4 text-white rounded-[15px]'/> Page Optimizer
                         </Button>
-                        <Button dark={false}>
+                        <Button className='rounded-[15px]' dark={false}>
                             <DocumentMinusIcon className='w-4'/>
                         </Button>
-                        <Button dark={false}>
+                        <Button className='rounded-[15px]' dark={false}>
                             <ArchiveBoxIcon className='w-4'/>
                         </Button>
                     </div>

@@ -27,8 +27,11 @@
       "components/*": [
         "src/components/*"
       ],
+      "@/components/*": [
+        "src/components/*"
+      ],
       "lib/*": [
-        "lib/*"
+        "src/lib/*"
       ],
       "hooks/*": [
         "src/hooks/*"

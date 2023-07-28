@@ -1,10 +1,12 @@
 
 const Loading = () => {
     return (
-        <div className='flex flex-col w-full gap-4 text-center'>
-            <div>Running analysis</div>
-            <div className='relative w-56 mx-auto h-1 bg-violet-100 overflow-hidden'>
-                <div className='will-change absolute animate-rl-loading-loop h-1 w-12 translate-x-1/2 bg-[#7F54B3]'></div>
+        <div className='absolute top-1/2 flex w-full items-center gap-4 text-center'>
+            <div className='w-full flex flex-col gap-4'>
+                <div>Running analysis</div>
+                <div className='relative w-72 mx-auto h-1.5 bg-violet-100 overflow-hidden'>
+                    <div className='will-change absolute animate-rl-loading-loop h-1.5 w-24 translate-x-1/2 bg-[#7F54B3]'></div>
+                </div>
             </div>
         </div>
     )
