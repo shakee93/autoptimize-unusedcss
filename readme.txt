@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.24 - 28/07/2023 =
+ * fix: selector pack items being duplicate
+
 = 2.0.23 - 20/07/2023 =
  * feat: switch cdn staging to live
  * fix: all jobs getting cleared when all rules cleared
