@@ -30,7 +30,7 @@ interface Audit {
     };
     type: string;
     score: number;
-    settings: AuditSettings[];
+    settings: AuditSetting[];
 }
 
 interface AuditHeadings {
@@ -53,7 +53,7 @@ interface AuditFile {
     wastedPercent?: number;
 }
 
-interface AuditSettings {
+interface AuditSetting {
     name: string;
     key: string,
     category: string;
@@ -61,7 +61,7 @@ interface AuditSettings {
         control_type: string;
         control_values: string[];
         control_payload: string;
-        value: string | null;
+        value: any;
         key: string;
     }>;
 }
@@ -73,10 +73,6 @@ interface Metric {
     displayValue: string;
     icon: string;
     score: number;
-}
-
-interface OptimizerSettings {
-
 }
 
 

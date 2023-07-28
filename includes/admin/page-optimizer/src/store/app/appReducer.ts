@@ -1,10 +1,17 @@
-import {AppAction, AppState, FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_SUCCESS} from "./appTypes";
+import {
+    AppAction,
+    AppState,
+    FETCH_DATA_FAILURE,
+    FETCH_DATA_REQUEST,
+    FETCH_DATA_SUCCESS,
+    UPDATE_SETTINGS
+} from "./appTypes";
 
 const initialState: AppState = {
     data: null,
     error: null,
     loading: false,
-    settings: null
+    settings: []
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
@@ -28,7 +35,13 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 data: null,
                 error: action.error,
                 loading: false,
-                settings: null
+                settings: []
+            };
+        case UPDATE_SETTINGS:
+            return {
+                ...state,
+                settings: action.payload.settings,
+                data: action.payload.data
             };
         default:
             return state;

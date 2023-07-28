@@ -1,7 +1,15 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
 import axios, {AxiosResponse} from 'axios';
-import {AppAction, AppState, FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_SUCCESS} from "./appTypes";
+import {
+    AppAction,
+    AppState,
+    FETCH_DATA_FAILURE,
+    FETCH_DATA_REQUEST,
+    FETCH_DATA_SUCCESS,
+    UPDATE_SETTINGS
+} from "./appTypes";
+import {isEqual} from 'underscore';
 
 
 const transformData = (data: any) => {
@@ -71,3 +79,50 @@ export const fetchData = (url : string): ThunkAction<void, AppState, unknown, An
         }
     };
 };
+
+export const updateSettings = (
+    audit: Audit,
+    setting: AuditSetting,
+    input: number, // index number of input
+    payload: any, // changed value
+ ): ThunkAction<void, AppState, unknown, AnyAction> => {
+    
+    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
+        const currentState = getState(); // Access the current state
+
+        // @ts-ignore
+        let newOptions : AuditSetting[] = currentState?.app?.settings?.map((s: AuditSetting) => {
+
+            if (isEqual(s.name, setting.name)) {
+                s.inputs[input].value = payload
+            }
+
+            return s;
+        });
+
+        // @ts-ignore
+        let newData = currentState.app.data
+
+        newData.data.audits = newData.data.audits.map((a: Audit) => {
+
+            if (audit.id === a.id) {
+                a.settings = audit.settings.map(s => {
+
+                    if (s.name === setting.name) {
+                        s.inputs[input].value = payload
+                    }
+
+                    return s;
+                })
+            }
+
+            return a;
+        });
+
+
+        dispatch({ type: UPDATE_SETTINGS , payload : {
+                settings: newOptions,
+                data: newData
+        } });
+    }
+}

@@ -69,6 +69,7 @@
     "redux-thunk": "^2.4.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
+    "underscore": "^1.13.6",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
@@ -81,6 +82,7 @@
     "@types/jest": "29.2.5",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
+    "@types/underscore": "^1.11.6",
     "@types/webfontloader": "^1.6.35",
     "@typescript-eslint/eslint-plugin": "5.48.1",
     "@typescript-eslint/parser": "5.48.1",

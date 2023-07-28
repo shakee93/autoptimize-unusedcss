@@ -8,6 +8,9 @@ import AuditFiles from "app/page-optimizer/components/audit/files";
 import {JsonView} from "react-json-view-lite";
 import Button from "components/ui/button";
 import {ArrowDown} from "lucide-react";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../store/reducers";
+import {isEqual} from "underscore";
 
 interface AuditProps {
     audit?: Audit;
@@ -17,6 +20,7 @@ interface AuditProps {
 const Audit = ({audit, priority = true }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
     const [showJson, setShowJson] = useState<boolean>(false)
+    const {settings} = useSelector((state: RootState) => state.app);
 
     if (!audit?.id) {
         return <></>;
@@ -50,8 +54,8 @@ const Audit = ({audit, priority = true }: AuditProps) => {
 
                     {audit.settings.length > 0 &&(
                         <div className="flex flex-wrap">
-                            {audit.settings.map((settings, index) => (
-                                <Setting key={index} settings={settings} index={index} />
+                            {audit.settings.map((s, index) => (
+                                <Setting audit={audit} key={index} settings={settings?.find(_s => _s.name === s.name)} index={index} />
                             ))}
                         </div>
                     )}
