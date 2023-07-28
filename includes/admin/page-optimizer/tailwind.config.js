@@ -85,7 +85,7 @@ module.exports = {
             transform: 'translateX(-50%)'
           },
           '50%': {
-            transform: 'translateX(400%)'
+            transform: 'translateX(250%)'
           }
         }
       },
@@ -93,7 +93,7 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         'rl-scale-in': 'rl-scale-in 0.1s ease-out',
-        'rl-loading-loop': 'rl-loading-loop 2s ease-out infinite',
+        'rl-loading-loop': 'rl-loading-loop 1.8s ease-out infinite',
       },
     },
   },
