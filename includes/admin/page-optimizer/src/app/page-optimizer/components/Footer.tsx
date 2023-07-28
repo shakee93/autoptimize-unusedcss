@@ -4,6 +4,8 @@ import {Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
+import {useState} from "react";
+import {cn} from "lib/utils";
 
 interface FooterProps {
     url: string
@@ -12,14 +14,19 @@ interface FooterProps {
 const Footer = ({ url } : FooterProps) => {
 
     const { setShowOptimizer } = useOptimizerContext()
+    const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
 
     return (
         <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-2.5 items-center'>
-                  <div className='h-fit w-fit bg-zinc-200 flex items-center justify-center rounded-md'>
-                      <img className='w-[2.1rem] rounded p-1 bg-zinc-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
+                  <div className={cn(
+                      'h-fit w-fit bg-zinc-200 flex items-center justify-center rounded-md',
+                      isFaviconLoaded ? 'flex' : 'hidden'
+                  )
+                  }>
+                      <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] rounded p-1 bg-zinc-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
                   </div>
                   <div>
                       <span className='flex text-sm gap-2 items-center' >
