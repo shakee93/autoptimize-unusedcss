@@ -23,11 +23,9 @@ const AuditNodeColumn = ({cell}: AuditNodeColumnProps) => {
         <div className='text-xs p-3'>
             <Tooltip>
                 <TooltipTrigger className='w-full'>
-
                     <Code code={snippet}></Code>
                 </TooltipTrigger>
                 <TooltipContent className='flex flex-col'>
-
                     {(value?.nodeLabel !== value?.selector) && (
                         <span className='ml-2 mb-2'>{value?.nodeLabel}</span>
                     )}

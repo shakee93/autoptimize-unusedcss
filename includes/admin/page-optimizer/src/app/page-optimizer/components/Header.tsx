@@ -41,10 +41,8 @@ const Header = ({ url = null}: { url: string|null}) => {
 
 
             <div className='flex gap-8 items-center'>
-                <TooltipText text='Close Optimizer'>
-                    <button onClick={() => { setShowOptimizer(false) }}>
-                        <XMarkIcon className="h-6 w-6 dark:text-zinc-300 text-zinc-600" />
-                    </button>
+                <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
+                    <XMarkIcon className="h-6 w-6 dark:text-zinc-300 text-zinc-600" />
                 </TooltipText>
 
             </div>
