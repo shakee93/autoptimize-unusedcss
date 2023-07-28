@@ -24,17 +24,7 @@ interface Audit {
         overallSavingsBytes: number;
         items: AuditFile[];
         type: string;
-        headings: {
-            key: string;
-            valueType?: string;
-            label?: string;
-            subItemsHeading?: {
-                key: string;
-                valueType: string;
-            };
-            control_type: string
-            control_values: string[]
-        }[];
+        headings: AuditHeadings[];
         sortedBy: string[];
         overallSavingsMs?: number;
     };
@@ -43,6 +33,18 @@ interface Audit {
     settings: AuditSettings[];
 }
 
+interface AuditHeadings {
+    key: string;
+    valueType?: string;
+    label?: string;
+    subItemsHeading?: {
+        key: string;
+        valueType: string;
+    };
+    control_type: string
+    control_values: string[],
+    granularity: number
+}
 
 interface AuditFile {
     wastedBytes: number;

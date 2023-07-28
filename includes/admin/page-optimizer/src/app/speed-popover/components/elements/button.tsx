@@ -1,22 +1,27 @@
 import {ReactNode, MouseEvent} from "react";
-import {BoltIcon} from "@heroicons/react/24/solid";
+import {cn} from "lib/utils";
 
-const Button = ({ children, dark = true, onClick}: {
+const Button = ({ children, dark = true, onClick, className}: {
     children?: ReactNode,
     dark?: boolean,
     onClick?: (e: MouseEvent<HTMLButtonElement>) => void
+    className?: string
 }) => {
 
-    let styles = 'bg-slate-900 text-white'
+    let styles = 'bg-slate-900 hover:bg-slate-800 text-white'
 
     if (!dark) {
-        styles = 'border border-gray-300'
+        styles = 'border border-gray-300 hover:bg-zinc-200'
     }
 
     return (
         <button
             onClick={(e) => onClick && onClick(e)}
-            className={`flex px-4 py-2 rounded-[15px] items-center gap-2 ${styles}`}>
+            className={cn(
+                `flex transition-colors px-4 py-2 rounded-lg items-center gap-2`,
+                styles,
+                className
+            )}>
             {children}
         </button>
     );

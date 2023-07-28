@@ -50,11 +50,11 @@ const ThemeSwitcher = () => {
     return (
         <div className="cursor-pointer select-none" onClick={changeTheme}>
             { theme === 'dark' ? (
-                <MoonIcon className="h-6 w-6 text-gray-500" />
+                <MoonIcon className="w-5 text-gray-500" />
             ) : theme === 'light' ? (
-                <SunIcon className="h-6 w-6 text-gray-500" />
+                <SunIcon className="w-5 text-gray-500" />
             ) : (
-                <ComputerDesktopIcon className="h-6 w-6 text-gray-500" />
+                <ComputerDesktopIcon className="w-5 text-gray-500" />
             )}
         </div>
     );
