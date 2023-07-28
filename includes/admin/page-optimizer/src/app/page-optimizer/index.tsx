@@ -10,12 +10,12 @@ import {useOptimizerContext} from "../../context/root";
 import {cn} from "../../lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
-import Loading from "app/speed-popover/components/elements/loading";
+import Loading from "components/loading";
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(false);
-    const {data, error, loading} = useSelector((state: RootState) => state.app);
+    const {data, error, loading, settings} = useSelector((state: RootState) => state.app);
     const {options} = useOptimizerContext()
 
     const tabs: Tab[] = [

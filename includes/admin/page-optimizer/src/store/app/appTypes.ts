@@ -1,10 +1,9 @@
 
-
-
 export interface AppState {
-    data?: OptimizerResults ; // Replace 'any' with the actual type of data you expect from the API
+    data?: OptimizerResults | null ;
     error: string | null;
     loading: boolean
+    settings: OptimizerSettings | null
 }
 
 export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';

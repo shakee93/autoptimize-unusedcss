@@ -6,7 +6,7 @@ import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditFiles from "app/page-optimizer/components/audit/files";
 import {JsonView} from "react-json-view-lite";
-import Button from "app/speed-popover/components/elements/button";
+import Button from "components/ui/button";
 import {ArrowDown} from "lucide-react";
 
 interface AuditProps {

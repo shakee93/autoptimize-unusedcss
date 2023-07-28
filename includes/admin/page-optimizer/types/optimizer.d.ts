@@ -55,11 +55,15 @@ interface AuditFile {
 
 interface AuditSettings {
     name: string;
+    key: string,
     category: string;
-    ajax_action: string;
-    control_type: string;
-    control_values: string[];
-    control_payload?: string;
+    inputs: Array<{
+        control_type: string;
+        control_values: string[];
+        control_payload: string;
+        value: string | null;
+        key: string;
+    }>;
 }
 
 interface Metric {
@@ -71,6 +75,9 @@ interface Metric {
     score: number;
 }
 
+interface OptimizerSettings {
+
+}
 
 
 

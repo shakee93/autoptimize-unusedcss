@@ -3,7 +3,8 @@ import {AppAction, AppState, FETCH_DATA_FAILURE, FETCH_DATA_REQUEST, FETCH_DATA_
 const initialState: AppState = {
     data: null,
     error: null,
-    loading: false
+    loading: false,
+    settings: null
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
@@ -19,6 +20,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 data: action.payload,
                 error: null,
                 loading: false,
+                settings: action.payload.settings
             };
         case FETCH_DATA_FAILURE:
             return {
@@ -26,6 +28,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 data: null,
                 error: action.error,
                 loading: false,
+                settings: null
             };
         default:
             return state;

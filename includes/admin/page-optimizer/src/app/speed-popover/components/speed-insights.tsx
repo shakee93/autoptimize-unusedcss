@@ -2,7 +2,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import {ReactNode, useEffect, useState} from "react";
 import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
-import Button from "./elements/button";
+import Button from "components/ui/button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../context/root";

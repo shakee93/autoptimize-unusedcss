@@ -1,5 +1,5 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
-import Button from "app/speed-popover/components/elements/button";
+import Button from "components/ui/button";
 import {Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
