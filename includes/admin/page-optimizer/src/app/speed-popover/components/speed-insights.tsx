@@ -9,11 +9,12 @@ import {useOptimizerContext} from "../../../context/root";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/reducers";
 import {Skeleton} from "components/ui/skeleton"
+import {optimizerData} from "../../../store/app/appSelector";
 
 const Content = () => {
 
     const {setShowOptimizer} = useOptimizerContext()
-    const {data, error, loading} = useSelector((state: RootState) => state.app);
+    const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
 
     const [on, setOn] = useState<boolean>(false)
