@@ -4,8 +4,10 @@ import {Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import {useState} from "react";
+import {useState, MouseEvent} from "react";
 import {cn} from "lib/utils";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/reducers";
 
 interface FooterProps {
     url: string
@@ -15,6 +17,12 @@ const Footer = ({ url } : FooterProps) => {
 
     const { setShowOptimizer } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
+    const { settings, data } = useSelector( (state: RootState) => state.app)
+    const submitSettings = (e: MouseEvent<HTMLButtonElement>) => {
+
+        // access the updated data and settings from the store
+        console.log(data, settings);
+    }
 
     return (
         <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
@@ -50,7 +58,7 @@ const Footer = ({ url } : FooterProps) => {
                     </TooltipText>
 
                 </div>
-                <Button className='text-sm'><SaveIcon className='w-5'/> Save Changes</Button>
+                <Button onClick={e => submitSettings(e)} className='text-sm'><SaveIcon className='w-5'/> Save Changes</Button>
                 <Button className='text-sm' onClick={ e => setShowOptimizer(false)} dark={false}>Close</Button>
             </div>
         </footer>

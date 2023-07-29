@@ -15,7 +15,7 @@ import Loading from "components/loading";
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(false);
-    const {data, error, loading, settings} = useSelector((state: RootState) => state.app);
+    const {data, loading} = useSelector((state: RootState) => state.app);
     const {options} = useOptimizerContext()
 
     const tabs: Tab[] = [
