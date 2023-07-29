@@ -5,20 +5,39 @@ import {
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction, AppState} from "../../../store/app/appTypes";
+import {useDispatch, useSelector} from "react-redux";
+import {changeReport, fetchData} from "../../../store/app/appActions";
+import {RootState} from "../../../store/reducers";
+import {optimizerData} from "../../../store/app/appSelector";
 
 
 const Header = ({ url = null}: { url: string|null}) => {
 
-    const [isDesktop, setIsDesktop] = useState(true);
-    const { setShowOptimizer, options } = useOptimizerContext()
+    const { setShowOptimizer , options } = useOptimizerContext()
+    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {data} = useSelector(optimizerData);
+    useEffect(() => {
+        
+        if (data?.success) {
+            return;
+        }
 
-    const desktopButtonClick = (isDesktop: boolean) => {
-        setIsDesktop(isDesktop);
-    };
+        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io?no_rapidload&type=' + activeReport;
 
+        if (options?.ajax_url) {
+            url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url + '&type=' + activeReport
+        }
+
+        dispatch(fetchData(url));
+
+    }, [dispatch, activeReport]); 
+    
     return (
 
         <header className='w-full px-6 py-3 flex justify-between border-b border-gray-border'>
@@ -28,10 +47,11 @@ const Header = ({ url = null}: { url: string|null}) => {
                 </div>
                 <div className='flex flex-column items-center gap-4'>
                     <div className='flex dark:bg-zinc-700 bg-[#eff1f5] rounded-2xl cursor-pointer'>
-                        <div onClick={() => desktopButtonClick(true)} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl border ${isDesktop? 'bg-white border-gray-300':'border-[#eff1f5] '}`}>
+
+                        <div onClick={() => dispatch(changeReport('desktop'))} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl border ${activeReport === 'desktop' ? 'bg-white border-gray-300':'border-[#eff1f5] '}`}>
                             <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
                         </div>
-                        <div onClick={() => desktopButtonClick(false)} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl  border ${isDesktop? 'border-[#eff1f5]':'bg-white border-gray-300'}`}>
+                        <div onClick={() => dispatch(changeReport('mobile'))} className={`text-sm flex flex-column gap-2 px-5 py-3 dark:bg-zinc-800 font-medium rounded-2xl  border ${activeReport === 'mobile' ? 'bg-white border-gray-300' : 'border-[#eff1f5]'}`}>
                             <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>

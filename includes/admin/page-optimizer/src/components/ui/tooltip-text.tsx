@@ -11,7 +11,7 @@ interface TooltipTextProps {
 const TooltipText = ({ text, children, onClick} : TooltipTextProps) => {
     return (
         <Tooltip>
-            <TooltipTrigger onClick={e => onClick} className='flex items-center'>
+            <TooltipTrigger onClick={e => onClick && onClick()} className='flex items-center'>
                 {children}
             </TooltipTrigger>
             <TooltipContent>{text}</TooltipContent>

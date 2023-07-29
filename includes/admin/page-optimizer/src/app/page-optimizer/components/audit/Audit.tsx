@@ -1,22 +1,30 @@
 import Card from "@/components/ui/card";
 import { PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
-import React, {useState, useRef } from "react";
+import React, {useState, useRef, useEffect, forwardRef, useImperativeHandle} from "react";
 import Setting from './Setting';
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditFiles from "app/page-optimizer/components/audit/files";
 import {JsonView} from "react-json-view-lite";
-import Button from "app/speed-popover/components/elements/button";
+import Button from "components/ui/button";
 import {ArrowDown} from "lucide-react";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../store/reducers";
+import {isEqual} from "underscore";
+import {optimizerData} from "../../../../store/app/appSelector";
+import {AuditComponentRef} from "app/page-optimizer";
 
-interface AuditProps {
+export interface AuditProps {
     audit?: Audit;
-    priority?: boolean;
+    index?: number;
+    onHeightChange?: (height: number) => void;
 }
 
-const Audit = ({audit, priority = true }: AuditProps) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange }, ref) => {
     const [toggleFiles, setToggleFiles] = useState(false);
     const [showJson, setShowJson] = useState<boolean>(false)
+    const {settings} = useSelector(optimizerData);
+    const divRef = useRef<HTMLDivElement>(null);
 
     if (!audit?.id) {
         return <></>;
@@ -28,16 +36,26 @@ const Audit = ({audit, priority = true }: AuditProps) => {
         icon = 'pass'
     }
 
-    return (
-        <Card padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
-            <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
-                <div className='absolute -left-6 text-center top-4'>
-                    <span
-                        className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${priority ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
+    useEffect(() => {
+        notifyHeightChange();
+    }, [toggleFiles]);
 
-                    <span
-                          className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
-                </div>
+    const notifyHeightChange = () => {
+        if (divRef.current && typeof onHeightChange === 'function') {
+            // Get the actual height of the Audit component
+            const height = divRef.current.clientHeight;
+            // reduce the height keep a padding above the circle
+            onHeightChange(height - 15);
+        }
+    };
+
+    useImperativeHandle(ref, () => ({
+        notifyHeightChange,
+    }));
+
+    return (
+        <Card ref={divRef} padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
+            <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
                 <div className='flex gap-3 font-normal  items-center text-base'>
                     <span
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100`}>
@@ -50,8 +68,8 @@ const Audit = ({audit, priority = true }: AuditProps) => {
 
                     {audit.settings.length > 0 &&(
                         <div className="flex flex-wrap">
-                            {audit.settings.map((settings, index) => (
-                                <Setting key={index} settings={settings} index={index} />
+                            {audit.settings.map((s, index) => (
+                                <Setting audit={audit} key={index} settings={settings?.find(_s => _s.name === s.name)} index={index} />
                             ))}
                         </div>
                     )}
@@ -85,6 +103,6 @@ const Audit = ({audit, priority = true }: AuditProps) => {
 
         </Card>
     );
-}
+})
 
 export default Audit
