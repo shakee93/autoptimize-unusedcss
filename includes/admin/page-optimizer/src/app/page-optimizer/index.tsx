@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 
 import Header from "app/page-optimizer/components/Header";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
@@ -72,6 +72,7 @@ export default function PageOptimizer() {
     };
 
 
+    let results = data?.data.grouped[activeTab];
     return (
         <div
             className="fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
@@ -106,10 +107,21 @@ export default function PageOptimizer() {
                                 {(data?.data && data?.data.audits?.length > 0) && (
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
-                                            {data?.data.grouped[`${activeTab}`]
+                                            {results
                                                 ?.sort((a, b) => a.score - b.score)
                                                 .map((audit, index) => (
-                                                    <Audit priority={index == 0} key={audit.id} audit={audit}/>
+                                                    <div className='relative' key={audit.id}>
+                                                        <div className='absolute -left-6 text-center top-4'>
+                                                            <span
+                                                                className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
+                                                            {(results && (index !== (results.length - 1))) && (
+                                                                <span
+                                                                    className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+
+                                                            )}
+                                                       </div>
+                                                        <Audit index={index}  audit={audit}/>
+                                                    </div>
                                                 ))}
                                         </div>
                                     </div>

@@ -29,7 +29,6 @@ const AuditFiles = ({audit}: AuditFileProps) => {
     const columns = audit?.files?.headings
         ?.map((heading) => {
 
-            console.log(heading);
             return columnHelper.accessor(row => row[heading.key as keyof AuditFile], {
                 id: heading.key ? heading.key : 'no-key',
                 meta: heading,

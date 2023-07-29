@@ -11,16 +11,17 @@ import {ArrowDown} from "lucide-react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../store/reducers";
 import {isEqual} from "underscore";
+import {optimizerData} from "../../../../store/app/appSelector";
 
 interface AuditProps {
     audit?: Audit;
-    priority?: boolean;
+    index?: number;
 }
 
-const Audit = ({audit, priority = true }: AuditProps) => {
+const Audit = ({audit }: AuditProps) => {
     const [toggleFiles, setToggleFiles] = useState(false);
     const [showJson, setShowJson] = useState<boolean>(false)
-    const {settings} = useSelector((state: RootState) => state.app);
+    const {settings} = useSelector(optimizerData);
 
     if (!audit?.id) {
         return <></>;
@@ -35,13 +36,6 @@ const Audit = ({audit, priority = true }: AuditProps) => {
     return (
         <Card padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
-                <div className='absolute -left-6 text-center top-4'>
-                    <span
-                        className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${priority ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
-
-                    <span
-                          className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
-                </div>
                 <div className='flex gap-3 font-normal  items-center text-base'>
                     <span
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100`}>
