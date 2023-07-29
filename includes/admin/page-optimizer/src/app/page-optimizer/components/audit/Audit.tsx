@@ -1,6 +1,6 @@
 import Card from "@/components/ui/card";
 import { PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
-import React, {useState, useRef } from "react";
+import React, {useState, useRef, useEffect, forwardRef, useImperativeHandle} from "react";
 import Setting from './Setting';
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
@@ -12,16 +12,19 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../../store/reducers";
 import {isEqual} from "underscore";
 import {optimizerData} from "../../../../store/app/appSelector";
+import {AuditComponentRef} from "app/page-optimizer";
 
-interface AuditProps {
+export interface AuditProps {
     audit?: Audit;
     index?: number;
+    onHeightChange?: (height: number) => void;
 }
 
-const Audit = ({audit }: AuditProps) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange }, ref) => {
     const [toggleFiles, setToggleFiles] = useState(false);
     const [showJson, setShowJson] = useState<boolean>(false)
     const {settings} = useSelector(optimizerData);
+    const divRef = useRef<HTMLDivElement>(null);
 
     if (!audit?.id) {
         return <></>;
@@ -33,8 +36,25 @@ const Audit = ({audit }: AuditProps) => {
         icon = 'pass'
     }
 
+    useEffect(() => {
+        notifyHeightChange();
+    }, [toggleFiles]);
+
+    const notifyHeightChange = () => {
+        if (divRef.current && typeof onHeightChange === 'function') {
+            // Get the actual height of the Audit component
+            const height = divRef.current.clientHeight;
+            // reduce the height keep a padding above the circle
+            onHeightChange(height - 15);
+        }
+    };
+
+    useImperativeHandle(ref, () => ({
+        notifyHeightChange,
+    }));
+
     return (
-        <Card padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
+        <Card ref={divRef} padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
                 <div className='flex gap-3 font-normal  items-center text-base'>
                     <span
@@ -83,6 +103,6 @@ const Audit = ({audit }: AuditProps) => {
 
         </Card>
     );
-}
+})
 
 export default Audit

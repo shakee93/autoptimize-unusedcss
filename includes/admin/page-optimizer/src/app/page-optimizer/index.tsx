@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 
 import Header from "app/page-optimizer/components/Header";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
@@ -7,10 +7,14 @@ import Card from "components/ui/card";
 import {useSelector} from "react-redux";
 import {useOptimizerContext} from "../../context/root";
 import {cn} from "lib/utils";
-import Audit from "app/page-optimizer/components/audit/Audit";
+import Audit, {AuditProps} from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
+
+export interface AuditComponentRef {
+    notifyHeightChange: () => void;
+}
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
@@ -72,8 +76,38 @@ export default function PageOptimizer() {
     };
 
 
-    let results = data?.data.grouped[activeTab];
+    let results = data?.data.grouped[activeTab]?.sort((a, b) => a.score - b.score);
+
+    if (!results) {
+        results = [];
+    }
+
+    const componentRefs = useRef<(AuditComponentRef | null)[]>(results.map(() => null));
+    const [componentHeights, setComponentHeights] = useState<number[]>([]);
+
+    useEffect(() => {
+        const heights = componentRefs.current.map((ref) => {
+            if (ref) {
+                // Get the height using the notifyHeightChange function
+                ref.notifyHeightChange();
+                return 45; // Temporary value
+            }
+            return 45;
+        });
+        setComponentHeights(heights);
+    }, [results]);
+
+    const handleAuditHeightChange = (index: number, height: number) => {
+        setComponentHeights((prevHeights) => {
+            const newHeights = [...prevHeights];
+            newHeights[index] = height;
+            return newHeights;
+        });
+    };
+
+
     return (
+
         <div
             className="fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]">
             <div className='overflow-auto w-full'>
@@ -108,21 +142,29 @@ export default function PageOptimizer() {
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
                                             {results
-                                                ?.sort((a, b) => a.score - b.score)
-                                                .map((audit, index) => (
-                                                    <div className='relative' key={audit.id}>
-                                                        <div className='absolute -left-6 text-center top-4'>
+                                                ?.map((audit, index) => {
+
+                                                    return (
+                                                        <div className='relative' key={audit.id}>
+                                                            <div className='absolute -left-6 text-center top-4'>
                                                             <span
                                                                 className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
-                                                            {(results && (index !== (results.length - 1))) && (
-                                                                <span
-                                                                    className={`w-[2px] h-[45px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                                                                {(results && (index !== (results.length - 1))) && (
+                                                                    <span
+                                                                        style={{
+                                                                            height: componentHeights[index]
+                                                                        }}
+                                                                        className={`w-[2px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
 
-                                                            )}
-                                                       </div>
-                                                        <Audit index={index}  audit={audit}/>
-                                                    </div>
-                                                ))}
+                                                                )}
+                                                            </div>
+                                                            <Audit
+                                                                onHeightChange={(height) => handleAuditHeightChange(index, height)}
+                                                                ref={(element) => (componentRefs.current[index] = element)}
+                                                                index={index} audit={audit}/>
+                                                        </div>
+                                                    )
+                                                })}
                                         </div>
                                     </div>
                                 )}
