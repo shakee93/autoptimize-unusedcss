@@ -5,21 +5,39 @@ import {
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport} from "../../../store/app/appActions";
+import {changeReport, fetchData} from "../../../store/app/appActions";
 import {RootState} from "../../../store/reducers";
+import {optimizerData} from "../../../store/app/appSelector";
 
 
 const Header = ({ url = null}: { url: string|null}) => {
 
     const { setShowOptimizer , options } = useOptimizerContext()
     const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
-    const {activeReport} = useSelector((state: RootState) => state.app);
+    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {data} = useSelector(optimizerData);
+    useEffect(() => {
+        
+        if (data?.success) {
+            return;
+        }
+
+        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io?no_rapidload&type=' + activeReport;
+
+        if (options?.ajax_url) {
+            url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url + '&type=' + activeReport
+        }
+
+        dispatch(fetchData(url));
+
+    }, [dispatch, activeReport]); 
+    
     return (
 
         <header className='w-full px-6 py-3 flex justify-between border-b border-gray-border'>
