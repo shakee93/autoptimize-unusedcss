@@ -12,10 +12,11 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
 
 interface FooterProps {
-    url: string
+    url: string,
+    togglePerformance: boolean
 }
 
-const Footer = ({ url } : FooterProps) => {
+const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const { setShowOptimizer } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
@@ -35,20 +36,27 @@ const Footer = ({ url } : FooterProps) => {
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
-                  {/*<div className={cn(*/}
-                  {/*    'h-fit w-fit bg-zinc-200 flex items-center justify-center rounded-md',*/}
-                  {/*    isFaviconLoaded ? 'flex' : 'hidden'*/}
-                  {/*)*/}
-                  {/*}>*/}
-                  {/*    <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] rounded p-1 bg-zinc-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>*/}
-                  {/*</div>*/}
-                  <div className='w-6'>
-                      <CircularProgressbarWithChildren styles={buildStyles({
-                          pathColor: '#0bb42f'
-                      })} value={data?.data.performance ? data.data.performance : 0} strokeWidth={12}>
-                         <span className='text-xxs text-zinc-500'> {data?.data.performance ? data.data.performance : 0}</span>
-                      </CircularProgressbarWithChildren>
-                  </div>
+                  {togglePerformance ? (
+                      <div className={cn(
+                          'h-fit w-fit bg-zinc-200 flex items-center justify-center rounded-md',
+                          isFaviconLoaded ? 'flex' : 'hidden'
+                      )
+                      }>
+                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] min-h-[2rem] rounded p-1 bg-zinc-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
+                      </div>
+                  ) : (
+                      <div className='px-[0.3rem]'>
+                          <div className='w-6'>
+                              <CircularProgressbarWithChildren styles={buildStyles({
+                                  pathColor: '#0bb42f'
+                              })} value={data?.data.performance ? data.data.performance : 0} strokeWidth={12}>
+                                  <span className='text-xxs text-zinc-500'> {data?.data.performance ? data.data.performance : 0}</span>
+                              </CircularProgressbarWithChildren>
+                          </div>
+                      </div>
+                  )}
+
+
                   <div>
                       <span className='flex text-sm gap-2 items-center' >
                           {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
