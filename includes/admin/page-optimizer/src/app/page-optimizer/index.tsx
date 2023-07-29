@@ -5,17 +5,17 @@ import PageSpeedScore from "app/page-optimizer/components/performance-widgets/Pa
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
 import Card from "components/ui/card";
 import {useSelector} from "react-redux";
-import {RootState} from "../../store/reducers";
 import {useOptimizerContext} from "../../context/root";
-import {cn} from "../../lib/utils";
+import {cn} from "lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
+import {optimizerData} from "../../store/app/appSelector";
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(false);
-    const {data, loading} = useSelector((state: RootState) => state.app);
+    const {data, loading} = useSelector(optimizerData);
     const {options} = useOptimizerContext()
 
     const tabs: Tab[] = [

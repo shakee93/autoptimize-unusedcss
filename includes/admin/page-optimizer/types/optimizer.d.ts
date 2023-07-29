@@ -75,6 +75,6 @@ interface Metric {
     score: number;
 }
 
-
+type ReportType = 'mobile' | 'desktop'
 
 

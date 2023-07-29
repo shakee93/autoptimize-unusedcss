@@ -4,6 +4,7 @@ import axios, {AxiosResponse} from 'axios';
 import {
     AppAction,
     AppState,
+    CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
     FETCH_DATA_SUCCESS,
@@ -124,5 +125,16 @@ export const updateSettings = (
                 settings: newOptions,
                 data: newData
         } });
+    }
+}
+
+export const changeReport = (
+    type: ReportType
+):  ThunkAction<void, AppState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState) => {
+        dispatch({
+            type: CHANGE_REPORT_TYPE,
+            reportType: type
+        })
     }
 }
