@@ -1,6 +1,5 @@
 import {Highlight, themes} from "prism-react-renderer";
 
-
 interface CodeProps {
     code: string
     lang?: string

@@ -30,7 +30,7 @@ interface Audit {
     };
     type: string;
     score: number;
-    settings: AuditSettings[];
+    settings: AuditSetting[];
 }
 
 interface AuditHeadings {
@@ -53,13 +53,17 @@ interface AuditFile {
     wastedPercent?: number;
 }
 
-interface AuditSettings {
+interface AuditSetting {
     name: string;
+    key: string,
     category: string;
-    ajax_action: string;
-    control_type: string;
-    control_values: string[];
-    control_payload?: string;
+    inputs: Array<{
+        control_type: string;
+        control_values: string[];
+        control_payload: string;
+        value: any;
+        key: string;
+    }>;
 }
 
 interface Metric {
@@ -71,7 +75,6 @@ interface Metric {
     score: number;
 }
 
-
-
+type ReportType = 'mobile' | 'desktop'
 
 

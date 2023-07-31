@@ -3,7 +3,7 @@ import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffec
 interface OptimizerContextProps {
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
-    options: WordPressOptions
+    options: WordPressOptions,
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
@@ -18,6 +18,7 @@ export const OptimizerProvider = ({ children } : {
         page_optimizer_base: '',
         plugin_url: ''
     } )
+    const [type, setType] = useState<ReportType>('desktop');
 
     useEffect(() => {
 
@@ -34,7 +35,7 @@ export const OptimizerProvider = ({ children } : {
         <OptimizerContext.Provider value={{
             showOptimizer,
             setShowOptimizer,
-            options
+            options,
         }}>
             {children}
         </OptimizerContext.Provider>

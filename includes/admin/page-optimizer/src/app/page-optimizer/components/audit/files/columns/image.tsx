@@ -15,19 +15,20 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
     let value = cell.getValue();
-    let snippet = ''
-    // @ts-ignore
-    
-    console.log(cell.table.getAllColumns());
+    let snippet = null
 
     if (cell.table.getColumn('node')) {
         // @ts-ignore
-        snippet = cell.row.getValue('node')?.snippet;
+        snippet = cell.row.getValue('node') as {
+            nodeLabel: string
+            selector: string
+            snippet: string
+        };
     }
 
     return (
             <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger >
                     <div className='flex items-center gap-3'>
                         <div className='w-6 h-6 border rounded-md overflow-hidden'>
                             <img className='w-fit' src={value} alt=''/>
@@ -50,11 +51,19 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                                 </div>
                             )}
                         </div>
-                        <div>
-                            {snippet && (
-                                <Code code={snippet} />
-                            )}
+                        {snippet && (
+                        <div className='flex flex-col gap-2'>
+
+                                <div>
+                                    {(snippet?.nodeLabel !== snippet?.selector) && (
+                                        <span className='ml-2 mb-2'>{value?.nodeLabel}</span>
+                                    )}
+                                    <Code lang='jsx' code={snippet?.selector} />
+                                </div>
+                                <Code code={snippet?.snippet} />
+
                         </div>
+                        )}
                     </div>
 
 

@@ -1,16 +1,17 @@
 import {Tooltip, TooltipContent, TooltipTrigger} from "components/ui/tooltip";
 import {Undo2} from "lucide-react";
-import {ReactNode} from "react";
+import {ReactNode, MouseEvent} from "react";
 
 interface TooltipTextProps {
     text: string
-    children: ReactNode
+    children: ReactNode,
+    onClick?: () => void
 }
 
-const TooltipText = ({ text, children} : TooltipTextProps) => {
+const TooltipText = ({ text, children, onClick} : TooltipTextProps) => {
     return (
         <Tooltip>
-            <TooltipTrigger className='flex items-center'>
+            <TooltipTrigger onClick={e => onClick && onClick()} className='flex items-center'>
                 {children}
             </TooltipTrigger>
             <TooltipContent>{text}</TooltipContent>
