@@ -87,11 +87,13 @@ export const updateSettings = (
     input: number, // index number of input
     payload: any, // changed value
  ): ThunkAction<void, AppState, unknown, AnyAction> => {
-    
+
     return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
 
+
         // @ts-ignore
+       // console.log( currentState.app.desktop.settings);
         let newOptions : AuditSetting[] = currentState?.app?.settings?.map((s: AuditSetting) => {
 
             if (isEqual(s.name, setting.name)) {
@@ -102,6 +104,7 @@ export const updateSettings = (
         });
 
         // @ts-ignore
+
         let newData = currentState.app.data
 
         newData.data.audits = newData.data.audits.map((a: Audit) => {
