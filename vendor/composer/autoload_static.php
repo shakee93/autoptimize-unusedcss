@@ -89,6 +89,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_Image_Enqueue' => __DIR__ . '/../..' . '/includes/modules/image/RapidLoad_Image_Enqueue.php',
         'RapidLoad_Job' => __DIR__ . '/../..' . '/includes/RapidLoad_Job.php',
         'RapidLoad_Job_Data' => __DIR__ . '/../..' . '/includes/RapidLoad_Job_Data.php',
+        'RapidLoad_Job_Optimization' => __DIR__ . '/../..' . '/includes/modules/optimizer/RapidLoad_Job_Optimization.php',
         'RapidLoad_Module' => __DIR__ . '/../..' . '/includes/modules/RapidLoad_Module.php',
         'RapidLoad_Onboard' => __DIR__ . '/../..' . '/includes/admin/on-board/RapidLoad_Onboard.php',
         'RapidLoad_Optimizer' => __DIR__ . '/../..' . '/includes/modules/optimizer/RapidLoad_Optimizer.php',
