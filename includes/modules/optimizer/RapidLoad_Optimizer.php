@@ -107,14 +107,14 @@ class RapidLoad_Optimizer
                         if(isset(self::$options[$input->key])){
                             $input->value = self::$options[$input->key];
                         }
-                        if($input->key == "unused-css-rules"){
+                        if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
                             if($data->exist()){
                                 $data->save(true);
                             }
                             $input->{'value_data'} = $data;
                         }
-                        if($input->key == "render-blocking-resources"){
+                        if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
                                 $data->save(true);
@@ -212,7 +212,7 @@ class RapidLoad_Optimizer
                                 }
                             }
 
-                            if($input->key == "unused-css-rules" || $input->key == "render-blocking-resources"){
+                            if($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss"){
                                 if(isset($input->{'value_data'})){
                                     unset($input->{'value_data'});
                                 }
