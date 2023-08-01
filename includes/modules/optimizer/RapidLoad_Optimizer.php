@@ -28,7 +28,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
-        add_action('wp_ajax_optimizer_enable_cache', [$this,'optimizer_update_settings']);
+        add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
     }
 
     public static function pre_optimizer_function(){
@@ -45,13 +45,18 @@ class RapidLoad_Optimizer
 
     public static function post_optimizer_function(){
 
-        if(!isset(self::$strategy) || !isset(self::$job) || !isset(self::$options))
+        if(!isset(self::$strategy) || !isset(self::$job) || !isset(self::$options)){
+            return;
+        }
 
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
         }
+
+        $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
+        $optimization->save();
 
         self::$job->save(!self::$job->exist());
     }
@@ -101,6 +106,20 @@ class RapidLoad_Optimizer
                     foreach ($settings->inputs as $input){
                         if(isset(self::$options[$input->key])){
                             $input->value = self::$options[$input->key];
+                        }
+                        if($input->key == "uucss_enable_uucss"){
+                            $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                            if($data->exist()){
+                                $data->save(true);
+                            }
+                            $input->{'value_data'} = $data;
+                        }
+                        if($input->key == "uucss_enable_cpcss"){
+                            $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                            if($data->exist()){
+                                $data->save(true);
+                            }
+                            $input->{'value_data'} = $data;
                         }
                     }
                 }
@@ -181,6 +200,8 @@ class RapidLoad_Optimizer
                                 }
                                 case 'dropdown' :
                                 case 'text' :
+                                case 'options' :
+                                case 'textarea' :
                                 case 'number' :{
                                     if(isset($input->value) && isset($input->key)){
                                         self::$options[$input->key] = $input->value;
@@ -188,6 +209,12 @@ class RapidLoad_Optimizer
                                         unset(self::$options[$input->key]);
                                     }
                                     break;
+                                }
+                            }
+
+                            if($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss"){
+                                if(isset($input->{'value_data'})){
+                                    unset($input->{'value_data'});
                                 }
                             }
 
@@ -238,6 +265,36 @@ class RapidLoad_Optimizer
                 }
 
             }
+        }
+
+        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] == "1" ? "1" : "");
+
+        $this->associate_domain(false);
+
+        if(isset(self::$options['uucss_lazy_load_images']) || self::$options['uucss_support_next_gen_formats']){
+            self::$options['uucss_enable_image_delivery'] = "1";
+        }else{
+            unset(self::$options['uucss_enable_image_delivery']);
+        }
+
+        if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
+            self::$options['uucss_enable_font_optimization'] = "1";
+        }else{
+            unset(self::$options['uucss_self_host_google_fonts']);
+        }
+
+        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] = "1" ||
+                isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] ||
+                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] = "1"){
+            self::$options['uucss_enable_css'] = "1";
+        }else{
+            unset(self::$options['uucss_enable_css']);
+        }
+
+        if(isset(self::$options['minify_js']) && self::$options['minify_js'] = "1" || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
+            self::$options['uucss_enable_javascript'] = "1";
+        }else{
+            unset(self::$options['uucss_enable_javascript']);
         }
 
         self::post_optimizer_function();

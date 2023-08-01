@@ -61,6 +61,7 @@ return array(
     'RapidLoad_Image_Enqueue' => $baseDir . '/includes/modules/image/RapidLoad_Image_Enqueue.php',
     'RapidLoad_Job' => $baseDir . '/includes/RapidLoad_Job.php',
     'RapidLoad_Job_Data' => $baseDir . '/includes/RapidLoad_Job_Data.php',
+    'RapidLoad_Job_Optimization' => $baseDir . '/includes/modules/optimizer/RapidLoad_Job_Optimization.php',
     'RapidLoad_Module' => $baseDir . '/includes/modules/RapidLoad_Module.php',
     'RapidLoad_Onboard' => $baseDir . '/includes/admin/on-board/RapidLoad_Onboard.php',
     'RapidLoad_Optimizer' => $baseDir . '/includes/modules/optimizer/RapidLoad_Optimizer.php',

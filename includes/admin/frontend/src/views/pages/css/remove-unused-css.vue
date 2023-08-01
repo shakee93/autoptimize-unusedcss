@@ -71,7 +71,7 @@
                                @click="focus='tag'"
                                :class="focus==='tag'? 'focus-tags': ''"
                                class="flex resize-none appearance-none border border-gray-button-border rounded-lg w-full p-1 text-gray-700 leading-tight focus:outline-none focus:border-transparent"
-                               placeholder=""/>
+                               placeholder="Type to add your plugin..."/>
 
 
               <div class="mt-3 -ml-9 cursor-pointer">
@@ -100,13 +100,13 @@
             <div :class="focus==='tag'? 'bg-purple-lite':'bg-gray-lite-background'" class="-mt-3 bg-purple-lite rounded-lg px-4 py-4 pb-2" role="alert">
               <p class="text-sm text-dark-gray-font flex"> Click on reload or type and select to load packs.</p>
             </div>
-<!--            <div v-if="focus === 'tag'" class="rounded-lg absolute mt-20 w-[350px] z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">-->
-<!--              <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectTest(select)">-->
-<!--                {{ select }}-->
-<!--              </div>-->
-<!--            </div>-->
-          </div>
 
+          </div>
+          <div v-if="focus === 'tag'" class="transition duration-300 rounded-lg -mt-[50px] w-[682px] grid absolute z-50" :class="focus === 'tag' ? 'bg-purple-lite' : 'bg-gray-lite-background'" v-click-away="clickOutside">
+            <div class="p-1 pl-2 rounded-lg hover:cursor-pointer hover:bg-purple hover:text-white" v-for="select in filteredList" :key="select" @click="selectPacks(select)">
+              {{ select }}
+            </div>
+          </div>
 
 
 
@@ -317,7 +317,7 @@ export default {
           this.onData.uucss_blocklist = this.blocklist;
           this.onData.whitelist_packs = option.unused_css.options.whitelist_packs;
           this.onData.suggested_whitelist_packs = option.unused_css.options.suggested_whitelist_packs.map(function(packs){
-            return packs.name;
+            return packs.id +":"+ packs.name;
           })
         }
       });
@@ -338,15 +338,30 @@ export default {
 
 
     filteredList() {
+      // console.log(this.onData.whitelist_packs);
+      // console.log(this.onData.suggested_whitelist_packs);
+      // const suggested_whitelist_packs = this.removeDuplicates(this.onData.whitelist_packs, this.onData.suggested_whitelist_packs)
+      // console.log(suggested_whitelist_packs);
       const text = this.filterText.toLowerCase().trim();
       if (!text) {
-        return this.onData.suggested_whitelist_packs;
+        return this.onData.suggested_whitelist_packs.map(function (wp) {
+          let item = wp.split(':');
+          return item[1];
+        });
       } else {
-        return this.onData.suggested_whitelist_packs.filter(item => item.toLowerCase().includes(text));
+        return this.onData.suggested_whitelist_packs.flatMap(function (wp) {
+          let item = wp.split(':');
+          let words = item[1].split(',').map(word => word.trim());
+          return words.filter(word => word.toLowerCase().includes(text));
+        });
       }
-    },
+    }
+
+
   },
   methods: {
+
+
     handleConfirm() {
       this.saveSettings();
       this.handleDontSave();
@@ -364,33 +379,76 @@ export default {
 
     loadWhitelistPacks() {
       this.refresh_element = true;
-      this.focus='tag';
+     // this.focus='tag';
 
       axios.post(window.uucss_global.ajax_url + '?action=suggest_whitelist_packs&nonce='+window.uucss_global.nonce)
           .then(response => {
 
              if(response.data?.data){
-              this.onData.whitelist_packs = response.data?.data?.map((value) => {
-                return value.id + ':' + value.name;
-              })
-               // this.onData.suggested_whitelist_packs  = this.onData.whitelist_packs;
+               const newWhitelist = response.data?.data?.map((value) => {
+                 return value.id + ':' + value.name;
+               })
+               const uniqueWhitelist = newWhitelist.map(function (wp) {
+                 let item = wp.split(':')
+                 return item[1];
+               })
+               const uniqueSuggetested = this.onData.suggested_whitelist_packs.map(function (wp) {
+                 let item = wp.split(':')
+                 return item[1];
+               })
+
+               const uniqueItems = uniqueWhitelist.filter(item => !uniqueSuggetested.includes(item));
+
+               if(uniqueItems.length > 0){
+                 const foundItem = newWhitelist.find(item => item.includes(uniqueItems));
+                 console.log("Found Item: "+ foundItem);
+                 this.onData.whitelist_packs.push(foundItem);
+
+                 this.onData.suggested_whitelist_packs = newWhitelist;
+               }
+               const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
+                 const textAfterColon = item.split(":")[1];
+                 return index === arr.findIndex((i) => i.split(":")[1] === textAfterColon);
+               });
+
+               this.onData.whitelist_packs = uniqueWhitelistPacks;
+
+
             }else if(response.data?.data?.errors[0]?.detail){
               this.errorMessage = response.data?.data?.errors[0].detail;
             }
             this.refresh_element = false;
-            this.focus=null;
+           // this.focus=null;
           })
           .catch(error => {
             this.errorMessage = error.message;
             this.refresh_element = false;
-            this.focus=null;
+         //   this.focus=null;
 
           });
 
     },
-    selectTest(selected) {
-      console.log(`Selected Test: ${selected}`);
+
+    selectPacks(selected) {
+      const text = selected.toLowerCase().trim();
+      const foundItem = this.onData.suggested_whitelist_packs.find(function (wp) {
+        const item = wp.split(':');
+        return item[1].toLowerCase() === text;
+      });
+
+      if (foundItem) {
+        const item = foundItem.split(':');
+        const newItem = item[0] + ':' + item[1];
+
+        // Check if the newItem already exists in whitelist_packs
+        if (!this.onData.whitelist_packs.includes(newItem)) {
+          this.onData.whitelist_packs.push(newItem);
+        }
+      }
     },
+
+
+
     clickOutside() {
       this.focus = '';
     },
