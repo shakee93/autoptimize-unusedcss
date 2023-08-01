@@ -6,10 +6,13 @@ import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import React, {useState, MouseEvent} from "react";
 import {cn} from "lib/utils";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store/reducers";
 import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
+import {fetchData} from "../../../store/app/appActions";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction, AppState} from "../../../store/app/appTypes";
 
 interface FooterProps {
     url: string,
@@ -18,13 +21,34 @@ interface FooterProps {
 
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
-    const { setShowOptimizer } = useOptimizerContext()
+    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const { setShowOptimizer, options } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading } = useSelector( optimizerData)
     const submitSettings = (e: MouseEvent<HTMLButtonElement>) => {
-
         // access the updated data and settings from the store
         console.log(data, settings);
+
+        if (options?.ajax_url) {
+            url = options.ajax_url + '?action=optimizer_update_settings'
+        }
+
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log(responseData);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
     }
 
     if (loading) {

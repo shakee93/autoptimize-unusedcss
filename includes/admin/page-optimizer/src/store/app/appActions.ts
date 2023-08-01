@@ -90,11 +90,10 @@ export const updateSettings = (
 
     return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
-
+        const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-       // console.log( currentState.app.desktop.settings);
-        let newOptions : AuditSetting[] = currentState?.app?.settings?.map((s: AuditSetting) => {
+        let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
 
             if (isEqual(s.name, setting.name)) {
                 s.inputs[input].value = payload
@@ -105,7 +104,7 @@ export const updateSettings = (
 
         // @ts-ignore
 
-        let newData = currentState.app.data
+        let newData = currentState.app?.[deviceType].data
 
         newData.data.audits = newData.data.audits.map((a: Audit) => {
 
