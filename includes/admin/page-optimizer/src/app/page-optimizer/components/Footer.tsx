@@ -34,7 +34,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         let req_url = "";
 
         if (options?.ajax_url) {
-            req_url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + window.uucss_global.nonce + '&url=' + url + '&strategy=' + activeReport;
+            req_url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport;
         }
 
         fetch(req_url, {

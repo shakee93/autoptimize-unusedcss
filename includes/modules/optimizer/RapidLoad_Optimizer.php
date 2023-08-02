@@ -22,7 +22,6 @@ class RapidLoad_Optimizer
 
     public function __construct(){
 
-        self::$options = RapidLoad_Base::fetch_options();
         self::pre_optimizer_function();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
@@ -39,11 +38,7 @@ class RapidLoad_Optimizer
         }
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
-            $options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
-
-            foreach ($options as $key => $option){
-                self::$options[$key] = $option;
-            }
+            self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
 
         }
     }
@@ -279,11 +274,11 @@ class RapidLoad_Optimizer
             }
         }
 
-        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] == "1" ? "1" : "");
+        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
         $this->associate_domain(false);
 
-        if(isset(self::$options['uucss_lazy_load_images']) || self::$options['uucss_support_next_gen_formats']){
+        if(isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] || isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats']){
             self::$options['uucss_enable_image_delivery'] = "1";
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
@@ -295,21 +290,23 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_self_host_google_fonts']);
         }
 
-        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] = "1" ||
+        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] ||
                 isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] ||
-                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] = "1"){
+                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] ){
             self::$options['uucss_enable_css'] = "1";
         }else{
             unset(self::$options['uucss_enable_css']);
         }
 
-        if(isset(self::$options['minify_js']) && self::$options['minify_js'] = "1" || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
+        if(isset(self::$options['minify_js']) && self::$options['minify_js'] || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
             self::$options['uucss_enable_javascript'] = "1";
         }else{
             unset(self::$options['uucss_enable_javascript']);
         }
 
         self::post_optimizer_function($result);
+
+        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         wp_send_json_success();
 
