@@ -24,7 +24,9 @@ class RapidLoad_Admin_Bar {
 //        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
 //        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
-        $this->load_optimizer_scripts();
+        if(!is_admin()){
+            $this->load_optimizer_scripts();
+        }
 
         add_action('wp_after_admin_bar_render', function () {
             echo '<div id="rapidload-page-optimizer"></div>';

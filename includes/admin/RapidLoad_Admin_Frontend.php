@@ -58,7 +58,7 @@ class RapidLoad_Admin_Frontend
 
         }
 
-        if($this->is_rapidload_page_optimizer()){
+        /*if($this->is_rapidload_page_optimizer()){
 
             //$this->load_optimizer_scripts();
 
@@ -72,7 +72,7 @@ class RapidLoad_Admin_Frontend
 
             }, 10, 2);
 
-        }
+        }*/
 
         if(is_admin()){
 
