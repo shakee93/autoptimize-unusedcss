@@ -124,7 +124,7 @@ class RapidLoad_Image
 
         if($width && $height){
 
-            $options .= ',w_' . $width . ',h_' . $height;
+            $options .= ',w_' . str_replace("px", "", $width) . ',h_' . str_replace("px", "", $height);
         }
 
         return $cdn . $options . '/' . $url;

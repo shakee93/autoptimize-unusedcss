@@ -353,7 +353,7 @@ class RapidLoad_Image_Enqueue
                         }
 
                         if (!isset($img->height) || $img->height == "auto") {
-                            $img->height = $dimension['height'];
+                            $img->height = $this->calculateSecondImageHeight($dimension['width'],  $dimension['height'], $img->width);
                         }
 
                     }
@@ -363,6 +363,20 @@ class RapidLoad_Image_Enqueue
 
         }
 
+    }
+
+    public function calculateSecondImageHeight($firstImageWidth, $firstImageHeight, $secondImageWidth) {
+        if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageWidth > 0 && $firstImageHeight > 0 &&$firstImageHeight > $firstImageWidth) {
+            $aspectRatio = $firstImageHeight / $firstImageWidth;
+            $secondImageHeight = $aspectRatio * $secondImageWidth;
+            return $secondImageHeight;
+        }else if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageHeight > 0 && $firstImageWidth > 0 && $firstImageWidth > $firstImageHeight) {
+            $aspectRatio = $firstImageWidth / $firstImageHeight;
+            $secondImageHeight = $secondImageWidth / $aspectRatio;
+            return $secondImageHeight;
+        } else {
+            return null; // Return 0 if first image width is 0 to avoid division by zero.
+        }
     }
 
     public function extractUrl($url){
