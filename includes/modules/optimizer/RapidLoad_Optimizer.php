@@ -31,7 +31,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
     }
 
-    public static function pre_optimizer_function(){
+    public static function   pre_optimizer_function(){
         if(isset($_REQUEST['url']) && !empty($_REQUEST['url']) && filter_var($_REQUEST['url'], FILTER_VALIDATE_URL) !== false){
             self::$job = new RapidLoad_Job([
                 'url' => $_REQUEST['url']
@@ -163,7 +163,13 @@ class RapidLoad_Optimizer
 
         self::verify_nonce();
 
-        if(!isset($_REQUEST['page_speed']) || !isset($_REQUEST['options'])){
+        $data = file_get_contents('php://input');
+
+        if(!isset($data)){
+            wp_send_json_error();
+        }
+
+        if(!isset($data->data)){
             wp_send_json_error();
         }
 
@@ -173,7 +179,7 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
-        $result = $_REQUEST['page_speed'];
+        $result = $data->data;
         $options = $_REQUEST['options'];
 
         if(!isset(self::$options['unused-javascript-files'])){
@@ -191,7 +197,7 @@ class RapidLoad_Optimizer
                             switch($input->control_type ){
 
                                 case 'checkbox' :{
-                                    if(isset($input->value) && isset($input->key) && $input->value == "1"){
+                                    if(isset($input->value) && isset($input->key) && $input->value){
                                         self::$options[$input->key] = "1";
                                     }else if(isset(self::$options[$input->key])){
                                         unset(self::$options[$input->key]);

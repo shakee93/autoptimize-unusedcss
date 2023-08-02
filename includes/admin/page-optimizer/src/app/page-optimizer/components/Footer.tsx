@@ -30,9 +30,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         console.log(data, settings);
 
         if (options?.ajax_url) {
-            url = options.ajax_url + '?action=optimizer_update_settings'
+            url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + window.uucss_global.nonce;
         }
-
 
         fetch(url, {
             method: 'POST',
