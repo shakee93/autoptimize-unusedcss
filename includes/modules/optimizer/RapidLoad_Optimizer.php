@@ -106,7 +106,12 @@ class RapidLoad_Optimizer
                 foreach ($audit->settings as $settings){
                     foreach ($settings->inputs as $input){
                         if(isset(self::$options[$input->key])){
-                            $input->value = self::$options[$input->key];
+                            if($input->key == "uucss_load_js_method"){
+                                $input->value = self::$options[$input->key] == "defer";
+                            }else{
+                                $input->value = self::$options[$input->key];
+                            }
+
                         }
                         if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
@@ -194,12 +199,15 @@ class RapidLoad_Optimizer
                 if(isset($audit->settings)){
                     foreach ($audit->settings as $settings){
                         foreach ($settings->inputs as $input){
-
                             switch($input->control_type ){
 
                                 case 'checkbox' :{
                                     if(isset($input->value) && isset($input->key) && $input->value){
-                                        self::$options[$input->key] = "1";
+                                        if($input->key == "uucss_load_js_method"){
+                                            self::$options[$input->key] = "defer";
+                                        }else{
+                                            self::$options[$input->key] = "1";
+                                        }
                                     }else if(isset(self::$options[$input->key])){
                                         unset(self::$options[$input->key]);
                                     }
@@ -308,7 +316,7 @@ class RapidLoad_Optimizer
 
         error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
-        wp_send_json_success();
+        wp_send_json_success('optimization updated successfully');
 
     }
 
