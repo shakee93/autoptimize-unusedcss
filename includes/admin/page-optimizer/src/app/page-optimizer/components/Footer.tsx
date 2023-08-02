@@ -25,15 +25,19 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const { setShowOptimizer, options } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading } = useSelector( optimizerData)
+    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const submitSettings = (e: MouseEvent<HTMLButtonElement>) => {
         // access the updated data and settings from the store
         console.log(data, settings);
+        console.log(options)
+
+        let req_url = "";
 
         if (options?.ajax_url) {
-            url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + window.uucss_global.nonce;
+            req_url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + window.uucss_global.nonce + '&url=' + url + '&strategy=' + activeReport;
         }
 
-        fetch(url, {
+        fetch(req_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

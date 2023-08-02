@@ -39,11 +39,16 @@ class RapidLoad_Optimizer
         }
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
-            self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
+            $options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
+
+            foreach ($options as $key => $option){
+                self::$options[$key] = $option;
+            }
+
         }
     }
 
-    public static function post_optimizer_function(){
+    public static function post_optimizer_function($data){
 
         if(!isset(self::$strategy) || !isset(self::$job) || !isset(self::$options)){
             return;
@@ -56,6 +61,7 @@ class RapidLoad_Optimizer
         }
 
         $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
+        $optimization->set_data($data);
         $optimization->save();
 
         self::$job->save(!self::$job->exist());
@@ -110,14 +116,14 @@ class RapidLoad_Optimizer
                         if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
                             if($data->exist()){
-                                $data->save(true);
+                                $data->save();
                             }
                             $input->{'value_data'} = $data;
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
-                                $data->save(true);
+                                $data->save();
                             }
                             $input->{'value_data'} = $data;
                         }
@@ -163,24 +169,24 @@ class RapidLoad_Optimizer
 
         self::verify_nonce();
 
-        $data = file_get_contents('php://input');
+        $data = json_decode(file_get_contents('php://input'));
 
         if(!isset($data)){
-            wp_send_json_error();
+            wp_send_json_error('no data');
         }
 
         if(!isset($data->data)){
-            wp_send_json_error();
+            wp_send_json_error('not set');
         }
 
         self::pre_optimizer_function();
 
         if(!isset(self::$options)){
-            wp_send_json_error();
+            wp_send_json_error('not set options');
         }
 
         $result = $data->data;
-        $options = $_REQUEST['options'];
+        $options = isset($_REQUEST['options']) ? $_REQUEST['options'] : [];
 
         if(!isset(self::$options['unused-javascript-files'])){
             self::$options['unused-javascript-files'] = [];
@@ -303,7 +309,7 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_enable_javascript']);
         }
 
-        self::post_optimizer_function();
+        self::post_optimizer_function($result);
 
         wp_send_json_success();
 

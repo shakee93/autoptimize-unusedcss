@@ -60,7 +60,7 @@ class RapidLoad_Admin_Frontend
 
         if($this->is_rapidload_page_optimizer()){
 
-            $this->load_optimizer_scripts();
+            //$this->load_optimizer_scripts();
 
             // TODO: temporary should be removed so it supports all the browsers
             add_filter('script_loader_tag', function ($tag, $handle) {
@@ -885,7 +885,11 @@ class RapidLoad_Admin_Frontend
         wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], '1.71');
 
         $data = array(
-            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist'
+            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
+            'plugin_url' => UUCSS_PLUGIN_URL,
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'optimizer_url' => $this->transform_url($this->get_current_url()),
+            'nonce' => wp_create_nonce( 'uucss_nonce' ),
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_admin', $data );

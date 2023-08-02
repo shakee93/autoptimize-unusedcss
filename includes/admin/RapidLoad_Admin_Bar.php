@@ -42,7 +42,8 @@ class RapidLoad_Admin_Bar {
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'optimizer_url' => $this->get_current_url()
+            'optimizer_url' => $this->transform_url($this->get_current_url()),
+            'nonce' => wp_create_nonce( 'uucss_nonce' ),
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload', $data );
