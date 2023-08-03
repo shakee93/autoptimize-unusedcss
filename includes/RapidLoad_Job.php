@@ -254,5 +254,46 @@ class RapidLoad_Job{
         }
     }
 
+    function get_optimization_revisions($strategy, $limit = 10){
 
+        global $wpdb;
+
+        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " LIMIT "  . $limit , OBJECT);
+
+        foreach ($data as $d){
+            $d->data = unserialize($d->data);
+        }
+
+        return $data;
+    }
+
+    function get_revision_count($strategy){
+
+        global $wpdb;
+        return $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id );
+
+    }
+
+    function delete_old_revision($strategy, $revision_count){
+        $revsions = $this->get_revision_ids($strategy);
+
+        if(!empty($revsions) && count($revsions) > ($revision_count -1 )){
+            $revsions = array_slice($revsions, (-1 * ($revision_count -1 )));
+            $revsions = array_map(function ($r){
+                return (double)$r[0];
+            },$revsions);
+            $revsions = implode(",",$revsions);
+            global $wpdb;
+            $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE id NOT IN( $revsions )");
+        }
+
+    }
+
+    function get_revision_ids($strategy){
+
+        global $wpdb;
+
+        return $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id , ARRAY_N);
+
+    }
 }

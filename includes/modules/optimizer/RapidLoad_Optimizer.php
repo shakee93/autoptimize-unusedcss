@@ -19,8 +19,11 @@ class RapidLoad_Optimizer
     static $options;
     static $job;
     static $strategy;
+    static $revision_limit;
 
     public function __construct(){
+
+        self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
         self::pre_optimizer_function();
 
@@ -53,6 +56,12 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
+        }
+
+        $revision_count = self::$job->get_revision_count(self::$strategy);
+
+        if($revision_count > (self::$revision_limit - 1)){
+            self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
         }
 
         $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
@@ -157,6 +166,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'page_speed' => $result,
+            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'options' => [
                 'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
             ]
@@ -313,8 +323,6 @@ class RapidLoad_Optimizer
         }
 
         self::post_optimizer_function($result);
-
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         wp_send_json_success('optimization updated successfully');
 
