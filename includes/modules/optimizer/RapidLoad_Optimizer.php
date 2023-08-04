@@ -19,10 +19,12 @@ class RapidLoad_Optimizer
     static $options;
     static $job;
     static $strategy;
+    static $revision_limit;
 
     public function __construct(){
 
-        self::$options = RapidLoad_Base::fetch_options();
+        self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
+
         self::pre_optimizer_function();
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
@@ -39,11 +41,7 @@ class RapidLoad_Optimizer
         }
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
-            $options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
-
-            foreach ($options as $key => $option){
-                self::$options[$key] = $option;
-            }
+            self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
 
         }
     }
@@ -58,6 +56,12 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
+        }
+
+        $revision_count = self::$job->get_revision_count(self::$strategy);
+
+        if($revision_count > (self::$revision_limit - 1)){
+            self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
         }
 
         $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
@@ -111,7 +115,12 @@ class RapidLoad_Optimizer
                 foreach ($audit->settings as $settings){
                     foreach ($settings->inputs as $input){
                         if(isset(self::$options[$input->key])){
-                            $input->value = self::$options[$input->key];
+                            if($input->key == "uucss_load_js_method"){
+                                $input->value = self::$options[$input->key] == "defer";
+                            }else{
+                                $input->value = self::$options[$input->key];
+                            }
+
                         }
                         if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
@@ -157,6 +166,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'page_speed' => $result,
+            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'options' => [
                 'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
             ]
@@ -199,12 +209,15 @@ class RapidLoad_Optimizer
                 if(isset($audit->settings)){
                     foreach ($audit->settings as $settings){
                         foreach ($settings->inputs as $input){
-
                             switch($input->control_type ){
 
                                 case 'checkbox' :{
                                     if(isset($input->value) && isset($input->key) && $input->value){
-                                        self::$options[$input->key] = "1";
+                                        if($input->key == "uucss_load_js_method"){
+                                            self::$options[$input->key] = "defer";
+                                        }else{
+                                            self::$options[$input->key] = "1";
+                                        }
                                     }else if(isset(self::$options[$input->key])){
                                         unset(self::$options[$input->key]);
                                     }
@@ -279,11 +292,11 @@ class RapidLoad_Optimizer
             }
         }
 
-        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] == "1" ? "1" : "");
+        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
         $this->associate_domain(false);
 
-        if(isset(self::$options['uucss_lazy_load_images']) || self::$options['uucss_support_next_gen_formats']){
+        if(isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] || isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats']){
             self::$options['uucss_enable_image_delivery'] = "1";
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
@@ -295,15 +308,15 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_self_host_google_fonts']);
         }
 
-        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] = "1" ||
+        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] ||
                 isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] ||
-                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] = "1"){
+                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] ){
             self::$options['uucss_enable_css'] = "1";
         }else{
             unset(self::$options['uucss_enable_css']);
         }
 
-        if(isset(self::$options['minify_js']) && self::$options['minify_js'] = "1" || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
+        if(isset(self::$options['minify_js']) && self::$options['minify_js'] || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
             self::$options['uucss_enable_javascript'] = "1";
         }else{
             unset(self::$options['uucss_enable_javascript']);
@@ -311,7 +324,7 @@ class RapidLoad_Optimizer
 
         self::post_optimizer_function($result);
 
-        wp_send_json_success();
+        wp_send_json_success('optimization updated successfully');
 
     }
 

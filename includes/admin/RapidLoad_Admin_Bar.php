@@ -48,7 +48,7 @@ class RapidLoad_Admin_Bar {
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
         );
 
-        wp_localize_script( 'rapidload_page_optimizer', 'rapidload', $data );
+        wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
 
         wp_enqueue_script( 'rapidload_page_optimizer' );
 

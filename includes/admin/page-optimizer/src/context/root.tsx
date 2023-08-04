@@ -12,7 +12,7 @@ export const OptimizerProvider = ({ children } : {
     children: ReactNode
 }) => {
     const [showOptimizer, setShowOptimizer] = useState(true);
-    const [options, setOptions] = useState(window?.rapidload ? window.rapidload : {
+    const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'https://rapidload.io/?no_rapidload',
         ajax_url: '',
         page_optimizer_base: '',
