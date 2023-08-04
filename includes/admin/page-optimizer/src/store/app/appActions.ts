@@ -110,19 +110,16 @@ export const updateSettings = (
 
         newData.data.audits = newData.data.audits.map((a: Audit) => {
 
-            if (audit.id === a.id) {
-                a.settings = audit.settings.map(s => {
-                    // console.log("audi"+ s);
-                    // console.log("settings" + setting);
-                    // console.log(setting.inputs[input].key);
-                    if (s.name === setting.name) {
-                        s.inputs[input].value = payload,
-                        s.inputs[input].key = setting.inputs[input].key
-                    }
+           a.settings.map(s => {
 
-                    return s;
-                })
-            }
+                if (s.inputs[input].key === setting.inputs[input].key) {
+                    s.inputs[input].value = payload;
+                }
+
+                return s;
+            })
+
+
 
             return a;
         });
