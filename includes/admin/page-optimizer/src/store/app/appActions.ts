@@ -86,6 +86,7 @@ export const updateSettings = (
     setting: AuditSetting,
     input: number, // index number of input
     payload: any, // changed value
+    key: any,
  ): ThunkAction<void, AppState, unknown, AnyAction> => {
 
     return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
@@ -110,9 +111,12 @@ export const updateSettings = (
 
             if (audit.id === a.id) {
                 a.settings = audit.settings.map(s => {
-
+                    console.log(s);
+                    console.log(setting);
+                    console.log(setting.inputs[input].key);
                     if (s.name === setting.name) {
-                        s.inputs[input].value = payload
+                        s.inputs[input].value = payload,
+                        setting.inputs[input].key = key
                     }
 
                     return s;
