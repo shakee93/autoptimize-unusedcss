@@ -112,7 +112,7 @@ export const updateSettings = (
 
             if (audit.id === a.id) {
                 a.settings = audit.settings.map(s => {
-                    // console.log("audi"+ s);
+                     console.log("audit", s);
                     // console.log("settings" + setting);
                     // console.log(setting.inputs[input].key);
                     if (s.name === setting.name) {
