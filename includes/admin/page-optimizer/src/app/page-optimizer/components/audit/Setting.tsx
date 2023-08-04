@@ -65,7 +65,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
         dispatch(updateSettings(
             audit,
             settings,
-             0,
+            0,
             checked
         ));
     }

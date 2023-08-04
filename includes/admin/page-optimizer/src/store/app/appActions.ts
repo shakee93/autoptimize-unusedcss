@@ -59,6 +59,7 @@ const initiateSettings = (data: any) => {
     // Use Set to remove duplicates based on a custom key
     // @ts-ignore
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str) => JSON.parse(str));
+    console.log("unique" , uniqueSettings)
     return uniqueSettings;
 }
 
@@ -69,7 +70,7 @@ export const fetchData = (url : string): ThunkAction<void, AppState, unknown, An
             dispatch({ type: FETCH_DATA_REQUEST });
 
             const response: AxiosResponse<any> = await axios.get(url);
-
+            console.log("Fetch Data" , response.data)
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
         } catch (error) {
             if (error instanceof Error) {
@@ -86,12 +87,13 @@ export const updateSettings = (
     setting: AuditSetting,
     input: number, // index number of input
     payload: any, // changed value
-    key: any,
+
  ): ThunkAction<void, AppState, unknown, AnyAction> => {
 
     return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
+        console.log("currentState" , currentState)
 
         // @ts-ignore
         let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
@@ -99,7 +101,6 @@ export const updateSettings = (
             if (isEqual(s.name, setting.name)) {
                 s.inputs[input].value = payload
             }
-
             return s;
         });
 
@@ -111,12 +112,12 @@ export const updateSettings = (
 
             if (audit.id === a.id) {
                 a.settings = audit.settings.map(s => {
-                    console.log(s);
-                    console.log(setting);
-                    console.log(setting.inputs[input].key);
+                    // console.log("audi"+ s);
+                    // console.log("settings" + setting);
+                    // console.log(setting.inputs[input].key);
                     if (s.name === setting.name) {
                         s.inputs[input].value = payload,
-                        setting.inputs[input].key = key
+                        s.inputs[input].key = setting.inputs[input].key
                     }
 
                     return s;

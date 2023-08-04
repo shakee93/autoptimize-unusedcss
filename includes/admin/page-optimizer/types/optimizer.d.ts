@@ -62,7 +62,7 @@ interface AuditSetting {
         control_values: string[];
         control_payload: string;
         value: any;
-        key: string;
+        key: any;
     }>;
 }
 
