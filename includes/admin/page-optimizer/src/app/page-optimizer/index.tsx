@@ -95,6 +95,7 @@ export default function PageOptimizer() {
             return 45;
         });
         setComponentHeights(heights);
+
     }, [results]);
 
     const handleAuditHeightChange = (index: number, height: number) => {
@@ -118,7 +119,8 @@ export default function PageOptimizer() {
                             <aside className="col-span-3">
                                 <h2 className="text-lg ml-5">Speed Insights</h2>
                                 <div className="widgets pt-4 flex">
-                                    {/*<PageSpeedScore pagespeed={pagespeed[0]}/>*/}
+                                    <PageSpeedScore/>
+
                                 </div>
                             </aside>
                         )}

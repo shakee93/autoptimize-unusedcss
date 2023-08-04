@@ -7,11 +7,24 @@ import {
     Average,
 } from 'app/page-optimizer/components/icons/icon-svg';
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
+import {useSelector} from "react-redux";
+import {optimizerData} from "../../../../store/app/appSelector";
+
+
+import * as Tooltip from '@radix-ui/react-tooltip';
+import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
+import SpeedInsightGroup from "../../../speed-popover/components/group";
+import Button from "components/ui/button";
+import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import {useOptimizerContext} from "../../../../context/root";
+import {RootState} from "../../../../store/reducers";
+import {Skeleton} from "components/ui/skeleton"
 
 
 
 interface PageSpeedScoreProps {
-    pagespeed?: PageSpeed;
+    pagespeed?: any;
     priority?: boolean;
 }
 
@@ -22,6 +35,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [strokeDashoffset, setStrokeDashoffset] = useState(0);
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
+    const {setShowOptimizer} = useOptimizerContext()
+    const {data, error, loading} = useSelector(optimizerData);
+    const [performance, setPerformance] = useState<number>(0)
+    const [on, setOn] = useState<boolean>(false)
+
     const handleCoreWebClick = () => {
         setCoreWebIsClicked(!isCoreWebClicked);
     };
@@ -30,7 +48,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         const radius = 62;
         const circumference = 2 * Math.PI * radius;
         let currentProgress = 0;
-        const performance = pagespeed?.performance?? 0;
+        const performance = data?.data.performance?? 0;
 
         setStrokeDasharray(circumference);
         setStrokeDashoffset(circumference);
@@ -58,7 +76,36 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     useEffect(() => {
         animateProgressBar();
-    }, []);
+
+        if (!loading && data) {
+            let currentNumber = 0;
+
+            const timer = setInterval(() => {
+                currentNumber += 1;
+                if (currentNumber <= data.data.performance) {
+                    setPerformance(currentNumber)
+                } else {
+                    clearInterval(timer);
+                }
+            }, 10); // Change the delay (in milliseconds) as desired
+
+            return () => clearInterval(timer);
+        }
+
+    }, [data, loading]);
+
+    const calculateOpacity = () => {
+
+        if (!data) {
+            return 0;
+        }
+
+        const targetNumber = data.data.performance;
+        const maxOpacity = 1;
+        const minOpacity = 0;
+        const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
+        return minOpacity + opacityIncrement * performance;
+    };
 
 
     return (
@@ -66,19 +113,26 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         <div>
             <div className="w-[285px] h-[280px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
-                    <div className="performance-circle">
-                        <svg width="155" height="155">
-                            <circle className="inner-circle" cx="77.5" cy="77.5" r="62" strokeWidth="10"></circle>
-                            <circle className="progress-bar" cx="77.5" cy="77.5" r="62" strokeWidth="10"
-                                    stroke={performanceColor} style={{
-                                strokeDasharray: strokeDasharray,
-                                strokeDashoffset: strokeDashoffset
-                            }}></circle>
-                            <text x="50%" y="50%" textAnchor="middle" dy=".3em"
-                                  className="text-[28px] text-black">{progress}%
-                            </text>
-                        </svg>
+
+                    <div className='mt-6'>
+                        {loading || on ? (
+                            <Skeleton className="w-44 h-44 rounded-full"/>
+                        ) : (
+                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
+                                pathColor: `#0bb42f`,
+                                pathTransitionDuration: .5,
+                            })} value={performance}>
+                                <span
+                                    style={{
+                                        opacity: calculateOpacity()
+                                    }}
+                                    className='text-5xl transition-all ease-out duration-300 absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
+                                >{performance}%</span>
+                            </CircularProgressbarWithChildren>
+                        )}
                     </div>
+
+
                     <div className="flex mb-2 mt-3">
                         <svg className="mr-2 mt-1" height="12.5" width="12.5">
                             <circle cx="6.25" cy="6.25" r="5" fill={performanceColor}></circle>
@@ -99,26 +153,26 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             <p className="text-xm font-normal">89-100</p>
                         </div>
                     </div>
-
+            
                 </div>
             </div>
-            <div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
-                <div className="p-5 grid grid-cols-3 gap-3">
-                    {pagespeed?.metrics.map((data, index) => (
-                    <div className={'justify-center grid'}>
-                        <div className="flex">
-                            <p className="text-sm font-medium mr-2 mt-[1px]">{data.title}</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <PerformanceIcons icon={data.icon }/>
-                            </span>
-                        </div>
-                        <p className="text-2xl font-medium text-red">{data.displayValue}</p>
-                    </div>
-                    ))}
-                </div>
-            </div>
-
+            {/*<div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">*/}
+            {/*    <div className="p-5 grid grid-cols-3 gap-3">*/}
+            {/*        {pagespeed?.metrics.map((data, index) => (*/}
+            {/*        <div className={'justify-center grid'}>*/}
+            {/*            <div className="flex">*/}
+            {/*                <p className="text-sm font-medium mr-2 mt-[1px]">{data.title}</p>*/}
+            {/*                <span*/}
+            {/*                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>*/}
+            {/*                    <PerformanceIcons icon={data.icon }/>*/}
+            {/*                </span>*/}
+            {/*            </div>*/}
+            {/*            <p className="text-2xl font-medium text-red">{data.data.performance}</p>*/}
+            {/*        </div>*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            
             <div onClick={handleCoreWebClick} className="w-[285px] drop-shadow-sm rounded-xl border border-gray-200 bg-white ">
                 <div className={`flex p-5 pl-6 border-b-[1px] border-gray-200 cursor-pointer`}>
                     <div>
@@ -139,7 +193,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 <Fail/>
                             </span>
                         </div>
-
+            
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
                     </div>
                     <div>
@@ -152,7 +206,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
-
+            
                     <div>
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
@@ -163,7 +217,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>
-
+            
                 </div>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     <div>
@@ -174,7 +228,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 <Fail/>
                             </span>
                         </div>
-
+            
                         <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
                     </div>
                     <div>
@@ -187,7 +241,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
                     </div>
-
+            
                     <div>
                         <div className="flex">
                             <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
@@ -198,12 +252,12 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                         <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
                     </div>
-
+            
                 </div>
                 </div>
-
+            
             </div>
-            </div>
+        </div>
     )
 }
 

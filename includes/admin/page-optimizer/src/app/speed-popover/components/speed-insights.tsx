@@ -20,7 +20,7 @@ const Content = () => {
     const [on, setOn] = useState<boolean>(false)
 
     useEffect(() => {
-        
+
         if (!loading && data) {
             let currentNumber = 0;
 

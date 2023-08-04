@@ -28,8 +28,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const submitSettings = (e: MouseEvent<HTMLButtonElement>) => {
         // access the updated data and settings from the store
-        console.log(data, settings);
-        console.log(options)
+        // console.log(data, settings);
+        // console.log(data)
 
         let req_url = "";
 
