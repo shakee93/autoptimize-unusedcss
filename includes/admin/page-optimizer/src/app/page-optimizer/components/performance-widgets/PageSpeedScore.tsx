@@ -62,21 +62,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         }
 
 
-        const interval = setInterval(() => {
-            if (currentProgress >= performance) {
-                clearInterval(interval);
-            } else {
-                currentProgress += 1;
-                const offset = circumference - (currentProgress / 100) * circumference;
-                setStrokeDashoffset(offset);
-                setProgress(currentProgress);
-            }
-        }, 20);
     };
 
     useEffect(() => {
-        animateProgressBar();
-
+        //animateProgressBar();
+        console.log("");
         if (!loading && data) {
             let currentNumber = 0;
 
@@ -111,7 +101,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     return (
 
         <div>
-            <div className="w-[285px] h-[280px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
+            <div className="w-[285px] h-[325px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
                     <div className='mt-6'>
