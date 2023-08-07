@@ -44,7 +44,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
-
+    console.log("table",table?.getRowModel());
     const cellWidth = (valueType: string) => {
 
         switch (valueType) {
@@ -89,6 +89,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                     </thead>
                     <tbody>
                     {table?.getRowModel().rows.map(row => (
+
                         <tr  key={row.id}>
                             {row.getVisibleCells().filter(cell => shouldRender(cell)).map(cell => (
                                 <td style={{

@@ -9,10 +9,9 @@ import {useEffect, useState} from "react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState} from "../../../store/app/appTypes";
+import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {changeReport, fetchData} from "../../../store/app/appActions";
-import {RootState} from "../../../store/reducers";
 import {optimizerData} from "../../../store/app/appSelector";
 
 
@@ -40,7 +39,7 @@ const Header = ({ url = null}: { url: string|null}) => {
     
     return (
 
-        <header className='w-full px-6 py-3 flex justify-between border-b border-zinc-700'>
+        <header className='w-full px-6 py-3 flex justify-between border-b border-zinc-200'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
