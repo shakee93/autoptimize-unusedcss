@@ -1,4 +1,8 @@
 
+export interface RootState {
+    app: AppState;
+}
+
 export interface AppState {
     activeReport: ReportType,
     mobile: {

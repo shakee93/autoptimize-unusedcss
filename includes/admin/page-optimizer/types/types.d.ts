@@ -1,6 +1,6 @@
 
 interface Window {
-    rapidload : WordPressOptions
+    rapidload_optimizer : WordPressOptions
 }
 
 interface WordPressOptions {
@@ -8,6 +8,7 @@ interface WordPressOptions {
     optimizer_url: string
     page_optimizer_base: string
     plugin_url: string
+    nonce?: string
 }
 
 interface Tab {

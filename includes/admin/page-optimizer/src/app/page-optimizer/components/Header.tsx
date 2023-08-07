@@ -9,10 +9,9 @@ import {useEffect, useState} from "react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState} from "../../../store/app/appTypes";
+import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {changeReport, fetchData} from "../../../store/app/appActions";
-import {RootState} from "../../../store/reducers";
 import {optimizerData} from "../../../store/app/appSelector";
 
 
