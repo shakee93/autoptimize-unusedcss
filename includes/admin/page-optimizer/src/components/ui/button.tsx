@@ -8,10 +8,10 @@ const Button = ({ children, dark = true, onClick, className}: {
     className?: string
 }) => {
 
-    let styles = 'bg-slate-900 hover:bg-slate-800 text-white'
+    let styles = 'dark:bg-zinc-200 bg-zinc-900 dark:hover:bg-zinc-300 hover:bg-zinc-700 dark:text-black text-white'
 
     if (!dark) {
-        styles = 'border border-gray-300 hover:bg-zinc-200'
+        styles = 'border border-zinc-300 dark:hover:bg-zinc-700 hover:bg-zinc-200'
     }
 
     return (

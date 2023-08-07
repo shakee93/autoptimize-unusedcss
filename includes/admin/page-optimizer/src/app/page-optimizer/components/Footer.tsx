@@ -7,12 +7,11 @@ import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import React, {useState, MouseEvent} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../store/reducers";
 import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
 import {fetchData} from "../../../store/app/appActions";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState} from "../../../store/app/appTypes";
+import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 
 interface FooterProps {
     url: string,
@@ -21,7 +20,7 @@ interface FooterProps {
 
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
-    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { setShowOptimizer, options } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading } = useSelector( optimizerData)
@@ -59,7 +58,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     }
 
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
+        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800/90 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
