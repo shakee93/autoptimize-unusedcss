@@ -1,16 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {CheckBadgeIcon} from "@heroicons/react/24/solid";
-
-
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
-
-
-import * as Tooltip from '@radix-ui/react-tooltip';
-import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
-import SpeedInsightGroup from "../../../speed-popover/components/group";
-import Button from "components/ui/button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../../context/root";
@@ -24,10 +16,8 @@ interface PageSpeedScoreProps {
 }
 
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
-    const [progress, setProgress] = useState(0);
-    const [performanceColor, setPerformanceColor] = useState('#ECECED');
-    const [strokeDasharray, setStrokeDasharray] = useState(0);
-    const [strokeDashoffset, setStrokeDashoffset] = useState(0);
+    const [performanceIcon, setPerformanceIcon] = useState('fail');
+    const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
     const {setShowOptimizer} = useOptimizerContext()
@@ -39,21 +29,19 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setCoreWebIsClicked(!isCoreWebClicked);
     };
 
-    const animateProgressBar = () => {
-        const radius = 62;
-        const circumference = 2 * Math.PI * radius;
-        let currentProgress = 0;
+    const progressBarColorCode = () => {
         const performance = data?.data.performance?? 0;
-
-        setStrokeDasharray(circumference);
-        setStrokeDashoffset(circumference);
+        console.log("Score",performance)
 
         if (performance < 50) {
-            setPerformanceColor('#FF3333');
+            setProgressbarColor('#FF3333');
+            setPerformanceIcon('fail')
         } else if (performance < 90) {
-            setPerformanceColor('#FFAA33');
+            setProgressbarColor('#FFAA33');
+            setPerformanceIcon('average')
         } else if (performance < 101) {
-            setPerformanceColor('#09B42F');
+            setProgressbarColor('#09B42F');
+            setPerformanceIcon('pass')
         }
 
 
@@ -66,7 +54,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
     useEffect(() => {
-        //animateProgressBar();
+        progressBarColorCode();
         console.log("performance", data?.data.metrics.icon);
         if (!loading && data) {
             let currentNumber = 0;
@@ -110,7 +98,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
                             <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                pathColor: `#0bb42f`,
+                                pathColor: progressbarColor,
                                 pathTransitionDuration: .5,
                             })} value={performance}>
                                 <span
@@ -125,22 +113,20 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
                     <div className="flex mb-2 mt-3">
-                        <svg className="mr-2 mt-1" height="12.5" width="12.5">
-                            <circle cx="6.25" cy="6.25" r="5" fill={performanceColor}></circle>
-                        </svg>
+                        <PerformanceIcons icon={performanceIcon} className={'mt-2 mr-1'}/>
                         <h1 className="text-base font-bold">Performance</h1>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                         <div className="flex">
-                            {/*<Fail cls="mt-2 mr-1"/>*/}
+                            <PerformanceIcons icon={'fail'} className={'mt-2 mr-1'}/>
                             <p className="text-xm font-normal">0-49</p>
                         </div>
                         <div className="flex">
-                            {/*<Average cls="mt-2 mr-1"/>*/}
+                            <PerformanceIcons icon={'average'} className={'mt-2 mr-1'}/>
                             <p className="text-xm font-normal">50-89</p>
                         </div>
                         <div className="flex">
-                            {/*<Pass cls="mt-2 mr-1"/>*/}
+                            <PerformanceIcons icon={'pass'} className={'mt-2 mr-1'}/>
                             <p className="text-xm font-normal">89-100</p>
                         </div>
                     </div>
@@ -186,7 +172,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 <PerformanceIcons icon={s.icon}/>
                             </span>
                         </div>
-                        <p className="text-[22px] font-medium mr-2 mr-1 text-red">{s.displayValue}</p>
+                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
                     </div>
                     ))}
                 </div>

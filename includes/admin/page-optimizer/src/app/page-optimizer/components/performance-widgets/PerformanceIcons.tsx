@@ -1,25 +1,26 @@
-import {
-    Pass,
-    Fail,
-    Average,
-} from '../icons/icon-svg';
-
+import React from 'react';
+import { Pass, Fail, Average } from '../icons/icon-svg';
 
 interface IconProps {
-   icon: string;
+    icon: string;
+    className?: string; // Add className prop
 }
 
-const PerformanceIcons = ({ icon }: IconProps) => {
+const PerformanceIcons = ({ icon, className }: IconProps) => {
+    let iconComponent = null;
+
+    if (icon === 'pass') {
+        iconComponent = <Pass />;
+    } else if (icon === 'average') {
+        iconComponent = <Average />;
+    } else if (icon === 'fail') {
+        iconComponent = <Fail />;
+    }
+
     return (
-        <span >
-            {icon === 'pass' ? (
-                <Pass />
-            ) : icon === 'average' ? (
-                <Average />
-            ) :icon === 'fail' ? (
-                <Fail />
-            ) : null}
-        </span>
+        <span className={`${className}`}>
+      {iconComponent}
+    </span>
     );
 };
 
