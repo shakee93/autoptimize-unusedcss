@@ -11,6 +11,7 @@ import {
     UPDATE_SETTINGS
 } from "./appTypes";
 import {isEqual} from 'underscore';
+import {RootState} from "../reducers";
 
 
 const transformData = (data: any) => {
@@ -88,9 +89,9 @@ export const updateSettings = (
     input: number, // index number of input
     payload: any, // changed value
 
- ): ThunkAction<void, AppState, unknown, AnyAction> => {
+ ): ThunkAction<void, RootState, unknown, AnyAction> => {
 
-    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState)  => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
         console.log("currentState" , currentState)
@@ -104,13 +105,16 @@ export const updateSettings = (
             return s;
         });
 
-        // @ts-ignore
-
         let newData = currentState.app?.[deviceType].data
+
+        if (!newData) {
+            console.error('RapidLoad: an error occurred while saving the settings')
+            return;
+        }
 
         newData.data.audits = newData.data.audits.map((a: Audit) => {
 
-           a.settings.map(s => {
+           a.settings = a.settings.map(s => {
 
                 if (s.inputs[input].key === setting.inputs[input].key) {
                     s.inputs[input].value = payload;
@@ -118,8 +122,6 @@ export const updateSettings = (
 
                 return s;
             })
-
-
 
             return a;
         });

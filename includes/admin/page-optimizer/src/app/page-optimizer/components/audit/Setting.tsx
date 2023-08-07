@@ -11,7 +11,7 @@ import {
 
 import { Switch } from "components/ui/switch"
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState} from "../../../../store/app/appTypes";
+import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
 import {useDispatch} from "react-redux";
 import {updateSettings} from "../../../../store/app/appActions";
 
@@ -47,7 +47,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
         return <></>
     }
 
-    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     let icons = {
         cache : <PageCache/>,

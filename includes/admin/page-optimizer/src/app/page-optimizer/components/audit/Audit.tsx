@@ -9,7 +9,6 @@ import {JsonView} from "react-json-view-lite";
 import Button from "components/ui/button";
 import {ArrowDown} from "lucide-react";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../../store/reducers";
 import {isEqual} from "underscore";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
@@ -69,7 +68,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
                     {audit.settings.length > 0 &&(
                         <div className="flex flex-wrap">
                             {audit.settings.map((s, index) => (
-                                <Setting audit={audit} key={index} settings={settings?.find(_s => _s.name === s.name)} index={index} />
+                                <Setting audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                             ))}
                         </div>
                     )}

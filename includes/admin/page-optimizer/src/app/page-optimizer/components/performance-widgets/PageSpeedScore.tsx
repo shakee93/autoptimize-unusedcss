@@ -18,7 +18,6 @@ import Button from "components/ui/button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../../context/root";
-import {RootState} from "../../../../store/reducers";
 import {Skeleton} from "components/ui/skeleton"
 
 

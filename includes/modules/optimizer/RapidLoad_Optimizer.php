@@ -166,7 +166,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'page_speed' => $result,
-            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
+//            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'options' => [
                 'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
             ]
