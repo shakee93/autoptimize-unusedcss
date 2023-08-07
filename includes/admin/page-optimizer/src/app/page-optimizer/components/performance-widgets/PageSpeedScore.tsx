@@ -1,11 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {CheckBadgeIcon} from "@heroicons/react/24/solid";
 
-import {
-    Pass,
-    Fail,
-    Average,
-} from 'app/page-optimizer/components/icons/icon-svg';
+
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
@@ -64,9 +60,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     };
 
+    const FirstLettersComponent = ({ text }) => {
+        const firstLetters = text.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+        return firstLetters;
+    };
+
+
     useEffect(() => {
         //animateProgressBar();
-        console.log("");
+        console.log("performance", data?.data.metrics.icon);
         if (!loading && data) {
             let currentNumber = 0;
 
@@ -131,15 +133,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                         <div className="flex">
-                            <Fail cls="mt-2 mr-1"/>
+                            {/*<Fail cls="mt-2 mr-1"/>*/}
                             <p className="text-xm font-normal">0-49</p>
                         </div>
                         <div className="flex">
-                            <Average cls="mt-2 mr-1"/>
+                            {/*<Average cls="mt-2 mr-1"/>*/}
                             <p className="text-xm font-normal">50-89</p>
                         </div>
                         <div className="flex">
-                            <Pass cls="mt-2 mr-1"/>
+                            {/*<Pass cls="mt-2 mr-1"/>*/}
                             <p className="text-xm font-normal">89-100</p>
                         </div>
                     </div>
@@ -175,75 +177,21 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 </div>
                 <div className={`${isCoreWebClicked ? 'visible h-[180px]' : 'invisible h-[0px]'}`}>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    <div>
+                    {data?.data.metrics.map((s, index) => (
+
+                    <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                         <div className="flex">
-                            <p className="text-xs font-medium mr-[8px] mt-[1px]">LCP</p>
+                            <p className="text-xs font-medium mr-[8px] mt-[1px]">{<FirstLettersComponent text={s.title} />}</p>
                             <span
                                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Fail/>
+                                <PerformanceIcons icon={s.icon}/>
                             </span>
                         </div>
-            
-                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
+                        <p className="text-[22px] font-medium mr-2 mr-1 text-red">{s.displayValue}</p>
                     </div>
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-3 mt-[1px]">FID</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Average/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
-                    </div>
-            
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-3 mt-[1px]">CLS</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Pass/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
-                    </div>
-            
+                    ))}
                 </div>
-                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-2 mt-[1px]">FCP</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Fail/>
-                            </span>
-                        </div>
-            
-                        <p className="text-[22px] font-medium mr-2 text-red">3.6 s</p>
-                    </div>
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-2 mt-[1px]">INP</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Average/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-red">0.6 s</p>
-                    </div>
-            
-                    <div>
-                        <div className="flex">
-                            <p className="text-[13px] font-medium mr-1 mt-[1px]">TTFB</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
-                                <Pass/>
-                            </span>
-                        </div>
-                        <p className="text-[22px] font-medium mr-2 text-green">0.6 s</p>
-                    </div>
-            
-                </div>
+
                 </div>
             
             </div>
