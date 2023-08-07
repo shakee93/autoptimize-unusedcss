@@ -284,7 +284,7 @@ class RapidLoad_Job{
             },$revsions);
             $revsions = implode(",",$revsions);
             global $wpdb;
-            $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE id NOT IN( $revsions )");
+            $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE id NOT IN( $revsions ) AND strategy = '$strategy'");
         }
 
     }

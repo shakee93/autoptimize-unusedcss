@@ -42,7 +42,9 @@ class RapidLoad_Optimizer
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
-
+            if(empty(self::$options)){
+                self::$options = RapidLoad_Base::fetch_options();
+            }
         }
     }
 
