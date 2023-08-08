@@ -17,6 +17,7 @@ class RapidLoad_Optimizer
     ];
 
     static $options;
+    static $global_options;
     static $job;
     static $strategy;
     static $revision_limit;
@@ -38,12 +39,22 @@ class RapidLoad_Optimizer
             self::$job = new RapidLoad_Job([
                 'url' => $_REQUEST['url']
             ]);
+            if(!isset(self::$job->id)){
+                self::$job->save();
+            }
         }
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
+            self::$global_options = RapidLoad_Base::fetch_options();
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
             if(empty(self::$options)){
-                self::$options = RapidLoad_Base::fetch_options();
+                self::$options = self::$global_options;
+            }else{
+                foreach (self::$global_options as $key => $value){
+                    if(!isset(self::$options[$key])){
+                        self::$options[$key] = $value;
+                    }
+                }
             }
         }
     }
@@ -58,6 +69,13 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
+        }
+
+        $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
+        $new_hash = hash('md5', serialize($data));
+
+        if($hash == $new_hash){
+            return;
         }
 
         $revision_count = self::$job->get_revision_count(self::$strategy);
@@ -168,7 +186,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'page_speed' => $result,
-//            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
+            'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'options' => [
                 'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
             ]
@@ -180,6 +198,8 @@ class RapidLoad_Optimizer
     public function optimizer_update_settings(){
 
         self::verify_nonce();
+
+        $new_options = [];
 
         $data = json_decode(file_get_contents('php://input'));
 
@@ -200,8 +220,8 @@ class RapidLoad_Optimizer
         $result = $data->data;
         $options = isset($_REQUEST['options']) ? $_REQUEST['options'] : [];
 
-        if(!isset(self::$options['unused-javascript-files'])){
-            self::$options['unused-javascript-files'] = [];
+        if(!isset($new_options['unused-javascript-files'])){
+            $new_options['unused-javascript-files'] = [];
         }
 
         if(isset($result->audits) && is_array($result->audits)){
@@ -216,12 +236,12 @@ class RapidLoad_Optimizer
                                 case 'checkbox' :{
                                     if(isset($input->value) && isset($input->key) && $input->value){
                                         if($input->key == "uucss_load_js_method"){
-                                            self::$options[$input->key] = "defer";
+                                            $new_options[$input->key] = "defer";
                                         }else{
-                                            self::$options[$input->key] = "1";
+                                            $new_options[$input->key] = "1";
                                         }
-                                    }else if(isset(self::$options[$input->key])){
-                                        unset(self::$options[$input->key]);
+                                    }else if(isset($new_options[$input->key])){
+                                        unset($new_options[$input->key]);
                                     }
                                     break;
                                 }
@@ -231,9 +251,9 @@ class RapidLoad_Optimizer
                                 case 'textarea' :
                                 case 'number' :{
                                     if(isset($input->value) && isset($input->key)){
-                                        self::$options[$input->key] = $input->value;
-                                    }else if(isset(self::$options[$input->key])){
-                                        unset(self::$options[$input->key]);
+                                        $new_options[$input->key] = $input->value;
+                                    }else if(isset($new_options[$input->key])){
+                                        unset($new_options[$input->key]);
                                     }
                                     break;
                                 }
@@ -256,15 +276,15 @@ class RapidLoad_Optimizer
 
                             if(isset($item->url)){
 
-                                $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+                                $key = array_search($item->url, array_column($new_options['unused-javascript-files'], 'url'));
 
                                 if(isset($key) && is_numeric($key)){
 
-                                    self::$options['unused-javascript-files'][$key]['pattern'] = $item->pattern;
-                                    self::$options['unused-javascript-files'][$key]['action'] = $item->action;
+                                    $new_options['unused-javascript-files'][$key]['pattern'] = $item->pattern;
+                                    $new_options['unused-javascript-files'][$key]['action'] = $item->action;
 
                                 }else{
-                                    self::$options['unused-javascript-files'][] = [
+                                    $new_options['unused-javascript-files'][] = [
                                         'url' => $item->url,
                                         'pattern' => $item->pattern,
                                         'action' => $item->action
@@ -284,45 +304,53 @@ class RapidLoad_Optimizer
         if(isset($options['unused-javascript-files']) && !empty($options['unused-javascript-files'])){
             foreach ($options['unused-javascript-files'] as $option){
 
-                $key = array_search($option['url'],array_column(self::$options['unused-javascript-files'], 'url'));
+                $key = array_search($option['url'],array_column($new_options['unused-javascript-files'], 'url'));
 
                 if(isset($key) && is_numeric($key)){
-                    self::$options['unused-javascript-files'][$key]['pattern'] = $option['pattern'];
-                    self::$options['unused-javascript-files'][$key]['action'] = $option['action'];
+                    $new_options['unused-javascript-files'][$key]['pattern'] = $option['pattern'];
+                    $new_options['unused-javascript-files'][$key]['action'] = $option['action'];
                 }
 
             }
         }
 
-        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
-
-        $this->associate_domain(false);
-
-        if(isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] || isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats']){
-            self::$options['uucss_enable_image_delivery'] = "1";
+        if(isset($new_options['uucss_lazy_load_images']) && $new_options['uucss_lazy_load_images'] || isset($new_options['uucss_support_next_gen_formats']) && $new_options['uucss_support_next_gen_formats']){
+            $new_options['uucss_enable_image_delivery'] = "1";
         }else{
-            unset(self::$options['uucss_enable_image_delivery']);
+            unset($new_options['uucss_enable_image_delivery']);
         }
 
-        if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
-            self::$options['uucss_enable_font_optimization'] = "1";
+        if(isset($new_options['uucss_self_host_google_fonts']) && $new_options['uucss_self_host_google_fonts'] == "1"){
+            $new_options['uucss_enable_font_optimization'] = "1";
         }else{
             unset(self::$options['uucss_self_host_google_fonts']);
         }
 
-        if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] ||
-                isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] ||
-                isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] ){
-            self::$options['uucss_enable_css'] = "1";
+        if(isset($new_options['uucss_minify']) && $new_options['uucss_minify'] ||
+            isset($new_options['uucss_enable_cpcss']) && $new_options['uucss_enable_cpcss'] ||
+            isset($new_options['uucss_enable_uucss']) && $new_options['uucss_enable_uucss'] ){
+            $new_options['uucss_enable_css'] = "1";
         }else{
             unset(self::$options['uucss_enable_css']);
         }
 
-        if(isset(self::$options['minify_js']) && self::$options['minify_js'] || isset(self::$options['uucss_load_js_method']) && self::$options['uucss_load_js_method'] == "defer"){
-            self::$options['uucss_enable_javascript'] = "1";
+        if(isset($new_options['minify_js']) && $new_options['minify_js'] || isset($new_options['uucss_load_js_method']) && $new_options['uucss_load_js_method'] == "defer"){
+            $new_options['uucss_enable_javascript'] = "1";
         }else{
-            unset(self::$options['uucss_enable_javascript']);
+            unset($new_options['uucss_enable_javascript']);
         }
+
+        foreach ($new_options as $key => $value){
+            if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
+                unset($new_options[$key]);
+            }
+        }
+
+        self::$options = $new_options;
+
+        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
+
+        $this->associate_domain(false);
 
         self::post_optimizer_function($result);
 

@@ -258,6 +258,10 @@ class RapidLoad_Job{
 
         global $wpdb;
 
+        if(!isset($this->id)){
+            return [];
+        }
+
         $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " LIMIT "  . $limit , OBJECT);
 
         foreach ($data as $d){
@@ -265,6 +269,22 @@ class RapidLoad_Job{
         }
 
         return $data;
+    }
+
+    function get_last_optimization_revision_hash($strategy){
+        global $wpdb;
+
+        if(!isset($this->id)){
+            return (object)[];
+        }
+
+        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY created_at DESC LIMIT 1 ");
+
+        if(!$data){
+            return false;
+        }else{
+            return hash('md5',$data);
+        }
     }
 
     function get_revision_count($strategy){
