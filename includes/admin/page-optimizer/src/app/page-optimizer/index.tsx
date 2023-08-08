@@ -76,7 +76,7 @@ export default function PageOptimizer() {
     };
 
 
-    let results = data?.data.grouped[activeTab]?.sort((a, b) => a.score - b.score);
+    let results = data?.data.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
 
     if (!results) {
         results = [];
@@ -144,13 +144,13 @@ export default function PageOptimizer() {
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
                                             {results
-                                                ?.map((audit, index) => {
+                                                ?.map((audit: Audit, index: number) => {
 
                                                     return (
                                                         <div className='relative' key={audit.id}>
                                                             <div className='absolute -left-6 text-center top-4'>
                                                             <span
-                                                                className={`border-2 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'bg-zinc-300' : 'bg-transparent'}`}></span>
+                                                                className={`border-2 dark:border-zinc-600 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
                                                                 {(results && (index !== (results.length - 1))) && (
                                                                     <span
                                                                         style={{
