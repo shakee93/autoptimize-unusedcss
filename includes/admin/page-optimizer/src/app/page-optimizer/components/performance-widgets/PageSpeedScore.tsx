@@ -31,7 +31,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     const progressBarColorCode = () => {
         const performance = data?.data.performance?? 0;
-        console.log("Score",performance)
 
         if (performance < 50) {
             setProgressbarColor('#FF3333');
@@ -90,67 +89,74 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     return (
 
         <div>
-            <div className="w-[285px] h-[325px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
+            <div className="mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
-                    <div className='mt-6'>
-                        {loading || on ? (
-                            <Skeleton className="w-44 h-44 rounded-full"/>
-                        ) : (
-                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                pathColor: progressbarColor,
-                                pathTransitionDuration: .5,
-                            })} value={performance}>
+                    <div className='flex gap-6'>
+                        <div className='flex flex-col gap-3 px-4 items-center'>
+
+                            <div className='mt-6'>
+                                {loading || on ? (
+                                    <Skeleton className="w-44 h-44 rounded-full"/>
+                                ) : (
+                                    <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
+                                        pathColor: progressbarColor,
+                                        pathTransitionDuration: .5,
+                                    })} value={performance}>
                                 <span
                                     style={{
                                         opacity: calculateOpacity()
                                     }}
-                                    className='text-5xl transition-all ease-out duration-300 absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
-                                >{performance}%</span>
-                            </CircularProgressbarWithChildren>
-                        )}
+                                    className='text-5xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
+                                >{performance}</span>
+                                    </CircularProgressbarWithChildren>
+                                )}
+                            </div>
+                        </div>
                     </div>
-
 
                     <div className="flex mb-2 mt-3">
                         <PerformanceIcons icon={performanceIcon} className={'mt-2 mr-1'}/>
                         <h1 className="text-base font-bold">Performance</h1>
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="flex">
-                            <PerformanceIcons icon={'fail'} className={'mt-2 mr-1'}/>
-                            <p className="text-xm font-normal">0-49</p>
+                    <div className="flex justify-around text-xm gap-4 font-normal w-full mb-5">
+                        <div className="flex items-center gap-1">
+                            <PerformanceIcons icon={'fail'}/>
+                            0-49
                         </div>
-                        <div className="flex">
-                            <PerformanceIcons icon={'average'} className={'mt-2 mr-1'}/>
-                            <p className="text-xm font-normal">50-89</p>
+                        <div className="flex items-center gap-1">
+                            <PerformanceIcons icon={'average'}/>
+                            50-89
                         </div>
-                        <div className="flex">
-                            <PerformanceIcons icon={'pass'} className={'mt-2 mr-1'}/>
-                            <p className="text-xm font-normal">89-100</p>
+                        <div className="flex items-center gap-1">
+                            <PerformanceIcons icon={'pass'}/>
+                            89-100
                         </div>
                     </div>
             
                 </div>
             </div>
-            {/*<div className="w-[285px] h-[195px] mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">*/}
-            {/*    <div className="p-5 grid grid-cols-3 gap-3">*/}
-            {/*        {pagespeed?.metrics.map((data, index) => (*/}
-            {/*        <div className={'justify-center grid'}>*/}
-            {/*            <div className="flex">*/}
-            {/*                <p className="text-sm font-medium mr-2 mt-[1px]">{data.title}</p>*/}
-            {/*                <span*/}
-            {/*                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>*/}
-            {/*                    <PerformanceIcons icon={data.icon }/>*/}
-            {/*                </span>*/}
-            {/*            </div>*/}
-            {/*            <p className="text-2xl font-medium text-red">{data.data.performance}</p>*/}
-            {/*        </div>*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            <div className="mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
+                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                    {data?.data.metrics.map((s, index) => (
+
+                        <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
+                            <div className="flex">
+                                <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
+                                    <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
+                                    <div><span
+                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <PerformanceIcons icon={s.icon}/>
+                            </span></div>
+                                </div>
+                            </div>
+                            <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
             
-            <div onClick={handleCoreWebClick} className="w-[285px] drop-shadow-sm rounded-xl border border-gray-200 bg-white ">
+            <div onClick={handleCoreWebClick} className="drop-shadow-sm rounded-xl border border-gray-200 bg-white ">
                 <div className={`flex p-5 pl-6 border-b-[1px] border-gray-200 cursor-pointer`}>
                     <div>
                         <p className="text-[16px] font-medium text-black">Core Web Vitals (28 days)</p>
@@ -160,24 +166,29 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                     </div>
                 </div>
-                <div className={`${isCoreWebClicked ? 'visible h-[180px]' : 'invisible h-[0px]'}`}>
-                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    {data?.data.metrics.map((s, index) => (
+                {isCoreWebClicked && (
+                    <div>
+                        <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                            {data?.data.metrics.map((s, index) => (
 
-                    <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                        <div className="flex">
-                            <p className="text-xs font-medium mr-[8px] mt-[1px]">{<FirstLettersComponent text={s.title} />}</p>
-                            <span
-                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
+                                <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
+                                    <div className="flex">
+                                        <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
+                                            <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
+                                            <div><span
+                                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200`}>
                                 <PerformanceIcons icon={s.icon}/>
-                            </span>
+                            </span></div>
+                                        </div>
+                                    </div>
+                                    <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
+                                </div>
+                            ))}
                         </div>
-                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
-                    </div>
-                    ))}
-                </div>
 
-                </div>
+                    </div>
+                )}
+
             
             </div>
         </div>
