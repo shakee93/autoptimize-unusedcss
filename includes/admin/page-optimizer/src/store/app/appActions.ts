@@ -7,11 +7,10 @@ import {
     CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS,
+    FETCH_DATA_SUCCESS, RootState,
     UPDATE_SETTINGS
 } from "./appTypes";
 import {isEqual} from 'underscore';
-import {RootState} from "../reducers";
 
 
 const transformData = (data: any) => {

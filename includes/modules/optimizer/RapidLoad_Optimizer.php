@@ -32,6 +32,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
+        add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
     }
 
     public static function   pre_optimizer_function(){
@@ -197,7 +198,7 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings(){
 
-        self::verify_nonce();
+//        self::verify_nonce();
 
         $new_options = [];
 

@@ -12,6 +12,7 @@ import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 
 import {fetchData} from "../../../store/app/appActions";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
+import axios from "axios";
 
 interface FooterProps {
     url: string,
@@ -25,31 +26,40 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading } = useSelector( optimizerData)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const submitSettings = (e: MouseEvent<HTMLButtonElement>) => {
+    const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
         // access the updated data and settings from the store
         // console.log(data, settings);
         // console.log(data)
 
         let req_url = "";
-
+        let query = '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport;
         if (options?.ajax_url) {
-            req_url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport;
-            }
+            req_url = options.ajax_url + query;
+        } else {
+            req_url = "http://rapidload.local/wp-admin/admin-ajax.php" + query;
+        }
+
+
+        // let datax = await axios.post(req_url, data);
+
+        // fetch(req_url, {
+        //     method: 'POST',
+        //     body: JSON.stringify(data),
+        // })
+        //     .then((response) => response.json())
+        //     .then((responseData) => {
+        //         console.log(responseData);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
 
         fetch(req_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((responseData) => {
-                console.log(responseData);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            "body": JSON.stringify(data),
+            "method": "POST",
+            // "mode": "no-cors",
+            "credentials": "omit"
+        });
 
     }
 
@@ -81,8 +91,6 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           </div>
                       </div>
                   )}
-
-
                   <div>
                       <span className='flex text-sm gap-1.5 items-center' >
                           {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />

@@ -1,12 +1,16 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
+import { vitePlugin as utwm } from 'unplugin-tailwindcss-mangle'
 
 export default defineConfig((configEnv) => {
   const isDevelopment = configEnv.mode === "development";
 
   return {
-    plugins: [react()],
+    plugins: [react(), utwm({
+      classSetOutput: true,
+      classMapOutput: true
+    })],
     resolve: {
       alias: {
         app: resolve(__dirname, "src", "app"),
@@ -27,7 +31,8 @@ export default defineConfig((configEnv) => {
     },
     css: {
       modules: {
-        generateScopedName: isDevelopment
+        hashPrefix: 'rl---',
+        generateScopedName: true
           ? "[name]__[local]__[hash:base64:5]"
           : "[hash:base64:5]",
       },
