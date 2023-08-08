@@ -35,7 +35,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
         if (options?.ajax_url) {
             req_url = options.ajax_url + '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport;
-        }
+            }
 
         fetch(req_url, {
             method: 'POST',
