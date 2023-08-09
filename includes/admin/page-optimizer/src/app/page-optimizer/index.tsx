@@ -106,13 +106,18 @@ export default function PageOptimizer() {
         });
     };
 
+    let url = 'https://rapidload.io/?no_rapidload';
+
+    if (options?.optimizer_url) {
+        url = options.optimizer_url
+    }
 
     return (
 
         <div
             className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]")}>
             <div className='overflow-auto w-full'>
-                <Header url={options.optimizer_url}/>
+                <Header url={url}/>
                 {!loading ? (
                     <section className="container grid grid-cols-12 gap-8 pt-4">
                         {togglePerformance && (

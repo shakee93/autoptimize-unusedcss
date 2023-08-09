@@ -13,27 +13,25 @@ import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {changeReport, fetchData} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
+import {Button} from "components/ui/button";
+import AppButton from "components/ui/app-button";
+import {cn} from "lib/utils";
 
 
-const Header = ({ url = null}: { url: string|null}) => {
+const Header = ({ url }: { url: string}) => {
 
     const { setShowOptimizer , options } = useOptimizerContext()
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const {data} = useSelector(optimizerData);
+    const {data, loading} = useSelector(optimizerData);
+
     useEffect(() => {
         
         if (data?.success) {
             return;
         }
 
-        let url = 'https://rapidload.io/?no_rapidload';
-
-        if (options?.optimizer_url) {
-            url = options.optimizer_url
-        }
-
-        dispatch(fetchData(options, url, false));
+        dispatch(fetchData(options, url, false))
 
     }, [dispatch, activeReport]); 
     
@@ -54,7 +52,16 @@ const Header = ({ url = null}: { url: string|null}) => {
                             <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>
-
+                    <div>
+                        <TooltipText text='Analyze the page'>
+                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='rounded-full border-none' dark={false}>
+                                <ArrowPathIcon className={cn(
+                                    'w-5',
+                                    loading ? 'animate-spin': ''
+                                )}/>
+                            </AppButton>
+                        </TooltipText>
+                    </div>
                 </div>
             </div>
 
