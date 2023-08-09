@@ -1,20 +1,17 @@
 
 
-interface OptimizerResults {
-    data : {
-        performance: number
-        audits: Audit[]
-        metrics: Metric[],
-        grouped: {
-            passed_audits: Audit[],
-            opportunities: Audit[],
-            diagnostics: Audit[],
-        }
-    },
-    success: boolean
+interface OptimizerResults  {
+    performance: number
+    audits: Audit[]
+    metrics: Metric[],
+    grouped: {
+        passed_audits: Audit[],
+        opportunities: Audit[],
+        diagnostics: Audit[],
+    }
 }
 
-type AuditTypes = keyof OptimizerResults["data"]['grouped']
+type AuditTypes = keyof OptimizerResults['grouped']
 
 interface Audit {
     id: string;
@@ -51,6 +48,8 @@ interface AuditFile {
     totalBytes: number;
     url: string;
     wastedPercent?: number;
+    action: string
+    pattern: string
 }
 
 interface AuditSetting {

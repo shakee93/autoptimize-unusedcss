@@ -1,13 +1,13 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
-import axios, {AxiosResponse} from 'axios';
 import {
     AppAction,
-    AppState,
     CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS, RootState,
+    FETCH_DATA_SUCCESS,
+    RootState,
+    UPDATE_FILE_ACTION,
     UPDATE_SETTINGS
 } from "./appTypes";
 import {isEqual} from 'underscore';
@@ -106,7 +106,7 @@ export const updateSettings = (
             return;
         }
 
-        newData.data.audits = newData.data.audits.map((a: Audit) => {
+        newData.audits = newData.audits.map((a: Audit) => {
 
            a.settings = a.settings.map(s => {
 
@@ -135,6 +135,22 @@ export const changeReport = (
         dispatch({
             type: CHANGE_REPORT_TYPE,
             reportType: type
+        })
+    }
+}
+
+export const updateFileAction = (
+    audit: Audit,
+    file: string,
+    value: any,
+):  ThunkAction<void, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+        dispatch({
+            type: UPDATE_FILE_ACTION, payload : {
+                audit: audit,
+                file: file,
+                value: value
+            }
         })
     }
 }

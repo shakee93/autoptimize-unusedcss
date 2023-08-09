@@ -4,7 +4,7 @@ import {
     CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS,
+    FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
     UPDATE_SETTINGS
 } from "./appTypes";
 
@@ -27,6 +27,7 @@ const initialState: AppState = {
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
+
     switch (action.type) {
         case FETCH_DATA_REQUEST:
             return {
@@ -36,8 +37,6 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 }
             };
         case FETCH_DATA_SUCCESS:
-            
-            console.log(action.payload);
             return {
                 ...state,
                 [state.activeReport] : {
@@ -67,6 +66,34 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 activeReport: action.reportType
+            };
+        case UPDATE_FILE_ACTION:
+
+            const { payload } = action;
+            const activeReport = state[state.activeReport];
+
+            if (activeReport.data) {
+                activeReport.data.audits = activeReport.data.audits.map((audit) => {
+                    if (payload.audit.id === audit.id) {
+                        audit.files.items = audit.files.items.map((item) => {
+                            if (item.url && item.url === payload.file) {
+                                return {
+                                    ...item,
+                                    action: payload.value,
+                                };
+                            }
+                            return item;
+                        });
+                    }
+                    return audit;
+                });
+            }
+
+            return {
+                ...state,
+                [state.activeReport]: {
+                    ...activeReport,
+                },
             };
         default:
             return state;

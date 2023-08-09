@@ -101,9 +101,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 <div className='flex gap-4 px-8 text-zinc-200'>
                     <Popover>
                         <PopoverTrigger asChild={false}>
-                            <TooltipText text='Revisions'>
-                                <History className='w-5 text-zinc-600' />
-                            </TooltipText>
+                            <History className='w-5 text-zinc-600' />
                         </PopoverTrigger>
                         <PopoverContent>
                             <ul>
