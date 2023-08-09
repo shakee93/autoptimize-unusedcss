@@ -43,7 +43,7 @@ const transformData = (data: any) => {
         settings: initiateSettings(data)
     };
 
-    console.log(_data);
+    // console.log(_data);
 
     return _data
 }
@@ -56,10 +56,7 @@ const initiateSettings = (data: any) => {
 
     const flattenedSettings = settings.flat();
 
-    // Use Set to remove duplicates based on a custom key
-    // @ts-ignore
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str) => JSON.parse(str));
-    console.log("unique" , uniqueSettings)
     return uniqueSettings;
 }
 
@@ -69,8 +66,8 @@ export const fetchData = (url : string): ThunkAction<void, AppState, unknown, An
         try {
             dispatch({ type: FETCH_DATA_REQUEST });
 
-            const response: AxiosResponse<any> = await axios.get(url);
-            console.log("Fetch Data" , response.data)
+            console.log(url);
+            const response: AxiosResponse<any> = await axios.post(url, []);
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
         } catch (error) {
             if (error instanceof Error) {
@@ -93,7 +90,6 @@ export const updateSettings = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
-        console.log("currentState" , currentState)
 
         // @ts-ignore
         let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {

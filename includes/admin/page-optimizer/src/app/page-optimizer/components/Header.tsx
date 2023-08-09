@@ -27,7 +27,7 @@ const Header = ({ url = null}: { url: string|null}) => {
             return;
         }
 
-        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io?no_rapidload&strategy=' + activeReport;
+        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io/?no_rapidload&strategy=' + activeReport;
 
         if (options?.ajax_url) {
             url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url + '&strategy=' + activeReport

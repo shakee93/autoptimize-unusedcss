@@ -94,24 +94,6 @@ class RapidLoad_Optimizer
 
     public function fetch_page_speed(){
 
-        // Allow from any origin
-        if (isset($_SERVER['HTTP_ORIGIN'])) {
-            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-
-        }
-
-        // Access-Control headers are received during OPTIONS requests
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-                // May also be using PUT, PATCH, HEAD etc
-                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-            exit(0);
-        }
-
         if(!isset(self::$job) || !isset(self::$strategy)){
             wp_send_json_error();
         }
@@ -196,15 +178,15 @@ class RapidLoad_Optimizer
 
                         }
                     }else{
-                        error_log($audit->id);
-                        error_log(json_encode($item));
+//                        error_log($audit->id);
+//                        error_log(json_encode($item));
                     }
                 }
             }
 
         }
 
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         wp_send_json_success([
             'page_speed' => $result,
@@ -216,8 +198,6 @@ class RapidLoad_Optimizer
     }
 
     public function optimizer_update_settings(){
-
-//        self::verify_nonce();
 
         $new_options = [
             'individual-file-actions' => []
@@ -352,7 +332,7 @@ class RapidLoad_Optimizer
 
         self::$options = $new_options;
 
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 

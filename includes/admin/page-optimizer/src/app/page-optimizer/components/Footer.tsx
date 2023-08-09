@@ -1,6 +1,6 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
-import Button from "components/ui/button";
-import {Redo2, SaveIcon, Undo2} from "lucide-react";
+import AppButton from "components/ui/app-button";
+import {History, Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
@@ -12,7 +12,19 @@ import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 
 import {fetchData} from "../../../store/app/appActions";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
+import {ArrowPathIcon} from "@heroicons/react/24/solid";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface FooterProps {
     url: string,
@@ -25,14 +37,14 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const { setShowOptimizer, options } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading } = useSelector( optimizerData)
+    const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const [reload, setReload] = useState<boolean>(false)
     const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
-        // access the updated data and settings from the store
-        // console.log(data, settings);
-        // console.log(data)
+        setSavingData(true)
 
         let req_url = "";
-        let query = '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport;
+        let query = '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport + '&reload=' + reload;
         if (options?.ajax_url) {
             req_url = options.ajax_url + query;
         } else {
@@ -40,24 +52,31 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         }
 
 
-        // let datax = await axios.post(req_url, data);
+        try {
+            const response: AxiosResponse = await axios.post(req_url, data);
 
-        // fetch(req_url, {
-        //     method: 'POST',
-        //     body: JSON.stringify(data),
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseData) => {
-        //         console.log(responseData);
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
+
+            // Handle success
+            console.log('Response:', response.data);
+            // You can put additional code here to process the response
+        } catch (error: any) {
+            // Handle error
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.log('Server responded with:', error.response.data);
+                console.log('Status code:', error.response.status);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log('No response received:', error.request);
+            } else {
+                // Something happened in setting up the request that triggered an error
+                console.log('Error:', error.message);
+            }
+        }
 
         fetch(req_url, {
             "body": JSON.stringify(data),
             "method": "POST",
-            // "mode": "no-cors",
             "credentials": "omit"
         });
 
@@ -65,6 +84,10 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     if (loading) {
         return  <></>
+    }
+
+    function reloadReport() {
+
     }
 
     return (
@@ -102,6 +125,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
            </div>
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-zinc-200'>
+                    <TooltipText text='Revisions'>
+                        <History className='w-5 text-zinc-600' />
+                    </TooltipText>
                     <TooltipText text='Switch theme'>
                         <ThemeSwitcher></ThemeSwitcher>
                     </TooltipText>
@@ -111,10 +137,32 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <TooltipText text='Redo'>
                         <Redo2 className='w-5' />
                     </TooltipText>
-
+                    {/*<Popover>*/}
+                    {/*    <PopoverTrigger>Open</PopoverTrigger>*/}
+                    {/*    <PopoverContent>Place content for the popover here.</PopoverContent>*/}
+                    {/*</Popover>*/}
                 </div>
-                <Button onClick={e => submitSettings(e)} className='text-sm'><SaveIcon className='w-5'/> Save Changes</Button>
-                <Button className='text-sm' onClick={ e => setShowOptimizer(false)} dark={false}>Close</Button>
+
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <AppButton className='text-sm'><SaveIcon className='w-5'/> Save Changes</AppButton>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Save Changes?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
+                            <AlertDialogCancel>Discard</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <AppButton onClick={(e) => reloadReport()} className='text-sm'><ArrowPathIcon className='w-5'/>Analyze</AppButton>
+                <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
             </div>
         </footer>
     );

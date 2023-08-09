@@ -15,7 +15,7 @@ import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
 import {useDispatch} from "react-redux";
 import {updateSettings} from "../../../../store/app/appActions";
 
-import Button from "@/components/ui/button"
+import AppButton from "components/ui/app-button"
 
 import {
     Dialog,
@@ -113,7 +113,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button className='text-sm'>Save changes</Button>
+                            <AppButton className='text-sm'>Save changes</AppButton>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
