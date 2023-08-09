@@ -90,6 +90,11 @@ class RapidLoad_Optimizer
         $optimization->save();
 
         self::$job->save(!self::$job->exist());
+
+        if(isset(self::$options['uucss_enable_cache'])){
+            self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
     }
 
     public function fetch_page_speed(){
