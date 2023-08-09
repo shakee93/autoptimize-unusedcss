@@ -91,7 +91,8 @@ class RapidLoad_Enqueue {
                 'dom' => $dom,
                 'inject' => $inject,
                 'options' => $this->options,
-                'job' => $job
+                'job' => $job,
+                'strategy' => $this->is_mobile() ? 'mobile' : 'desktop'
             ]) ;
 
             if(isset($state['dom'])){

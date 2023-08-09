@@ -26,13 +26,40 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
-        self::pre_optimizer_function();
-
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
+
+        add_filter('rapidload/enqueue/preload/fonts', function ($urls, $job, $strategy){
+
+            $options = $strategy === "mobile" ? $job->get_mobile_options() : $job->get_desktop_options();
+
+            if(isset($options['individual-file-actions']) && isset($options['individual-file-actions']['font-display'])){
+
+                foreach ($options['individual-file-actions']['font-display'] as $value){
+
+                    if (isset($value->url) && filter_var($value->url, FILTER_VALIDATE_URL) !== false) {
+
+                        $path_parts = pathinfo($value->url);
+
+                        $file_extension = strtolower($path_parts['extension']);
+
+                        if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
+
+                            if(isset($value->action) && $value->action == "preload"){
+                                $urls[] = $value->url;
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }, 10, 3);
     }
 
     public static function   pre_optimizer_function(){
@@ -116,6 +143,8 @@ class RapidLoad_Optimizer
 
             exit(0);
         }
+
+        self::pre_optimizer_function();
 
         if(!isset(self::$job) || !isset(self::$strategy)){
             wp_send_json_error();
@@ -241,6 +270,8 @@ class RapidLoad_Optimizer
         if(!isset(self::$options)){
             wp_send_json_error('not set options');
         }
+
+        self::pre_optimizer_function();
 
         $result = $data->data;
         $options = isset($_REQUEST['individual-file-actions']) ? $_REQUEST['individual-file-actions'] : [];
