@@ -153,11 +153,15 @@ export default function PageOptimizer() {
 
                                                     return (
                                                         <div className='relative' key={audit.id}>
-                                                            <div className='absolute -left-6 text-center top-1/2 -translate-y-1/2'>
+                                                            <div className={cn(
+                                                                'absolute -left-6 text-center top-[17px]',
+                                                                // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
+                                                            )}>
                                                             <span
                                                                 className={`border-2 dark:border-zinc-600 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
                                                                 {(results && (index !== (results.length - 1))) && (
                                                                     <span
+                                                                        data-h={componentHeights[index]}
                                                                         style={{
                                                                             height: componentHeights[index]
                                                                         }}
