@@ -9,13 +9,15 @@ export interface AppState {
         data?: OptimizerResults | null;
         error?: string | null;
         loading: boolean
-        settings?: AuditSetting[]
+        settings?: AuditSetting[],
+        revisions: any
     },
     desktop: {
         data?: OptimizerResults | null;
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[]
+        revisions: any
     }
 }
 

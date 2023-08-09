@@ -14,13 +14,15 @@ const initialState: AppState = {
         data: null,
         error: null,
         loading: true,
-        settings: []
+        settings: [],
+        revisions: []
     },
     desktop: {
         data: null,
         error: null,
         loading: true,
-        settings: []
+        settings: [],
+        revisions: []
     }
 };
 
@@ -34,13 +36,16 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 }
             };
         case FETCH_DATA_SUCCESS:
+            
+            console.log(action.payload);
             return {
                 ...state,
                 [state.activeReport] : {
-                    data: action.payload,
+                    data: action.payload.data,
                     error: null,
                     loading: false,
-                    settings: action.payload.settings
+                    settings: action.payload.settings,
+                    revisions: action.payload.revisions
                 }
             };
         case FETCH_DATA_FAILURE:

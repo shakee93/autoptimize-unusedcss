@@ -76,7 +76,7 @@ export default function PageOptimizer() {
     };
 
 
-    let results = data?.data.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
+    let results = data?.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
 
     if (!results) {
         results = [];
@@ -145,7 +145,7 @@ export default function PageOptimizer() {
                             </div>
                             <div className="audits pt-4 flex">
 
-                                {(data?.data && data?.data.audits?.length > 0) && (
+                                {(data && data?.audits?.length > 0) && (
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
                                             {results

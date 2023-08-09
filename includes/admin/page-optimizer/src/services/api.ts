@@ -38,8 +38,8 @@ class ApiService {
                         new: reload,
                     }
                 });
-
-            return response.data;
+            
+            return response;
         } catch (error) {
             throw error;
         }

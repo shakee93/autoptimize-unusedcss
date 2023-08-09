@@ -16,44 +16,32 @@ import ApiService from "../../services/api";
 
 const transformData = (data: any) => {
     
-    // temp mapping
-    data.data = data.data.page_speed
-
-    data.data.performance =  data.data.performance ? parseFloat(data?.data?.performance.toFixed(0)) : 0
-
-    if (data.data.screenShots) {
-        delete data.data.screenShots
-    }
-
-    if (data.data.final_screenShot) {
-        delete data.data.final_screenShot
-    }
-
-    let audits : Audit[] = data.data.audits
+    let audits : Audit[] = data.data.page_speed.audits
 
     let _data = {
         data: {
-            ...data.data,
+            performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
+            ...data.data.page_speed,
             grouped : {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit'),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
                 diagnostics: audits.filter(audit => audit.type === "diagnostics"),
-            }
+            },
         },
         success: data.success,
-        settings: initiateSettings(data)
+        settings: initiateSettings(audits),
+        revisions: data.data.revisions,
+        individual_file_actions: data.data['individual-file-actions']
     };
-
-    // console.log(_data);
 
     return _data
 }
 
 
 // this grabs the data and populates a settings object with values
-const initiateSettings = (data: any) => {
+const initiateSettings = (audits: Audit[]) => {
 
-    let settings = data.data.audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
+    let settings = audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
 
     const flattenedSettings = settings.flat();
 
@@ -63,21 +51,23 @@ const initiateSettings = (data: any) => {
 
 export const fetchData = (options: WordPressOptions, url : string, reload: boolean): ThunkAction<void, RootState, unknown, AnyAction> => {
 
+    const api = new ApiService(options);
+
+
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             dispatch({ type: FETCH_DATA_REQUEST });
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
 
-            const api = new ApiService(options);
 
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
                 reload
             )
-            
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
+
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: FETCH_DATA_FAILURE, error: error.message });

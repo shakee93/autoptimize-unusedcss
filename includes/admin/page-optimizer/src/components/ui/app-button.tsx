@@ -4,7 +4,7 @@ import {cn} from "lib/utils";
 const AppButton = ({ children, dark = true, onClick, className}: {
     children?: ReactNode,
     dark?: boolean,
-    onClick?: (e: MouseEvent<HTMLButtonElement>) => void
+    onClick?: (e: MouseEvent<HTMLDivElement>) => void
     className?: string
 }) => {
 
@@ -15,15 +15,15 @@ const AppButton = ({ children, dark = true, onClick, className}: {
     }
 
     return (
-        <button
+        <div
             onClick={(e) => onClick && onClick(e)}
             className={cn(
-                `min-h-[40px] flex transition-colors px-4 py-2 rounded-lg items-center gap-2`,
+                `cursor-pointer min-h-[40px] flex transition-colors px-4 py-2 rounded-lg items-center gap-2`,
                 styles,
                 className
             )}>
             {children}
-        </button>
+        </div>
     );
 }
 

@@ -26,6 +26,12 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+
 interface FooterProps {
     url: string,
     togglePerformance: boolean
@@ -76,8 +82,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           <div className='w-6'>
                               <CircularProgressbarWithChildren styles={buildStyles({
                                   pathColor: '#0bb42f'
-                              })} value={data?.data.performance ? data.data.performance : 0} strokeWidth={12}>
-                                  <span className='text-xxs text-zinc-500'> {data?.data.performance ? data.data.performance : 0}</span>
+                              })} value={data?.performance ? data.performance : 0} strokeWidth={12}>
+                                  <span className='text-xxs text-zinc-500'> {data?.performance ? data.performance : 0}</span>
                               </CircularProgressbarWithChildren>
                           </div>
                       </div>
@@ -93,9 +99,20 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
            </div>
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-zinc-200'>
-                    <TooltipText text='Revisions'>
-                        <History className='w-5 text-zinc-600' />
-                    </TooltipText>
+                    <Popover>
+                        <PopoverTrigger asChild={false}>
+                            <TooltipText text='Revisions'>
+                                <History className='w-5 text-zinc-600' />
+                            </TooltipText>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <ul>
+                                {JSON.stringify(data)}
+                                <li></li>
+                            </ul>
+                        </PopoverContent>
+                    </Popover>
+
                     <TooltipText text='Switch theme'>
                         <ThemeSwitcher></ThemeSwitcher>
                     </TooltipText>
@@ -105,15 +122,12 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <TooltipText text='Redo'>
                         <Redo2 className='w-5' />
                     </TooltipText>
-                    {/*<Popover>*/}
-                    {/*    <PopoverTrigger>Open</PopoverTrigger>*/}
-                    {/*    <PopoverContent>Place content for the popover here.</PopoverContent>*/}
-                    {/*</Popover>*/}
+
                 </div>
 
                 <AlertDialog>
                     <AlertDialogTrigger>
-                        <AppButton className='text-sm'><SaveIcon className='w-5'/> Save Changes</AppButton>
+                        <AppButton className='text-sm'><SaveIcon className='w-5'/>Save Changes</AppButton>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
