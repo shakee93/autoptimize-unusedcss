@@ -11,6 +11,7 @@ import {
     UPDATE_SETTINGS
 } from "./appTypes";
 import {isEqual} from 'underscore';
+import ApiService from "../../services/api";
 
 
 const transformData = (data: any) => {
@@ -56,19 +57,27 @@ const initiateSettings = (data: any) => {
 
     const flattenedSettings = settings.flat();
 
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str) => JSON.parse(str));
+    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
     return uniqueSettings;
 }
 
-export const fetchData = (url : string): ThunkAction<void, AppState, unknown, AnyAction> => {
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean): ThunkAction<void, RootState, unknown, AnyAction> => {
 
-    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>) => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             dispatch({ type: FETCH_DATA_REQUEST });
+            const currentState = getState(); // Access the current state
+            const activeReport = currentState.app.activeReport;
 
-            console.log(url);
-            const response: AxiosResponse<any> = await axios.post(url, []);
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
+            const api = new ApiService(options);
+
+            const response = await api.fetchPageSpeed(
+                url,
+                activeReport,
+                reload
+            )
+            
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
@@ -131,8 +140,8 @@ export const updateSettings = (
 
 export const changeReport = (
     type: ReportType
-):  ThunkAction<void, AppState, unknown, AnyAction> => {
-    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState) => {
+):  ThunkAction<void, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         dispatch({
             type: CHANGE_REPORT_TYPE,
             reportType: type

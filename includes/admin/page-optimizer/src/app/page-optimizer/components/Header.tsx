@@ -18,7 +18,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 const Header = ({ url = null}: { url: string|null}) => {
 
     const { setShowOptimizer , options } = useOptimizerContext()
-    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data} = useSelector(optimizerData);
     useEffect(() => {
@@ -27,13 +27,13 @@ const Header = ({ url = null}: { url: string|null}) => {
             return;
         }
 
-        let url = 'http://rapidload.local/wp-admin/admin-ajax.php?action=fetch_page_speed&url=https://rapidload.io/?no_rapidload&strategy=' + activeReport;
+        let url = 'https://rapidload.io/?no_rapidload';
 
-        if (options?.ajax_url) {
-            url = options.ajax_url + '?action=fetch_page_speed&url=' + options.optimizer_url + '&strategy=' + activeReport
+        if (options?.optimizer_url) {
+            url = options.optimizer_url
         }
 
-        dispatch(fetchData(url));
+        dispatch(fetchData(options, url, false));
 
     }, [dispatch, activeReport]); 
     

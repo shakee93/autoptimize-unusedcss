@@ -1,4 +1,5 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
+import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
 import {History, Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
@@ -9,11 +10,10 @@ import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
-import {fetchData} from "../../../store/app/appActions";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
-import axios, {AxiosResponse} from "axios";
 import {ArrowPathIcon} from "@heroicons/react/24/solid";
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -43,42 +43,14 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
         setSavingData(true)
 
-        let req_url = "";
-        let query = '?action=optimizer_update_settings&nonce=' + options.nonce + '&url=' + url + '&strategy=' + activeReport + '&reload=' + reload;
-        if (options?.ajax_url) {
-            req_url = options.ajax_url + query;
-        } else {
-            req_url = "http://rapidload.local/wp-admin/admin-ajax.php" + query;
-        }
+        const api = new ApiService(options);
 
-
-        try {
-            const response: AxiosResponse = await axios.post(req_url, data);
-
-
-            // Handle success
-            console.log('Response:', response.data);
-            // You can put additional code here to process the response
-        } catch (error: any) {
-            // Handle error
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                console.log('Server responded with:', error.response.data);
-                console.log('Status code:', error.response.status);
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.log('No response received:', error.request);
-            } else {
-                // Something happened in setting up the request that triggered an error
-                console.log('Error:', error.message);
-            }
-        }
-
-        fetch(req_url, {
-            "body": JSON.stringify(data),
-            "method": "POST",
-            "credentials": "omit"
-        });
+        const res = await api.updateSettings(
+            url,
+            activeReport,
+            reload,
+            data
+        )
 
     }
 

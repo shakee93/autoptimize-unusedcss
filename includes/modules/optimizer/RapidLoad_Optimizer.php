@@ -98,9 +98,11 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
+        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
-        if(!$result || isset($_REQUEST['new'])){
+        if(!$result || $new){
 
             $api = new RapidLoad_Api();
 
