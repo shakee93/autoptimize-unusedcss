@@ -287,6 +287,22 @@ class RapidLoad_Job{
         }
     }
 
+    function get_last_optimization_revision($strategy){
+        global $wpdb;
+
+        if(!isset($this->id)){
+            return (object)[];
+        }
+
+        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY created_at DESC LIMIT 1 ");
+
+        if(!$data){
+            return false;
+        }else{
+            return unserialize($data);
+        }
+    }
+
     function get_revision_count($strategy){
 
         global $wpdb;

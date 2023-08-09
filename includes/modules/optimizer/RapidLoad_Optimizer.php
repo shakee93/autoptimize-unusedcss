@@ -112,18 +112,22 @@ class RapidLoad_Optimizer
             exit(0);
         }
 
-        $api = new RapidLoad_Api();
+        if(!isset(self::$job) || !isset(self::$strategy)){
+            wp_send_json_error();
+        }
 
-        $size = isset($_REQUEST['size']) && $_REQUEST['size'] == 'mobile';
-        $url = "https://viajaya.ec/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+        $result = self::$job->get_last_optimization_revision(self::$strategy);
 
-        $result = $api->post('page-speed', [
-            'url' => $url,
-            'mobile' => $size
-        ]);
+        if(!$result || isset($_REQUEST['new'])){
 
-        if(!isset(self::$options['unused-javascript-files'])){
-            self::$options['unused-javascript-files'] = [];
+            $api = new RapidLoad_Api();
+
+            $url = "https://viajaya.ec/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+
+            $result = $api->post('page-speed', [
+                'url' => $url,
+                'mobile' => self::$strategy
+            ]);
         }
 
         if(!isset($result->audits)){
@@ -161,36 +165,51 @@ class RapidLoad_Optimizer
                 }
             }
 
-            if($audit->id == "unused-javascript"){
+            if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                foreach ($audit->files->items as $item){
 
-                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
-                    foreach ($audit->files->items as $item){
+                    if(isset($item->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                            'unused-css-rules','legacy-javascript','font-display'])){
 
-                        if(isset(self::$options['unused-javascript-files']) && is_array(self::$options['unused-javascript-files']) && !empty(self::$options['unused-javascript-files'])){
+                        if(!isset(self::$options['individual-file-actions'])){
+                            self::$options['individual-file-actions'] = [];
+                        }
 
-                            $key = array_search($item->url, array_column(self::$options['unused-javascript-files'], 'url'));
+                        if(!isset(self::$options['individual-file-actions'][$audit->id])){
+                            self::$options['individual-file-actions'][$audit->id][] = [
+                                'url' => $item->url,
+                                'action' => '',
+                                'pattern' => '',
+                            ];
+                        }
+
+                        if(isset(self::$options['individual-file-actions'][$audit->id]) && is_array(self::$options['individual-file-actions'][$audit->id]) && !empty(self::$options['individual-file-actions'][$audit->id])){
+
+                            $key = array_search($item->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
 
                             if(isset($key) && is_numeric($key)){
 
-                                $item->pattern = self::$options['unused-javascript-files'][$key]['pattern'];
-                                $item->action = self::$options['unused-javascript-files'][$key]['action'];
+                                $item->pattern = self::$options['individual-file-actions'][$audit->id][$key]['pattern'];
+                                $item->action = self::$options['individual-file-actions'][$audit->id][$key]['action'];
 
                             }
 
                         }
+                    }else{
+                        error_log($audit->id);
+                        error_log(json_encode($item));
                     }
                 }
-
             }
 
         }
 
+        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+
         wp_send_json_success([
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
-            'options' => [
-                'unused-javascript-files' => isset(self::$options['unused-javascript-files']) ? self::$options['unused-javascript-files'] : []
-            ]
+            'individual-file-actions' => self::$options['individual-file-actions']
         ]);
 
 
@@ -200,7 +219,9 @@ class RapidLoad_Optimizer
 
 //        self::verify_nonce();
 
-        $new_options = [];
+        $new_options = [
+            'individual-file-actions' => []
+        ];
 
         $data = json_decode(file_get_contents('php://input'));
 
@@ -212,18 +233,12 @@ class RapidLoad_Optimizer
             wp_send_json_error('not set');
         }
 
-        self::pre_optimizer_function();
-
         if(!isset(self::$options)){
             wp_send_json_error('not set options');
         }
 
         $result = $data->data;
-        $options = isset($_REQUEST['options']) ? $_REQUEST['options'] : [];
-
-        if(!isset($new_options['unused-javascript-files'])){
-            $new_options['unused-javascript-files'] = [];
-        }
+        $options = isset($_REQUEST['individual-file-actions']) ? $_REQUEST['individual-file-actions'] : [];
 
         if(isset($result->audits) && is_array($result->audits)){
 
@@ -270,49 +285,37 @@ class RapidLoad_Optimizer
                     }
                 }
 
-                if($audit->id == "unused-javascript"){
+                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                    foreach ($audit->files->items as $item){
 
-                    if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
-                        foreach ($audit->files->items as $item){
+                        if(isset($item->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                                'unused-css-rules','legacy-javascript','font-display'])){
 
-                            if(isset($item->url)){
-
-                                $key = array_search($item->url, array_column($new_options['unused-javascript-files'], 'url'));
-
-                                if(isset($key) && is_numeric($key)){
-
-                                    $new_options['unused-javascript-files'][$key]['pattern'] = $item->pattern;
-                                    $new_options['unused-javascript-files'][$key]['action'] = $item->action;
-
-                                }else{
-                                    $new_options['unused-javascript-files'][] = [
-                                        'url' => $item->url,
-                                        'pattern' => $item->pattern,
-                                        'action' => $item->action
-                                    ];
-                                }
-
+                            if(!isset($new_options['individual-file-actions'][$audit->id])){
+                                $new_options['individual-file-actions'][$audit->id] = [];
                             }
+
+                            $key = array_search($item->url, array_column($new_options['individual-file-actions'][$audit->id], 'url'));
+
+                            if(isset($key) && is_numeric($key)){
+
+                                $new_options['individual-file-actions'][$audit->id][$key]['pattern'] = $item->pattern;
+                                $new_options['individual-file-actions'][$audit->id][$key]['action'] = $item->action;
+
+                            }else{
+                                $new_options['individual-file-actions'][$audit->id][] = [
+                                    'url' => $item->url,
+                                    'pattern' => isset($item->pattern) ? $item->pattern : null,
+                                    'action' => isset($item->action) ? $item->action : 'none'
+                                ];
+                            }
+
                         }
                     }
-
                 }
 
             }
 
-        }
-
-        if(isset($options['unused-javascript-files']) && !empty($options['unused-javascript-files'])){
-            foreach ($options['unused-javascript-files'] as $option){
-
-                $key = array_search($option['url'],array_column($new_options['unused-javascript-files'], 'url'));
-
-                if(isset($key) && is_numeric($key)){
-                    $new_options['unused-javascript-files'][$key]['pattern'] = $option['pattern'];
-                    $new_options['unused-javascript-files'][$key]['action'] = $option['action'];
-                }
-
-            }
         }
 
         if(isset($new_options['uucss_lazy_load_images']) && $new_options['uucss_lazy_load_images'] || isset($new_options['uucss_support_next_gen_formats']) && $new_options['uucss_support_next_gen_formats']){
@@ -348,6 +351,8 @@ class RapidLoad_Optimizer
         }
 
         self::$options = $new_options;
+
+        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
