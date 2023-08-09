@@ -13,6 +13,7 @@ import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from 
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {ArrowPathIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
+import { formatDistanceToNow } from 'date-fns';
 
 import {
     AlertDialog,
@@ -32,6 +33,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {useToast} from "components/ui/use-toast";
+import {JsonView} from "react-json-view-lite";
 
 interface FooterProps {
     url: string,
@@ -43,7 +45,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { setShowOptimizer, options } = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const { settings, data, loading } = useSelector( optimizerData)
+    const { settings, data, loading, revisions } = useSelector( optimizerData)
     const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
@@ -71,7 +73,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     if (loading) {
         return  <></>
     }
-
+    
     return (
         <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800/90 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
            <div className='flex gap-4 items-center'>
@@ -111,9 +113,15 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                         <PopoverTrigger asChild={false}>
                             <History className='w-5 text-zinc-600' />
                         </PopoverTrigger>
-                        <PopoverContent>
-                            <ul>
-                                {JSON.stringify(data)}
+                        <PopoverContent className='pt-0'>
+                            <div className='my-2 ml-4 font-medium '>Revisions</div>
+                            <ul className='border rounded-lg'>
+                                { revisions.map((rev: Revision, index: number) => {
+                                    return <li className={cn(
+                                        'px-4 py-3 text-sm hover:bg-zinc-100',
+                                        index === 0 ? 'border-none' : 'border-t'
+                                    )} key={rev.id}>{formatDistanceToNow(new Date(rev.created_at), { addSuffix: true })} - Perf: {rev.data.performance}</li>
+                                })}
                                 <li></li>
                             </ul>
                         </PopoverContent>

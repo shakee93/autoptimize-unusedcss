@@ -76,4 +76,11 @@ interface Metric {
 
 type ReportType = 'mobile' | 'desktop'
 
+interface Revision {
+    created_at: string
+    id: number
+    job_id: number
+    strategy: ReportType
+    data: OptimizerResults
+}
 

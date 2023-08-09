@@ -37,6 +37,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 }
             };
         case FETCH_DATA_SUCCESS:
+            
             return {
                 ...state,
                 [state.activeReport] : {
@@ -58,6 +59,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 [state.activeReport] : {
+                    ...state[state.activeReport],
                     settings: action.payload.settings,
                     data: action.payload.data
                 }
