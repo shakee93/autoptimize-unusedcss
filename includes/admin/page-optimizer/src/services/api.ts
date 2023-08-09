@@ -50,12 +50,13 @@ class ApiService {
 
         try {
             const response = await this.axios
-                .post( "", data, {
+                .post( "", {
+                    data
+                }, {
                     params: {
                         action: "optimizer_update_settings",
                         url: url,
                         strategy: activeReport,
-                        new: reload,
                     }
                 });
 

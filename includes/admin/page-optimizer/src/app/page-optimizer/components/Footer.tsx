@@ -5,14 +5,14 @@ import {History, Redo2, SaveIcon, Undo2} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import React, {useState, MouseEvent} from "react";
+import React, {useState, MouseEvent, useEffect} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
-import {ArrowPathIcon} from "@heroicons/react/24/solid";
+import {ArrowPathIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
 
 import {
     AlertDialog,
@@ -31,6 +31,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import {useToast} from "components/ui/use-toast";
 
 interface FooterProps {
     url: string,
@@ -46,6 +47,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
+    const { toast } = useToast()
+
     const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
         setSavingData(true)
 
@@ -57,6 +60,11 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             reload,
             data
         )
+
+        setSavingData(false)
+        toast({
+            description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
+        })
 
     }
 
@@ -125,7 +133,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
                 <AlertDialog>
                     <AlertDialogTrigger>
-                        <AppButton className='text-sm'><SaveIcon className='w-5'/>Save Changes</AppButton>
+                        <AppButton className='text-sm'>
+                            {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
+                            Save Changes</AppButton>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>

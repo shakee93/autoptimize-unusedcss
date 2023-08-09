@@ -7,6 +7,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
+import {Toaster} from "components/ui/toaster";
 
 const App = ({is_popup}: {
     is_popup: boolean
@@ -36,6 +37,7 @@ const App = ({is_popup}: {
         <div>
             {popover}
             {showOptimizer && <PageOptimizer/>}
+            <Toaster/>
         </div>
     );
 }
