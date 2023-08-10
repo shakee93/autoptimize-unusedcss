@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
 
 import Header from "app/page-optimizer/components/Header";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
@@ -7,7 +7,7 @@ import Card from "components/ui/card";
 import {useSelector} from "react-redux";
 import {useOptimizerContext} from "../../context/root";
 import {cn} from "lib/utils";
-import Audit, {AuditProps} from "app/page-optimizer/components/audit/Audit";
+import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
@@ -148,8 +148,7 @@ export default function PageOptimizer() {
                                 {(data && data?.audits?.length > 0) && (
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
-                                            {results
-                                                ?.map((audit: Audit, index: number) => {
+                                            {results?.map((audit: Audit, index: number) => {
 
                                                     return (
                                                         <div className='relative' key={audit.id}>

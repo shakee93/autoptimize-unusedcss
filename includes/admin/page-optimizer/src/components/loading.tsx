@@ -17,7 +17,7 @@ const Loading = ({ url } : { url: string} ) => {
         
         let interval = setInterval(() => {
             setMessage(p => p >= messages.length - 1 ? 0 : p + 1)
-        }, 5000)
+        }, 7000)
 
         return () => clearInterval(interval);
 

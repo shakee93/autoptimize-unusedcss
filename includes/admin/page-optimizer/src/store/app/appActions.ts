@@ -10,7 +10,6 @@ import {
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS
 } from "./appTypes";
-import {isEqual} from 'underscore';
 import ApiService from "../../services/api";
 
 
@@ -93,7 +92,7 @@ export const updateSettings = (
         // @ts-ignore
         let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
 
-            if (isEqual(s.name, setting.name)) {
+            if (s.name === setting.name) {
 
                 console.log(s.inputs);
 

@@ -1,9 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 import Code from "components/ui/code";
  
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return clsx(inputs)
 }
 
 export function isImageAudit(audit_id: string) {
