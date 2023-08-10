@@ -183,7 +183,7 @@ export default function PageOptimizer() {
                         </article>
                     </section>
                 ) : (
-                    <Loading/>
+                    <Loading url={url}/>
                 )}
             </div>
             <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
