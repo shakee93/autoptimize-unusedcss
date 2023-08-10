@@ -9,6 +9,7 @@ class RapidLoad_Font_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $strategy;
     private $file_system;
 
     public function __construct($job)
@@ -33,6 +34,10 @@ class RapidLoad_Font_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         $this->add_display_swap_to_inline_styles();
 
         $this->add_display_swap_to_google_fonts();
@@ -50,7 +55,8 @@ class RapidLoad_Font_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 
@@ -90,6 +96,8 @@ class RapidLoad_Font_Enqueue
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
             explode(",", $this->options['uucss_preload_font_urls']) :
             [];
+
+        $font_urls = apply_filters('rapidload/enqueue/preload/fonts', $font_urls, $this->job, $this->strategy);
 
         foreach ($font_urls as $url) {
             if(empty($url)){

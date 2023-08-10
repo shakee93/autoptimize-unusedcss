@@ -13,6 +13,7 @@ class Javascript_Enqueue
     private $options;
     private $file_system;
     private $settings;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -36,31 +37,21 @@ class Javascript_Enqueue
             $this->options = $state['options'];
         }
 
-        global $post;
-
-        if(isset($post->ID)){
-
-            $this->settings = get_post_meta($post->ID, 'rapidload_js_settings');
-
-            if(isset($this->settings[0])){
-
-                $this->settings = $this->settings[0];
-
-            }
-
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
         }
 
         $links = $this->dom->find( 'script' );
 
         foreach ( $links as $link ) {
 
-            if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
-                $this->load_scripts_on_user_interaction($link);
-            }
-
             $this->minify_js($link);
 
             $this->optimize_js_delivery($link);
+
+            if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
+                $this->load_scripts_on_user_interaction($link);
+            }
 
         }
 
@@ -132,20 +123,36 @@ class Javascript_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 
     public function load_scripts_on_user_interaction($link){
 
-        if(!isset($link->src) || self::is_file_excluded($link->src)){
-            return;
-        }
+        if(self::is_js($link)){
 
-        if(self::is_load_on_user_interaction($link->src)){
-            $data_attr = "data-rapidload-src";
-            $link->{$data_attr} = $link->src;
-            unset($link->src);
+            if(!self::is_file_excluded($link->src) && self::is_load_on_user_interaction($link->src)){
+
+                $data_attr = "data-rapidload-src";
+                $link->{$data_attr} = $link->src;
+                unset($link->src);
+
+            }
+
+        }else if(self::is_inline_script($link)){
+
+            if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
+
+                $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+
+            }else if(isset($link->{"data-rapidload-delayed"})) {
+
+                unset($link->{"data-rapidload-delayed"});
+                $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+
+            }
+
         }
 
     }
@@ -210,8 +217,6 @@ class Javascript_Enqueue
 
     public function optimize_js_delivery($link){
 
-        $method = false;
-
         if(!isset($link->type)){
             $link->type = 'text/javascript';
         }
@@ -220,54 +225,27 @@ class Javascript_Enqueue
             return;
         }
 
-        if(isset($this->settings['js_files'])){
+        if(isset($this->options['uucss_load_js_method']) && $this->options['uucss_load_js_method'] == "defer"){
 
-            $key = array_search($link->src, array_column($this->settings['js_files'], 'url'));
+            if(self::is_js($link)){
 
-            if(isset($key) && is_numeric($key)){
-                $method = $this->settings['js_files'][$key]['action'];
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer'))      {
+
+                    $link->defer = true;
+                    unset($link->async);
+
+                }
+
+            }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
+
+                if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
+
+                    $this->defer_inline_js($link);
+
+                }
+
             }
-        }
 
-        if((!$method || $method == 'none') && isset($this->options['uucss_load_js_method'])){
-            $method = $this->options['uucss_load_js_method'];
-        }
-
-        if($method){
-            switch ($method){
-                case 'defer' : {
-                    if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
-                        $link->defer = true;
-                        unset($link->async);
-                    }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js']) && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
-                        if(self::is_load_on_user_interaction($link->innertext())){
-                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-                        }else if(isset($link->{"data-rapidload-delayed"})){
-                            unset($link->{"data-rapidload-delayed"});
-                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-                        }else{
-                            $this->defer_inline_js($link);
-                        }
-                    }else{
-                        if(isset($link->{"data-rapidload-delayed"})){
-                            unset($link->{"data-rapidload-delayed"});
-                            $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-                        }
-                    }
-                    break;
-                }
-                case 'on-user-interaction' : {
-                    if(self::is_js($link) && !self::is_file_excluded($link->src)){
-                        $data_attr = "data-rapidload-src";
-                        $link->{$data_attr} = $link->src;
-                        unset($link->src);
-                    }
-                    break;
-                }
-                default:{
-
-                }
-            }
         }
 
     }

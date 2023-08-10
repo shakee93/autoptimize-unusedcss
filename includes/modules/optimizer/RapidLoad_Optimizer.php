@@ -26,13 +26,41 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
-        self::pre_optimizer_function();
-
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
+
+        add_filter('rapidload/enqueue/preload/fonts', function ($urls, $job, $strategy){
+
+            $options = $strategy === "mobile" ? $job->get_mobile_options() : $job->get_desktop_options();
+
+            if(isset($options['individual-file-actions']) && isset($options['individual-file-actions']['font-display'])){
+
+                foreach ($options['individual-file-actions']['font-display'] as $value){
+
+                    if (isset($value->url) && filter_var($value->url, FILTER_VALIDATE_URL) !== false) {
+
+                        $path_parts = pathinfo($value->url);
+
+                        if(isset($path_parts['extension'])){
+                            $file_extension = strtolower($path_parts['extension']);
+
+                            if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
+
+                                if(isset($value->action) && $value->action == "preload"){
+                                    $urls[] = $value->url;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return $urls;
+        }, 10, 3);
+
+
     }
 
     public static function   pre_optimizer_function(){
@@ -90,9 +118,34 @@ class RapidLoad_Optimizer
         $optimization->save();
 
         self::$job->save(!self::$job->exist());
+
+        if(isset(self::$options['uucss_enable_cache'])){
+            self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
     }
 
     public function fetch_page_speed(){
+
+        // Allow from any origin
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+
+        }
+
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                // May also be using PUT, PATCH, HEAD etc
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+            exit(0);
+        }
+
+        self::pre_optimizer_function();
 
         if(!isset(self::$job) || !isset(self::$strategy)){
             wp_send_json_error();
@@ -201,6 +254,8 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings(){
 
+//        self::verify_nonce();
+
         $new_options = [
             'individual-file-actions' => []
         ];
@@ -218,6 +273,8 @@ class RapidLoad_Optimizer
         if(!isset(self::$options)){
             wp_send_json_error('not set options');
         }
+
+        self::pre_optimizer_function();
 
         $result = $data->data;
         $options = isset($_REQUEST['individual-file-actions']) ? $_REQUEST['individual-file-actions'] : [];
