@@ -1,20 +1,17 @@
 
 
-interface OptimizerResults {
-    data : {
-        performance: number
-        audits: Audit[]
-        metrics: Metric[],
-        grouped: {
-            passed_audits: Audit[],
-            opportunities: Audit[],
-            diagnostics: Audit[],
-        }
-    },
-    success: boolean
+interface OptimizerResults  {
+    performance: number
+    audits: Audit[]
+    metrics: Metric[],
+    grouped: {
+        passed_audits: Audit[],
+        opportunities: Audit[],
+        diagnostics: Audit[],
+    }
 }
 
-type AuditTypes = keyof OptimizerResults["data"]['grouped']
+type AuditTypes = keyof OptimizerResults['grouped']
 
 interface Audit {
     id: string;
@@ -51,20 +48,26 @@ interface AuditFile {
     totalBytes: number;
     url: string;
     wastedPercent?: number;
+    action: string
+    pattern: string
 }
 
 interface AuditSetting {
     name: string;
     key: string,
     category: string;
-    inputs: Array<{
-        control_type: string;
-        control_values: string[];
-        control_payload: string;
-        value: any;
-        key: any;
-    }>;
+    inputs: AuditSettingInput[];
 }
+
+interface AuditSettingInput {
+    control_type: ControlTypes;
+    control_values: string[];
+    control_payload: string;
+    value: any;
+    key: any;
+}
+
+type ControlTypes = 'checkbox' | 'textarea' | string
 
 interface Metric {
     id: string;
@@ -77,4 +80,11 @@ interface Metric {
 
 type ReportType = 'mobile' | 'desktop'
 
+interface Revision {
+    created_at: string
+    id: number
+    job_id: number
+    strategy: ReportType
+    data: OptimizerResults
+}
 

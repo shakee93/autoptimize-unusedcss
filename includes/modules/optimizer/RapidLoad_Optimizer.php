@@ -151,9 +151,11 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
+        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
-        if(!$result || isset($_REQUEST['new'])){
+        if(!$result || $new){
 
             $api = new RapidLoad_Api();
 
@@ -231,15 +233,15 @@ class RapidLoad_Optimizer
 
                         }
                     }else{
-                        error_log($audit->id);
-                        error_log(json_encode($item));
+//                        error_log($audit->id);
+//                        error_log(json_encode($item));
                     }
                 }
             }
 
         }
 
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         wp_send_json_success([
             'page_speed' => $result,
@@ -389,7 +391,7 @@ class RapidLoad_Optimizer
 
         self::$options = $new_options;
 
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 

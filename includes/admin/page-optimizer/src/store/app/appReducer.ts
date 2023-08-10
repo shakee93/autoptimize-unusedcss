@@ -4,7 +4,7 @@ import {
     CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS,
+    FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
     UPDATE_SETTINGS
 } from "./appTypes";
 
@@ -14,17 +14,20 @@ const initialState: AppState = {
         data: null,
         error: null,
         loading: true,
-        settings: []
+        settings: [],
+        revisions: []
     },
     desktop: {
         data: null,
         error: null,
         loading: true,
-        settings: []
+        settings: [],
+        revisions: []
     }
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
+
     switch (action.type) {
         case FETCH_DATA_REQUEST:
             return {
@@ -34,13 +37,15 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 }
             };
         case FETCH_DATA_SUCCESS:
+            
             return {
                 ...state,
                 [state.activeReport] : {
-                    data: action.payload,
+                    data: action.payload.data,
                     error: null,
                     loading: false,
-                    settings: action.payload.settings
+                    settings: action.payload.settings,
+                    revisions: action.payload.revisions
                 }
             };
         case FETCH_DATA_FAILURE:
@@ -54,6 +59,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 [state.activeReport] : {
+                    ...state[state.activeReport],
                     settings: action.payload.settings,
                     data: action.payload.data
                 }
@@ -62,6 +68,34 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 activeReport: action.reportType
+            };
+        case UPDATE_FILE_ACTION:
+
+            const { payload } = action;
+            const activeReport = state[state.activeReport];
+
+            if (activeReport.data) {
+                activeReport.data.audits = activeReport.data.audits.map((audit) => {
+                    if (payload.audit.id === audit.id) {
+                        audit.files.items = audit.files.items.map((item) => {
+                            if (item.url && item.url === payload.file) {
+                                return {
+                                    ...item,
+                                    action: payload.value,
+                                };
+                            }
+                            return item;
+                        });
+                    }
+                    return audit;
+                });
+            }
+
+            return {
+                ...state,
+                [state.activeReport]: {
+                    ...activeReport,
+                },
             };
         default:
             return state;

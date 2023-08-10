@@ -35,7 +35,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     }
 
     if (heading.control_type === 'dropdown') {
-        return <AuditColumnDropdown heading={heading}/>
+        return <AuditColumnDropdown cell={cell} audit={audit} heading={heading}/>
     }
 
     if (heading.valueType === 'bytes') {

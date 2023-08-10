@@ -6,7 +6,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     return (
       <textarea
           cols={500}
@@ -17,7 +17,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>(
         )}
         ref={ref}
         {...props}
-      >{children}</textarea>
+      ></textarea>
     )
   }
 )

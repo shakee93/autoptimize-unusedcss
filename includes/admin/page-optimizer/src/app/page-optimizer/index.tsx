@@ -76,7 +76,7 @@ export default function PageOptimizer() {
     };
 
 
-    let results = data?.data.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
+    let results = data?.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
 
     if (!results) {
         results = [];
@@ -106,13 +106,18 @@ export default function PageOptimizer() {
         });
     };
 
+    let url = 'https://rapidload.io/?no_rapidload';
+
+    if (options?.optimizer_url) {
+        url = options.optimizer_url
+    }
 
     return (
 
         <div
             className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-white text-[#212427] dark:bg-zinc-900 bg-[#F7F9FA]")}>
             <div className='overflow-auto w-full'>
-                <Header url={options.optimizer_url}/>
+                <Header url={url}/>
                 {!loading ? (
                     <section className="container grid grid-cols-12 gap-8 pt-4">
                         {togglePerformance && (
@@ -140,7 +145,7 @@ export default function PageOptimizer() {
                             </div>
                             <div className="audits pt-4 flex">
 
-                                {(data?.data && data?.data.audits?.length > 0) && (
+                                {(data && data?.audits?.length > 0) && (
                                     <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                         <div className='col-span-12 ml-8 flex flex-col gap-4'>
                                             {results
@@ -148,11 +153,15 @@ export default function PageOptimizer() {
 
                                                     return (
                                                         <div className='relative' key={audit.id}>
-                                                            <div className='absolute -left-6 text-center top-4'>
+                                                            <div className={cn(
+                                                                'absolute -left-6 text-center top-[17px]',
+                                                                // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
+                                                            )}>
                                                             <span
                                                                 className={`border-2 dark:border-zinc-600 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
                                                                 {(results && (index !== (results.length - 1))) && (
                                                                     <span
+                                                                        data-h={componentHeights[index]}
                                                                         style={{
                                                                             height: componentHeights[index]
                                                                         }}

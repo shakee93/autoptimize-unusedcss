@@ -2,7 +2,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import {ReactNode, useEffect, useState} from "react";
 import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
-import Button from "components/ui/button";
+import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../context/root";
@@ -121,17 +121,17 @@ const Content = () => {
                     )}
                     <hr className='my-3 mx-6'/>
                     <div className='flex gap-3 text-sm'>
-                        <Button onClick={(e) => {
+                        <AppButton onClick={(e) => {
                             setShowOptimizer(true)
                         }}>
                             <BoltIcon className='w-4 text-white rounded-[15px]'/> Page Optimizer
-                        </Button>
-                        <Button className='rounded-[15px]' dark={false}>
+                        </AppButton>
+                        <AppButton className='rounded-[15px]' dark={false}>
                             <DocumentMinusIcon className='w-4'/>
-                        </Button>
-                        <Button className='rounded-[15px]' dark={false}>
+                        </AppButton>
+                        <AppButton className='rounded-[15px]' dark={false}>
                             <ArchiveBoxIcon className='w-4'/>
-                        </Button>
+                        </AppButton>
                     </div>
                 </div>
             </div>

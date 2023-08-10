@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { SunIcon, MoonIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
 
 const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState('system');
+    const [theme, setTheme] = useState('light');
 
     useEffect(() => {
         //@ts-ignore

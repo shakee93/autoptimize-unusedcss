@@ -30,7 +30,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     };
 
     const progressBarColorCode = () => {
-        const performance = data?.data.performance?? 0;
+        const performance = data?.performance?? 0;
 
         if (performance < 50) {
             setProgressbarColor('#FF3333');
@@ -54,13 +54,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     useEffect(() => {
         progressBarColorCode();
-        console.log("performance", data?.data.metrics.icon);
+        console.log("performance", data?.metrics.icon);
         if (!loading && data) {
             let currentNumber = 0;
 
             const timer = setInterval(() => {
                 currentNumber += 1;
-                if (currentNumber <= data.data.performance) {
+                if (currentNumber <= data?.performance) {
                     setPerformance(currentNumber)
                 } else {
                     clearInterval(timer);
@@ -78,7 +78,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             return 0;
         }
 
-        const targetNumber = data.data.performance;
+        const targetNumber = data?.performance;
         const maxOpacity = 1;
         const minOpacity = 0;
         const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
@@ -138,7 +138,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             </div>
             <div className="mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    {data?.data.metrics.map((s, index) => (
+                    {data?.metrics.map((s, index) => (
 
                         <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                             <div className="flex">
@@ -169,7 +169,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 {isCoreWebClicked && (
                     <div>
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                            {data?.data.metrics.map((s, index) => (
+                            {data?.metrics.map((s, index) => (
 
                                 <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                                     <div className="flex">

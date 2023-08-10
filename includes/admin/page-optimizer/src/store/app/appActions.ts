@@ -1,76 +1,72 @@
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
-import axios, {AxiosResponse} from 'axios';
 import {
     AppAction,
-    AppState,
     CHANGE_REPORT_TYPE,
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS, RootState,
+    FETCH_DATA_SUCCESS,
+    RootState,
+    UPDATE_FILE_ACTION,
     UPDATE_SETTINGS
 } from "./appTypes";
 import {isEqual} from 'underscore';
+import ApiService from "../../services/api";
 
 
 const transformData = (data: any) => {
     
-    // temp mapping
-    data.data = data.data.page_speed
-
-    data.data.performance =  data.data.performance ? parseFloat(data?.data?.performance.toFixed(0)) : 0
-
-    if (data.data.screenShots) {
-        delete data.data.screenShots
-    }
-
-    if (data.data.final_screenShot) {
-        delete data.data.final_screenShot
-    }
-
-    let audits : Audit[] = data.data.audits
+    let audits : Audit[] = data.data.page_speed.audits
 
     let _data = {
         data: {
-            ...data.data,
+            performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
+            ...data.data.page_speed,
             grouped : {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit'),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
                 diagnostics: audits.filter(audit => audit.type === "diagnostics"),
-            }
+            },
         },
         success: data.success,
-        settings: initiateSettings(data)
+        settings: initiateSettings(audits),
+        revisions: data.data.revisions,
+        individual_file_actions: data.data['individual-file-actions']
     };
-
-    console.log(_data);
 
     return _data
 }
 
 
 // this grabs the data and populates a settings object with values
-const initiateSettings = (data: any) => {
+const initiateSettings = (audits: Audit[]) => {
 
-    let settings = data.data.audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
+    let settings = audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
 
     const flattenedSettings = settings.flat();
 
-    // Use Set to remove duplicates based on a custom key
-    // @ts-ignore
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str) => JSON.parse(str));
-    console.log("unique" , uniqueSettings)
+    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
     return uniqueSettings;
 }
 
-export const fetchData = (url : string): ThunkAction<void, AppState, unknown, AnyAction> => {
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean): ThunkAction<void, RootState, unknown, AnyAction> => {
 
-    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>) => {
+    const api = new ApiService(options);
+
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             dispatch({ type: FETCH_DATA_REQUEST });
+            const currentState = getState(); // Access the current state
+            const activeReport = currentState.app.activeReport;
 
-            const response: AxiosResponse<any> = await axios.get(url);
-            console.log("Fetch Data" , response.data)
+
+            const response = await api.fetchPageSpeed(
+                url,
+                activeReport,
+                reload
+            )
+
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
         } catch (error) {
             if (error instanceof Error) {
@@ -85,7 +81,7 @@ export const fetchData = (url : string): ThunkAction<void, AppState, unknown, An
 export const updateSettings = (
     audit: Audit,
     setting: AuditSetting,
-    input: number, // index number of input
+    key: string, // key of the input
     payload: any, // changed value
 
  ): ThunkAction<void, RootState, unknown, AnyAction> => {
@@ -93,13 +89,23 @@ export const updateSettings = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
-        console.log("currentState" , currentState)
 
         // @ts-ignore
         let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
 
             if (isEqual(s.name, setting.name)) {
-                s.inputs[input].value = payload
+
+                console.log(s.inputs);
+
+                s.inputs = s.inputs.map(input => {
+
+                    if (input.key === key) {
+                        input.value = payload
+                    }
+
+                    return input;
+                })
+
             }
             return s;
         });
@@ -111,13 +117,18 @@ export const updateSettings = (
             return;
         }
 
-        newData.data.audits = newData.data.audits.map((a: Audit) => {
+        newData.audits = newData.audits.map((a: Audit) => {
 
            a.settings = a.settings.map(s => {
 
-                if (s.inputs[input].key === setting.inputs[input].key) {
-                    s.inputs[input].value = payload;
-                }
+               s.inputs = s.inputs.map(input => {
+
+                   if (input.key === key) {
+                       input.value = payload
+                   }
+
+                   return input;
+               })
 
                 return s;
             })
@@ -135,11 +146,27 @@ export const updateSettings = (
 
 export const changeReport = (
     type: ReportType
-):  ThunkAction<void, AppState, unknown, AnyAction> => {
-    return async (dispatch: ThunkDispatch<AppState, unknown, AppAction>, getState) => {
+):  ThunkAction<void, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         dispatch({
             type: CHANGE_REPORT_TYPE,
             reportType: type
+        })
+    }
+}
+
+export const updateFileAction = (
+    audit: Audit,
+    file: string,
+    value: any,
+):  ThunkAction<void, RootState, unknown, AnyAction> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+        dispatch({
+            type: UPDATE_FILE_ACTION, payload : {
+                audit: audit,
+                file: file,
+                value: value
+            }
         })
     }
 }

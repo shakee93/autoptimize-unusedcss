@@ -44,7 +44,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
-    console.log("table",table?.getRowModel());
+
     const cellWidth = (valueType: string) => {
 
         switch (valueType) {
@@ -103,6 +103,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                     ))}
                     </tbody>
                 </table>
+                <JsonView shouldInitiallyExpand={e => false} data={audit.files}/>
             </div>
 
         </div>
