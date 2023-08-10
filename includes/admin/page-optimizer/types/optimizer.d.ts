@@ -56,14 +56,18 @@ interface AuditSetting {
     name: string;
     key: string,
     category: string;
-    inputs: Array<{
-        control_type: string;
-        control_values: string[];
-        control_payload: string;
-        value: any;
-        key: any;
-    }>;
+    inputs: AuditSettingInput[];
 }
+
+interface AuditSettingInput {
+    control_type: ControlTypes;
+    control_values: string[];
+    control_payload: string;
+    value: any;
+    key: any;
+}
+
+type ControlTypes = 'checkbox' | 'textarea' | string
 
 interface Metric {
     id: string;

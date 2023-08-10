@@ -81,7 +81,7 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
 export const updateSettings = (
     audit: Audit,
     setting: AuditSetting,
-    input: number, // index number of input
+    key: string, // key of the input
     payload: any, // changed value
 
  ): ThunkAction<void, RootState, unknown, AnyAction> => {
@@ -94,7 +94,18 @@ export const updateSettings = (
         let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
 
             if (isEqual(s.name, setting.name)) {
-                s.inputs[input].value = payload
+
+                console.log(s.inputs);
+
+                s.inputs = s.inputs.map(input => {
+
+                    if (input.key === key) {
+                        input.value = payload
+                    }
+
+                    return input;
+                })
+
             }
             return s;
         });
@@ -110,9 +121,14 @@ export const updateSettings = (
 
            a.settings = a.settings.map(s => {
 
-                if (s.inputs[input].key === setting.inputs[input].key) {
-                    s.inputs[input].value = payload;
-                }
+               s.inputs = s.inputs.map(input => {
+
+                   if (input.key === key) {
+                       input.value = payload
+                   }
+
+                   return input;
+               })
 
                 return s;
             })

@@ -9,6 +9,7 @@ interface WordPressOptions {
     page_optimizer_base: string
     plugin_url: string
     nonce?: string
+    timezone: string
 }
 
 interface Tab {

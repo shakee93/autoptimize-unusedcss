@@ -32,8 +32,8 @@ import { Label } from "@/components/ui/label"
 import {Settings, SettingsIcon} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
-import SettingSwitch from "./option-elements/switch";
-import SettingInput from "app/page-optimizer/components/audit/option-elements/input";
+import {JsonView} from "react-json-view-lite";
+import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
 
 interface SettingItemProps {
     audit: Audit
@@ -48,6 +48,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const [open, setOpen] = React.useState(false);
 
     let icons = {
         cache : <PageCache/>,
@@ -57,21 +58,21 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
         css : <CSSDelivery/>,
     }
 
-    let mainInput = settings.inputs[0]
-    let additionalSettings = settings.inputs
+    let [mainInput, ...additionalInputs] = settings.inputs
 
-    const updateValue = (checked: boolean) => {
+    
+    const updateValue = (value: any, key: string) => {
 
         dispatch(updateSettings(
             audit,
             settings,
-            0,
-            checked
+            key,
+            value
         ));
     }
 
     // temporarily show this popup on render blocking resources audit
-    const showPopover = audit.id === "render-blocking-resources"
+    const showPopover = additionalInputs.length > 0
 
     return (
         <div
@@ -81,11 +82,11 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
             {icons[settings.category as keyof typeof icons]} {settings.name}
             {mainInput && (
                 // @ts-ignore
-                <SettingSwitch checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c)}/>
+                <Switch checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
             )}
 
             {showPopover && (
-                <Dialog>
+                <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                         <button>
                             <Cog6ToothIcon className='w-[1.15rem] text-zinc-400'/>
@@ -99,21 +100,12 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-5 pb-2">
-                            {/* Let's have dynamic input's over here*/}
-                            {/* use the option-element to create each type of control */}
-                            <div className="flex flex-col justify-start items-center gap-3">
-                                <SettingInput/>
-                            </div>
-                            <div className="flex flex-col justify-start items-center gap-3">
-                                {/* extract this as a separate component */}
-                                <Label htmlFor="name" className="ml-4 text-left w-full">
-                                    Mobile Critical CSS
-                                </Label>
-                                <Input type='text' id="name" value="hello" className="col-span-4" />
-                            </div>
+                            <AdditionalInputs update={updateValue} data={additionalInputs}/>
+                            {/*<JsonView data={additionalInputs} shouldInitiallyExpand={e => false}/>*/}
                         </div>
                         <DialogFooter>
                             <AppButton className='text-sm'>Save changes</AppButton>
+                            <AppButton onClick={e => setOpen(false)} dark={false} className='text-sm'>Close</AppButton>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
