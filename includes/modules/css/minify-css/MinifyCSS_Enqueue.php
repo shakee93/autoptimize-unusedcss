@@ -11,6 +11,7 @@ class MinifyCSS_Enqueue
     private $options;
     private $file_system;
     private $settings;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -34,6 +35,10 @@ class MinifyCSS_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         $links = $this->dom->find( 'link' );
 
         foreach ( $links as $link ) {
@@ -54,7 +59,8 @@ class MinifyCSS_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 

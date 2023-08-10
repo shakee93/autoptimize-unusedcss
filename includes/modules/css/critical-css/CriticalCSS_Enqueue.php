@@ -15,6 +15,7 @@ class CriticalCSS_Enqueue
     private $data;
     private $warnings;
     private $is_mobile;
+    private $strategy;
 
     public function __construct($job_data)
     {
@@ -42,13 +43,18 @@ class CriticalCSS_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         if(!isset($this->job_data->id) || $this->job_data->status != 'success'){
             //$this->inject->rapidload = false;
             //$this->inject->successfully_injected = false;
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -72,7 +78,8 @@ class CriticalCSS_Enqueue
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -83,7 +90,8 @@ class CriticalCSS_Enqueue
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 

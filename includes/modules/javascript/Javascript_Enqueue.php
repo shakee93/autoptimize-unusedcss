@@ -13,6 +13,7 @@ class Javascript_Enqueue
     private $options;
     private $file_system;
     private $settings;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -34,6 +35,10 @@ class Javascript_Enqueue
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
         }
 
         global $post;
@@ -132,7 +137,8 @@ class Javascript_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 

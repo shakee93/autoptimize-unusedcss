@@ -13,6 +13,7 @@ class RapidLoad_Image_Enqueue
     private $settings;
     private $imgExt;
     private $cdn;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -36,6 +37,10 @@ class RapidLoad_Image_Enqueue
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
         }
 
         if(!isset($this->options['uucss_exclude_above_the_fold_image_count'])){
@@ -232,7 +237,8 @@ class RapidLoad_Image_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 

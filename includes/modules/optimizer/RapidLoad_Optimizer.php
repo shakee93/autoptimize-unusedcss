@@ -44,22 +44,23 @@ class RapidLoad_Optimizer
 
                         $path_parts = pathinfo($value->url);
 
-                        $file_extension = strtolower($path_parts['extension']);
+                        if(isset($path_parts['extension'])){
+                            $file_extension = strtolower($path_parts['extension']);
 
-                        if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
+                            if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
 
-                            if(isset($value->action) && $value->action == "preload"){
-                                $urls[] = $value->url;
+                                if(isset($value->action) && $value->action == "preload"){
+                                    $urls[] = $value->url;
+                                }
                             }
-
                         }
                     }
-
                 }
-
             }
-
+            return $urls;
         }, 10, 3);
+
+
     }
 
     public static function   pre_optimizer_function(){
