@@ -2,42 +2,21 @@ import {Label} from "components/ui/label";
 import {Input} from "components/ui/input";
 import React, {useState} from "react";
 import {Switch} from "components/ui/switch";
-import {Textarea} from "components/ui/textarea";
+import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
 
 
 interface AdditionalInputsProps {
     data: AuditSettingInput[]
+    updates: {
+        key: string,
+        value: any
+    }[]
     update: (v: any, key: string ) => void
 }
 
-const AdditionalInputs = ({ data } : AdditionalInputsProps) => {
-    const [updates, setUpdates] = useState<{
-        key: string,
-        value: any
-    }[]>(data.map(({ key, value }) => ({ key, value })))
+const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
 
-    const update = (val: any, key: string) => {
-        let changed = updates.find(i => i.key === key);
-
-        if (changed) {
-            setUpdates(
-                updates.map(_i => {
-
-                    if (_i.key === key) {
-                        _i.value = val
-                    }
-
-                    return _i;
-                })
-            )
-        } else {
-            setUpdates([...updates, {
-                key: key,
-                value: val
-            }])
-        }
-    }
 
     const fields = (input: AuditSettingInput) => {
 

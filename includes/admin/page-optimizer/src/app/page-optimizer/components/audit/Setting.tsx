@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {ArrowPathIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
 import {
     CSSDelivery,
@@ -49,6 +49,33 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const [open, setOpen] = React.useState(false);
+    const [mainInput, ...additionalInputs] = settings.inputs
+    const [updates, setUpdates] = useState<{
+        key: string,
+        value: any
+    }[]>(additionalInputs.map(({ key, value }) => ({ key, value })))
+
+    const update = (val: any, key: string) => {
+        let changed = updates.find(i => i.key === key);
+
+        if (changed) {
+            setUpdates(
+                updates.map(_i => {
+
+                    if (_i.key === key) {
+                        _i.value = val
+                    }
+
+                    return _i;
+                })
+            )
+        } else {
+            setUpdates([...updates, {
+                key: key,
+                value: val
+            }])
+        }
+    }
 
     let icons = {
         cache : <PageCache/>,
@@ -58,9 +85,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
         css : <CSSDelivery/>,
     }
 
-    let [mainInput, ...additionalInputs] = settings.inputs
 
-    
     const updateValue = (value: any, key: string) => {
 
         dispatch(updateSettings(
@@ -73,6 +98,15 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
 
     // temporarily show this popup on render blocking resources audit
     const showPopover = additionalInputs.length > 0
+
+    const saveAdditionalSettings = () => {
+
+        updates.forEach(({key, value}) => {
+            updateValue(value, key)
+        })
+
+        setOpen(false);
+    }
 
     return (
         <div
@@ -92,19 +126,18 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                             <Cog6ToothIcon className='w-[1.15rem] text-zinc-400'/>
                         </button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
+                    <DialogContent className="sm:max-w-[450px]">
+                        <DialogHeader className='border-b px-6 py-7'>
                             <DialogTitle>{settings.name} Settings</DialogTitle>
                             <DialogDescription>
                                 Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="grid gap-5 pb-2">
-                            <AdditionalInputs update={updateValue} data={additionalInputs}/>
-                            {/*<JsonView data={additionalInputs} shouldInitiallyExpand={e => false}/>*/}
+                        <div className="grid gap-4 px-6 py-4">
+                            <AdditionalInputs updates={updates} update={update} data={additionalInputs}/>
                         </div>
-                        <DialogFooter>
-                            <AppButton className='text-sm'>Save changes</AppButton>
+                        <DialogFooter className='px-6 py-3 border-t'>
+                            <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
                             <AppButton onClick={e => setOpen(false)} dark={false} className='text-sm'>Close</AppButton>
                         </DialogFooter>
                     </DialogContent>
