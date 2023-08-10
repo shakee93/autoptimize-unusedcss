@@ -14,6 +14,15 @@ export function isImageAudit(audit_id: string) {
   ].includes(audit_id)
 }
 
+export function isUrl(input: string): boolean {
+  try {
+    new URL(input);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 export function truncateMiddleOfURL(url: string, maxLength: number) {
   try {
 
