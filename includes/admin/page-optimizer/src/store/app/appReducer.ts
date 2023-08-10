@@ -76,9 +76,12 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
             if (activeReport.data) {
                 activeReport.data.audits = activeReport.data.audits.map((audit) => {
-                    if (payload.audit.id === audit.id) {
+
+                    if(audit.files && audit.files.items) {
+
                         audit.files.items = audit.files.items.map((item) => {
-                            if (item.url && item.url === payload.file) {
+                            if (item.url && item.action && item.url === payload.file) {
+
                                 return {
                                     ...item,
                                     action: payload.value,
@@ -87,6 +90,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                             return item;
                         });
                     }
+                    
+
                     return audit;
                 });
             }
