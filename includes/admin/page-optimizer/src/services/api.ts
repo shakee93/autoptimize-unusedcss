@@ -16,6 +16,21 @@ class ApiService {
 
     }
 
+    async throwIfError(response: Response) {
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        let data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.data);
+        }
+
+        return data
+    }
+
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean) {
 
 
@@ -34,12 +49,7 @@ class ApiService {
                 }
             });
 
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            return await response.json();
+            return this.throwIfError(response);
         } catch (error) {
             console.error(error);
             throw error;
@@ -65,11 +75,9 @@ class ApiService {
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
 
-            return response.json();
+
+            return this.throwIfError(response);
         } catch (error) {
             console.error(error);
             throw error;

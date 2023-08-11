@@ -262,18 +262,14 @@ class RapidLoad_Optimizer
 
         $data = json_decode(file_get_contents('php://input'));
 
-        if(!isset($data)){
-            wp_send_json_error('no data');
-        }
-
-        if(!isset($data->data)){
-            wp_send_json_error('not set');
+        if(!isset($data) || !isset($data->data)){
+            wp_send_json_error('Missing required data to save the settings!');
         }
 
         self::pre_optimizer_function();
 
         if(!isset(self::$options)){
-            wp_send_json_error('not set options');
+            wp_send_json_error('Missing options data to save the settings!');
         }
 
         $result = $data->data;
