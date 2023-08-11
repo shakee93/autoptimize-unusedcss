@@ -34,7 +34,6 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
 
 
     const updateAction = (v: string) => {
-        console.log(url);
         dispatch(updateFileAction(audit, url.url ? url.url : url, v));
         setAction(v);
     };

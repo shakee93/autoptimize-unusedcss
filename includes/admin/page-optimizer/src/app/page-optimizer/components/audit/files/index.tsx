@@ -52,6 +52,8 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                 return '160px';
             case 'bytes':
                 return '140px';
+            case 'controls':
+                return '200px';
             default:
                 return 'auto'
         }
