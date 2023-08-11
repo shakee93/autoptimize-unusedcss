@@ -40,9 +40,9 @@ class RapidLoad_Optimizer
 
                 foreach ($options['individual-file-actions']['font-display'] as $value){
 
-                    if (isset($value->url) && filter_var($value->url, FILTER_VALIDATE_URL) !== false) {
+                    if (isset($value->url) && isset($value->url->url) && filter_var($value->url->url, FILTER_VALIDATE_URL) !== false) {
 
-                        $path_parts = pathinfo($value->url);
+                        $path_parts = pathinfo($value->url->url);
 
                         if(isset($path_parts['extension'])){
                             $file_extension = strtolower($path_parts['extension']);
@@ -50,7 +50,7 @@ class RapidLoad_Optimizer
                             if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
 
                                 if(isset($value->action) && $value->action == "preload"){
-                                    $urls[] = $value->url;
+                                    $urls[] = $value->url->url;
                                 }
                             }
                         }
@@ -60,7 +60,11 @@ class RapidLoad_Optimizer
             return $urls;
         }, 10, 3);
 
+        add_action('rapidload/enqueue/optimize-js', function ($link){
 
+
+
+        }, 10 , 1);
     }
 
     public static function   pre_optimizer_function(){
@@ -159,7 +163,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = "https://viajaya.ec/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = "https://www.submeter.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
@@ -189,14 +193,14 @@ class RapidLoad_Optimizer
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data;
+                            $input->{'value_data'} = $data->status;
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data;
+                            $input->{'value_data'} = $data->status;
                         }
                     }
                 }
@@ -205,7 +209,7 @@ class RapidLoad_Optimizer
             if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
                 foreach ($audit->files->items as $item){
 
-                    if(isset($item->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                    if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
                             'unused-css-rules','legacy-javascript','font-display'])){
 
                         if(!isset(self::$options['individual-file-actions'])){
@@ -214,39 +218,35 @@ class RapidLoad_Optimizer
 
                         if(!isset(self::$options['individual-file-actions'][$audit->id])){
                             self::$options['individual-file-actions'][$audit->id][] = [
-                                'url' => $item->url,
-                                'action' => '',
-                                'pattern' => '',
+                                'url' => $item->url->url,
+                                'action' => 'none',
+                                'url_object' => $item->url
                             ];
                         }
 
                         if(isset(self::$options['individual-file-actions'][$audit->id]) && is_array(self::$options['individual-file-actions'][$audit->id]) && !empty(self::$options['individual-file-actions'][$audit->id])){
 
-                            $key = array_search($item->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
+                            $key = array_search($item->url->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
 
                             if(isset($key) && is_numeric($key)){
 
-                                $item->pattern = self::$options['individual-file-actions'][$audit->id][$key]['pattern'];
                                 $item->action = self::$options['individual-file-actions'][$audit->id][$key]['action'];
 
                             }
 
                         }
-                    }else{
-//                        error_log($audit->id);
-//                        error_log(json_encode($item));
                     }
                 }
             }
 
         }
 
-//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+        self::post_optimizer_function($result);
 
         wp_send_json_success([
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
-            'individual-file-actions' => self::$options['individual-file-actions']
+            'individual-file-actions' => isset(self::$options['individual-file-actions']) ? self::$options['individual-file-actions'] : []
         ]);
 
 
@@ -270,11 +270,11 @@ class RapidLoad_Optimizer
             wp_send_json_error('not set');
         }
 
+        self::pre_optimizer_function();
+
         if(!isset(self::$options)){
             wp_send_json_error('not set options');
         }
-
-        self::pre_optimizer_function();
 
         $result = $data->data;
         $options = isset($_REQUEST['individual-file-actions']) ? $_REQUEST['individual-file-actions'] : [];
@@ -327,7 +327,7 @@ class RapidLoad_Optimizer
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
                     foreach ($audit->files->items as $item){
 
-                        if(isset($item->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                        if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
                                 'unused-css-rules','legacy-javascript','font-display'])){
 
                             if(!isset($new_options['individual-file-actions'][$audit->id])){
@@ -338,14 +338,12 @@ class RapidLoad_Optimizer
 
                             if(isset($key) && is_numeric($key)){
 
-                                $new_options['individual-file-actions'][$audit->id][$key]['pattern'] = $item->pattern;
                                 $new_options['individual-file-actions'][$audit->id][$key]['action'] = $item->action;
 
                             }else{
                                 $new_options['individual-file-actions'][$audit->id][] = [
                                     'url' => $item->url,
-                                    'pattern' => isset($item->pattern) ? $item->pattern : null,
-                                    'action' => isset($item->action) ? $item->action : 'none'
+                                    'action' => isset($item->action) ? $item->action : null
                                 ];
                             }
 
@@ -391,7 +389,7 @@ class RapidLoad_Optimizer
 
         self::$options = $new_options;
 
-//        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
