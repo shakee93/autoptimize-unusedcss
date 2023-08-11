@@ -13,7 +13,7 @@ export const OptimizerProvider = ({ children } : {
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
-    const [showOptimizer, setShowOptimizer] = useState(!isAdminBar);
+    const [showOptimizer, setShowOptimizer] = useState(false);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'https://rapidload.io/?no_rapidload',
         ajax_url: '',

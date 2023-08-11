@@ -21,20 +21,12 @@ import {cn} from "lib/utils";
 const Header = ({ url }: { url: string}) => {
 
     const { setShowOptimizer , options } = useOptimizerContext()
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
 
-    useEffect(() => {
-        
-        if (data?.success) {
-            return;
-        }
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
-        dispatch(fetchData(options, url, false))
 
-    }, [dispatch, activeReport]); 
-    
     return (
 
         <header className='w-full px-6 py-3 flex justify-between border-b dark:border-zinc-600 border-zinc-200'>

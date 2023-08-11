@@ -82,7 +82,6 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                         audit.files.items = audit.files.items.map((item) => {
                             
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
-                                console.log(item);
                                 return {
                                     ...item,
                                     action: {
