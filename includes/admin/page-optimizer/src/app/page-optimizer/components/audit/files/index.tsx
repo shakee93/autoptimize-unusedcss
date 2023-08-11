@@ -64,7 +64,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
             return false
         }
 
-        return !['pattern'].includes(col.id as string)
+        return !['pattern', 'file_type'].includes(col.id as string)
     }
 
     return (
