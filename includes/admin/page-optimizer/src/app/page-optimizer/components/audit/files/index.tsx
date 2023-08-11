@@ -103,7 +103,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                     ))}
                     </tbody>
                 </table>
-                <JsonView shouldInitiallyExpand={e => false} data={audit.files}/>
+                {/*<JsonView shouldInitiallyExpand={e => false} data={audit.files}/>*/}
             </div>
 
         </div>

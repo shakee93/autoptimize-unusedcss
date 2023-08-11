@@ -1,9 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 import Code from "components/ui/code";
  
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return clsx(inputs)
 }
 
 export function isImageAudit(audit_id: string) {
@@ -13,6 +12,15 @@ export function isImageAudit(audit_id: string) {
     'unsized-images',
       'uses-responsive-images'
   ].includes(audit_id)
+}
+
+export function isUrl(input: string): boolean {
+  try {
+    new URL(input);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 export function truncateMiddleOfURL(url: string, maxLength: number) {

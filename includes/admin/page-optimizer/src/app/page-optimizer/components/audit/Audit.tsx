@@ -6,10 +6,7 @@ import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditFiles from "app/page-optimizer/components/audit/files";
 import {JsonView} from "react-json-view-lite";
-import AppButton from "components/ui/app-button";
-import {ArrowDown} from "lucide-react";
 import {useSelector} from "react-redux";
-import {isEqual} from "underscore";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 

@@ -1,7 +1,4 @@
 import {CellContext} from "@tanstack/react-table";
-import {JsonView} from "react-json-view-lite";
-import DOMPurify from 'dompurify';
-import {Highlight, themes} from "prism-react-renderer";
 import Code from "components/ui/code";
 import {Tooltip, TooltipContent, TooltipTrigger} from "components/ui/tooltip";
 
