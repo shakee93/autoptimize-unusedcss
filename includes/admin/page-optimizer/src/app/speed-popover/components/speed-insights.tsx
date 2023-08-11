@@ -16,7 +16,7 @@ const Content = () => {
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
 
-    const [on, setOn] = useState<boolean>(true)
+    const [on, setOn] = useState<boolean>(false)
 
     useEffect(() => {
 

@@ -59,14 +59,14 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
 
-
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
                 reload
             )
 
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
+
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: FETCH_DATA_FAILURE, error: error.message });

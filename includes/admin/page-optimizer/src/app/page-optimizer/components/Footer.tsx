@@ -116,7 +116,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                         <PopoverContent className='pt-0'>
                             <div className='my-2 ml-4 font-medium '>Revisions</div>
                             <ul className='border rounded-lg'>
-                                { revisions.map((rev: Revision, index: number) => {
+                                { revisions?.map((rev: Revision, index: number) => {
                                     return <li className={cn(
                                         'px-4 py-3 text-sm hover:bg-zinc-100',
                                         index === 0 ? 'border-none' : 'border-t'

@@ -22,12 +22,20 @@ interface AuditColumnDropdownProps {
 
 const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) => {
     const {getValue, row} = cell;
+    const url = row.getValue("url") as any;
+    const value = getValue();
+
+    if (value?.control_type !== 'dropdown' || !value) {
+        return <span></span>
+    }
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const [action, setAction] = useState<string>(getValue() || "none");
-    const url = row.getValue("url") as string;
+    const [action, setAction] = useState<string>(value.value || "none");
+
 
     const updateAction = (v: string) => {
-        dispatch(updateFileAction(audit, url, v));
+        console.log(url);
+        dispatch(updateFileAction(audit, url.url ? url.url : url, v));
         setAction(v);
     };
 
@@ -40,8 +48,11 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
         }
     };
 
+
+
+
     const renderSelectItems = () => {
-        return heading.control_values.map((value) => (
+        return value.control_values.map((value: string) => (
             <SelectItem
                 className="capitalize cursor-pointer"
                 key={value}

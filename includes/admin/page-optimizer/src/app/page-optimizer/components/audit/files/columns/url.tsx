@@ -15,7 +15,7 @@ interface AuditColumnUrlProps {
 const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
 
 
-    let value = cell.getValue() as string
+    let value = cell.getValue()
     
     if (isImageAudit(audit.id)) {
         return <AuditColumnImage cell={cell}/>
@@ -25,8 +25,14 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
                href={value}>{truncateMiddleOfURL(value, 50)}
                 <ArrowTopRightOnSquareIcon className='w-4'/> </a>
         )
+    } else if (typeof value === 'object' && typeof value?.url === 'string') {
+        return (
+            <a className='flex gap-2' target='_blank'
+               href={value.url}>{truncateMiddleOfURL(value.url, 50)}
+                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+        )
     } else {
-        return <Code code={value}></Code>
+        return <span>{value}</span>
     }
 }
 
