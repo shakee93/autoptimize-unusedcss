@@ -53,6 +53,8 @@ class Javascript_Enqueue
                 $this->load_scripts_on_user_interaction($link);
             }
 
+            do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy);
+
         }
 
         /*if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
@@ -225,7 +227,7 @@ class Javascript_Enqueue
             return;
         }
 
-        if(isset($this->options['uucss_load_js_method']) && $this->options['uucss_load_js_method'] == "defer"){
+        if(isset($this->options['uucss_load_js_method']) && ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1")){
 
             if(self::is_js($link)){
 
@@ -236,7 +238,7 @@ class Javascript_Enqueue
 
                 }
 
-            }else if(self::is_inline_script($link) && isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
+            }else if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1" && self::is_inline_script($link)){
 
                 if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
 
@@ -247,7 +249,6 @@ class Javascript_Enqueue
             }
 
         }
-
     }
 
     public function defer_inline_js($link){

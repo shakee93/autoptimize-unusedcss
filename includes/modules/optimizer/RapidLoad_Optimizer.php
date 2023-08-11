@@ -60,7 +60,11 @@ class RapidLoad_Optimizer
             return $urls;
         }, 10, 3);
 
+        add_action('rapidload/enqueue/optimize-js', function ($link){
 
+
+
+        }, 10 , 1);
     }
 
     public static function   pre_optimizer_function(){
