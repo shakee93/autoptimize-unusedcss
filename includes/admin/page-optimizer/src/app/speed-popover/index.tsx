@@ -1,11 +1,7 @@
 import React, {useEffect} from 'react';
 import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
-import { ReactNode, Dispatch, SetStateAction } from 'react';
 import {useOptimizerContext} from "../../context/root";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/reducers";
-
 
 function SpeedPopover() {
 

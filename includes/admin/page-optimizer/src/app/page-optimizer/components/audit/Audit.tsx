@@ -18,7 +18,7 @@ export interface AuditProps {
 
 const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange }, ref) => {
     const [toggleFiles, setToggleFiles] = useState(false);
-    const [showJson, setShowJson] = useState<boolean>(false)
+    const [showJson, setShowJson] = useState<boolean>(true)
     const {settings} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
 

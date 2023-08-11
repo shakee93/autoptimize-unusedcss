@@ -27,7 +27,7 @@
     "commit-lint"
   ],
   "browserslist": [
-    ">0.2%",
+    ">0.5%",
     "not dead",
     "not IE 11"
   ],

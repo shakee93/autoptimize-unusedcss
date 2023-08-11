@@ -7,7 +7,6 @@ import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progr
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../context/root";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../store/reducers";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
 
@@ -17,7 +16,7 @@ const Content = () => {
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
 
-    const [on, setOn] = useState<boolean>(false)
+    const [on, setOn] = useState<boolean>(true)
 
     useEffect(() => {
 
@@ -26,7 +25,7 @@ const Content = () => {
 
             const timer = setInterval(() => {
                 currentNumber += 1;
-                if (currentNumber <= data.data.performance) {
+                if (currentNumber <=data.performance) {
                     setPerformance(currentNumber)
                 } else {
                     clearInterval(timer);
@@ -45,7 +44,7 @@ const Content = () => {
             return 0;
         }
 
-        const targetNumber = data.data.performance;
+        const targetNumber =data.performance;
         const maxOpacity = 1;
         const minOpacity = 0;
         const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
@@ -113,10 +112,10 @@ const Content = () => {
                         </div>
                     ) : (
                         <div className='flex flex-col gap-2'>
-                            <SpeedInsightGroup title='Opportunities' items={data?.data?.grouped?.opportunities}/>
-                            <SpeedInsightGroup title='Diagnostics' items={data?.data?.grouped?.diagnostics}/>
+                            <SpeedInsightGroup title='Opportunities' items={data?.grouped?.opportunities}/>
+                            <SpeedInsightGroup title='Diagnostics' items={data?.grouped?.diagnostics}/>
                             <SpeedInsightGroup title='Passed Audits' success={true}
-                                               items={data?.data?.grouped?.passed_audits}/>
+                                               items={data?.grouped?.passed_audits}/>
                         </div>
                     )}
                     <hr className='my-3 mx-6'/>

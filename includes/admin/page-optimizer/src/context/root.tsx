@@ -11,12 +11,16 @@ export const OptimizerContext = createContext<OptimizerContextProps | null>(null
 export const OptimizerProvider = ({ children } : {
     children: ReactNode
 }) => {
-    const [showOptimizer, setShowOptimizer] = useState(true);
+    const isAdminBar = document.getElementById('wpadminbar');
+
+    const [showOptimizer, setShowOptimizer] = useState(!isAdminBar);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'https://rapidload.io/?no_rapidload',
         ajax_url: '',
         page_optimizer_base: '',
-        plugin_url: ''
+        plugin_url: '',
+        nonce: '',
+        timezone: 'UTC'
     } )
     const [type, setType] = useState<ReportType>('desktop');
 
