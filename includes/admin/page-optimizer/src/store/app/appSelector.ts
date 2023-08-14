@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import {RootState} from "../reducers";
+import {RootState} from "./appTypes";
 
 const state = (state: RootState) => state.app;
 

@@ -46,9 +46,19 @@ interface AuditHeadings {
 interface AuditFile {
     wastedBytes: number;
     totalBytes: number;
-    url: string;
+    action: {
+        value: string,
+        control_type: string
+        control_values: string[]
+    };
     wastedPercent?: number;
-    action: string
+    url: {
+        url: string,
+        file_type: {
+            label: string
+            value: string
+        }
+    }
     pattern: string
 }
 

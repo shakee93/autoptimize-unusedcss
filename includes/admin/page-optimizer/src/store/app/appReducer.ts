@@ -80,11 +80,14 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     if(audit.files && audit.files.items) {
 
                         audit.files.items = audit.files.items.map((item) => {
-                            if (item.url && item.action && item.url === payload.file) {
-
+                            
+                            if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
                                 return {
                                     ...item,
-                                    action: payload.value,
+                                    action: {
+                                        ...item.action,
+                                        value: payload.value,
+                                    }
                                 };
                             }
                             return item;

@@ -5,7 +5,7 @@ import SpeedPopover from "app/speed-popover";
 import {useOptimizerContext} from "../context/root";
 import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
-import {AppAction, AppState} from "../store/app/appTypes";
+import {AppAction, AppState, RootState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 
@@ -29,8 +29,12 @@ const App = ({is_popup}: {
 
     const popover = is_popup && popupNode ? ReactDOM.createPortal(<SpeedPopover/>, popupNode) : <SpeedPopover/>;
 
-    const dispatch: ThunkDispatch<AppState, unknown, AppAction> = useDispatch();
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
 
+    useEffect(() => {
+        dispatch(fetchData(options, options.optimizer_url, false))
+    }, [dispatch, activeReport]);
 
 
     return (

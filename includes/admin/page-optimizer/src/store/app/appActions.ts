@@ -58,7 +58,13 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             dispatch({ type: FETCH_DATA_REQUEST });
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
+            const activeReportData = currentState.app[activeReport]
 
+            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // if(activeReportData.loading && activeReportData.data ) {
+            //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
+            //     return;
+            // }
 
             const response = await api.fetchPageSpeed(
                 url,
@@ -66,7 +72,8 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 reload
             )
 
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response.data) });
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
+
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: FETCH_DATA_FAILURE, error: error.message });

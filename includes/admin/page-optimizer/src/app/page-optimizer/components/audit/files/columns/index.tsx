@@ -34,7 +34,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
         return <AuditColumnUrl audit={audit} cell={cell}/>
     }
 
-    if (heading.control_type === 'dropdown') {
+    if (heading.valueType === 'controls') {
         return <AuditColumnDropdown cell={cell} audit={audit} heading={heading}/>
     }
 
@@ -56,6 +56,10 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
 
     if (heading.valueType === 'numeric' && typeof value === 'object') {
         return <span>{(value.value as number)}</span>
+    }
+
+    if (typeof value === 'object') {
+        return <span>{JSON.stringify(value)}</span>
     }
 
     console.log('col', value);

@@ -52,6 +52,8 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                 return '160px';
             case 'bytes':
                 return '140px';
+            case 'controls':
+                return '200px';
             default:
                 return 'auto'
         }
@@ -64,7 +66,7 @@ const AuditFiles = ({audit}: AuditFileProps) => {
             return false
         }
 
-        return !['pattern'].includes(col.id as string)
+        return !['pattern', 'file_type'].includes(col.id as string)
     }
 
     return (

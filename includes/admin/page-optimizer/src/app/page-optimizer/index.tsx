@@ -55,7 +55,7 @@ export default function PageOptimizer() {
                     key={tab.key}
                 >
                     {tab.name}
-                    {(data?.data && data.data.audits?.length > 0) && (
+                    {(data && data.audits?.length > 0) && (
                         <div className={
                             cn(
                                 'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
@@ -65,7 +65,7 @@ export default function PageOptimizer() {
                             <span className={cn(
                                 activeTab === tab.key && 'text-white'
                             )}>
-                                {data?.data.grouped[`${tab.key}`].length}
+                                {data?.grouped[`${tab.key}`].length}
                             </span>
                         </div>
                     )}
@@ -106,11 +106,7 @@ export default function PageOptimizer() {
         });
     };
 
-    let url = 'https://rapidload.io/?no_rapidload';
-
-    if (options?.optimizer_url) {
-        url = options.optimizer_url
-    }
+    let url = options?.optimizer_url;
 
     return (
 

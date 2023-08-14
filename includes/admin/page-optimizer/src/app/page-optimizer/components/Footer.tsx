@@ -12,7 +12,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
-import {ArrowPathIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
+import {ArrowPathIcon, CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import { formatDistanceToNow } from 'date-fns';
 
 import {
@@ -52,21 +52,37 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const { toast } = useToast()
 
     const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
-        setSavingData(true)
+
+        if (savingData) {
+            return;
+        }
+
+        setSavingData(true);
 
         const api = new ApiService(options);
 
-        const res = await api.updateSettings(
-            url,
-            activeReport,
-            reload,
-            data
-        )
+
+        try {
+            const res = await api.updateSettings(
+                url,
+                activeReport,
+                reload,
+                data
+            );
+
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
+            })
+
+        } catch (error: any) {
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+            })
+
+        }
+
 
         setSavingData(false)
-        toast({
-            description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
-        })
 
     }
 
@@ -116,7 +132,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                         <PopoverContent className='pt-0'>
                             <div className='my-2 ml-4 font-medium '>Revisions</div>
                             <ul className='border rounded-lg'>
-                                { revisions.map((rev: Revision, index: number) => {
+                                { revisions?.map((rev: Revision, index: number) => {
                                     return <li className={cn(
                                         'px-4 py-3 text-sm hover:bg-zinc-100',
                                         index === 0 ? 'border-none' : 'border-t'
