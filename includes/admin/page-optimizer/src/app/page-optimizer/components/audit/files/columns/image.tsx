@@ -26,16 +26,18 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
         };
     }
 
+    value = value.url ? value.url : value;
+
     return (
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
-                        <div className='w-6 h-6 border rounded-md overflow-hidden'>
+                        <div className='w-6 h-6 border rounded-md overflow-hidden'>]
                             <img className='w-fit' src={value} alt=''/>
                         </div>
 
                         <a className='flex gap-2' target='_blank'
-                           href={value}>{truncateMiddleOfURL(value, 50)}
+                           href={value}>{truncateMiddleOfURL(value, 40)}
                             <ArrowTopRightOnSquareIcon className='w-4'/> </a>
                     </div>
                 </TooltipTrigger>
