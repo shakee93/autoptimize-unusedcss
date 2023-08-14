@@ -129,6 +129,18 @@ class RapidLoad_Optimizer
             return;
         }
 
+        foreach (self::$options as $key => $option){
+
+            if(!isset(self::$global_options[$key])){
+                continue;
+            }
+
+            if(isset(self::$global_options[$key]) && gettype(self::$global_options[$key])){
+
+            }
+
+        }
+
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
         }else{
@@ -161,24 +173,6 @@ class RapidLoad_Optimizer
     }
 
     public function fetch_page_speed(){
-
-        // Allow from any origin
-        if (isset($_SERVER['HTTP_ORIGIN'])) {
-            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-
-        }
-
-        // Access-Control headers are received during OPTIONS requests
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-                // May also be using PUT, PATCH, HEAD etc
-                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-
-            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-            exit(0);
-        }
 
         self::pre_optimizer_function();
 
