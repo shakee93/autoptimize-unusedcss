@@ -156,7 +156,7 @@ const SpeedInsights = ({children}: {
                     </div>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                    <Tooltip.Content className="font-sans animate-rl-scale-in" sideOffset={5}>
+                    <Tooltip.Content className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5}>
                         <Content/>
                     </Tooltip.Content>
                 </Tooltip.Portal>
