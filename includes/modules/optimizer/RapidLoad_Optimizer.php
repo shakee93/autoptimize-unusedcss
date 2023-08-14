@@ -73,14 +73,18 @@ class RapidLoad_Optimizer
                         if(isset($option->action) && gettype($option->action) == "object" && isset($option->action) && isset($option->action->value)){
 
                             if(isset($link->src)){
-
                                 if($option->action->value == "delay"){
                                     if (preg_match('/.*googletagmanager\.com\/gtag\/.*/', $link->src)) {
-
+                                        $link->{"data-rapidload-src"} = $link->src;
+                                        unset($link->src);
                                     }
                                 }
-
-
+                            }else if(!empty($link->innertext())){
+                                if($option->action->value == "delay"){
+                                    if (preg_match('/.*googletagmanager\.com\/gtag\/.*/', $link->innertext())) {
+                                        $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+                                    }
+                                }
                             }
 
                         }
