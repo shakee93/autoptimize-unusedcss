@@ -18,6 +18,7 @@ class RapidLoad_Optimizer
 
     static $options;
     static $global_options;
+    static $merged_options = [];
     static $job;
     static $strategy;
     static $revision_limit;
@@ -111,13 +112,14 @@ class RapidLoad_Optimizer
             self::$strategy = $_REQUEST['strategy'];
             self::$global_options = RapidLoad_Base::fetch_options();
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
-            if(empty(self::$options)){
-                self::$options = self::$global_options;
-            }else{
-                foreach (self::$global_options as $key => $value){
-                    if(!isset(self::$options[$key])){
-                        self::$options[$key] = $value;
-                    }
+            foreach (self::$options as $key => $value){
+                if(!isset(self::$merged_options[$key])){
+                    self::$merged_options[$key] = $value;
+                }
+            }
+            foreach (self::$global_options as $key => $value){
+                if(!isset(self::$merged_options[$key])){
+                    self::$merged_options[$key] = $value;
                 }
             }
         }
@@ -135,8 +137,15 @@ class RapidLoad_Optimizer
                 continue;
             }
 
-            if(isset(self::$global_options[$key]) && gettype(self::$global_options[$key])){
+            $option_type = gettype(self::$global_options[$key]);
 
+            if(isset(self::$global_options[$key])){
+                if($option_type == "string" && self::$global_options[$key] == $option){
+                    unset(self::$options[$key]);
+                }
+                else if (($option_type == "object" || $option_type == "array") && json_encode($option) == json_encode(self::$global_options[$key])){
+                    unset(self::$options[$key]);
+                }
             }
 
         }
@@ -194,76 +203,80 @@ class RapidLoad_Optimizer
                 'url' => $url,
                 'mobile' => self::$strategy
             ]);
+
+            if(is_wp_error($result)){
+                wp_send_json_error($result);
+            }
+
+            foreach ($result->audits as $audit){
+
+                if(isset($audit->settings)){
+                    foreach ($audit->settings as $settings){
+                        foreach ($settings->inputs as $input){
+                            if(isset(self::$merged_options[$input->key])){
+                                if($input->key == "uucss_load_js_method"){
+                                    $input->value = self::$merged_options[$input->key] == "defer";
+                                }else{
+                                    $input->value = self::$merged_options[$input->key];
+                                }
+
+                            }
+                            if($input->key == "uucss_enable_uucss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                                if($data->exist()){
+                                    $data->save();
+                                }
+                                $input->{'value_data'} = $data->status;
+                            }
+                            if($input->key == "uucss_enable_cpcss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                                if($data->exist()){
+                                    $data->save();
+                                }
+                                $input->{'value_data'} = $data->status;
+                            }
+                        }
+                    }
+                }
+
+                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                    foreach ($audit->files->items as $item){
+
+                        if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                                'unused-css-rules','legacy-javascript','font-display'])){
+
+                            if(!isset(self::$merged_options['individual-file-actions'])){
+                                self::$merged_options['individual-file-actions'] = [];
+                            }
+
+                            if(!isset(self::$merged_options['individual-file-actions'][$audit->id])){
+                                self::$merged_options['individual-file-actions'][$audit->id][] = [
+                                    'url' => $item->url->url,
+                                    'action' => 'none',
+                                    'url_object' => $item->url
+                                ];
+                            }
+
+                            if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
+
+                                $key = array_search($item->url->url, array_column(self::$merged_options['individual-file-actions'][$audit->id], 'url'));
+
+                                if(isset($key) && is_numeric($key)){
+
+                                    $item->action = self::$merged_options['individual-file-actions'][$audit->id][$key]['action'];
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+            }
         }
 
         if(!isset($result->audits)){
             wp_send_json_error([]);
-        }
-
-        foreach ($result->audits as $audit){
-
-            if(isset($audit->settings)){
-                foreach ($audit->settings as $settings){
-                    foreach ($settings->inputs as $input){
-                        if(isset(self::$options[$input->key])){
-                            if($input->key == "uucss_load_js_method"){
-                                $input->value = self::$options[$input->key] == "defer";
-                            }else{
-                                $input->value = self::$options[$input->key];
-                            }
-
-                        }
-                        if($input->key == "uucss_enable_uucss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if($data->exist()){
-                                $data->save();
-                            }
-                            $input->{'value_data'} = $data->status;
-                        }
-                        if($input->key == "uucss_enable_cpcss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if($data->exist()){
-                                $data->save();
-                            }
-                            $input->{'value_data'} = $data->status;
-                        }
-                    }
-                }
-            }
-
-            if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
-                foreach ($audit->files->items as $item){
-
-                    if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
-                            'unused-css-rules','legacy-javascript','font-display'])){
-
-                        if(!isset(self::$options['individual-file-actions'])){
-                            self::$options['individual-file-actions'] = [];
-                        }
-
-                        if(!isset(self::$options['individual-file-actions'][$audit->id])){
-                            self::$options['individual-file-actions'][$audit->id][] = [
-                                'url' => $item->url->url,
-                                'action' => 'none',
-                                'url_object' => $item->url
-                            ];
-                        }
-
-                        if(isset(self::$options['individual-file-actions'][$audit->id]) && is_array(self::$options['individual-file-actions'][$audit->id]) && !empty(self::$options['individual-file-actions'][$audit->id])){
-
-                            $key = array_search($item->url->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
-
-                            if(isset($key) && is_numeric($key)){
-
-                                $item->action = self::$options['individual-file-actions'][$audit->id][$key]['action'];
-
-                            }
-
-                        }
-                    }
-                }
-            }
-
         }
 
         self::post_optimizer_function($result);
@@ -271,7 +284,7 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
-            'individual-file-actions' => isset(self::$options['individual-file-actions']) ? self::$options['individual-file-actions'] : []
+            'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : []
         ]);
 
 
@@ -298,7 +311,6 @@ class RapidLoad_Optimizer
         }
 
         $result = $data->data;
-        $options = isset($_REQUEST['individual-file-actions']) ? $_REQUEST['individual-file-actions'] : [];
 
         if(isset($result->audits) && is_array($result->audits)){
 
