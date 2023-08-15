@@ -208,6 +208,10 @@ class RapidLoad_Optimizer
                 wp_send_json_error($result);
             }
 
+            if(!isset($result->audits)){
+                wp_send_json_error([]);
+            }
+
             foreach ($result->audits as $audit){
 
                 if(isset($audit->settings)){
