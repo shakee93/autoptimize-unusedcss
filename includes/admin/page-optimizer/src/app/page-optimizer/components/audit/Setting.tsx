@@ -34,6 +34,7 @@ import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
 import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
+import TooltipText from "components/ui/tooltip-text";
 
 interface SettingItemProps {
     audit: Audit
@@ -122,9 +123,11 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
             {showPopover && (
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <button>
-                            <Cog6ToothIcon className='w-[1.15rem] text-zinc-400'/>
-                        </button>
+                        <div className='cursor-pointer'>
+                            <TooltipText text={`${settings.name} Settings`}>
+                                <Cog6ToothIcon className='w-[1.15rem] text-zinc-400'/>
+                            </TooltipText>
+                        </div>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[450px]">
                         <DialogHeader className='border-b px-6 py-7'>

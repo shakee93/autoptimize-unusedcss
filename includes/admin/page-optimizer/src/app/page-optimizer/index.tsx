@@ -11,6 +11,8 @@ import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
+import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
+import TooltipText from "components/ui/tooltip-text";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -108,6 +110,21 @@ export default function PageOptimizer() {
 
     let url = options?.optimizer_url;
 
+
+    const TogglePerformanceComponent = ({}) => {
+
+        return (
+            <TooltipText text='Toggle Sidebar'>
+                <span className='cursor-pointer' onClick={() => {
+                    setTogglePerformance(prev => !prev)
+                }}>
+                            {(togglePerformance) ? <ArrowLeftToLine className="h-4 w-4 text-gray-500"/> :
+                                <ArrowRightToLine className="h-4 w-4 text-gray-500"/>}
+                        </span>
+            </TooltipText>
+        )
+    }
+
     return (
 
         <div
@@ -118,21 +135,15 @@ export default function PageOptimizer() {
                     <section className="container grid grid-cols-12 gap-8 pt-4">
                         {togglePerformance && (
                             <aside className="col-span-3">
-                                <h2 className="text-lg ml-5">Speed Insights</h2>
+                                <div className="text-lg ml-5 flex items-center gap-2">Speed Insights {togglePerformance && <TogglePerformanceComponent/>} </div>
                                 <div className="widgets pt-4 flex">
                                     <PageSpeedScore/>
-
                                 </div>
                             </aside>
                         )}
                         <article className={`${togglePerformance ? 'col-span-9' : 'col-span-12'}`}>
                             <h2 className="text-lg ml-5 flex gap-2 font-normal items-center">
-                        <span className='cursor-pointer' onClick={() => {
-                            setTogglePerformance(prev => !prev)
-                        }}>
-                            {(togglePerformance) ? <ArrowLeftOnRectangleIcon className="h-4 w-4 text-gray-500"/> :
-                                <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500"/>}
-                        </span>
+                                {!togglePerformance && <TogglePerformanceComponent/>}
                                 Fix Performance Issues</h2>
                             <div className="tabs pt-4 flex">
                                 <Card padding='p-0 px-6' cls='flex cursor-pointer select-none'>

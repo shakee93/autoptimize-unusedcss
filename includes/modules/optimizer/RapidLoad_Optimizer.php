@@ -171,6 +171,8 @@ class RapidLoad_Optimizer
             ]);
         }
 
+        error_log(json_encode($result));
+
         if(!isset($result->audits)){
             wp_send_json_error([]);
         }
