@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
+import Settings from "app/page-optimizer/components/audit/Settings";
 
 export interface AuditProps {
     audit?: Audit;
@@ -70,13 +71,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
 
                 <div className='flex gap-2 items-center'>
 
-                    {audit.settings.length > 0 &&(
-                        <div className="flex flex-wrap justify-end gap-2">
-                            {audit.settings.map((s, index) => (
-                                <Setting audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
-                            ))}
-                        </div>
-                    )}
+                    <Settings audit={audit}/>
+
 
                     {(audit.files?.items?.length) > 0 && (
                         <div>
