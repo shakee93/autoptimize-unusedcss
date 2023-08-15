@@ -58,7 +58,7 @@ export const SelectionBoxIcon = () => (
 export const Pass:FC<SvgProps> = ({cls}) => (
     <svg className={`${cls}`} width="9" height="9" viewBox="0 0 9 9" fill="none"
          xmlns="http://www.w3.org/2000/svg">
-        <circle cx="4.5" cy="4.5" r="4.5" fill="#09B42F"></circle>
+        <circle cx="4.5" cy="4.5" r="4.5" fill="#0c6"></circle>
     </svg>
 );
 

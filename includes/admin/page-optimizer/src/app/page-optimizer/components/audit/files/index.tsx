@@ -10,6 +10,7 @@ import {JsonView} from "react-json-view-lite";
 import React from "react";
 import AuditColumns from "./columns";
 import {isImageAudit} from "lib/utils";
+import Description from "app/page-optimizer/components/audit/Description";
 
 
 interface AuditFileProps {
@@ -71,7 +72,11 @@ const AuditFiles = ({audit}: AuditFileProps) => {
 
     return (
         <div className='border-t dark:border-zinc-700 border-zinc-200 w-full p-4'>
+            <div className='pt-0 pb-4 px-4 text-zinc-700'>
+                <Description content={audit.description}/>
+            </div>
             <div className='w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden'>
+                <div></div>
                 <table className='w-full'>
                     <thead>
                     {table?.getHeaderGroups().map(headerGroup => (
@@ -107,7 +112,6 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                 </table>
                 {/*<JsonView shouldInitiallyExpand={e => false} data={audit.files}/>*/}
             </div>
-
         </div>
     )
 }

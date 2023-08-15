@@ -16,6 +16,7 @@ type AuditTypes = keyof OptimizerResults['grouped']
 interface Audit {
     id: string;
     name: string;
+    description: string;
     icon: string;
     files: {
         overallSavingsBytes: number;
@@ -27,6 +28,8 @@ interface Audit {
     };
     type: string;
     score: number;
+    scoreDisplayMode: string;
+    displayValue: string;
     settings: AuditSetting[];
 }
 
