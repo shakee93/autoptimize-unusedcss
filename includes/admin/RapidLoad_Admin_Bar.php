@@ -54,8 +54,13 @@ class RapidLoad_Admin_Bar {
         wp_enqueue_script( 'rapidload_page_optimizer' );
 
         function add_module_script_type($tag, $handle) {
+
             if ($handle === 'rapidload_page_optimizer') {
-                $tag = str_replace(' src', ' type="module" src', $tag);
+                $tag = preg_replace("/type=['\"]text\/javascript['\"]/", "type='module'", $tag);
+
+                if (!preg_match("/type=/", $tag)) {
+                    $tag = preg_replace("/<script /", "<script type=\"module\" ", $tag);
+                }
             }
             return $tag;
         }
