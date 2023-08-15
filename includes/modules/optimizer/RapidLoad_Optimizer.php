@@ -397,7 +397,9 @@ class RapidLoad_Optimizer
 
                             if(isset($key) && is_numeric($key)){
 
-                                self::$options['individual-file-actions'][$audit->id][$key]->action = $item->action;
+                                if(isset(self::$options['individual-file-actions'][$audit->id][$key])){
+                                    self::$options['individual-file-actions'][$audit->id][$key]->action = $item->action;
+                                }
 
                             }else{
                                 self::$options['individual-file-actions'][$audit->id][] = (object)[
