@@ -11,11 +11,12 @@ import {
     UPDATE_SETTINGS
 } from "./appTypes";
 import ApiService from "../../services/api";
+import Audit from "app/page-optimizer/components/audit/Audit";
 
 
 const transformData = (data: any) => {
     
-    let audits : Audit[] = data.data.page_speed.audits
+    let audits : Audit[] = data.data.page_speed.audits.sort((a: Audit, b: Audit) => a.score - b.score)
 
     let _data = {
         data: {
@@ -24,7 +25,10 @@ const transformData = (data: any) => {
             grouped : {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit'),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
-                diagnostics: audits.filter(audit => audit.type === "diagnostics"),
+                diagnostics: [
+                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
+                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode === 'informative'),
+                ],
             },
         },
         success: data.success,
