@@ -1,15 +1,16 @@
-import {Cell,
+import {
+    Cell,
     ColumnMeta,
     createColumnHelper,
     flexRender,
-    getCoreRowModel,
+    getCoreRowModel, getPaginationRowModel,
     Header,
     useReactTable
 } from "@tanstack/react-table";
 import {JsonView} from "react-json-view-lite";
-import React from "react";
+import React, {useEffect} from "react";
 import AuditColumns from "./columns";
-import {isImageAudit} from "lib/utils";
+import {cn, isImageAudit} from "lib/utils";
 import Description from "app/page-optimizer/components/audit/Description";
 
 
@@ -44,8 +45,13 @@ const AuditFiles = ({audit}: AuditFileProps) => {
         data: audit.files.items,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
     })
 
+
+    useEffect(() => {
+        table.setPageSize(10);
+    }, [])
     const cellWidth = (valueType: string) => {
 
         switch (valueType) {
@@ -110,8 +116,28 @@ const AuditFiles = ({audit}: AuditFileProps) => {
                     ))}
                     </tbody>
                 </table>
+
                 {/*<JsonView shouldInitiallyExpand={e => false} data={audit.files}/>*/}
             </div>
+
+            {table.getPageCount() > 1 && (
+                <div className='w-full flex justify-end'>
+                    <ul className='flex gap-1 mt-4'>
+                        <li className='hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs'>{'<'}</li>
+                        {[...Array(table.getPageCount())].map((i, index) => (
+                            <li className={cn(
+                                'hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs',
+                                table.getState().pagination.pageIndex === index ? 'bg-zinc-200' : ''
+                            )}
+                                onClick={() => {
+                                    table.setPageIndex(index)
+                                }}
+                                key={index}>{index + 1}</li>
+                        ))}
+                        <li className='hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs'>{'>'}</li>
+                    </ul>
+                </div>
+            )}
         </div>
     )
 }
