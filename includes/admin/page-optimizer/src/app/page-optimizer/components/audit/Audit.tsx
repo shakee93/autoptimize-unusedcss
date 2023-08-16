@@ -4,7 +4,7 @@ import React, {useState, useRef, useEffect, forwardRef, useImperativeHandle} fro
 import Setting from './Setting';
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
-import AuditFiles from "app/page-optimizer/components/audit/files";
+import AuditContent from "app/page-optimizer/components/audit/files";
 import {JsonView} from "react-json-view-lite";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
@@ -24,6 +24,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
     const divRef = useRef<HTMLDivElement>(null);
 
     const [showJson, setShowJson] = useState<boolean>(false)
+    const [filesMounted, setFilesMounted] = useState(false)
 
     if (!audit?.id) {
         return <></>;
@@ -37,12 +38,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
 
     useEffect(() => {
         notifyHeightChange();
-    }, [toggleFiles]);
+    }, [toggleFiles, filesMounted]);
 
     const notifyHeightChange = () => {
         if (divRef.current && typeof onHeightChange === 'function') {
             // Get the actual height of the Audit component
-            const height = divRef.current.clientHeight;
+            const height = divRef.current.scrollHeight;
             // reduce the height keep a padding above the circle
             onHeightChange(height - 15);
         }
@@ -52,8 +53,35 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
         notifyHeightChange,
     }));
 
+    const summary = () => {
+        const numItems = audit.files?.items?.length || 0;
+        const numSettings = audit.settings.length || 0;
+
+        if (numItems === 0 && numSettings === 0) {
+            return '';
+        }
+
+        let summaryText = ``;
+
+        if (numSettings > 0) {
+            summaryText += ` ${numSettings} ${numSettings === 1 ? 'Action' : 'Actions'}`;
+        }
+
+        if (numItems > 0) {
+            if (numSettings > 0) {
+                summaryText += ', ';
+            }
+
+
+            summaryText += ` ${numItems} ${numItems === 1 ? 'Resource' : 'Resources'}`;
+        }
+
+        return `${summaryText}`;
+    };
+
+
     return (
-        <Card spreader={(audit?.files?.items?.length ? true: false) && !toggleFiles} ref={divRef} padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
+        <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
                 <div className='flex gap-3 font-normal  items-center text-base'>
                     <div
@@ -62,24 +90,33 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
                     </div>
                     <div className='flex flex-col justify-around'>
                         {audit.name}
-                        {audit.displayValue && (
-                            <span className='text-xxs leading-tight opacity-70'> {audit.displayValue}</span>
-                        )}
+                        <span className='flex text-xxs leading-tight opacity-70'>
+                             {audit.displayValue && (
+                                 <span>{audit.displayValue}</span>
+                             )}
+                        </span>
                     </div>
 
                 </div>
 
-                <div className='flex gap-2 items-center'>
-
-                    <Settings audit={audit}/>
+                <div className='flex gap-4 items-center'>
 
 
-                    {(audit.files?.items?.length) > 0 && (
+
+                    { (audit.files?.items?.length > 0 || audit.settings.length > 0) && (
+                        <div className='text-xs opacity-50'>
+                            {summary()}
+                        </div>
+                    )}
+
+                    {/*<Settings audit={audit} max={1}/>*/}
+
+                    {(audit.files?.items?.length > 0 || audit.settings.length > 0)  && (
                         <div>
-                            <TooltipText text='View files and actions'>
+                            <TooltipText text='Show files and actions'>
                                 <div onClick={() => setToggleFiles(prev => !prev)}
                                         className={`transition min-w-[125px] duration-300 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl dark:hover:opacity-80 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border dark:border-zinc-600 border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300'}`}>
-                                    View Files {(toggleFiles) ?
+                                    Show Actions {(toggleFiles) ?
                                     <MinusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/> :
                                     <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>}
                                 </div>
@@ -100,8 +137,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
                     <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
                 </div>
             )}
-            {audit.files && toggleFiles && (
-                <AuditFiles audit={audit}/>
+            {((audit.files?.items?.length > 0 || audit.settings.length > 0) && toggleFiles) && (
+                <AuditContent notify={setFilesMounted} audit={audit}/>
             )}
 
         </Card>

@@ -20,7 +20,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({ children, cls, padding, sp
 
             {spreader && (
                 <div className='absolute w-full -bottom-1.5 z-[-1]'>
-                    <div className='rounded-2xl h-5 border mx-2 bg-white opacity-40'></div>
+                    <div className='rounded-2xl h-5 border mx-2 bg-white opacity-60'></div>
                     <div className='absolute w-full -bottom-1 z-[-1]'>
                         <div className=' rounded-2xl h-5 border mx-4 bg-white opacity-30'></div>
                     </div>

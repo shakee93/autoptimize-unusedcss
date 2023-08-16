@@ -3,7 +3,7 @@ const Description = ({ content} : {content: string}) => {
     const parts = content.split(/\[(.*?)\]\((.*?)\)/);
 
     return (
-        <p>
+        <div className='text-sm p-2'>
             {parts.map((part, index) => {
                 if (index % 3 === 1) {
                     // Creating anchor tag for links
@@ -20,7 +20,7 @@ const Description = ({ content} : {content: string}) => {
                     return null;
                 }
             })}
-        </p>
+        </div>
     );
 }
 
