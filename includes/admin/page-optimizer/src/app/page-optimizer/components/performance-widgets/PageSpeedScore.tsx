@@ -89,7 +89,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     return (
 
         <div className='w-full'>
-            <div className="mb-3 drop-shadow-sm rounded-xl border dark:border-zinc-700 bg-white dark:bg-transparent">
+            <div className="mb-3 drop-shadow-sm rounded-3xl border dark:border-zinc-700 bg-white dark:bg-transparent">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
                     <div className='flex gap-6'>
@@ -136,7 +136,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 </div>
             </div>
-            <div className="mb-3 drop-shadow-sm rounded-xl border dark:border-zinc-700 bg-white dark:bg-transparent">
+            <div className="mb-3 drop-shadow-sm rounded-3xl border dark:border-zinc-700 bg-white dark:bg-transparent">
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     {data?.metrics.map((s, index) => (
 
@@ -156,7 +156,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 </div>
             </div>
 
-            <div onClick={handleCoreWebClick} className="drop-shadow-sm rounded-xl border dark:border-zinc-700 bg-white dark:bg-transparent">
+            <div onClick={handleCoreWebClick} className="drop-shadow-sm rounded-3xl border dark:border-zinc-700 bg-white dark:bg-transparent">
                 <div className={`flex justify-around px-6 py-4 cursor-pointer`}>
                     <div>
                         <p className="">Real Experience (28 days)</p>

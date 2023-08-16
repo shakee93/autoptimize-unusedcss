@@ -148,7 +148,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
 
     return (
-        <div className='border-t dark:border-zinc-700 border-zinc-200 w-full py-4'>
+        <div className='border-t dark:border-zinc-700 border-zinc-200 w-full pt-4'>
             <div className=' pb-4 text-zinc-700 dark:text-zinc-300'>
                <div className='px-4 ml-2'>
                    <Description content={audit.description}/>
@@ -164,7 +164,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             {(audit?.files?.items?.length > 0 && mounted && tables.length > 0) && tables.map((table, index) => (
                 <div key={index} className='flex flex-col gap-3 p-4 border-t dark:border-zinc-700'>
                     <div className='font-medium text-sm ml-2'> {table.options.meta?.title ? table.options.meta.title : 'Related Resources'} </div>
-                    <div className='w-full dark:border-zinc-700 border border-zinc-200  rounded-[20px] overflow-hidden'>
+                    <div className='w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden'>
 
                             <table className='w-full'>
                                 <thead>
