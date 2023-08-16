@@ -15,7 +15,7 @@ const Settings = ({ audit, max = 2 }: SettingsProps) => {
     return (
         <>
             {audit.settings.length > 0 &&(
-                <div className="flex flex-wrap justify-end gap-2">
+                <div className="flex flex-wrap gap-2">
                     {audit.settings.slice(0, max).map((s, index) => (
                         <Setting audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                     ))}

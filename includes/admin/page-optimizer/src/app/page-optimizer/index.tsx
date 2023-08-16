@@ -78,7 +78,7 @@ export default function PageOptimizer() {
     };
 
 
-    let results = data?.grouped[activeTab]?.sort((a: Audit, b: Audit) => a.score - b.score);
+    let results = data?.grouped[activeTab];
 
     if (!results) {
         results = [];

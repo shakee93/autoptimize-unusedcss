@@ -2,7 +2,7 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "componen
 import {truncateMiddleOfURL} from "lib/utils";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import {CircleDashed} from "lucide-react";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
 import Code from "components/ui/code";
 
@@ -14,30 +14,33 @@ interface AuditColumnImageProps {
 const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
-    let value = cell.getValue();
-    let snippet = null
+    let [value, setValue] = useState<any>('')
+    let [snippet, setSnippet] = useState<any>('')
 
-    if (cell.table.getColumn('node')) {
-        // @ts-ignore
-        snippet = cell.row.getValue('node') as {
-            nodeLabel: string
-            selector: string
-            snippet: string
-        };
-    }
+    useEffect(() => {
+        setValue(cell.getValue().url ? cell.getValue().url : cell.getValue())
 
-    value = value.url ? value.url : value;
+        if (cell.table.getColumn('node')) {
+            // @ts-ignore
+                setSnippet(cell.row.getValue('node') as {
+                    nodeLabel: string
+                    selector: string
+                    snippet: string
+                })
+        }
+
+    }, [cell])
 
     return (
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
-                        <div className='w-6 h-6 border rounded-md overflow-hidden'>]
-                            <img className='w-fit' src={value} alt=''/>
+                        <div className='w-6 h-6 border rounded-md overflow-hidden'>
+                            <img className='w-fit' src={value.url ? value.url : value} alt=''/>
                         </div>
 
                         <a className='flex gap-2' target='_blank'
-                           href={value}>{truncateMiddleOfURL(value, 40)}
+                           href={value}>{truncateMiddleOfURL(value.url ? value.url : value, 40)}
                             <ArrowTopRightOnSquareIcon className='w-4'/> </a>
                     </div>
                 </TooltipTrigger>
@@ -71,7 +74,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
                 </TooltipContent>
             </Tooltip>
-    )
+    );
 }
 
 export default AuditColumnImage
