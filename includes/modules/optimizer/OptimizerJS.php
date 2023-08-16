@@ -34,12 +34,18 @@ class OptimizerJS
                     }
 
                 }
+                self::$js_files = $this->removeDuplicateFiles(self::$js_files);
 
             }
 
+            error_log(json_encode(self::$js_files, JSON_PRETTY_PRINT));
 
+        }, 10 , 3);
+    }
 
-        }, 10 , 1);
+    function removeDuplicateFiles($array) {
+        $uniqueArrays = array_map("unserialize", array_unique(array_map("serialize", $array)));
+        return $uniqueArrays;
     }
 
 }

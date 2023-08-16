@@ -153,7 +153,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = "https://hello.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
