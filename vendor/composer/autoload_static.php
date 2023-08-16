@@ -61,6 +61,8 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Nginx_Helper_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
         'NinjaFroms_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/ninja-forms/NinjaFroms_Compatible.php',
         'Nitropack_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/nitropack/Nitropack_Compatible.php',
+        'OptimizerFont' => __DIR__ . '/../..' . '/includes/modules/optimizer/OptimizerFont.php',
+        'OptimizerJS' => __DIR__ . '/../..' . '/includes/modules/optimizer/OptimizerJS.php',
         'Optimole_WP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
         'PAnD' => __DIR__ . '/..' . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
         'RankMathSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
