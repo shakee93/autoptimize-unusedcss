@@ -93,6 +93,6 @@ class RapidLoad_Job_Optimization
     }
 
     public function set_data($data){
-        $this->data = serialize($data);
+        $this->data = json_encode($data);
     }
 }
