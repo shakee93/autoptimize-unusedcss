@@ -176,7 +176,7 @@ export default function PageOptimizer() {
                                                                         style={{
                                                                             height: componentHeights[index]
                                                                         }}
-                                                                        className={`w-[2px] border-dashed border-l-2 border-gray-highlight left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                                                                        className={`w-[2px] border-dashed border-l-2 dark:border-zinc-600 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
 
                                                                 )}
                                                             </div>

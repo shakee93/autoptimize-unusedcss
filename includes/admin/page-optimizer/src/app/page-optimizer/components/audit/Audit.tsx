@@ -55,15 +55,23 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
             return prevOpenAudits; // Return the array unchanged if no action is taken
         });
 
+        notifyHeightChange();
+
     }, [toggleFiles]);
+
 
     const notifyHeightChange = () => {
         if (divRef.current && typeof onHeightChange === 'function') {
-            // Get the actual height of the Audit component
-            const height = divRef.current.scrollHeight;
-            // reduce the height keep a padding above the circle
-            onHeightChange(height - 15);
+
+            setTimeout(() => {
+                const height = divRef?.current?.clientHeight || 0;
+                onHeightChange(height - 15);
+            }, 0)
+
+            return;
         }
+        
+        console.log('here');
     };
 
     useImperativeHandle(ref, () => ({
@@ -101,7 +109,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0'
               className={cn(
                   `hover:opacity-100 w-full flex justify-center flex-col items-center`,
-                  toggleFiles && 'shadow-xl'
+                  toggleFiles && 'shadow-xl dark:shadow-zinc-800/70'
               )}
         >
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
@@ -138,7 +146,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                         <div>
                             <TooltipText text='Show resources and actions'>
                                 <div onClick={() => setToggleFiles(prev => !prev)}
-                                        className={`transition min-w-[125px] duration-300 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl dark:hover:opacity-80 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border dark:border-zinc-600 border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300'}`}>
+                                        className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl dark:hover:opacity-80 dark:border-zinc-600 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300 '}`}>
                                     {!toggleFiles ? 'Show' : 'Hide'} Actions {(toggleFiles) ?
                                     <MinusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/> :
                                     <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>}

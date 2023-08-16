@@ -3,6 +3,7 @@ import { SunIcon, MoonIcon, ComputerDesktopIcon } from "@heroicons/react/24/outl
 
 const ThemeSwitcher = () => {
     const [theme, setTheme] = useState('light');
+    const darkModeClass = 'dark'
 
     useEffect(() => {
         //@ts-ignore
@@ -17,19 +18,19 @@ const ThemeSwitcher = () => {
         //@ts-ignore
         if(theme === 'dark' && typeof window !== 'undefined') {
             //@ts-ignore
-            document.body.classList.add('dark');
+            document.body.classList.add(darkModeClass);
             //@ts-ignore
         } else if(theme === 'light' && typeof window !== 'undefined') {
             //@ts-ignore
-            document.body.classList.remove('dark');
+            document.body.classList.remove(darkModeClass);
         } else if (theme === 'system') {
             //@ts-ignore
             if(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 //@ts-ignore
-                document.body.classList.add('dark');
+                document.body.classList.add(darkModeClass);
             } else {
                 //@ts-ignore
-                document.body.classList.remove('dark');
+                document.body.classList.remove(darkModeClass);
             }
         }
 

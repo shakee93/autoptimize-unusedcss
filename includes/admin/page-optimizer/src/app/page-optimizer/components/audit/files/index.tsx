@@ -56,9 +56,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
         table.setPageSize(10);
         setMounted(true);
-        setTimeout(() => {
-            notify(true)
-        }, 1000)
+
+        notify(true)
 
     }, [])
     const cellWidth = (valueType: string) => {
@@ -88,23 +87,23 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
     return (
         <div className='border-t dark:border-zinc-700 border-zinc-200 w-full py-4'>
-            <div className=' pb-4 text-zinc-700'>
+            <div className=' pb-4 text-zinc-700 dark:text-zinc-300'>
                <div className='px-4 ml-2'>
                    <Description content={audit.description}/>
                </div>
             </div>
             {audit.settings.length > 0 && (
-                <div className='flex flex-col border-t py-4 px-4 gap-3'>
+                <div className='flex flex-col border-t dark:border-zinc-700 py-4 px-4 gap-3'>
                     <div className='font-medium text-sm ml-2'>Recommended Settings</div>
                     <Settings audit={audit}/>
                 </div>
             )}
 
             {audit?.files?.items?.length > 0 && (
-                <div className='flex flex-col gap-3 p-4 border-t'>
+                <div className='flex flex-col gap-3 p-4 border-t dark:border-zinc-700'>
                     <div className='font-medium text-sm ml-2'>Resources with Actions</div>
-                    <div className='w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden'>
-                        {(
+                    <div className='w-full dark:border-zinc-700 border border-zinc-200  rounded-[20px] overflow-hidden'>
+                        {mounted && (
                             <table className='w-full'>
                                 <thead>
                                 {table?.getHeaderGroups().map(headerGroup => (

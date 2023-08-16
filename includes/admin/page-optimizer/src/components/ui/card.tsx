@@ -25,9 +25,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, paddi
                     'absolute w-full -bottom-1.5 z-[-20] transition-opacity duration-500 delay-500',
 
                 )}>
-                    <div className='rounded-2xl h-5 border mx-2 bg-white opacity-60'></div>
+                    <div className='rounded-2xl h-5 border dark:border-zinc-700 mx-2 bg-white dark:bg-zinc-900 opacity-60'></div>
                     <div className='absolute w-full -bottom-1 z-[-1]'>
-                        <div className=' rounded-2xl h-5 border mx-4 bg-white opacity-30'></div>
+                        <div className=' rounded-2xl h-5 border dark:border-zinc-800 mx-4 bg-white dark:bg-zinc-900 opacity-30'></div>
                     </div>
                 </div>
             )}
