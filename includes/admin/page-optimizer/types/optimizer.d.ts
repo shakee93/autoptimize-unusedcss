@@ -30,19 +30,62 @@ interface LoadingExperience {
 
 type AuditTypes = keyof OptimizerResults['grouped']
 
+interface AuditFileBase  {
+    overallSavingsBytes: number;
+    type: 'list' | 'table' | 'opportunity';
+    headings?: AuditHeadings[];
+    sortedBy: string[];
+    overallSavingsMs?: number;
+}
+
+interface ListItems extends AuditFileBase {
+    type: 'list'
+    items: AuditListResource[]
+}
+
+interface TableItems extends AuditFileBase {
+    type: 'table' | 'opportunity'
+    items: AuditTableResource[];
+}
+
+interface AuditListResource {
+    headings: AuditHeadings[]
+    items: AuditTableResource[]
+    type: 'table' | string
+}
+
+type AuditResource = AuditTableResource | AuditListResource
+
+type AuditFiles = ListItems | TableItems
+
+interface AuditTableResource {
+    wastedBytes: number;
+    totalBytes: number;
+    action: {
+        value: string,
+        control_type: string
+        control_values: string[]
+    };
+    wastedPercent?: number;
+    url: {
+        url: string,
+        file_type: {
+            label: string
+            value: string
+        }
+    }
+    pattern: string
+}
+
+
+
+
 interface Audit {
     id: string;
     name: string;
     description: string;
     icon: string;
-    files: {
-        overallSavingsBytes: number;
-        items: AuditFile[];
-        type: string;
-        headings: AuditHeadings[];
-        sortedBy: string[];
-        overallSavingsMs?: number;
-    };
+    files: AuditFiles
     type: string;
     score: number;
     scoreDisplayMode: string;
@@ -61,25 +104,6 @@ interface AuditHeadings {
     control_type: string
     control_values: string[],
     granularity: number
-}
-
-interface AuditFile {
-    wastedBytes: number;
-    totalBytes: number;
-    action: {
-        value: string,
-        control_type: string
-        control_values: string[]
-    };
-    wastedPercent?: number;
-    url: {
-        url: string,
-        file_type: {
-            label: string
-            value: string
-        }
-    }
-    pattern: string
 }
 
 interface AuditSetting {

@@ -4,7 +4,7 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel, getPaginationRowModel,
-    Header,
+    Header, Table,
     useReactTable
 } from "@tanstack/react-table";
 import {JsonView} from "react-json-view-lite";
@@ -22,44 +22,100 @@ interface AuditContentProps {
 
 const AuditContent = ({audit, notify}: AuditContentProps) => {
 
-    const columnHelper = createColumnHelper<AuditFile>()
     const [mounted, setMounted] = useState(false)
+    const tables: Table<AuditResource>[] = [];
+    const columns = [];
 
-    if (!audit?.files?.headings) {
+    if (!['table', 'opportunity', 'list'].includes(audit?.files?.type) ) {
         return (
             <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>
         )
     }
 
-    const columns = audit?.files?.headings
-        ?.map((heading) => {
-
-            return columnHelper.accessor(row => row[heading.key as keyof AuditFile], {
-                id: heading.key ? heading.key : 'no-key',
-                meta: heading,
-                cell: info => <AuditColumns audit={audit} heading={heading} cell={info}/>,
-                header: () => <span>{heading.label}</span>,
-            });
-
-        });
+    if (['table', 'opportunity'].includes(audit.files.type)) {
+        const columnHelper = createColumnHelper<AuditResource>()
 
 
-    const table = useReactTable({
-        data: audit.files.items,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-    })
+        const col = audit?.files?.headings
+            ?.map((heading) => {
+                return columnHelper.accessor(row => row[heading.key as keyof AuditResource], {
+                    id: heading.key ? heading.key : 'no-key',
+                    meta: heading,
+                    cell: info => <AuditColumns audit={audit} heading={heading} cell={info}/>,
+                    header: () => <span>{heading.label}</span>,
+                });
+
+            })
+
+        columns.push(
+            col
+        )
+
+        if (col) {
+            tables.push(
+                useReactTable({
+                    data: audit.files.items,
+                    // @ts-ignore
+                    columns: col,
+                    getCoreRowModel: getCoreRowModel(),
+                    getPaginationRowModel: getPaginationRowModel(),
+                })
+            );
+        }
+
+
+    }
+
+    if (audit.files.type === 'list') {
+
+        audit.files.items.forEach(item => {
+            const columnHelper = createColumnHelper<AuditResource>()
+
+            if (item.type && item.type !== 'table') {
+                return;
+            }
+
+            const col = item?.headings
+                ?.map((heading) => {
+                    return columnHelper.accessor(row => row[heading.key as keyof AuditResource], {
+                        id: heading.key ? heading.key : 'no-key',
+                        meta: heading,
+                        cell: info => <AuditColumns audit={audit} heading={heading} cell={info}/>,
+                        header: () => <span>{heading.label}</span>,
+                    });
+
+                })
+
+            columns.push(
+                col
+            )
+
+            tables.push(
+                useReactTable({
+                    data: item.items,
+                    // @ts-ignore
+                    columns: col,
+                    getCoreRowModel: getCoreRowModel(),
+                    getPaginationRowModel: getPaginationRowModel(),
+                })
+            )
+
+        })
+
+    }
 
 
     useEffect(() => {
 
-        table.setPageSize(10);
+        if (tables[0]) {
+            tables[0].setPageSize(10);
+        }
+
         setMounted(true);
 
         notify(true)
 
-    }, [])
+    }, []);
     const cellWidth = (valueType: string) => {
 
         switch (valueType) {
@@ -74,7 +130,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         }
     }
 
-    const shouldRender = (cell: Header<AuditFile, unknown> | Cell<AuditFile, unknown>) => {
+    const shouldRender = (cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>) => {
         let col = cell.column.columnDef;
 
         if(col.id === 'node' && isImageAudit(audit.id) ) {
@@ -99,11 +155,11 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             )}
 
-            {audit?.files?.items?.length > 0 && (
-                <div className='flex flex-col gap-3 p-4 border-t dark:border-zinc-700'>
-                    <div className='font-medium text-sm ml-2'>Resources with Actions</div>
+            {(audit?.files?.items?.length > 0 && mounted && tables.length > 0) && tables.map((table, index) => (
+                <div key={index} className='flex flex-col gap-3 p-4 border-t dark:border-zinc-700'>
+                    <div className='font-medium text-sm ml-2'>Related Resources</div>
                     <div className='w-full dark:border-zinc-700 border border-zinc-200  rounded-[20px] overflow-hidden'>
-                        {mounted && (
+
                             <table className='w-full'>
                                 <thead>
                                 {table?.getHeaderGroups().map(headerGroup => (
@@ -140,7 +196,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 ))}
                                 </tbody>
                             </table>
-                        )}
 
                         {/*<JsonView shouldInitiallyExpand={e => false} data={audit.files}/>*/}
                     </div>
@@ -164,7 +219,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                         </div>
                     )}
                 </div>
-            )}
+            )) }
         </div>
     )
 }
