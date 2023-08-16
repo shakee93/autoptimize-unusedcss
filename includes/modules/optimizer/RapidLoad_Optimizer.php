@@ -175,7 +175,7 @@ class RapidLoad_Optimizer
         }
 
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
-        $new_hash = hash('md5', serialize($data));
+        $new_hash = hash('md5', json_encode($data));
 
         if($hash == $new_hash){
             return;
@@ -215,7 +215,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = "https://stackoverflow.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = "https://hello.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
