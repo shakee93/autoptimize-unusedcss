@@ -51,8 +51,11 @@ export function truncateMiddleOfURL(url: string, maxLength: number) {
 
     return truncatedURL;
   } catch (error) {
-    console.error('Invalid URL:', url);
-    return <Code code={url}></Code>;
+    // console.error('Invalid URL:', url);
+
+    if (url) {
+      return <Code code={url}></Code>;
+    }
   }
 }
 
