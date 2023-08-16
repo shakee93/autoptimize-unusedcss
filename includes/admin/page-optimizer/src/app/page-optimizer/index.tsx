@@ -22,7 +22,7 @@ export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(false);
     const {data, loading} = useSelector(optimizerData);
-    const {options} = useOptimizerContext()
+    const {options, setOpenAudits} = useOptimizerContext()
 
     const tabs: Tab[] = [
         {
@@ -125,6 +125,11 @@ export default function PageOptimizer() {
         )
     }
 
+    useEffect(() => {
+
+        setOpenAudits([]);
+
+    }, [activeTab])
     return (
 
         <div
@@ -146,7 +151,7 @@ export default function PageOptimizer() {
                                 {!togglePerformance && <TogglePerformanceComponent/>}
                                 Fix Performance Issues</h2>
                             <div className="tabs pt-4 flex">
-                                <Card padding='p-0 px-6' cls='flex cursor-pointer select-none'>
+                                <Card padding='p-0 px-6' className='flex cursor-pointer select-none'>
                                     {renderTabs()}
                                 </Card>
                             </div>

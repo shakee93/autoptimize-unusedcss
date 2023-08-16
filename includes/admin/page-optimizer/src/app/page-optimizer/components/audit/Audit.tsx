@@ -11,6 +11,8 @@ import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
 import Settings from "app/page-optimizer/components/audit/Settings";
+import {useOptimizerContext} from "../../../../context/root";
+import {cn} from "lib/utils";
 
 export interface AuditProps {
     audit?: Audit;
@@ -22,6 +24,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
     const [toggleFiles, setToggleFiles] = useState(false);
     const {settings} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
+    const {openAudits, setOpenAudits} = useOptimizerContext()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
@@ -37,8 +40,22 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
     }
 
     useEffect(() => {
-        notifyHeightChange();
-    }, [toggleFiles, filesMounted]);
+
+        setOpenAudits(prevOpenAudits => {
+            if (toggleFiles) {
+                // Add if not present
+                if (!prevOpenAudits.includes(audit.id)) {
+                    return [...prevOpenAudits, audit.id];
+                }
+            } else {
+                // Remove if present
+                return prevOpenAudits.filter(id => id !== audit.id);
+            }
+
+            return prevOpenAudits; // Return the array unchanged if no action is taken
+        });
+
+    }, [toggleFiles]);
 
     const notifyHeightChange = () => {
         if (divRef.current && typeof onHeightChange === 'function') {
@@ -81,9 +98,14 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
 
 
     return (
-        <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0' cls={`w-full flex justify-center flex-col items-center `}>
+        <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0'
+              className={cn(
+                  `hover:opacity-100 w-full flex justify-center flex-col items-center`,
+              )}
+        >
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
                 <div className='flex gap-3 font-normal  items-center text-base'>
+
                     <div
                         className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
                         {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 border-zinc-400 rounded-full'></span> : <PerformanceIcons icon={icon}/> }

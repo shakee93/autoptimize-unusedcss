@@ -15,14 +15,14 @@ const initialState: AppState = {
         error: null,
         loading: true,
         settings: [],
-        revisions: []
+        revisions: [],
     },
     desktop: {
         data: null,
         error: null,
         loading: true,
         settings: [],
-        revisions: []
+        revisions: [],
     }
 };
 

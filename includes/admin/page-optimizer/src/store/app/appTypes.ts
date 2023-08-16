@@ -11,7 +11,6 @@ export interface AppState {
         loading: boolean
         settings?: AuditSetting[],
         revisions: any,
-
     },
     desktop: {
         data?: OptimizerResults | null;
@@ -19,7 +18,6 @@ export interface AppState {
         loading: boolean
         settings?: AuditSetting[]
         revisions: any,
-        meta: any
     }
 }
 

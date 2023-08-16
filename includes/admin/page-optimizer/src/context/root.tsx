@@ -1,6 +1,8 @@
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react';
 
 interface OptimizerContextProps {
+    openAudits: string[],
+    setOpenAudits: Dispatch<SetStateAction<string[]>>;
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
     options: WordPressOptions,
@@ -13,7 +15,8 @@ export const OptimizerProvider = ({ children } : {
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
-    const [showOptimizer, setShowOptimizer] = useState(false);
+    const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'https://rapidload.io/?no_rapidload',
         ajax_url: '',
@@ -40,6 +43,8 @@ export const OptimizerProvider = ({ children } : {
             showOptimizer,
             setShowOptimizer,
             options,
+            openAudits,
+            setOpenAudits
         }}>
             {children}
         </OptimizerContext.Provider>
