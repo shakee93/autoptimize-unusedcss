@@ -1,5 +1,9 @@
+import {
+    RowData
+} from "@tanstack/react-table";
 
 interface Window {
+
     rapidload_optimizer : WordPressOptions
 }
 
@@ -23,5 +27,11 @@ interface Help{
     help: boolean,
     title : string,
     content: string,
+}
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        title: string
+    }
 }
 

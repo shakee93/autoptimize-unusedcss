@@ -13,8 +13,6 @@ import AuditColumns from "./columns";
 import {cn, isImageAudit} from "lib/utils";
 import Description from "app/page-optimizer/components/audit/Description";
 import Settings from "app/page-optimizer/components/audit/Settings";
-
-
 interface AuditContentProps {
     audit: Audit,
     notify: any
@@ -59,6 +57,9 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                     columns: col,
                     getCoreRowModel: getCoreRowModel(),
                     getPaginationRowModel: getPaginationRowModel(),
+                    meta : {
+                        title: "Related Resources and Actions"
+                    }
                 })
             );
         }
@@ -90,14 +91,19 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 col
             )
 
+            const table = useReactTable({
+                data: item.items,
+                // @ts-ignore
+                columns: col,
+                getCoreRowModel: getCoreRowModel(),
+                getPaginationRowModel: getPaginationRowModel(),
+                meta : {
+                    title: "Related Resources"
+                }
+            })
+
             tables.push(
-                useReactTable({
-                    data: item.items,
-                    // @ts-ignore
-                    columns: col,
-                    getCoreRowModel: getCoreRowModel(),
-                    getPaginationRowModel: getPaginationRowModel(),
-                })
+                table
             )
 
         })
@@ -157,7 +163,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
             {(audit?.files?.items?.length > 0 && mounted && tables.length > 0) && tables.map((table, index) => (
                 <div key={index} className='flex flex-col gap-3 p-4 border-t dark:border-zinc-700'>
-                    <div className='font-medium text-sm ml-2'>Related Resources</div>
+                    <div className='font-medium text-sm ml-2'> {table.options.meta?.title ? table.options.meta.title : 'Related Resources'} </div>
                     <div className='w-full dark:border-zinc-700 border border-zinc-200  rounded-[20px] overflow-hidden'>
 
                             <table className='w-full'>
