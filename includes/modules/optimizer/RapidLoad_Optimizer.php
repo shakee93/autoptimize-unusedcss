@@ -133,23 +133,29 @@ class RapidLoad_Optimizer
 
         foreach (self::$options as $key => $option){
 
-            if(!isset(self::$global_options[$key])){
-                continue;
-            }
-
             if($key == "individual-file-actions"){
 
-                foreach (self::$options['individual-file-actions'] as $action_key => $actions){
+                foreach (self::$options['individual-file-actions'] as $tag_key => $tag){
 
-                    if(isset($actions) && isset($actions->action) && isset($actions->action->value) && $actions->action->value == "none"){
-                        unset(self::$options['individual-file-actions'][$action_key]);
+                    foreach (self::$options['individual-file-actions'][$tag_key] as $file_action_keys => $file_action){
+
+                        if(isset($file_action)){
+                            if(!isset($file_action->action)){
+                                unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
+                            }
+                            else if(isset($file_action->action) && isset($file_action->action->value) && $file_action->action->value == "none"){
+                                unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
+                            }
+                        }
+
+
                     }
 
                 }
 
             }
 
-            $option_type = gettype(self::$global_options[$key]);
+            $option_type = gettype(self::$options[$key]);
 
             if(isset(self::$global_options[$key])){
                 if($option_type == "string" && self::$global_options[$key] == $option){
@@ -161,6 +167,8 @@ class RapidLoad_Optimizer
             }
 
         }
+
+       error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
@@ -275,13 +283,15 @@ class RapidLoad_Optimizer
 
                                 if(isset($key) && is_numeric($key)){
 
-                                    $item->action = self::$merged_options['individual-file-actions'][$audit->id][$key]['action'];
+                                    if(isset(self::$merged_options['individual-file-actions'][$audit->id][$key]['action'])){
+                                        $item->action = (object)self::$merged_options['individual-file-actions'][$audit->id][$key]['action'];
+                                    }
 
                                 }else{
 
-                                    self::$merged_options['individual-file-actions'][$audit->id][] = [
+                                    self::$merged_options['individual-file-actions'][$audit->id][] = (object)[
                                         'url' => $item->url->url,
-                                        'action' => $item->action,
+                                        'action' => isset($item->action) ? $item->action : null,
                                         'url_object' => $item->url
                                     ];
 
@@ -383,16 +393,18 @@ class RapidLoad_Optimizer
                                 self::$options['individual-file-actions'][$audit->id] = [];
                             }
 
-                            $key = array_search($item->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
+                            $key = array_search($item->url->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
 
                             if(isset($key) && is_numeric($key)){
 
-                                self::$options['individual-file-actions'][$audit->id][$key]['action'] = $item->action;
+                                if(isset(self::$options['individual-file-actions'][$audit->id][$key])){
+                                    self::$options['individual-file-actions'][$audit->id][$key]->action = $item->action;
+                                }
 
                             }else{
-                                self::$options['individual-file-actions'][$audit->id][] = [
+                                self::$options['individual-file-actions'][$audit->id][] = (object)[
                                     'url' => $item->url->url,
-                                    'action' => $item->action,
+                                    'action' => isset($item->action) ? $item->action : null,
                                     'url_object' => $item->url
                                 ];
                             }
@@ -405,7 +417,7 @@ class RapidLoad_Optimizer
 
         }
 
-        if(isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] || isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats']){
+        if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1")){
             self::$options['uucss_enable_image_delivery'] = "1";
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
@@ -436,8 +448,6 @@ class RapidLoad_Optimizer
                 unset(self::$options[$key]);
             }
         }
-
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 

@@ -11,7 +11,7 @@ import React, {useState} from "react";
 import {CellContext} from "@tanstack/react-table";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../../../store/app/appTypes";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateFileAction} from "../../../../../../store/app/appActions";
 
 interface AuditColumnDropdownProps {
@@ -24,11 +24,13 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     const {getValue, row} = cell;
     const url = row.getValue("url") as any;
     const value = getValue();
+    const meta = useSelector((state : RootState) => state.app.activeReport == "desktop" ? state.app.desktop.data.meta : state.app.mobile.data.meta)
+    // you can find state structure in appReducer.ts (initial state)
 
     if (value?.control_type !== 'dropdown' || !value) {
         return <span></span>
     }
-
+    console.log('meta value: ' , meta);
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const [action, setAction] = useState<string>(value.value || "none");
 
@@ -51,7 +53,10 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
 
 
     const renderSelectItems = () => {
-        return value.control_values.map((value: string) => (
+
+        const file_type = url.file_type.value;
+        const options = meta.controls.dropdown_options.filter((o)=>o.type == file_type)[0]?.options;
+        return options?.map((value: string) => (
             <SelectItem
                 className="capitalize cursor-pointer"
                 key={value}
