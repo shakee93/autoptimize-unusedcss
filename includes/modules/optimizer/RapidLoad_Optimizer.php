@@ -413,7 +413,6 @@ class RapidLoad_Optimizer
 
             }
 
-
         }
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1")){
@@ -444,12 +443,9 @@ class RapidLoad_Optimizer
 
         foreach (self::$options as $key => $value){
             if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
-                error_log($key);
                 unset(self::$options[$key]);
             }
         }
-
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
