@@ -10,6 +10,7 @@ interface OptimizerResults  {
         passed_audits: Audit[],
         opportunities: Audit[],
         diagnostics: Audit[],
+        attention_required: Audit[],
     }
     meta: {
         controls : {

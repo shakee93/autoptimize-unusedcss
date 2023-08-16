@@ -12,6 +12,7 @@ import {
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
+import {WordPressOptions} from "../../../types/types";
 
 
 const transformData = (data: any) => {
@@ -29,6 +30,10 @@ const transformData = (data: any) => {
                     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
                     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode === 'informative'),
                 ],
+                attention_required: [
+                    ...audits.filter(audit => audit.type === 'opportunity'),
+                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
+                ]
             },
         },
         success: data.success,

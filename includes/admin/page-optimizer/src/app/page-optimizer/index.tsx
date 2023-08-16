@@ -13,23 +13,30 @@ import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
 import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
+import {Tab} from "../../../types/types";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
 
 export default function PageOptimizer() {
-    const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
+    const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
     const [togglePerformance, setTogglePerformance] = useState(false);
     const {data, loading} = useSelector(optimizerData);
     const {options, setOpenAudits} = useOptimizerContext()
 
     const tabs: Tab[] = [
         {
+            key: "attention_required",
+            name: "Attention Required",
+            color: 'border-red-400',
+            activeColor: 'bg-red-400'
+        },
+        {
             key: "opportunities",
             name: "Opportunities",
-            color: 'border-red-400',
-            activeColor: 'bg-red-400',
+            color: 'border-orange-400',
+            activeColor: 'bg-orange-400',
         },
         {
             key: "diagnostics",
