@@ -7,6 +7,7 @@ import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progr
 import 'react-circular-progressbar/dist/styles.css';
 import {useOptimizerContext} from "../../../../context/root";
 import {Skeleton} from "components/ui/skeleton"
+import {JsonView} from "react-json-view-lite";
 
 
 
@@ -46,15 +47,14 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     };
 
-    const FirstLettersComponent = ({ text }) => {
+    const FirstLettersComponent = ({ text }: {text: string}) => {
         const firstLetters = text.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
-        return firstLetters;
+        return <>{firstLetters}</>;
     };
 
 
     useEffect(() => {
         progressBarColorCode();
-        console.log("performance", data?.metrics.icon);
         if (!loading && data) {
             let currentNumber = 0;
 
@@ -88,7 +88,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     return (
 
-        <div>
+        <div className='w-full'>
             <div className="mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
@@ -133,7 +133,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             89-100
                         </div>
                     </div>
-            
+
                 </div>
             </div>
             <div className="mb-3 drop-shadow-sm rounded-xl border border-gray-200 bg-white">
@@ -155,19 +155,18 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     ))}
                 </div>
             </div>
-            
+
             <div onClick={handleCoreWebClick} className="drop-shadow-sm rounded-xl border border-gray-200 bg-white ">
-                <div className={`flex p-5 pl-6 border-b-[1px] border-gray-200 cursor-pointer`}>
+                <div className={`flex justify-around px-6 py-4 cursor-pointer`}>
                     <div>
-                        <p className="text-[16px] font-medium text-black">Core Web Vitals (28 days)</p>
-                        <p className="text-[12px] font-medium text-gray-light-font">Real user experience from Google</p>
+                        <p className="">Real Experience (28 days)</p>
+                        <p className="text-xs opacity-60">Real user experience from Google</p>
                     </div>
-                    <div>
-                            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
-                    </div>
+                    <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                 </div>
                 {isCoreWebClicked && (
-                    <div>
+                    <div className='border-t'>
+
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                             {data?.metrics.map((s, index) => (
 
@@ -189,7 +188,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 )}
 
-            
+
             </div>
         </div>
     )

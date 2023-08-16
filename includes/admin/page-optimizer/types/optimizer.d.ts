@@ -4,6 +4,8 @@ interface OptimizerResults  {
     performance: number
     audits: Audit[]
     metrics: Metric[],
+    loadingExperience?: LoadingExperience
+    originLoadingExperience?: LoadingExperience
     grouped: {
         passed_audits: Audit[],
         opportunities: Audit[],
@@ -17,6 +19,13 @@ interface OptimizerResults  {
             }[]
         }
     }
+}
+
+interface LoadingExperience {
+    id: string
+    initial_url: string
+    overall_category: string,
+    metrics: any
 }
 
 type AuditTypes = keyof OptimizerResults['grouped']
