@@ -33,6 +33,8 @@ return array(
     'Nginx_Helper_Compatible' => $baseDir . '/includes/third-party/plugins/nginx-helper/Nginx_Helper_Compatible.php',
     'NinjaFroms_Compatible' => $baseDir . '/includes/third-party/plugins/ninja-forms/NinjaFroms_Compatible.php',
     'Nitropack_Compatible' => $baseDir . '/includes/third-party/plugins/nitropack/Nitropack_Compatible.php',
+    'OptimizerFont' => $baseDir . '/includes/modules/optimizer/OptimizerFont.php',
+    'OptimizerJS' => $baseDir . '/includes/modules/optimizer/OptimizerJS.php',
     'Optimole_WP_Compatible' => $baseDir . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
     'PAnD' => $vendorDir . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
     'RankMathSEO_Compatible' => $baseDir . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',

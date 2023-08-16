@@ -33,70 +33,8 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
 
-        add_filter('rapidload/enqueue/preload/fonts', function ($urls, $job, $strategy){
-
-            $options = $strategy === "mobile" ? $job->get_mobile_options() : $job->get_desktop_options();
-
-            if(isset($options['individual-file-actions']) && isset($options['individual-file-actions']['font-display'])){
-
-                foreach ($options['individual-file-actions']['font-display'] as $value){
-
-                    if (isset($value->url) && isset($value->url->url) && filter_var($value->url->url, FILTER_VALIDATE_URL) !== false) {
-
-                        $path_parts = pathinfo($value->url->url);
-
-                        if(isset($path_parts['extension'])){
-                            $file_extension = strtolower($path_parts['extension']);
-
-                            if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
-
-                                if(isset($value->action) && $value->action == "preload"){
-                                    $urls[] = $value->url->url;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return $urls;
-        }, 10, 3);
-
-        add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy){
-
-            $options = $strategy == "mobile" ? $job->get_mobile_options() : $job->get_desktop_options();
-
-            if(isset($options['individual-file-actions'])){
-
-                foreach ($options['individual-file-actions'] as $option){
-
-                    if(isset($option->url) && gettype($option->url) == "object" && isset($option->url->url) && isset($option->url->file_type) && $option->url->file_type == "js"){
-
-                        if(isset($option->action) && gettype($option->action) == "object" && isset($option->action) && isset($option->action->value)){
-
-                            if(isset($link->src)){
-                                if($option->action->value == "delay"){
-                                    if (preg_match('/.*googletagmanager\.com\/gtag\/.*/', $link->src)) {
-                                        $link->{"data-rapidload-src"} = $link->src;
-                                        unset($link->src);
-                                    }
-                                }
-                            }else if(!empty($link->innertext())){
-                                if($option->action->value == "delay"){
-                                    if (preg_match('/.*googletagmanager\.com\/gtag\/.*/', $link->innertext())) {
-                                        $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }, 10 , 1);
+        new OptimizerFont();
+        new OptimizerJS();
     }
 
     public static function   pre_optimizer_function(){
@@ -215,7 +153,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = "https://hello.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
