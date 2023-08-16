@@ -265,7 +265,7 @@ class RapidLoad_Job{
         $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " LIMIT "  . $limit , OBJECT);
 
         foreach ($data as $d){
-            $d->data = unserialize($d->data);
+            $d->data = json_decode($d->data);
         }
 
         return $data;
@@ -299,7 +299,7 @@ class RapidLoad_Job{
         if(!$data){
             return false;
         }else{
-            return unserialize($data);
+            return json_decode($data);
         }
     }
 

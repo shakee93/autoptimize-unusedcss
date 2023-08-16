@@ -112,12 +112,12 @@ class RapidLoad_Optimizer
             self::$strategy = $_REQUEST['strategy'];
             self::$global_options = RapidLoad_Base::fetch_options();
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
-            foreach (self::$options as $key => $value){
+            foreach (self::$global_options as $key => $value){
                 if(!isset(self::$merged_options[$key])){
                     self::$merged_options[$key] = $value;
                 }
             }
-            foreach (self::$global_options as $key => $value){
+            foreach (self::$options as $key => $value){
                 if(!isset(self::$merged_options[$key])){
                     self::$merged_options[$key] = $value;
                 }
@@ -168,8 +168,6 @@ class RapidLoad_Optimizer
 
         }
 
-       error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
-
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
         }else{
@@ -217,7 +215,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = "https://www.submeter.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = "https://stackoverflow.com/"; // isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
@@ -239,7 +237,7 @@ class RapidLoad_Optimizer
                         foreach ($settings->inputs as $input){
                             if(isset(self::$merged_options[$input->key])){
                                 if($input->key == "uucss_load_js_method"){
-                                    $input->value = self::$merged_options[$input->key] == "defer";
+                                    $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
                                 }else{
                                     $input->value = self::$merged_options[$input->key];
                                 }
@@ -354,8 +352,8 @@ class RapidLoad_Optimizer
                                         }else{
                                             self::$options[$input->key] = "1";
                                         }
-                                    }else if(isset(self::$options[$input->key])){
-                                        unset(self::$options[$input->key]);
+                                    }else if(isset($input->key)){
+                                        self::$options[$input->key] = "";
                                     }
                                     break;
                                 }
@@ -415,6 +413,7 @@ class RapidLoad_Optimizer
 
             }
 
+
         }
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1")){
@@ -445,9 +444,12 @@ class RapidLoad_Optimizer
 
         foreach (self::$options as $key => $value){
             if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
+                error_log($key);
                 unset(self::$options[$key]);
             }
         }
+
+        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
