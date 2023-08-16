@@ -18,7 +18,7 @@ import {optimizerData} from "../../../../../../store/app/appSelector";
 interface AuditColumnDropdownProps {
     heading: AuditHeadings;
     audit: Audit;
-    cell: CellContext<AuditFile, any>;
+    cell: CellContext<AuditResource, any>;
 }
 
 const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) => {

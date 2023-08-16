@@ -53,7 +53,7 @@ const Content = () => {
 
     return (
         <div
-            className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-slate-50'>
+            className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-zinc-50 dark:bg-zinc-900'>
             {/*<div className='absolute -top-8 text-white'>*/}
             {/*    <label htmlFor="on">*/}
             {/*        <input id='on' onClick={() => setOn(p => !p)} type="checkbox"/>*/}
@@ -123,7 +123,7 @@ const Content = () => {
                         <AppButton onClick={(e) => {
                             setShowOptimizer(true)
                         }}>
-                            <BoltIcon className='w-4 text-white rounded-[15px]'/> Page Optimizer
+                            <BoltIcon className='w-4 text-white dark:text-zinc-900 rounded-[15px]'/> Page Optimizer
                         </AppButton>
                         <AppButton className='rounded-[15px]' dark={false}>
                             <DocumentMinusIcon className='w-4'/>
@@ -151,7 +151,7 @@ const SpeedInsights = ({children}: {
             <Tooltip.Root>
                 <Tooltip.Trigger asChild>
                     <div
-                        className={`${!root ? 'bg-gray-900 text-white py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
+                        className={`${!root ? 'bg-gray-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
                         {children}
                     </div>
                 </Tooltip.Trigger>

@@ -5,6 +5,15 @@ import {Switch} from "components/ui/switch";
 import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
 
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "components/ui/select";
 
 interface AdditionalInputsProps {
     data: AuditSettingInput[]
@@ -16,6 +25,21 @@ interface AdditionalInputsProps {
 }
 
 const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
+
+
+    const renderSelectItems = (values: string[]) => {
+
+        return values?.map((value: string) => (
+            <SelectItem
+                className="capitalize cursor-pointer"
+                key={value}
+                value={value}
+            >
+                {value}
+            </SelectItem>
+        ));
+    };
+
 
 
     const fields = (input: AuditSettingInput) => {
@@ -37,10 +61,32 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                         <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
                     </>
                 )
+            case "options":
+                return(
+                    <>
+                        <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
+                            <span>{input.control_label}</span>
+                            <Select value={updates.find(i => i.key === input.key)?.value}  onValueChange={v => update(v, input.key)}>
+                                <SelectTrigger className="w-[180px] capitalize">
+                                    <SelectValue placeholder="Select action"/>
+                                </SelectTrigger>
+                                <SelectContent className="z-[100001]">
+                                    <SelectGroup>
+                                        <SelectLabel>Actions</SelectLabel>
+                                        {renderSelectItems(input.control_values)}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </Label>
+                    </>
+                )
             default:
                return (
                    <Label htmlFor="name" className="flex flex-col gap-1 ml-4 text-left w-full">
                        {input.control_label ? input.control_label : input.key} <span className='text-xs opacity-50 mt'>unsupported input field - {input.control_type}</span>
+                       <p>
+                           {JSON.stringify(input)}
+                       </p>
                    </Label>
                )
         }
