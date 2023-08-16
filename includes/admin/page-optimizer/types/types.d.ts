@@ -32,6 +32,7 @@ interface Help{
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         title: string
+        type?: string
     }
 }
 

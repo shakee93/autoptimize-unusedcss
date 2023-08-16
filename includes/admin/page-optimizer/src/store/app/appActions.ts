@@ -15,9 +15,48 @@ import Audit from "app/page-optimizer/components/audit/Audit";
 import {WordPressOptions} from "../../../types/types";
 
 
+const transformAudit = (audit: Audit) => {
+
+
+    if (audit.files && (audit.files.type === 'opportunity' || audit.files.type === 'table')) {
+
+        if (audit?.files?.items?.length > 0) {
+
+            audit.files.grouped_items = Object.entries(audit.files.items.reduce((result, item: AuditTableResource) => {
+                if (!item.url) {
+                    return result;
+                }
+
+                if (typeof item.url === 'string') {
+                    return result;
+                }
+
+                const { url, file_type } = item.url;
+                const { value } = file_type;
+
+                const key = `${value}`;
+
+                if (!result[key]) {
+                    result[key] = [];
+                }
+
+                result[key].push(item);
+
+                return result;
+            }, {})).map(([type, items]) => ({ type, items }));
+
+
+
+        }
+
+    }
+    
+    return audit
+}
+
 const transformData = (data: any) => {
     
-    let audits : Audit[] = data.data.page_speed.audits.sort((a: Audit, b: Audit) => a.score - b.score)
+    let audits : Audit[] = data.data.page_speed.audits.sort((a: Audit, b: Audit) => a.score - b.score).map( (a: Audit) => transformAudit(a))
 
     let _data = {
         data: {

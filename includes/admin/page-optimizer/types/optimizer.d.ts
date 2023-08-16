@@ -47,7 +47,10 @@ interface ListItems extends AuditFileBase {
 interface TableItems extends AuditFileBase {
     type: 'table' | 'opportunity'
     items: AuditTableResource[];
+    grouped_items: { type: string; items: AuditTableResource[] }[];
 }
+
+type FileTypes = 'css' | 'js' | 'image' | string
 
 interface AuditListResource {
     headings: AuditHeadings[]
@@ -57,25 +60,25 @@ interface AuditListResource {
 
 type AuditResource = AuditTableResource | AuditListResource
 
-type AuditFiles = ListItems | TableItems
+type AuditFiles = TableItems | ListItems
 
 interface AuditTableResource {
-    wastedBytes: number;
-    totalBytes: number;
-    action: {
+    wastedBytes?: number;
+    totalBytes?: number;
+    action?: {
         value: string,
         control_type: string
         control_values: string[]
     };
     wastedPercent?: number;
-    url: {
+    url?: {
         url: string,
         file_type: {
             label: string
             value: string
         }
-    }
-    pattern: string
+    } | string
+    pattern?: string
 }
 
 

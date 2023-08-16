@@ -7,16 +7,25 @@ import {optimizerData} from "../../../../store/app/appSelector";
 interface SettingsProps {
     audit: Audit
     max?: number
+    type?: string
 }
 
-const Settings = ({ audit, max = 2 }: SettingsProps) => {
+const Settings = ({ audit, max = 2, type }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
     return (
         <>
             {audit.settings.length > 0 &&(
                 <div className="flex flex-wrap gap-2">
-                    {audit.settings.slice(0, max).map((s, index) => (
+
+                    {audit.settings.filter(i => {
+
+                        if (i.category === 'javascript') {
+                            i.category = 'js'
+                        }
+
+                        return  i.category === type;
+                    }).map((s, index) => (
                         <Setting audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                     ))}
                 </div>
