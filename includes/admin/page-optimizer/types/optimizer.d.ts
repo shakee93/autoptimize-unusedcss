@@ -9,6 +9,14 @@ interface OptimizerResults  {
         opportunities: Audit[],
         diagnostics: Audit[],
     }
+    meta: {
+        controls : {
+            dropdown_options: {
+                type: string
+                options: string[]
+            }[]
+        }
+    }
 }
 
 type AuditTypes = keyof OptimizerResults['grouped']

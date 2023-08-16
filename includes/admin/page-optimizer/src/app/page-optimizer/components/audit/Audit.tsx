@@ -113,7 +113,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
 
                     {(audit.files?.items?.length > 0 || audit.settings.length > 0)  && (
                         <div>
-                            <TooltipText text='Show files and actions'>
+                            <TooltipText text='Show resources and actions'>
                                 <div onClick={() => setToggleFiles(prev => !prev)}
                                         className={`transition min-w-[125px] duration-300 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl dark:hover:opacity-80 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border dark:border-zinc-600 border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300'}`}>
                                     Show Actions {(toggleFiles) ?

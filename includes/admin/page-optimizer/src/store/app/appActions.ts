@@ -105,8 +105,6 @@ export const updateSettings = (
 
             if (s.name === setting.name) {
 
-                console.log(s.inputs);
-
                 s.inputs = s.inputs.map(input => {
 
                     if (input.key === key) {

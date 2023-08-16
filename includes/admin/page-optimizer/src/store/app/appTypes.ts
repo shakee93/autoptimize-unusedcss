@@ -10,14 +10,16 @@ export interface AppState {
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[],
-        revisions: any
+        revisions: any,
+
     },
     desktop: {
         data?: OptimizerResults | null;
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[]
-        revisions: any
+        revisions: any,
+        meta: any
     }
 }
 
