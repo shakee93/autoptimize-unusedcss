@@ -20,8 +20,8 @@ export interface AuditProps {
     onHeightChange?: (height: number) => void;
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange }, ref) => {
-    const [toggleFiles, setToggleFiles] = useState(false);
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeightChange }, ref) => {
+    const [toggleFiles, setToggleFiles] = useState(index === 0);
     const {settings} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
     const {openAudits, setOpenAudits} = useOptimizerContext()
@@ -101,6 +101,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0'
               className={cn(
                   `hover:opacity-100 w-full flex justify-center flex-col items-center`,
+                  toggleFiles && 'shadow-xl'
               )}
         >
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
@@ -138,7 +139,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, onHeightChange 
                             <TooltipText text='Show resources and actions'>
                                 <div onClick={() => setToggleFiles(prev => !prev)}
                                         className={`transition min-w-[125px] duration-300 cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-xl dark:hover:opacity-80 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border dark:border-zinc-600 border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300'}`}>
-                                    Show Actions {(toggleFiles) ?
+                                    {!toggleFiles ? 'Show' : 'Hide'} Actions {(toggleFiles) ?
                                     <MinusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/> :
                                     <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>}
                                 </div>

@@ -24,14 +24,15 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
             case "checkbox":
                 return (
                     <Label htmlFor="name" className="flex gap-2 items-center ml-4 text-left w-full">
-                        <span>{input.key}</span> <Switch checked={updates.find(i => i.key === input.key)?.value} onCheckedChange={(c: boolean) => update(c, input.key)}/>
+                        <span>{input.control_label}</span> <Switch checked={updates.find(i => i.key === input.key)?.value} onCheckedChange={(c: boolean) => update(c, input.key)}/>
                     </Label>
                 )
             case "textarea":
                 return(
                     <>
                         <Label htmlFor="name" className="flex ml-4 text-left w-full">
-                            <span>{input.key}</span>
+                            <span>{input.control_label}</span>
+
                         </Label>
                         <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
                     </>
@@ -39,7 +40,7 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
             default:
                return (
                    <Label htmlFor="name" className="flex flex-col gap-1 ml-4 text-left w-full">
-                       {input.key} <span className='text-xs opacity-50 mt'>unsupported input field - {input.control_type}</span>
+                       {input.control_label ? input.control_label : input.key} <span className='text-xs opacity-50 mt'>unsupported input field - {input.control_type}</span>
                    </Label>
                )
         }
@@ -54,6 +55,7 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                     </div>
                 ))
         }
+
         {/*<JsonView data={updates}  shouldInitiallyExpand={e => false} />*/}
     </>
 }

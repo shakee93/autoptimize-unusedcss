@@ -53,7 +53,7 @@ export default function PageOptimizer() {
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
-                    className={cn(`flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
+                    className={cn(`cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
                     key={tab.key}
                 >
                     {tab.name}
@@ -151,7 +151,7 @@ export default function PageOptimizer() {
                                 {!togglePerformance && <TogglePerformanceComponent/>}
                                 Fix Performance Issues</h2>
                             <div className="tabs pt-4 flex">
-                                <Card padding='p-0 px-6' className='flex cursor-pointer select-none'>
+                                <Card padding='p-0 px-6' className='flex select-none'>
                                     {renderTabs()}
                                 </Card>
                             </div>

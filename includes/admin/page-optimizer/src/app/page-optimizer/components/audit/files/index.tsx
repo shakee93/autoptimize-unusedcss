@@ -104,13 +104,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 <div className='flex flex-col gap-3 p-4 border-t'>
                     <div className='font-medium text-sm ml-2'>Resources with Actions</div>
                     <div className='w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden'>
-                        {mounted && (
+                        {(
                             <table className='w-full'>
                                 <thead>
                                 {table?.getHeaderGroups().map(headerGroup => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers.filter(header => shouldRender(header)).map(header => (
-                                            <th className='first:pl-6 px-2 py-3 dark:bg-zinc-900 bg-zinc-100 font-medium text-xs text-left' key={header.id}>
+                                            <th className='first:pl-6 px-2 py-3 dark:bg-zinc-900 bg-zinc-100 font-medium text-xs text-left'
+                                                key={header.id}>
                                                 {header.isPlaceholder
                                                     ? null
                                                     : flexRender(
@@ -125,12 +126,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 <tbody>
                                 {table?.getRowModel().rows.map(row => (
 
-                                    <tr  key={row.id}>
+                                    <tr key={row.id}>
                                         {row.getVisibleCells().filter(cell => shouldRender(cell)).map(cell => (
                                             <td style={{
                                                 // @ts-ignore
                                                 width: cellWidth(cell.column.columnDef.meta?.valueType)
-                                            }} className='first:pl-6 py-2 border-t dark:border-zinc-700 border-zinc-200 px-2 text-sm h-[50px] items-center' key={cell.id}>
+                                            }}
+                                                className='first:pl-6 py-2 border-t dark:border-zinc-700 border-zinc-200 px-2 text-sm h-[50px] items-center'
+                                                key={cell.id}>
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </td>
                                         ))}

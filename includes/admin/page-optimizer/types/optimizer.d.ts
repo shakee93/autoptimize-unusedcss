@@ -93,6 +93,7 @@ interface AuditSettingInput {
     control_type: ControlTypes;
     control_values: string[];
     control_payload: string;
+    control_label: string;
     value: any;
     key: any;
 }
