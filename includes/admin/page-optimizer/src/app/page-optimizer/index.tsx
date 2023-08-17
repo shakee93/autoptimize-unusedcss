@@ -13,7 +13,6 @@ import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
 import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
-import {Tab} from "../../../types/types";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -21,7 +20,7 @@ export interface AuditComponentRef {
 
 export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
-    const [togglePerformance, setTogglePerformance] = useState(false);
+    const [togglePerformance, setTogglePerformance] = useState(true);
     const {data, loading} = useSelector(optimizerData);
     const {options, setOpenAudits} = useOptimizerContext()
 

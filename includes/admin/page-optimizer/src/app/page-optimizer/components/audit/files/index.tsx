@@ -21,6 +21,19 @@ interface AuditContentProps {
     notify: any;
 }
 
+import {
+    RowData
+} from "@tanstack/react-table";
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        title: string
+        type?: string
+    }
+}
+
+
+
 const AuditContent = ({audit, notify}: AuditContentProps) => {
     const [mounted, setMounted] = useState(false);
 
