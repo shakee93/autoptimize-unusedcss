@@ -117,16 +117,20 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
                 <div className='flex gap-3 font-normal  items-center text-base'>
 
-                    <div
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
-                        {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 border-zinc-400 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
-                    </div>
+                    <TooltipText className='capitalize' text={audit.scoreDisplayMode === 'informative' ? 'Informative' : `Audit status: ${icon}`}>
+                        <div
+                            className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
+                            {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 border-zinc-400 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
+
+                        </div>
+                    </TooltipText>
                     <div className='flex flex-col justify-around'>
                         {audit.name}
                         <span className='flex text-xxs leading-tight opacity-70'>
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
+                            <span>- {audit.id}</span>
                         </span>
                     </div>
 
