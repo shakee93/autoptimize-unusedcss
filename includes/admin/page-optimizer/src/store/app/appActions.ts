@@ -12,7 +12,6 @@ import {
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
-import {WordPressOptions} from "../../../types/types";
 
 
 const transformAudit = (audit: Audit) => {
@@ -25,7 +24,6 @@ const transformAudit = (audit: Audit) => {
             audit.files.grouped_items = audit.files.items.reduce((result: GroupedAuditResource[] , item) => {
 
                 let key = 'unknown'
-                console.log(item);
 
                 if (item.url && typeof item.url !== 'string') {
                     const { url, file_type } = item.url;
@@ -214,6 +212,7 @@ export const updateFileAction = (
     value: any,
 ):  ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+        
         dispatch({
             type: UPDATE_FILE_ACTION, payload : {
                 audit: audit,

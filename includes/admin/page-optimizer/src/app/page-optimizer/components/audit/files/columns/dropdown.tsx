@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "components/ui/select";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../../../store/app/appTypes";
@@ -23,8 +23,8 @@ interface AuditColumnDropdownProps {
 
 const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) => {
     const {getValue, row} = cell;
-    const url = row.getValue("url") as any;
-    const value = getValue();
+    let url = row.getValue("url") as any;
+    let value = getValue();
     const data = useSelector(optimizerData)
     
     // you can find state structure in appReducer.ts (initial state)
@@ -36,8 +36,8 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
 
 
     const updateAction = (v: string) => {
-        dispatch(updateFileAction(audit, url.url ? url.url : url, v));
         setAction(v);
+        dispatch(updateFileAction(audit, url.url ? url.url : url, v));
     };
 
     const transformLabel = (value: string) => {
@@ -48,9 +48,6 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
                 return value;
         }
     };
-
-
-
 
     const renderSelectItems = () => {
 

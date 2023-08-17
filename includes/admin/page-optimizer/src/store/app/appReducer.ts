@@ -77,23 +77,30 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             if (activeReport.data) {
                 activeReport.data.audits = activeReport.data.audits.map((audit) => {
 
-                    if(audit.files && audit.files.items) {
 
-                        audit.files.items = audit.files.items.map((item) => {
-                            
+                    if (audit.files && audit.files.items && (audit.files.type === 'table' || audit.files.type === 'opportunity')) {
+                        const updateActionValue = (item: AuditTableResource) => {
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
                                 return {
                                     ...item,
                                     action: {
                                         ...item.action,
                                         value: payload.value,
-                                    }
+                                    },
                                 };
                             }
                             return item;
-                        });
+                        };
+
+                        audit.files.items = audit.files.items.map(updateActionValue);
+
+                        if (audit.files.grouped_items) {
+                            audit.files.grouped_items = audit.files.grouped_items.map((group) => ({
+                                ...group,
+                                items: group.items.map(updateActionValue),
+                            }));
+                        }
                     }
-                    
 
                     return audit;
                 });
