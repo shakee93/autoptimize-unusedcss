@@ -207,6 +207,8 @@ class RapidLoad_Optimizer
                     if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
                             'unused-css-rules','legacy-javascript','font-display'])){
 
+                        error_log(json_encode($audit->files->items, JSON_PRETTY_PRINT));
+
                         if(!isset(self::$merged_options['individual-file-actions'])){
                             self::$merged_options['individual-file-actions'] = [];
                         }
@@ -214,6 +216,11 @@ class RapidLoad_Optimizer
                         if(!isset(self::$merged_options['individual-file-actions'][$audit->id])){
                             self::$merged_options['individual-file-actions'][$audit->id][] = [];
                         }
+
+                        $item->action = (object)[
+                            "control_type" => "dropdown",
+                            "value"         => "none"
+                        ];
 
                         if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
 

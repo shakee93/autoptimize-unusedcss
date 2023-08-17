@@ -18,7 +18,7 @@ export const OptimizerProvider = ({ children } : {
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
-        optimizer_url: 'https://rapidload.io/?no_rapidload',
+        optimizer_url: 'http://rapidload.local/',
         ajax_url: '',
         page_optimizer_base: '',
         plugin_url: '',
