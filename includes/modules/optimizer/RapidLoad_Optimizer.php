@@ -51,14 +51,11 @@ class RapidLoad_Optimizer
             self::$global_options = RapidLoad_Base::fetch_options();
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
             foreach (self::$global_options as $key => $value){
-                if(!isset(self::$merged_options[$key])){
-                    self::$merged_options[$key] = $value;
-                }
+                self::$merged_options[$key] = $value;
             }
+            error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
             foreach (self::$options as $key => $value){
-                if(!isset(self::$merged_options[$key])){
-                    self::$merged_options[$key] = $value;
-                }
+                self::$merged_options[$key] = $value;
             }
         }
     }
@@ -153,7 +150,7 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = 'https://stackoverflow.com';//isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
             $result = $api->post('page-speed', [
                 'url' => $url,
@@ -168,81 +165,83 @@ class RapidLoad_Optimizer
                 wp_send_json_error([]);
             }
 
-            foreach ($result->audits as $audit){
-
-                if(isset($audit->settings)){
-                    foreach ($audit->settings as $settings){
-                        foreach ($settings->inputs as $input){
-                            if(isset(self::$merged_options[$input->key])){
-                                if($input->key == "uucss_load_js_method"){
-                                    $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
-                                }else{
-                                    $input->value = self::$merged_options[$input->key];
-                                }
-
-                            }
-                            if($input->key == "uucss_enable_uucss"){
-                                $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                                if($data->exist()){
-                                    $data->save();
-                                }
-                                $input->{'value_data'} = $data->status;
-                            }
-                            if($input->key == "uucss_enable_cpcss"){
-                                $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                                if($data->exist()){
-                                    $data->save();
-                                }
-                                $input->{'value_data'} = $data->status;
-                            }
-                        }
-                    }
-                }
-
-                if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
-                    foreach ($audit->files->items as $item){
-
-                        if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
-                                'unused-css-rules','legacy-javascript','font-display'])){
-
-                            if(!isset(self::$merged_options['individual-file-actions'])){
-                                self::$merged_options['individual-file-actions'] = [];
-                            }
-
-                            if(!isset(self::$merged_options['individual-file-actions'][$audit->id])){
-                                self::$merged_options['individual-file-actions'][$audit->id][] = [];
-                            }
-
-                            if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
-
-                                $key = array_search($item->url->url, array_column(self::$merged_options['individual-file-actions'][$audit->id], 'url'));
-
-                                if(isset($key) && is_numeric($key)){
-
-                                    if(isset(self::$merged_options['individual-file-actions'][$audit->id][$key]['action'])){
-                                        $item->action = (object)self::$merged_options['individual-file-actions'][$audit->id][$key]['action'];
-                                    }
-
-                                }else{
-
-                                    self::$merged_options['individual-file-actions'][$audit->id][] = (object)[
-                                        'url' => $item->url->url,
-                                        'action' => isset($item->action) ? $item->action : null,
-                                        'url_object' => $item->url
-                                    ];
-
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-            }
         }
 
         if(!isset($result->audits)){
             wp_send_json_error([]);
+        }
+
+        foreach ($result->audits as $audit){
+
+            if(isset($audit->settings)){
+                foreach ($audit->settings as $settings){
+                    foreach ($settings->inputs as $input){
+                        if(isset(self::$merged_options[$input->key])){
+                            if($input->key == "uucss_load_js_method"){
+                                $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
+                            }else{
+                                $input->value = self::$merged_options[$input->key];
+                            }
+                        }
+                        if($input->key == "uucss_enable_uucss"){
+                            $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                            if($data->exist()){
+                                $data->save();
+                            }
+                            $input->{'value_data'} = $data->status;
+                        }
+                        if($input->key == "uucss_enable_cpcss"){
+                            $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                            if($data->exist()){
+                                $data->save();
+                            }
+                            $input->{'value_data'} = $data->status;
+                        }
+                    }
+                }
+            }
+
+            if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+                foreach ($audit->files->items as $item){
+
+                    if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
+                            'unused-css-rules','legacy-javascript','font-display'])){
+
+                        if(!isset(self::$merged_options['individual-file-actions'])){
+                            self::$merged_options['individual-file-actions'] = [];
+                        }
+
+                        if(!isset(self::$merged_options['individual-file-actions'][$audit->id])){
+                            self::$merged_options['individual-file-actions'][$audit->id][] = [];
+                        }
+
+                        if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
+
+                            $key = array_search($item->url->url, array_column(self::$merged_options['individual-file-actions'][$audit->id], 'url'));
+
+                            if(isset($key) && is_numeric($key)){
+
+                                self::$merged_options['individual-file-actions'][$audit->id] = array_values(self::$merged_options['individual-file-actions'][$audit->id]);
+
+                                if(isset(self::$merged_options['individual-file-actions'][$audit->id][$key]->action)){
+                                    $item->action = (object)self::$merged_options['individual-file-actions'][$audit->id][$key]->action;
+                                }
+
+                            }else{
+
+                                self::$merged_options['individual-file-actions'][$audit->id][] = (object)[
+                                    'url' => $item->url->url,
+                                    'action' => isset($item->action) ? $item->action : null,
+                                    'url_object' => $item->url
+                                ];
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
         }
 
         self::post_optimizer_function($result);
@@ -332,6 +331,8 @@ class RapidLoad_Optimizer
                             $key = array_search($item->url->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
 
                             if(isset($key) && is_numeric($key)){
+
+                                self::$options['individual-file-actions'][$audit->id] = array_values(self::$options['individual-file-actions'][$audit->id]);
 
                                 if(isset(self::$options['individual-file-actions'][$audit->id][$key])){
                                     self::$options['individual-file-actions'][$audit->id][$key]->action = $item->action;
