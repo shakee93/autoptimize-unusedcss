@@ -3,7 +3,7 @@ import Code from "components/ui/code";
 import {Tooltip, TooltipContent, TooltipTrigger} from "components/ui/tooltip";
 
 interface AuditNodeColumnProps {
-    cell: CellContext<AuditFile, any>
+    cell: CellContext<AuditResource, any>
 }
 
 const AuditNodeColumn = ({cell}: AuditNodeColumnProps) => {

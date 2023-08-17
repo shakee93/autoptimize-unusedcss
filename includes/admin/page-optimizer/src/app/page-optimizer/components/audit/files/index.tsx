@@ -53,10 +53,10 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         return !["pattern", "file_type"].includes(col.id as string);
     };
 
-    const createTable = (items: AuditResource[], title: string, type?: string) => {
+    const createTable = (headings : AuditHeadings[], items: AuditResource[], title: string, type?: string) => {
         const columnHelper = createColumnHelper<AuditResource>();
 
-        const col = audit?.files?.headings?.map((heading) => {
+        const col = headings.map((heading) => {
             return columnHelper.accessor(
                 (row) => row[heading.key as keyof AuditResource],
                 {
@@ -93,7 +93,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         audit.files.grouped_items.forEach((data) => {
             if (data.items && data.items.length > 0) {
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
-                const table = createTable(data.items, `${label} Files`, data.type);
+                const table = createTable(audit.files?.headings || [], data.items, `${label} Files`, data.type);
                 tables.push(table);
             }
         });
@@ -102,7 +102,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     if (audit.files.type === "list") {
         audit.files.items.forEach((item) => {
             if (item.type && item.type === "table" && item.items.length > 0) {
-                const table = createTable(item.items, "Related Resources");
+                const table = createTable(item.headings, item.items, "Related Resources");
                 tables.push(table);
             }
         });
@@ -116,7 +116,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             </div>
 
-            {audit.settings.length > 0 && (
+            {(audit.settings.length > 0 && audit.settings.find(s => ['cache'].includes(s.category)) ) && (
                 <div className='flex flex-col border-t dark:border-zinc-700 py-4 px-4 gap-3'>
                     <div className='font-medium text-sm ml-2'>Recommended Settings</div>
                     <Settings type='cache' audit={audit}/>

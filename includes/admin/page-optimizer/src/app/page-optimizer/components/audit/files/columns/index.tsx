@@ -23,7 +23,7 @@ import AuditNodeColumn from "app/page-optimizer/components/audit/files/columns/n
 interface AuditColumnProps {
     audit: Audit
     heading: AuditHeadings,
-    cell: CellContext<AuditFile, any>,
+    cell: CellContext<AuditResource, any>,
 }
 
 const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
@@ -62,7 +62,11 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
         return <span>{JSON.stringify(value)}</span>
     }
 
-    console.log('col', value);
+    if (heading.valueType === 'text') {
+        return <span>{value}</span>
+    }
+
+    console.log('col', value, heading.valueType);
     return <span>{value}</span>;
 
 }

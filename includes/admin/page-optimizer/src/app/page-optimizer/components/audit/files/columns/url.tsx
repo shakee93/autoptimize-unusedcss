@@ -9,7 +9,7 @@ import Code from "components/ui/code";
 
 interface AuditColumnUrlProps {
     audit : Audit,
-    cell: CellContext<AuditFile, any>
+    cell: CellContext<AuditResource, any>
 }
 
 const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
