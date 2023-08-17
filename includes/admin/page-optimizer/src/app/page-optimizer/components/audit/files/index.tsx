@@ -116,6 +116,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             </div>
 
+            {audit.settings.length > 0 && (
+                <div className='flex flex-col border-t dark:border-zinc-700 py-4 px-4 gap-3'>
+                    <div className='font-medium text-sm ml-2'>Recommended Settings</div>
+                    <Settings type='cache' audit={audit}/>
+                </div>
+            )}
+
+
             {tables.map((table, index) => (
                 <div key={index} className="flex flex-col gap-3 px-4 py-3 border-t dark:border-zinc-700">
                     <div className="flex flex-col gap-2 justify-center">
