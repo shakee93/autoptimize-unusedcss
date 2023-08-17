@@ -14,6 +14,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import {JsonView} from "react-json-view-lite";
+import {ChevronLeft, ChevronRight} from "lucide-react";
 
 interface AuditContentProps {
     audit: Audit;
@@ -78,6 +79,11 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 title: title,
                 type
             },
+            initialState : {
+                pagination : {
+                    pageSize: 5
+                }
+            }
         });
 
         return table;
@@ -90,6 +96,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     }
 
     if (audit.files.type === "opportunity" || audit.files.type === "table") {
+        // console.log(audit.files.grouped_items);
         audit.files.grouped_items.forEach((data) => {
             if (data.items && data.items.length > 0) {
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
@@ -178,12 +185,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                     </div>
                     {table.getPageCount() > 1 && (
                         <div className="w-full flex justify-end">
-                            <ul className="flex gap-1 mt-4">
-                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">{"<"}</li>
+                            <ul className="flex gap-1 mt-4 items-center">
+                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">
+                                    <ChevronLeft className='w-4'/>
+                                </li>
                                 {[...Array(table.getPageCount())].map((i, index) => (
                                     <li
                                         className={cn(
-                                            "hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs",
+                                            "hover:bg-zinc-200 border px-3 py-1.5 cursor-pointer rounded text-xs",
                                             table.getState().pagination.pageIndex === index ? "bg-zinc-200" : ""
                                         )}
                                         onClick={() => {
@@ -194,7 +203,9 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                         {index + 1}
                                     </li>
                                 ))}
-                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">{">"}</li>
+                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">
+                                    <ChevronRight className='w-4'/>
+                                </li>
                             </ul>
                         </div>
                     )}

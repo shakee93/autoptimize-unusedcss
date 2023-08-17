@@ -23,16 +23,20 @@ const transformAudit = (audit: Audit) => {
         if (audit?.files?.items?.length > 0) {
 
             audit.files.grouped_items = audit.files.items.reduce((result: GroupedAuditResource[] , item) => {
-                if (!item.url || typeof item.url === "string") {
-                    return result;
+
+                let key = 'unknown'
+                console.log(item);
+
+                if (item.url && typeof item.url !== 'string') {
+                    const { url, file_type } = item.url;
+
+                    if (file_type.value) {
+                        key = file_type.value
+                    }
                 }
 
-                const { url, file_type } = item.url;
-                const { value } = file_type;
-
-                const key = `${value}`;
-
                 const existingGroup = result.find(group => group.type === key);
+
                 if (existingGroup) {
                     existingGroup.items.push(item);
                 } else {

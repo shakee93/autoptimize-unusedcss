@@ -110,8 +110,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef} padding='p-0'
               className={cn(
-                  `hover:opacity-100 w-full flex justify-center flex-col items-center`,
-                  toggleFiles && 'shadow-xl dark:shadow-zinc-800/70'
+                  `hover:opacity-100  w-full flex justify-center flex-col items-center`,
+                  toggleFiles ? 'shadow-xl dark:shadow-zinc-800/70' : 'dark:hover:border-zinc-500 hover:border-zinc-400/60'
               )}
         >
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
@@ -134,15 +134,11 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
 
                 <div className='flex gap-4 items-center'>
 
-
-
                     { (audit.files?.items?.length > 0 || audit.settings.length > 0) && (
                         <div className='text-xs opacity-50'>
                             {summary()}
                         </div>
                     )}
-
-                    {/*<Settings audit={audit} max={1}/>*/}
 
                     {(audit.files?.items?.length > 0 || audit.settings.length > 0)  && (
                         <div>
@@ -156,8 +152,6 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                             </TooltipText>
                         </div>
                     )}
-
-                    {/*<Button onClick={e => setShowJson(p => !p)} dark={false}><ArrowDown className='w-4'/></Button>*/}
 
                 </div>
 
