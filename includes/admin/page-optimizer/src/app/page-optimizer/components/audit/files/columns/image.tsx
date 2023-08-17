@@ -8,28 +8,24 @@ import Code from "components/ui/code";
 
 
 interface AuditColumnImageProps {
-    cell: CellContext<AuditFile, any>
+    cell: CellContext<AuditResource, any>
 }
 
 const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
-    let [value, setValue] = useState<any>('')
-    let [snippet, setSnippet] = useState<any>('')
 
-    useEffect(() => {
-        setValue(cell.getValue().url ? cell.getValue().url : cell.getValue())
+    let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
+    let snippet : any = '';
 
-        if (cell.table.getColumn('node')) {
-            // @ts-ignore
-                setSnippet(cell.row.getValue('node') as {
-                    nodeLabel: string
-                    selector: string
-                    snippet: string
-                })
+    if (cell.table.getColumn('node')) {
+        // @ts-ignore
+        snippet = cell.row.getValue('node') as {
+            nodeLabel: string
+            selector: string
+            snippet: string
         }
-
-    }, [cell])
+    }
 
     return (
             <Tooltip>
@@ -39,9 +35,13 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                             <img className='w-fit' src={value.url ? value.url : value} alt=''/>
                         </div>
 
-                        <a className='flex gap-2' target='_blank'
-                           href={value}>{truncateMiddleOfURL(value.url ? value.url : value, 40)}
-                            <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                        {value && (
+                            <a className='flex gap-2' target='_blank'
+                               href={value}>{truncateMiddleOfURL(value.url ? value.url : value, 40)}
+                                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                        )}
+
+
                     </div>
                 </TooltipTrigger>
                 <TooltipContent className='max-w-[48rem] min-w-[2rem] min-h-[2rem]'>

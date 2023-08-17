@@ -22,12 +22,8 @@ const transformAudit = (audit: Audit) => {
 
         if (audit?.files?.items?.length > 0) {
 
-            audit.files.grouped_items = Object.entries(audit.files.items.reduce((result, item: AuditTableResource) => {
-                if (!item.url) {
-                    return result;
-                }
-
-                if (typeof item.url === 'string') {
+            audit.files.grouped_items = audit.files.items.reduce((result: GroupedAuditResource[] , item) => {
+                if (!item.url || typeof item.url === "string") {
                     return result;
                 }
 
@@ -36,14 +32,15 @@ const transformAudit = (audit: Audit) => {
 
                 const key = `${value}`;
 
-                if (!result[key]) {
-                    result[key] = [];
+                const existingGroup = result.find(group => group.type === key);
+                if (existingGroup) {
+                    existingGroup.items.push(item);
+                } else {
+                    result.push({ type: key, items: [item] });
                 }
 
-                result[key].push(item);
-
                 return result;
-            }, {})).map(([type, items]) => ({ type, items }));
+            }, []);
 
 
 

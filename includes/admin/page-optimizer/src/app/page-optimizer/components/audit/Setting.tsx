@@ -82,6 +82,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
         cache : <PageCache/>,
         image : <ImageDeliverySVG/>,
         javascript : <JavascriptDelivery/>,
+        js : <JavascriptDelivery/>,
         font : <FontDelivery/>,
         css : <CSSDelivery/>,
     }

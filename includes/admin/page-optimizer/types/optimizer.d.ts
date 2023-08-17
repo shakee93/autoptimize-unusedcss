@@ -47,10 +47,15 @@ interface ListItems extends AuditFileBase {
 interface TableItems extends AuditFileBase {
     type: 'table' | 'opportunity'
     items: AuditTableResource[];
-    grouped_items: { type: string; items: AuditTableResource[] }[];
+    grouped_items: GroupedAuditResource[];
 }
 
-type FileTypes = 'css' | 'js' | 'image' | string
+interface GroupedAuditResource {
+ type: string;
+ items: AuditTableResource[]
+}
+
+type FileTypes = 'css' | 'js' | 'image' | 'font' | string
 
 interface AuditListResource {
     headings: AuditHeadings[]

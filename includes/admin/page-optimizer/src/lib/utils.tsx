@@ -30,7 +30,7 @@ export function truncateMiddleOfURL(url: string, maxLength: number) {
     if (url === 'Unattributable') {
       return url;
     }
-
+    
     const parsedURL = new URL(url);
 
     // Check if the last part of the pathname is empty (no trailing slash)
