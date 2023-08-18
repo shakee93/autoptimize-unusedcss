@@ -288,7 +288,7 @@ class Javascript_Enqueue
                 return;
             }
 
-            if(preg_match( "/({$this->default_inline_js_exclusion_pattern})/msi", $inner_text )){
+            if(!empty($this->default_inline_js_exclusion_pattern) && preg_match( "/({$this->default_inline_js_exclusion_pattern})/msi", $inner_text )){
                 return;
             }
 
