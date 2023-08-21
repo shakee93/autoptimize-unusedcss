@@ -220,18 +220,18 @@ class RapidLoad_Job{
 
     }
 
-    function get_desktop_options(){
+    function get_desktop_options($transformed = false){
 
         if(isset($this->desktop_options)){
-            return unserialize($this->desktop_options);
+            return !$transformed ? unserialize($this->desktop_options) : $this->transform_individual_file_actions(unserialize($this->desktop_options));
         }
         return [];
     }
 
-    function get_mobile_options(){
+    function get_mobile_options($transformed = false){
 
         if(isset($this->mobile_options)){
-            return unserialize($this->mobile_options);
+            return !$transformed ? unserialize($this->mobile_options) : $this->transform_individual_file_actions(unserialize($this->mobile_options));
         }
         return [];
     }
@@ -332,4 +332,58 @@ class RapidLoad_Job{
         return $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id , ARRAY_N);
 
     }
+
+    function transform_individual_file_actions($options){
+
+        $files = [];
+
+        if(isset($options['individual-file-actions']) && !empty($options['individual-file-actions'])){
+
+            foreach ($options['individual-file-actions'] as $tag){
+
+                foreach ($tag as $action){
+
+                    $files[] = [
+                        'url' => $action->url,
+                        'type' => $action->url_object->file_type->value,
+                        'action' => $action->action->value,
+                        'regex' => $this->generateUrlRegex($action->url)
+                    ];
+
+                }
+
+            }
+
+            if(!empty($files)){
+                $options['individual-file-actions'] = $files;
+            }
+        }
+
+        return $options;
+    }
+
+    function generateUrlRegex($url) {
+        // Escape characters with special meanings in regex
+        $urlParts = parse_url($url);
+        if (isset($urlParts['path'])) {
+            $path = $urlParts['path'];
+        } else {
+            return false; // Invalid URL
+        }
+
+        // Escape characters with special meanings in regex
+        $escapedPath = preg_quote($path, '/');
+
+        // Replace placeholders for dynamic parts of the path with regex patterns
+        $escapedPath = preg_replace('/\\\\\{[^\\\\]+\}/', '([^/]+)', $escapedPath);
+
+        // Add regex anchors to match the entire path
+        $regexPattern = '/^' . $escapedPath . '$/';
+
+        error_log($url);
+        error_log($regexPattern);
+
+        return $regexPattern;
+    }
+
 }

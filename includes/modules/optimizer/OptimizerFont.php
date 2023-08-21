@@ -7,29 +7,10 @@ class OptimizerFont
     {
         add_filter('rapidload/enqueue/preload/fonts', function ($urls, $job, $strategy){
 
-            $options = $strategy === "mobile" ? $job->get_mobile_options() : $job->get_desktop_options();
+            $options = $strategy === "mobile" ? $job->get_mobile_options(true) : $job->get_desktop_options(true);
 
-            if(isset($options['individual-file-actions']) && isset($options['individual-file-actions']['font-display'])){
+            error_log(json_encode($options, JSON_PRETTY_PRINT));
 
-                foreach ($options['individual-file-actions']['font-display'] as $value){
-
-                    if (isset($value->url) && isset($value->url->url) && filter_var($value->url->url, FILTER_VALIDATE_URL) !== false) {
-
-                        $path_parts = pathinfo($value->url->url);
-
-                        if(isset($path_parts['extension'])){
-                            $file_extension = strtolower($path_parts['extension']);
-
-                            if(in_array($file_extension, ['woff2', 'woff' , 'ttf'])){
-
-                                if(isset($value->action) && $value->action == "preload"){
-                                    $urls[] = $value->url->url;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             return $urls;
         }, 10, 3);
     }

@@ -53,7 +53,7 @@ class RapidLoad_Optimizer
             foreach (self::$global_options as $key => $value){
                 self::$merged_options[$key] = $value;
             }
-            error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
+
             foreach (self::$options as $key => $value){
                 self::$merged_options[$key] = $value;
             }
