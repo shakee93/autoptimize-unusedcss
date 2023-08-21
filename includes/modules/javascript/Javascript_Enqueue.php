@@ -13,14 +13,37 @@ class Javascript_Enqueue
     private $options;
     private $file_system;
     private $settings;
-    private $strategy;
+    private $default_inline_js_exclusion_pattern;
+    private $default_js_exclusion_pattern;
 
     public function __construct($job)
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
+        $this->init();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 60);
+    }
+
+    public function init(){
+
+        $this->default_inline_js_exclusion_pattern = "";
+        $this->default_js_exclusion_pattern = "";
+        $default_inline_js_exclusion_list = $this->get_default_inline_js_exclusions();
+        $default_js_exclusion_list = $this->get_default_js_exclusions();
+
+        foreach ($default_inline_js_exclusion_list as $exclusion){
+            $this->default_inline_js_exclusion_pattern .= preg_quote( (string) $exclusion, '#' ) . '|';
+        }
+
+        $this->default_inline_js_exclusion_pattern = rtrim( $this->default_inline_js_exclusion_pattern, '|' );
+
+        foreach ($default_js_exclusion_list as $exclusion){
+            $this->default_js_exclusion_pattern .= str_replace( '#', '\#', $exclusion ) . '|';
+        }
+
+        $this->default_js_exclusion_pattern = rtrim( $this->default_js_exclusion_pattern, '|' );
+
     }
 
     public function update_content($state){
@@ -231,7 +254,11 @@ class Javascript_Enqueue
 
             if(self::is_js($link)){
 
-                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer'))      {
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                    if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
+                        return;
+                    }
 
                     $link->defer = true;
                     unset($link->async);
@@ -262,6 +289,10 @@ class Javascript_Enqueue
             }
 
             if ( ! empty( $jquery_patterns ) && ! preg_match( "/({$jquery_patterns})/msi", $inner_text ) ) {
+                return;
+            }
+
+            if(!empty($this->default_inline_js_exclusion_pattern) && preg_match( "/({$this->default_inline_js_exclusion_pattern})/msi", $inner_text )){
                 return;
             }
 
@@ -343,5 +374,65 @@ class Javascript_Enqueue
         }
 
         return $excluded;
+    }
+
+    public function get_default_inline_js_exclusions(){
+        $list = [
+            "DOMContentLoaded",
+            "document.write",
+            "window.lazyLoadOptions",
+            "N.N2_",
+            "rev_slider_wrapper",
+            "FB3D_CLIENT_LOCALE",
+            "ewww_webp_supported",
+            "anr_captcha_field_div",
+            "renderInvisibleReCaptcha",
+            "bookingInProgress"
+        ];
+        return apply_filters('rapidload/defer/exclusions/inline_js', $list);
+    }
+
+    public function get_default_js_exclusions(){
+        $list = [
+            "gist.github.com",
+            "content.jwplatform.com",
+            "js.hsforms.net",
+            "www.uplaunch.com",
+            "google.com\/recaptcha",
+            "widget.reviews.co.uk",
+            "verify.authorize.net\/anetseal",
+            "lib\/admin\/assets\/lib\/webfont\/webfont.min.js",
+            "app.mailerlite.com",
+            "widget.reviews.io",
+            "simplybook.(.*)\/v2\/widget\/widget.js",
+            "\/wp-includes\/js\/dist\/i18n.min.js",
+            "\/wp-content\/plugins\/wpfront-notification-bar\/js\/wpfront-notification-bar(.*).js",
+            "\/wp-content\/plugins\/oxygen\/component-framework\/vendor\/aos\/aos.js",
+            "\/wp-content\/plugins\/ewww-image-optimizer\/includes\/check-webp(.min)?.js",
+            "static.mailerlite.com\/data\/(.*).js",
+            "cdn.voxpow.com\/static\/libs\/v1\/(.*).js",
+            "cdn.voxpow.com\/media\/trackers\/js\/(.*).js",
+            "use.typekit.net",
+            "www.idxhome.com",
+            "\/wp-includes\/js\/dist\/vendor\/lodash(.min)?.js",
+            "\/wp-includes\/js\/dist\/api-fetch(.min)?.js",
+            "\/wp-includes\/js\/dist\/i18n(.min)?.js",
+            "\/wp-includes\/js\/dist\/vendor\/wp-polyfill(.min)?.js",
+            "\/wp-includes\/js\/dist\/url(.min)?.js",
+            "\/wp-includes\/js\/dist\/hooks(.min)?.js",
+            "www.paypal.com\/sdk\/js",
+            "js-eu1.hsforms.net",
+            "yanovis.Voucher.js",
+            "\/carousel-upsells-and-related-product-for-woocommerce\/assets\/js\/glide.min.js",
+            "use.typekit.com",
+            "\/artale\/modules\/kirki\/assets\/webfont.js",
+            "\/api\/scripts\/lb_cs.js",
+            "js.hscta.net\/cta\/current.js",
+            "widget.refari.co",
+            "player.vdocipher.com",
+            "\/assets\/js\/preloaded-elements-handlers(.min)?.js" // popup not working
+        ];
+
+        return apply_filters('rapidload/defer/exclusions/js', $list);
     }
 }
