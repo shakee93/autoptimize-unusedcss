@@ -207,8 +207,6 @@ class RapidLoad_Optimizer
                     if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
                             'unused-css-rules','legacy-javascript','font-display'])){
 
-                        error_log(json_encode($audit->files->items, JSON_PRETTY_PRINT));
-
                         if(!isset(self::$merged_options['individual-file-actions'])){
                             self::$merged_options['individual-file-actions'] = [];
                         }
