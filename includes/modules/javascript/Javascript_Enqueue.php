@@ -39,7 +39,7 @@ class Javascript_Enqueue
         $this->default_inline_js_exclusion_pattern = rtrim( $this->default_inline_js_exclusion_pattern, '|' );
 
         foreach ($default_js_exclusion_list as $exclusion){
-            $this->default_js_exclusion_pattern .= preg_quote( (string) $exclusion, '#' ) . '|';
+            $this->default_js_exclusion_pattern .= str_replace( '#', '\#', $exclusion ) . '|';
         }
 
         $this->default_js_exclusion_pattern = rtrim( $this->default_js_exclusion_pattern, '|' );
@@ -254,7 +254,11 @@ class Javascript_Enqueue
 
             if(self::is_js($link)){
 
-                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer') && !preg_match( "/({$this->default_js_exclusion_pattern})/msi", $link->src )){
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                    if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
+                        return;
+                    }
 
                     $link->defer = true;
                     unset($link->async);
@@ -425,7 +429,8 @@ class Javascript_Enqueue
             "\/api\/scripts\/lb_cs.js",
             "js.hscta.net\/cta\/current.js",
             "widget.refari.co",
-            "player.vdocipher.com"
+            "player.vdocipher.com",
+            "\/assets\/js\/preloaded-elements-handlers(.min)?.js" // popup not working
         ];
 
         return apply_filters('rapidload/defer/exclusions/js', $list);
