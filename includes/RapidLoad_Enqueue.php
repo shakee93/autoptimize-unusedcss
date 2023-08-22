@@ -87,12 +87,26 @@ class RapidLoad_Enqueue {
 
             $inject->parsed_html = true;
 
+            $strategy = $this->is_mobile() ? 'mobile' : 'desktop';
+
+            $page_options = [];
+
+            if($strategy == "mobile"){
+                $page_options = $job->get_mobile_options(true);
+            }else{
+                $page_options = $job->get_desktop_options(true);
+            }
+
+            foreach ($page_options as $key => $option){
+                $this->options[$key] = $option;
+            }
+
             $state = apply_filters('uucss/enqueue/content/update',[
                 'dom' => $dom,
                 'inject' => $inject,
                 'options' => $this->options,
                 'job' => $job,
-                'strategy' => $this->is_mobile() ? 'mobile' : 'desktop'
+                'strategy' => $strategy,
             ]) ;
 
             if(isset($state['dom'])){
