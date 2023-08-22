@@ -8,7 +8,7 @@ class RapidLoad_HTML_Minifier
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         if(!isset($this->options['rapidload_minify_html']) || $this->options['rapidload_minify_html'] == ""){
             return;

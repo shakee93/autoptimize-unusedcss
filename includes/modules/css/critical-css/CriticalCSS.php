@@ -20,7 +20,7 @@ class CriticalCSS
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         add_action('uucss/options/css', [$this, 'render_options']);
 

@@ -15,7 +15,9 @@ class JavaScript
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
+
+        error_log(json_encode($this->options, JSON_PRETTY_PRINT));
 
         add_action('uucss/options/js', [$this, 'render_options']);
 

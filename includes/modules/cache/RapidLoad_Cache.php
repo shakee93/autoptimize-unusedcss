@@ -12,7 +12,7 @@ class RapidLoad_Cache
 
     public function __construct()
     {
-        self::$options = RapidLoad_Base::fetch_options();
+        self::$options = RapidLoad_Base::get_merged_options();
 
         if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
             return;

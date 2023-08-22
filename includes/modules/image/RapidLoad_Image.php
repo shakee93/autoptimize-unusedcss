@@ -12,7 +12,7 @@ class RapidLoad_Image
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         if(!isset($this->options['uucss_enable_image_delivery']) || $this->options['uucss_enable_image_delivery'] == ""){
             return;

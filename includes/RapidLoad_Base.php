@@ -7,6 +7,7 @@ class RapidLoad_Base
     use RapidLoad_Utils;
 
     public static $options;
+    public static $paged_options;
 
     public $url = null;
     public $rule = null;
@@ -34,6 +35,8 @@ class RapidLoad_Base
     public function __construct()
     {
         self::fetch_options();
+
+        add_filter('rapidload/options', [$this, 'merge_job_options']);
 
         add_action('init', function (){
 
@@ -115,6 +118,33 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    function merge_job_options($option){
+
+        $this->url = $this->get_current_url();
+
+        $this->url = $this->transform_url($this->url);
+
+        $job = new RapidLoad_Job(['url' => $this->url]);
+
+        if(isset($job->id)){
+
+            $strategy = $this->is_mobile() ? 'mobile' : 'desktop';
+
+            if($strategy == "mobile"){
+                $page_options = $job->get_mobile_options(true);
+            }else{
+                $page_options = $job->get_desktop_options(true);
+            }
+
+            foreach ($page_options as $key => $op){
+                $option[$key] = $op;
+            }
+
+        }
+
+        return $option;
     }
 
     function rapidload_display_global_notification() {
@@ -416,6 +446,21 @@ class RapidLoad_Base
         }
 
         return self::$options;
+    }
+
+    public static function get_merged_options(){
+
+        if(!isset(self::$options)){
+            self::$options = self::fetch_options();
+        }
+
+        if(isset(self::$paged_options)){
+            return self::$paged_options;
+        }
+
+        self::$paged_options = apply_filters('rapidload/options', self::$options);
+
+        return self::$paged_options;
     }
 
     public static function get_option($name, $default = null)
