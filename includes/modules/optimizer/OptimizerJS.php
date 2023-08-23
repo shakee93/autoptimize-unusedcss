@@ -38,8 +38,6 @@ class OptimizerJS
 
             }
 
-            error_log(json_encode(self::$js_files, JSON_PRETTY_PRINT));
-
         }, 10 , 3);
     }
 

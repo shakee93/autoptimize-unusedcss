@@ -17,8 +17,6 @@ class JavaScript
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        error_log(json_encode($this->options, JSON_PRETTY_PRINT));
-
         add_action('uucss/options/js', [$this, 'render_options']);
 
         if(!isset($this->options['uucss_enable_javascript']) || $this->options['uucss_enable_javascript'] == ""){

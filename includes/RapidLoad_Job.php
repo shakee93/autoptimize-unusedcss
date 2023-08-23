@@ -343,7 +343,7 @@ class RapidLoad_Job{
 
                 foreach ($tag as $action){
 
-                    $files[] = [
+                    $files[] = (object)[
                         'url' => $action->url,
                         'type' => $action->url_object->file_type->value,
                         'action' => $action->action->value,
@@ -378,10 +378,7 @@ class RapidLoad_Job{
         $escapedPath = preg_replace('/\\\\\{[^\\\\]+\}/', '([^/]+)', $escapedPath);
 
         // Add regex anchors to match the entire path
-        $regexPattern = '/^' . $escapedPath . '$/';
-
-        error_log($url);
-        error_log($regexPattern);
+        $regexPattern = '/' . $escapedPath . '/';
 
         return $regexPattern;
     }
