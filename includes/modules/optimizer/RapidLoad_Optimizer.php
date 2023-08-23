@@ -35,6 +35,8 @@ class RapidLoad_Optimizer
 
         new OptimizerFont();
         new OptimizerJS();
+        new OptimizerImage();
+        new OptimizerStyle();
     }
 
     public static function   pre_optimizer_function(){
@@ -132,19 +134,17 @@ class RapidLoad_Optimizer
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
         $new_hash = hash('md5', json_encode($data));
 
-        if($hash == $new_hash){
-            return;
+        if($hash != $new_hash){
+            $revision_count = self::$job->get_revision_count(self::$strategy);
+
+            if($revision_count > (self::$revision_limit - 1)){
+                self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
+            }
+
+            $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
+            $optimization->set_data($data);
+            $optimization->save();
         }
-
-        $revision_count = self::$job->get_revision_count(self::$strategy);
-
-        if($revision_count > (self::$revision_limit - 1)){
-            self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
-        }
-
-        $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
-        $optimization->set_data($data);
-        $optimization->save();
 
         self::$job->save(!self::$job->exist());
 
@@ -346,9 +346,7 @@ class RapidLoad_Optimizer
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
                     foreach ($audit->files->items as $item){
 
-                        if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
-                                'unused-css-rules','legacy-javascript','font-display'])){
-
+                        if(isset($item->url) && isset($item->url->url)){
                             if(!isset(self::$options['individual-file-actions'][$audit->id])){
                                 self::$options['individual-file-actions'][$audit->id] = [];
                             }
