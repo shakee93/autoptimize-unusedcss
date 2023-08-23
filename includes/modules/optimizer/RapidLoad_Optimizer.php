@@ -77,9 +77,29 @@ class RapidLoad_Optimizer
                         if(isset($file_action)){
                             if(!isset($file_action->action)){
                                 unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
+                                continue;
                             }
                             else if(isset($file_action->action) && isset($file_action->action->value) && $file_action->action->value == "none"){
                                 unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
+                                continue;
+                            }
+                            switch ($file_action->url_object->file_type->value){
+                                case 'css':{
+                                    self::$options['uucss_enable_css'] = "1";
+                                    break;
+                                }
+                                case 'js':{
+                                    self::$options['uucss_enable_javascript'] = "1";
+                                    break;
+                                }
+                                case 'image':{
+                                    self::$options['uucss_enable_image_delivery'] = "1";
+                                    break;
+                                }
+                                case 'font':{
+                                    self::$options['uucss_enable_font_optimization'] = "1";
+                                    break;
+                                }
                             }
                         }
 
