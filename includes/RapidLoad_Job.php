@@ -233,7 +233,7 @@ class RapidLoad_Job{
         if(isset($this->mobile_options)){
             return !$transformed ? unserialize($this->mobile_options) : $this->transform_individual_file_actions(unserialize($this->mobile_options));
         }
-        return [];
+        return $this->get_desktop_options($transformed);
     }
 
     function set_desktop_options($options){
