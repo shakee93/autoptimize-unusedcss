@@ -14,6 +14,7 @@ export const OptimizerProvider = ({ children } : {
     children: ReactNode
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
+    const isDevelopment= import.meta.env.DEV
 
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
@@ -57,6 +58,11 @@ export const OptimizerProvider = ({ children } : {
     * Disable all stylesheets on WordPress page when the Optimizer is open
     * */
     const manipulateStyles = (value: SetStateAction<boolean>) => {
+
+        if (isDevelopment) {
+            return;
+        }
+
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
         const styleTags = document.querySelectorAll('style');
         const targetStylesheet = document.getElementById('rapidload_page_optimizer-css');
