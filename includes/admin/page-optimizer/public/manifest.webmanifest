@@ -1,0 +1,8 @@
+{
+  "name": "RapidLoad Page Optimizer",
+  "short_name": "RapidLoad",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "purple",
+  "theme_color": "purple"
+}
