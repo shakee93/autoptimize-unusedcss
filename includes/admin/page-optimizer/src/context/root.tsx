@@ -44,14 +44,14 @@ export const OptimizerProvider = ({ children } : {
 
         if (!value) {
             // giving a breath to enabled stylesheets to paint
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 setShowOptimizer(value)
-            }, 30);
+            });
         } else {
             setShowOptimizer(value)
         }
-
     }
+
 
     /*
     * Disable all stylesheets on WordPress page when the Optimizer is open
