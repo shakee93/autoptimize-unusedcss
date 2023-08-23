@@ -81,39 +81,7 @@ class Javascript_Enqueue
 
         }
 
-        /*if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1"){
-            $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
-                ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-                    var listener = function () {
-                        const scriptElements = document.getElementsByTagName('script');
-                        for (let i = 0; i < scriptElements.length; i++) {
-                          const script = scriptElements[i];
-                            if (script.type === 'rapidload/lazyscript') {
-                            const newScript = document.createElement('script');
-                            newScript.type = 'text/javascript';
-                            if (script.id) {
-                              newScript.src = script.id;
-                            }
-                            if (script.src) {
-                              newScript.src = script.src;
-                            } else {
-                              const inlineScript = document.createTextNode(script.textContent || script.innerText);
-                              newScript.appendChild(inlineScript);
-                            }
-                            script.parentNode.replaceChild(newScript, script);
-                          }
-                        }
-                    };
-                    addEventListener(event, listener);
-                });
-            });");
-
-            $node->setAttribute('type', 'text/javascript');
-            $body->appendChild($node);
-        }*/
-
-        if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
+        if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" || apply_filters('rapidload/delay-script/enable', false)){
             $body = $this->dom->find('body', 0);
             $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
                 ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
@@ -305,11 +273,11 @@ class Javascript_Enqueue
 
     }
 
-    private static function is_js( $el ) {
+    public static function is_js( $el ) {
         return !empty($el->src) && strpos($el->src,".js");
     }
 
-    private static function is_inline_script( $el ) {
+    public static function is_inline_script( $el ) {
         return !empty($el->type) && $el->type == "text/javascript" && !isset($el->src);
     }
 

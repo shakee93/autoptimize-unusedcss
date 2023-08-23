@@ -75,8 +75,6 @@ class RapidLoad_Font_Enqueue
                 $script[0]->{'data-rapidload-src'} = $script[0]->src;
                 unset($script[0]->src);
 
-                error_log($inlne_script[0]->innertext());
-
                 $script[0]->onload = 'if(document.getElementById("'. $id .'-after")) {var newScript = document.createElement("script");
                                 var inlineScript = document.createTextNode(document.getElementById("'. $id .'-after").innerHTML);
                                 newScript.appendChild(inlineScript);
