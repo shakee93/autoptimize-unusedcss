@@ -13,8 +13,11 @@ class OptimizerStyle
                     if(isset($file_action->type) && $file_action->type == "css"){
                         if( isset($file_action->url) && !filter_var($file_action->url, FILTER_VALIDATE_URL) === false){
                             if(isset($file_action->action) && $file_action->action == "remove"){
-                                unset($sheet->rel);
-                                unset($sheet->href);
+                                if(preg_match($file_action->regex, $sheet->href)){
+                                    unset($sheet->rel);
+                                    unset($sheet->href);
+                                }
+
                             }
                         }
                     }
