@@ -358,7 +358,7 @@ class RapidLoad_Optimizer
                                 self::$options['individual-file-actions'][$audit->id] = array_values(self::$options['individual-file-actions'][$audit->id]);
 
                                 if(isset(self::$options['individual-file-actions'][$audit->id][$key])){
-                                    self::$options['individual-file-actions'][$audit->id][$key]->action = $item->action;
+                                    self::$options['individual-file-actions'][$audit->id][$key]->action = isset($item->action) ? $item->action : (object)[];
                                 }
 
                             }else{
