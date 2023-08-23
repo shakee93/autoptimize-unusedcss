@@ -62,7 +62,7 @@
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "dompurify": "^3.0.5",
-    "framer-motion": "^10.13.1",
+    "framer-motion": "^10.16.0",
     "immer": "^10.0.2",
     "lucide-react": "^0.263.1",
     "pretty-bytes": "^6.1.1",

@@ -16,6 +16,7 @@ export const OptimizerProvider = ({ children } : {
     const isAdminBar = document.getElementById('wpadminbar');
 
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [sheetsHidden, setSheetsHihdden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'http://rapidload.local/',
@@ -38,10 +39,56 @@ export const OptimizerProvider = ({ children } : {
         
     }, [showOptimizer])
 
+    const _setShowOptimizer = (value: SetStateAction<boolean>) => {
+        manipulateStylesheets(value)
+
+        if (!value) {
+            // giving a breath to enabled stylesheets to paint
+            setTimeout(() => {
+                setShowOptimizer(value)
+            }, 30);
+        } else {
+            setShowOptimizer(value)
+        }
+
+    }
+
+    useEffect(() => {
+        manipulateStylesheets(showOptimizer)
+    }, [showOptimizer])
+
+
+    /*
+    * Disable all stylesheets on WordPress page when the Optimizer is open
+    * */
+    const manipulateStylesheets = (value: SetStateAction<boolean>) => {
+
+        const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+        const targetStylesheet = document.getElementById('rapidload_page_optimizer-css');
+
+        if (value && !sheetsHidden) {
+            stylesheets.forEach(function(stylesheet) {
+                const url = (stylesheet as HTMLLinkElement).href;
+                if (stylesheet !== targetStylesheet && !url.includes('fonts.googleapis.com')) {
+                    (stylesheet as HTMLLinkElement).disabled = true;
+                }
+            });
+            setSheetsHihdden(true)
+        }
+
+        if (!value && sheetsHidden) {
+            stylesheets.forEach(function(stylesheet) {
+                (stylesheet as HTMLLinkElement).disabled = false;
+            });
+            setSheetsHihdden(false)
+        }
+
+    }
+
     return (
         <OptimizerContext.Provider value={{
             showOptimizer,
-            setShowOptimizer,
+            setShowOptimizer : _setShowOptimizer,
             options,
             openAudits,
             setOpenAudits

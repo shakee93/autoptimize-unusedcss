@@ -85,7 +85,7 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                    <Label htmlFor="name" className="flex flex-col gap-1 ml-4 text-left w-full">
                        {input.control_label ? input.control_label : input.key} <span className='text-xs opacity-50 mt'>unsupported input field - {input.control_type}</span>
                        <p>
-                           {JSON.stringify(input)}
+                           {/*{JSON.stringify(input)}*/}
                        </p>
                    </Label>
                )

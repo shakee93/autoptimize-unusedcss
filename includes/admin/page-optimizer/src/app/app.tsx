@@ -26,6 +26,8 @@ const App = ({is_popup}: {
             }
         }
     }, [is_popup]);
+    
+
 
     const popover = is_popup && popupNode ? ReactDOM.createPortal(<SpeedPopover/>, popupNode) : <SpeedPopover/>;
 
