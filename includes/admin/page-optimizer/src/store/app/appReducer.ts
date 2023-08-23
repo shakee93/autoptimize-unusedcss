@@ -33,11 +33,11 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 [state.activeReport] : {
+                    ...state[state.activeReport],
                     loading: true
                 }
             };
         case FETCH_DATA_SUCCESS:
-            
             return {
                 ...state,
                 [state.activeReport] : {

@@ -94,7 +94,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             },
             initialState : {
                 pagination : {
-                    pageSize: 5
+                    pageSize: 8
                 }
             }
         });
@@ -113,7 +113,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         audit.files.grouped_items.forEach((data) => {
             if (data.items && data.items.length > 0) {
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
-                const table = createTable(audit.files?.headings || [], data.items, `${label} Files`, data.type);
+                const table = createTable(audit.files?.headings || [], data.items, label === 'unknown' ? 'Other items' :`${label} Files`, data.type);
                 tables.push(table);
             }
         });

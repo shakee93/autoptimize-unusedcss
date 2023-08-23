@@ -102,7 +102,6 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
-            dispatch({ type: FETCH_DATA_REQUEST });
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
             const activeReportData = currentState.app[activeReport]
@@ -113,11 +112,17 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     return;
             // }
 
+            if (activeReportData.data && !reload) {
+                return;
+            }
+
+            dispatch({ type: FETCH_DATA_REQUEST });
+
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
                 reload
-            )
+            );
 
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
 

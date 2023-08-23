@@ -13,6 +13,7 @@ import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
 import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
+import {m, AnimatePresence} from "framer-motion";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -83,17 +84,13 @@ export default function PageOptimizer() {
         });
     };
 
+    let xx = data?.grouped[activeTab]
 
-    let results = data?.grouped[activeTab];
-
-    if (!results) {
-        results = [];
-    }
-
-    const componentRefs = useRef<(AuditComponentRef | null)[]>(results.map(() => null));
+    const componentRefs = useRef<(AuditComponentRef | null)[]>(xx ? xx.map(() => null) : []);
     const [componentHeights, setComponentHeights] = useState<number[]>([]);
 
     useEffect(() => {
+
         const heights = componentRefs.current.map((ref) => {
             if (ref) {
                 // Get the height using the notifyHeightChange function
@@ -104,7 +101,7 @@ export default function PageOptimizer() {
         });
         setComponentHeights(heights);
 
-    }, [results]);
+    }, [data]);
 
     const handleAuditHeightChange = (index: number, height: number) => {
         setComponentHeights((prevHeights) => {
@@ -162,21 +159,24 @@ export default function PageOptimizer() {
                                 </Card>
                             </div>
                             <div className="audits pt-4 flex">
-
-                                {(data && data?.audits?.length > 0) && (
-                                    <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
-                                        <div className='col-span-12 ml-8 flex flex-col gap-4'>
-                                            {results?.map((audit: Audit, index: number) => {
-
-                                                    return (
-                                                        <div className='relative' key={audit.id}>
+                                {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) && (
+                                    <AnimatePresence initial={false}>
+                                        <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
+                                            <div className='col-span-12 ml-8 flex flex-col gap-4'>
+                                                {data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
+                                                        <m.div
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, y: -20 }}
+                                                            transition={{ delay: index * 0.05 }}
+                                                            className='relative' key={audit.id}>
                                                             <div className={cn(
                                                                 'absolute -left-6 text-center top-[17px]',
                                                                 // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
                                                             )}>
                                                             <span
                                                                 className={`border-2 dark:border-zinc-600 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
-                                                                {(results && (index !== (results.length - 1))) && (
+                                                                {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (
                                                                     <span
                                                                         data-h={componentHeights[index]}
                                                                         style={{
@@ -190,11 +190,12 @@ export default function PageOptimizer() {
                                                                 onHeightChange={(height) => handleAuditHeightChange(index, height)}
                                                                 ref={(element) => (componentRefs.current[index] = element)}
                                                                 index={index} audit={audit}/>
-                                                        </div>
+                                                        </m.div>
                                                     )
-                                                })}
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </AnimatePresence>
                                 )}
                             </div>
                         </article>

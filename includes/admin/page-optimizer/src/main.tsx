@@ -2,6 +2,8 @@ import React from "react";
 import "./index.css";
 import App from "app/app";
 import domReady from '@wordpress/dom-ready';
+import { LazyMotion, domAnimation } from "framer-motion"
+
 
 import {createRoot} from 'react-dom/client';
 import {OptimizerProvider} from "./context/root";
@@ -23,7 +25,9 @@ domReady(function () {
         <Provider store={store}>
             <OptimizerProvider>
                 <TooltipProvider delayDuration={100}>
-                    <App is_popup={is_popup}/>
+                    <LazyMotion features={domAnimation}>
+                        <App is_popup={is_popup}/>
+                    </LazyMotion>
                 </TooltipProvider>
             </OptimizerProvider>
         </Provider>

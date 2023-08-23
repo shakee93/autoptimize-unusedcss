@@ -43,19 +43,19 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
 
     useEffect(() => {
 
-        setOpenAudits(prevOpenAudits => {
-            if (toggleFiles) {
-                // Add if not present
-                if (!prevOpenAudits.includes(audit.id)) {
-                    return [...prevOpenAudits, audit.id];
-                }
-            } else {
-                // Remove if present
-                return prevOpenAudits.filter(id => id !== audit.id);
-            }
-
-            return prevOpenAudits; // Return the array unchanged if no action is taken
-        });
+        // setOpenAudits(prevOpenAudits => {
+        //     if (toggleFiles) {
+        //         // Add if not present
+        //         if (!prevOpenAudits.includes(audit.id)) {
+        //             return [...prevOpenAudits, audit.id];
+        //         }
+        //     } else {
+        //         // Remove if present
+        //         return prevOpenAudits.filter(id => id !== audit.id);
+        //     }
+        //
+        //     return prevOpenAudits; // Return the array unchanged if no action is taken
+        // });
 
         notifyHeightChange();
 
@@ -93,7 +93,6 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
         if (numSettings > 0) {
             summaryText += ` ${numSettings} ${numSettings === 1 ? 'Action' : 'Actions'}`;
         }
-
         if (numItems > 0) {
             if (numSettings > 0) {
                 summaryText += ', ';
@@ -115,6 +114,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
               )}
         >
             <div className='min-h-[56px] relative flex justify-between w-full py-2 px-4'>
+
                 <div className='flex gap-3 font-normal  items-center text-base'>
 
                     <TooltipText className='capitalize' text={audit.scoreDisplayMode === 'informative' ? 'Informative' : `Audit status: ${icon}`}>
@@ -125,12 +125,18 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                         </div>
                     </TooltipText>
                     <div className='flex flex-col justify-around'>
-                        {audit.name}
+                        <div className='flex gap-2 items-center'>
+                            {audit.name}
+                            {/*<span className='text-xxs leading-tight border border-purple-300 rounded-2xl py-0.5 px-2 bg-purple-100'>*/}
+                            {/*    2 changes*/}
+                            {/*</span>*/}
+
+                        </div>
                         <span className='flex text-xxs leading-tight opacity-70'>
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
-                            <span>- {audit.id}</span>
+                            {/*<span>- {audit.id}</span>*/}
                         </span>
                     </div>
 
