@@ -457,7 +457,7 @@ class RapidLoad_Base
         }
 
         if(isset(self::$paged_options)){
-            //return self::$paged_options;
+            return self::$paged_options;
         }
 
         self::$paged_options = apply_filters('rapidload/options', self::$options);
