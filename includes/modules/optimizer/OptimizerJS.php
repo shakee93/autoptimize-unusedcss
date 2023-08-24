@@ -60,8 +60,9 @@ class OptimizerJS
                                         if(Javascript_Enqueue::is_js($link)){
 
                                             if(isset($file_action->regex) && $file_action->regex){
+                                                $link->{'optimizer-handled'} = $file_action->regex;
                                                 if(preg_match($file_action->regex, $link->src)){
-                                                    $link->{'optimizer-handled'} = $file_action->regex;
+
                                                     if($link->{'data-rapidload-removed'}){
                                                         return;
                                                     }
