@@ -23,3 +23,4 @@ interface Help{
     content: string,
 }
 
+declare const __OPTIMIZER_VERSION__ : string

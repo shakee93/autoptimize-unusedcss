@@ -34,7 +34,8 @@
     "build": "vite build",
     "test": "jest",
     "postinstall": "husky install",
-    "prepare": "tw-patch"
+    "prepare": "tw-patch",
+    "version": "npm run build"
   },
   "dependencies": {
     "@heroicons/react": "2.0.13",

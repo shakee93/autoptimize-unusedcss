@@ -8,6 +8,7 @@ interface OptimizerContextProps {
     options: WordPressOptions,
     setTheme: Dispatch<SetStateAction<string>>;
     theme: string,
+    version: string
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
@@ -156,7 +157,8 @@ export const OptimizerProvider = ({ children } : {
             openAudits,
             setOpenAudits,
             theme,
-            setTheme
+            setTheme,
+            version: __OPTIMIZER_VERSION__
         }}>
             {children}
         </OptimizerContext.Provider>

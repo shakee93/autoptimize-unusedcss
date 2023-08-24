@@ -2,7 +2,8 @@ import {defineConfig} from "vite";
 import {resolve} from "path";
 import react from "@vitejs/plugin-react";
 import {vitePlugin as utwm} from 'unplugin-tailwindcss-mangle'
-
+// @ts-ignore
+import packageJson from './package.json';
 export default defineConfig((configEnv) => {
     const isDevelopment = configEnv.mode === "development";
 
@@ -11,6 +12,9 @@ export default defineConfig((configEnv) => {
             classSetOutput: true,
             classMapOutput: true
         })],
+        define: {
+            '__OPTIMIZER_VERSION__': JSON.stringify(packageJson.version),
+        },
         base: "http://rapidload.local/",
         resolve: {
             alias: {
