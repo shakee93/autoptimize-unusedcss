@@ -63,6 +63,7 @@ export const OptimizerProvider = ({ children } : {
     * */
     const manipulateStylesheets = (value: SetStateAction<boolean>) => {
 
+        const inlineStyles = document.querySelectorAll('style');
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
         const targetStylesheet = document.getElementById('rapidload_page_optimizer-css');
 
@@ -73,6 +74,10 @@ export const OptimizerProvider = ({ children } : {
                     (stylesheet as HTMLLinkElement).disabled = true;
                 }
             });
+            inlineStyles.forEach(function(style) {
+                style.disabled = true;
+            });
+
             setSheetsHihdden(true)
         }
 
@@ -80,10 +85,16 @@ export const OptimizerProvider = ({ children } : {
             stylesheets.forEach(function(stylesheet) {
                 (stylesheet as HTMLLinkElement).disabled = false;
             });
+            inlineStyles.forEach(function(style) {
+                style.disabled = false;
+            });
             setSheetsHihdden(false)
         }
 
     }
+
+
+
 
     return (
         <OptimizerContext.Provider value={{
