@@ -53,8 +53,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     };
 
-    const FirstLettersComponent = ({ text }: {text: string}) => {
-        const firstLetters = text.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+    const FirstLettersComponent = ({ text }: { text: string }) => {
+        const replacedText = text.replace(/_/g, ' ');
+        const firstLetters = replacedText.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
         return <>{firstLetters}</>;
     };
 
@@ -181,25 +182,27 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                     <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                 </div>
-                {isCoreWebClicked && (
-                    <div className='border-t'>
+                {isCoreWebClicked && data?.loadingExperience &&(
+                    <div className='border-t dark:border-zinc-700'>
 
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                            {data?.metrics.map((s, index) => (
-
+                            {Object.entries(data.loadingExperience.metrics).map(([metricName, metric], index) => (
                                 <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                                    <div className="flex">
-                                        <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
-                                            <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
-                                            <div><span
-                                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                                <PerformanceIcons icon={s.icon}/>
+                                        <div className="flex">
+                                            <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
+                                                <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>
+                                                <div><span
+                                                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
+                                <PerformanceIcons icon={metric.category}/>
                             </span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
+                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{metric.percentile}</p>
+
                                 </div>
                             ))}
+
+
                         </div>
 
                     </div>

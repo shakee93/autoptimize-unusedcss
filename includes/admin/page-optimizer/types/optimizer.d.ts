@@ -26,7 +26,17 @@ interface LoadingExperience {
     id: string
     initial_url: string
     overall_category: string,
-    metrics: any
+    metrics: {
+        [metricName: string]: {
+            percentile: number;
+            distributions: {
+                min: number;
+                max?: number;
+                proportion: number;
+            }[];
+            category: string;
+        };
+    }
 }
 
 type AuditTypes = keyof OptimizerResults['grouped']
