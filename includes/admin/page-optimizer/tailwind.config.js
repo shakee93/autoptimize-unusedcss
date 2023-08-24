@@ -1,7 +1,7 @@
 /** @type {DefaultColors} */
-
 const colors = require('tailwindcss/colors')
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   // prefix: 'rl-',
   darkMode: ["class", ".rapidload-dark"],
@@ -20,6 +20,9 @@ module.exports = {
       },
     },
     extend: {
+      transitionDuration: {
+        400 : '400ms'
+      },
       fontSize: {
         xxs: '0.6rem',
       },
