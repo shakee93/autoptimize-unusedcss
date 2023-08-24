@@ -91,17 +91,17 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     }
     
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-black bg-white border-t w-full'>
+        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
                   {togglePerformance ? (
                       <div className={cn(
-                          'h-fit w-fit bg-zinc-200 flex items-center justify-center rounded-md',
+                          'h-fit w-fit bg-brand-200 flex items-center justify-center rounded-md',
                           isFaviconLoaded ? 'flex' : 'hidden'
                       )
                       }>
-                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] min-h-[2rem] rounded p-1 bg-zinc-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
+                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] min-h-[2rem] rounded p-1 bg-brand-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
                       </div>
                   ) : (
                       <div className='px-[0.3rem]'>
@@ -109,7 +109,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                               <CircularProgressbarWithChildren styles={buildStyles({
                                   pathColor: '#0bb42f'
                               })} value={data?.performance ? data.performance : 0} strokeWidth={12}>
-                                  <span className='text-xxs text-zinc-500'> {data?.performance ? data.performance : 0}</span>
+                                  <span className='text-xxs text-brand-500'> {data?.performance ? data.performance : 0}</span>
                               </CircularProgressbarWithChildren>
                           </div>
                       </div>
@@ -118,23 +118,23 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                       <span className='flex text-sm gap-1.5 items-center' >
                           {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
-                      <div className='text-xxs leading-relaxed text-zinc-500'>Last Analyzed 2 days ago...</div>
+                      <div className='text-xxs leading-relaxed text-brand-500'>Last Analyzed 2 days ago...</div>
                   </div>
             </a>
 
            </div>
             <div className='flex items-center gap-2'>
-                <div className='flex gap-4 px-8 text-zinc-200 dark:text-white'>
+                <div className='flex gap-4 px-8 text-brand-200 dark:text-white'>
                     <Popover>
                         <PopoverTrigger asChild={false}>
-                            <History className='w-5 text-zinc-600' />
+                            <History className='w-5 text-brand-600' />
                         </PopoverTrigger>
-                        <PopoverContent className='pt-0 dark:bg-zinc-800 dark:text-white'>
+                        <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
                             <div className='my-2 ml-4 font-medium '>Revisions</div>
                             <ul className='border rounded-lg'>
                                 { revisions?.map((rev: Revision, index: number) => {
                                     return <li className={cn(
-                                        'cursor-pointer px-4 py-3 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-900',
+                                        'cursor-pointer px-4 py-3 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
                                         index === 0 ? 'border-none' : 'border-t'
                                     )} key={rev.id}>{formatDistanceToNow(new Date(rev.created_at), { addSuffix: true })} - Perf: {rev?.data?.performance}</li>
                                 })}

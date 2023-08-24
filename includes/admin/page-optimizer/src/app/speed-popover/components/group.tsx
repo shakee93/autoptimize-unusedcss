@@ -41,7 +41,7 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
 
     return (
         <div
-            className="flex flex-col cursor-pointer items-center border rounded-[20px] bg-white dark:bg-transparent">
+            className="flex flex-col cursor-pointer items-center border rounded-[20px] bg-brand-50 dark:bg-transparent">
             <div onClick={() => { setIsOpen(p => !p)}} className='select-none flex justify-between w-full items-center py-2.5 px-4'>
                 <div className='flex gap-4 items-center pr-8 '>
                     <div className='text-sm'>
@@ -49,12 +49,12 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
                     </div>
                         {!success ? (
                             <div
-                                className='text-xs dark:text-zinc-600 border border-red-300 bg-red-100 flex gap-1 items-center pr-2 pl-1 py-0.5 rounded-full'>
+                                className='text-xs dark:text-brand-600 border border-red-300 bg-red-100 flex gap-1 items-center pr-2 pl-1 py-0.5 rounded-full'>
                                 <XCircleIcon className='w-5 text-red-500'/> {items.length} audits
                             </div>
                         ) : (
                             <div
-                                className='text-xs dark:text-zinc-600 border border-green-500 bg-green-50 flex gap-1 items-center pr-2 pl-1 py-0.5 rounded-full'>
+                                className='text-xs dark:text-brand-600 border border-green-500 bg-green-50 flex gap-1 items-center pr-2 pl-1 py-0.5 rounded-full'>
                                 <CheckCircleIcon className='w-5 text-green-600'/> {items.length} audits
                             </div>
                         )}

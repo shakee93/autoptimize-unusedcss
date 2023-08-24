@@ -113,7 +113,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
+            className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
             {icons[settings.category as keyof typeof icons]} {settings.name}
             {mainInput && (
@@ -126,7 +126,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                     <DialogTrigger asChild>
                         <div className='cursor-pointer'>
                             <TooltipText text={`${settings.name} Settings`}>
-                                <Cog6ToothIcon className='w-[1.15rem] text-zinc-400'/>
+                                <Cog6ToothIcon className='w-[1.15rem] text-brand-400'/>
                             </TooltipText>
                         </div>
                     </DialogTrigger>

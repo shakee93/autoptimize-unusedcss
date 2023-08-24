@@ -68,15 +68,15 @@ const transformData = (data: any) => {
                     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
                     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode === 'informative'),
                 ],
-                attention_required: [
-                    ...audits.filter(audit => audit.type === 'opportunity'),
-                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
-                ].filter(audit => {
-                    return ![
-                        'mainthread-work-breakdown',
-                        'dom-size'
-                    ].includes(audit.id)
-                })
+                // attention_required: [
+                //     ...audits.filter(audit => audit.type === 'opportunity'),
+                //     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
+                // ].filter(audit => {
+                //     return ![
+                //         'mainthread-work-breakdown',
+                //         'dom-size'
+                //     ].includes(audit.id)
+                // })
             },
         },
         success: data.success,
@@ -128,7 +128,7 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 activeReport,
                 reload
             );
-
+            
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
 
         } catch (error) {

@@ -1,7 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {DefaultColors} */
+
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   // prefix: 'rl-',
-  darkMode: ["class"],
+  darkMode: ["class", ".rapidload-dark"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -26,6 +29,11 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        brand: {
+          0: '#fff',
+          930: '#101012',
+          ...colors.zinc
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

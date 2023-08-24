@@ -9,6 +9,7 @@ import {useOptimizerContext} from "../../../../context/root";
 import {Skeleton} from "components/ui/skeleton"
 import {JsonView} from "react-json-view-lite";
 import {cn} from "lib/utils";
+import Card from "components/ui/card";
 
 
 
@@ -96,7 +97,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         return (
             <div className={cn(
-                'mb-3 drop-shadow-sm rounded-3xl border bg-white dark:bg-black',
+                'mb-3 drop-shadow-sm rounded-3xl border bg-brand-50 dark:bg-brand-950',
                 className
             )}>
                 {children}
@@ -106,8 +107,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     return (
 
-        <div className='w-full'>
-            <PerfCard>
+        <div className='w-full flex flex-col gap-4'>
+            <Card>
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
                     <div className='flex gap-6'>
@@ -153,8 +154,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                 </div>
-            </PerfCard>
-            <PerfCard>
+            </Card>
+            <Card>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     {data?.metrics.map((s, index) => (
 
@@ -163,7 +164,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
                                     <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
                                     <div><span
-                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
+                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
                                 <PerformanceIcons icon={s.icon}/>
                             </span></div>
                                 </div>
@@ -172,9 +173,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     ))}
                 </div>
-            </PerfCard>
-
-            <PerfCard>
+            </Card>
+            <Card>
                 <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
                     <div>
                         <p className="">Real Experience (28 days)</p>
@@ -182,7 +182,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                     <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                 </div>
-                {isCoreWebClicked && data?.loadingExperience &&(
+                {isCoreWebClicked && data?.loadingExperience?.metrics &&(
                     <div className='border-t dark:border-zinc-700'>
 
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
@@ -208,7 +208,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 )}
 
-            </PerfCard>
+            </Card>
         </div>
     )
 }

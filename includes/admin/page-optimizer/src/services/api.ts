@@ -25,7 +25,7 @@ class ApiService {
         let data = await response.json();
 
         if (!data.success) {
-            throw new Error(data.data);
+            throw new Error("Problem Retrieving Data: Our Apologies. For Assistance, Please Reach Out to Customer Support.");
         }
 
         return data
@@ -56,7 +56,7 @@ class ApiService {
         }
     }
 
-    async updateSettings(url: string, activeReport: string, reload: boolean, data: string) {
+    async updateSettings(url: string, activeReport: string, reload: boolean, data: any) {
         try {
 
             const query = new URLSearchParams();

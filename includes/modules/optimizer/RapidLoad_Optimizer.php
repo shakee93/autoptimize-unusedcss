@@ -170,7 +170,8 @@ class RapidLoad_Optimizer
 
             $api = new RapidLoad_Api();
 
-            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+//            $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+            $url = 'https://staging.rapidload.io/';
 
             $result = $api->post('page-speed', [
                 'url' => $url,

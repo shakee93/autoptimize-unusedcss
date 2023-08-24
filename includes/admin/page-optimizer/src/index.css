@@ -16,7 +16,7 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
  
-    --border: 0 0% 91.76%;
+    --border: 0 0% 88%;
     --input: 214.3 31.8% 91.4%;
  
     --primary: 222.2 47.4% 11.2%;
@@ -36,7 +36,7 @@
     --radius: 0.5rem;
   }
  
-  .dark {
+  .rapidload-dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
  
