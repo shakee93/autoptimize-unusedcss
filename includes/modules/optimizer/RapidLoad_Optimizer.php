@@ -162,7 +162,7 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
-        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+        $new = isset($_REQUEST['new']);
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
@@ -282,12 +282,12 @@ class RapidLoad_Optimizer
 
                     }
 
-                    if(!$found && isset( $fileaction->meta)){
+                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
 
                         $passed_item = json_decode($fileaction->meta);
                         $passed_item->passed = true;
 
-                        //array_push($audit->files->items, $passed_item);
+                        array_push($audit->files->items, $passed_item);
 
                     }
                 }
