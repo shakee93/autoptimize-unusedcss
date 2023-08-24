@@ -30,6 +30,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brand: {
+          0: '#fff',
           930: '#101012',
           ...colors.zinc
         },

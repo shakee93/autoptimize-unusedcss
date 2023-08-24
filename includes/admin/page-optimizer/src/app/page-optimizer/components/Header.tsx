@@ -29,19 +29,19 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-50'>
+        <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
                 </div>
                 <div className='flex flex-column items-center gap-4'>
-                    <div className='flex dark:bg-brand-800 bg-brand-200 rounded-2xl cursor-pointer'>
+                    <div className='flex dark:bg-brand-800 bg-brand-200/80 rounded-2xl cursor-pointer'>
 
-                        <div onClick={() => dispatch(changeReport('desktop'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl border ${activeReport === 'desktop' ? ' dark:bg-brand-900 bg-brand-50':'border-transparent'}`}>
-                            <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-brand-500 text-[#7f54b3]" /> Desktop
+                        <div onClick={() => dispatch(changeReport('desktop'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl border ${activeReport === 'desktop' ? ' dark:bg-brand-930 bg-brand-0':'border-transparent'}`}>
+                            <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-brand-500 " /> Desktop
                         </div>
-                        <div onClick={() => dispatch(changeReport('mobile'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl  border ${activeReport === 'mobile' ? ' dark:bg-brand-900 bg-brand-50' : 'border-transparent'}`}>
-                            <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500 text-[#7f54b3]" /> Mobile
+                        <div onClick={() => dispatch(changeReport('mobile'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl  border ${activeReport === 'mobile' ? ' dark:bg-brand-930 bg-brand-0' : 'border-transparent'}`}>
+                            <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" /> Mobile
                         </div>
                     </div>
                     <div>

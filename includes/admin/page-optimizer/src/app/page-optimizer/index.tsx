@@ -137,7 +137,7 @@ export default function PageOptimizer() {
     return (
 
         <div
-            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-100")}>
+            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
             <div className='overflow-auto w-full'>
                 <Header url={url}/>
                 {!loading ? (
@@ -164,7 +164,7 @@ export default function PageOptimizer() {
                                     {!togglePerformance && <TogglePerformanceComponent/>}
                                     Fix Performance Issues</h2>
                                 <div className="tabs pt-4 flex">
-                                    <Card padding='p-0 px-6' className='flex select-none'>
+                                    <Card className='flex select-none p-0 px-6'>
                                         {renderTabs()}
                                     </Card>
                                 </div>
@@ -185,14 +185,14 @@ export default function PageOptimizer() {
                                                                     // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
                                                                 )}>
                                                             <span
-                                                                className={`border-2 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300' : 'bg-transparent'}`}></span>
+                                                                className={`border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>
                                                                     {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (
                                                                         <span
                                                                             data-h={componentHeights[index]}
                                                                             style={{
                                                                                 height: componentHeights[index]
                                                                             }}
-                                                                            className={`w-[2px] border-dashed border-l-2 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                                                                            className={`w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
 
                                                                     )}
                                                                 </div>

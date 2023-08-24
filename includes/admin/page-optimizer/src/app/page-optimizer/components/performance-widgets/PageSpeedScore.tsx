@@ -9,6 +9,7 @@ import {useOptimizerContext} from "../../../../context/root";
 import {Skeleton} from "components/ui/skeleton"
 import {JsonView} from "react-json-view-lite";
 import {cn} from "lib/utils";
+import Card from "components/ui/card";
 
 
 
@@ -106,8 +107,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     return (
 
-        <div className='w-full'>
-            <PerfCard>
+        <div className='w-full flex flex-col gap-4'>
+            <Card>
                 <div className="content grid place-content-center place-items-center mt-[30px]">
 
                     <div className='flex gap-6'>
@@ -153,8 +154,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                 </div>
-            </PerfCard>
-            <PerfCard>
+            </Card>
+            <Card>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                     {data?.metrics.map((s, index) => (
 
@@ -172,9 +173,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     ))}
                 </div>
-            </PerfCard>
-
-            <PerfCard>
+            </Card>
+            <Card>
                 <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
                     <div>
                         <p className="">Real Experience (28 days)</p>
@@ -182,7 +182,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                     <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                 </div>
-                {isCoreWebClicked && data?.loadingExperience &&(
+                {isCoreWebClicked && data?.loadingExperience?.metrics &&(
                     <div className='border-t dark:border-zinc-700'>
 
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
@@ -208,7 +208,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 )}
 
-            </PerfCard>
+            </Card>
         </div>
     )
 }
