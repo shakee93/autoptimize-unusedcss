@@ -162,7 +162,7 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
-        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+        $new = isset($_REQUEST['new']);
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
