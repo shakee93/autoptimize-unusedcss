@@ -16,7 +16,7 @@ export const OptimizerProvider = ({ children } : {
     const isAdminBar = document.getElementById('wpadminbar');
     const isDevelopment= import.meta.env.DEV
 
-    const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [showOptimizer, setShowOptimizer] = useState<boolean>(true);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
