@@ -8,7 +8,7 @@ const AppButton = ({ children, dark = true, onClick, className}: {
     className?: string
 }) => {
 
-    let styles = 'dark:bg-zinc-200 bg-zinc-900 dark:hover:bg-zinc-300 hover:bg-zinc-700 dark:text-black text-white'
+    let styles = 'dark:bg-white bg-zinc-900 dark:hover:bg-zinc-200 hover:bg-zinc-700 dark:text-black text-white'
 
     if (!dark) {
         styles = 'border border-zinc-300 dark:hover:bg-zinc-700 hover:bg-zinc-200'

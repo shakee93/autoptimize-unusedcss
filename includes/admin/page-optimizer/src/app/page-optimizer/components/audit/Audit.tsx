@@ -154,7 +154,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                         <div>
                             <TooltipText text='Show resources and actions'>
                                 <div onClick={() => setToggleFiles(prev => !prev)}
-                                        className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:opacity-80 dark:border-zinc-600 ${toggleFiles ? ' dark:bg-zinc-900 bg-zinc-100 border border-zinc-300': 'dark:bg-zinc-800 bg-zinc-200/[.2] border border-zinc-300 '}`}>
+                                        className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-transparent hover:bg-zinc-100 transition-colors dark:border-zinc-600 ${toggleFiles ? ' dark:bg-zinc-900 border border-zinc-300': 'border border-zinc-300 '}`}>
                                     {!toggleFiles ? 'Show' : 'Hide'} Actions {(toggleFiles) ?
                                     <MinusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/> :
                                     <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>}

@@ -29,7 +29,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='w-full px-6 py-3 flex justify-between border-b dark:border-zinc-600 border-zinc-200'>
+        <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-black dark:border-zinc-600 border-zinc-200'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
