@@ -42,7 +42,8 @@ class UnusedCSS_Enqueue
             wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js?v=i', [ 'jquery' ], UUCSS_VERSION );
             wp_localize_script( 'rapidload', 'rapidload', [
                 'files' => $this->files,
-                'do_not_load_original_css' => apply_filters('rapidload/frontend/do-not-load/original-css', false)
+                'do_not_load_original_css' => apply_filters('rapidload/frontend/do-not-load/original-css', false),
+                'options' => $this->options
             ] );
             wp_enqueue_script( 'rapidload' );
 
