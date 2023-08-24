@@ -145,7 +145,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
     return (
         <div className="border-t w-full pt-4">
-            <div className="pb-4 text-zinc-700 dark:text-zinc-300">
+            <div className="pb-4 text-brand-700 dark:text-brand-300">
                 <div className="px-4 ml-2">
                     <Description content={audit.description}/>
                 </div>
@@ -170,9 +170,9 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 <Settings type={table.options.meta?.type} audit={audit}/>
                                 {/*<TooltipText text='Show the files that have successfully passed this audit'>*/}
                                 {/*    <div*/}
-                                {/*        className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
+                                {/*        className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
                                 {/*    >*/}
-                                {/*        Show Optimized Files <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>*/}
+                                {/*        Show Optimized Files <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>*/}
                                 {/*    </div>*/}
                                 {/*</TooltipText>*/}
                             </div>
@@ -187,7 +187,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                         .filter((header) => shouldRender(header))
                                         .map((header) => (
                                             <th
-                                                className="first:pl-6 px-2 py-3 dark:bg-zinc-900 bg-zinc-100 font-medium text-xs text-left"
+                                                className="first:pl-6 px-2 py-3 dark:bg-brand-900 bg-brand-100 font-medium text-xs text-left"
                                                 key={header.id}
                                             >
                                                 {header.isPlaceholder
@@ -221,14 +221,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                     {table.getPageCount() > 1 && (
                         <div className="w-full flex justify-end">
                             <ul className="flex gap-1 mt-4 items-center">
-                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">
+                                <li className="hover:bg-brand-200 px-3 py-1 cursor-pointer rounded text-xs">
                                     <ChevronLeft className='w-4'/>
                                 </li>
                                 {[...Array(table.getPageCount())].map((i, index) => (
                                     <li
                                         className={cn(
-                                            "hover:bg-zinc-200 border px-3 py-1.5 cursor-pointer rounded text-xs",
-                                            table.getState().pagination.pageIndex === index ? "bg-zinc-200" : ""
+                                            "hover:bg-brand-200 border px-3 py-1.5 cursor-pointer rounded text-xs",
+                                            table.getState().pagination.pageIndex === index ? "bg-brand-200" : ""
                                         )}
                                         onClick={() => {
                                             table.setPageIndex(index);
@@ -238,7 +238,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                         {index + 1}
                                     </li>
                                 ))}
-                                <li className="hover:bg-zinc-200 px-3 py-1 cursor-pointer rounded text-xs">
+                                <li className="hover:bg-brand-200 px-3 py-1 cursor-pointer rounded text-xs">
                                     <ChevronRight className='w-4'/>
                                 </li>
                             </ul>

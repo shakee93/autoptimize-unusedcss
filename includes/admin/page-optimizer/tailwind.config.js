@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
   // prefix: 'rl-',
-  darkMode: ["class"],
+  darkMode: ["class", ".rapidload-dark"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -30,6 +30,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brand: {
+          930: '#101012',
           ...colors.zinc
         },
         primary: {

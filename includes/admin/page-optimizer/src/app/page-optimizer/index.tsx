@@ -57,7 +57,7 @@ export default function PageOptimizer() {
 
 
         return tabs.map((tab) => {
-            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-zinc-500";
+            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500";
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
@@ -137,7 +137,7 @@ export default function PageOptimizer() {
     return (
 
         <div
-            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-zinc-200 text-zinc-800 dark:bg-zinc-930 bg-zinc-50")}>
+            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-100")}>
             <div className='overflow-auto w-full'>
                 <Header url={url}/>
                 {!loading ? (
@@ -185,7 +185,7 @@ export default function PageOptimizer() {
                                                                     // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
                                                                 )}>
                                                             <span
-                                                                className={`border-2 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
+                                                                className={`border-2 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300' : 'bg-transparent'}`}></span>
                                                                     {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (
                                                                         <span
                                                                             data-h={componentHeights[index]}

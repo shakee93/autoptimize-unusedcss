@@ -95,7 +95,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         return (
             <div className={cn(
-                'mb-3 drop-shadow-sm rounded-3xl border bg-white dark:bg-black',
+                'mb-3 drop-shadow-sm rounded-3xl border bg-brand-50 dark:bg-brand-950',
                 className
             )}>
                 {children}
@@ -162,7 +162,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
                                     <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
                                     <div><span
-                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
+                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
                                 <PerformanceIcons icon={s.icon}/>
                             </span></div>
                                 </div>
@@ -192,7 +192,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                         <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
                                             <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
                                             <div><span
-                                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
+                                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
                                 <PerformanceIcons icon={s.icon}/>
                             </span></div>
                                         </div>
