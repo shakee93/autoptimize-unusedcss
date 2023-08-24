@@ -5,6 +5,7 @@ interface WordPressOptions {
     ajax_url: string
     optimizer_url: string
     page_optimizer_base: string
+    page_optimizer_package_base : string
     plugin_url: string
     nonce?: string
     timezone: string

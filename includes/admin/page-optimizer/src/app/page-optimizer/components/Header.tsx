@@ -31,15 +31,15 @@ const Header = ({ url }: { url: string}) => {
         <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
-                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                    <img className='w-36' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
                     {version && (
-                        <span className='absolute text-xxs left-[72px] -top-1.5 text-brand-300'>v{version}</span>
+                        <span className='absolute text-xxs left-[72px] -top-1.5 dark:text-brand-500 text-brand-300'>v{version}</span>
                     )}
                 </div>
                 <div className='flex flex-column items-center gap-4'>
                     <div className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                             <div className={cn(
-                                'absolute shadow-md left-0.5 w-[7.5rem] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium bg-brand-0',
+                                'absolute shadow-md left-0.5 w-[7.5rem] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                                 activeReport === 'mobile' && 'w-[6.95rem] left-1/2'
                             )}>
                             </div>

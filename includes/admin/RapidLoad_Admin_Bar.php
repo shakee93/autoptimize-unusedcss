@@ -38,11 +38,14 @@ class RapidLoad_Admin_Bar {
     public function load_optimizer_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],UUCSS_VERSION);
+        $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
 
-        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], UUCSS_VERSION);
+        wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
+
+        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
 
         $data = array(
+            'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
             'ajax_url' => admin_url( 'admin-ajax.php' ),
