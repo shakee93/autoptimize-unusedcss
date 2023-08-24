@@ -41,6 +41,7 @@ class ApiService {
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', import.meta.env.DEV as unknown as string)
 
             const response = await fetch(this.baseURL, {
                 method: "GET",
