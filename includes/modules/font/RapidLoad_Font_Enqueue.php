@@ -97,6 +97,8 @@ class RapidLoad_Font_Enqueue
 
         $font_urls = apply_filters('rapidload/enqueue/preload/fonts', $font_urls, $this->job, $this->strategy);
 
+        $font_urls = array_unique($font_urls);
+
         foreach ($font_urls as $url) {
             if(empty($url)){
                 continue;

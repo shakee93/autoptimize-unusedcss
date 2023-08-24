@@ -246,6 +246,10 @@ class RapidLoad_Image_Enqueue
 
         $preloaded_files = isset($this->options['uucss_preload_lcp_image']) && !empty($this->options['uucss_preload_lcp_image']) ? explode("\n", $this->options['uucss_preload_lcp_image']) : [];
 
+        $preloaded_files = apply_filters('rapidload/enqueue/preload/images', $preloaded_files, $this->job, $this->strategy);
+
+        $preloaded_files = array_unique($preloaded_files);
+
         foreach ($preloaded_files as $preloaded_file){
 
             $preloaded_file = str_replace("\r", "", $preloaded_file);

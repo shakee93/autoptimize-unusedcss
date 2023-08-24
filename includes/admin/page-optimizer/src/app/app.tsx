@@ -26,8 +26,10 @@ const App = ({is_popup}: {
             }
         }
     }, [is_popup]);
-    
 
+    useEffect(() => {
+        document.body.classList.add('rl-page-optimizer-loaded')
+    }, [])
 
     const popover = is_popup && popupNode ? ReactDOM.createPortal(<SpeedPopover/>, popupNode) : <SpeedPopover/>;
 

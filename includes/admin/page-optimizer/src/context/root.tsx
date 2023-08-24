@@ -14,9 +14,10 @@ export const OptimizerProvider = ({ children } : {
     children: ReactNode
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
+    const isDevelopment= import.meta.env.DEV
 
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
-    const [sheetsHidden, setSheetsHihdden]= useState(false)
+    const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
         optimizer_url: 'http://rapidload.local/',
@@ -40,58 +41,70 @@ export const OptimizerProvider = ({ children } : {
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
-        manipulateStylesheets(value)
+        manipulateStyles(value)
 
         if (!value) {
             // giving a breath to enabled stylesheets to paint
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 setShowOptimizer(value)
-            }, 30);
+            });
         } else {
             setShowOptimizer(value)
         }
-
     }
-
-    useEffect(() => {
-        manipulateStylesheets(showOptimizer)
-    }, [showOptimizer])
 
 
     /*
     * Disable all stylesheets on WordPress page when the Optimizer is open
     * */
-    const manipulateStylesheets = (value: SetStateAction<boolean>) => {
+    const manipulateStyles = (value: SetStateAction<boolean>) => {
 
-        const inlineStyles = document.querySelectorAll('style');
+        if (isDevelopment) {
+            return;
+        }
+
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+        const styleTags = document.querySelectorAll('style');
         const targetStylesheet = document.getElementById('rapidload_page_optimizer-css');
 
         if (value && !sheetsHidden) {
             stylesheets.forEach(function(stylesheet) {
                 const url = (stylesheet as HTMLLinkElement).href;
                 if (stylesheet !== targetStylesheet && !url.includes('fonts.googleapis.com')) {
-                    (stylesheet as HTMLLinkElement).disabled = true;
+                    (stylesheet as HTMLLinkElement).setAttribute('data-original-media', (stylesheet as HTMLLinkElement).getAttribute('media') || '');
+                    (stylesheet as HTMLLinkElement).setAttribute('media', 'none');
                 }
             });
-            inlineStyles.forEach(function(style) {
-                style.disabled = true;
+
+            styleTags.forEach(function(styleTag) {
+                const originalMedia = styleTag.getAttribute('media');
+                styleTag.setAttribute('data-original-media', originalMedia || '');
+                styleTag.setAttribute('media', 'none');
             });
 
-            setSheetsHihdden(true)
-        }
-
-        if (!value && sheetsHidden) {
+            setSheetsHidden(true);
+        } else {
             stylesheets.forEach(function(stylesheet) {
-                (stylesheet as HTMLLinkElement).disabled = false;
+                const originalMedia = (stylesheet as HTMLLinkElement).getAttribute('data-original-media');
+                if (originalMedia) {
+                    (stylesheet as HTMLLinkElement).setAttribute('media', originalMedia);
+                    (stylesheet as HTMLLinkElement).removeAttribute('data-original-media');
+                }
             });
-            inlineStyles.forEach(function(style) {
-                style.disabled = false;
-            });
-            setSheetsHihdden(false)
-        }
 
-    }
+            styleTags.forEach(function(styleTag) {
+                const originalMedia = styleTag.getAttribute('data-original-media');
+                if (originalMedia) {
+                    styleTag.setAttribute('media', originalMedia);
+                } else {
+                    styleTag.removeAttribute('media')
+                    styleTag.removeAttribute('data-original-media')
+                }
+            });
+
+            setSheetsHidden(false);
+        }
+    };
 
 
 

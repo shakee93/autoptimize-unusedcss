@@ -346,7 +346,7 @@ class RapidLoad_Job{
                     $files[] = (object)[
                         'url' => $action->url,
                         'type' => $action->url_object->file_type->value,
-                        'action' => $action->action->value,
+                        'action' => isset($action->action) && isset($action->action->value) ? $action->action->value : (object)[],
                         'regex' => $this->generateUrlRegex($action->url)
                     ];
 

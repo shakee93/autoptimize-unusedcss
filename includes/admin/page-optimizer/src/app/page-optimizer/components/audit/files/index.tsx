@@ -24,6 +24,21 @@ interface AuditContentProps {
 import {
     RowData
 } from "@tanstack/react-table";
+import {Switch} from "components/ui/switch";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import TooltipText from "components/ui/tooltip-text";
+import {Cog6ToothIcon} from "@heroicons/react/20/solid";
+import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
+import AppButton from "components/ui/app-button";
+import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -151,8 +166,15 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                         <div
                             className='font-medium text-sm ml-2 capitalize'>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</div>
                         {audit.settings.length > 0 && (
-                            <div>
+                            <div className='flex gap-3'>
                                 <Settings type={table.options.meta?.type} audit={audit}/>
+                                {/*<TooltipText text='Show the files that have successfully passed this audit'>*/}
+                                {/*    <div*/}
+                                {/*        className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 dark:border-zinc-700 border border-zinc-200 w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
+                                {/*    >*/}
+                                {/*        Show Optimized Files <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>*/}
+                                {/*    </div>*/}
+                                {/*</TooltipText>*/}
                             </div>
                         )}
                     </div>

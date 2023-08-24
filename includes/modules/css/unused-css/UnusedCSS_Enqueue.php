@@ -110,6 +110,8 @@ class UnusedCSS_Enqueue
 
         foreach ( $sheets as $sheet ) {
 
+            do_action('rapidload/enqueue/before-optimize-css', $sheet, $this->job_data, $this->strategy);
+
             $parent = $sheet->parent();
 
             if(isset($parent) && $parent->tag == 'noscript'){

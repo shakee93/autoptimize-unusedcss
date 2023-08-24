@@ -24,21 +24,23 @@ class RapidLoad_Admin_Bar {
 //        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
 //        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
-        if(!is_admin() && RapidLoad_DB::$current_version > 1.5){
+        if (!is_admin() && is_user_logged_in() && RapidLoad_DB::$current_version > 1.5) {
             $this->load_optimizer_scripts();
+
+            add_action('wp_after_admin_bar_render', function () {
+                echo '<div id="rapidload-page-optimizer"></div>';
+            });
         }
 
-        add_action('wp_after_admin_bar_render', function () {
-            echo '<div id="rapidload-page-optimizer"></div>';
-        });
+
     }
 
     public function load_optimizer_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],'1.71');
+        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], '1.71');
+        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], UUCSS_VERSION);
 
         $data = array(
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
@@ -92,6 +94,10 @@ class RapidLoad_Admin_Bar {
                     overflow: hidden;
                 }
 
+                .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-sub-wrapper {
+                    display: none !important;
+                }
+
             </style>
 
         <?php }
@@ -118,16 +124,16 @@ class RapidLoad_Admin_Bar {
                     'meta'  => array( 'class' => '' ),
                 ));
 
-//                $wp_admin_bar->add_node( array(
-//                    'id'    => 'rapidload-clear-cache',
-//                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
-//                    //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
-//                    'href'   => wp_nonce_url( add_query_arg( array(
-//                        '_action' => 'rapidload_purge_all',
-//                    ) ), 'uucss_nonce', 'nonce' ),
-//                    'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
-//                    'parent' => 'rapidload'
-//                ));
+                $wp_admin_bar->add_node( array(
+                    'id'    => 'rapidload-clear-cache',
+                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
+                    //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+                    'href'   => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                    ) ), 'uucss_nonce', 'nonce' ),
+                    'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
+                    'parent' => 'rapidload'
+                ));
 
             }
 
