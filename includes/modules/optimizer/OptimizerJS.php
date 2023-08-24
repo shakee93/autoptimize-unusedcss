@@ -18,7 +18,6 @@ class OptimizerJS
                 foreach ($options['individual-file-actions'] as $file_action){
                     if(isset($file_action->type) && $file_action->type == "js"){
                         if( isset($file_action->url) && !filter_var($file_action->url, FILTER_VALIDATE_URL) === false){
-                            $link->{'optimizer-handled'} = true;
                             if(isset($file_action->action)){
                                 switch ($file_action->action){
                                     case 'defer' : {
@@ -59,6 +58,7 @@ class OptimizerJS
                                     }
                                     case 'remove' : {
                                         if(Javascript_Enqueue::is_js($link)){
+                                            $link->{'optimizer-handled'} = $file_action->regex;
                                             if(isset($file_action->regex) && $file_action->regex){
                                                 if(preg_match($file_action->regex, $link->src)){
                                                     error_log($link->parent->tag);
