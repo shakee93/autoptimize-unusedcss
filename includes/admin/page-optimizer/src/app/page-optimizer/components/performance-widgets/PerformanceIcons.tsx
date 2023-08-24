@@ -9,11 +9,11 @@ interface IconProps {
 const PerformanceIcons = ({ icon, className }: IconProps) => {
     let iconComponent = null;
 
-    if (icon === 'pass') {
+    if (icon === 'pass' || icon === 'FAST' ) {
         iconComponent = <Pass />;
-    } else if (icon === 'average') {
+    } else if (icon === 'average' || icon === 'AVERAGE') {
         iconComponent = <Average />;
-    } else if (icon === 'fail') {
+    } else if (icon === 'fail' || icon === 'SLOW' ) {
         iconComponent = <Fail />;
     }
 
