@@ -53,7 +53,8 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
 
         const file_type = url.file_type.value;
         const options = data.data?.meta?.controls.dropdown_options.filter((o)=> o.type == file_type)[0]?.options;
-        return options?.map((value: string) => (
+        
+        return mutateOptions(options, file_type)?.map((value: string) => (
             <SelectItem
                 className="capitalize cursor-pointer"
                 key={value}
@@ -63,6 +64,25 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
             </SelectItem>
         ));
     };
+    
+    const mutateOptions = (options: string[] | any, file_type: string) => {
+
+        // remove defer when defer is on globally
+        if (['javascript', 'js'].includes(file_type)) {
+            let defer = data.settings?.find(setting => setting.name === 'Defer Javascript')
+
+            if (defer?.inputs[0].value) {
+
+                if (action === 'defer') {
+                    updateAction('none')
+                }
+
+                options = options.filter((option : string) => option !== 'defer');
+            }
+        }
+        
+        return options;
+    }
 
     return (
         <Select value={action} onValueChange={updateAction}>
