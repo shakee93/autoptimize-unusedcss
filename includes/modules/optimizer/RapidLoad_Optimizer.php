@@ -162,7 +162,7 @@ class RapidLoad_Optimizer
             wp_send_json_error();
         }
 
-        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+        $new = isset($_REQUEST['new']);
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
@@ -224,8 +224,7 @@ class RapidLoad_Optimizer
             if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
                 foreach ($audit->files->items as $item){
 
-                    if(isset($item->url) && isset($item->url->url) && in_array($audit->id,['bootup-time','unused-javascript','render-blocking-resources','offscreen-images',
-                            'unused-css-rules','legacy-javascript','font-display'])){
+                    if(isset($item->url) && isset($item->url->url)){
 
                         if(!isset(self::$merged_options['individual-file-actions'])){
                             self::$merged_options['individual-file-actions'] = [];
@@ -265,6 +264,34 @@ class RapidLoad_Optimizer
                         }
                     }
                 }
+
+                foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
+
+                    $found = false;
+
+                    foreach ($audit->files->items as $item){
+
+                        if(isset($item->url) && isset($item->url->url)){
+
+                            if($item->url->url == $fileaction->url){
+                                $found = true;
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
+
+                        $passed_item = json_decode($fileaction->meta);
+                        $passed_item->passed = true;
+
+                        array_push($audit->files->items, $passed_item);
+
+                    }
+                }
+
             }
 
         }
@@ -365,7 +392,8 @@ class RapidLoad_Optimizer
                                 self::$options['individual-file-actions'][$audit->id][] = (object)[
                                     'url' => $item->url->url,
                                     'action' => isset($item->action) ? $item->action : null,
-                                    'url_object' => $item->url
+                                    'url_object' => $item->url,
+                                    'meta' => json_encode($item)
                                 ];
                             }
 

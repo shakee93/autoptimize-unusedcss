@@ -13,7 +13,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, paddi
 
     return (
         <div ref={ref} className={cn(
-            `w-full border-zinc-200 dark:bg-zinc-900 bg-white dark:border-zinc-700 border rounded-3xl`,
+            `w-full border-zinc-200 dark:bg-black bg-white dark:border-zinc-700 border rounded-3xl`,
             pad,
             className,
             spreader ? 'mb-0' : ''

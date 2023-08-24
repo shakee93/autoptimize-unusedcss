@@ -14,7 +14,7 @@ class RapidLoad_Enqueue {
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1" || apply_filters('rapidload/enable/frontend_rapidload_debug', false)){
             self::$frontend_debug = true;
@@ -112,6 +112,7 @@ class RapidLoad_Enqueue {
             if(self::$frontend_debug){
                 header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
             }
+            header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . json_encode($this->options) . ']' );
 
             return $dom;
         }

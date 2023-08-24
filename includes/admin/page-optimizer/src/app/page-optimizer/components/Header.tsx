@@ -29,7 +29,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='w-full px-6 py-3 flex justify-between border-b dark:border-zinc-600 border-zinc-200'>
+        <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-black bg-white'>
             <div className='flex gap-12 items-center'>
                 <div>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
@@ -37,10 +37,10 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-4'>
                     <div className='flex dark:bg-zinc-800 bg-[#eff1f5] rounded-2xl cursor-pointer'>
 
-                        <div onClick={() => dispatch(changeReport('desktop'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl border ${activeReport === 'desktop' ? ' dark:bg-zinc-900 bg-white dark:border-zinc-700 border-zinc-300':'dark:border-zinc-800 border-[#eff1f5] '}`}>
+                        <div onClick={() => dispatch(changeReport('desktop'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl border ${activeReport === 'desktop' ? ' dark:bg-zinc-900 bg-white':''}`}>
                             <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Desktop
                         </div>
-                        <div onClick={() => dispatch(changeReport('mobile'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl  border ${activeReport === 'mobile' ? ' dark:bg-zinc-900 bg-white dark:border-zinc-700 border-zinc-300' : 'dark:border-zinc-800 border-[#eff1f5]'}`}>
+                        <div onClick={() => dispatch(changeReport('mobile'))} className={`text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl  border ${activeReport === 'mobile' ? ' dark:bg-zinc-900 bg-white ' : ''}`}>
                             <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-zinc-500 text-[#7f54b3]" /> Mobile
                         </div>
                     </div>
