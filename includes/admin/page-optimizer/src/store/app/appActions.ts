@@ -71,7 +71,12 @@ const transformData = (data: any) => {
                 attention_required: [
                     ...audits.filter(audit => audit.type === 'opportunity'),
                     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
-                ]
+                ].filter(audit => {
+                    return ![
+                        'mainthread-work-breakdown',
+                        'dom-size'
+                    ].includes(audit.id)
+                })
             },
         },
         success: data.success,

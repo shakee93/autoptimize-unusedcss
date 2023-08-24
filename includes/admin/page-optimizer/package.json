@@ -1,30 +1,24 @@
 {
-  "name": "vital",
-  "version": "1.0.0",
-  "description": "Starter template for Vite with React (TypeScript). Supports Tailwind with CSS-Modules. Jest and @react/testing-library configured and ready to go. Also ESLint, Prettier, Husky, Commit-lint and Atomic Design for components.",
-  "homepage": "https://github.com/jvidalv/vital#readme",
+  "name": "@rapidload/page-optimizer",
+  "version": "1.0.01",
+  "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
+  "homepage": "https://rapidload.io/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jvidalv/vital.git"
+    "url": "git+https://github.com/shakee93/autoptimize-unusedcss.git"
   },
-  "author": "Josep Vidal <josepvidalvidal@gmail.com>",
+  "author": "RapidLoad Team <hello@rapidload.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jvidalv/vital/issues"
+    "url": "https://github.com/shakee93/autoptimize-unusedcss/issues"
   },
   "keywords": [
-    "react",
-    "vite",
-    "typescript",
-    "jest",
-    "tailwind",
-    "template",
-    "starter",
-    "css-modules",
-    "eslint",
-    "prettier",
-    "husky",
-    "commit-lint"
+    "rapidload",
+    "wordpress",
+    "page-speed",
+    "speed",
+    "wordpress-page-speed",
+    "google-page-speed"
   ],
   "browserslist": [
     ">0.5%",
@@ -116,5 +110,6 @@
     "typescript": "4.9.4",
     "unplugin-tailwindcss-mangle": "^1.2.7",
     "vite": "^4.4.7"
-  }
+  },
+  "main": "dist/assets/index.js"
 }
