@@ -36,8 +36,8 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-4'>
                     <div className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                             <div className={cn(
-                                'absolute left-0.5 w-[7.5rem] rounded-[15px] duration-200 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium bg-brand-0',
-                                activeReport === 'mobile' && 'w-[6.7rem] left-1/2 translate-x-[0.5rem]'
+                                'absolute shadow-md left-0.5 w-[7.5rem] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium bg-brand-0',
+                                activeReport === 'mobile' && 'w-[6.95rem] left-1/2'
                             )}>
                             </div>
                         <div onClick={() => dispatch(changeReport('desktop'))}
@@ -46,7 +46,7 @@ const Header = ({ url }: { url: string}) => {
                         </div>
 
                         <div onClick={() => dispatch(changeReport('mobile'))}
-                             className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
+                             className={`relative z-1 text-sm flex flex-column gap-2 pl-3 px-5 py-3 font-medium rounded-2xl`}>
                             <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" /> Mobile
                         </div>
                     </div>
