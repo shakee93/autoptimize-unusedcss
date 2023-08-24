@@ -31,7 +31,7 @@ const Header = ({ url }: { url: string}) => {
         <header className='w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
-                    <img className='w-36' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
                     {version && (
                         <span className='absolute text-xxs left-[72px] -top-1.5 dark:text-brand-500 text-brand-300'>v{version}</span>
                     )}

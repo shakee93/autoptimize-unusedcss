@@ -285,6 +285,10 @@ trait RapidLoad_Utils {
 
 	function transform_url( $url ) {
 
+        if (!$url) {
+            return $url;
+        }
+
 		$url_parts = parse_url( $url );
 
 		$options = RapidLoad_Base::fetch_options();
