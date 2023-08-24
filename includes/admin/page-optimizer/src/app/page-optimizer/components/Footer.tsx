@@ -91,7 +91,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     }
     
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-zinc-800/90 bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
+        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-black bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
