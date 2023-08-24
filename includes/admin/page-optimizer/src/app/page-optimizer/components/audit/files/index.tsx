@@ -144,7 +144,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     }
 
     return (
-        <div className="border-t dark:border-zinc-700 border-zinc-200 w-full pt-4">
+        <div className="border-t w-full pt-4">
             <div className="pb-4 text-zinc-700 dark:text-zinc-300">
                 <div className="px-4 ml-2">
                     <Description content={audit.description}/>
@@ -152,7 +152,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             </div>
 
             {(audit.settings.length > 0 && audit.settings.find(s => ['cache'].includes(s.category)) ) && (
-                <div className='flex flex-col border-t dark:border-zinc-700 py-4 px-4 gap-3'>
+                <div className='flex flex-col border-t py-4 px-4 gap-3'>
                     <div className='font-medium text-sm ml-2'>Recommended Settings</div>
                     <Settings type='cache' audit={audit}/>
                 </div>
@@ -160,7 +160,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
 
             {tables.map((table, index) => (
-                <div key={index} className="flex flex-col gap-3 px-4 py-3 border-t dark:border-zinc-700">
+                <div key={index} className="flex flex-col gap-3 px-4 py-3 border-t">
                     <div className="flex flex-col gap-2 justify-center">
 
                         <div
@@ -170,7 +170,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 <Settings type={table.options.meta?.type} audit={audit}/>
                                 {/*<TooltipText text='Show the files that have successfully passed this audit'>*/}
                                 {/*    <div*/}
-                                {/*        className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 dark:border-zinc-700 border border-zinc-200 w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
+                                {/*        className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-zinc-100 dark:bg-zinc-900 bg-zinc-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
                                 {/*    >*/}
                                 {/*        Show Optimized Files <PlusCircleIcon className='w-6 h-6 dark:text-zinc-500 text-zinc-900'/>*/}
                                 {/*    </div>*/}
@@ -178,7 +178,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                             </div>
                         )}
                     </div>
-                    <div className="w-full dark:border-zinc-700 border border-zinc-200 rounded-[20px] overflow-hidden">
+                    <div className="w-full border rounded-[20px] overflow-hidden">
                         <table className="w-full">
                             <thead>
                             {table?.getHeaderGroups().map((headerGroup) => (
@@ -207,7 +207,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                                 // @ts-ignore
                                                 width: cellWidth(cell.column.columnDef.meta?.valueType),
                                             }}
-                                            className="first:pl-6 py-2 border-t dark:border-zinc-700 border-zinc-200 px-2 text-sm h-[50px] items-center"
+                                            className="first:pl-6 py-2 border-t px-2 text-sm h-[50px] items-center"
                                             key={cell.id}
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
