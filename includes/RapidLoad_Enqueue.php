@@ -112,6 +112,7 @@ class RapidLoad_Enqueue {
             if(self::$frontend_debug){
                 header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
             }
+            header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . json_encode($this->options) . ']' );
 
             return $dom;
         }
