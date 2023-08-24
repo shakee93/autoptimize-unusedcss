@@ -117,6 +117,8 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     return;
             // }
 
+            console.log('here');
+
             if (activeReportData.data && !reload) {
                 return;
             }
@@ -128,7 +130,7 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 activeReport,
                 reload
             );
-
+            
             dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
 
         } catch (error) {

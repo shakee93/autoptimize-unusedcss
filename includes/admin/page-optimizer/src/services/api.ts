@@ -25,7 +25,7 @@ class ApiService {
         let data = await response.json();
 
         if (!data.success) {
-            throw new Error(data.data);
+            throw new Error("Problem Retrieving Data: Our Apologies. For Assistance, Please Reach Out to Customer Support.");
         }
 
         return data
