@@ -282,7 +282,7 @@ class RapidLoad_Optimizer
 
                     }
 
-                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value)){
+                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
 
                         $passed_item = json_decode($fileaction->meta);
                         $passed_item->passed = true;
