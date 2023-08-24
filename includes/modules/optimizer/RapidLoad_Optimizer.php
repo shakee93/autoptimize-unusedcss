@@ -287,7 +287,7 @@ class RapidLoad_Optimizer
                         $passed_item = json_decode($fileaction->meta);
                         $passed_item->passed = true;
 
-                        array_push($audit->files->items, $passed_item);
+                        //array_push($audit->files->items, $passed_item);
 
                     }
                 }
