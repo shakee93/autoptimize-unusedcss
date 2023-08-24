@@ -91,7 +91,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     }
     
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-black bg-zinc-50 border-t dark:border-zinc-600 border-zinc-300 w-full'>
+        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-black bg-white border-t w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
@@ -131,11 +131,11 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                         </PopoverTrigger>
                         <PopoverContent className='pt-0 dark:bg-zinc-800 dark:text-white'>
                             <div className='my-2 ml-4 font-medium '>Revisions</div>
-                            <ul className='border dark:border-zinc-700 rounded-lg'>
+                            <ul className='border rounded-lg'>
                                 { revisions?.map((rev: Revision, index: number) => {
                                     return <li className={cn(
                                         'cursor-pointer px-4 py-3 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-900',
-                                        index === 0 ? 'border-none' : 'border-t dark:border-zinc-600'
+                                        index === 0 ? 'border-none' : 'border-t'
                                     )} key={rev.id}>{formatDistanceToNow(new Date(rev.created_at), { addSuffix: true })} - Perf: {rev?.data?.performance}</li>
                                 })}
                                 <li></li>

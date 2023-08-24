@@ -95,7 +95,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         return (
             <div className={cn(
-                'mb-3 drop-shadow-sm rounded-3xl border dark:border-zinc-700 bg-white dark:bg-black',
+                'mb-3 drop-shadow-sm rounded-3xl border bg-white dark:bg-black',
                 className
             )}>
                 {children}
@@ -182,7 +182,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
                 </div>
                 {isCoreWebClicked && (
-                    <div className='border-t dark:border-zinc-700'>
+                    <div className='border-t'>
 
                         <div className="p-5 grid grid-cols-3 gap-3 pl-6">
                             {data?.metrics.map((s, index) => (

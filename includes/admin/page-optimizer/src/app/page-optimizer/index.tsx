@@ -136,7 +136,7 @@ export default function PageOptimizer() {
     return (
 
         <div
-            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-zinc-200 text-zinc-800 dark:bg-zinc-930 bg-[#F7F9FA]")}>
+            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-zinc-200 text-zinc-800 dark:bg-zinc-930 bg-zinc-50")}>
             <div className='overflow-auto w-full'>
                 <Header url={url}/>
                 {!loading ? (
@@ -175,14 +175,14 @@ export default function PageOptimizer() {
                                                                 // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
                                                             )}>
                                                             <span
-                                                                className={`border-2 dark:border-zinc-600 border-zinc-300 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
+                                                                className={`border-2 inline-block w-3 h-3  rounded-full ${index === 0 ? 'dark:bg-zinc-600 bg-zinc-300' : 'bg-transparent'}`}></span>
                                                                 {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (
                                                                     <span
                                                                         data-h={componentHeights[index]}
                                                                         style={{
                                                                             height: componentHeights[index]
                                                                         }}
-                                                                        className={`w-[2px] border-dashed border-l-2 dark:border-zinc-600 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                                                                        className={`w-[2px] border-dashed border-l-2 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
 
                                                                 )}
                                                             </div>
