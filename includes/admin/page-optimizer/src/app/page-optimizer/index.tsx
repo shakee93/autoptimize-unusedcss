@@ -21,18 +21,18 @@ export interface AuditComponentRef {
 }
 
 export default function PageOptimizer() {
-    const [activeTab, setActiveTab] = useState<AuditTypes>("attention_required");
+    const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(true);
     const {data, loading, error} = useSelector(optimizerData);
     const {options, setOpenAudits} = useOptimizerContext()
 
     const tabs: Tab[] = [
-        {
-            key: "attention_required",
-            name: "Attention Required",
-            color: 'border-red-400',
-            activeColor: 'bg-red-400'
-        },
+        // {
+        //     key: "attention_required",
+        //     name: "Attention Required",
+        //     color: 'border-red-400',
+        //     activeColor: 'bg-red-400'
+        // },
         {
             key: "opportunities",
             name: "Opportunities",
@@ -197,6 +197,7 @@ export default function PageOptimizer() {
                                                                     )}
                                                                 </div>
                                                                 <Audit
+                                                                    activeTab={activeTab}
                                                                     onHeightChange={(height) => handleAuditHeightChange(index, height)}
                                                                     ref={(element) => (componentRefs.current[index] = element)}
                                                                     index={index} audit={audit}/>

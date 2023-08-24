@@ -16,13 +16,14 @@ import {cn} from "lib/utils";
 
 export interface AuditProps {
     audit: Audit;
+    activeTab: string,
     index?: number;
     onHeightChange?: (height: number) => void;
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeightChange }, ref) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTab, onHeightChange }, ref) => {
 
-    const [toggleFiles, setToggleFiles] = useState(index === 0 && (audit?.files?.items?.length > 0 || audit?.settings.length > 0));
+    const [toggleFiles, setToggleFiles] = useState(index === 0 && activeTab === 'opportunities' && (audit?.files?.items?.length > 0 || audit?.settings.length > 0));
 
     const {settings} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
