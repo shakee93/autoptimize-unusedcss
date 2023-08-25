@@ -129,11 +129,11 @@ export default function PageOptimizer() {
         )
     }
 
-    useEffect(() => {
-
-        setOpenAudits([]);
-
-    }, [activeTab])
+    // useEffect(() => {
+    //
+    //     setOpenAudits([]);
+    //
+    // }, [activeTab])
     return (
 
         <div

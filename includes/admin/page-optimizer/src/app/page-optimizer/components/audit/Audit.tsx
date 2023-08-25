@@ -74,12 +74,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
             return;
         }
         
-        console.log('here');
     };
-
-    useImperativeHandle(ref, () => ({
-        notifyHeightChange,
-    }));
 
     const summary = () => {
         const numItems = audit.files?.items?.length || 0;
@@ -105,7 +100,6 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
 
         return `${summaryText}`;
     };
-
 
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}

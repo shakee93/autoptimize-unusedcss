@@ -27,7 +27,6 @@ interface AuditColumnProps {
 }
 
 const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
-
     let value = cell.getValue()
 
     if (heading.valueType === 'url') {

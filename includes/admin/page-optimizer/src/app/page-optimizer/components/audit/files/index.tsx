@@ -24,21 +24,7 @@ interface AuditContentProps {
 import {
     RowData
 } from "@tanstack/react-table";
-import {Switch} from "components/ui/switch";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "components/ui/dialog";
-import TooltipText from "components/ui/tooltip-text";
-import {Cog6ToothIcon} from "@heroicons/react/20/solid";
-import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
-import AppButton from "components/ui/app-button";
-import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
@@ -50,10 +36,8 @@ declare module '@tanstack/react-table' {
 
 
 const AuditContent = ({audit, notify}: AuditContentProps) => {
-    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
         notify(true);
     }, []);
 
@@ -96,7 +80,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 }
             );
         });
-
         const table = useReactTable({
             data: items,
             // @ts-ignore
@@ -142,7 +125,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             }
         });
     }
-
+    
     return (
         <div className="border-t w-full pt-4">
             <div className="pb-4 text-brand-700 dark:text-brand-300">

@@ -11,6 +11,10 @@ import {
 const initialState: AppState = {
     activeReport: 'desktop',
     mobile: {
+        original: null,
+        changes: {
+            files: []
+        },
         data: null,
         error: null,
         loading: true,
@@ -18,6 +22,10 @@ const initialState: AppState = {
         revisions: [],
     },
     desktop: {
+        original: null,
+        changes: {
+            files: []
+        },
         data: null,
         error: null,
         loading: true,
@@ -41,6 +49,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 [state.activeReport] : {
+                    ...state[state.activeReport],
+                    original: action.payload.data,
                     data: action.payload.data,
                     error: null,
                     loading: false,
@@ -73,6 +83,16 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
             const { payload } = action;
             const activeReport = state[state.activeReport];
+            let changes = activeReport.changes.files.filter(f => f.file === payload.file)
+
+            if (changes.length == 0) {
+                activeReport.changes.files.push({
+                    ...payload,
+                    value: payload.prev
+                });
+            }
+
+            activeReport.changes.files.push(payload);
 
             if (activeReport.data) {
                 activeReport.data.audits = activeReport.data.audits.map((audit) => {
@@ -81,6 +101,20 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     if (audit.files && audit.files.items && (audit.files.type === 'table' || audit.files.type === 'opportunity')) {
                         const updateActionValue = (item: AuditTableResource) => {
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
+
+
+                                // reporting changes
+                                // if (!changes) {
+                                //     activeReport.changes.files.push({
+                                //         audit: audit.id,
+                                //         file: item.url.url,
+                                //         value: item.action.value
+                                //     });
+                                // } else{
+                                //     activeReport.changes.files.push(action.payload)
+                                // }
+
+
                                 return {
                                     ...item,
                                     action: {
