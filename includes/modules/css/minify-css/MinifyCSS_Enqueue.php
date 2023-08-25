@@ -54,6 +54,8 @@ class MinifyCSS_Enqueue
 
             $this->minify_inline_css($style);
 
+            do_action('rapidload/enqueue/after-minify-css', $style, $this->job, $this->strategy);
+
         }
 
         return [
