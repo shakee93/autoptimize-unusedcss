@@ -63,6 +63,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             return false;
         }
 
+        if(col.id === 'action' && [
+            'modern-image-formats',
+            'offscreen-images',
+            'unsized-images'
+        ].includes(audit.id)) {
+            return false
+        }
+
         return !["pattern", "file_type"].includes(col.id as string);
     };
 
@@ -107,11 +115,18 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     }
 
     if (audit.files.type === "opportunity" || audit.files.type === "table") {
-        // console.log(audit.files.grouped_items);
-        audit.files.grouped_items.forEach((data) => {
+        audit.files?.grouped_items?.forEach((data) => {
             if (data.items && data.items.length > 0) {
+
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
-                const table = createTable(audit.files?.headings || [], data.items, label === 'unknown' ? 'Other items' :`${label} Files`, data.type);
+                let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
+
+
+                if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1) {
+                    title = ''
+                }
+
+                const table = createTable(audit.files?.headings || [], data.items, title, data.type);
                 tables.push(table);
             }
         });
@@ -144,8 +159,10 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
             {tables.map((table, index) => (
                 <div key={index} className="flex flex-col gap-3 px-4 py-3 border-t">
-                    <div className="flex flex-col gap-2 justify-center">
-
+                    <div className={cn(
+                        'flex flex-col justify-center',
+                        tables.length > 1 ? 'gap-2' : 'gap-0'
+                    )}>
                         <div
                             className='font-medium text-sm ml-2 capitalize'>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</div>
                         {audit.settings.length > 0 && (
