@@ -46,6 +46,8 @@ class MinifyCSS_Enqueue
 
             $this->minify_css($link);
 
+            do_action('rapidload/enqueue/after-minify-css', $link, $this->job, $this->strategy);
+
         }
 
         $styles = $this->dom->find( 'style' );
@@ -53,8 +55,6 @@ class MinifyCSS_Enqueue
         foreach ($styles as $style){
 
             $this->minify_inline_css($style);
-
-            do_action('rapidload/enqueue/after-minify-css', $style, $this->job, $this->strategy);
 
         }
 
