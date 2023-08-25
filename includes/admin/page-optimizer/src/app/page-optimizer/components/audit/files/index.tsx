@@ -24,6 +24,8 @@ interface AuditContentProps {
 import {
     RowData
 } from "@tanstack/react-table";
+import TooltipText from "components/ui/tooltip-text";
+import {PlusCircleIcon} from "@heroicons/react/24/solid";
 
 
 declare module '@tanstack/react-table' {
@@ -149,7 +151,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             </div>
 
-            {(audit.settings.length > 0 && audit.settings.find(s => ['cache'].includes(s.category)) ) && (
+            {(audit.settings.length > 0 && tables.length === 0) && (
+                <div className='flex flex-col border-t py-4 px-4 gap-3'>
+                    <div className='font-medium text-sm ml-2'>Recommended Settings</div>
+                    <Settings audit={audit}/>
+                </div>
+            )}
+
+            {(audit.settings.length > 0 && audit.settings.find(s => ['cache'].includes(s.category))) && (
                 <div className='flex flex-col border-t py-4 px-4 gap-3'>
                     <div className='font-medium text-sm ml-2'>Recommended Settings</div>
                     <Settings type='cache' audit={audit}/>
@@ -160,8 +169,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             {tables.map((table, index) => (
                 <div key={index} className="flex flex-col gap-3 px-4 py-3 border-t">
                     <div className={cn(
-                        'flex flex-col justify-center',
-                        tables.length > 1 ? 'gap-2' : 'gap-0'
+                        'flex flex-col gap-2 justify-center',
                     )}>
                         <div
                             className='font-medium text-sm ml-2 capitalize'>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</div>
