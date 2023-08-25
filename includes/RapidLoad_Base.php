@@ -127,6 +127,8 @@ class RapidLoad_Base
         $this->url = $this->get_current_url();
 
         $this->url = $this->transform_url($this->url);
+        
+        error_log($this->url);
 
         $job = new RapidLoad_Job(['url' => $this->url]);
 

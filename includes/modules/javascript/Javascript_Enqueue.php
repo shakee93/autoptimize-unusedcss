@@ -67,6 +67,8 @@ class Javascript_Enqueue
 
         $links = $this->dom->find( 'script' );
 
+        error_log(count($links));
+
         foreach ( $links as $link ) {
 
             $this->minify_js($link);
@@ -76,6 +78,8 @@ class Javascript_Enqueue
             if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
                 $this->load_scripts_on_user_interaction($link);
             }
+
+
 
             do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy);
 
