@@ -192,6 +192,8 @@ class UnusedCSS_Enqueue
 
                     array_push( $this->inject->injected_css_files, $newLink );
 
+                    do_action('rapidload/enqueue/after-optimize-css', $sheet, $this->job_data, $this->strategy);
+
                 }
                 else {
 

@@ -77,6 +77,8 @@ class Javascript_Enqueue
                 $this->load_scripts_on_user_interaction($link);
             }
 
+
+
             do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy);
 
         }
