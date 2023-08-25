@@ -35,6 +35,10 @@ trait RapidLoad_Utils {
 
 	    }
 
+        if(isset($_SERVER['REQUEST_URI'])){
+            return home_url(add_query_arg(array(), $_SERVER['REQUEST_URI']));
+        }
+
 	    return null;
     }
 
