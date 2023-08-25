@@ -270,31 +270,35 @@ class RapidLoad_Optimizer
                     }
                 }
 
-                foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
+                if(isset(self::$merged_options['individual-file-actions'][$audit->id])){
 
-                    $found = false;
+                    foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
 
-                    foreach ($audit->files->items as $item){
+                        $found = false;
 
-                        if(isset($item->url) && isset($item->url->url)){
+                        foreach ($audit->files->items as $item){
 
-                            if($item->url->url == $fileaction->url){
-                                $found = true;
-                                break;
+                            if(isset($item->url) && isset($item->url->url) && isset($fileaction->url)){
+
+                                if($item->url->url == $fileaction->url){
+                                    $found = true;
+                                    break;
+                                }
+
                             }
 
                         }
 
+                        if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
+
+                            $passed_item = json_decode($fileaction->meta);
+                            $passed_item->passed = true;
+
+                            array_push($audit->files->items, $passed_item);
+
+                        }
                     }
 
-                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
-
-                        $passed_item = json_decode($fileaction->meta);
-                        $passed_item->passed = true;
-
-                        array_push($audit->files->items, $passed_item);
-
-                    }
                 }
 
             }
