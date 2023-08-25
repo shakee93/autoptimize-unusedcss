@@ -14,6 +14,10 @@ interface FilesTableHeaderProps {
 const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : FilesTableHeaderProps) => {
     const tableId = table.options.meta?.tableId;
 
+    // TODO: possible bug in list type table audits
+    // @ts-ignore
+    const passed = table.getCoreRowModel().rows.map(r => r.original).find((r) => r?.passed)
+    
     if (!tableId) {
         return <></>
     }
@@ -25,19 +29,21 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : File
             {audit.settings.length > 0 && (
                 <div className='flex gap-3'>
                     <Settings type={table.options.meta?.type} audit={audit}/>
-                    <TooltipText
-                        text='Show the files that have successfully passed this audit'>
-                        <div
-                            onClick={e => updateFilter(table.options.meta?.tableId)}
-                            className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"
-                        >
-                            Show Optimized Files
-                            {(tableFilterStates[tableId] && tableFilterStates[tableId] === 'on') ?
-                                <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
-                                <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
-                            }
-                        </div>
-                    </TooltipText>
+                    {passed && (
+                        <TooltipText
+                            text='Show the files that have successfully passed this audit'>
+                            <div
+                                onClick={e => updateFilter(table.options.meta?.tableId)}
+                                className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"
+                            >
+                                Show Optimized Files
+                                {(tableFilterStates[tableId] && tableFilterStates[tableId] === 'on') ?
+                                    <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
+                                    <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                }
+                            </div>
+                        </TooltipText>
+                    )}
                 </div>
             )}
         </>

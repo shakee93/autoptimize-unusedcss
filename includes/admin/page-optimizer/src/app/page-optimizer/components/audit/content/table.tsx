@@ -34,7 +34,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
             return false
         }
 
-        return !["pattern", "file_type"].includes(col.id as string);
+        return !["pattern", "file_type", 'passed'].includes(col.id as string);
     };
 
     const cellWidth = (valueType: string) => {
@@ -85,14 +85,18 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                     </thead>
                     <tbody>
                     {table?.getFilteredRowModel().rows.map((row) => (
-                        <tr key={row.id}>
+                        <tr className={cn(
+                            "passed" in row.original && row.original?.passed ? 'bg-green-50' : ''
+                        )} key={row.id}>
                             {row.getVisibleCells().filter((cell) => shouldRender(cell)).map((cell) => (
                                 <td
                                     style={{
                                         // @ts-ignore
                                         width: cellWidth(cell.column.columnDef.meta?.valueType),
                                     }}
-                                    className="first:pl-6 py-2 border-t px-2 text-sm h-[50px] items-center"
+                                    className={cn(
+                                        "first:pl-6 py-2 border-t px-2 text-sm h-[50px] items-center",
+                                    )}
                                     key={cell.id}
                                 >
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

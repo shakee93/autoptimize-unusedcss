@@ -63,7 +63,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
         const selectFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
 
-            console.log(row.original,columnId, tableId, tableFilterStates, value);
+            // console.log(row.original,columnId, tableId, tableFilterStates, value);
 
             if (row.original.passed && value === 'on') {
                 return true;
