@@ -4,7 +4,7 @@ class OptimizerStyle
 {
     public function __construct(){
 
-        add_action('rapidload/enqueue/before-optimize-css', function ($sheet, $job_data, $strategy){
+        add_action('rapidload/enqueue/after-optimize-css', function ($sheet, $job_data, $strategy){
 
             $options = $strategy === "mobile" ? $$job_data->job->get_mobile_options(true) : $job_data->job->get_desktop_options(true);
 
