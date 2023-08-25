@@ -171,7 +171,7 @@ class RapidLoad_Optimizer
             $api = new RapidLoad_Api();
 
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
-            $isDev = isset($_REQUEST['is_dev']) ? $_REQUEST['is_dev'] : site_url();
+            $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
             if ($isDev) {
                 $url = 'https://stackoverflow.com/';
