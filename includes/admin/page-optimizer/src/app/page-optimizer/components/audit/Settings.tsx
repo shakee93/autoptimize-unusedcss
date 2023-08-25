@@ -16,7 +16,11 @@ const Settings = ({ audit, max = 2, type }: SettingsProps) => {
     if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
         type = 'image'
     }
-    
+
+    if (type === 'google_font') {
+        type = 'font'
+    }
+
     return (
         <>
             {audit.settings.length > 0 &&(
@@ -38,7 +42,7 @@ const Settings = ({ audit, max = 2, type }: SettingsProps) => {
                 </div>
             )}
         </>
-    )
+    );
 }
 
 export default Settings
