@@ -4,7 +4,7 @@ import {isImageAudit, isUrl, truncateMiddleOfURL} from "lib/utils";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import {CircleDashed} from "lucide-react";
 import {CellContext} from "@tanstack/react-table";
-import AuditColumnImage from "app/page-optimizer/components/audit/files/columns/image";
+import AuditColumnImage from "app/page-optimizer/components/audit/content/columns/image";
 import Code from "components/ui/code";
 
 interface AuditColumnUrlProps {

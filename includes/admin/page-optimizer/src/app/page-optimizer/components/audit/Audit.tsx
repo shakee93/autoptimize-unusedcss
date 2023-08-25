@@ -1,16 +1,14 @@
 import Card from "@/components/ui/card";
 import { PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
-import React, {useState, useRef, useEffect, forwardRef, useImperativeHandle} from "react";
-import Setting from './Setting';
+import React, {useState, useRef, useEffect, forwardRef} from "react";
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
-import AuditContent from "app/page-optimizer/components/audit/files";
+import AuditContent from "app/page-optimizer/components/audit/content";
 import {JsonView} from "react-json-view-lite";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
-import Settings from "app/page-optimizer/components/audit/Settings";
 import {useOptimizerContext} from "../../../../context/root";
 import {cn} from "lib/utils";
 
