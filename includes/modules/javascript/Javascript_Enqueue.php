@@ -67,8 +67,6 @@ class Javascript_Enqueue
 
         $links = $this->dom->find( 'script' );
 
-        error_log(count($links));
-
         foreach ( $links as $link ) {
 
             $this->minify_js($link);
