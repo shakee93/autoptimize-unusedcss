@@ -40,6 +40,10 @@ class RapidLoad_Admin_Bar {
 
         $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
 
+        if (defined('RAPIDLOAD_DEV_MODE')) {
+            $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
+        }
+
         wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);

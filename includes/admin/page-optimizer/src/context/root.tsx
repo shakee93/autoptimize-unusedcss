@@ -27,6 +27,7 @@ export const OptimizerProvider = ({ children } : {
         optimizer_url: 'http://rapidload.local/',
         ajax_url: '',
         page_optimizer_base: '',
+        page_optimizer_package_base: '',
         plugin_url: '',
         nonce: '',
         timezone: 'UTC'
@@ -69,12 +70,13 @@ export const OptimizerProvider = ({ children } : {
 
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
         const styleTags = document.querySelectorAll('style');
-        const targetStylesheet = document.getElementById('rapidload_page_optimizer-css');
+        const rapidloadStylesheet = document.getElementById('rapidload_page_optimizer-css');
+        const rapidloadStyleTag = document.getElementById('rapidload-admin-bar-css');
 
         if (value && !sheetsHidden) {
             stylesheets.forEach(function(stylesheet) {
                 const url = (stylesheet as HTMLLinkElement).href;
-                if (stylesheet !== targetStylesheet && !url.includes('fonts.googleapis.com')) {
+                if (stylesheet !== rapidloadStylesheet && !url.includes('fonts.googleapis.com')) {
                     (stylesheet as HTMLLinkElement).setAttribute('data-original-media', (stylesheet as HTMLLinkElement).getAttribute('media') || '');
                     (stylesheet as HTMLLinkElement).setAttribute('media', 'none');
                 }
@@ -82,8 +84,10 @@ export const OptimizerProvider = ({ children } : {
 
             styleTags.forEach(function(styleTag) {
                 const originalMedia = styleTag.getAttribute('media');
-                styleTag.setAttribute('data-original-media', originalMedia || '');
-                styleTag.setAttribute('media', 'none');
+                if (styleTag !== rapidloadStyleTag) {
+                    styleTag.setAttribute('data-original-media', originalMedia || '');
+                    styleTag.setAttribute('media', 'none');
+                }
             });
 
             setSheetsHidden(true);

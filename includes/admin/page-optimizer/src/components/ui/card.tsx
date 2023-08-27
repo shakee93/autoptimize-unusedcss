@@ -20,9 +20,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, sprea
                 <div className={cn(
                     'absolute w-full -bottom-1 z-[-20] transition-opacity duration-500 delay-500',
                 )}>
-                    <div className='rounded-3xl h-10 border dark:border-brand-700 mx-1.5 bg-brand-50 dark:bg-brand-900 opacity-80'></div>
+                    <div className='rounded-3xl h-10 dark:border-brand-700 mx-1.5 bg-brand-200/90 dark:bg-brand-900 opacity-80'></div>
                     <div className='absolute w-full -bottom-1 z-[-1]'>
-                        <div className=' rounded-3xl h-5 border dark:border-brand-700 mx-4 bg-brand-50 dark:bg-brand-900 opacity-40'></div>
+                        <div className='rounded-3xl h-5 dark:border-brand-700 mx-5 bg-brand-200/80 dark:bg-brand-900 opacity-40'></div>
                     </div>
                 </div>
             )}

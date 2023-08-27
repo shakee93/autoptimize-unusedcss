@@ -220,6 +220,7 @@ export const updateFileAction = (
     audit: Audit,
     file: string,
     value: any,
+    prev: any
 ):  ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         
@@ -227,7 +228,8 @@ export const updateFileAction = (
             type: UPDATE_FILE_ACTION, payload : {
                 audit: audit,
                 file: file,
-                value: value
+                value: value,
+                prev: prev,
             }
         })
     }

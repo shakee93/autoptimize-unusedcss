@@ -4,7 +4,7 @@ import {ReactNode, MouseEvent} from "react";
 import {cn} from "lib/utils";
 
 interface TooltipTextProps {
-    text: string
+    text: string | ReactNode
     children: ReactNode,
     className?: string
     onClick?: () => void

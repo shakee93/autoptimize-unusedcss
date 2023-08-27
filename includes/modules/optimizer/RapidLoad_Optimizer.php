@@ -294,13 +294,58 @@ class RapidLoad_Optimizer
                             $passed_item = json_decode($fileaction->meta);
                             $passed_item->passed = true;
 
-                            array_push($audit->files->items, $passed_item);
+                            $audit->files->headings[] = [
+                                'key' => 'passed',
+                                'label' => 'Passed',
+                                'valueType' => 'boolean',
+                            ];
+                            $audit->files->items[] = $passed_item;
 
                         }
                     }
 
                 }
 
+            }
+
+            if ($audit->id === 'render-blocking-resources') {
+//                $audit->files->headings[] = [
+//                    'key' => 'passed',
+//                    'label' => 'Passed',
+//                    'valueType' => 'boolean',
+//                ];
+//                $audit->files->items[] = [
+//                    "url" => [
+//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.css?v=876760765&ver=5.9.3",
+//                        "file_type" => [
+//                            "label" => "CSS",
+//                            "value" => "css"
+//                        ]
+//                    ],
+//                    "wastedMs" => 318,
+//                    "totalBytes" => 2083,
+//                    "action" => [
+//                        "control_type" => "dropdown",
+//                        "value" => "none"
+//                    ],
+//                    "passed" => true
+//                ];
+//                $audit->files->items[] = [
+//                    "url" => [
+//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.js?v=876760765&ver=5.9.3",
+//                        "file_type" => [
+//                            "label" => "Javascript",
+//                            "value" => "js"
+//                        ]
+//                    ],
+//                    "wastedMs" => 318,
+//                    "totalBytes" => 2083,
+//                    "action" => [
+//                        "control_type" => "dropdown",
+//                        "value" => "none"
+//                    ],
+//                    "passed" => true
+//                ];
             }
 
         }

@@ -13,15 +13,26 @@ interface SettingsProps {
 const Settings = ({ audit, max = 2, type }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
+    if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
+        type = 'image'
+    }
+
+    if (type === 'google_font') {
+        type = 'font'
+    }
+
     return (
         <>
             {audit.settings.length > 0 &&(
                 <div className="flex flex-wrap gap-2">
-
                     {audit.settings.filter(i => {
 
+                        if (!type) {
+                            return true
+                        }
+
                         if (i.category === 'javascript') {
-                            i.category = 'js'
+                            i.category = 'js';
                         }
 
                         return  i.category === type;
@@ -31,7 +42,7 @@ const Settings = ({ audit, max = 2, type }: SettingsProps) => {
                 </div>
             )}
         </>
-    )
+    );
 }
 
 export default Settings

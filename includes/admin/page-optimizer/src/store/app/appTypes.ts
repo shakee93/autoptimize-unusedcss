@@ -7,17 +7,25 @@ export interface AppState {
     activeReport: ReportType,
     mobile: {
         data?: OptimizerResults | null;
+        original?: OptimizerResults | null;
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[],
         revisions: any,
+        changes: {
+            files: Array<any>
+        },
     },
     desktop: {
         data?: OptimizerResults | null;
+        original?: OptimizerResults | null;
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[]
         revisions: any,
+        changes: {
+            files: Array<any>
+        },
     }
 }
 
@@ -62,6 +70,7 @@ interface UpdateFileActionAction {
         audit: Audit
         file: string
         value: string
+        prev: string
     }
 }
 

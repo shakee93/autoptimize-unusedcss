@@ -94,6 +94,7 @@ interface AuditTableResource {
         }
     } | string
     pattern?: string
+    passed?: boolean
 }
 
 

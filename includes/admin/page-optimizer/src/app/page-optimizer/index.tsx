@@ -129,11 +129,11 @@ export default function PageOptimizer() {
         )
     }
 
-    useEffect(() => {
-
-        setOpenAudits([]);
-
-    }, [activeTab])
+    // useEffect(() => {
+    //
+    //     setOpenAudits([]);
+    //
+    // }, [activeTab])
     return (
 
         <div
@@ -192,7 +192,7 @@ export default function PageOptimizer() {
                                                                             style={{
                                                                                 height: componentHeights[index]
                                                                             }}
-                                                                            className={`w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-7 absolute`}></span>
+                                                                            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>
 
                                                                     )}
                                                                 </div>
