@@ -30,6 +30,8 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     let value = getValue();
     const { data, settings, changes } = useSelector(optimizerData)
     let fileChanges = changes.files.filter(f => f.file === url.url).map(f => f.value)
+    const file_type = url.file_type.value;
+    const options = data?.meta?.controls.dropdown_options.filter((o)=> o.type == file_type)[0]?.options;
 
     // you can find state structure in appReducer.ts (initial state)
     if (value?.control_type !== 'dropdown' || !value) {
@@ -58,9 +60,7 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
 
     const renderSelectItems = () => {
 
-        const file_type = url.file_type.value;
-        const options = data?.meta?.controls.dropdown_options.filter((o)=> o.type == file_type)[0]?.options;
-        
+
         return mutateOptions(options, file_type)?.map((value: string) => (
             <SelectItem
                 className="capitalize cursor-pointer"
@@ -89,6 +89,10 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
         }
         
         return options;
+    }
+
+    if (!options) {
+        return <></>
     }
 
     return (
