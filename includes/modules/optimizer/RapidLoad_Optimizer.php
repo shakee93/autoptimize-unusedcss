@@ -174,7 +174,7 @@ class RapidLoad_Optimizer
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
             if ($isDev) {
-                $url = 'https://stackoverflow.com/';
+                $url = 'https://staging.rapidload.io/';
             }
 
             $result = $api->post('page-speed', [
@@ -213,17 +213,21 @@ class RapidLoad_Optimizer
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data->status;
+                            $settings->{'status'} = $data->status;
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data->status;
+                            $settings->{'status'} = $data->status;
                         }
                     }
                 }
+            }
+
+            if(isset($audit->files) && isset($audit->files->headings) && count($audit->files->headings) == 0 && isset(self::$merged_options['individual-file-actions-headings'][$audit->id])){
+                $audit->files->headings = json_decode(self::$merged_options['individual-file-actions-headings'][$audit->id]);
             }
 
             if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
@@ -270,83 +274,56 @@ class RapidLoad_Optimizer
                     }
                 }
 
-                if(isset(self::$merged_options['individual-file-actions'][$audit->id])){
+            }
 
-                    foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
+            if(isset(self::$merged_options['individual-file-actions'][$audit->id])){
 
-                        $found = false;
+                $passed_heading_exist = false;
 
-                        foreach ($audit->files->items as $item){
+                foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
 
-                            if(isset($item->url) && isset($item->url->url) && isset($fileaction->url)){
+                    $found = false;
 
-                                if($item->url->url == $fileaction->url){
-                                    $found = true;
-                                    break;
-                                }
+                    foreach ($audit->files->items as $item){
 
+                        if(isset($item->url) && isset($item->url->url) && isset($fileaction->url)){
+
+                            if($item->url->url == $fileaction->url){
+                                $found = true;
+                                break;
                             }
 
                         }
 
-                        if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
+                    }
 
-                            $passed_item = json_decode($fileaction->meta);
-                            $passed_item->passed = true;
+                    if(!$found && isset( $fileaction->meta) && isset($fileaction->action) && isset($fileaction->action->value) && $fileaction->action->value != "none"){
 
+                        $passed_item = json_decode($fileaction->meta);
+                        $passed_item->passed = true;
+
+                        foreach ($audit->files->headings as $heading){
+                            $_heading = (array)$heading;
+                            if(isset($_heading['key']) && $_heading['key'] == "passed"){
+                                $passed_heading_exist = true;
+                                break;
+                            }
+                        }
+
+                        if(!$passed_heading_exist){
                             $audit->files->headings[] = [
                                 'key' => 'passed',
                                 'label' => 'Passed',
                                 'valueType' => 'boolean',
                             ];
-                            $audit->files->items[] = $passed_item;
-
                         }
-                    }
+                        $audit->files->items[] = $passed_item;
 
+                    }
                 }
 
             }
 
-            if ($audit->id === 'render-blocking-resources') {
-//                $audit->files->headings[] = [
-//                    'key' => 'passed',
-//                    'label' => 'Passed',
-//                    'valueType' => 'boolean',
-//                ];
-//                $audit->files->items[] = [
-//                    "url" => [
-//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.css?v=876760765&ver=5.9.3",
-//                        "file_type" => [
-//                            "label" => "CSS",
-//                            "value" => "css"
-//                        ]
-//                    ],
-//                    "wastedMs" => 318,
-//                    "totalBytes" => 2083,
-//                    "action" => [
-//                        "control_type" => "dropdown",
-//                        "value" => "none"
-//                    ],
-//                    "passed" => true
-//                ];
-//                $audit->files->items[] = [
-//                    "url" => [
-//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.js?v=876760765&ver=5.9.3",
-//                        "file_type" => [
-//                            "label" => "Javascript",
-//                            "value" => "js"
-//                        ]
-//                    ],
-//                    "wastedMs" => 318,
-//                    "totalBytes" => 2083,
-//                    "action" => [
-//                        "control_type" => "dropdown",
-//                        "value" => "none"
-//                    ],
-//                    "passed" => true
-//                ];
-            }
 
         }
 
@@ -425,6 +402,11 @@ class RapidLoad_Optimizer
                 }
 
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+
+                    if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
+                        self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                    }
+
                     foreach ($audit->files->items as $item){
 
                         if(isset($item->url) && isset($item->url->url)){
