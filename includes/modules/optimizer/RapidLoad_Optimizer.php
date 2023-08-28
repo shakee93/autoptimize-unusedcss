@@ -173,7 +173,7 @@ class RapidLoad_Optimizer
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
-            if ($isDev) {
+            if (!$isDev) {
                 $url = 'https://stackoverflow.com/';
             }
 
@@ -213,17 +213,21 @@ class RapidLoad_Optimizer
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data->status;
+                            $settings->{'status'} = $data->status;
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
                                 $data->save();
                             }
-                            $input->{'value_data'} = $data->status;
+                            $settings->{'status'} = $data->status;
                         }
                     }
                 }
+            }
+
+            if(isset($audit->files) && isset($audit->files->headings) && count($audit->files->headings) == 0 && isset(self::$merged_options['individual-file-actions-headings'][$audit->id])){
+                $audit->files->headings = json_decode(self::$merged_options['individual-file-actions-headings'][$audit->id]);
             }
 
             if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
@@ -308,45 +312,6 @@ class RapidLoad_Optimizer
 
             }
 
-            if ($audit->id === 'render-blocking-resources') {
-//                $audit->files->headings[] = [
-//                    'key' => 'passed',
-//                    'label' => 'Passed',
-//                    'valueType' => 'boolean',
-//                ];
-//                $audit->files->items[] = [
-//                    "url" => [
-//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.css?v=876760765&ver=5.9.3",
-//                        "file_type" => [
-//                            "label" => "CSS",
-//                            "value" => "css"
-//                        ]
-//                    ],
-//                    "wastedMs" => 318,
-//                    "totalBytes" => 2083,
-//                    "action" => [
-//                        "control_type" => "dropdown",
-//                        "value" => "none"
-//                    ],
-//                    "passed" => true
-//                ];
-//                $audit->files->items[] = [
-//                    "url" => [
-//                        "url" => "https://staging-rapidload.rapidload-cdn.io/wp-content/plugins/uucss-stripe-gateway/assets/css/style.js?v=876760765&ver=5.9.3",
-//                        "file_type" => [
-//                            "label" => "Javascript",
-//                            "value" => "js"
-//                        ]
-//                    ],
-//                    "wastedMs" => 318,
-//                    "totalBytes" => 2083,
-//                    "action" => [
-//                        "control_type" => "dropdown",
-//                        "value" => "none"
-//                    ],
-//                    "passed" => true
-//                ];
-            }
 
         }
 
@@ -425,6 +390,11 @@ class RapidLoad_Optimizer
                 }
 
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
+
+                    if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
+                        self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                    }
+
                     foreach ($audit->files->items as $item){
 
                         if(isset($item->url) && isset($item->url->url)){
