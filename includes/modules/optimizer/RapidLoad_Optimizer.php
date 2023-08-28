@@ -278,6 +278,8 @@ class RapidLoad_Optimizer
 
             if(isset(self::$merged_options['individual-file-actions'][$audit->id])){
 
+                $passed_heading_exist = false;
+
                 foreach (self::$merged_options['individual-file-actions'][$audit->id] as $fileaction){
 
                     $found = false;
@@ -300,11 +302,21 @@ class RapidLoad_Optimizer
                         $passed_item = json_decode($fileaction->meta);
                         $passed_item->passed = true;
 
-                        $audit->files->headings[] = [
-                            'key' => 'passed',
-                            'label' => 'Passed',
-                            'valueType' => 'boolean',
-                        ];
+                        foreach ($audit->files->headings as $heading){
+                            $_heading = (array)$heading;
+                            if(isset($_heading['key']) && $_heading['key'] == "passed"){
+                                $passed_heading_exist = true;
+                                break;
+                            }
+                        }
+
+                        if(!$passed_heading_exist){
+                            $audit->files->headings[] = [
+                                'key' => 'passed',
+                                'label' => 'Passed',
+                                'valueType' => 'boolean',
+                            ];
+                        }
                         $audit->files->items[] = $passed_item;
 
                     }
