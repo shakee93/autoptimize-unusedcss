@@ -86,7 +86,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                     <tbody>
                     {table?.getFilteredRowModel().rows.map((row) => (
                         <tr className={cn(
-                            "passed" in row.original && row.original?.passed ? 'bg-green-50' : ''
+                            "passed" in row.original && row.original?.passed ? 'bg-green-50 dark:bg-brand-800' : ''
                         )} key={row.id}>
                             {row.getVisibleCells().filter((cell) => shouldRender(cell)).map((cell) => (
                                 <td

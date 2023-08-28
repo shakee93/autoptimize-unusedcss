@@ -173,8 +173,8 @@ class RapidLoad_Optimizer
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
-            if (!$isDev) {
-                $url = 'https://stackoverflow.com/';
+            if ($isDev) {
+                $url = 'https://staging.rapidload.io/';
             }
 
             $result = $api->post('page-speed', [
