@@ -104,9 +104,6 @@ class RapidLoad_Base
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
 
-            if( RapidLoad_DB::$current_version > 1.5){
-                $this->container['page_optimizer'] = new RapidLoad_Optimizer();
-            }
             //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
 
         });
