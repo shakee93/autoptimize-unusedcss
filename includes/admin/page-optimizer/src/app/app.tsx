@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState, RootState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
+import TooltipText from "components/ui/tooltip-text";
 
 const App = ({is_popup}: {
     is_popup: boolean

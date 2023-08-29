@@ -146,12 +146,12 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <TooltipText text='Switch theme'>
                         <ThemeSwitcher></ThemeSwitcher>
                     </TooltipText>
-                    <TooltipText text='Undo'>
-                        <Undo2 className='w-5' />
-                    </TooltipText>
-                    <TooltipText text='Redo'>
-                        <Redo2 className='w-5' />
-                    </TooltipText>
+                    {/*<TooltipText text='Undo'>*/}
+                    {/*    <Undo2 className='w-5' />*/}
+                    {/*</TooltipText>*/}
+                    {/*<TooltipText text='Redo'>*/}
+                    {/*    <Redo2 className='w-5' />*/}
+                    {/*</TooltipText>*/}
 
                 </div>
 

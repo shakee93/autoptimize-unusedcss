@@ -1,5 +1,5 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useRef, useState} from "react";
 import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
@@ -9,10 +9,24 @@ import {useOptimizerContext} from "../../../context/root";
 import {useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
+import TooltipText from "components/ui/tooltip-text";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import {HoverCardPortal} from "@radix-ui/react-hover-card";
+import {Archive, Circle, Dot, FileCode2, FileMinus2} from "lucide-react";
 
 const Content = () => {
 
-    const {setShowOptimizer} = useOptimizerContext()
+    const {setShowOptimizer, options} = useOptimizerContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
 
@@ -50,6 +64,61 @@ const Content = () => {
         const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
         return minOpacity + opacityIncrement * performance;
     };
+
+    const PopupActions = () => {
+
+        if (!options.actions) {
+            return <></>
+        }
+
+        let [actions, setActions] = useState(options.actions.map(a => ({
+            ...a,
+            loading: false
+        })))
+        
+        let icons = {
+            clear_cache :  <Archive className='w-4'/>,
+            clear_page_cache : <FileMinus2 className='w-4'/>,
+            clear_optimization : <FileCode2 className='w-4'/>
+        }
+
+        const triggerAction = async (action: any) => {
+            try {
+                setActions(prev => prev.map(a =>
+                    a.icon === action.icon ? {
+                        ...a,
+                        loading: true
+                    } : a
+                ))
+
+                let result = await fetch(action.href);
+            } catch (e) {
+                console.error(e);
+            }
+
+            setActions(prev => prev.map(a =>
+                a.icon === action.icon ? {
+                    ...a,
+                    loading: false
+                } : a
+            ))
+        }
+
+        return (
+            <>
+                {actions.map(action => (
+                    <TooltipText key={action.icon} text={action.tooltip}>
+                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' dark={false}>
+                            {icons[action.icon]} {action.loading && <span>
+                            <Circle className='w-2 absolute stroke-none fill-blue-500'/>
+                            <Circle className='w-2 relative motion-safe:animate-ping stroke-none fill-blue-500'/>
+                        </span>}
+                        </AppButton>
+                    </TooltipText>
+                ))}
+            </>
+        );
+    }
 
     return (
         <div
@@ -125,12 +194,7 @@ const Content = () => {
                         }}>
                             <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Page Optimizer
                         </AppButton>
-                        <AppButton className='rounded-[15px]' dark={false}>
-                            <DocumentMinusIcon className='w-4'/>
-                        </AppButton>
-                        <AppButton className='rounded-[15px]' dark={false}>
-                            <ArchiveBoxIcon className='w-4'/>
-                        </AppButton>
+                        <PopupActions/>
                     </div>
                 </div>
             </div>
@@ -143,29 +207,24 @@ const SpeedInsights = ({children}: {
 }) => {
 
     const {options} = useOptimizerContext()
+    const [open, setOpen] = useState<boolean>(false)
 
     const root = options?.plugin_url
 
     return (
-        <div>
-            <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                    <div
-                        className={`${!root ? 'bg-gray-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
-                        {children}
-                    </div>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                    <Tooltip.Content className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5}>
-                        <Content/>
-                    </Tooltip.Content>
-                </Tooltip.Portal>
-            </Tooltip.Root>
-            {/*{!root && (*/}
-            {/*    <Content/>*/}
-            {/*)}*/}
-        </div>
-
+        <HoverCard openDelay={0}>
+            <HoverCardTrigger asChild>
+                <div
+                    className={`${!root ? 'bg-gray-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
+                    {children}
+                </div>
+            </HoverCardTrigger>
+            <HoverCardPortal>
+                <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+                    <Content/>
+                </HoverCardContent>
+            </HoverCardPortal>
+        </HoverCard>
     );
 
 }

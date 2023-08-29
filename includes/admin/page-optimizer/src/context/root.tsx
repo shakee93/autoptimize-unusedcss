@@ -30,7 +30,8 @@ export const OptimizerProvider = ({ children } : {
         page_optimizer_package_base: '',
         plugin_url: '',
         nonce: '',
-        timezone: 'UTC'
+        timezone: 'UTC',
+        actions: []
     } )
     const [type, setType] = useState<ReportType>('desktop');
 

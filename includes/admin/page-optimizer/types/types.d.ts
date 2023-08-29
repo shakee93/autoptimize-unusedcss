@@ -9,6 +9,11 @@ interface WordPressOptions {
     plugin_url: string
     nonce?: string
     timezone: string
+    actions: {
+        href: string
+        icon: 'clear_cache' | 'clear_optimization' | 'clear_page_cache'
+        tooltip: string
+    }[]
 }
 
 interface Tab {

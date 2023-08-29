@@ -1,6 +1,7 @@
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {Bug, ChevronDown, Circle} from "lucide-react";
 import {useState} from "react";
+import Card from "components/ui/card";
 
 const SpeedInsightGroup = ({ title, success = false,items = []}: {
     title: string
@@ -40,8 +41,9 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
     }
 
     return (
-        <div
-            className="flex flex-col cursor-pointer items-center border rounded-[20px] bg-brand-50 dark:bg-transparent">
+        <Card
+            className='cursor-pointer'
+        >
             <div onClick={() => { setIsOpen(p => !p)}} className='select-none flex justify-between w-full items-center py-2.5 px-4'>
                 <div className='flex gap-4 items-center pr-8 '>
                     <div className='text-sm'>
@@ -82,7 +84,7 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
                     )).slice(0, 3)}
                 </div>
             )}
-        </div>
+        </Card>
     )
 }
 
