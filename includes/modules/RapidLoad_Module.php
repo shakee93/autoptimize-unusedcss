@@ -93,7 +93,17 @@ class RapidLoad_Module
             'group' => 'cache',
             'status' => 'on',
             'class' => RapidLoad_Cache::class,
-            'global' => 'font'
+            'global' => 'cache'
+        ];
+
+        $this->modules['page-optimizer'] = [
+            'id' => 'page-optimizer',
+            'title' => 'Page Optimizer',
+            'description' => 'Page Optimizer',
+            'group' => 'optimize',
+            'status' => 'on',
+            'class' => RapidLoad_Optimizer::class,
+            'global' => 'optimizer'
         ];
 
     }
@@ -224,6 +234,10 @@ class RapidLoad_Module
 
                 break;
             }
+            case 'page-optimizer' : {
+                $options['uucss_enable_page_optimizer'] = $active == "on" ? "1" : "";
+                break;
+            }
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
@@ -331,6 +345,10 @@ class RapidLoad_Module
             'cache' => [
                 'id' => 'cache',
                 'status' => isset($options['uucss_enable_cache']) && $options['uucss_enable_cache'] == "1" ? "on" : "off",
+            ],
+            'page-optimizer' => [
+                'id' => 'page-optimizer',
+                'status' => isset($options['uucss_enable_page_optimizer']) && $options['uucss_enable_page_optimizer'] == "1" ? "on" : "off",
             ]
         ];
 
