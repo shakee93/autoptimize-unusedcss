@@ -388,7 +388,8 @@ class Javascript_Enqueue
             "ewww_webp_supported",
             "anr_captcha_field_div",
             "renderInvisibleReCaptcha",
-            "bookingInProgress"
+            "bookingInProgress",
+            "do_not_load_original_css"
         ];
         return apply_filters('rapidload/defer/exclusions/inline_js', $list);
     }
