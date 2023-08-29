@@ -16,7 +16,6 @@ class Javascript_Enqueue
     private $settings;
     private $default_inline_js_exclusion_pattern;
     private $default_js_exclusion_pattern;
-    private $strategy;
 
     public function __construct($job)
     {
