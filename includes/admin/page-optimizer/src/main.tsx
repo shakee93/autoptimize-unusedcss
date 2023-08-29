@@ -9,6 +9,7 @@ import {createRoot} from 'react-dom/client';
 import {OptimizerProvider} from "./context/root";
 import {Provider} from "react-redux";
 import store from "./store";
+import {TooltipProvider} from "components/ui/tooltip";
 
 
 domReady(function () {
@@ -54,9 +55,11 @@ domReady(function () {
     optimizer.render(
         <Provider store={store}>
             <OptimizerProvider>
+                <TooltipProvider delayDuration={100}>
                     <LazyMotion features={domAnimation}>
                         <App is_popup={is_popup}/>
                     </LazyMotion>
+                </TooltipProvider>
             </OptimizerProvider>
         </Provider>
     );
