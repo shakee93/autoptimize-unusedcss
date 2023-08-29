@@ -27,7 +27,7 @@ class RapidLoad_Optimizer
 
         self::$global_options = RapidLoad_Base::fetch_options();
 
-        if(!isset($this->options['uucss_enable_page_optimizer']) || $this->options['uucss_enable_page_optimizer'] == ""){
+        if(!isset(self::$global_options['uucss_enable_page_optimizer']) || self::$global_options['uucss_enable_page_optimizer'] == ""){
             return;
         }
 

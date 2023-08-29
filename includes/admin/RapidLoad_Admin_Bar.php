@@ -24,7 +24,7 @@ class RapidLoad_Admin_Bar {
 //        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
 //        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
-        if (!is_admin() && is_user_logged_in() && RapidLoad_Base::get()->modules()->is_active('page-optimizer')) {
+        if (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) {
             $this->load_optimizer_scripts();
 
             add_action('wp_after_admin_bar_render', function () {
@@ -76,6 +76,7 @@ class RapidLoad_Admin_Bar {
         add_filter('script_loader_tag', 'add_module_script_type', 10, 2);
 
     }
+
     public function rapidload_admin_bar_css()
     {
 
@@ -133,7 +134,7 @@ class RapidLoad_Admin_Bar {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload-clear-cache',
-                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
+                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS/Font Optimizations', 'clear_optimization' ) . '</span>',
                     //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
                     'href'   => wp_nonce_url( add_query_arg( array(
                         '_action' => 'rapidload_purge_all',
