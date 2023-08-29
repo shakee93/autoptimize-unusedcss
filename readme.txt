@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.25 - 29/08/2023 =
+ * improve: add default exclusions for javascript optimizations
+
 = 2.0.24 - 28/07/2023 =
  * fix: selector pack items being duplicate
 
