@@ -11,11 +11,11 @@ class Javascript_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $strategy;
     private $file_system;
     private $settings;
     private $default_inline_js_exclusion_pattern;
     private $default_js_exclusion_pattern;
-    private $strategy;
 
     public function __construct($job)
     {
@@ -358,7 +358,8 @@ class Javascript_Enqueue
             "ewww_webp_supported",
             "anr_captcha_field_div",
             "renderInvisibleReCaptcha",
-            "bookingInProgress"
+            "bookingInProgress",
+            "do_not_load_original_css"
         ];
         return apply_filters('rapidload/defer/exclusions/inline_js', $list);
     }
