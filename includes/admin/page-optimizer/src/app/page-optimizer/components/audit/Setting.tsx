@@ -113,7 +113,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
+            className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
             {icons[settings.category as keyof typeof icons]} {settings.name}
             {mainInput && (
@@ -147,6 +147,10 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                     </DialogContent>
                 </Dialog>
             )}
+
+            {/*<TooltipText text='Queued'>*/}
+            {/*    <div className='bg-sky-400 w-2 h-2 shadow-lg rounded-full -right-1 -top-1'></div>*/}
+            {/*</TooltipText>*/}
 
         </div>
     );

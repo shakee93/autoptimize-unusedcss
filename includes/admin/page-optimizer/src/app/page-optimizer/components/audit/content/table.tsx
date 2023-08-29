@@ -4,8 +4,9 @@ import TooltipText from "components/ui/tooltip-text";
 import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 import {Cell, flexRender, Header, Table} from "@tanstack/react-table";
 import {ChevronLeft, ChevronRight} from "lucide-react";
-import React from "react";
+import React, {useState} from "react";
 import FilesTableHeader from "app/page-optimizer/components/audit/content/header";
+import {JsonView} from "react-json-view-lite";
 
 
 interface FilesTableProps {
@@ -16,6 +17,9 @@ interface FilesTableProps {
 }
 
 const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTableProps) => {
+
+    // the pageIndex of table gets reset by actions in dropdown. so setting our own index
+    const [pageIndex, setPageIndex] = useState<number>(0)
 
     const shouldRender = (
         cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
@@ -84,7 +88,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                     ))}
                     </thead>
                     <tbody>
-                    {table?.getFilteredRowModel().rows.map((row) => (
+                    {table?.getRowModel().rows.map((row) => (
                         <tr className={cn(
                             "passed" in row.original && row.original?.passed ? 'bg-green-50 dark:bg-brand-800' : ''
                         )} key={row.id}>
@@ -110,24 +114,41 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
             {table.getPageCount() > 1 && (
                 <div className="w-full flex justify-end">
                     <ul className="flex gap-1 mt-4 items-center">
-                        <li className="hover:bg-brand-200 px-3 py-1 cursor-pointer rounded text-xs">
+                        <li onClick={e => {
+                            pageIndex > 0 && setPageIndex(p =>  p - 1)
+                            table.previousPage()
+                        }}
+                            className={cn(
+                                "disabled:opacity-30 hover:bg-brand-100 px-3 py-1 cursor-pointer rounded text-xs",
+                                !table.getCanPreviousPage() && 'opacity-30 cursor-no-drop'
+                            )}>
                             <ChevronLeft className='w-4'/>
                         </li>
                         {[...Array(table.getPageCount())].map((i, index) => (
                             <li
                                 className={cn(
-                                    "hover:bg-brand-200 border px-3 py-1.5 cursor-pointer rounded text-xs",
-                                    table.getState().pagination.pageIndex === index ? "bg-brand-200" : ""
+                                    "hover:bg-brand-100 border px-3 py-1.5 cursor-pointer rounded text-xs",
+                                    pageIndex === index ? "bg-brand-200" : ""
                                 )}
                                 onClick={() => {
-                                    table.setPageIndex(index);
+                                    setPageIndex(index)
+                                    table.setPageIndex(e => index);
                                 }}
                                 key={index}
                             >
                                 {index + 1}
                             </li>
                         ))}
-                        <li className="hover:bg-brand-200 px-3 py-1 cursor-pointer rounded text-xs">
+                        <li onClick={e => {
+                            if(table.getCanNextPage()) {
+                                setPageIndex(p => p + 1)
+                                table.nextPage()
+                            }
+                        }}
+                            className={cn(
+                                "disabled:opacity-30 hover:bg-brand-100 px-3 py-1 cursor-pointer rounded text-xs",
+                                !table.getCanNextPage() && 'opacity-30 cursor-no-drop'
+                            )}>
                             <ChevronRight className='w-4'/>
                         </li>
                     </ul>

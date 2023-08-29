@@ -188,7 +188,7 @@ class RapidLoad_Optimizer
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
             if ($isDev) {
-                $url = 'https://staging.rapidload.io/';
+                $url = 'http://54.70.121.132/';
             }
 
             $result = $api->post('page-speed', [
@@ -200,13 +200,19 @@ class RapidLoad_Optimizer
                 wp_send_json_error($result);
             }
 
+            if (isset($result->errors)) {
+                wp_send_json_error($result->errors);
+            }
+
             if(!isset($result->audits)){
+                error_log(json_encode($result, JSON_PRETTY_PRINT));
                 wp_send_json_error([]);
             }
 
         }
 
         if(!isset($result->audits)){
+            error_log(json_encode($result, JSON_PRETTY_PRINT));
             wp_send_json_error([]);
         }
 

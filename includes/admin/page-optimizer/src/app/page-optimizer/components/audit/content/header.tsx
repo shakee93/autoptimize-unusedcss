@@ -3,6 +3,9 @@ import TooltipText from "components/ui/tooltip-text";
 import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 import React from "react";
 import {Table} from "@tanstack/react-table";
+import {useSelector} from "react-redux";
+import {optimizerData} from "../../../../../store/app/appSelector";
+import {JsonView} from "react-json-view-lite";
 
 interface FilesTableHeaderProps {
     audit: Audit
@@ -13,19 +16,40 @@ interface FilesTableHeaderProps {
 
 const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : FilesTableHeaderProps) => {
     const tableId = table.options.meta?.tableId;
+    const { data, settings, changes } = useSelector(optimizerData)
+    let rows = table.getCoreRowModel().rows.map(r => r.original)
+    let file_type = table.options.meta?.type
+    // @ts-ignore
+    let urls = rows.filter(r => r?.url?.file_type.value === file_type).map(r => r?.url?.url)
+    let _changes = changes?.files.map(i => i.file)
+
+    // TODO: count the file changes
+    let countOfChanges = 0;
 
     // TODO: possible bug in list type table audits
     // @ts-ignore
-    const passed = table.getCoreRowModel().rows.map(r => r.original).find((r) => r?.passed)
+    const passed = rows.find((r) => r?.passed)
     
     if (!tableId) {
         return <></>
     }
 
+    if (urls && changes) {
+        countOfChanges = urls.filter(url => _changes.includes(url)).length
+    }
+
     return (
         <>
             <div
-                className='font-medium text-sm ml-2 capitalize'>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</div>
+                className='flex items-center gap-2 font-medium text-sm ml-2 capitalize'>
+                {table.options.meta?.title ? table.options.meta.title : "Related Resources"}
+                {/*{!!countOfChanges && (*/}
+                {/*    <>*/}
+                {/*        <span> · </span>*/}
+                {/*        <span className='text-xs text-blue-500 font-normal'>{countOfChanges} file change{countOfChanges > 1 && 's'}</span>*/}
+                {/*    </>*/}
+                {/*)}*/}
+            </div>
             {audit.settings.length > 0 && (
                 <div className='flex gap-3'>
                     <Settings type={table.options.meta?.type} audit={audit}/>
