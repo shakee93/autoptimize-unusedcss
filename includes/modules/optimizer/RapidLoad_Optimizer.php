@@ -35,6 +35,10 @@ class RapidLoad_Optimizer
             return;
         }
 
+        if(!defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')){
+            define('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED', true);
+        }
+
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);

@@ -55,7 +55,33 @@ class RapidLoad_Admin_Bar {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'optimizer_url' => $this->transform_url($this->get_current_url()),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
-            'timezone' => get_option('timezone_string', 'UTC')
+            'timezone' => get_option('timezone_string', 'UTC'),
+            'actions' => [
+                [
+                    'tooltip' => 'Clear Site Cache',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'icon' => 'clear_cache'
+                ],
+                [
+                    'tooltip' => 'Clear Page Cache',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                        '_url' => $this->transform_url($this->get_current_url()),
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'icon' => 'clear_page_cache'
+                ],
+                [
+                    'tooltip' => 'Clear CSS/JS/Font Optimizations',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                    ) ), 'uucss_nonce', 'nonce' ),
+                    'icon' => 'clear_optimization'
+                ]
+            ]
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
