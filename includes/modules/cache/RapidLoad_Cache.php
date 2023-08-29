@@ -605,7 +605,10 @@ class RapidLoad_Cache
         }
 
         if ( $_GET['_action'] === 'clearurl' ) {
-            self::clear_page_cache_by_url( RapidLoad_Cache_Engine::$request_headers['Host'] . RapidLoad_Cache_Engine::sanitize_server_input($_SERVER['REQUEST_URI'], false) );
+
+            $url = isset($_GET['_url']) ? $_GET['_url'] : RapidLoad_Cache_Engine::$request_headers['Host'] . RapidLoad_Cache_Engine::sanitize_server_input($_SERVER['REQUEST_URI'], false);
+
+            self::clear_page_cache_by_url( $url );
         } elseif ( $_GET['_action'] === 'clear' ) {
             self::each_site( ( is_multisite() && is_network_admin() ), 'self::clear_site_cache', array(), true );
         }

@@ -29,7 +29,7 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     let url = row.getValue("url") as any;
     let value = getValue();
     const { data, settings, changes } = useSelector(optimizerData)
-    let fileChanges = changes.files.filter(f => f.file === url.url).map(f => f.value)
+    let fileChanges = changes ? changes.files.filter(f => f.file === url.url).map(f => f.value) : []
     const file_type = url.file_type.value;
     const options = data?.meta?.controls.dropdown_options.filter((o)=> o.type == file_type)[0]?.options;
 
@@ -94,7 +94,7 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     if (!options) {
         return <></>
     }
-
+    
     return (
         <div className='relative'>
             {(fileChanges && (fileChanges.length > 0 && fileChanges[0] !== fileChanges[fileChanges.length - 1])) && (
@@ -126,4 +126,4 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     );
 };
 
-export default AuditColumnDropdown;
+export default React.memo(AuditColumnDropdown);

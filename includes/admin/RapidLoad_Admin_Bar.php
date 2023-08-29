@@ -24,7 +24,7 @@ class RapidLoad_Admin_Bar {
 //        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
 //        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
-        if (!is_admin() && is_user_logged_in() && RapidLoad_Base::get()->modules()->is_active('page-optimizer')) {
+        if (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) {
             $this->load_optimizer_scripts();
 
             add_action('wp_after_admin_bar_render', function () {
@@ -55,7 +55,33 @@ class RapidLoad_Admin_Bar {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'optimizer_url' => $this->transform_url($this->get_current_url()),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
-            'timezone' => get_option('timezone_string', 'UTC')
+            'timezone' => get_option('timezone_string', 'UTC'),
+            'actions' => [
+                [
+                    'tooltip' => 'Clear Site Cache',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'icon' => 'clear_cache'
+                ],
+                [
+                    'tooltip' => 'Clear Page Cache',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                        '_url' => $this->transform_url($this->get_current_url()),
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'icon' => 'clear_page_cache'
+                ],
+                [
+                    'tooltip' => 'Clear CSS/JS/Font Optimizations',
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                    ) ), 'uucss_nonce', 'nonce' ),
+                    'icon' => 'clear_optimization'
+                ]
+            ]
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
@@ -76,6 +102,7 @@ class RapidLoad_Admin_Bar {
         add_filter('script_loader_tag', 'add_module_script_type', 10, 2);
 
     }
+
     public function rapidload_admin_bar_css()
     {
 
@@ -133,7 +160,7 @@ class RapidLoad_Admin_Bar {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload-clear-cache',
-                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
+                    'title' => '<span class="ab-label">' . __( 'Clear CSS/JS/Font Optimizations', 'clear_optimization' ) . '</span>',
                     //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
                     'href'   => wp_nonce_url( add_query_arg( array(
                         '_action' => 'rapidload_purge_all',

@@ -96,7 +96,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             globalFilterFn: selectFilterFn,
             initialState : {
                 pagination : {
-                    pageSize: 8
+                    pageSize: 5
                 }
             },
             onGlobalFilterChange: () => updateFilter(tableId),
@@ -181,4 +181,4 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     );
 };
 
-export default AuditContent;
+export default React.memo(AuditContent);
