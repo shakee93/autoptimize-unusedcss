@@ -11,6 +11,7 @@ class Javascript_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $strategy;
     private $file_system;
     private $settings;
     private $default_inline_js_exclusion_pattern;
