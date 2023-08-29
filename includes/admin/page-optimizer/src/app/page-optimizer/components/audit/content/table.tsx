@@ -113,7 +113,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
             </div>
             {table.getPageCount() > 1 && (
                 <div className="w-full flex justify-end">
-                    <ul className="flex gap-1 mt-4 items-center">
+                    <ul className="flex gap-1 items-center">
                         <li onClick={e => {
                             pageIndex > 0 && setPageIndex(p =>  p - 1)
                             table.previousPage()
