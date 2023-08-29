@@ -11,6 +11,7 @@ import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
 import {useOptimizerContext} from "../../../../context/root";
 import {cn} from "lib/utils";
+import {InformationCircleIcon} from "@heroicons/react/20/solid";
 
 export interface AuditProps {
     audit: Audit;
@@ -29,6 +30,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
+    const filesOrActions = (audit.files?.items?.length > 0 || audit.settings.length > 0)
 
     if (!audit?.id) {
         return <></>;
@@ -129,7 +131,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
-                            <span>- {audit.id}</span>
+                            {/*<span>{audit.id}</span>*/}
                         </span>
                     </div>
 
@@ -143,18 +145,30 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                         </div>
                     )}
 
-                    {(audit.files?.items?.length > 0 || audit.settings.length > 0)  && (
-                        <div>
-                            <TooltipText text='Show resources and actions'>
-                                <div onClick={() => setToggleFiles(prev => !prev)}
-                                        className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-transparent hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
-                                    {!toggleFiles ? 'Show' : 'Hide'} Actions {(toggleFiles) ?
+                    <div>
+                        <TooltipText
+                            text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
+                        >
+                            <div onClick={() => setToggleFiles(prev => !prev)}
+                                 className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-transparent hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
+
+                                {filesOrActions ? (
+                                    toggleFiles ? 'Hide Actions' : 'Show Actions'
+                                ) : 'Learn More'}
+
+
+                                {filesOrActions ? (
+                                    (toggleFiles) ?
+                                        <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
+                                        <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                ) : (
+                                    (toggleFiles) ?
                                     <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
-                                    <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>}
-                                </div>
-                            </TooltipText>
-                        </div>
-                    )}
+                                    <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                    )}
+                            </div>
+                        </TooltipText>
+                    </div>
 
                 </div>
 
@@ -167,7 +181,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                     <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
                 </div>
             )}
-            {((audit.files?.items?.length > 0 || audit.settings.length > 0) && toggleFiles) && (
+            {(toggleFiles) && (
                 <AuditContent notify={setFilesMounted} audit={audit}/>
             )}
 

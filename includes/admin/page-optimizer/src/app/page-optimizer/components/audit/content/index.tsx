@@ -109,11 +109,12 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
     const tables: Table<AuditResource>[] = [];
 
-    if (!audit?.files?.type || !["table", "opportunity", "list"].includes(audit.files.type)) {
+    // TODO: render criticalrequestchain type properly
+    if (audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
         return <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>;
     }
 
-    if (audit.files.type === "opportunity" || audit.files.type === "table") {
+    if (audit.files?.type === "opportunity" || audit.files?.type === "table") {
         audit.files?.grouped_items?.forEach((data, index) => {
             if (data.items && data.items.length > 0) {
 
@@ -130,7 +131,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         });
     }
 
-    if (audit.files.type === "list") {
+    if (audit.files?.type === "list") {
         audit.files.items.forEach((item, index) => {
             if (item.type && item.type === "table" && item.items.length > 0) {
                 const table = createTable(index, item.headings, item.items, "Related Resources");
