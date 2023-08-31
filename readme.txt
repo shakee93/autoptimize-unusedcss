@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.26 - 31/08/2023 =
+ * fix: skipping gtag js on optimization
+
 = 2.0.25 - 29/08/2023 =
  * improve: add default exclusions for javascript optimizations
 
