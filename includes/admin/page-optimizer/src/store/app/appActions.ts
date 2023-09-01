@@ -100,7 +100,7 @@ const initiateSettings = (audits: Audit[]) => {
     return uniqueSettings;
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 

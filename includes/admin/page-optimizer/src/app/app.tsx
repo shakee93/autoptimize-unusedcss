@@ -8,39 +8,44 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState, RootState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
-import TooltipText from "components/ui/tooltip-text";
 
-const App = ({is_popup}: {
-    is_popup: boolean
+const App = ({ popup, _showOptimizer = false }: {
+    popup?: HTMLElement | null,
+    _showOptimizer?: boolean
 }) => {
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, options} = useOptimizerContext()
+    const {showOptimizer, setShowOptimizer, options} = useOptimizerContext()
+
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
-        if (is_popup) {
-            // We're assuming here that 'rl-node-wrapper' is the id of the second root
-            const node = document.getElementById('rl-node-wrapper')
+        if (popup) {
+            const node = popup
 
             if (node) {
                 node.innerHTML = ''
                 setPopupNode(node);
             }
         }
-    }, [is_popup]);
+    }, [popup]);
 
     useEffect(() => {
-        document.body.classList.add('rl-page-optimizer-loaded')
+
+        if (_showOptimizer) {
+            setShowOptimizer(true)
+        }
+
+        document.body.classList.add('rl-page-optimizer-loaded');
     }, [])
 
-    const popover = is_popup && popupNode ? ReactDOM.createPortal(<SpeedPopover/>, popupNode) : <SpeedPopover/>;
-
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const popover = popupNode &&
+        ReactDOM.createPortal(<SpeedPopover/>, popupNode) ;
 
     useEffect(() => {
+        // load initial data
         dispatch(fetchData(options, options.optimizer_url, false))
     }, [dispatch, activeReport]);
-
 
     return (
         <div>

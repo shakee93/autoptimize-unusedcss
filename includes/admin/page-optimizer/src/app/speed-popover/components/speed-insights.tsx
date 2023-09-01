@@ -71,7 +71,7 @@ const Content = () => {
             return <></>
         }
 
-        let [actions, setActions] = useState(options.actions.map(a => ({
+        let [actions, setActions] = useState<RapidLoadGlobalAction[]>(options.actions.map((a :WordPressOptions['actions'][0]) => ({
             ...a,
             loading: false
         })))
@@ -82,7 +82,7 @@ const Content = () => {
             clear_optimization : <FileCode2 className='w-4'/>
         }
 
-        const triggerAction = async (action: any) => {
+        const triggerAction = async (action: RapidLoadGlobalAction) => {
             try {
                 setActions(prev => prev.map(a =>
                     a.icon === action.icon ? {

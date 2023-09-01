@@ -1,3 +1,4 @@
+
 interface Window {
     rapidload_optimizer: WordPressOptions;
 }
@@ -9,11 +10,15 @@ interface WordPressOptions {
     plugin_url: string
     nonce?: string
     timezone: string
-    actions: {
-        href: string
-        icon: 'clear_cache' | 'clear_optimization' | 'clear_page_cache'
-        tooltip: string
-    }[]
+    load_optimizer: boolean
+    actions: RapidLoadGlobalAction[]
+}
+
+interface RapidLoadGlobalAction {
+    href: string
+    icon: 'clear_cache' | 'clear_optimization' | 'clear_page_cache'
+    tooltip: string
+    loading?: boolean
 }
 
 interface Tab {

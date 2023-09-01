@@ -9,6 +9,20 @@
   </head>
   <body>
     <div id="rapidload-page-optimizer"></div>
+    <div id='popup'>
+      hover me to show popup
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let container = document.getElementById('rapidload-page-optimizer')
+        new window.RapidLoadOptimizer({
+          container,
+          popup:  document.getElementById('popup'),
+          showOptimizer: true
+        });
+      })
+    </script>
   </body>
 </html>
