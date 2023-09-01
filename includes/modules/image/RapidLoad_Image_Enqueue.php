@@ -402,11 +402,11 @@ class RapidLoad_Image_Enqueue
     }
 
     public function calculateSecondImageHeight($firstImageWidth, $firstImageHeight, $secondImageWidth) {
-        if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageWidth > 0 && $firstImageHeight > 0 &&$firstImageHeight > $firstImageWidth) {
+        if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageWidth > 0 && $firstImageHeight > 0 &&$firstImageHeight >= $firstImageWidth) {
             $aspectRatio = $firstImageHeight / $firstImageWidth;
             $secondImageHeight = $aspectRatio * $secondImageWidth;
             return $secondImageHeight;
-        }else if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageHeight > 0 && $firstImageWidth > 0 && $firstImageWidth > $firstImageHeight) {
+        }else if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageHeight > 0 && $firstImageWidth > 0 && $firstImageWidth >= $firstImageHeight) {
             $aspectRatio = $firstImageWidth / $firstImageHeight;
             $secondImageHeight = $secondImageWidth / $aspectRatio;
             return $secondImageHeight;
