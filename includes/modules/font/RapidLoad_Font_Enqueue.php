@@ -148,7 +148,7 @@ class RapidLoad_Font_Enqueue
 
             if (is_file($file_path)) {
 
-                if(apply_filters('uucss/enqueue/inline/google-font', false)){
+                if(apply_filters('uucss/enqueue/inline/google-font', true)){
                     $content = @file_get_contents($file_path);
                     $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
                     $title_content = $this->dom->find( 'title' )[0]->outertext;
