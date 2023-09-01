@@ -24,8 +24,11 @@ class RapidLoad_Image
 
         add_filter('wp_calculate_image_srcset', function ($a, $b, $c, $d, $e){
             foreach ($a as $index => $src){
-                $a[$index]['url'] = self::get_replaced_url($src['url'],self::$image_indpoint);
+                if(isset($src['url']) && isset($src['value'])){
+                    $a[$index]['url'] = self::get_replaced_url($src['url'],self::$image_indpoint, $src['value'], false, ['retina' => 'ret_img']);
+                }
             }
+            return $a;
         }, 10, 5);
 
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
