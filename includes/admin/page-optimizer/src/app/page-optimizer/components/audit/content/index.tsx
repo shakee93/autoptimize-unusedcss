@@ -103,8 +103,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             getFilteredRowModel: getFilteredRowModel()
         });
 
-
-        return table;
+        tables.push(table);
     };
 
     const tables: Table<AuditResource>[] = [];
@@ -117,7 +116,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     if (audit.files?.type === "opportunity" || audit.files?.type === "table") {
         audit.files?.grouped_items?.forEach((data, index) => {
             if (data.items && data.items.length > 0) {
-
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
                 let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
 
@@ -125,8 +123,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                     title = ''
                 }
 
-                const table = createTable(index, audit.files?.headings || [], data.items, title, data.type);
-                tables.push(table);
+                createTable(index, audit.files?.headings || [], data.items, title, data.type);
             }
         });
     }
@@ -134,8 +131,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     if (audit.files?.type === "list") {
         audit.files.items.forEach((item, index) => {
             if (item.type && item.type === "table" && item.items.length > 0) {
-                const table = createTable(index, item.headings, item.items, "Related Resources");
-                tables.push(table);
+                createTable(index, item.headings, item.items, "Related Resources");
             }
         });
     }
