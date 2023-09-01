@@ -8,13 +8,15 @@ interface OptimizerContextProps {
     options: WordPressOptions,
     setTheme: Dispatch<SetStateAction<string>>;
     theme: string,
-    version: string
+    version: string,
+    mode: RapidLoadOptimizerModes
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
 
-export const OptimizerProvider = ({ children } : {
+export const OptimizerProvider = ({ children, mode } : {
     children: ReactNode
+    mode: RapidLoadOptimizerModes
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
     const isDevelopment= import.meta.env.DEV
@@ -31,7 +33,8 @@ export const OptimizerProvider = ({ children } : {
         plugin_url: '',
         nonce: '',
         timezone: 'UTC',
-        actions: []
+        actions: [],
+        load_optimizer: false
     } )
     const [type, setType] = useState<ReportType>('desktop');
 
@@ -163,7 +166,8 @@ export const OptimizerProvider = ({ children } : {
             setOpenAudits,
             theme,
             setTheme,
-            version: __OPTIMIZER_VERSION__
+            version: __OPTIMIZER_VERSION__,
+            mode
         }}>
             {children}
         </OptimizerContext.Provider>

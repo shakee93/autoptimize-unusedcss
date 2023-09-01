@@ -15,14 +15,15 @@ interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
     showOptimizer?: boolean
     popup?: HTMLElement | null
+    mode?: RapidLoadOptimizerModes
 }
 
 export class RapidLoadOptimizer {
-    constructor({ container, showOptimizer = false, popup = null} : initRapidLoadOptimizerProps) {
+    constructor({ mode = 'normal', container, showOptimizer = false, popup = null} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
             <Provider store={store}>
-                <OptimizerProvider>
+                <OptimizerProvider mode={mode}>
                     <TooltipProvider delayDuration={100}>
                         <LazyMotion features={domAnimation}>
                             <App _showOptimizer={showOptimizer} popup={popup} />
@@ -50,7 +51,8 @@ domReady(function () {
 
         new RapidLoadOptimizer({
             container,
-            popup
+            popup,
+            mode: 'normal'
         });
     }
 

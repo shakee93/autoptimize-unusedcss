@@ -14,7 +14,7 @@ const App = ({ popup, _showOptimizer = false }: {
     _showOptimizer?: boolean
 }) => {
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, options} = useOptimizerContext()
+    const {showOptimizer, setShowOptimizer, mode, options} = useOptimizerContext()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
