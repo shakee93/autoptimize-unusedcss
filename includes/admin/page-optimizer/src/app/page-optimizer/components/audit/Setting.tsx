@@ -29,12 +29,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import {Settings, SettingsIcon} from "lucide-react";
+import {Lock, Settings, SettingsIcon} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
 import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
 import TooltipText from "components/ui/tooltip-text";
+import Mode from "app/page-optimizer/components/Mode";
+import {useOptimizerContext} from "../../../../context/root";
 
 interface SettingItemProps {
     audit: Audit
@@ -49,6 +51,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { mode } = useOptimizerContext()
     const [open, setOpen] = React.useState(false);
     const [mainInput, ...additionalInputs] = settings.inputs
     const [updates, setUpdates] = useState<{
@@ -116,37 +119,48 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
             className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
             {icons[settings.category as keyof typeof icons]} {settings.name}
+
+
             {mainInput && (
                 // @ts-ignore
-                <Switch checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
+                <Switch disabled={['onboard', 'preview'].includes(mode)} checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
             )}
 
-            {showPopover && (
-                <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger asChild>
-                        <div className='cursor-pointer'>
-                            <TooltipText text={`${settings.name} Settings`}>
-                                <Cog6ToothIcon className='w-[1.15rem] text-brand-400'/>
-                            </TooltipText>
-                        </div>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[450px]">
-                        <DialogHeader className='border-b px-6 py-7'>
-                            <DialogTitle>{settings.name} Settings</DialogTitle>
-                            <DialogDescription>
-                                Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 px-6 py-4">
-                            <AdditionalInputs updates={updates} update={update} data={additionalInputs}/>
-                        </div>
-                        <DialogFooter className='px-6 py-3 border-t'>
-                            <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
-                            <AppButton onClick={e => setOpen(false)} dark={false} className='text-sm'>Close</AppButton>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
-            )}
+
+            <Mode>
+                {showPopover && (
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogTrigger disabled asChild>
+                            <div className='cursor-pointer'>
+                                <TooltipText text={`${settings.name} Settings`}>
+                                    <Cog6ToothIcon className='w-[1.15rem] text-brand-400'/>
+                                </TooltipText>
+                            </div>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[450px]">
+                            <DialogHeader className='border-b px-6 py-7'>
+                                <DialogTitle>{settings.name} Settings</DialogTitle>
+                                <DialogDescription>
+                                    Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 px-6 py-4">
+                                <AdditionalInputs updates={updates} update={update} data={additionalInputs}/>
+                            </div>
+                            <DialogFooter className='px-6 py-3 border-t'>
+                                <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
+                                <AppButton onClick={e => setOpen(false)} dark={false} className='text-sm'>Close</AppButton>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                )}
+            </Mode>
+
+            <Mode mode='onboard'>
+                <TooltipText text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
+                    <Lock className='w-4 text-brand-400'/>
+                </TooltipText>
+            </Mode>
 
             {/*<TooltipText text='Queued'>*/}
             {/*    <div className='bg-sky-400 w-2 h-2 shadow-lg rounded-full -right-1 -top-1'></div>*/}
