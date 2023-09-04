@@ -30,7 +30,7 @@ const AuditColumnDropdown = ({audit, heading, cell}: AuditColumnDropdownProps) =
     let value = getValue();
     const { data, settings, changes } = useSelector(optimizerData)
     let fileChanges = changes ? changes.files.filter(f => f.file === url.url).map(f => f.value) : []
-    const file_type = url.file_type.value;
+    const file_type = url?.file_type?.value;
     const options = data?.meta?.controls.dropdown_options.filter((o)=> o.type == file_type)[0]?.options;
 
     // you can find state structure in appReducer.ts (initial state)
