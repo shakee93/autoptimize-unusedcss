@@ -56,7 +56,7 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options , mode} = useOptimizerContext()
+    const { setShowOptimizer, options , modeData} = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading, revisions } = useSelector(optimizerData)
     const [savingData, setSavingData] = useState<boolean>(false)
@@ -228,7 +228,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                         <div className='py-4 text-sm'>
                                             <ul>
                                                 {data && dialogData.audits.slice(0, dialogData.show).map((audit) => (
-                                                    <li>
+                                                    <li key={audit.id}>
                                                         <Card className='px-3 py-2 mb-1.5'>
                                                             <div className='flex gap-2 items-center'>
                                                                 <div
@@ -252,9 +252,15 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                             </ul>
                                         </div>
                                         <div className='flex justify-center'>
-                                            <Button className='gap-2'>
-                                                <UserCircle className='w-5 mr-0.5'/>Connect RapidLoad Account
-                                            </Button>
+                                            {modeData?.connect_url && (
+                                               <a href={modeData?.connect_url} target={modeData?.target}>
+                                                   <Button className='gap-2'>
+                                                      <>
+                                                          <UserCircle className='w-5 mr-0.5'/>Connect RapidLoad Account
+                                                      </>
+                                                   </Button>
+                                               </a>
+                                            )}
                                         </div>
                                     </>
                                 )}

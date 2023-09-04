@@ -10,13 +10,15 @@ interface OptimizerContextProps {
     theme: string,
     version: string,
     mode: RapidLoadOptimizerModes
+    modeData?: RapidLoadOptimizerModeData
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
 
-export const OptimizerProvider = ({ children, mode } : {
+export const OptimizerProvider = ({ children, mode, modeData } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
+    modeData?: RapidLoadOptimizerModeData
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
     const isDevelopment= import.meta.env.DEV
@@ -167,7 +169,8 @@ export const OptimizerProvider = ({ children, mode } : {
             theme,
             setTheme,
             version: __OPTIMIZER_VERSION__,
-            mode
+            mode,
+            modeData
         }}>
             {children}
         </OptimizerContext.Provider>

@@ -15,15 +15,16 @@ interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
     showOptimizer?: boolean
     popup?: HTMLElement | null
-    mode?: RapidLoadOptimizerModes
+    mode?: RapidLoadOptimizerModes,
+    modeData ?:RapidLoadOptimizerModeData
 }
 
 export class RapidLoadOptimizer {
-    constructor({ mode = 'normal', container, showOptimizer = false, popup = null} : initRapidLoadOptimizerProps) {
+    constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
             <Provider store={store}>
-                <OptimizerProvider mode={mode}>
+                <OptimizerProvider mode={mode} modeData={modeData}>
                     <TooltipProvider delayDuration={100}>
                         <LazyMotion features={domAnimation}>
                             <App _showOptimizer={showOptimizer} popup={popup} />

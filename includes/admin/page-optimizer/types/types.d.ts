@@ -16,6 +16,11 @@ interface WordPressOptions {
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
 
+interface RapidLoadOptimizerModeData {
+    connect_url: string
+    target?: string
+}
+
 interface RapidLoadGlobalAction {
     href: string
     icon: 'clear_cache' | 'clear_optimization' | 'clear_page_cache'
