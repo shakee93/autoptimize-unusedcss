@@ -136,10 +136,18 @@
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
+
               <RouterLink v-if="item.id === 'cdn' && license_information.licensed_domain" :class="item.status && !loading? 'rl-Show': 'rl-Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
+
+              <div @click="openOptimizer" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
+                   :class="item.status && !loading? 'rl-Show': 'rl-Hide'"
+                   class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+                          :to="item.link">
+                Open Optimizer
+              </div>
 
 
               <svg v-if="item.id === 'cdn'"  :class="loading? 'rl-Show': 'rl-Hide'" class="absolute" style="top:80.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -420,7 +428,7 @@ export default {
         license_key:this.license_information.key,
 
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_connect&nonce='+window.uucss_global.nonce, data,{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_connect&nonce='+window.uucss_global?.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -445,7 +453,7 @@ export default {
       const data = {
         disconnect:true,
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce, data,{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_license&nonce='+window.uucss_global?.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -454,7 +462,7 @@ export default {
     },
     update_license(){
 
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce).then((response)=>{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_license&nonce='+window.uucss_global?.nonce).then((response)=>{
         if(response.data?.data){
 
           if(response.data?.data === 'License key authentication failed' || response.data?.data?.licensed_domain === null){
@@ -505,7 +513,7 @@ export default {
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global.nonce, {
+      axios.post(window.uucss_global?.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global?.nonce, {
         cancelToken: cancelToken
       })
           .then(response => {
@@ -524,7 +532,29 @@ export default {
           });
 
     },
+    openOptimizer() {
+      if (window.RapidLoadOptimizer) {
+        let container = document.getElementById('rapidload-page-optimizer')
 
+        new window.RapidLoadOptimizer({
+          container,
+          showOptimizer: true
+        })
+
+        // TODO: open optimizer in onboard mode example
+        // new window.RapidLoadOptimizer({
+        //   container,
+        //   showOptimizer: true,
+        //   mode: 'onboard',
+        //   modeData: {
+        //     // this is the url where to redirect user when they press connect
+        //     connect_url: 'http://localhost:5173/',
+        //     target: '_blank'
+        //   }
+        // });
+      }
+      
+    }
   },
 
   data() {
@@ -550,9 +580,9 @@ export default {
             exp_date:new Date(),
             license:'',
             status: true,
-            link: window.uucss_global.app_url,
+            link: window.uucss_global?.app_url,
             licensed_domain: null,
-            connect_link: window.uucss_global.activation_url,
+            connect_link: window.uucss_global?.activation_url,
             activation_nonce: null,
           },
       items_data: [],

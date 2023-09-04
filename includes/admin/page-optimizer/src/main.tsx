@@ -24,7 +24,7 @@ export class RapidLoadOptimizer {
         const optimizer = createRoot(container);
         optimizer.render(
             <Provider store={store}>
-                <OptimizerProvider mode={mode} modeData={modeData}>
+                <OptimizerProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
                     <TooltipProvider delayDuration={100}>
                         <LazyMotion features={domAnimation}>
                             <App _showOptimizer={showOptimizer} popup={popup} />

@@ -11,20 +11,24 @@ interface OptimizerContextProps {
     version: string,
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
+    manipulatingStyles: boolean
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
 
-export const OptimizerProvider = ({ children, mode, modeData } : {
+export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerValue } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
+    initShowOptimizerValue?: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
     const isDevelopment= import.meta.env.DEV
 
     const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
+    const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
@@ -40,8 +44,9 @@ export const OptimizerProvider = ({ children, mode, modeData } : {
     } )
     const [type, setType] = useState<ReportType>('desktop');
 
-    useEffect(() => {
+    useEffect(() => setMounted(true), [])
 
+    useEffect(() => {
 
         if (showOptimizer) {
             document.body.classList.add('rapidload-optimizer-open')
@@ -52,7 +57,8 @@ export const OptimizerProvider = ({ children, mode, modeData } : {
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
-        manipulateStyles(value)
+
+        manipulateStyles(value);
 
         if (!value) {
             // giving a breath to enabled stylesheets to paint
@@ -73,6 +79,8 @@ export const OptimizerProvider = ({ children, mode, modeData } : {
         if (isDevelopment) {
             return;
         }
+        
+        setManipulatingStyles(true);
 
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
         const styleTags = document.querySelectorAll('style');
@@ -118,6 +126,10 @@ export const OptimizerProvider = ({ children, mode, modeData } : {
 
             setSheetsHidden(false);
         }
+
+        setTimeout(() => {
+            setManipulatingStyles(false);
+        }, 300)
     };
 
 
@@ -170,7 +182,8 @@ export const OptimizerProvider = ({ children, mode, modeData } : {
             setTheme,
             version: __OPTIMIZER_VERSION__,
             mode,
-            modeData
+            modeData,
+            manipulatingStyles
         }}>
             {children}
         </OptimizerContext.Provider>

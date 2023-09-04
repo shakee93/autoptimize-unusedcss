@@ -3,7 +3,7 @@
 @tailwind utilities;
  
 @layer base {
-  :root {
+  .rl-page-optimizer-loaded {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
  
@@ -69,11 +69,8 @@
 }
 
 @layer base {
-  * {
+  #rapidload-page-optimizer * {
     @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 

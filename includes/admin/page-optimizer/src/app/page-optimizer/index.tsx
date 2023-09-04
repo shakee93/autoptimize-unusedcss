@@ -24,7 +24,7 @@ export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(true);
     const {data, loading, error} = useSelector(optimizerData);
-    const {options, setOpenAudits, mode} = useOptimizerContext()
+    const {options, setOpenAudits, mode, manipulatingStyles} = useOptimizerContext()
 
     const tabs: Tab[] = [
         // {
