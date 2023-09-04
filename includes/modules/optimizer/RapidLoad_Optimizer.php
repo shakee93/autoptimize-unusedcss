@@ -510,7 +510,7 @@ class RapidLoad_Optimizer
 
     // old ajax actions here
 
-    public function optimizer_enable_cache(){
+    /*public function optimizer_enable_cache(){
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
@@ -549,7 +549,7 @@ class RapidLoad_Optimizer
         self::post_optimizer_function();
 
         wp_send_json_success(true);
-    }
+    }*/
 
     public function associate_domain($revoke){
         $api = new RapidLoad_Api();
@@ -567,7 +567,7 @@ class RapidLoad_Optimizer
 
     }
 
-    public function optimizer_self_host_google_font(){
+    /*public function optimizer_self_host_google_font(){
 
         if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
             wp_send_json_error('optimizer failed');
@@ -813,7 +813,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success(true);
 
-    }
+    }*/
 
     // old ajax actions ends here
 
