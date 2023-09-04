@@ -1,6 +1,6 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {ReactNode, useEffect, useRef, useState} from "react";
-import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
+import React, {ReactNode, useEffect, useRef, useState} from "react";
+import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
@@ -23,12 +23,14 @@ import {
 } from "@/components/ui/hover-card"
 import {HoverCardPortal} from "@radix-ui/react-hover-card";
 import {Archive, Circle, Dot, FileCode2, FileMinus2} from "lucide-react";
+import {useToast} from "components/ui/use-toast";
 
 const Content = () => {
 
     const {setShowOptimizer, options} = useOptimizerContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
+    const { toast } = useToast()
 
     const [on, setOn] = useState<boolean>(false)
 
@@ -92,6 +94,11 @@ const Content = () => {
                 ))
 
                 let result = await fetch(action.href);
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>Successfully completed <CheckCircleIcon className='w-5 text-green-600'/> </div>
+                })
+
             } catch (e) {
                 console.error(e);
             }
