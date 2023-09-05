@@ -48,7 +48,7 @@ class OptimizerJS
                                         }elseif (Javascript_Enqueue::is_inline_script($link)){
                                             if(isset($file_action->regex) && $file_action->regex){
                                                 if(preg_match($file_action->regex, $link->innertext())){
-                                                    $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+                                                    $link->__set('outertext',"<noscript data-rapidload-delayedd>" . $link->innertext() . "</noscript>");
                                                     $this->add_delay_script();
                                                 }
                                             }
