@@ -375,7 +375,7 @@ class RapidLoad_Job{
 
         $patterns = [
             [
-                'find' => '/https:\/\/script\.hotjar\.com\/modules\/([a-zA-Z0-9]+)\.js/',
+                'find' => '/https:\/\/script\.hotjar\.com\/modules\/',
                 'regex' => '/static\.hotjar\.com\/c\/hotjar/g'
             ],
             [
