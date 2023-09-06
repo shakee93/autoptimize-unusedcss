@@ -26,8 +26,6 @@ class RapidLoad_Admin_Bar {
 
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
-        error_log($page);
-
         if (
             (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) ||
             (is_admin() && $page === 'rapidload')

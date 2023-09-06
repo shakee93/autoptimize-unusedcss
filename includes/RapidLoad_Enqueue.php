@@ -113,6 +113,49 @@ class RapidLoad_Enqueue {
                 header( 'uucss:' . 'v' . UUCSS_VERSION . ' [' . count( $inject->found_css_files ) . count( $inject->found_css_cache_files ) . count( $inject->injected_css_files ) . ']' );
             }
 
+            $pattern = '/(?:href|src)=["\']?([^"\'>\s]+)/';
+
+            $_html = "";
+
+            if(isset($dom)){
+
+                if(gettype($dom) == "string"){
+                    $_html = $dom;
+                }else{
+                    $_html = $dom->__toString();
+                }
+
+            }
+
+            $_html = preg_match_all('/(?:href|src)=["\']?([^"\'>\s]+)/', $_html, $matches);
+
+            $domains = [];
+
+            foreach ($matches[1] as $url) {
+                if(filter_var($url, FILTER_VALIDATE_URL)){
+                    if(isset($url) && !empty($url)){
+                        $_parsed_url = parse_url($url);
+                        if(isset($_parsed_url['host'])){
+                            array_push($domains, $_parsed_url['host']);
+                        }
+                    }
+                }
+            }
+
+            $domains = array_unique($domains);
+
+            if(gettype($dom) != "string"){
+                foreach ($domains as $domain){
+                    if(!$this->str_contains(site_url(), $domain)){
+                        $head = $dom->find('head', 0);
+                        $preconnect = '<link href="//' . $domain . '" rel="dns-prefetch" crossorigin>';
+                        $first_child = $head->first_child();
+                        $first_child->__set('outertext', $preconnect . $first_child->outertext);
+                    }
+                }
+            }
+
+
             return $dom;
         }
 
