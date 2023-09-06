@@ -263,10 +263,10 @@ class RapidLoad_Optimizer
                             self::$merged_options['individual-file-actions'][$audit->id][] = [];
                         }
 
-                        $item->action = (object)[
+                        /*$item->action = (object)[
                             "control_type" => "dropdown",
                             "value"         => "none"
-                        ];
+                        ];*/
 
                         if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
 
