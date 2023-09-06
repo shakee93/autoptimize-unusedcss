@@ -203,8 +203,8 @@ class RapidLoad_Font_Enqueue
         );
 
         foreach ($preload_fonts as $preload_font) {
-            $preload_font->{'handled'} = true;
-            //$preload_font->remove();
+            //$preload_font->{'handled'} = true;
+            $preload_font->remove();
         }
     }
 }
