@@ -199,7 +199,8 @@ class RapidLoad_Font_Enqueue
         }
 
         $preload_fonts = $this->dom->find(
-            'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            //'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            'link[href*=fonts.googleapis.com]'
         );
 
         foreach ($preload_fonts as $preload_font) {
