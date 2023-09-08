@@ -1,39 +1,46 @@
-import React, {useRef, useEffect, ReactNode} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import {createRoot} from "react-dom/client";
+import { useRootContext } from '../context/root';
 
 interface ShadowDomProps {
-    children: ReactNode
-    styles: string
+    children: React.ReactNode;
+    styles: string;
 }
 
-const ShadowRoot = ({ children, styles }: ShadowDomProps) => {
+const ShadowRoot: React.FC<ShadowDomProps> = ({ children, styles }) => {
     const hostRef = useRef<HTMLDivElement>(null);
-    const shadowRootRef = useRef<ShadowRoot | null>(null);
+    const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
+    const { theme } = useRootContext();
 
     useEffect(() => {
         if (hostRef.current) {
-            shadowRootRef.current = hostRef.current?.attachShadow({ mode: 'open' });
+            const shadowRoot = hostRef.current.attachShadow({ mode: 'open' });
 
-            // If styles are provided, attach them to the shadow root
+
             if (styles) {
-                const originalStyles = document.getElementById('rapidload_page_optimizer-css') as HTMLLinkElement
+                const originalStyles = document.getElementById('rapidload_page_optimizer-css') as HTMLLinkElement;
                 const styleLink = document.createElement('link');
                 styleLink.setAttribute('rel', 'stylesheet');
                 styleLink.setAttribute('href', originalStyles?.href ? originalStyles.href : styles);
-                shadowRootRef.current.appendChild(styleLink);
+                shadowRoot.appendChild(styleLink);
             }
 
-            // ReactDOM will attach the children to a child div inside the shadow root
-            const reactRoot = document.createElement('div');
-            shadowRootRef.current.appendChild(reactRoot);
+            // This div will act as the container for the portal
+            const portalDiv = document.createElement('div');
+            shadowRoot.appendChild(portalDiv);
 
-            const root = createRoot(reactRoot)
-            root.render(children)
+            setPortalContainer(portalDiv);
         }
-    }, [children, styles]);
+    }, [styles]);
 
-    return <div ref={hostRef}></div>;
+    let portal =  portalContainer && ReactDOM.createPortal(children, portalContainer) ;
+    
+    return (
+        <>
+            {portal}
+            <div ref={hostRef}></div>
+        </>
+    )
 };
 
 export default ShadowRoot;

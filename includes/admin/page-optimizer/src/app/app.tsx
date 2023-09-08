@@ -11,6 +11,7 @@ import {Toaster} from "components/ui/toaster";
 import stylesUrl from '../index.css?url';
 import WebFont from "webfontloader";
 import ShadowDom from "components/shadow-dom";
+import {useRootContext} from "../context/root";
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
@@ -19,6 +20,7 @@ const App = ({ popup, _showOptimizer = false }: {
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
     const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
+    const { theme } = useRootContext()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);

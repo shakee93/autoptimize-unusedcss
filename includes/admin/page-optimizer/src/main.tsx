@@ -12,6 +12,8 @@ import {Provider} from "react-redux";
 import store from "./store";
 import {TooltipProvider} from "components/ui/tooltip";
 import ShadowDom from "components/shadow-dom";
+import RootProvider from "./context/root";
+import ShadowRoot from "components/shadow-dom";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -25,17 +27,19 @@ export class RapidLoadOptimizer {
     constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-           <ShadowDom styles={stylesUrl}>
-               <Provider store={store}>
-                   <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                       <TooltipProvider delayDuration={100}>
-                           <LazyMotion features={domAnimation}>
-                               <App _showOptimizer={showOptimizer} popup={popup} />
-                           </LazyMotion>
-                       </TooltipProvider>
-                   </AppProvider>
-               </Provider>
-           </ShadowDom>
+           <RootProvider>
+               <ShadowRoot styles={stylesUrl}>
+                   <Provider store={store}>
+                       <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
+                           <TooltipProvider delayDuration={100}>
+                               <LazyMotion features={domAnimation}>
+                                   <App _showOptimizer={showOptimizer} popup={popup} />
+                               </LazyMotion>
+                           </TooltipProvider>
+                       </AppProvider>
+                   </Provider>
+               </ShadowRoot>
+           </RootProvider>
         );
     }
 }
