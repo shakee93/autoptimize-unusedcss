@@ -14,6 +14,7 @@ import {TooltipProvider} from "components/ui/tooltip";
 import ShadowDom from "components/shadow-dom";
 import RootProvider from "./context/root";
 import ShadowRoot from "components/shadow-dom";
+import SpeedPopover from "app/speed-popover";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -33,6 +34,9 @@ export class RapidLoadOptimizer {
                        <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
                            <TooltipProvider delayDuration={100}>
                                <LazyMotion features={domAnimation}>
+                                   <ShadowRoot styles={stylesUrl}>
+                                       <SpeedPopover/>
+                                   </ShadowRoot>
                                    <App _showOptimizer={showOptimizer} popup={popup} />
                                </LazyMotion>
                            </TooltipProvider>

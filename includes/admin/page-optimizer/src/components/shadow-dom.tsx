@@ -5,10 +5,11 @@ import { useRootContext } from '../context/root';
 interface ShadowDomProps {
     children: React.ReactNode;
     styles: string;
+    node?: HTMLDivElement
 }
 
-const ShadowRoot: React.FC<ShadowDomProps> = ({ children, styles }) => {
-    const hostRef = useRef<HTMLDivElement>(null);
+const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
+    const hostRef = useRef<HTMLDivElement>(node as HTMLDivElement);
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme } = useRootContext();
     const darkModeClass = 'rapidload-dark';
@@ -49,14 +50,14 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, styles }) => {
                 }
             }
         }
-    }, [theme, portalContainer]);
+    }, [theme, portalContainer, node]);
 
     let portal =  portalContainer && ReactDOM.createPortal(children, portalContainer) ;
     
     return (
         <>
             {portal}
-            <div ref={hostRef}></div>
+            {!node && <div ref={hostRef}></div>}
         </>
     )
 };

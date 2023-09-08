@@ -208,9 +208,8 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children, shadow}: {
+const SpeedInsights = ({children}: {
     children: ReactNode,
-    shadow: ShadowRoot
 }) => {
 
     const {options} = useAppContext()
@@ -218,7 +217,6 @@ const SpeedInsights = ({children, shadow}: {
 
     const root = options?.plugin_url
 
-    const container = shadow.getElementById('rl-react-popup-wrapper')
     return (
         <HoverCard openDelay={0}>
             <HoverCardTrigger asChild>
@@ -227,11 +225,9 @@ const SpeedInsights = ({children, shadow}: {
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardPortal container={container ? container : null}>
-                <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
-                    <Content/>
-                </HoverCardContent>
-            </HoverCardPortal>
+            <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+                <Content/>
+            </HoverCardContent>
         </HoverCard>
     );
 

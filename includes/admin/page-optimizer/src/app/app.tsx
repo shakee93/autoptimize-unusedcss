@@ -69,7 +69,7 @@ const App = ({ popup, _showOptimizer = false }: {
 
 
     const popover = shadowRoot &&
-        ReactDOM.createPortal(<SpeedPopover shadow={shadowRoot}/>, shadowRoot) ;
+        ReactDOM.createPortal(<SpeedPopover/>, shadowRoot) ;
 
     useEffect(() => {
         // load initial data
@@ -78,7 +78,6 @@ const App = ({ popup, _showOptimizer = false }: {
 
     return (
         <>
-            {popover}
             {showOptimizer && (
                 <PageOptimizer/>
             )}
