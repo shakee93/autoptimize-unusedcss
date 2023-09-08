@@ -17,13 +17,18 @@ const RootProvider = ({ children }: RootProviderProps) => {
 
     useEffect(() => {
         //@ts-ignore
-        const localTheme = typeof window !== 'undefined' && window.localStorage.getItem('theme');
+        const localTheme = typeof window !== 'undefined' && window.localStorage.getItem('rapidload-theme');
         if(localTheme) {
             setTheme(localTheme);
         }
 
     }, []);
 
+    useEffect(() => {
+
+        typeof window !== 'undefined' && window.localStorage.setItem('rapidload-theme', theme)
+
+    }, [theme])
     return (
         <RootContext.Provider value={{
             theme,

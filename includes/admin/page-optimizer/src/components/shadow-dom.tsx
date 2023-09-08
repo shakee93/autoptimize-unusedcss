@@ -50,6 +50,8 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
                 }
             }
         }
+
+
     }, [theme, portalContainer, node]);
 
     let portal =  portalContainer ? ReactDOM.createPortal(children, portalContainer) : '' ;
