@@ -48,7 +48,7 @@ domReady(function () {
         const container = document.getElementById('rapidload-page-optimizer') as HTMLDivElement;
 
         // see if admin bar node is there get popup container
-        const popup = document.getElementById('rl-node-wrapper') as HTMLDivElement;
+        let popup =  replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
 
         new RapidLoadOptimizer({
             container,
@@ -58,3 +58,27 @@ domReady(function () {
     }
 
 });
+
+
+function replaceParentWithDiv(childElement: HTMLElement) {
+
+    if (!childElement) return;
+
+    const parentElement = childElement.parentNode as HTMLElement;
+
+    const newDiv = document.createElement('div');
+    newDiv.innerHTML = parentElement?.innerHTML;
+
+    for(let i = 0; i < parentElement.attributes.length; i++) {
+        const attr = parentElement.attributes[i];
+
+        if(attr.name === 'href') continue;
+
+        newDiv.setAttribute(attr.name, attr.value);
+    }
+
+    parentElement.parentNode?.replaceChild(newDiv, parentElement);
+
+    return newDiv
+}
+
