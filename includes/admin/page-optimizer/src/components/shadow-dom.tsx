@@ -11,6 +11,8 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, styles }) => {
     const hostRef = useRef<HTMLDivElement>(null);
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme } = useRootContext();
+    const darkModeClass = 'rapidload-dark';
+
 
     useEffect(() => {
         if (hostRef.current) {
@@ -32,6 +34,22 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, styles }) => {
             setPortalContainer(portalDiv);
         }
     }, [styles]);
+
+    useEffect(() => {
+        if (portalContainer) {
+            if (theme === 'dark') {
+                portalContainer.classList.add(darkModeClass);
+            } else if (theme === 'light') {
+                portalContainer.classList.remove(darkModeClass);
+            } else if (theme === 'system') {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    portalContainer.classList.add(darkModeClass);
+                } else {
+                    portalContainer.classList.remove(darkModeClass);
+                }
+            }
+        }
+    }, [theme, portalContainer]);
 
     let portal =  portalContainer && ReactDOM.createPortal(children, portalContainer) ;
     

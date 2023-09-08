@@ -15,8 +15,6 @@ interface RootProviderProps {
 const RootProvider = ({ children }: RootProviderProps) => {
     const [theme, setTheme] = useState('light')
 
-    const darkModeClass = 'rapidload-dark'
-
     useEffect(() => {
         //@ts-ignore
         const localTheme = typeof window !== 'undefined' && window.localStorage.getItem('theme');
@@ -25,32 +23,6 @@ const RootProvider = ({ children }: RootProviderProps) => {
         }
 
     }, []);
-
-    useEffect(() => {
-        
-        //@ts-ignore
-        if(theme === 'dark' && typeof window !== 'undefined') {
-            //@ts-ignore
-            document.body.classList.add(darkModeClass);
-            //@ts-ignore
-        } else if(theme === 'light' && typeof window !== 'undefined') {
-            //@ts-ignore
-            document.body.classList.remove(darkModeClass);
-        } else if (theme === 'system') {
-            //@ts-ignore
-            if(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                //@ts-ignore
-                document.body.classList.add(darkModeClass);
-            } else {
-                //@ts-ignore
-                document.body.classList.remove(darkModeClass);
-            }
-        }
-
-        //@ts-ignore
-        typeof window !== 'undefined' && window.localStorage.setItem('theme', theme);
-    }, [theme]);
-
 
     return (
         <RootContext.Provider value={{
