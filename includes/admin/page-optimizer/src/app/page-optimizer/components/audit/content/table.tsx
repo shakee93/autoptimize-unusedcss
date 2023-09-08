@@ -127,8 +127,8 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                         {[...Array(table.getPageCount())].map((i, index) => (
                             <li
                                 className={cn(
-                                    "hover:bg-brand-100 border px-3 py-1.5 cursor-pointer rounded text-xs",
-                                    pageIndex === index ? "bg-brand-200" : ""
+                                    "dark:hover:bg-brand-700 hover:bg-brand-100 border px-3 py-1.5 cursor-pointer rounded text-xs",
+                                    pageIndex === index ? "dark:bg-brand-600 bg-brand-200" : ""
                                 )}
                                 onClick={() => {
                                     setPageIndex(index)
