@@ -18,8 +18,6 @@ interface FilesTableProps {
 
 const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTableProps) => {
 
-    // the pageIndex of table gets reset by actions in dropdown. so setting our own index
-    const [pageIndex, setPageIndex] = useState<number>(0)
 
     const shouldRender = (
         cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
@@ -115,7 +113,6 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                 <div className="w-full flex justify-end">
                     <ul className="flex gap-1 items-center">
                         <li onClick={e => {
-                            pageIndex > 0 && setPageIndex(p =>  p - 1)
                             table.previousPage()
                         }}
                             className={cn(
@@ -128,10 +125,9 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                             <li
                                 className={cn(
                                     "dark:hover:bg-brand-700 hover:bg-brand-100 border px-3 py-1.5 cursor-pointer rounded text-xs",
-                                    pageIndex === index ? "dark:bg-brand-600 bg-brand-200" : ""
+                                    table.getState().pagination.pageIndex === index ? "dark:bg-brand-600 bg-brand-200" : ""
                                 )}
                                 onClick={() => {
-                                    setPageIndex(index)
                                     table.setPageIndex(e => index);
                                 }}
                                 key={index}
@@ -141,7 +137,6 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                         ))}
                         <li onClick={e => {
                             if(table.getCanNextPage()) {
-                                setPageIndex(p => p + 1)
                                 table.nextPage()
                             }
                         }}
@@ -158,4 +153,4 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
     )
 }
 
-export default FilesTable
+export default React.memo(FilesTable)

@@ -100,7 +100,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 }
             },
             onGlobalFilterChange: () => updateFilter(tableId),
-            getFilteredRowModel: getFilteredRowModel()
+            getFilteredRowModel: getFilteredRowModel(),
+            autoResetPageIndex: false
         });
 
         tables.push(table);
