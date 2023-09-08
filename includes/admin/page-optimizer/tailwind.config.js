@@ -1,5 +1,6 @@
 /** @type {DefaultColors} */
 const colors = require('tailwindcss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -12,6 +13,9 @@ module.exports = {
     './src/**/*.{ts,tsx}',
 	],
   theme: {
+    fontFamily: {
+      'sans': ['Lexend', ...defaultTheme.fontFamily.sans]
+    },
     container: {
       center: true,
       padding: "2rem",

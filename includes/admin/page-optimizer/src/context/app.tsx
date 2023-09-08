@@ -47,9 +47,9 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue }
     useEffect(() => {
 
         if (showOptimizer) {
-            document.body.classList.add('rapidload-optimizer-open')
+            document.documentElement.classList.add('rapidload-optimizer-open')
         } else {
-            document.body.classList.remove('rapidload-optimizer-open')
+            document.documentElement.classList.remove('rapidload-optimizer-open')
         }
         
     }, [showOptimizer])

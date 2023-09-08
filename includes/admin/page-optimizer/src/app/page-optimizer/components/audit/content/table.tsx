@@ -66,7 +66,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
                />
             </div>
             <div className="w-full border rounded-[20px] overflow-hidden">
-                <table className="w-full">
+                <table className="w-full text-brand-800 dark:text-brand-100">
                     <thead>
                     {table?.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
@@ -153,4 +153,4 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter }: FilesTabl
     )
 }
 
-export default React.memo(FilesTable)
+export default FilesTable

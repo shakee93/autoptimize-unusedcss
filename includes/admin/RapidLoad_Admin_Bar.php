@@ -132,20 +132,21 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
+                html.rapidload-optimizer-open,
+                .rapidload-optimizer-open body,
                 body.rapidload-optimizer-open {
-                    overflow: hidden;
+                    overflow: hidden !important;
                 }
 
                 .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
                 }
 
-                .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-item {
-
+                #wp-admin-bar-rapidload .ab-item {
                     padding: 0 8px 0 7px;
                 }
 
-                 #wp-admin-bar-rapidload *,
+                .rl-page-optimizer-loaded #wp-admin-bar-rapidload *,
                 .rl-page-optimizer-loaded #wpadminbar .ab-top-menu > li.hover > .ab-item, #wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus,
                 .rl-page-optimizer-loaded #wpadminbar:not(.mobile) .ab-top-menu > li:hover > .ab-item, #wpadminbar:not(.mobile) .ab-top-menu > li > .ab-item:focus {
                     color: #0c0c0c !important;
