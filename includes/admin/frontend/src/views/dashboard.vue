@@ -143,7 +143,7 @@
               </RouterLink>
 
               <div @click="openOptimizer" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
-                   :class="item.status && !loading? 'rl-Show': 'rl-Hide'"
+                   :class="item.status? 'rl-Show': 'rl-Hide'"
                    class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
                           :to="item.link">
                 Open Optimizer
@@ -319,6 +319,39 @@
           <div class="col-start-1 col-end-3" >
             <a :href="license_information.link" target="_blank">
               <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">View My Account</button>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div v-if="on_board_complete===''"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+
+        <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+          <div class="col-start-1 col-end-3" >
+            <h4 class="heading-margin text-gray-h text-base font-semibold">Onboard Pending</h4>
+          </div>
+          <div class="col-end-7 col-span-2">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 0C17.0775 0 22 4.9225 22 11C22 17.0775 17.0775 22 11 22C4.9225 22 0 17.0775 0 11C0 4.9225 4.9225 0 11 0ZM12.5538 12.8975L13.035 4.015H8.965L9.44625 12.8975H12.5538ZM12.43 17.5175C12.76 17.2013 12.9387 16.7612 12.9387 16.1975C12.9387 15.62 12.7738 15.18 12.4438 14.8638C12.1138 14.5475 11.6325 14.3825 10.9862 14.3825C10.34 14.3825 9.85875 14.5475 9.515 14.8638C9.17125 15.18 9.00625 15.62 9.00625 16.1975C9.00625 16.7612 9.185 17.2013 9.52875 17.5175C9.88625 17.8337 10.3675 17.985 10.9862 17.985C11.605 17.985 12.0863 17.8337 12.43 17.5175Z" fill="#EED202"/>
+            </svg>
+          </div>
+        </div>
+
+        <hr class="border-gray-border-line border-b-0">
+
+        <div class="p-2 pl-4 pr-4 pb-1 pt-6">
+          <p class="mb-1 text-xm text-black font-medium">You have not completed the onboard
+            process. Please complete it by pressing
+            the continue onboard button.  </p>
+        </div>
+
+        <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
+        <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3" >
+            <a :href="onboard_link" >
+              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
             </a>
           </div>
 
@@ -559,6 +592,8 @@ export default {
 
   data() {
     return {
+      on_board_complete: window.uucss_global.on_board_complete,
+      onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       popupModel: false,
       axios_request : null,
       tick_image: 'license-information.svg',
@@ -679,6 +714,7 @@ export default {
           status: false,
           isDisabled: true
         },
+
 
       ],
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/'
