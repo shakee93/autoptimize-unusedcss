@@ -24,7 +24,12 @@ class RapidLoad_Admin_Bar {
 //        wp_enqueue_script( 'rapidload-speed-popover-js', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/js/main.js', null, 'xx.xx', true);
 //        wp_enqueue_style( 'rapidload-speed-popover-css', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/speed-popover/build/static/css/main.css', null, 'xx.xx');
 
-        if (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) {
+        $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
+
+        if (
+            (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) ||
+            (is_admin() && $page === 'rapidload')
+        ) {
             $this->load_optimizer_scripts();
 
             add_action('wp_after_admin_bar_render', function () {
@@ -33,10 +38,12 @@ class RapidLoad_Admin_Bar {
         }
 
 
+
     }
 
     public function load_optimizer_scripts()
     {
+        $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
         $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
 
@@ -49,6 +56,7 @@ class RapidLoad_Admin_Bar {
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
 
         $data = array(
+            'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
@@ -111,6 +119,10 @@ class RapidLoad_Admin_Bar {
 
             <style id="rapidload-admin-bar-css">
 
+                #wp-admin-bar-rapidload * {
+                    color: #0c0c0c;
+                }
+
                 #wp-admin-bar-rapidload .rl-node-wrapper {
                     display: flex;
                     gap: 6px;
@@ -130,6 +142,11 @@ class RapidLoad_Admin_Bar {
 
                 .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
+                }
+
+                .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-item {
+
+                    padding: 0 8px 0 7px;
                 }
 
             </style>

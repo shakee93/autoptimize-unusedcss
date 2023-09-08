@@ -219,18 +219,44 @@ class RapidLoad_Image_Enqueue
 
         foreach ( $styles as $style ) {
 
-            $parser = new \Sabberworm\CSS\Parser($style->innertext);
-            $cssDocument = $parser->parse();
-            foreach ($cssDocument->getAllValues() as $value) {
-                if( $value instanceof \Sabberworm\CSS\Value\URL){
-                    $url = $this->extractUrl($value->getURL()->getString());
-                    $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+            $url_replaced = false;
+
+            $pattern = '/https?:\/\/[^\s]+\.(?:jpg|jpeg|png|webp)/i';
+            preg_match_all($pattern, $style->innertext, $matches);
+
+            if(isset($matches[0]) && is_array($matches[0]) && !empty($matches[0])){
+
+                $matches[0] = array_unique($matches[0]);
+
+                foreach ($matches[0] as $match){
+
+                    $urlExt = pathinfo($match, PATHINFO_EXTENSION);
                     if (in_array($urlExt, $this->imgExt)) {
-                        $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
-                        $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                        $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn);
+                        $style->__set('innertext', str_replace($match,$replace_url,$style->innertext));
+                        $url_replaced = true;
+                    }
+
+                }
+
+            }
+
+            if(!$url_replaced){
+                $parser = new \Sabberworm\CSS\Parser($style->innertext);
+                $cssDocument = $parser->parse();
+                foreach ($cssDocument->getAllValues() as $value) {
+                    if( $value instanceof \Sabberworm\CSS\Value\URL){
+                        $url = $this->extractUrl($value->getURL()->getString());
+                        $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                        if (in_array($urlExt, $this->imgExt)) {
+                            $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
+                            $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                        }
                     }
                 }
             }
+
+
             //$style->__set('innertext', $cssDocument->render());
         }
 
@@ -376,11 +402,11 @@ class RapidLoad_Image_Enqueue
     }
 
     public function calculateSecondImageHeight($firstImageWidth, $firstImageHeight, $secondImageWidth) {
-        if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageWidth > 0 && $firstImageHeight > 0 &&$firstImageHeight > $firstImageWidth) {
+        if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageWidth > 0 && $firstImageHeight > 0 &&$firstImageHeight >= $firstImageWidth) {
             $aspectRatio = $firstImageHeight / $firstImageWidth;
             $secondImageHeight = $aspectRatio * $secondImageWidth;
             return $secondImageHeight;
-        }else if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageHeight > 0 && $firstImageWidth > 0 && $firstImageWidth > $firstImageHeight) {
+        }else if (is_numeric($firstImageWidth) && is_numeric($firstImageHeight) && $firstImageHeight > 0 && $firstImageWidth > 0 && $firstImageWidth >= $firstImageHeight) {
             $aspectRatio = $firstImageWidth / $firstImageHeight;
             $secondImageHeight = $secondImageWidth / $aspectRatio;
             return $secondImageHeight;

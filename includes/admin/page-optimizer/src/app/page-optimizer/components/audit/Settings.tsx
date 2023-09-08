@@ -21,6 +21,10 @@ const Settings = ({ audit, max = 2, type }: SettingsProps) => {
         type = 'font'
     }
 
+    if (type === 'data_image') {
+        type = 'image'
+    }
+
     return (
         <>
             {audit.settings.length > 0 &&(

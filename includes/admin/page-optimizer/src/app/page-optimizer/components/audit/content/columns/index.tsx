@@ -65,7 +65,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
         return <span>{value}</span>
     }
 
-    console.log('col', value, heading.valueType);
+    console.log('col', value, heading.valueType, audit.id);
     return <span>{JSON.stringify(value)}</span>;
 
 }

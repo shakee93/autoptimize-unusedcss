@@ -410,6 +410,10 @@ class RapidLoad_Admin
                 'cache_expires' => 0,
                 'cache_expiry_time' => 0,
                 'mobile_cache' => 0,
+                'excluded_post_ids'=> '',
+                'excluded_page_paths' => '',
+                'excluded_query_strings' => '',
+                'excluded_cookies' => ''
             ];
 
             if(isset($_REQUEST['cache_expires'])){
@@ -427,6 +431,30 @@ class RapidLoad_Admin
             if(isset($_REQUEST['mobile_cache'])){
 
                 $args['mobile_cache'] = ($_REQUEST['mobile_cache'] == 'true' ? 1 : 0);
+
+            }
+
+            if(isset($_REQUEST['excluded_post_ids']) && !empty($_REQUEST['excluded_post_ids'])){
+
+                $args['excluded_post_ids'] = $_REQUEST['excluded_post_ids'];
+
+            }
+
+            if(isset($_REQUEST['excluded_page_paths']) && !empty($_REQUEST['excluded_page_paths'])){
+
+                $args['excluded_page_paths'] = $_REQUEST['excluded_page_paths'];
+
+            }
+
+            if(isset($_REQUEST['excluded_query_strings']) && !empty($_REQUEST['excluded_query_strings'])){
+
+                $args['excluded_query_strings'] = $_REQUEST['excluded_query_strings'];
+
+            }
+
+            if(isset($_REQUEST['excluded_cookies']) && !empty($_REQUEST['excluded_cookies'])){
+
+                $args['excluded_cookies'] = $_REQUEST['excluded_cookies'];
 
             }
 

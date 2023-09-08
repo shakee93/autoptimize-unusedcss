@@ -263,10 +263,10 @@ class RapidLoad_Optimizer
                             self::$merged_options['individual-file-actions'][$audit->id][] = [];
                         }
 
-                        $item->action = (object)[
+                        /*$item->action = (object)[
                             "control_type" => "dropdown",
                             "value"         => "none"
-                        ];
+                        ];*/
 
                         if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
 
@@ -461,11 +461,16 @@ class RapidLoad_Optimizer
 
         }
 
-        if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1")){
+        if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";
+            if(isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1" ){
+                self::$options['uucss_lazy_load_images'] == "1";
+            }
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
         }
+
+
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
             self::$options['uucss_enable_font_optimization'] = "1";
@@ -505,7 +510,7 @@ class RapidLoad_Optimizer
 
     // old ajax actions here
 
-    public function optimizer_enable_cache(){
+    /*public function optimizer_enable_cache(){
 
         if(!isset($_REQUEST['status'])){
             wp_send_json_success('param missing');
@@ -544,7 +549,7 @@ class RapidLoad_Optimizer
         self::post_optimizer_function();
 
         wp_send_json_success(true);
-    }
+    }*/
 
     public function associate_domain($revoke){
         $api = new RapidLoad_Api();
@@ -562,7 +567,7 @@ class RapidLoad_Optimizer
 
     }
 
-    public function optimizer_self_host_google_font(){
+    /*public function optimizer_self_host_google_font(){
 
         if(!isset(self::$job) || !isset(self::$options) || !isset(self::$strategy)){
             wp_send_json_error('optimizer failed');
@@ -808,7 +813,7 @@ class RapidLoad_Optimizer
 
         wp_send_json_success(true);
 
-    }
+    }*/
 
     // old ajax actions ends here
 

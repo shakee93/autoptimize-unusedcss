@@ -248,6 +248,7 @@ class RapidLoad_Module
     public function active_modules(){
 
         $options = RapidLoad_Base::fetch_options();
+        $cache_options = RapidLoad_Cache::get_settings();
 
         $options = [
             'general' => [
@@ -345,6 +346,15 @@ class RapidLoad_Module
             'cache' => [
                 'id' => 'cache',
                 'status' => isset($options['uucss_enable_cache']) && $options['uucss_enable_cache'] == "1" ? "on" : "off",
+                'options' => [
+                    'cache_expires' => isset($cache_options['cache_expires']) ? $cache_options['cache_expires'] : 0,
+                    'cache_expiry_time' => isset($cache_options['cache_expiry_time']) ? $cache_options['cache_expiry_time'] : 0,
+                    'mobile_cache' => isset($cache_options['mobile_cache']) ? $cache_options['mobile_cache'] : 0,
+                    'excluded_post_ids'=> isset($cache_options['excluded_post_ids']) ? $cache_options['excluded_post_ids'] : '',
+                    'excluded_page_paths' => isset($cache_options['excluded_page_paths']) ? $cache_options['excluded_page_paths'] : '',
+                    'excluded_query_strings' => isset($cache_options['excluded_query_strings']) ? $cache_options['excluded_query_strings'] : '',
+                    'excluded_cookies' => isset($cache_options['excluded_cookies']) ? $cache_options['excluded_cookies'] : '',
+                ]
             ],
             'page-optimizer' => [
                 'id' => 'page-optimizer',

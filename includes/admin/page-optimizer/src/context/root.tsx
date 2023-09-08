@@ -8,19 +8,27 @@ interface OptimizerContextProps {
     options: WordPressOptions,
     setTheme: Dispatch<SetStateAction<string>>;
     theme: string,
-    version: string
+    version: string,
+    mode: RapidLoadOptimizerModes
+    modeData?: RapidLoadOptimizerModeData
+    manipulatingStyles: boolean
 }
 
 export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
 
-export const OptimizerProvider = ({ children } : {
+export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerValue } : {
     children: ReactNode
+    mode: RapidLoadOptimizerModes
+    modeData?: RapidLoadOptimizerModeData
+    initShowOptimizerValue?: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
     const isDevelopment= import.meta.env.DEV
 
     const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
+    const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
@@ -30,12 +38,15 @@ export const OptimizerProvider = ({ children } : {
         page_optimizer_package_base: '',
         plugin_url: '',
         nonce: '',
-        timezone: 'UTC'
+        timezone: 'UTC',
+        actions: [],
+        load_optimizer: false
     } )
     const [type, setType] = useState<ReportType>('desktop');
 
-    useEffect(() => {
+    useEffect(() => setMounted(true), [])
 
+    useEffect(() => {
 
         if (showOptimizer) {
             document.body.classList.add('rapidload-optimizer-open')
@@ -46,7 +57,8 @@ export const OptimizerProvider = ({ children } : {
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
-        manipulateStyles(value)
+
+        manipulateStyles(value);
 
         if (!value) {
             // giving a breath to enabled stylesheets to paint
@@ -67,6 +79,8 @@ export const OptimizerProvider = ({ children } : {
         if (isDevelopment) {
             return;
         }
+        
+        setManipulatingStyles(true);
 
         const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
         const styleTags = document.querySelectorAll('style');
@@ -112,6 +126,10 @@ export const OptimizerProvider = ({ children } : {
 
             setSheetsHidden(false);
         }
+
+        setTimeout(() => {
+            setManipulatingStyles(false);
+        }, 300)
     };
 
 
@@ -162,7 +180,10 @@ export const OptimizerProvider = ({ children } : {
             setOpenAudits,
             theme,
             setTheme,
-            version: __OPTIMIZER_VERSION__
+            version: __OPTIMIZER_VERSION__,
+            mode,
+            modeData,
+            manipulatingStyles
         }}>
             {children}
         </OptimizerContext.Provider>

@@ -9,6 +9,26 @@
   </head>
   <body>
     <div id="rapidload-page-optimizer"></div>
+    <div id='popup'>
+      hover me to show popup
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let container = document.getElementById('rapidload-page-optimizer')
+        let popup = document.getElementById('popup')
+        new window.RapidLoadOptimizer({
+          container,
+          popup,
+          showOptimizer: false,
+          mode: 'onboard',
+          modeData: {
+            connect_url: 'http://localhost:5173/',
+            target: '_blank'
+          }
+        });
+      })
+    </script>
   </body>
 </html>

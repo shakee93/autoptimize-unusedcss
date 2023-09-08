@@ -1,7 +1,7 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
-import {History, Redo2, SaveIcon, Undo2} from "lucide-react";
+import {History, Redo2, SaveIcon, Undo2, User, UserCircle, UserPlus, UserPlus2, UserPlus2Icon} from "lucide-react";
 import {useOptimizerContext} from "../../../context/root";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
@@ -28,12 +28,25 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
+import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {useToast} from "components/ui/use-toast";
 import {JsonView} from "react-json-view-lite";
+import Mode from "app/page-optimizer/components/Mode";
+import Card from "components/ui/card";
+import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
+import {Button} from "components/ui/button";
 
 interface FooterProps {
     url: string,
@@ -43,9 +56,9 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options } = useOptimizerContext()
+    const { setShowOptimizer, options , modeData} = useOptimizerContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const { settings, data, loading, revisions } = useSelector( optimizerData)
+    const { settings, data, loading, revisions } = useSelector(optimizerData)
     const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
@@ -89,6 +102,27 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     if (loading) {
         return  <></>
     }
+
+
+    const computeDialogData = (data: OptimizerResults | null | undefined) => {
+        if (!data) {
+            return null;
+        }
+
+        const show = 5;
+        const audits = [...data.grouped.opportunities, ...data.grouped.diagnostics].filter(audit => (audit.files?.items?.length > 0 || audit.settings.length > 0));
+        const count = audits.length;
+        const balance = count - show;
+
+        return {
+            show,
+            balance,
+            count,
+            audits
+        };
+    };
+
+    const dialogData = computeDialogData(data);
     
     return (
         <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
@@ -125,57 +159,117 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
            </div>
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-brand-200 dark:text-white'>
-                    <Popover>
-                        <PopoverTrigger asChild={false}>
-                            <History className='w-5 text-brand-600' />
-                        </PopoverTrigger>
-                        <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
-                            <div className='my-2 ml-4 font-medium '>Revisions</div>
-                            <ul className='border rounded-lg'>
-                                { revisions?.map((rev: Revision, index: number) => {
-                                    return <li className={cn(
-                                        'cursor-pointer px-4 py-3 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
-                                        index === 0 ? 'border-none' : 'border-t'
-                                    )} key={rev.id}>{formatDistanceToNow(new Date(rev.created_at), { addSuffix: true })} - Perf: {rev?.data?.performance}</li>
-                                })}
-                                <li></li>
-                            </ul>
-                        </PopoverContent>
-                    </Popover>
+                    <Mode>
+                        <Popover>
+                            <PopoverTrigger asChild={false}>
+                                <History className='w-5 text-brand-600' />
+                            </PopoverTrigger>
+                            <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
+                                <div className='my-2 ml-4 font-medium '>Revisions</div>
+                                <ul className='border rounded-lg'>
+                                    { revisions?.map((rev: Revision, index: number) => {
+                                        return <li className={cn(
+                                            'cursor-pointer px-4 py-3 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
+                                            index === 0 ? 'border-none' : 'border-t'
+                                        )} key={rev.id}>{formatDistanceToNow(new Date(rev.created_at), { addSuffix: true })} - Perf: {rev?.data?.performance}</li>
+                                    })}
+                                    <li></li>
+                                </ul>
+                            </PopoverContent>
+                        </Popover>
+                    </Mode>
 
                     <TooltipText text='Switch theme'>
                         <ThemeSwitcher></ThemeSwitcher>
                     </TooltipText>
-                    <TooltipText text='Undo'>
-                        <Undo2 className='w-5' />
-                    </TooltipText>
-                    <TooltipText text='Redo'>
-                        <Redo2 className='w-5' />
-                    </TooltipText>
-
+                    {/*<TooltipText text='Undo'>*/}
+                    {/*    <Undo2 className='w-5' />*/}
+                    {/*</TooltipText>*/}
+                    {/*<TooltipText text='Redo'>*/}
+                    {/*    <Redo2 className='w-5' />*/}
+                    {/*</TooltipText>*/}
                 </div>
 
-                <AlertDialog>
-                    <AlertDialogTrigger>
-                        <AppButton className='text-sm'>
-                            {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
-                            Save Changes</AppButton>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Save Changes?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
-                            <AlertDialogCancel>Discard</AlertDialogCancel>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <Mode>
+                    <AlertDialog>
+                        <AlertDialogTrigger>
+                            <AppButton className='text-sm'>
+                                {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
+                                Save Changes</AppButton>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Save Changes?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
+                                <AlertDialogCancel>Discard</AlertDialogCancel>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                </Mode>
 
-                <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                <Mode mode='onboard'>
+                    <Dialog>
+                        <DialogTrigger>
+                            <AppButton className='text-sm'>
+                                {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <UserCircle className='w-5 mr-0.5'/>}
+                                Connect your Account</AppButton>
+                        </DialogTrigger>
+                        <DialogContent className='px-6 py-6'>
+                            <DialogHeader>
+                                {dialogData && (
+                                    <>
+                                        <DialogTitle>RapidLoad can improve {dialogData.count} Audits</DialogTitle>
+                                        <div className='py-4 text-sm'>
+                                            <ul>
+                                                {data && dialogData.audits.slice(0, dialogData.show).map((audit) => (
+                                                    <li key={audit.id}>
+                                                        <Card className='px-3 py-2 mb-1.5'>
+                                                            <div className='flex gap-2 items-center'>
+                                                                <div
+                                                                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
+                                                                    {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={audit.icon}/> }
+
+                                                                </div>
+                                                                <div className='flex flex-col'>
+                                                                    {audit.name}
+                                                                    {audit.displayValue && (
+                                                                        <span className='text-xxs leading-tight text-muted-foreground'>{audit.displayValue}</span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </Card>
+                                                    </li>
+                                                ))}
+                                                {data && !!dialogData.balance && (
+                                                    <li className='text-center text-muted-foreground mt-3'>and {dialogData.balance} more audit{dialogData.balance > 1 && 's'}...</li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                        <div className='flex justify-center'>
+                                            {modeData?.connect_url && (
+                                               <a href={modeData?.connect_url} target={modeData?.target}>
+                                                   <Button className='gap-2'>
+                                                      <>
+                                                          <UserCircle className='w-5 mr-0.5'/>Connect RapidLoad Account
+                                                      </>
+                                                   </Button>
+                                               </a>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
+                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                </Mode>
+
             </div>
         </footer>
     );

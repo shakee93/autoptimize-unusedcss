@@ -371,6 +371,36 @@ class RapidLoad_Job{
             return false; // Invalid URL
         }
 
+        $regexPattern = null;
+
+        $patterns = [
+            [
+                'find' => '/^https:\/\/script\.hotjar\.com\/modules\.[a-zA-Z0-9]+\.js$/',
+                'regex' => '/static\.hotjar\.com\/c\/hotjar/'
+            ],
+            [
+                'find' => '/^https:\/\/www\.gstatic\.com\/recaptcha\/releases\/[A-Za-z0-9-]+\/recaptcha__en\.js$/',
+                'regex' => '/https:\/\/www\.google\.com\/recaptcha\/api\.js/'
+            ]
+        ];
+
+        $patterns = apply_filters('rapidload/optimizer/regex/js-scripts', $patterns);
+
+        foreach ($patterns as $pattern){
+
+            if(isset($pattern['find']) && isset($pattern['regex'])){
+
+                if(preg_match($pattern['find'], $url)){
+                    $regexPattern = $pattern['regex'];
+                    break;
+                }
+            }
+        }
+
+        if($regexPattern){
+            return $regexPattern;
+        }
+
         // Escape characters with special meanings in regex
         $escapedPath = preg_quote($path, '/');
 

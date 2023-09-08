@@ -174,20 +174,22 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     ))}
                 </div>
             </Card>
-            <Card>
-                <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
-                    <div>
-                        <p className="">Real Experience (28 days)</p>
-                        <p className="text-xs opacity-60">Real user experience from Google</p>
-                    </div>
-                    <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
-                </div>
-                {isCoreWebClicked && data?.loadingExperience?.metrics &&(
-                    <div className='border-t dark:border-zinc-700'>
 
-                        <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                            {Object.entries(data.loadingExperience.metrics).map(([metricName, metric], index) => (
-                                <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
+            {data?.loadingExperience?.metrics && (
+                <Card>
+                    <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
+                        <div>
+                            <p className="">Real Experience (28 days)</p>
+                            <p className="text-xs opacity-60">Real user experience from Google</p>
+                        </div>
+                        <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
+                    </div>
+                    {isCoreWebClicked && (
+                        <div className='border-t dark:border-zinc-700'>
+
+                            <div className="p-5 grid grid-cols-3 gap-3 pl-6">
+                                {Object.entries(data.loadingExperience.metrics).map(([metricName, metric], index) => (
+                                    <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                                         <div className="flex">
                                             <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
                                                 <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>
@@ -199,16 +201,18 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                         </div>
                                         <p className="text-[22px] font-medium mr-2 mt-1 text-red">{metric.percentile}</p>
 
-                                </div>
-                            ))}
+                                    </div>
+                                ))}
 
+
+                            </div>
 
                         </div>
+                    )}
 
-                    </div>
-                )}
+                </Card>
+            )}
 
-            </Card>
         </div>
     )
 }

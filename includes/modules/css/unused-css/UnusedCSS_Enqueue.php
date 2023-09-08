@@ -43,7 +43,6 @@ class UnusedCSS_Enqueue
             wp_localize_script( 'rapidload', 'rapidload', [
                 'files' => $this->files,
                 'do_not_load_original_css' => apply_filters('rapidload/frontend/do-not-load/original-css', false),
-                'options' => $this->options
             ] );
             wp_enqueue_script( 'rapidload' );
 

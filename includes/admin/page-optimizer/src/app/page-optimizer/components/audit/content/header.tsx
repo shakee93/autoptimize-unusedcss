@@ -20,7 +20,7 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : File
     let rows = table.getCoreRowModel().rows.map(r => r.original)
     let file_type = table.options.meta?.type
     // @ts-ignore
-    let urls = rows.filter(r => r?.url?.file_type.value === file_type).map(r => r?.url?.url)
+    let urls = rows.filter(r => r?.url?.file_type?.value === file_type).map(r => r?.url?.url)
     let _changes = changes?.files.map(i => i.file)
 
     // TODO: count the file changes

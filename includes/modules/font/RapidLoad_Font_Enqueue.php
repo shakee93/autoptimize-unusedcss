@@ -175,7 +175,7 @@ class RapidLoad_Font_Enqueue
             }
         }
 
-        $inline_styles = $this->dom->find('link[href*=fonts.googleapis.com]');
+        $inline_styles = $this->dom->find('style');
         $pattern = "/@import\s*'(https:\/\/fonts.googleapis.com[^']+)';/";
         foreach ($inline_styles as $inline_style){
             if (preg_match($pattern, $inline_style->innertext(), $matches)) {
@@ -199,10 +199,12 @@ class RapidLoad_Font_Enqueue
         }
 
         $preload_fonts = $this->dom->find(
-            'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            //'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            'link[href*=fonts.googleapis.com]'
         );
 
         foreach ($preload_fonts as $preload_font) {
+            $preload_font->{'handled'} = true;
             $preload_font->remove();
         }
     }

@@ -1,25 +1,29 @@
-import {Tooltip, TooltipContent, TooltipTrigger} from "components/ui/tooltip";
+import {Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "components/ui/tooltip";
 import {Undo2} from "lucide-react";
 import {ReactNode, MouseEvent} from "react";
 import {cn} from "lib/utils";
+import {TooltipPortal} from "@radix-ui/react-tooltip";
 
 interface TooltipTextProps {
     text: string | ReactNode
     children: ReactNode,
     className?: string
-    onClick?: () => void
+    onClick?: () => void,
+    asChild?: boolean
 }
 
-const TooltipText = ({ text, children, onClick, className} : TooltipTextProps) => {
+const TooltipText = ({ text, children, onClick, className, asChild = false} : TooltipTextProps) => {
     return (
-        <Tooltip>
-            <TooltipTrigger onClick={e => onClick && onClick()} className={cn(
-                'flex items-center',
-            )}>
-                {children}
-            </TooltipTrigger>
-            <TooltipContent className={className}>{text}</TooltipContent>
-        </Tooltip>
+        <TooltipProvider disableHoverableContent={false} delayDuration={0}>
+            <Tooltip  >
+                <TooltipTrigger asChild={asChild} onClick={e => onClick && onClick()} className={cn(
+                    'flex items-center',
+                )}>
+                    {children}
+                </TooltipTrigger>
+                <TooltipContent className={className}>{text}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     )
 }
 

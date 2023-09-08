@@ -1,6 +1,6 @@
 import * as Tooltip from '@radix-ui/react-tooltip';
-import {ReactNode, useEffect, useState} from "react";
-import {ArchiveBoxIcon, BoltIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
+import React, {ReactNode, useEffect, useRef, useState} from "react";
+import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
@@ -9,12 +9,28 @@ import {useOptimizerContext} from "../../../context/root";
 import {useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
+import TooltipText from "components/ui/tooltip-text";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import {HoverCardPortal} from "@radix-ui/react-hover-card";
+import {Archive, Circle, Dot, FileCode2, FileMinus2} from "lucide-react";
+import {useToast} from "components/ui/use-toast";
 
 const Content = () => {
 
-    const {setShowOptimizer} = useOptimizerContext()
+    const {setShowOptimizer, options} = useOptimizerContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
+    const { toast } = useToast()
 
     const [on, setOn] = useState<boolean>(false)
 
@@ -51,9 +67,69 @@ const Content = () => {
         return minOpacity + opacityIncrement * performance;
     };
 
+    const PopupActions = () => {
+
+        if (!options.actions) {
+            return <></>
+        }
+
+        let [actions, setActions] = useState<RapidLoadGlobalAction[]>(options.actions.map((a :WordPressOptions['actions'][0]) => ({
+            ...a,
+            loading: false
+        })))
+        
+        let icons = {
+            clear_cache :  <Archive className='w-4'/>,
+            clear_page_cache : <FileMinus2 className='w-4'/>,
+            clear_optimization : <FileCode2 className='w-4'/>
+        }
+
+        const triggerAction = async (action: RapidLoadGlobalAction) => {
+            try {
+                setActions(prev => prev.map(a =>
+                    a.icon === action.icon ? {
+                        ...a,
+                        loading: true
+                    } : a
+                ))
+
+                let result = await fetch(action.href);
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>Successfully completed <CheckCircleIcon className='w-5 text-green-600'/> </div>
+                })
+
+            } catch (e) {
+                console.error(e);
+            }
+
+            setActions(prev => prev.map(a =>
+                a.icon === action.icon ? {
+                    ...a,
+                    loading: false
+                } : a
+            ))
+        }
+
+        return (
+            <>
+                {actions.map(action => (
+                    <TooltipText key={action.icon} text={action.tooltip}>
+                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' dark={false}>
+                            {icons[action.icon]} {action.loading && <span>
+                            <Circle className='w-2 absolute stroke-none fill-blue-500'/>
+                            <Circle className='w-2 relative motion-safe:animate-ping stroke-none fill-blue-500'/>
+                        </span>}
+                        </AppButton>
+                    </TooltipText>
+                ))}
+            </>
+        );
+    }
+
     return (
         <div
-            className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
+            className='relative text-brand-950 dark:text-brand-50 flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
             {/*<div className='absolute -top-8 text-white'>*/}
             {/*    <label htmlFor="on">*/}
             {/*        <input id='on' onClick={() => setOn(p => !p)} type="checkbox"/>*/}
@@ -62,7 +138,6 @@ const Content = () => {
             {/*</div>*/}
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
-
                     <div className='mt-6'>
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
@@ -76,7 +151,7 @@ const Content = () => {
                                         opacity: calculateOpacity()
                                     }}
                                     className='text-5xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
->{performance}</span>
+                                >{performance}</span>
                             </CircularProgressbarWithChildren>
                         )}
                     </div>
@@ -125,12 +200,7 @@ const Content = () => {
                         }}>
                             <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Page Optimizer
                         </AppButton>
-                        <AppButton className='rounded-[15px]' dark={false}>
-                            <DocumentMinusIcon className='w-4'/>
-                        </AppButton>
-                        <AppButton className='rounded-[15px]' dark={false}>
-                            <ArchiveBoxIcon className='w-4'/>
-                        </AppButton>
+                        <PopupActions/>
                     </div>
                 </div>
             </div>
@@ -138,34 +208,31 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children}: {
+const SpeedInsights = ({children, shadow}: {
     children: ReactNode,
+    shadow: ShadowRoot
 }) => {
 
     const {options} = useOptimizerContext()
+    const [open, setOpen] = useState<boolean>(false)
 
     const root = options?.plugin_url
 
+    const container = shadow.getElementById('rl-react-popup-wrapper')
     return (
-        <div>
-            <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                    <div
-                        className={`${!root ? 'bg-gray-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
-                        {children}
-                    </div>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                    <Tooltip.Content className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5}>
-                        <Content/>
-                    </Tooltip.Content>
-                </Tooltip.Portal>
-            </Tooltip.Root>
-            {/*{!root && (*/}
-            {/*    <Content/>*/}
-            {/*)}*/}
-        </div>
-
+        <HoverCard openDelay={0}>
+            <HoverCardTrigger asChild>
+                <div
+                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+                    {children}
+                </div>
+            </HoverCardTrigger>
+            <HoverCardPortal container={container ? container : null}>
+                <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+                    <Content/>
+                </HoverCardContent>
+            </HoverCardPortal>
+        </HoverCard>
     );
 
 }
