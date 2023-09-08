@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {useEffect, useState} from "react";
-import {useOptimizerContext} from "../../../context/root";
+import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
@@ -19,7 +19,7 @@ import {cn} from "lib/utils";
 
 const Header = ({ url }: { url: string}) => {
 
-    const { setShowOptimizer , options, version, manipulatingStyles } = useOptimizerContext()
+    const { setShowOptimizer , options, version, manipulatingStyles } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
 

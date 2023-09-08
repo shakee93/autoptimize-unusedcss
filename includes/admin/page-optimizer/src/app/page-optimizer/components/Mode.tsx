@@ -1,4 +1,4 @@
-import {useOptimizerContext} from "../../../context/root";
+import {useAppContext} from "../../../context/app";
 import {ReactNode} from "react";
 
 interface ModeRenderProps {
@@ -10,7 +10,7 @@ interface ModeProps {
     children: ReactNode
 }
 const Mode = ({ children, mode = 'normal' }: ModeProps) => {
-    const { mode: _mode } = useOptimizerContext()
+    const { mode: _mode } = useAppContext()
 
 
     if (mode === _mode) {

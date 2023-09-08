@@ -1,15 +1,17 @@
 import React from "react";
 import "./index.css";
+import stylesUrl from './index.css?url';
 import App from "app/app";
 import domReady from '@wordpress/dom-ready';
 import { LazyMotion, domAnimation } from "framer-motion"
 
 
 import {createRoot} from 'react-dom/client';
-import {OptimizerProvider, useOptimizerContext} from "./context/root";
+import {AppProvider, useAppContext} from "./context/app";
 import {Provider} from "react-redux";
 import store from "./store";
 import {TooltipProvider} from "components/ui/tooltip";
+import ShadowDom from "components/shadow-dom";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -23,15 +25,17 @@ export class RapidLoadOptimizer {
     constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-            <Provider store={store}>
-                <OptimizerProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                    <TooltipProvider delayDuration={100}>
-                        <LazyMotion features={domAnimation}>
-                            <App _showOptimizer={showOptimizer} popup={popup} />
-                        </LazyMotion>
-                    </TooltipProvider>
-                </OptimizerProvider>
-            </Provider>
+           <ShadowDom styles={stylesUrl}>
+               <Provider store={store}>
+                   <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
+                       <TooltipProvider delayDuration={100}>
+                           <LazyMotion features={domAnimation}>
+                               <App _showOptimizer={showOptimizer} popup={popup} />
+                           </LazyMotion>
+                       </TooltipProvider>
+                   </AppProvider>
+               </Provider>
+           </ShadowDom>
         );
     }
 }
@@ -49,6 +53,7 @@ domReady(function () {
 
         // see if admin bar node is there get popup container
         let popup =  replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+
 
         new RapidLoadOptimizer({
             container,

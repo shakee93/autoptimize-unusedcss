@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
 import SpeedPopover from "app/speed-popover";
-import {useOptimizerContext} from "../context/root";
+import {useAppContext} from "../context/app";
 import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState, RootState} from "../store/app/appTypes";
@@ -10,13 +10,14 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import stylesUrl from '../index.css?url';
 import WebFont from "webfontloader";
+import ShadowDom from "components/shadow-dom";
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
     _showOptimizer?: boolean
 }) => {
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, mode, options} = useOptimizerContext()
+    const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -74,11 +75,13 @@ const App = ({ popup, _showOptimizer = false }: {
     }, [dispatch, activeReport]);
 
     return (
-        <div>
+        <>
             {popover}
-            {showOptimizer && <PageOptimizer/>}
+            {showOptimizer && (
+                <PageOptimizer/>
+            )}
             <Toaster/>
-        </div>
+        </>
     );
 }
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { SunIcon, MoonIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
-import {useOptimizerContext} from "../../context/root";
+import {useAppContext} from "../../context/app";
 
 const ThemeSwitcher = () => {
 
-    const { theme, setTheme } = useOptimizerContext()
+    const { theme, setTheme } = useAppContext()
 
     const changeTheme = () => {
         if(theme === 'dark') {

@@ -14,9 +14,9 @@ interface OptimizerContextProps {
     manipulatingStyles: boolean
 }
 
-export const OptimizerContext = createContext<OptimizerContextProps | null>(null)
+export const AppContext = createContext<OptimizerContextProps | null>(null)
 
-export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerValue } : {
+export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -58,8 +58,6 @@ export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerV
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
 
-        manipulateStyles(value);
-
         if (!value) {
             // giving a breath to enabled stylesheets to paint
             requestAnimationFrame(() => {
@@ -69,69 +67,6 @@ export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerV
             setShowOptimizer(value)
         }
     }
-
-
-    /*
-    * Disable all stylesheets on WordPress page when the Optimizer is open
-    * */
-    const manipulateStyles = (value: SetStateAction<boolean>) => {
-
-        if (isDevelopment) {
-            return;
-        }
-        
-        setManipulatingStyles(true);
-
-        const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
-        const styleTags = document.querySelectorAll('style');
-        const rapidloadStylesheet = document.getElementById('rapidload_page_optimizer-css');
-        const rapidloadStyleTag = document.getElementById('rapidload-admin-bar-css');
-
-        if (value && !sheetsHidden) {
-            stylesheets.forEach(function(stylesheet) {
-                const url = (stylesheet as HTMLLinkElement).href;
-                if (stylesheet !== rapidloadStylesheet && !url.includes('fonts.googleapis.com')) {
-                    (stylesheet as HTMLLinkElement).setAttribute('data-original-media', (stylesheet as HTMLLinkElement).getAttribute('media') || '');
-                    (stylesheet as HTMLLinkElement).setAttribute('media', 'none');
-                }
-            });
-
-            styleTags.forEach(function(styleTag) {
-                const originalMedia = styleTag.getAttribute('media');
-                if (styleTag !== rapidloadStyleTag) {
-                    styleTag.setAttribute('data-original-media', originalMedia || '');
-                    styleTag.setAttribute('media', 'none');
-                }
-            });
-
-            setSheetsHidden(true);
-        } else {
-            stylesheets.forEach(function(stylesheet) {
-                const originalMedia = (stylesheet as HTMLLinkElement).getAttribute('data-original-media');
-                if (originalMedia) {
-                    (stylesheet as HTMLLinkElement).setAttribute('media', originalMedia);
-                    (stylesheet as HTMLLinkElement).removeAttribute('data-original-media');
-                }
-            });
-
-            styleTags.forEach(function(styleTag) {
-                const originalMedia = styleTag.getAttribute('data-original-media');
-                if (originalMedia) {
-                    styleTag.setAttribute('media', originalMedia);
-                } else {
-                    styleTag.removeAttribute('media')
-                    styleTag.removeAttribute('data-original-media')
-                }
-            });
-
-            setSheetsHidden(false);
-        }
-
-        setTimeout(() => {
-            setManipulatingStyles(false);
-        }, 300)
-    };
-
 
     const [theme, setTheme] = useState('light');
     const darkModeClass = 'rapidload-dark'
@@ -172,7 +107,7 @@ export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerV
 
 
     return (
-        <OptimizerContext.Provider value={{
+        <AppContext.Provider value={{
             showOptimizer,
             setShowOptimizer : _setShowOptimizer,
             options,
@@ -186,12 +121,12 @@ export const OptimizerProvider = ({ children, mode, modeData, initShowOptimizerV
             manipulatingStyles
         }}>
             {children}
-        </OptimizerContext.Provider>
+        </AppContext.Provider>
     );
 };
 
-export function useOptimizerContext() {
-    const context = useContext(OptimizerContext);
+export const useAppContext = () => {
+    const context = useContext(AppContext);
 
     if (context === null) {
         throw new Error('useOptimizerContext must be used within an OptimizerProvider');

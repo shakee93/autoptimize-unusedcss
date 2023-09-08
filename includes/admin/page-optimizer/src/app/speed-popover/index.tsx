@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
-import {useOptimizerContext} from "../../context/root";
+import {useAppContext} from "../../context/app";
 
 function SpeedPopover({ shadow }: { shadow: ShadowRoot }) {
 
-    const { options } = useOptimizerContext()
+    const { options } = useAppContext()
 
 
 
