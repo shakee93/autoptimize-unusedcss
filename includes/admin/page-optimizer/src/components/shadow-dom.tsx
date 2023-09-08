@@ -5,7 +5,7 @@ import { useRootContext } from '../context/root';
 interface ShadowDomProps {
     children: React.ReactNode;
     styles: string;
-    node?: HTMLDivElement
+    node?: HTMLElement | null
 }
 
 const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
@@ -52,7 +52,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
         }
     }, [theme, portalContainer, node]);
 
-    let portal =  portalContainer && ReactDOM.createPortal(children, portalContainer) ;
+    let portal =  portalContainer ? ReactDOM.createPortal(children, portalContainer) : '' ;
     
     return (
         <>

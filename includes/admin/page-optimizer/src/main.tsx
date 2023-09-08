@@ -34,7 +34,7 @@ export class RapidLoadOptimizer {
                        <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
                            <TooltipProvider delayDuration={100}>
                                <LazyMotion features={domAnimation}>
-                                   <ShadowRoot styles={stylesUrl}>
+                                   <ShadowRoot node={popup} styles={stylesUrl}>
                                        <SpeedPopover/>
                                    </ShadowRoot>
                                    <App _showOptimizer={showOptimizer} popup={popup} />
