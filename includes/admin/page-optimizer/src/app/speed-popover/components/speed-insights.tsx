@@ -129,7 +129,7 @@ const Content = () => {
 
     return (
         <div
-            className='relative flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
+            className='relative text-brand-950 dark:text-brand-50 flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
             {/*<div className='absolute -top-8 text-white'>*/}
             {/*    <label htmlFor="on">*/}
             {/*        <input id='on' onClick={() => setOn(p => !p)} type="checkbox"/>*/}
@@ -138,7 +138,6 @@ const Content = () => {
             {/*</div>*/}
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
-
                     <div className='mt-6'>
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
@@ -209,8 +208,9 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children}: {
+const SpeedInsights = ({children, shadow}: {
     children: ReactNode,
+    shadow: ShadowRoot
 }) => {
 
     const {options} = useOptimizerContext()
@@ -218,15 +218,16 @@ const SpeedInsights = ({children}: {
 
     const root = options?.plugin_url
 
+    const container = shadow.getElementById('rl-react-popup-wrapper')
     return (
         <HoverCard openDelay={0}>
             <HoverCardTrigger asChild>
                 <div
-                    className={`${!root ? 'bg-gray-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center'}`}>
+                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardPortal>
+            <HoverCardPortal container={container ? container : null}>
                 <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
                     <Content/>
                 </HoverCardContent>
