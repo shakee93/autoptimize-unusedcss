@@ -13,7 +13,11 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme } = useRootContext();
     const darkModeClass = 'rapidload-dark';
+    const isDevelopment= import.meta.env.DEV
 
+    if(!node && isDevelopment) {
+        return <>{children}</>
+    }
 
     useEffect(() => {
         if (hostRef.current) {

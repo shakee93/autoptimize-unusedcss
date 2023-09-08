@@ -21,6 +21,10 @@ interface FilesTableProps {
 const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, notify }: FilesTableProps) => {
 
     const [open, setOpen] = useState(index === 0)
+    const tableId = table.options.meta?.tableId;
+    let rows = table.getCoreRowModel().rows.map(r => r.original)
+    // @ts-ignore
+    const passed = rows.find((r) => r?.passed)
 
     useEffect(() => {
         notify(true)
@@ -62,9 +66,9 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
 
 
     return (
-        <div className="flex flex-col gap-3  border-t">
+        <div className="flex flex-col gap-3 border-t">
             <div className={cn(
-                'flex flex-col gap-2 justify-center ',
+                'flex flex-col gap-3 justify-center ',
             )}>
                <FilesTableHeader audit={audit}
                                  open={open}
@@ -76,6 +80,23 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
             </div>
             {open && (
                 <div className='px-4 pb-3'>
+                    {(passed && tableId) && (
+                        <div className='mb-3 ml-3'>
+                            <TooltipText
+                                text='Show the files that have successfully passed this audit'>
+                                <div
+                                    onClick={e => updateFilter(table.options.meta?.tableId)}
+                                    className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"
+                                >
+                                    Show Optimized Files
+                                    {(tableFilterStates[tableId] && tableFilterStates[tableId] === 'on') ?
+                                        <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
+                                        <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                    }
+                                </div>
+                            </TooltipText>
+                        </div>
+                    )}
                     <div className="w-full border rounded-[20px] overflow-hidden">
                         <table className="w-full text-brand-800 dark:text-brand-100">
                             <thead>
