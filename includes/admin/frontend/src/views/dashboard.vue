@@ -143,7 +143,7 @@
               </RouterLink>
 
               <div @click="openOptimizer" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
-                   :class="item.status && !loading? 'rl-Show': 'rl-Hide'"
+                   :class="item.status? 'rl-Show': 'rl-Hide'"
                    class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
                           :to="item.link">
                 Open Optimizer
@@ -325,7 +325,7 @@
         </div>
       </div>
 
-      <div v-if="on_board_complete==='1'"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+      <div v-if="on_board_complete===''"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
 
         <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
           <div class="col-start-1 col-end-3" >
