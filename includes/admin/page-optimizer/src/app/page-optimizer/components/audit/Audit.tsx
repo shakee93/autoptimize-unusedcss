@@ -183,7 +183,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                 </div>
             )}
             {(toggleFiles) && (
-                <AuditContent notify={setFilesMounted} audit={audit}/>
+                <AuditContent notify={notifyHeightChange} audit={audit}/>
             )}
 
         </Card>

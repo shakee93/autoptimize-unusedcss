@@ -1,20 +1,23 @@
 import Settings from "app/page-optimizer/components/audit/Settings";
 import TooltipText from "components/ui/tooltip-text";
 import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import React from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import {Table} from "@tanstack/react-table";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../../store/app/appSelector";
 import {JsonView} from "react-json-view-lite";
+import {cn} from "lib/utils";
 
 interface FilesTableHeaderProps {
     audit: Audit
     table: Table<AuditResource>
     tableFilterStates: any
-    updateFilter: any
+    updateFilter: any,
+    open: boolean,
+    setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : FilesTableHeaderProps) => {
+const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter, open, setOpen} : FilesTableHeaderProps) => {
     const tableId = table.options.meta?.tableId;
     const { data, settings, changes } = useSelector(optimizerData)
     let rows = table.getCoreRowModel().rows.map(r => r.original)
@@ -41,8 +44,28 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : File
     return (
         <>
             <div
-                className='flex items-center gap-2 font-medium text-sm ml-2 capitalize'>
-                {table.options.meta?.title ? table.options.meta.title : "Related Resources"}
+                className={cn(
+                    'flex items-center gap-2 font-medium text-sm capitalize px-4 py-3',
+                    open && 'border-b'
+                )
+                }>
+                <div className='flex gap-2'>
+                    <TooltipText asChild text={
+                        `${open ? 'Hide' : 'Show'} ${table.options.meta?.title && table.options.meta.title}`
+                    }>
+                        <button className='flex gap-2' onClick={e => setOpen(p => !p)}>
+                            { open ?
+                                <MinusCircleIcon className='w-5 h-5 dark:text-brand-500 text-brand-900'/> :
+                                <PlusCircleIcon className='w-5 h-5 dark:text-brand-500 text-brand-900'/>
+                            }
+                            <span>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</span>
+                           </button>
+                    </TooltipText>
+                </div>
+
+                <div className='opacity-50 text-xs'>
+                    {rows.length} Resource{rows.length > 1 ? 's' : ''}
+                </div>
                 {/*{!!countOfChanges && (*/}
                 {/*    <>*/}
                 {/*        <span> · </span>*/}
@@ -70,6 +93,7 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter} : File
                     )}
                 </div>
             )}
+
         </>
     );
 }

@@ -169,6 +169,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             {tables.map((table, index) => (
                <FilesTable
                    key={index}
+                   notify={notify}
+                   index={index}
                    audit={audit}
                    tableFilterStates={tableFilterStates}
                    updateFilter={updateFilter}

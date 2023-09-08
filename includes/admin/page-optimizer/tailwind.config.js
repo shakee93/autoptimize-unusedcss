@@ -14,7 +14,8 @@ module.exports = {
 	],
   theme: {
     fontFamily: {
-      'sans': ['Lexend', ...defaultTheme.fontFamily.sans]
+      'sans': ['Lexend', ...defaultTheme.fontFamily.sans],
+      ...defaultTheme.fontFamily
     },
     container: {
       center: true,
