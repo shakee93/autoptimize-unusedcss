@@ -119,10 +119,6 @@ class RapidLoad_Admin_Bar {
 
             <style id="rapidload-admin-bar-css">
 
-                #wp-admin-bar-rapidload * {
-                    color: #0c0c0c;
-                }
-
                 #wp-admin-bar-rapidload .rl-node-wrapper {
                     display: flex;
                     gap: 6px;
@@ -147,6 +143,12 @@ class RapidLoad_Admin_Bar {
                 .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-item {
 
                     padding: 0 8px 0 7px;
+                }
+
+                 #wp-admin-bar-rapidload *,
+                .rl-page-optimizer-loaded #wpadminbar .ab-top-menu > li.hover > .ab-item, #wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus,
+                .rl-page-optimizer-loaded #wpadminbar:not(.mobile) .ab-top-menu > li:hover > .ab-item, #wpadminbar:not(.mobile) .ab-top-menu > li > .ab-item:focus {
+                    color: #0c0c0c !important;
                 }
 
             </style>
