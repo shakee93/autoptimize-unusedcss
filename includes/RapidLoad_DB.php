@@ -480,6 +480,8 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
+        $where = str_replace("[job_table_name]","{$wpdb->prefix}rapidload_job", $where);
+
         $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job_data {$where}");
 
         $error = $wpdb->last_error;
