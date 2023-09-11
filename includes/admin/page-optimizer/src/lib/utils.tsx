@@ -11,7 +11,8 @@ export function isImageAudit(audit_id: string) {
       'offscreen-images',
     'modern-image-formats',
     'unsized-images',
-      'uses-responsive-images'
+      'uses-responsive-images',
+      'uses-optimized-images'
   ].includes(audit_id)
 }
 

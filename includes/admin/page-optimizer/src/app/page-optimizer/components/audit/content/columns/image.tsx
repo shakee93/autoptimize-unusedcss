@@ -18,7 +18,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
     let snippet : any = '';
 
-    if (cell.table.getColumn('node')) {
+    if (cell.table.options.meta?.type === 'image' && cell.table.options.columns.map(c => c.id).includes('node')) {
         // @ts-ignore
         snippet = cell.row.getValue('node') as {
             nodeLabel: string

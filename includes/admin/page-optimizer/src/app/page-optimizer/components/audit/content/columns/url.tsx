@@ -17,7 +17,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
 
     let value = cell.getValue()
     
-    if (isImageAudit(audit.id)) {
+    if (isImageAudit(audit.id) || value?.file_type?.value === 'image') {
         return <AuditColumnImage cell={cell}/>
     } else if (isUrl(value)) {
         return (

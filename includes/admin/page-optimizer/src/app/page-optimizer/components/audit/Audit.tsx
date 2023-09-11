@@ -134,7 +134,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
-                            {/*<span>{audit.id}</span>*/}
+                            <span>{audit.id}</span>
                         </span>
                     </div>
 

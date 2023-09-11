@@ -36,16 +36,8 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
     ) => {
         let col = cell.column.columnDef;
 
-        if (col.id === "node" && isImageAudit(audit.id)) {
+        if (col.id === "node" && isImageAudit(audit.id) ) {
             return false;
-        }
-
-        if(col.id === 'action' && [
-            'modern-image-formats',
-            'offscreen-images',
-            'unsized-images'
-        ].includes(audit.id)) {
-            return false
         }
 
         return !["pattern", "file_type", 'passed'].includes(col.id as string);
