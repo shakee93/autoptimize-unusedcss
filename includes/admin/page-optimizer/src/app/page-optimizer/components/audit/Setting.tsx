@@ -131,13 +131,13 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                 {showPopover && (
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger disabled asChild>
-                            <div className='cursor-pointer'>
+                            <div >
                                 <TooltipText text={`${settings.name} Settings`}>
                                     <Cog6ToothIcon className='w-[1.15rem] text-brand-400'/>
                                 </TooltipText>
                             </div>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[450px]">
+                        <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
                             <DialogHeader className='border-b px-6 py-7'>
                                 <DialogTitle>{settings.name} Settings</DialogTitle>
                                 <DialogDescription>

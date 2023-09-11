@@ -120,7 +120,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
                 let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
 
-                if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1) {
+                if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1 && label.toLowerCase() === 'unknown') {
                     title = ''
                 }
 
