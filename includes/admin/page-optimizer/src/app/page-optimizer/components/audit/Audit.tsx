@@ -66,12 +66,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
     }, [toggleFiles, activeReport]);
 
 
-    const notifyHeightChange = () => {
+    const notifyHeightChange = (initHeight = null) => {
         if (divRef.current && typeof onHeightChange === 'function') {
 
             setTimeout(() => {
                 const height = divRef?.current?.clientHeight || 0;
-                onHeightChange(height - 15);
+                onHeightChange((initHeight ? initHeight : height) - 15);
             }, 0)
 
             return;
@@ -107,7 +107,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
-                  `overflow-hidden hover:opacity-100  w-full flex justify-center flex-col items-center p-0`,
+                  `overflow-hidden hover:opacity-100 w-full flex justify-center flex-col items-center p-0`,
                   toggleFiles ? 'shadow-xl dark:shadow-brand-800/70' : 'dark:hover:border-brand-500 hover:border-brand-400/60'
               )}
         >
@@ -185,7 +185,11 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                 </div>
             )}
 
-            <Accordion initialRender={true} isOpen={toggleFiles}>
+            <Accordion
+                onHeightChange={notifyHeightChange}
+                onAnimationComplete={notifyHeightChange}
+                initialRender={true}
+                isOpen={toggleFiles}>
                 <AuditContent notify={notifyHeightChange} audit={audit} />
             </Accordion>
 

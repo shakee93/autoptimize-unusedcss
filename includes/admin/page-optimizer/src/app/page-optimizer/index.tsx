@@ -173,36 +173,38 @@ export default function PageOptimizer() {
                                     {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) && (
                                         <AnimatePresence initial={false}>
                                             <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
-                                                <div className='col-span-12 ml-8 flex flex-col gap-4'>
+                                                <div className='col-span-12 flex flex-col gap-4'>
                                                     {data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
-                                                            <m.div
-                                                                initial={{ opacity: 0, y: 10 }}
-                                                                animate={{ opacity: 1, y: 0 }}
-                                                                exit={{ opacity: 0, y: -20 }}
-                                                                transition={{ delay: index * 0.03 }}
-                                                                className='relative' key={audit.id}>
-                                                                <div className={cn(
-                                                                    'absolute -left-6 text-center top-[17px]',
-                                                                    // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'
-                                                                )}>
-                                                            <span
-                                                                className={`border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>
-                                                                    {/*{(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
-                                                                    {/*    <span*/}
-                                                                    {/*        data-h={componentHeights[index]}*/}
-                                                                    {/*        style={{*/}
-                                                                    {/*            height: componentHeights[index]*/}
-                                                                    {/*        }}*/}
-                                                                    {/*        className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
+                                                        <m.div
+                                                            initial={{opacity: 0, y: 10}}
+                                                            animate={{opacity: 1, y: 0}}
+                                                            exit={{opacity: 0, y: -20}}
+                                                            transition={{delay: index * 0.03}}
+                                                            className='relative' key={audit.id}>
 
-                                                                    {/*)}*/}
-                                                                </div>
-                                                                <Audit
-                                                                    activeTab={activeTab}
-                                                                    onHeightChange={(height) => handleAuditHeightChange(index, height)}
-                                                                    ref={(element) => (componentRefs.current[index] = element)}
-                                                                    index={index} audit={audit}/>
-                                                            </m.div>
+                                                            {/*{ TODO: fix this with new animation }*/}
+                                                            {/*<div className={cn(*/}
+                                                            {/*    'h-3 absolute -left-6 text-center top-[1.5rem]',*/}
+                                                            {/*    // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'*/}
+                                                            {/*)}>*/}
+                                                            {/*        <span*/}
+                                                            {/*            className={`relative border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>*/}
+                                                            {/*    {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
+                                                            {/*        <span*/}
+                                                            {/*            style={{*/}
+                                                            {/*                height: componentHeights[index]*/}
+                                                            {/*            }}*/}
+                                                            {/*            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
+
+                                                            {/*    )}*/}
+                                                            {/*</div>*/}
+
+                                                            <Audit
+                                                                activeTab={activeTab}
+                                                                onHeightChange={(height) => handleAuditHeightChange(index, height)}
+                                                                ref={(element) => (componentRefs.current[index] = element)}
+                                                                index={index} audit={audit}/>
+                                                        </m.div>
                                                         )
                                                     )}
                                                 </div>
