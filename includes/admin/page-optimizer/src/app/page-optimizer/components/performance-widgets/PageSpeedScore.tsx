@@ -50,8 +50,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             setProgressbarColor('#09B42F');
             setPerformanceIcon('pass')
         }
-
-
     };
 
     const FirstLettersComponent = ({ text }: { text: string }) => {

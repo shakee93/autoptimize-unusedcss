@@ -31,11 +31,23 @@ const Content = () => {
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
-
+    const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [on, setOn] = useState<boolean>(false)
 
-    useEffect(() => {
+    const progressBarColor = () => {
+        const performance = data?.performance?? 0;
 
+        if (performance < 50) {
+            setProgressbarColor('#FF3333');
+        } else if (performance < 90) {
+            setProgressbarColor('#FFAA33');
+        } else if (performance < 101) {
+            setProgressbarColor('#09B42F');
+        }
+    };
+
+    useEffect(() => {
+        progressBarColor();
         if (!loading && data) {
             let currentNumber = 0;
 
@@ -143,7 +155,7 @@ const Content = () => {
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
                             <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                pathColor: `#0bb42f`,
+                                pathColor: progressbarColor,
                                 pathTransitionDuration: .5,
                             })} value={performance}>
                                 <span
