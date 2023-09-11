@@ -6,11 +6,12 @@ import {optimizerData} from "../../../../store/app/appSelector";
 
 interface SettingsProps {
     audit: Audit
+    auditSettings?: AuditSetting[]
     max?: number
     type?: string
 }
 
-const Settings = ({ audit, max = 2, type }: SettingsProps) => {
+const Settings = ({ audit, max = 2, type, auditSettings }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
     if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
@@ -25,11 +26,15 @@ const Settings = ({ audit, max = 2, type }: SettingsProps) => {
         type = 'image'
     }
 
+    if (!auditSettings) {
+        auditSettings = audit.settings
+    }
+
     return (
         <>
-            {audit.settings.length > 0 &&(
+            {auditSettings && auditSettings.length > 0 &&(
                 <div className="flex flex-wrap gap-2">
-                    {audit.settings.filter(i => {
+                    {auditSettings.filter(i => {
 
                         if (!type) {
                             return true

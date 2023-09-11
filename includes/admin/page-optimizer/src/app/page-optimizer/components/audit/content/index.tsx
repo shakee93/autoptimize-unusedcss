@@ -144,6 +144,11 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         }));
     };
 
+    let remainingSettings = audit
+        .settings
+        .filter(s => !tables.map(t => t.options.meta?.type).includes(s.category) )
+
+
     return (
         <div className="border-t w-full pt-4">
             <div className="pb-4 text-brand-700 dark:text-brand-300">
@@ -152,17 +157,12 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             </div>
 
-            {(audit.settings.length > 0 && tables.length === 0) && (
+            {(audit.settings.length > 0 && remainingSettings.length > 0) && (
                 <div className='flex flex-col border-t py-4 px-4 gap-3'>
-                    <div className='font-medium text-sm ml-2'>Recommended Settings</div>
-                    <Settings audit={audit}/>
-                </div>
-            )}
-
-            {(audit.settings.length > 0 && audit.settings.find(s => ['cache'].includes(s.category))) && (
-                <div className='flex flex-col border-t py-4 px-4 gap-3'>
-                    <div className='font-medium text-sm ml-2'>Recommended Settings</div>
-                    <Settings type='cache' audit={audit}/>
+                    <div className='font-medium text-sm ml-2'>
+                        {audit.settings.length !== remainingSettings.length ? 'Additional Settings' : 'Recommended Settings'}
+                    </div>
+                    <Settings audit={audit} auditSettings={remainingSettings}/>
                 </div>
             )}
 
