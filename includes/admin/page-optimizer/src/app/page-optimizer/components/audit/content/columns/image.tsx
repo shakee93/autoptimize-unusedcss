@@ -31,8 +31,9 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
-                        <div className='w-6 h-6 border rounded-md overflow-hidden'>
-                            <img className='w-fit' src={value.url ? value.url : value} alt=''/>
+                        <div style={{
+                            backgroundImage: `url(${value.url ? value.url : value})`
+                        }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
                         </div>
 
                         {value && (
