@@ -146,11 +146,12 @@ class RapidLoad_Admin_Bar {
                     padding: 0 8px 0 7px;
                 }
 
-                .rl-page-optimizer-loaded #wp-admin-bar-rapidload *,
-                .rl-page-optimizer-loaded #wpadminbar .ab-top-menu > li.hover > .ab-item, #wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus,
-                .rl-page-optimizer-loaded #wpadminbar:not(.mobile) .ab-top-menu > li:hover > .ab-item, #wpadminbar:not(.mobile) .ab-top-menu > li > .ab-item:focus {
-                    color: #0c0c0c !important;
-                }
+                /*.rl-page-optimizer-loaded #wp-admin-bar-rapidload *,*/
+                /*.rl-page-optimizer-loaded #wpadminbar .ab-top-menu > li.hover > .ab-item, #wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus,*/
+                /*.rl-page-optimizer-loaded #wpadminbar:not(.mobile) .ab-top-menu > li:hover > .ab-item, #wpadminbar:not(.mobile) .ab-top-menu > li > .ab-item:focus {*/
+                /*    color: #0c0c0c !important;*/
+
+                /*}*/
 
             </style>
 

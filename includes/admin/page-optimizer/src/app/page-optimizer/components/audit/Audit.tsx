@@ -12,6 +12,8 @@ import TooltipText from "components/ui/tooltip-text";
 import {useAppContext} from "../../../../context/app";
 import {cn} from "lib/utils";
 import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import {AnimatePresence, m} from "framer-motion";
+import {Accordion} from "components/accordion";
 
 export interface AuditProps {
     audit: Audit;
@@ -105,7 +107,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
-                  `hover:opacity-100  w-full flex justify-center flex-col items-center p-0`,
+                  `overflow-hidden hover:opacity-100  w-full flex justify-center flex-col items-center p-0`,
                   toggleFiles ? 'shadow-xl dark:shadow-brand-800/70' : 'dark:hover:border-brand-500 hover:border-brand-400/60'
               )}
         >
@@ -182,9 +184,10 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                     <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
                 </div>
             )}
-            {(toggleFiles) && (
-                <AuditContent notify={notifyHeightChange} audit={audit}/>
-            )}
+
+            <Accordion initialRender={true} isOpen={toggleFiles}>
+                <AuditContent notify={notifyHeightChange} audit={audit} />
+            </Accordion>
 
         </Card>
     );

@@ -225,7 +225,7 @@ const SpeedInsights = ({children}: {
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+            <HoverCardContent id='rpo-popup-content' className="text-base font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
                 <Content/>
             </HoverCardContent>
         </HoverCard>

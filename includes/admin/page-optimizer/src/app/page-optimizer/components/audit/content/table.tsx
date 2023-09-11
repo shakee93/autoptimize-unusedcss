@@ -7,6 +7,7 @@ import {ChevronLeft, ChevronRight} from "lucide-react";
 import React, {useEffect, useState} from "react";
 import FilesTableHeader from "app/page-optimizer/components/audit/content/header";
 import {JsonView} from "react-json-view-lite";
+import {Accordion} from "components/accordion";
 
 
 interface FilesTableProps {
@@ -66,7 +67,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
 
 
     return (
-        <div className="flex flex-col gap-3 border-t">
+        <div className="flex flex-col border-t">
             <div className={cn(
                 'flex flex-col gap-3 justify-center ',
             )}>
@@ -78,8 +79,9 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                                  updateFilter={updateFilter}
                />
             </div>
-            {open && (
-                <div className='px-4 pb-3'>
+
+            <Accordion isOpen={open}>
+                <div className='px-4 py-3'>
                     {(passed && tableId) && (
                         <div className='mb-3 ml-3'>
                             <TooltipText
@@ -183,7 +185,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                     )}
 
                 </div>
-            )}
+            </Accordion>
         </div>
     )
 }

@@ -73,7 +73,7 @@ export default function PageOptimizer() {
                                 (activeTab === tab.key) && tab.activeColor,
                             )}>
                             <span className={cn(
-                                activeTab === tab.key && 'text-white'
+                                activeTab === tab.key && 'text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}
                             </span>
@@ -137,6 +137,7 @@ export default function PageOptimizer() {
     return (
 
         <div
+            id='rapidload-page-optimizer'
             className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
             <div className='overflow-auto w-full h-fit'>
                 <Header url={url}/>
@@ -178,7 +179,7 @@ export default function PageOptimizer() {
                                                                 initial={{ opacity: 0, y: 10 }}
                                                                 animate={{ opacity: 1, y: 0 }}
                                                                 exit={{ opacity: 0, y: -20 }}
-                                                                transition={{ delay: index * 0.05 }}
+                                                                transition={{ delay: index * 0.03 }}
                                                                 className='relative' key={audit.id}>
                                                                 <div className={cn(
                                                                     'absolute -left-6 text-center top-[17px]',
@@ -186,15 +187,15 @@ export default function PageOptimizer() {
                                                                 )}>
                                                             <span
                                                                 className={`border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>
-                                                                    {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (
-                                                                        <span
-                                                                            data-h={componentHeights[index]}
-                                                                            style={{
-                                                                                height: componentHeights[index]
-                                                                            }}
-                                                                            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>
+                                                                    {/*{(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
+                                                                    {/*    <span*/}
+                                                                    {/*        data-h={componentHeights[index]}*/}
+                                                                    {/*        style={{*/}
+                                                                    {/*            height: componentHeights[index]*/}
+                                                                    {/*        }}*/}
+                                                                    {/*        className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
 
-                                                                    )}
+                                                                    {/*)}*/}
                                                                 </div>
                                                                 <Audit
                                                                     activeTab={activeTab}

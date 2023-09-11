@@ -15,6 +15,34 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const darkModeClass = 'rapidload-dark';
     const isDevelopment= import.meta.env.DEV
 
+
+
+
+
+
+    useEffect(() => {
+
+        if (isDevelopment) {
+            setPortalContainer(document.body as HTMLDivElement)
+        }
+
+        if (portalContainer) {
+            if (theme === 'dark') {
+                portalContainer.classList.add(darkModeClass);
+            } else if (theme === 'light') {
+                portalContainer.classList.remove(darkModeClass);
+            } else if (theme === 'system') {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    portalContainer.classList.add(darkModeClass);
+                } else {
+                    portalContainer.classList.remove(darkModeClass);
+                }
+            }
+        }
+
+
+    }, [theme, portalContainer, node]);
+
     if(!node && isDevelopment) {
         return <>{children}</>
     }
@@ -39,24 +67,6 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
             setPortalContainer(portalDiv);
         }
     }, [styles]);
-
-    useEffect(() => {
-        if (portalContainer) {
-            if (theme === 'dark') {
-                portalContainer.classList.add(darkModeClass);
-            } else if (theme === 'light') {
-                portalContainer.classList.remove(darkModeClass);
-            } else if (theme === 'system') {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    portalContainer.classList.add(darkModeClass);
-                } else {
-                    portalContainer.classList.remove(darkModeClass);
-                }
-            }
-        }
-
-
-    }, [theme, portalContainer, node]);
 
     let portal =  portalContainer ? ReactDOM.createPortal(children, portalContainer) : '' ;
     
