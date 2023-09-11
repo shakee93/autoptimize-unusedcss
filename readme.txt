@@ -150,6 +150,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.0.28 - 11/09/2023 =
+ * fix: google font stylesheet not removing
+
 = 2.0.27 - 01/09/2023 =
  * fix: some inline style images not optimizing
 
