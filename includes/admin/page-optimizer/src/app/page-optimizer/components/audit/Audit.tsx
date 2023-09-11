@@ -9,7 +9,7 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
-import {useOptimizerContext} from "../../../../context/root";
+import {useAppContext} from "../../../../context/app";
 import {cn} from "lib/utils";
 import {InformationCircleIcon} from "@heroicons/react/20/solid";
 
@@ -27,7 +27,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
 
     const {settings, activeReport} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
-    const {openAudits, setOpenAudits} = useOptimizerContext()
+    const {openAudits, setOpenAudits} = useAppContext()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
@@ -183,7 +183,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                 </div>
             )}
             {(toggleFiles) && (
-                <AuditContent notify={setFilesMounted} audit={audit}/>
+                <AuditContent notify={notifyHeightChange} audit={audit}/>
             )}
 
         </Card>

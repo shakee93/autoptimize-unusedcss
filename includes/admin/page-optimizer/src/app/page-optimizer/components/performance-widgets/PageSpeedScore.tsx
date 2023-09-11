@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {useOptimizerContext} from "../../../../context/root";
+import {useAppContext} from "../../../../context/app";
 import {Skeleton} from "components/ui/skeleton"
 import {JsonView} from "react-json-view-lite";
 import {cn} from "lib/utils";
@@ -28,7 +28,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
-    const {setShowOptimizer} = useOptimizerContext()
+    const {setShowOptimizer} = useAppContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)

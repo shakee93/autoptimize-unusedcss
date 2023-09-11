@@ -100,7 +100,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 }
             },
             onGlobalFilterChange: () => updateFilter(tableId),
-            getFilteredRowModel: getFilteredRowModel()
+            getFilteredRowModel: getFilteredRowModel(),
+            autoResetPageIndex: false
         });
 
         tables.push(table);
@@ -168,6 +169,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             {tables.map((table, index) => (
                <FilesTable
                    key={index}
+                   notify={notify}
+                   index={index}
                    audit={audit}
                    tableFilterStates={tableFilterStates}
                    updateFilter={updateFilter}

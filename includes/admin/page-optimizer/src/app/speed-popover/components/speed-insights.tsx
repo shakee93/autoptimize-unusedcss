@@ -5,7 +5,7 @@ import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {useOptimizerContext} from "../../../context/root";
+import {useAppContext} from "../../../context/app";
 import {useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
@@ -27,7 +27,7 @@ import {useToast} from "components/ui/use-toast";
 
 const Content = () => {
 
-    const {setShowOptimizer, options} = useOptimizerContext()
+    const {setShowOptimizer, options} = useAppContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
@@ -208,17 +208,15 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children, shadow}: {
+const SpeedInsights = ({children}: {
     children: ReactNode,
-    shadow: ShadowRoot
 }) => {
 
-    const {options} = useOptimizerContext()
+    const {options} = useAppContext()
     const [open, setOpen] = useState<boolean>(false)
 
     const root = options?.plugin_url
 
-    const container = shadow.getElementById('rl-react-popup-wrapper')
     return (
         <HoverCard openDelay={0}>
             <HoverCardTrigger asChild>
@@ -227,11 +225,9 @@ const SpeedInsights = ({children, shadow}: {
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardPortal container={container ? container : null}>
-                <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
-                    <Content/>
-                </HoverCardContent>
-            </HoverCardPortal>
+            <HoverCardContent className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+                <Content/>
+            </HoverCardContent>
         </HoverCard>
     );
 

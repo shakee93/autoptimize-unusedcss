@@ -36,7 +36,7 @@ import {JsonView} from "react-json-view-lite";
 import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
 import TooltipText from "components/ui/tooltip-text";
 import Mode from "app/page-optimizer/components/Mode";
-import {useOptimizerContext} from "../../../../context/root";
+import {useAppContext} from "../../../../context/app";
 
 interface SettingItemProps {
     audit: Audit
@@ -51,7 +51,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { mode } = useOptimizerContext()
+    const { mode } = useAppContext()
     const [open, setOpen] = React.useState(false);
     const [mainInput, ...additionalInputs] = settings.inputs
     const [updates, setUpdates] = useState<{

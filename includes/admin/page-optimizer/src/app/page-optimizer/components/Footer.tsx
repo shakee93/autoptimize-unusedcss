@@ -2,7 +2,7 @@ import ThemeSwitcher from "components/ui/theme-switcher";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
 import {History, Redo2, SaveIcon, Undo2, User, UserCircle, UserPlus, UserPlus2, UserPlus2Icon} from "lucide-react";
-import {useOptimizerContext} from "../../../context/root";
+import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import React, {useState, MouseEvent, useEffect} from "react";
@@ -56,7 +56,7 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options , modeData} = useOptimizerContext()
+    const { setShowOptimizer, options , modeData} = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading, revisions } = useSelector(optimizerData)
     const [savingData, setSavingData] = useState<boolean>(false)
