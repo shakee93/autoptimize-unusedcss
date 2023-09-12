@@ -16,10 +16,10 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const darkModeClass = 'rapidload-dark';
 
     useEffect(() => {
-        //
-        // if (isDev) {
-        //     setPortalContainer(document.body as HTMLDivElement)
-        // }
+
+        if (isDev) {
+            setPortalContainer(document.body as HTMLDivElement)
+        }
 
         if (portalContainer) {
             if (theme === 'dark') {
@@ -38,9 +38,9 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
 
-    // if(!node && isDev) {
-    //     return <>{children}</>
-    // }
+    if(!node && isDev) {
+        return <>{children}</>
+    }
 
     useEffect(() => {
         if (hostRef.current) {
