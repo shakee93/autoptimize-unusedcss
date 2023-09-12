@@ -24,11 +24,12 @@ import {
 import {HoverCardPortal} from "@radix-ui/react-hover-card";
 import {Archive, Circle, Dot, FileCode2, FileMinus2} from "lucide-react";
 import {useToast} from "components/ui/use-toast";
+import {ComputerDesktopIcon, DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
 
 const Content = () => {
 
     const {setShowOptimizer, options} = useAppContext()
-    const {data, error, loading} = useSelector(optimizerData);
+    const {data, error, loading, activeReport} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
     const [progressbarColor, setProgressbarColor] = useState('#ECECED');
@@ -150,7 +151,7 @@ const Content = () => {
             {/*</div>*/}
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
-                    <div className='mt-6'>
+                    <div className='mt-2'>
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
@@ -168,7 +169,17 @@ const Content = () => {
                         )}
                     </div>
 
-                    <div className="flex justify-around text-sm gap-4 font-light w-full mt-5">
+                    <div className='text-xs w-full capitalize flex justify-center'>
+                        <div className='inline-flex gap-1 justify-center items-center border rounded-full py-1 px-3'>
+                            {activeReport === 'desktop' ?
+                                <ComputerDesktopIcon  className="h-5 w-5 " /> :
+                                <DevicePhoneMobileIcon  className="h-4 w-4" />
+                            }
+                            <span>{activeReport}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-around text-sm gap-4 font-light w-full">
                         <div className='flex items-center gap-1'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
                                 <polygon points="5,0 0,10 10,10" fill="red"/>
