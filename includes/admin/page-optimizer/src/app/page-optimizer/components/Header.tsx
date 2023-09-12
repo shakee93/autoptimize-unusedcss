@@ -39,8 +39,8 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-4'>
                     <div className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                             <div className={cn(
-                                'absolute shadow-md left-0.5 w-[7.5rem] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                                activeReport === 'mobile' && 'w-[6.95rem] left-1/2'
+                                'absolute shadow-md left-0.5 w-[120px] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                                activeReport === 'mobile' && 'w-[112px] left-1/2'
                             )}>
                             </div>
                         <div onClick={() => dispatch(changeReport('desktop'))}

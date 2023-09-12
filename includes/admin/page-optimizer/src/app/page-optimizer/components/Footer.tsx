@@ -135,10 +135,10 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           isFaviconLoaded ? 'flex' : 'hidden'
                       )
                       }>
-                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-[2.1rem] min-h-[2rem] rounded p-1 bg-brand-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
+                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-8 min-h-[32px] rounded p-1 bg-brand-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
                       </div>
                   ) : (
-                      <div className='px-[0.3rem]'>
+                      <div className='px-[5px]'>
                           <div className='w-6'>
                               <CircularProgressbarWithChildren styles={buildStyles({
                                   pathColor: '#0bb42f'
@@ -162,7 +162,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <Mode>
                         <Popover>
                             <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
-                                <TooltipText text='Show Revisions'>
+                                <TooltipText asChild text='Show Revisions'>
                                     <History className='w-5 ' />
                                 </TooltipText>
                             </PopoverTrigger>

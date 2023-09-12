@@ -2,6 +2,35 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
+function rem2px(input, fontSize = 16) {
+  if (input == null) {
+    return input;
+  }
+  switch (typeof input) {
+    case 'object':
+      if (Array.isArray(input)) {
+        return input.map((val) => rem2px(val, fontSize));
+      }
+      const ret = {};
+      for (const key in input) {
+        ret[key] = rem2px(input[key], fontSize);
+      }
+      return ret;
+    case 'string':
+      return input.replace(
+          /(\d*\.?\d+)rem$/,
+          (_, val) => `${parseFloat(val) * fontSize}px`,
+      );
+    case 'function':
+      return eval(input.toString().replace(
+          /(\d*\.?\d+)rem/g,
+          (_, val) => `${parseFloat(val) * fontSize}px`,
+      ));
+    default:
+      return input;
+  }
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // prefix: 'rl-',
@@ -17,6 +46,13 @@ module.exports = {
       'sans': ['Lexend', ...defaultTheme.fontFamily.sans],
       ...defaultTheme.fontFamily
     },
+    // to fix font-size: 62% problem
+    fontSize: rem2px(defaultTheme.fontSize),
+    lineHeight: rem2px(defaultTheme.lineHeight),
+    spacing: rem2px(defaultTheme.spacing),
+    borderRadius: rem2px(defaultTheme.borderRadius),
+    minWidth: rem2px(defaultTheme.minWidth),
+    width: rem2px(defaultTheme.width),
     container: {
       center: true,
       padding: "2rem",
@@ -29,7 +65,7 @@ module.exports = {
         400 : '400ms'
       },
       fontSize: {
-        xxs: '0.6rem',
+        xxs: '10px',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -73,11 +109,6 @@ module.exports = {
         'gray-350': '#C0C0C0',
         'purple-750': '#7F54B3',
         'zinc-930': '#101012'
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {

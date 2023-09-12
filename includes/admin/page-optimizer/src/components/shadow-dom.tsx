@@ -16,10 +16,10 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const darkModeClass = 'rapidload-dark';
 
     useEffect(() => {
-
-        if (isDev) {
-            setPortalContainer(document.body as HTMLDivElement)
-        }
+        //
+        // if (isDev) {
+        //     setPortalContainer(document.body as HTMLDivElement)
+        // }
 
         if (portalContainer) {
             if (theme === 'dark') {
@@ -38,9 +38,9 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
 
-    if(!node && isDev) {
-        return <>{children}</>
-    }
+    // if(!node && isDev) {
+    //     return <>{children}</>
+    // }
 
     useEffect(() => {
         if (hostRef.current) {
@@ -55,20 +55,35 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
                 shadowRoot.appendChild(styleLink);
             }
 
+
+
+            const resetStyles = document.createElement('style');
+            resetStyles.textContent = `
+              :host, :root {
+                font-size: initial;
+              }
+            `;
+            shadowRoot.appendChild(resetStyles);
+
             // This div will act as the container for the portal
             const portalDiv = document.createElement('div');
+            // portalDiv.style.fontSize = '16px';
             shadowRoot.appendChild(portalDiv);
+
+            hostRef.current.style.fontSize = '16px';
 
             setPortalContainer(portalDiv);
         }
     }, [styles]);
 
     let portal =  portalContainer ? ReactDOM.createPortal(children, portalContainer) : '' ;
-    
+
     return (
         <>
+
             {portal}
-            {!node && <div ref={hostRef}></div>}
+            {!node && <div ref={hostRef}>
+            </div>}
         </>
     )
 };

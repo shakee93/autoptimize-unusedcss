@@ -53,11 +53,11 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
                     </div>
                 </TooltipTrigger>
-                <TooltipContent className='max-w-[48rem] min-w-[2rem] min-h-[2rem]'>
+                <TooltipContent className='max-w-[768px] min-w-[32px] min-h-[32px]'>
                     <div className='flex flex-row items-center gap-3 py-1'>
                         <div>
                             <img alt={value} onError={() => setLoaded(true)}
-                                 onLoadCapture={() => setLoaded(true)} className='max-w-[10rem]'
+                                 onLoadCapture={() => setLoaded(true)} className='max-w-[160px]'
                                  src={value}/>
                             {!loaded && (
                                 <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>

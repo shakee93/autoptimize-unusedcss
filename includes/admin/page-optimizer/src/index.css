@@ -72,8 +72,10 @@
   * {
     @apply border-border;
   }
+
 }
 
 .rapidload-dark {
   color-scheme: dark;
 }
+

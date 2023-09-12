@@ -133,7 +133,7 @@ const Setting = ({audit, settings, index}: SettingItemProps) => {
                         <DialogTrigger disabled asChild>
                             <div >
                                 <TooltipText text={`${settings.name} Settings`}>
-                                    <Cog6ToothIcon className='w-[1.15rem] text-brand-400'/>
+                                    <Cog6ToothIcon className='w-5 text-brand-400'/>
                                 </TooltipText>
                             </div>
                         </DialogTrigger>
