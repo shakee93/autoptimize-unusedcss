@@ -31,15 +31,23 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
-                        <div style={{
-                            backgroundImage: `url(${value.url ? value.url : value})`
-                        }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
+                        <div className='w-6 h-6'>
+                            <div style={{
+                                backgroundImage: `url(${value.url ? value.url : value})`
+                            }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
+                            </div>
                         </div>
 
+
                         {value && (
-                            <a className='flex gap-2' target='_blank'
-                               href={value}>{truncateMiddleOfURL(value.url ? value.url : value, 40)}
-                                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                            <a className='text-left' target='_blank'
+                               href={value}>
+                                <span>{truncateMiddleOfURL(value.url ? value.url : value, 40)}</span>
+                                <span>
+                                    <ArrowTopRightOnSquareIcon className='ml-1.5 inline-block w-3.5'/>
+                                </span>
+
+                            </a>
                         )}
 
 
