@@ -62,21 +62,12 @@ const transformData = (data: any) => {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
             ...data.data.page_speed,
             grouped : {
-                passed_audits: audits.filter(audit => audit.type === 'passed_audit'),
+                passed_audits: audits.filter(audit => audit.type === 'passed_audit').sort(
+                    (a,b) => (a.settings.length > 0 || a.files?.items?.length > 0) ? -1 : 1
+                ),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
-                diagnostics: [
-                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
-                    ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode === 'informative'),
-                ],
-                // attention_required: [
-                //     ...audits.filter(audit => audit.type === 'opportunity'),
-                //     ...audits.filter(audit => audit.type === "diagnostics" && audit.scoreDisplayMode !== 'informative'),
-                // ].filter(audit => {
-                //     return ![
-                //         'mainthread-work-breakdown',
-                //         'dom-size'
-                //     ].includes(audit.id)
-                // })
+                diagnostics:  audits.filter(audit => audit.type === "diagnostics")
+                    .sort((a, b) => (a.scoreDisplayMode === 'informative' ? 1 : -1)),
             },
         },
         success: data.success,
