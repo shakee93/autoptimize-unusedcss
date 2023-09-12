@@ -133,11 +133,36 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                         </div>
                     </TooltipText>
                     <div className='flex flex-col justify-around'>
-                        <div className='flex gap-2 items-center'>
+                        <div className='flex gap-1 items-center'>
                             {audit.name}
                             {/*<span className='text-xxs leading-tight border border-purple-300 rounded-2xl py-0.5 px-2 bg-purple-100'>*/}
                             {/*    2 changes*/}
                             {/*</span>*/}
+
+                            {activeSettings.length > 0 && (
+                                <HoverCard openDelay={0} >
+                                    <HoverCardTrigger>
+                                        <div
+                                            onClick={() => setToggleFiles(prev => !prev)}
+                                            className={cn(
+                                                'cursor-pointer select-none text-xs p-2 text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
+                                                activeSettings.length > 1 && 'border py-0.5 px-2'
+                                            )}>
+                                            {activeSettings.length > 1 ? activeSettings.length : ''}
+                                            <div className='bg-blue-500 w-1.5 h-1.5 shadow-lg rounded-full -right-1 -top-1'></div>
+                                        </div>
+                                    </HoverCardTrigger>
+                                    {!toggleFiles && (
+                                        <HoverCardContent side='top' sideOffset={5}>
+                                     <span className='flex flex-col border gap-2 bg-white dark:bg-brand-950 rounded-lg py-2 px-2'>
+                                         <span className='text-sm text-center'>{activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}</span>
+                                         <Settings hideActions={true} className='flex flex-row' audit={audit} auditSettings={activeSettings}>
+                                         </Settings>
+                                     </span>
+                                        </HoverCardContent>
+                                    )}
+                                </HoverCard>
+                            )}
 
                         </div>
                         <span className='flex text-xxs leading-tight opacity-70'>
@@ -150,37 +175,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
 
                 </div>
 
-                <div className='flex gap-2 items-center'>
+                <div className='flex gap-4 items-center'>
 
                     { (audit.files?.items?.length > 0 || audit.settings.length > 0) && (
                         <div className='text-xs opacity-50'>
                             {summary()}
                         </div>
-                    )}
-
-                    {activeSettings.length > 0 && (
-                            <HoverCard openDelay={0} >
-                                <HoverCardTrigger>
-                                    <div
-                                        onClick={() => setToggleFiles(prev => !prev)}
-                                        className={cn(
-                                        'cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl px-2 py-2',
-                                            activeSettings.length > 1 && 'border px-3 py-2'
-                                        )}>
-                                        {activeSettings.length > 1 ? activeSettings.length : ''}
-                                        <div className='bg-blue-500 w-2 h-2 shadow-lg rounded-full -right-1 -top-1'></div>
-                                    </div>
-                                </HoverCardTrigger>
-                                {!toggleFiles && (
-                                    <HoverCardContent side='left'>
-                                     <span className='flex flex-col border gap-2 bg-white rounded-lg py-2 px-2'>
-                                         <span className='text-sm text-center'>{activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}</span>
-                                         <Settings hideActions={true} className='flex flex-row' audit={audit} auditSettings={activeSettings}>
-                                         </Settings>
-                                     </span>
-                                    </HoverCardContent>
-                                )}
-                            </HoverCard>
                     )}
 
 
