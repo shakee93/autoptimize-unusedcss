@@ -198,16 +198,18 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                 Save Changes</AppButton>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Save Changes?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
-                                <AlertDialogCancel>Discard</AlertDialogCancel>
-                            </AlertDialogFooter>
+                            <div>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Save Changes?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
+                                    <AlertDialogCancel>Discard</AlertDialogCancel>
+                                </AlertDialogFooter>
+                            </div>
                         </AlertDialogContent>
                     </AlertDialog>
                     <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
@@ -215,57 +217,59 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
                 <Mode mode='onboard'>
                     <Dialog>
-                        <DialogTrigger>
-                            <AppButton className='text-sm'>
-                                {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <UserCircle className='w-5 mr-0.5'/>}
-                                Connect your Account</AppButton>
-                        </DialogTrigger>
-                        <DialogContent className='px-6 py-6'>
-                            <DialogHeader>
-                                {dialogData && (
-                                    <>
-                                        <DialogTitle>RapidLoad can improve {dialogData.count} Audits</DialogTitle>
-                                        <div className='py-4 text-sm'>
-                                            <ul>
-                                                {data && dialogData.audits.slice(0, dialogData.show).map((audit) => (
-                                                    <li key={audit.id}>
-                                                        <Card className='px-3 py-2 mb-1.5'>
-                                                            <div className='flex gap-2 items-center'>
-                                                                <div
-                                                                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                                                                    {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={audit.icon}/> }
+                        <div>
+                            <DialogTrigger>
+                                <AppButton className='text-sm'>
+                                    {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <UserCircle className='w-5 mr-0.5'/>}
+                                    Connect your Account</AppButton>
+                            </DialogTrigger>
+                            <DialogContent className='px-6 py-6'>
+                                <DialogHeader>
+                                    {dialogData && (
+                                        <>
+                                            <DialogTitle>RapidLoad can improve {dialogData.count} Audits</DialogTitle>
+                                            <div className='py-4 text-sm'>
+                                                <ul>
+                                                    {data && dialogData.audits.slice(0, dialogData.show).map((audit) => (
+                                                        <li key={audit.id}>
+                                                            <Card className='px-3 py-2 mb-1.5'>
+                                                                <div className='flex gap-2 items-center'>
+                                                                    <div
+                                                                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
+                                                                        {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={audit.icon}/> }
 
+                                                                    </div>
+                                                                    <div className='flex flex-col'>
+                                                                        {audit.name}
+                                                                        {audit.displayValue && (
+                                                                            <span className='text-xxs leading-tight text-muted-foreground'>{audit.displayValue}</span>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
-                                                                <div className='flex flex-col'>
-                                                                    {audit.name}
-                                                                    {audit.displayValue && (
-                                                                        <span className='text-xxs leading-tight text-muted-foreground'>{audit.displayValue}</span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </Card>
-                                                    </li>
-                                                ))}
-                                                {data && !!dialogData.balance && (
-                                                    <li className='text-center text-muted-foreground mt-3'>and {dialogData.balance} more audit{dialogData.balance > 1 && 's'}...</li>
+                                                            </Card>
+                                                        </li>
+                                                    ))}
+                                                    {data && !!dialogData.balance && (
+                                                        <li className='text-center text-muted-foreground mt-3'>and {dialogData.balance} more audit{dialogData.balance > 1 && 's'}...</li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                            <div className='flex justify-center'>
+                                                {modeData?.connect_url && (
+                                                    <a href={modeData?.connect_url} target={modeData?.target}>
+                                                        <Button className='gap-2'>
+                                                            <>
+                                                                <UserCircle className='w-5 mr-0.5'/>Connect RapidLoad Account
+                                                            </>
+                                                        </Button>
+                                                    </a>
                                                 )}
-                                            </ul>
-                                        </div>
-                                        <div className='flex justify-center'>
-                                            {modeData?.connect_url && (
-                                               <a href={modeData?.connect_url} target={modeData?.target}>
-                                                   <Button className='gap-2'>
-                                                      <>
-                                                          <UserCircle className='w-5 mr-0.5'/>Connect RapidLoad Account
-                                                      </>
-                                                   </Button>
-                                               </a>
-                                            )}
-                                        </div>
-                                    </>
-                                )}
-                            </DialogHeader>
-                        </DialogContent>
+                                            </div>
+                                        </>
+                                    )}
+                                </DialogHeader>
+                            </DialogContent>
+                        </div>
                     </Dialog>
                     <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
                 </Mode>
