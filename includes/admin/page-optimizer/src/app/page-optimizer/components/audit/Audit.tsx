@@ -163,15 +163,20 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                 <HoverCardTrigger>
                                     <div
                                         onClick={() => setToggleFiles(prev => !prev)}
-                                        className='cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1 border rounded-2xl px-3 py-2'>
-                                        {activeSettings.length}
-                                        <Cog6ToothIcon className='w-4 '/>
+                                        className={cn(
+                                        'cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl px-2 py-2',
+                                            activeSettings.length > 1 && 'border px-3 py-2'
+                                        )}>
+                                        {activeSettings.length > 1 ? activeSettings.length : ''}
+                                        <div className='bg-blue-500 w-2 h-2 shadow-lg rounded-full -right-1 -top-1'></div>
                                     </div>
                                 </HoverCardTrigger>
                                 {!toggleFiles && (
-                                    <HoverCardContent side='left' sideOffset={10}>
-                                     <span>
-                                         <Settings hideActions={true} className='flex flex-row bg-white  rounded-2xl' audit={audit} auditSettings={activeSettings}/>
+                                    <HoverCardContent side='left'>
+                                     <span className='flex flex-col border gap-2 bg-white rounded-2xl py-2 px-4'>
+                                         <span className='text-sm text-center'>{activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}</span>
+                                         <Settings hideActions={true} className='flex flex-row ' audit={audit} auditSettings={activeSettings}>
+                                         </Settings>
                                      </span>
                                     </HoverCardContent>
                                 )}

@@ -1,5 +1,5 @@
 import Setting from "app/page-optimizer/components/audit/Setting";
-import React from "react";
+import React, {ReactNode} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {cn, transformFileType} from "lib/utils";
@@ -13,9 +13,10 @@ interface SettingsProps {
     type?: string
     className?: string
     hideActions?: boolean
+    children?: ReactNode
 }
 
-const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions }: SettingsProps) => {
+const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions, children }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
     type = transformFileType(audit, type);
@@ -29,9 +30,10 @@ const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions 
             {/*<JsonView data={settings} shouldInitiallyExpand={e => false}/>*/}
             {auditSettings && auditSettings.length > 0 &&(
                 <div className={cn(
-                    'flex flex-wrap gap-2',
+                    'flex flex-wrap gap-2 items-center',
                     className
                 )}>
+                    {children ? children : ''}
                     {auditSettings.filter(i => {
 
                         if (!type) {
