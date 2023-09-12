@@ -379,27 +379,21 @@ class RapidLoad_Admin_Frontend
             $_REQUEST['columns'][0]['search']['value'] : false;
 
         $filters = [];
-        $_status_filter = "";
 
         if($status_filter){
 
-            if($status_filter == 'rule-based'){
-                $_status_filter = " job_id IN (select id from [job_table_name] where rule_id is not null) ";
-            }else if($status_filter == 'warning'){
+            if($status_filter == 'warning'){
 
                 $filters[] = " warnings IS NOT NULL ";
-                $_status_filter = " warnings IS NOT NULL ";
 
             }else{
 
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
-                $_status_filter = " status = '". $status_filter . "' AND warnings IS NULL ";
             }
 
         }else{
 
             $filters[] = " status != 'rule-based' ";
-            $_status_filter = "";
 
         }
 
@@ -458,8 +452,8 @@ class RapidLoad_Admin_Frontend
         wp_send_json([
             'data' => $data,
             "draw" => (int)$draw,
-            "recordsTotal" => RapidLoad_DB::get_total_job_count(" WHERE job_type = 'uucss'"),
-            "recordsFiltered" => RapidLoad_DB::get_total_job_count(!empty($_status_filter) ? " WHERE " . $_status_filter . " AND job_type = 'uucss'" : " WHERE job_type = 'uucss'"),
+            "recordsTotal" => RapidLoad_DB::get_total_job_count($type == "path" ? " where rule = 'is_url' and regex = '/'" : " where rule != 'is_url'"),
+            "recordsFiltered" => RapidLoad_DB::get_total_job_count($where_clause),
             "success" => true
         ]);
 
