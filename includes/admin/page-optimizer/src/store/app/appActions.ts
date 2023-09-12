@@ -57,13 +57,35 @@ const transformData = (data: any) => {
     
     let audits : Audit[] = data.data.page_speed.audits.sort((a: Audit, b: Audit) => a.score - b.score).map( (a: Audit) => transformAudit(a))
 
+    const sortAuditsWithActions = (a: Audit, b: Audit) => {
+        const aFirstCondition = a.settings.filter(s => s.inputs[0].value).length > 0;
+        const bFirstCondition = b.settings.filter(s => s.inputs[0].value).length > 0;
+
+        if (aFirstCondition && !bFirstCondition) return -1;
+        if (!aFirstCondition && bFirstCondition) return 1;
+
+        const aSecondCondition = a.settings.length > 0;
+        const bSecondCondition = b.settings.length > 0;
+
+        if (aSecondCondition && !bSecondCondition) return -1;
+        if (!aSecondCondition && bSecondCondition) return 1;
+
+        const aThirdCondition = (a.files?.items?.length || 0) > 0;
+        const bThirdCondition = (b.files?.items?.length || 0) > 0;
+
+        if (aThirdCondition && !bThirdCondition) return -1;
+        if (!aThirdCondition && bThirdCondition) return 1;
+
+        return 0;
+    }
+
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
             ...data.data.page_speed,
             grouped : {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit').sort(
-                    (a,b) => (a.settings.length > 0 || a.files?.items?.length > 0) ? -1 : 1
+                    sortAuditsWithActions
                 ),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
                 diagnostics:  audits.filter(audit => audit.type === "diagnostics")

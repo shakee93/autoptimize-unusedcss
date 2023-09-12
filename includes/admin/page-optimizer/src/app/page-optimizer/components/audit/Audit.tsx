@@ -1,6 +1,6 @@
 import Card from "@/components/ui/card";
 import { PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
-import React, {useState, useRef, useEffect, forwardRef} from "react";
+import React, {useState, useRef, useEffect, forwardRef, useMemo} from "react";
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditContent from "app/page-optimizer/components/audit/content";
@@ -11,9 +11,17 @@ import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
 import {useAppContext} from "../../../../context/app";
 import {cn} from "lib/utils";
-import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import {AnimatePresence, m} from "framer-motion";
 import {Accordion} from "components/accordion";
+import Settings from "app/page-optimizer/components/audit/Settings";
+
+
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
 
 export interface AuditProps {
     audit: Audit;
@@ -104,6 +112,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
         return `${summaryText}`;
     };
 
+    const activeSettings = useMemo(() => (audit.settings.filter(s => s.inputs[0].value)), [audit.settings])
+
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
@@ -140,7 +150,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
 
                 </div>
 
-                <div className='flex gap-4 items-center'>
+                <div className='flex gap-2 items-center'>
 
                     { (audit.files?.items?.length > 0 || audit.settings.length > 0) && (
                         <div className='text-xs opacity-50'>
@@ -148,12 +158,33 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                         </div>
                     )}
 
+                    {activeSettings.length > 0 && (
+                            <HoverCard openDelay={0} closeDelay={0}>
+                                <HoverCardTrigger>
+                                    <div
+                                        onClick={() => setToggleFiles(prev => !prev)}
+                                        className='cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1 border rounded-2xl px-3 py-2'>
+                                        {activeSettings.length}
+                                        <Cog6ToothIcon className='w-4 '/>
+                                    </div>
+                                </HoverCardTrigger>
+                                {!toggleFiles && (
+                                    <HoverCardContent side='left' sideOffset={10}>
+                                     <span>
+                                         <Settings hideActions={true} className='flex flex-row bg-white  rounded-2xl' audit={audit} auditSettings={activeSettings}/>
+                                     </span>
+                                    </HoverCardContent>
+                                )}
+                            </HoverCard>
+                    )}
+
+
                     <div>
                         <TooltipText
                             text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
                         >
                             <div onClick={() => setToggleFiles(prev => !prev)}
-                                 className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-transparent hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
+                                 className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
 
                                 {filesOrActions ? (
                                     toggleFiles ? 'Hide Actions' : 'Show Actions'
@@ -171,7 +202,10 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                     )}
                             </div>
                         </TooltipText>
+
                     </div>
+
+
 
                 </div>
 
