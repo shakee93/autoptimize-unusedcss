@@ -16,6 +16,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
+import {Monitor} from "lucide-react";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -45,7 +46,7 @@ const Header = ({ url }: { url: string}) => {
                             </div>
                         <div onClick={() => dispatch(changeReport('desktop'))}
                              className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
-                            <ComputerDesktopIcon  className="h-5 w-5 font-medium dark:text-brand-500 " /> Desktop
+                            <Monitor  className="h-5 w-5 font-medium dark:text-brand-500 " /> Desktop
                         </div>
 
                         <div onClick={() => dispatch(changeReport('mobile'))}

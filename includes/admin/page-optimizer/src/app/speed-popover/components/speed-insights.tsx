@@ -22,7 +22,7 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import {HoverCardPortal} from "@radix-ui/react-hover-card";
-import {Archive, Circle, Dot, FileCode2, FileMinus2, GaugeCircle} from "lucide-react";
+import {Archive, Circle, Dot, FileCode2, FileMinus2, GaugeCircle, Monitor} from "lucide-react";
 import {useToast} from "components/ui/use-toast";
 import {ComputerDesktopIcon, DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
 import {ThunkDispatch} from "redux-thunk";
@@ -154,9 +154,14 @@ const Content = () => {
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
-                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                pathColor: progressbarColor,
-                                pathTransitionDuration: .5,
+                            <CircularProgressbarWithChildren
+                                strokeWidth={4}
+                                className='w-44 h-44 relative'
+                                styles={buildStyles({
+                                    pathColor: progressbarColor,
+                                    trailColor: '#eeeeee',
+                                    pathTransitionDuration: .5,
+                                    strokeLinecap: 'round'
                             })} value={performance}>
                                 <span
                                     style={{
@@ -171,10 +176,10 @@ const Content = () => {
                     <div className='text-xs w-full flex justify-center'>
                         <TooltipText asChild text='Switch Report'>
                             <button onClick={() => dispatch(changeReport(activeReport === 'desktop' ? 'mobile' : 'desktop'))}
-                                    className='capitalize inline-flex gap-1 justify-center items-center border rounded-full py-1 px-3'>
+                                    className='capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
                                 {activeReport === 'desktop' ?
-                                    <ComputerDesktopIcon  className="h-5 w-5" /> :
-                                    <DevicePhoneMobileIcon  className="h-5 w-5" />
+                                    <Monitor className="w-4 h-5" /> :
+                                    <DevicePhoneMobileIcon  className="h-5" />
                                 }
                                 <span>{activeReport}</span>
                             </button>
@@ -260,11 +265,11 @@ const SpeedInsights = ({children}: {
         <HoverCard openDelay={0}>
             <HoverCardTrigger asChild>
                 <div
-                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardContent id='rpo-popup-content' className="text-base font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+            <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
                 <Content/>
             </HoverCardContent>
         </HoverCard>

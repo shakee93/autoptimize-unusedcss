@@ -55,22 +55,10 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
                 shadowRoot.appendChild(styleLink);
             }
 
-
-
-            const resetStyles = document.createElement('style');
-            resetStyles.textContent = `
-              :host, :root {
-                font-size: initial;
-              }
-            `;
-            shadowRoot.appendChild(resetStyles);
-
             // This div will act as the container for the portal
             const portalDiv = document.createElement('div');
             // portalDiv.style.fontSize = '16px';
             shadowRoot.appendChild(portalDiv);
-
-            hostRef.current.style.fontSize = '16px';
 
             setPortalContainer(portalDiv);
         }

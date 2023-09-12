@@ -131,11 +131,12 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
                   {togglePerformance ? (
                       <div className={cn(
-                          'h-fit w-fit bg-brand-200 flex items-center justify-center rounded-md',
+                          'h-fit w-fit  flex items-center justify-center rounded-md',
                           isFaviconLoaded ? 'flex' : 'hidden'
                       )
                       }>
-                          <img onLoad={e => setIsFaviconLoaded(true)} className='w-8 min-h-[32px] rounded p-1 bg-brand-200/70' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
+                          <img onLoad={e => setIsFaviconLoaded(true)}
+                               className='w-8 min-h-[32px] rounded-md p-1 bg-brand-200 dark:bg-brand-700' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>
                       </div>
                   ) : (
                       <div className='px-[5px]'>
