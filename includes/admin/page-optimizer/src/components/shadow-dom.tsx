@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useRootContext } from '../context/root';
+import {isDev} from "lib/utils";
 
 interface ShadowDomProps {
     children: React.ReactNode;
@@ -13,16 +14,10 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme } = useRootContext();
     const darkModeClass = 'rapidload-dark';
-    const isDevelopment= import.meta.env.DEV
-
-
-
-
-
 
     useEffect(() => {
 
-        if (isDevelopment) {
+        if (isDev) {
             setPortalContainer(document.body as HTMLDivElement)
         }
 
@@ -43,7 +38,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
 
-    if(!node && isDevelopment) {
+    if(!node && isDev) {
         return <>{children}</>
     }
 

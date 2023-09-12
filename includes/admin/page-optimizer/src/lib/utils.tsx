@@ -37,6 +37,8 @@ export function transformFileType(audit: Audit, type?: string) {
   return type
 }
 
+export const isDev = import.meta.env.DEV
+
 export function isUrl(input: string): boolean {
   try {
     new URL(input);
