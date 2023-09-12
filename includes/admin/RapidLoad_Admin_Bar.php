@@ -139,7 +139,7 @@ class RapidLoad_Admin_Bar {
                     overflow: hidden !important;
                 }
 
-                .rl-page-optimizer-loaded #wp-admin-bar-rapidload .ab-sub-wrapper {
+                .rpo-loaded\:with-popup #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
                 }
 
