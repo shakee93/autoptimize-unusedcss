@@ -159,7 +159,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                     )}
 
                     {activeSettings.length > 0 && (
-                            <HoverCard openDelay={0} closeDelay={0}>
+                            <HoverCard openDelay={0} >
                                 <HoverCardTrigger>
                                     <div
                                         onClick={() => setToggleFiles(prev => !prev)}
@@ -173,9 +173,9 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                 </HoverCardTrigger>
                                 {!toggleFiles && (
                                     <HoverCardContent side='left'>
-                                     <span className='flex flex-col border gap-2 bg-white rounded-2xl py-2 px-4'>
+                                     <span className='flex flex-col border gap-2 bg-white rounded-lg py-2 px-2'>
                                          <span className='text-sm text-center'>{activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}</span>
-                                         <Settings hideActions={true} className='flex flex-row ' audit={audit} auditSettings={activeSettings}>
+                                         <Settings hideActions={true} className='flex flex-row' audit={audit} auditSettings={activeSettings}>
                                          </Settings>
                                      </span>
                                     </HoverCardContent>
