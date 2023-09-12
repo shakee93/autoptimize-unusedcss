@@ -158,11 +158,13 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
            </div>
             <div className='flex items-center gap-2'>
-                <div className='flex gap-4 px-8 text-brand-200 dark:text-white'>
+                <div className='flex gap-4 px-8 text-brand-600 dark:text-brand-400 '>
                     <Mode>
                         <Popover>
-                            <PopoverTrigger asChild={false}>
-                                <History className='w-5 text-brand-600' />
+                            <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
+                                <TooltipText text='Show Revisions'>
+                                    <History className='w-5 ' />
+                                </TooltipText>
                             </PopoverTrigger>
                             <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
                                 <div className='my-2 ml-4 font-medium '>Revisions</div>
@@ -180,7 +182,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     </Mode>
 
                     <TooltipText text='Switch theme'>
-                        <ThemeSwitcher></ThemeSwitcher>
+                        <div className='hover:dark:text-brand-100'>
+                            <ThemeSwitcher></ThemeSwitcher>
+                        </div>
                     </TooltipText>
                     {/*<TooltipText text='Undo'>*/}
                     {/*    <Undo2 className='w-5' />*/}

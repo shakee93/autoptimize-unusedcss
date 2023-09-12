@@ -8,6 +8,7 @@ interface WordPressOptions {
     page_optimizer_base: string
     page_optimizer_package_base : string
     plugin_url: string
+    dashboard_url?: string
     nonce?: string
     timezone: string
     load_optimizer: boolean

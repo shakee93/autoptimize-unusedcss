@@ -61,6 +61,7 @@ class RapidLoad_Admin_Bar {
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
             'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'dashboard_url' => admin_url( 'admin.php?page=rapidload' ),
             'optimizer_url' => $this->transform_url($this->get_current_url()),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
             'timezone' => get_option('timezone_string', 'UTC'),
