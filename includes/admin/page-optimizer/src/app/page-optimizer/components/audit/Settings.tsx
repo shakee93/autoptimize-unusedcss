@@ -2,6 +2,8 @@ import Setting from "app/page-optimizer/components/audit/Setting";
 import React from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
+import {transformFileType} from "lib/utils";
+import {JsonView} from "react-json-view-lite";
 
 
 interface SettingsProps {
@@ -14,17 +16,7 @@ interface SettingsProps {
 const Settings = ({ audit, max = 2, type, auditSettings }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
-    if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
-        type = 'image'
-    }
-
-    if (type === 'google_font') {
-        type = 'font'
-    }
-
-    if (type === 'data_image') {
-        type = 'image'
-    }
+    type = transformFileType(audit, type);
 
     if (!auditSettings) {
         auditSettings = audit.settings
@@ -32,16 +24,13 @@ const Settings = ({ audit, max = 2, type, auditSettings }: SettingsProps) => {
 
     return (
         <>
+            {/*<JsonView data={settings} shouldInitiallyExpand={e => false}/>*/}
             {auditSettings && auditSettings.length > 0 &&(
                 <div className="flex flex-wrap gap-2">
                     {auditSettings.filter(i => {
 
                         if (!type) {
                             return true
-                        }
-
-                        if (i.category === 'javascript') {
-                            i.category = 'js';
                         }
 
                         return  i.category === type;

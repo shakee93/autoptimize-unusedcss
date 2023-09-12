@@ -20,6 +20,7 @@ import {
     RowData
 } from "@tanstack/react-table";
 import FilesTable from "app/page-optimizer/components/audit/content/table";
+import {transformFileType} from "lib/utils";
 
 
 declare module '@tanstack/react-table' {
@@ -146,7 +147,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
     let remainingSettings = audit
         .settings
-        .filter(s => !tables.map(t => t.options.meta?.type).includes(s.category) )
+        .filter(s => !tables.map(t => transformFileType(audit, t.options.meta?.type)).includes(s.category) )
 
 
     return (

@@ -16,6 +16,27 @@ export function isImageAudit(audit_id: string) {
   ].includes(audit_id)
 }
 
+export function transformFileType(audit: Audit, type?: string) {
+
+  if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
+    type = 'image';
+  }
+
+  if (type === 'google_font') {
+    type = 'font'
+  }
+
+  if (type === 'data_image') {
+    type = 'image'
+  }
+
+  if (type === 'js') {
+    type = 'javascript'
+  }
+
+  return type
+}
+
 export function isUrl(input: string): boolean {
   try {
     new URL(input);
