@@ -2,13 +2,20 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "componen
 import {truncateMiddleOfURL} from "lib/utils";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import {CircleDashed} from "lucide-react";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {CellContext} from "@tanstack/react-table";
 import Code from "components/ui/code";
+import {JsonView} from "react-json-view-lite";
 
 
 interface AuditColumnImageProps {
     cell: CellContext<AuditResource, any>
+}
+
+interface FetchDetails {
+    redirected: boolean;
+    status: number;
+    statusText: string;
 }
 
 const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
@@ -18,7 +25,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
     let snippet : any = '';
 
-    if (cell.table.options.meta?.type === 'image' && cell.table.options.columns.map(c => c.id).includes('node')) {
+    if (cell.table.options.meta?.type === 'image' && cell.table.options.columns.find(c => c.id === 'node')) {
         // @ts-ignore
         snippet = cell.row.getValue('node') as {
             nodeLabel: string
@@ -33,23 +40,20 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                     <div className='flex items-center gap-3'>
                         <div className='w-6 h-6'>
                             <div style={{
-                                backgroundImage: `url(${value.url ? value.url : value})`
+                                backgroundImage: `url(${value})`
                             }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
                             </div>
                         </div>
 
-
                         {value && (
                             <a className='text-left' target='_blank'
                                href={value}>
-                                <span>{truncateMiddleOfURL(value.url ? value.url : value, 40)}</span>
+                                <span>{truncateMiddleOfURL(value, 40)}</span>
                                 <span>
                                     <ArrowTopRightOnSquareIcon className='ml-1.5 inline-block w-3.5'/>
                                 </span>
-
                             </a>
                         )}
-
 
                     </div>
                 </TooltipTrigger>

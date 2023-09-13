@@ -139,13 +139,13 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                             {/*    2 changes*/}
                             {/*</span>*/}
 
-                            {activeSettings.length > 0 && (
+                            {(activeSettings.length > 0 && !toggleFiles) && (
                                 <HoverCard openDelay={0} >
                                     <HoverCardTrigger>
                                         <div
                                             onClick={() => setToggleFiles(prev => !prev)}
                                             className={cn(
-                                                'cursor-pointer select-none text-xs p-2 text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
+                                                'cursor-pointer select-none text-xs p-1 text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
                                                 activeSettings.length > 1 && 'border py-0.5 px-2'
                                             )}>
                                             {activeSettings.length > 1 ? activeSettings.length : ''}
