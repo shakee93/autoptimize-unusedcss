@@ -15,6 +15,7 @@ import ShadowDom from "components/shadow-dom";
 import RootProvider from "./context/root";
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
+import {ErrorBoundary} from "react-error-boundary";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -24,30 +25,72 @@ interface initRapidLoadOptimizerProps {
     modeData ?:RapidLoadOptimizerModeData
 }
 
+const logError = (error: Error, info: { componentStack: string }) => {
+    // Do something with the error, e.g. log to an external API
+    console.error(error, info);
+};
+
+const ApplicationCrashed = () => {
+
+    const containerStyles = {
+        background: 'white',
+        bottom: 0,
+        position: 'absolute' as 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '10px 20px',
+        borderRadius: '10px',
+        marginBottom: '20px',
+        border: '1px solid #F44336',
+        boxShadow: '0 10px 15px -3px #F44336, 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        fontSize: '14px'
+    };
+
+    const errorStyle = {
+        background: 'red',
+        padding: '5px 15px',
+        fontSize: '12px',
+        borderRadius: '5px',
+        color: 'white',
+        marginLeft: '10px'
+    };
+
+    return (
+        <div className='rpo-app-crashed' style={containerStyles}>
+            <div  className='rpo-error'>
+                RapidLoad Page Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
+            </div>
+        </div>
+    )
+}
+
+
 export class RapidLoadOptimizer {
     constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-           <RootProvider>
-               <ShadowRoot styles={stylesUrl}>
-                   <Provider store={store}>
-                       <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                           <TooltipProvider delayDuration={100}>
-                               <LazyMotion features={domAnimation}>
-                                   {popup && (
-                                       <ShadowRoot node={popup} styles={stylesUrl}>
-                                           <SpeedPopover/>
-                                       </ShadowRoot>
-                                   )}
+           <ErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+               <RootProvider>
+                   <ShadowRoot styles={stylesUrl}>
+                       <Provider store={store}>
+                           <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
+                               <TooltipProvider delayDuration={100}>
+                                   <LazyMotion features={domAnimation}>
+                                       {popup && (
+                                           <ShadowRoot node={popup} styles={stylesUrl}>
+                                               <SpeedPopover/>
+                                           </ShadowRoot>
+                                       )}
 
-                                   <App _showOptimizer={showOptimizer} popup={popup} />
+                                       <App _showOptimizer={showOptimizer} popup={popup} />
 
-                               </LazyMotion>
-                           </TooltipProvider>
-                       </AppProvider>
-                   </Provider>
-               </ShadowRoot>
-           </RootProvider>
+                                   </LazyMotion>
+                               </TooltipProvider>
+                           </AppProvider>
+                       </Provider>
+                   </ShadowRoot>
+               </RootProvider>
+           </ErrorBoundary>
         );
     }
 }
