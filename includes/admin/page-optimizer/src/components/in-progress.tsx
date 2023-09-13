@@ -6,8 +6,8 @@ import Indicator from "components/indicator";
 const InProgress = () => {
 
     return (
-        <Indicator className='animate-pulse fill-amber-500'>
-             <span className='flex gap-2 items-center'> <RefreshCcw className='w-4 animate-spin text-amber-500'/>
+        <Indicator className='animate-pulse fill-orange-500'>
+             <span className='flex gap-2 items-center'> <RefreshCcw className='w-4 animate-spin text-orange-500'/>
                 Optimization in progress
             </span>
         </Indicator>

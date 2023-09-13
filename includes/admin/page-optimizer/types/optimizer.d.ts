@@ -132,7 +132,7 @@ interface AuditSetting {
     category: string;
     inputs: AuditSettingInput[];
     status?: {
-        status: string
+        status: 'failed' | 'queued' | 'processing' | 'success'
         stats: []
         warnings: []
         error: any
