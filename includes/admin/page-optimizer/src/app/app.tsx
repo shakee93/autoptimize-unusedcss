@@ -59,7 +59,6 @@ const App = ({ popup, _showOptimizer = false }: {
                     {showOptimizer && (
                         <PageOptimizer/>
                     )}
-                    <Toaster/>
                 </>
             )}
         </>
