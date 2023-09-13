@@ -187,8 +187,8 @@ class RapidLoad_Optimizer
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
-            if ($isDev) {
-                $url = 'http://54.70.121.132/';
+            if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
+                $url = 'https://catlitter.lk/';
             }
 
             $result = $api->post('page-speed', [

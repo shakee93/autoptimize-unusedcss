@@ -18,8 +18,6 @@ class RapidLoad_Font
             return;
         }
 
-        error_log('font enabled');
-
         $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
