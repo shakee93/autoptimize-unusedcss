@@ -88,7 +88,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                 {(
                     imageDetails?.redirected
                     && (imageDetails?.status === 302 || imageDetails?.status === 307 || true)
-                    && value.includes('images.rapidload-cdn.io')
+                    // && value.includes('images.rapidload-cdn.io')
                 ) && (
                     <InProgress/>
                 )}

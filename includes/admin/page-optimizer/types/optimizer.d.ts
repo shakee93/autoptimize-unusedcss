@@ -131,6 +131,12 @@ interface AuditSetting {
     key: string,
     category: string;
     inputs: AuditSettingInput[];
+    status?: {
+        status: string
+        stats: []
+        warnings: []
+        error: any
+    }
 }
 
 interface AuditSettingInput {

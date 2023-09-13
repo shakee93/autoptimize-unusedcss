@@ -29,7 +29,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import {Lock, Settings, SettingsIcon} from "lucide-react";
+import {Circle, Lock, Settings, SettingsIcon} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -37,6 +37,9 @@ import AdditionalInputs from "app/page-optimizer/components/audit/additional-inp
 import TooltipText from "components/ui/tooltip-text";
 import Mode from "app/page-optimizer/components/Mode";
 import {useAppContext} from "../../../../context/app";
+import Indicator from "components/indicator";
+import {cn} from "lib/utils";
+import InProgress from "components/in-progress";
 
 interface SettingItemProps {
     audit: Audit
@@ -114,21 +117,64 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
         setOpen(false);
     }
 
+    const Status = ({ status } : { status: AuditSetting['status']}) => {
+
+        if (!status) {
+            return  <></>
+        }
+
+        if (status.status === 'failed') {
+            return (
+                <Indicator className='fill-rose-600'>
+                    <div className='flex flex-col gap-0.5'>
+                        <span className='flex gap-2 items-center'>
+                            <Circle className='w-2 fill-rose-500 stroke-0'/>
+                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
+                        </span>
+                        <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
+                    </div>
+                </Indicator>
+            );
+        }
+
+        if(status.status === 'progress') {
+            return <InProgress/>
+        }
+
+        return (
+            <>
+                {/*{status.status}*/}
+            </>
+        );
+    }
+
     return (
         <div
             key={index}
             className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
+
+
+
             {icons[settings.category as keyof typeof icons]} {settings.name}
+
+
+            {/*<JsonView data={settings.status}/>*/}
 
 
             {!hideActions && (
                 <>
+
                     {mainInput && (
                         // @ts-ignore
                         <Switch disabled={['onboard', 'preview'].includes(mode)} checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
                     )}
 
+                    {settings.status && (
+                        <div className='px-1'>
+                            <Status status={settings.status}/>
+                        </div>
+                    )}
 
                     <Mode>
                         {showPopover && (
@@ -166,6 +212,9 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                     </Mode>
                 </>
             )}
+
+
+
 
 
             {/*<TooltipText text='Queued'>*/}
