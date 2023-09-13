@@ -46,7 +46,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
                         </TooltipText>
                     </span>
                 )}
-                <span className='inline-block'>{truncateMiddleOfURL(value.url, 50)} <ArrowTopRightOnSquareIcon className='w-4 inline-block ml-1 -mt-1'/></span>
+                <span className='items-center gap-2'>{truncateMiddleOfURL(value.url, 50)} <ArrowTopRightOnSquareIcon className='w-4 inline-block -mt-0.5'/></span>
             </a>
         );
     } else {
