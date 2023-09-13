@@ -10,7 +10,7 @@ import {optimizerData} from "../../../../store/app/appSelector";
 import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
 import {useAppContext} from "../../../../context/app";
-import {cn} from "lib/utils";
+import {cn, isDev} from "lib/utils";
 import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import {AnimatePresence, m} from "framer-motion";
 import {Accordion} from "components/accordion";
@@ -169,7 +169,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
-                            <span>{audit.id}</span>
+                            {isDev && (<span> - {audit.id}</span>)}
                         </span>
                     </div>
 

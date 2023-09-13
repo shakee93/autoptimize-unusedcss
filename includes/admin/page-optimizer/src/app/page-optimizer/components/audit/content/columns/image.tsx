@@ -21,6 +21,9 @@ interface FetchDetails {
 const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [imageDetails, setImageDetails] = useState<FetchDetails | null>(null);
+
 
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
     let snippet : any = '';
@@ -34,13 +37,52 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
         }
     }
 
+    useEffect(() => {
+        const fetchImageDetails = async () => {
+            try {
+                const response = await fetch(value);
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch image");
+                }
+
+                const blob = await response.blob();
+                const objectUrl = URL.createObjectURL(blob);
+
+                setImageDetails({
+                    redirected: response.redirected,
+                    status: response.status,
+                    statusText: response.statusText
+                });
+                setImageUrl(objectUrl);
+
+                setLoaded(true)
+            } catch (error) {
+                setImageUrl(value); // Set the original value as a fallback
+                setLoaded(true)
+            }
+        };
+
+        if (value) {
+            fetchImageDetails();
+        }
+
+        // Don't forget to revoke the object URL to free up memory when the component unmounts
+        return () => {
+            if (imageUrl) {
+                URL.revokeObjectURL(imageUrl);
+            }
+        };
+    }, [value]);
+
+
     return (
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
                         <div className='w-6 h-6'>
                             <div style={{
-                                backgroundImage: `url(${value})`
+                                backgroundImage: `url(${imageUrl || value})`
                             }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
                             </div>
                         </div>
@@ -60,9 +102,11 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                 <TooltipContent className='max-w-[768px] min-w-[32px] min-h-[32px]'>
                     <div className='flex flex-row items-center gap-3 py-1'>
                         <div>
-                            <img alt={value} onError={() => setLoaded(true)}
-                                 onLoadCapture={() => setLoaded(true)} className='max-w-[160px]'
-                                 src={value}/>
+                            <img
+                                alt={value}
+                                className='max-w-[160px]'
+                                src={imageUrl || value}
+                            />
                             {!loaded && (
                                 <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>
                                     <CircleDashed className='animate-spin text-purple-750 w-6'/>
