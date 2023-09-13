@@ -27,6 +27,12 @@ class RapidLoad_Optimizer
 
         self::$global_options = RapidLoad_Base::fetch_options();
 
+        add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
+        add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
+
+        add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
+        add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
+
         if(!isset(self::$global_options['uucss_enable_page_optimizer']) || self::$global_options['uucss_enable_page_optimizer'] == ""){
             return;
         }
@@ -40,12 +46,6 @@ class RapidLoad_Optimizer
         }
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
-
-        add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
-        add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
-
-        add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
-        add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
 
         new OptimizerFont();
         new OptimizerJS();
