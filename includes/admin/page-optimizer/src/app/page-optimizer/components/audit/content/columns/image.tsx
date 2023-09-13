@@ -24,11 +24,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [imageDetails, setImageDetails] = useState<FetchDetails | null>({
-        redirected: true,
-        status: 302,
-        statusText: ''
-});
+    const [imageDetails, setImageDetails] = useState<FetchDetails | null>(null);
 
 
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
@@ -87,8 +83,8 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
                 {(
                     imageDetails?.redirected
-                    && (imageDetails?.status === 302 || imageDetails?.status === 307 || true)
-                    // && value.includes('images.rapidload-cdn.io')
+                    && (imageDetails?.status === 302 || imageDetails?.status === 307)
+                    && value.includes('images.rapidload-cdn.io')
                 ) && (
                     <InProgress/>
                 )}
