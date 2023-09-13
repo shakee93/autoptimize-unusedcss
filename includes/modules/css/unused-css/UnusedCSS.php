@@ -225,7 +225,6 @@ class UnusedCSS
                         $link['rule_status'] = $job_data->status;
                         $link['rule_hits'] = $job_data->hits;
                         $link['applied_links'] = count($job->get_urls());
-                        $link['applied_successful_links'] = 0;
                     }
 
                     if(!isset($link['status'])){
