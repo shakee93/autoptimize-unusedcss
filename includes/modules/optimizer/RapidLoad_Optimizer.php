@@ -190,7 +190,7 @@ class RapidLoad_Optimizer
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
                 $url = 'https://catlitter.lk/';
             }
-            error_log($url);
+
             $result = $api->post('page-speed', [
                 'url' => $url,
                 'mobile' => self::$strategy
