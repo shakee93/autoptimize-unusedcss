@@ -350,9 +350,7 @@
         <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
 
           <div class="col-start-1 col-end-3" >
-            <a :href="onboard_link" >
-              <button class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
-            </a>
+              <button @click="onboardOptimier" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
           </div>
 
         </div>
@@ -374,6 +372,7 @@ import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
 import optimization from "./optimization.vue";
 import popupModel from "../components/popupModel.vue";
+// import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
 export default {
 
@@ -385,6 +384,12 @@ export default {
   },
 
   mounted() {
+
+    if (this.on_board_complete ==='') {
+      this.onboardOptimier();
+    }else if (window.location.href.indexOf("nonce") > -1) {
+      this.openOptimizer();
+    }
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
@@ -565,6 +570,24 @@ export default {
           });
 
     },
+    onboardOptimier(){
+      if (window.RapidLoadOptimizer) {
+        let container = document.getElementById('rapidload-page-optimizer')
+
+        // open optimizer in onboard mode
+        new window.RapidLoadOptimizer({
+          container,
+          showOptimizer: true,
+          mode: 'onboard',
+          modeData: {
+            // this is the url where to redirect user when they press connect
+            connect_url: this.license_information.connect_link,
+            // target: '_blank'
+          }
+        });
+      }
+
+    },
     openOptimizer() {
       if (window.RapidLoadOptimizer) {
         let container = document.getElementById('rapidload-page-optimizer')
@@ -573,18 +596,6 @@ export default {
           container,
           showOptimizer: true
         })
-
-        // TODO: open optimizer in onboard mode example
-        // new window.RapidLoadOptimizer({
-        //   container,
-        //   showOptimizer: true,
-        //   mode: 'onboard',
-        //   modeData: {
-        //     // this is the url where to redirect user when they press connect
-        //     connect_url: 'http://localhost:5173/',
-        //     target: '_blank'
-        //   }
-        // });
       }
       
     }
@@ -700,7 +711,7 @@ export default {
           id : "page-optimizer",
           title: "Page Optimizer",
           description: 'Effortlessly optimize your site’s speed with on-the-spot actionable fixes',
-          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#DE00A0"/><g clip-path="url(#clip0_2572_64)"><path d="M35.575 19.6589L33.8047 22.352C34.6234 23.8549 35.0517 25.5325 35.0517 27.2363C35.0517 28.9401 34.6234 30.6176 33.8047 32.1204H15.1513C14.1175 30.219 13.7143 28.0488 13.998 25.9121C14.2817 23.7754 15.238 21.7786 16.7338 20.1999C18.2296 18.6213 20.1904 17.5394 22.3429 17.1049C24.4955 16.6705 26.7326 16.9051 28.7427 17.7762L31.5956 15.9831C28.9974 14.4009 25.9285 13.7302 22.8909 14.081C19.8534 14.4318 17.0272 15.7832 14.8752 17.9141C12.7231 20.0449 11.3726 22.8289 11.0447 25.8104C10.7167 28.7919 11.4309 31.7942 13.0701 34.3258L13.5054 34.9929H35.4506L35.8859 34.3258C37.3127 32.1215 38.0433 29.553 37.9861 26.9429C37.9288 24.3327 37.0862 21.7974 35.564 19.6553L35.575 19.6589Z" fill="white"/><path d="M34.2365 17.2382L26.7678 28.355C26.5619 28.6835 26.2841 28.963 25.9544 29.1733C25.6248 29.3836 25.2516 29.5192 24.8618 29.5706C24.472 29.622 24.0755 29.5878 23.7009 29.4704C23.3263 29.3529 22.983 29.1553 22.696 28.8917C22.4089 28.6282 22.1852 28.3053 22.0411 27.9465C21.897 27.5878 21.8361 27.2021 21.8628 26.8174C21.8895 26.4327 22.0031 26.0587 22.1955 25.7224C22.3878 25.3861 22.6541 25.0959 22.9749 24.8729L23.0298 24.8334L34.2365 17.2382Z" fill="white"/></g><defs><clipPath id="clip0_2572_64"><rect width="27" height="21" fill="white" transform="translate(11 14)"/></clipPath></defs></svg>',
+          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#6F2DBD"/><path d="M28 25L21.1605 29.3505L23.932 30.9643L21 35L27.8396 30.7114L25.0716 29.1031L28 25Z" fill="white"/><path d="M18.1962 28.3053C17.09 27.7681 16.1326 26.9566 15.4111 25.9446C14.6896 24.9326 14.2267 23.7522 14.0646 22.5107C13.9026 21.2692 14.0464 20.006 14.4831 18.8358C14.9197 17.6656 15.6354 16.6256 16.565 15.8103C17.4946 14.995 18.6086 14.4303 19.8059 14.1674C21.0032 13.9045 22.2457 13.9519 23.4205 14.3051C24.5953 14.6584 25.6652 15.3063 26.5329 16.1901C27.4006 17.0739 28.0387 18.1655 28.389 19.3656H30.268C31.4767 19.3635 32.6403 19.8354 33.5192 20.6842C34.3981 21.5329 34.9254 22.6941 34.9927 23.9285C35.0599 25.1629 34.662 26.3768 33.8807 27.3202C33.0995 28.2636 31.9944 28.8648 30.7929 29" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           link: '/#',
           status: false,
           isDisabled: true
