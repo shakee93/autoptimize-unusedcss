@@ -64,6 +64,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
 
         const selectFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
 
+            return true;
             // console.log(row.original,columnId, tableId, tableFilterStates, value);
 
             if (row.original.passed && value === 'on') {
@@ -92,16 +93,16 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 tableId
             },
             state: {
-                globalFilter: tableFilterStates[tableId] || 'off',
+                // globalFilter: tableFilterStates[tableId] || 'off',
             },
-            globalFilterFn: selectFilterFn,
+            // globalFilterFn: selectFilterFn,
             initialState : {
                 pagination : {
                     pageSize: 5
                 }
             },
-            onGlobalFilterChange: () => updateFilter(tableId),
-            getFilteredRowModel: getFilteredRowModel(),
+            // onGlobalFilterChange: () => updateFilter(tableId),
+            // getFilteredRowModel: getFilteredRowModel(),
             autoResetPageIndex: false
         });
 

@@ -31,8 +31,10 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter, open, 
 
     // TODO: possible bug in list type table audits
     // @ts-ignore
-    const passed = rows.find((r) => r?.passed)
-    
+    const resources = rows.filter((r) => !r?.passed) || []
+    // @ts-ignore
+    const passed = rows.filter((r) => r?.passed) || []
+
     if (!tableId) {
         return <></>
     }
@@ -66,7 +68,13 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter, open, 
                     </div>
 
                     <div className='opacity-50 text-xs'>
-                        {rows.length} Resource{rows.length > 1 ? 's' : ''}{/* {(audit.settings.length) && 'and Actions'}*/}
+                        {resources.length > 0 && (
+                            <span>{resources.length} Resource{resources.length > 1 ? 's' : ''}</span>
+                        )}
+                        {(resources.length > 0 && passed.length > 0) && ', '}
+                        {passed.length > 0 && (
+                            <span>{passed.length} Optimized Resource{passed.length > 1 ? 's' : ''}</span>
+                        )}
                     </div>
                 </div>
                 {/*{!!countOfChanges && (*/}
