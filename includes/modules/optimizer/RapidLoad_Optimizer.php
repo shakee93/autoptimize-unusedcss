@@ -188,9 +188,9 @@ class RapidLoad_Optimizer
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
-                $url = 'http://54.70.121.132/';
+                $url = 'https://catlitter.lk/';
             }
-
+            error_log($url);
             $result = $api->post('page-speed', [
                 'url' => $url,
                 'mobile' => self::$strategy
