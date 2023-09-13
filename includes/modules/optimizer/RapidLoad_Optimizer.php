@@ -187,6 +187,7 @@ class RapidLoad_Optimizer
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
+
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
                 $url = 'https://catlitter.lk/';
             }
