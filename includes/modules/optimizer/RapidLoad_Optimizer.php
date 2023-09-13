@@ -21,7 +21,7 @@ class RapidLoad_Optimizer
     static $merged_options = [];
     static $job;
     static $strategy;
-    static $revision_limit;
+    static $revision_limit = 10;
 
     public function __construct(){
 
