@@ -21,7 +21,6 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue }
     initShowOptimizerValue?: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
-    const isDevelopment= import.meta.env.DEV
 
     const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);

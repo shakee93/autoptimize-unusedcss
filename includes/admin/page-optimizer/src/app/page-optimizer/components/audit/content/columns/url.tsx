@@ -21,15 +21,20 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
         return <AuditColumnImage cell={cell}/>
     } else if (isUrl(value)) {
         return (
-            <a className='flex gap-2' target='_blank'
-               href={value}>{truncateMiddleOfURL(value, 50)}
-                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+            <a className='text-left' target='_blank'
+               href={value}>
+                <span>{truncateMiddleOfURL(value, 50)}</span>
+                <ArrowTopRightOnSquareIcon className='w-4 inline-block ml-2'/>
+            </a>
         )
     } else if (typeof value === 'object' && typeof value?.url === 'string') {
         return (
-            <a className='flex gap-2' target='_blank'
-               href={value.url}>{truncateMiddleOfURL(value.url, 50)}
-                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+            <a className='text-left align-middle' target='_blank'
+               href={value.url}>
+                <span>{truncateMiddleOfURL(value.url, 50)}</span>
+                <span><ArrowTopRightOnSquareIcon className='w-4 inline-block ml-2 -mt-1'/></span>
+
+            </a>
         )
     } else {
         return <span>{value}</span>

@@ -17,6 +17,7 @@ const App = ({ popup, _showOptimizer = false }: {
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
     const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
+    const [mounted, setMounted] = useState(false)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
@@ -34,6 +35,15 @@ const App = ({ popup, _showOptimizer = false }: {
         });
 
         document.body.classList.add('rl-page-optimizer-loaded');
+        document.body.classList.add('rpo-loaded');
+
+        if (popup) {
+            document.body.classList.add('rpo-loaded:with-popup');
+        }
+
+        setTimeout(() => {
+            setMounted(true)
+        }, 50)
     }, [])
 
 
@@ -44,10 +54,14 @@ const App = ({ popup, _showOptimizer = false }: {
 
     return (
         <>
-            {showOptimizer && (
-                <PageOptimizer/>
+            {mounted && (
+                <>
+                    {showOptimizer && (
+                        <PageOptimizer/>
+                    )}
+                    <Toaster/>
+                </>
             )}
-            <Toaster/>
         </>
     );
 }

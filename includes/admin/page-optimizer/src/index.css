@@ -72,8 +72,14 @@
   * {
     @apply border-border;
   }
+
 }
 
 .rapidload-dark {
   color-scheme: dark;
 }
+
+.rapidload-dark path.CircularProgressbar-trail {
+  stroke: #2d2d2d !important;
+}
+

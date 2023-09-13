@@ -9,7 +9,7 @@ const Description = ({ content} : {content: string}) => {
                     // Creating anchor tag for links
                     const link = parts[index + 1];
                     return (
-                        <a className='text-purple-750/80' key={index} href={link} target="_blank" rel="noopener noreferrer">
+                        <a className='text-purple-750/80 dark:text-brand-500' key={index} href={link} target="_blank" rel="noopener noreferrer">
                             {part}
                         </a>
                     );

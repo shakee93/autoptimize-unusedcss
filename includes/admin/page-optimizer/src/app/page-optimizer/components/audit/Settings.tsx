@@ -1,7 +1,9 @@
 import Setting from "app/page-optimizer/components/audit/Setting";
-import React from "react";
+import React, {ReactNode} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
+import {cn, transformFileType} from "lib/utils";
+import {JsonView} from "react-json-view-lite";
 
 
 interface SettingsProps {
@@ -9,22 +11,15 @@ interface SettingsProps {
     auditSettings?: AuditSetting[]
     max?: number
     type?: string
+    className?: string
+    hideActions?: boolean
+    children?: ReactNode
 }
 
-const Settings = ({ audit, max = 2, type, auditSettings }: SettingsProps) => {
+const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions, children }: SettingsProps) => {
     const {settings} = useSelector(optimizerData);
 
-    if(audit.id === 'lcp-lazy-loaded' && type === 'unknown') {
-        type = 'image'
-    }
-
-    if (type === 'google_font') {
-        type = 'font'
-    }
-
-    if (type === 'data_image') {
-        type = 'image'
-    }
+    type = transformFileType(audit, type);
 
     if (!auditSettings) {
         auditSettings = audit.settings
@@ -32,21 +27,22 @@ const Settings = ({ audit, max = 2, type, auditSettings }: SettingsProps) => {
 
     return (
         <>
+            {/*<JsonView data={settings} shouldInitiallyExpand={e => false}/>*/}
             {auditSettings && auditSettings.length > 0 &&(
-                <div className="flex flex-wrap gap-2">
+                <div className={cn(
+                    'flex flex-wrap gap-2 items-center',
+                    className
+                )}>
+                    {children ? children : ''}
                     {auditSettings.filter(i => {
 
                         if (!type) {
                             return true
                         }
 
-                        if (i.category === 'javascript') {
-                            i.category = 'js';
-                        }
-
                         return  i.category === type;
                     }).map((s, index) => (
-                        <Setting audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
+                        <Setting hideActions={hideActions} audit={audit} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                     ))}
                 </div>
             )}

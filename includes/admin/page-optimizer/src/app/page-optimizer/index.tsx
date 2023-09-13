@@ -57,11 +57,11 @@ export default function PageOptimizer() {
 
 
         return tabs.map((tab) => {
-            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500";
+            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300";
             return (
                 <div
                     onClick={() => setActiveTab(tab.key)}
-                    className={cn(`cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
+                    className={cn(`cursor-pointer  flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
                     key={tab.key}
                 >
                     {tab.name}
@@ -73,7 +73,8 @@ export default function PageOptimizer() {
                                 (activeTab === tab.key) && tab.activeColor,
                             )}>
                             <span className={cn(
-                                activeTab === tab.key && 'text-white dark:text-brand-900'
+                                '',
+                                activeTab === tab.key && ' text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}
                             </span>

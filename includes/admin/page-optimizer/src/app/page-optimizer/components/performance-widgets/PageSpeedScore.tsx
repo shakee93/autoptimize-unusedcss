@@ -116,10 +116,16 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                        pathColor: progressbarColor,
-                                        pathTransitionDuration: .5,
-                                    })} value={performance}>
+                                    <CircularProgressbarWithChildren
+                                        strokeWidth={4}
+                                        className='w-44 h-44 relative'
+                                        styles={
+                                            buildStyles({
+                                                pathColor: progressbarColor,
+                                                trailColor: '#eeeeee',
+                                                pathTransitionDuration: .5,
+                                                strokeLinecap: 'round',
+                                            })} value={performance}>
                                 <span
                                     style={{
                                         opacity: calculateOpacity()

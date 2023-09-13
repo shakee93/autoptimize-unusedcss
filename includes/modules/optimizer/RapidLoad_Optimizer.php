@@ -187,8 +187,8 @@ class RapidLoad_Optimizer
             $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
             $isDev = isset($_REQUEST['is_dev']) && $_REQUEST['is_dev'] === 'true';
 
-            if ($isDev) {
-                $url = 'http://54.70.121.132/';
+            if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
+                $url = 'https://catlitter.lk/';
             }
 
             $result = $api->post('page-speed', [
@@ -233,14 +233,22 @@ class RapidLoad_Optimizer
                             if($data->exist()){
                                 $data->save();
                             }
-                            $settings->{'status'} = $data->status;
+                            $settings->{'status'} = [
+                                'status' => $data->status,
+                                'stats' => $data->get_stats(),
+                                'warnings' => $data->get_warnings(),
+                                'error' => $data->get_error()
+                            ];
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                             if($data->exist()){
                                 $data->save();
                             }
-                            $settings->{'status'} = $data->status;
+                            $settings->{'status'} = [
+                                'status' => $data->status,
+                                'error' => $data->get_error()
+                            ];
                         }
                     }
                 }

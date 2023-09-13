@@ -6,7 +6,7 @@ import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useAppContext} from "../../../context/app";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
 import TooltipText from "components/ui/tooltip-text";
@@ -22,17 +22,23 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import {HoverCardPortal} from "@radix-ui/react-hover-card";
-import {Archive, Circle, Dot, FileCode2, FileMinus2} from "lucide-react";
+import {Archive, Circle, Dot, FileCode2, FileMinus2, GaugeCircle, Monitor} from "lucide-react";
 import {useToast} from "components/ui/use-toast";
+import {ComputerDesktopIcon, DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction, RootState} from "../../../store/app/appTypes";
+import {changeReport} from "../../../store/app/appActions";
+import ThemeSwitcher from "components/ui/theme-switcher";
 
 const Content = () => {
 
     const {setShowOptimizer, options} = useAppContext()
-    const {data, error, loading} = useSelector(optimizerData);
+    const {data, error, loading, activeReport} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
     const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [on, setOn] = useState<boolean>(false)
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     const progressBarColor = () => {
         const performance = data?.performance?? 0;
@@ -142,21 +148,20 @@ const Content = () => {
     return (
         <div
             className='relative text-brand-950 dark:text-brand-50 flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
-            {/*<div className='absolute -top-8 text-white'>*/}
-            {/*    <label htmlFor="on">*/}
-            {/*        <input id='on' onClick={() => setOn(p => !p)} type="checkbox"/>*/}
-            {/*        Loading*/}
-            {/*    </label>*/}
-            {/*</div>*/}
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
-                    <div className='mt-6'>
+                    <div className='mt-2'>
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
-                            <CircularProgressbarWithChildren strokeWidth={4} className='w-44 h-44 relative' styles={buildStyles({
-                                pathColor: progressbarColor,
-                                pathTransitionDuration: .5,
+                            <CircularProgressbarWithChildren
+                                strokeWidth={4}
+                                className='w-44 h-44 relative'
+                                styles={buildStyles({
+                                    pathColor: progressbarColor,
+                                    trailColor: '#eeeeee',
+                                    pathTransitionDuration: .5,
+                                    strokeLinecap: 'round'
                             })} value={performance}>
                                 <span
                                     style={{
@@ -168,7 +173,20 @@ const Content = () => {
                         )}
                     </div>
 
-                    <div className="flex justify-around text-sm gap-4 font-light w-full mt-5">
+                    <div className='text-xs w-full flex justify-center'>
+                        <TooltipText asChild text='Switch Report'>
+                            <button onClick={() => dispatch(changeReport(activeReport === 'desktop' ? 'mobile' : 'desktop'))}
+                                    className='capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
+                                {activeReport === 'desktop' ?
+                                    <Monitor className="w-4 h-5" /> :
+                                    <DevicePhoneMobileIcon  className="h-5" />
+                                }
+                                <span>{activeReport}</span>
+                            </button>
+                        </TooltipText>
+                    </div>
+
+                    <div className="flex justify-around text-sm gap-4 font-light w-full">
                         <div className='flex items-center gap-1'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
                                 <polygon points="5,0 0,10 10,10" fill="red"/>
@@ -189,8 +207,22 @@ const Content = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col'>
-                    <div className='text-md font-medium text-left mb-3 ml-3'>Speed insights</div>
+                <div className='flex flex-col flex-grow'>
+                    <div className='flex gap-2 text-md justify-between items-center font-medium text-left mb-3 px-3'>
+                        Speed insights
+                        <div className='flex gap-2 text-brand-600 dark:text-brand-400'>
+                            <TooltipText text='Go to Plugin Dashboard'>
+                                <a className='flex hover:dark:text-brand-100 justify-center rounded-full w-7 h-7 p-0.5 text-xs items-center gap-2' href={options?.dashboard_url ? options?.dashboard_url : '#'}>
+                                    <GaugeCircle className='w-5'/>
+                                </a>
+                            </TooltipText>
+                            <TooltipText text='Switch theme'>
+                                <div className='hover:dark:text-brand-100'>
+                                    <ThemeSwitcher></ThemeSwitcher>
+                                </div>
+                            </TooltipText>
+                        </div>
+                    </div>
                     {loading || on ? (
                         <div className='flex flex-col gap-2'>
                             <Skeleton className="w-full h-[48px] rounded-[18px]"/>
@@ -233,11 +265,11 @@ const SpeedInsights = ({children}: {
         <HoverCard openDelay={0}>
             <HoverCardTrigger asChild>
                 <div
-                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 text-sm cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+                    className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
                     {children}
                 </div>
             </HoverCardTrigger>
-            <HoverCardContent id='rpo-popup-content' className="text-base font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+            <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
                 <Content/>
             </HoverCardContent>
         </HoverCard>

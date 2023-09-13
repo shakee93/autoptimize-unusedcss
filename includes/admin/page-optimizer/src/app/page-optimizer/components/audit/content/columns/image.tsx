@@ -31,25 +31,33 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
             <Tooltip>
                 <TooltipTrigger >
                     <div className='flex items-center gap-3'>
-                        <div style={{
-                            backgroundImage: `url(${value.url ? value.url : value})`
-                        }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
+                        <div className='w-6 h-6'>
+                            <div style={{
+                                backgroundImage: `url(${value.url ? value.url : value})`
+                            }} className='w-6 h-6 bg-cover bg-center border rounded-md overflow-hidden'>
+                            </div>
                         </div>
 
+
                         {value && (
-                            <a className='flex gap-2' target='_blank'
-                               href={value}>{truncateMiddleOfURL(value.url ? value.url : value, 40)}
-                                <ArrowTopRightOnSquareIcon className='w-4'/> </a>
+                            <a className='text-left' target='_blank'
+                               href={value}>
+                                <span>{truncateMiddleOfURL(value.url ? value.url : value, 40)}</span>
+                                <span>
+                                    <ArrowTopRightOnSquareIcon className='ml-1.5 inline-block w-3.5'/>
+                                </span>
+
+                            </a>
                         )}
 
 
                     </div>
                 </TooltipTrigger>
-                <TooltipContent className='max-w-[48rem] min-w-[2rem] min-h-[2rem]'>
+                <TooltipContent className='max-w-[768px] min-w-[32px] min-h-[32px]'>
                     <div className='flex flex-row items-center gap-3 py-1'>
                         <div>
                             <img alt={value} onError={() => setLoaded(true)}
-                                 onLoadCapture={() => setLoaded(true)} className='max-w-[10rem]'
+                                 onLoadCapture={() => setLoaded(true)} className='max-w-[160px]'
                                  src={value}/>
                             {!loaded && (
                                 <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>

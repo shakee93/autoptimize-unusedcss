@@ -359,6 +359,7 @@ class RapidLoad_Admin_Frontend
             if($status_filter == 'warning'){
 
                 $filters[] = " warnings IS NOT NULL ";
+
             }else{
 
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
@@ -425,8 +426,8 @@ class RapidLoad_Admin_Frontend
         wp_send_json([
             'data' => $data,
             "draw" => (int)$draw,
-            "recordsTotal" => RapidLoad_DB::get_total_job_count(),
-            "recordsFiltered" => RapidLoad_DB::get_total_job_count(),
+            "recordsTotal" => RapidLoad_DB::get_total_job_count($type == "path" ? " where rule = 'is_url' and regex = '/'" : " where rule != 'is_url'"),
+            "recordsFiltered" => RapidLoad_DB::get_total_job_count($where_clause),
             "success" => true
         ]);
 
