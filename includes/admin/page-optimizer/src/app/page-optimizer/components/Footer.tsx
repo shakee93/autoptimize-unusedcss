@@ -2,6 +2,8 @@ import ThemeSwitcher from "components/ui/theme-switcher";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
 import {
+    ChevronDown,
+    ChevronUp,
     History,
     Loader,
     Redo2,
@@ -16,7 +18,7 @@ import {
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import React, {useState, MouseEvent, useEffect} from "react";
+import React, {useState, MouseEvent, useEffect, useRef} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -59,6 +61,16 @@ import Card from "components/ui/card";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import {Button} from "components/ui/button";
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel, DropdownMenuPortal,
+    DropdownMenuShortcut,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 interface FooterProps {
     url: string,
     togglePerformance: boolean
@@ -73,6 +85,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
+    const refSaveButton = useRef(null);
+
     const { toast } = useToast()
 
     const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -207,29 +221,53 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 </div>
 
                 <Mode>
-                    <AlertDialog>
-                        <AlertDialogTrigger>
-                            <AppButton className='text-sm'>
-                                {savingData ? <Loader className='w-5 -ml-1 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5 -ml-1'/>}
-                                Save Changes
-                            </AppButton>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className='w-full max-w-[520px]'>
-                            <div>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Save Changes?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
-                                    <AlertDialogCancel>Discard</AlertDialogCancel>
-                                </AlertDialogFooter>
-                            </div>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='outline'>Close</AppButton>
+                    <div className='flex gap-4'>
+                        <AlertDialog>
+                            <DropdownMenu>
+                                <Button ref={refSaveButton} asChild
+                                        className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
+                                    <AlertDialogTrigger className='flex gap-2 items-center pl-3 pr-2'>
+                                        {savingData ?
+                                            <Loader className='w-5 mr-0.5 animate-spin'/> :
+                                            <SaveIcon className='w-5 mr-0.5'/>}
+                                        Save Changes
+                                    </AlertDialogTrigger>
+
+                                    <DropdownMenuTrigger className='hover:bg-slate-700 bg-slate-800 h-full px-2 pr-2.5'>
+                                        <ChevronDown className='w-5'/>
+                                    </DropdownMenuTrigger>
+                                </Button>
+
+                                <DropdownMenuContent align='end'  alignOffset={200} sideOffset={5}
+                                                     className='z-[110000] relative left-[42px] min-w-[200px]'>
+                                    <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem>
+                                        Save & Analyze
+                                        <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem>Save as Global Settings</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <AlertDialogContent className='w-full max-w-[520px]'>
+                                <div>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Save Changes?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
+                                        <AlertDialogCancel>Discard</AlertDialogCancel>
+                                    </AlertDialogFooter>
+                                </div>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                        <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='outline'>Close</AppButton>
+                    </div>
                 </Mode>
 
                 <Mode mode='onboard'>
