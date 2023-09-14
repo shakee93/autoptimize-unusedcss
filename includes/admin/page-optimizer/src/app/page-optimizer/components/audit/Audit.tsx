@@ -1,5 +1,5 @@
 import Card from "@/components/ui/card";
-import { PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/solid";
+import {PlusCircleIcon, MinusCircleIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
 import React, {useState, useRef, useEffect, forwardRef, useMemo} from "react";
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
@@ -22,6 +22,7 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import {toast} from "components/ui/use-toast";
 
 export interface AuditProps {
     audit: Audit;

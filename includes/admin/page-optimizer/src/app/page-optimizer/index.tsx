@@ -15,6 +15,7 @@ import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import {m, AnimatePresence} from "framer-motion";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
+import {Toaster} from "components/ui/toaster";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -223,6 +224,7 @@ export default function PageOptimizer() {
             {!error && (
                 <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
             )}
+            <Toaster/>
         </div>
     );
 }

@@ -9,7 +9,7 @@ import {
 } from "./appTypes";
 
 const initialState: AppState = {
-    activeReport: 'desktop',
+    activeReport: 'mobile',
     mobile: {
         original: null,
         changes: {

@@ -29,6 +29,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../store/app/appTypes";
 import {changeReport} from "../../../store/app/appActions";
 import ThemeSwitcher from "components/ui/theme-switcher";
+import {Toaster} from "components/ui/toaster";
 
 const Content = () => {
 
@@ -103,6 +104,11 @@ const Content = () => {
         }
 
         const triggerAction = async (action: RapidLoadGlobalAction) => {
+
+
+
+            return;
+
             try {
                 setActions(prev => prev.map(a =>
                     a.icon === action.icon ? {
@@ -114,6 +120,7 @@ const Content = () => {
                 let result = await fetch(action.href);
 
                 toast({
+
                     description: <div className='flex w-full gap-2 text-center'>Successfully completed <CheckCircleIcon className='w-5 text-green-600'/> </div>
                 })
 

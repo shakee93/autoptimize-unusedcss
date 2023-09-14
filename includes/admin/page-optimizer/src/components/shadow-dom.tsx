@@ -70,8 +70,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
         <>
 
             {portal}
-            {!node && <div ref={hostRef}>
-            </div>}
+            {!node && <div ref={hostRef}></div>}
         </>
     )
 };

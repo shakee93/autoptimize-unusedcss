@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {ArrowPathIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
+import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
 import {
     CSSDelivery,
     JavascriptDelivery,
@@ -29,7 +29,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import {Lock, Settings, SettingsIcon} from "lucide-react";
+import {Circle, GanttChart, Lock, RefreshCcw, Settings, SettingsIcon} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -37,6 +37,9 @@ import AdditionalInputs from "app/page-optimizer/components/audit/additional-inp
 import TooltipText from "components/ui/tooltip-text";
 import Mode from "app/page-optimizer/components/Mode";
 import {useAppContext} from "../../../../context/app";
+import Indicator from "components/indicator";
+import {cn} from "lib/utils";
+import InProgress from "components/in-progress";
 
 interface SettingItemProps {
     audit: Audit
@@ -114,21 +117,74 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
         setOpen(false);
     }
 
+    const Status = ({ status } : { status: AuditSetting['status']}) => {
+
+        if (!status) {
+            return  <></>
+        }
+
+        if (status.status === 'failed') {
+            return (
+                <Indicator className='fill-rose-600'>
+                    <div className='flex flex-col gap-0.5'>
+                        <span className='flex gap-2 items-center'>
+                            <Circle className='w-2 fill-rose-500 stroke-0'/>
+                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
+                        </span>
+                        <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
+                    </div>
+                </Indicator>
+            );
+        }
+
+        if(status.status === 'queued') {
+            return (
+                <Indicator className='animate-pulse fill-amber-500'>
+                    <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
+                        Waiting in the queue
+                    </div>
+                </Indicator>
+            )
+        }
+
+        if(status.status === 'processing') {
+            return <InProgress/>
+        }
+
+        if(status.status === 'success') {
+            return (
+                <Indicator className='fill-green-600'>
+                    <div className='flex gap-2 items-center'>
+                        <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
+                    </div>
+                </Indicator>
+            )
+        }
+
+        return <></>;
+    }
+
     return (
         <div
             key={index}
             className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
         >
-            {icons[settings.category as keyof typeof icons]} {settings.name}
 
+            {icons[settings.category as keyof typeof icons]} {settings.name}
 
             {!hideActions && (
                 <>
+
                     {mainInput && (
                         // @ts-ignore
                         <Switch disabled={['onboard', 'preview'].includes(mode)} checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
                     )}
 
+                    {settings.status && (
+                        <div className='px-1'>
+                            <Status status={settings.status}/>
+                        </div>
+                    )}
 
                     <Mode>
                         {showPopover && (
@@ -166,12 +222,6 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                     </Mode>
                 </>
             )}
-
-
-            {/*<TooltipText text='Queued'>*/}
-            {/*    <div className='bg-sky-400 w-2 h-2 shadow-lg rounded-full -right-1 -top-1'></div>*/}
-            {/*</TooltipText>*/}
-
         </div>
     );
 };

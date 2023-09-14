@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
 import {useAppContext} from "../../context/app";
+import {Toaster} from "components/ui/toaster";
 
 function SpeedPopover() {
 
@@ -19,7 +20,7 @@ function SpeedPopover() {
                 )}
                 <span className="rl-label">RapidLoad</span>
             </SpeedInsights>
-
+            <Toaster/>
         </div>
     );
 }

@@ -24,14 +24,11 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
     let [loaded, setLoaded] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [imageDetails, setImageDetails] = useState<FetchDetails | null>({
-        redirected: true,
-        status: 302,
-        statusText: ''
-});
+    const [imageDetails, setImageDetails] = useState<FetchDetails | null>(null);
 
 
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
+    const shouldFetch = value.includes('images.rapidload-cdn.io')
     let snippet : any = '';
 
     if (cell.table.options.meta?.type === 'image' && cell.table.options.columns.find(c => c.id === 'node')) {
@@ -69,7 +66,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
             }
         };
 
-        if (value) {
+        if (value && shouldFetch) {
             fetchImageDetails();
         }
 
@@ -79,7 +76,7 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                 URL.revokeObjectURL(imageUrl);
             }
         };
-    }, []);
+    }, [value]);
 
 
     return (
@@ -87,8 +84,8 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
                 {(
                     imageDetails?.redirected
-                    && (imageDetails?.status === 302 || imageDetails?.status === 307 || true)
-                    && value.includes('images.rapidload-cdn.io')
+                    && (imageDetails?.status === 302 || imageDetails?.status === 307)
+                    && shouldFetch
                 ) && (
                     <InProgress/>
                 )}
@@ -117,12 +114,15 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
                     </TooltipTrigger>
                     <TooltipContent className='max-w-[768px] min-w-[32px] min-h-[32px]'>
                         <div className='flex flex-row items-center gap-3 py-1'>
-                            <div>
+                            <div className='relative'>
                                 <img
                                     alt={value}
+                                    onError={() => setLoaded(true)}
+                                    onLoadCapture={() => setLoaded(true)}
                                     className='max-w-[160px]'
                                     src={imageUrl || value}
                                 />
+
                                 {!loaded && (
                                     <div className='absolute left-1/2 -translate-y-1/2 top-1/2 -translate-x-1/2'>
                                         <CircleDashed className='animate-spin text-purple-750 w-6'/>

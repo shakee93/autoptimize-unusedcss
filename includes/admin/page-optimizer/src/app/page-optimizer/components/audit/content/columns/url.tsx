@@ -37,7 +37,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
             <a className='text-left inline-flex items-center align-middle' target='_blank'
                href={value.url}>
                 {passed && (
-                    <span className='flex gap-1 mr-1'>
+                    <span className='inline-flex gap-1 mr-1'>
                         {/*<TooltipText text='You are seeing this because you have given this file an action, Not reported by Google PageSpeed.'>*/}
                         {/*    <div className='bg-blue-500 w-1.5 h-1.5 shadow-lg rounded-full'></div>*/}
                         {/*</TooltipText>*/}
@@ -46,8 +46,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
                         </TooltipText>
                     </span>
                 )}
-                <span>{truncateMiddleOfURL(value.url, 50)}</span>
-                <span><ArrowTopRightOnSquareIcon className='w-4 inline-block ml-2 -mt-1'/></span>
+                <span className='items-center gap-2'>{truncateMiddleOfURL(value.url, 50)} <ArrowTopRightOnSquareIcon className='w-4 inline-block -mt-0.5'/></span>
             </a>
         );
     } else {
