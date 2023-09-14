@@ -237,4 +237,4 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
     );
 })
 
-export default Audit
+export default React.memo(Audit)
