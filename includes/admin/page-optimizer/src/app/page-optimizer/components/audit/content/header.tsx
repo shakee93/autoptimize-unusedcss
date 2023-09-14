@@ -10,36 +10,30 @@ import {cn} from "lib/utils";
 
 interface FilesTableHeaderProps {
     audit: Audit
-    table: Table<AuditResource>
+    group: any
     open: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const FilesTableHeader = ({audit, table, open, setOpen} : FilesTableHeaderProps) => {
-    const tableId = table.options.meta?.tableId;
-    const { data, settings, changes } = useSelector(optimizerData)
-    let rows = table.getCoreRowModel().rows.map(r => r.original)
-    let file_type = table.options.meta?.type
-    // @ts-ignore
-    let urls = rows.filter(r => r?.url?.file_type?.value === file_type).map(r => r?.url?.url)
-    let _changes = changes?.files.map(i => i.file)
+const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps) => {
+
+
+    const label = (typeof group.items[0].url !== 'string' && group.items[0].url?.file_type?.label) || group.type
+    let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
+
+    if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1 && label.toLowerCase() === 'unknown') {
+        title = ''
+    }
+
+    let rows = group.items
 
     // TODO: count the file changes
-    let countOfChanges = 0;
 
     // TODO: possible bug in list type table audits
     // @ts-ignore
     const resources = rows.filter((r) => !r?.passed) || []
     // @ts-ignore
     const passed = rows.filter((r) => r?.passed) || []
-
-    if (!tableId) {
-        return <></>
-    }
-
-    if (urls && changes) {
-        countOfChanges = urls.filter(url => _changes.includes(url)).length
-    }
 
     return (
         <>
@@ -53,14 +47,14 @@ const FilesTableHeader = ({audit, table, open, setOpen} : FilesTableHeaderProps)
                 <div className='flex gap-2 items-center px-2'>
                     <div className='flex gap-2'>
                         <TooltipText asChild text={
-                            `${open ? 'Hide' : 'Show'} ${table.options.meta?.title && table.options.meta.title}`
+                            `${open ? 'Hide' : 'Show'} ${title ?? title}`
                         }>
                             <button className='flex gap-2' onClick={e => setOpen(p => !p)}>
                                 { open ?
                                     <MinusCircleIcon className='w-5 h-5 dark:text-brand-500 text-brand-900'/> :
                                     <PlusCircleIcon className='w-5 h-5 dark:text-brand-500 text-brand-900'/>
                                 }
-                                <span>{table.options.meta?.title ? table.options.meta.title : "Related Resources"}</span>
+                                <span>{title ? title : "Related Resources"}</span>
                             </button>
                         </TooltipText>
                     </div>
@@ -78,7 +72,7 @@ const FilesTableHeader = ({audit, table, open, setOpen} : FilesTableHeaderProps)
 
                 {(audit.settings.length > 0) && (
                     <div className='flex flex-col gap-3 px-4'>
-                        <Settings type={table.options.meta?.type} audit={audit}/>
+                        <Settings type={group.type} audit={audit}/>
                     </div>
                 )}
 

@@ -1,14 +1,6 @@
-import React, {useEffect, useState} from "react";
-import AuditColumns from "./columns";
+import React, {useEffect} from "react";
 import Description from "app/page-optimizer/components/audit/Description";
 import Settings from "app/page-optimizer/components/audit/Settings";
-import {
-    createColumnHelper, FilterFn,
-    getCoreRowModel, getFilteredRowModel,
-    getPaginationRowModel,
-    Table,
-    useReactTable,
-} from "@tanstack/react-table";
 import {JsonView} from "react-json-view-lite";
 
 interface AuditContentProps {
@@ -19,15 +11,12 @@ interface AuditContentProps {
 import {
     RowData
 } from "@tanstack/react-table";
-import FilesTable from "app/page-optimizer/components/audit/content/table";
-import {isImageAudit, transformFileType} from "lib/utils";
-import Help from "app/page-optimizer/components/audit/Help";
+import {transformFileType} from "lib/utils";
+import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
-        title: string
-        type?: string
         tableId: string
     }
 }
@@ -40,103 +29,17 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         notify(true);
     }, []);
 
-    const createTable = (index: number,headings : AuditHeadings[], items: AuditResource[], title: string, type?: string) => {
-        const columnHelper = createColumnHelper<AuditResource>();
-
-        const tableId = `table_${audit.id}_${index}`
-
-        const col = headings.map((heading) => {
-            return columnHelper.accessor(
-                (row) => row[heading.key as keyof AuditResource],
-                {
-                    id: heading.key ? heading.key : "no-key",
-                    meta: heading,
-                    cell: (info) => <AuditColumns audit={audit} heading={heading} cell={info}/>,
-                    header: () => <span>{heading.label}</span>,
-                    enableHiding: true,
-
-                }
-            );
-        });
-
-        const getHiddenColumns = () => {
-
-            let hiddenColumns: { [id: string]: boolean } = {
-                pattern: false,
-                file_type: false,
-                passed: false
-            }
-
-            if (isImageAudit(audit.id)) {
-                hiddenColumns.node = false
-            }
-
-            // check the first row to find any blank columns if found hide that column
-            let firstRow = Object.keys(items[0]);
-            col.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
-                if(c.id) hiddenColumns[c.id] = false
-            })
-            
-            return hiddenColumns;
-        }
-
-        const table = useReactTable({
-            data: items,
-            // @ts-ignore
-            columns: col,
-            getCoreRowModel: getCoreRowModel(),
-            getPaginationRowModel: getPaginationRowModel(),
-            meta: {
-                title,
-                type,
-                tableId
-            },
-            initialState : {
-                pagination : {
-                    pageSize: 5
-                },
-                columnVisibility: getHiddenColumns()
-            },
-            autoResetPageIndex: false,
-        });
-
-        tables.push(table);
-    };
-
-    const tables: Table<AuditResource>[] = [];
-
     // TODO: render criticalrequestchain type properly
     if (audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
         return <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>;
     }
 
-    if (audit.files?.type === "opportunity" || audit.files?.type === "table") {
-        audit.files?.grouped_items?.forEach((data, index) => {
-            if (data.items && data.items.length > 0) {
-                const label = (typeof data.items[0].url !== 'string' && data.items[0].url?.file_type?.label) || data.type
-                let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
-
-                if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1 && label.toLowerCase() === 'unknown') {
-                    title = ''
-                }
-
-                createTable(index, audit.files?.headings || [], data.items, title, data.type);
-            }
-        });
-    }
-
-    if (audit.files?.type === "list") {
-        audit.files.items.forEach((item, index) => {
-            if (item.type && item.type === "table" && item.items.length > 0) {
-                createTable(index, item.headings, item.items, "Related Resources");
-            }
-        });
-    }
 
     let remainingSettings = audit
         .settings
-        .filter(s => !tables.map(t => transformFileType(audit, t.options.meta?.type)).includes(s.category) )
-
+        // @ts-ignore
+        .filter(s => ! audit.files?.grouped_items?.map(group => transformFileType(audit, group.type))
+            .includes(s.category) )
 
     return (
         <div className="border-t w-full pt-4">
@@ -156,15 +59,31 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </div>
             )}
 
-            {tables.map((table, index) => (
-               <FilesTable
-                   key={index}
-                   notify={notify}
-                   index={index}
-                   audit={audit}
-                   table={table}
-               />
-            ))}
+            {((audit.files?.type === "opportunity" || audit.files?.type === "table")) &&
+                audit.files?.grouped_items?.map((group, index) =>
+                    <FileGroup
+                        key={index}
+                        index={index}
+                        audit={audit}
+                        group={group}
+                        notify={notify}
+                    />
+                )
+            }
+
+            {((audit.files?.type === "list" ) &&
+                audit.files?.items.map((list, index) =>
+                        (list?.type === 'table' && list.items?.length > 0) && (
+                            <FileGroup
+                                key={index}
+                                index={index}
+                                audit={audit}
+                                group={list}
+                                notify={notify}
+                            />
+                        )
+                )
+            )}
         </div>
     );
 };
