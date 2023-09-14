@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react";
 import FilesTableHeader from "app/page-optimizer/components/audit/content/header";
 import {JsonView} from "react-json-view-lite";
 import {Accordion} from "components/accordion";
+import columns from "app/page-optimizer/components/audit/content/columns";
 
 
 interface FilesTableProps {
@@ -33,10 +34,24 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
         notify(true)
     }, [open])
 
-    const shouldRender = (
+    const shouldRenderCell = (
         cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
     ) => {
         let col = cell.column.columnDef;
+
+        if (col.id === "node" && isImageAudit(audit.id) ) {
+            return false;
+        }
+
+        return !["pattern", "file_type", 'passed'].includes(col.id as string);
+    };
+
+    const shouldRenderHeader = (
+        cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
+    ) => {
+        let col = cell.column.columnDef;
+
+        // return true;
 
         if (col.id === "node" && isImageAudit(audit.id) ) {
             return false;
@@ -57,7 +72,6 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                 return "auto";
         }
     };
-
 
 
     return (
@@ -100,7 +114,6 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                                 {table?.getHeaderGroups().map((headerGroup) => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers
-                                            .filter((header) => shouldRender(header))
                                             .map((header) => (
                                                 <th
                                                     className="first:pl-6 px-2 py-3 dark:bg-brand-900 bg-brand-100 font-medium text-xs text-left"
@@ -118,7 +131,7 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                                 {rowModel.rows.map((row) => (
                                     <tr className={cn(
                                     )} key={row.id}>
-                                        {row.getVisibleCells().filter((cell) => shouldRender(cell)).map((cell) => (
+                                        {row.getVisibleCells().map((cell) => (
                                             <td
                                                 style={{
                                                     // @ts-ignore

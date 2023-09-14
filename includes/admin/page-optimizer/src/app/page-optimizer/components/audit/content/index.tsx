@@ -20,7 +20,7 @@ import {
     RowData
 } from "@tanstack/react-table";
 import FilesTable from "app/page-optimizer/components/audit/content/table";
-import {transformFileType} from "lib/utils";
+import {isImageAudit, transformFileType} from "lib/utils";
 import Help from "app/page-optimizer/components/audit/Help";
 
 
@@ -59,6 +59,8 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                     meta: heading,
                     cell: (info) => <AuditColumns audit={audit} heading={heading} cell={info}/>,
                     header: () => <span>{heading.label}</span>,
+                    enableHiding: true,
+
                 }
             );
         });
@@ -81,6 +83,26 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         };
 
 
+        const getHiddenColumns = () => {
+
+            let hiddenColumns: { [id: string]: boolean } = {
+                pattern: false,
+                file_type: false,
+                passed: false
+            }
+
+            if (isImageAudit(audit.id)) {
+                hiddenColumns.node = false
+            }
+
+            // check the first row to find any blank columns if found hide that column
+            let firstRow = Object.keys(items[0]);
+            col.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
+                if(c.id) hiddenColumns[c.id] = false
+            })
+            
+            return hiddenColumns;
+        }
 
         const table = useReactTable({
             data: items,
@@ -100,12 +122,23 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
             initialState : {
                 pagination : {
                     pageSize: 5
-                }
+                },
+                columnVisibility: getHiddenColumns()
             },
             // onGlobalFilterChange: () => updateFilter(tableId),
             // getFilteredRowModel: getFilteredRowModel(),
-            autoResetPageIndex: false
+            autoResetPageIndex: false,
         });
+
+        // table.getAllLeafColumns().forEach(column => {
+        //     if (column.id === "node" && isImageAudit(audit.id) ) {
+        //         column.toggleVisibility(false);
+        //     }
+        //
+        //     if (["pattern", "file_type", 'passed'].includes(column.id)) {
+        //         column.toggleVisibility(false);
+        //     }
+        // })
 
         tables.push(table);
     };
