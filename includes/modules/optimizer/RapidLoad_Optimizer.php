@@ -361,7 +361,8 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
-            'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : []
+            'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
+            'options' => self::$options
         ]);
 
 
