@@ -59,12 +59,16 @@ class ApiService {
         }
     }
 
-    async updateSettings(url: string, activeReport: string, reload: boolean, data: any) {
+    async updateSettings(url: string, activeReport: string, reload: boolean, data: any, global: boolean, analyze: boolean) {
         try {
 
             const query = new URLSearchParams();
 
             this.baseURL.searchParams.append('action', 'optimizer_update_settings')
+
+            if(global) this.baseURL.searchParams.append('global', 'true')
+            if(analyze) this.baseURL.searchParams.append('analyze', 'true')
+
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
 

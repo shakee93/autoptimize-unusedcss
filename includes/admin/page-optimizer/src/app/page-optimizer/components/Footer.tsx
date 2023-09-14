@@ -6,7 +6,7 @@ import {
     ChevronUp,
     History,
     Loader,
-    Redo2,
+    Redo2, RefreshCcw,
     SaveIcon,
     Undo2,
     User,
@@ -70,6 +70,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {fetchData} from "../../../store/app/appActions";
 
 interface FooterProps {
     url: string,
@@ -79,17 +80,20 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options , modeData} = useAppContext()
+    const { setShowOptimizer, options ,
+        modeData, savingData, setSavingData} = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading, revisions } = useSelector(optimizerData)
-    const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
-    const refSaveButton = useRef(null);
+    const refSaveButton = useRef<HTMLButtonElement | null>(null);
+    const [open, setOpen] = useState(false)
+    const defaultAction = 0
+    const [activeAction, setActiveAction] = useState(defaultAction)
 
     const { toast } = useToast()
 
-    const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
+    const submitSettings = async (analyze = false, global = false) => {
 
         if (savingData) {
             return;
@@ -105,12 +109,19 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 url,
                 activeReport,
                 reload,
-                data
+                data,
+                global,
+                analyze
             );
 
             toast({
                 description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
             })
+
+            if (analyze) {
+                dispatch(fetchData(options, url, true));
+            }
+
 
         } catch (error: any) {
             toast({
@@ -148,9 +159,40 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     };
 
     const dialogData = computeDialogData(data);
+
+    const saveActions = [
+        {
+            text: 'Save Changes',
+            title: 'Save Changes?',
+            description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
+            onClick : submitSettings
+        },
+        {
+            text: <div className='flex w-full items-center justify-between'>
+                Save & Analyze
+                {/*<TooltipText text='2 Optimizations are in progess'>*/}
+                {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
+                {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
+                {/*</TooltipText>*/}
+            </div>,
+            title: 'Save and analyze your page again?',
+            description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.",
+            onClick : () => {
+                submitSettings(true)
+            }
+        },
+        {
+            text: 'Save as Global Settings',
+            title: 'Save these settings as global settings?',
+            description: "You have made changes to your settings. Click 'Save Changes' to override global settings or 'Discard' to revert to the previous state.",
+            onClick : () => {
+                submitSettings(false, true)
+            }
+        },
+    ]
     
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
+        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
@@ -222,15 +264,15 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
                 <Mode>
                     <div className='flex gap-4'>
-                        <AlertDialog>
+                        <AlertDialog open={open} onOpenChange={setOpen}>
                             <DropdownMenu>
                                 <Button ref={refSaveButton} asChild
                                         className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
-                                    <AlertDialogTrigger className='flex gap-2 items-center pl-3 pr-2'>
+                                    <AlertDialogTrigger onClick={e => setActiveAction(0)} className='flex gap-2 items-center pl-3 pr-2 h-full'>
                                         {savingData ?
                                             <Loader className='w-5 mr-0.5 animate-spin'/> :
                                             <SaveIcon className='w-5 mr-0.5'/>}
-                                        Save Changes
+                                        {defaultAction > 0 ? saveActions[activeAction].text : saveActions[0].text}
                                     </AlertDialogTrigger>
 
                                     <DropdownMenuTrigger className='hover:bg-slate-700 bg-slate-800 h-full px-2 pr-2.5'>
@@ -238,29 +280,32 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                     </DropdownMenuTrigger>
                                 </Button>
 
-                                <DropdownMenuContent align='end'  alignOffset={200} sideOffset={5}
-                                                     className='z-[110000] relative left-[42px] min-w-[200px]'>
+                                <DropdownMenuContent style={{
+                                    width: refSaveButton.current?.clientWidth || 200
+                                }} align='end'  sideOffset={6}
+                                                     className='z-[110000] relative min-w-[200px]'>
                                     <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem>
-                                        Save & Analyze
-                                        <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem>Save as Global Settings</DropdownMenuItem>
+                                    {saveActions.filter((e, i) => defaultAction > 0 ? i !== activeAction : i !== 0).map((action, index) => (
+                                        <span key={index}>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={e => {
+                                                setActiveAction(saveActions.indexOf(action))
+                                                setOpen(true)
+                                            }}>{action.text}</DropdownMenuItem>
+                                        </span>
+                                    ))}
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
                             <AlertDialogContent className='w-full max-w-[520px]'>
                                 <div>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Save Changes?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
-                                        </AlertDialogDescription>
+                                        <AlertDialogTitle>{saveActions[activeAction].title}</AlertDialogTitle>
+                                        <AlertDialogDescription>{saveActions[activeAction].description}</AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
+                                        <AlertDialogAction onClick={e => saveActions[activeAction].onClick()} >Save Changes</AlertDialogAction>
                                         <AlertDialogCancel>Discard</AlertDialogCancel>
                                     </AlertDialogFooter>
                                 </div>

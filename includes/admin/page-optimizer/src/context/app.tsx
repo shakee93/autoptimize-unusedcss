@@ -10,6 +10,8 @@ interface OptimizerContextProps {
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
     manipulatingStyles: boolean
+    savingData: boolean;
+    setSavingData: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -40,6 +42,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue }
         load_optimizer: false
     } )
     const [type, setType] = useState<ReportType>('desktop');
+    const [savingData, setSavingData] = useState<boolean>(false)
 
     useEffect(() => setMounted(true), [])
 
@@ -75,7 +78,9 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue }
             version: __OPTIMIZER_VERSION__,
             mode,
             modeData,
-            manipulatingStyles
+            manipulatingStyles,
+            savingData,
+            setSavingData
         }}>
             {children}
         </AppContext.Provider>

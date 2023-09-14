@@ -54,13 +54,7 @@ const App = ({ popup, _showOptimizer = false }: {
 
     return (
         <>
-            {mounted && (
-                <>
-                    {showOptimizer && (
-                        <PageOptimizer/>
-                    )}
-                </>
-            )}
+            {(mounted && showOptimizer) && <PageOptimizer/>}
         </>
     );
 }
