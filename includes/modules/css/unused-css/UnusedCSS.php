@@ -20,6 +20,8 @@ class UnusedCSS
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
+        new UnusedCSS_Queue();
+
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_uucss'] = "" ){
             return;
         }
@@ -60,8 +62,6 @@ class UnusedCSS
             add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
             add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         }
-
-        new UnusedCSS_Queue();
     }
 
     public function add_meta_boxes()

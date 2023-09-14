@@ -126,6 +126,34 @@ class RapidLoad_Optimizer
 
             }
 
+            if(isset(self::$options[$key]) && (self::$options[$key] != "" || !self::$options[$key])){
+
+                switch ($key){
+                    case 'uucss_enable_uucss':
+                    case 'uucss_inline_css':
+                    case 'uucss_enable_cpcss':
+                    case 'uucss_minify':
+                        self::$options['uucss_enable_css'] = "1";
+                        break;
+                    case 'uucss_self_host_google_fonts':
+                        self::$options['uucss_enable_font_optimization'] = "1";
+                        break;
+                    case 'defer_inline_js':
+                    case 'minify_js':
+                    case 'uucss_load_js_method':
+                        self::$options['uucss_enable_javascript'] = "1";
+                        break;
+                    case 'uucss_support_next_gen_formats':
+                    case 'uucss_set_width_and_height':
+                    case 'uucss_lazy_load_images':
+                    case 'uucss_exclude_above_the_fold_image_count':
+                    case 'uucss_lazy_load_iframes':
+                        self::$options['uucss_enable_image_delivery'] = "1";
+                        break;
+                }
+
+            }
+
             $option_type = gettype(self::$options[$key]);
 
             if(isset(self::$global_options[$key])){
@@ -361,7 +389,9 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
-            'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : []
+            'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
+            'options' => self::$options,
+            'merged_options' => self::$merged_options
         ]);
 
 

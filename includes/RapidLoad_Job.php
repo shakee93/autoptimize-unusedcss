@@ -278,7 +278,7 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY created_at DESC LIMIT 1 ");
+        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
         if(!$data){
             return false;
@@ -294,7 +294,7 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY created_at DESC LIMIT 1 ");
+        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
         if(!$data){
             return false;
