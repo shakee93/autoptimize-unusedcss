@@ -285,7 +285,6 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                 }} align='end'  sideOffset={6}
                                                      className='z-[110000] relative min-w-[200px]'>
                                     <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
                                     {saveActions.filter((e, i) => defaultAction > 0 ? i !== activeAction : i !== 0).map((action, index) => (
                                         <span key={index}>
                                             <DropdownMenuSeparator />

@@ -161,7 +161,7 @@ export default function PageOptimizer() {
                     )}>
 
                         {savingData && (
-                            <div className='absolute h-[calc(100vh-130px)] w-screen left-0 inset-0 z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                            <div className='fixed h-screen w-screen inset-0 z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
                                 <div className='flex gap-2 items-center absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2'>
                                     <Loader className='w-5 animate-spin'/> Saving Changes...
                                 </div>
