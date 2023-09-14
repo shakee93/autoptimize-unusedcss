@@ -112,7 +112,7 @@ class RapidLoad_Onboard{
             wp_redirect( admin_url( 'admin.php?page=rapidload' ) );
         } else if ( RapidLoad_Base::get_option( 'rapidload_do_activation_redirect' ) ) {
             RapidLoad_Base::delete_option( 'rapidload_do_activation_redirect' );
-            wp_redirect( '/wp-admin/options-general.php?page=rapidload-on-board' );
+            wp_redirect( '/wp-admin/options-general.php?page=rapidload' );
         }
     }
 
