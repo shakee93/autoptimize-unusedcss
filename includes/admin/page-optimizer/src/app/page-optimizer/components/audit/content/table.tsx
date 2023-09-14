@@ -14,13 +14,11 @@ import columns from "app/page-optimizer/components/audit/content/columns";
 interface FilesTableProps {
     audit: Audit
     table: Table<AuditResource>
-    tableFilterStates: any
-    updateFilter: any
     index: number
     notify: (val: boolean) => void
 }
 
-const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, notify }: FilesTableProps) => {
+const FilesTable = ({ audit, table, index, notify }: FilesTableProps) => {
 
     const [open, setOpen] = useState(index === 0)
     const tableId = table.options.meta?.tableId;
@@ -33,32 +31,6 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
     useEffect(() => {
         notify(true)
     }, [open])
-
-    const shouldRenderCell = (
-        cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
-    ) => {
-        let col = cell.column.columnDef;
-
-        if (col.id === "node" && isImageAudit(audit.id) ) {
-            return false;
-        }
-
-        return !["pattern", "file_type", 'passed'].includes(col.id as string);
-    };
-
-    const shouldRenderHeader = (
-        cell: Header<AuditResource, unknown> | Cell<AuditResource, unknown>
-    ) => {
-        let col = cell.column.columnDef;
-
-        // return true;
-
-        if (col.id === "node" && isImageAudit(audit.id) ) {
-            return false;
-        }
-
-        return !["pattern", "file_type", 'passed'].includes(col.id as string);
-    };
 
     const cellWidth = (valueType: string) => {
         switch (valueType) {
@@ -83,30 +55,11 @@ const FilesTable = ({ audit, table, tableFilterStates, updateFilter, index, noti
                                  open={open}
                                  setOpen={setOpen}
                                  table={table}
-                                 tableFilterStates={tableFilterStates}
-                                 updateFilter={updateFilter}
                />
             </div>
 
             <Accordion isOpen={open}>
                 <div className='px-4 py-3'>
-                    {/*{(passed && tableId) && (*/}
-                    {/*    <div className='mb-3 ml-3'>*/}
-                    {/*        <TooltipText*/}
-                    {/*            text='Show the files that have successfully passed this audit'>*/}
-                    {/*            <div*/}
-                    {/*                onClick={e => updateFilter(table.options.meta?.tableId)}*/}
-                    {/*                className="flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pl-3 pr-2 py-2"*/}
-                    {/*            >*/}
-                    {/*                Show Optimized Files*/}
-                    {/*                {(tableFilterStates[tableId] && tableFilterStates[tableId] === 'on') ?*/}
-                    {/*                    <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :*/}
-                    {/*                    <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>*/}
-                    {/*                }*/}
-                    {/*            </div>*/}
-                    {/*        </TooltipText>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
                     {rowModel?.rows.length > 0 && (
                         <div className="w-full border rounded-[20px] overflow-hidden">
                             <table className="w-full text-brand-800 dark:text-brand-100">

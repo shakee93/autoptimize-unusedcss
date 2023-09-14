@@ -11,13 +11,11 @@ import {cn} from "lib/utils";
 interface FilesTableHeaderProps {
     audit: Audit
     table: Table<AuditResource>
-    tableFilterStates: any
-    updateFilter: any,
     open: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter, open, setOpen} : FilesTableHeaderProps) => {
+const FilesTableHeader = ({audit, table, open, setOpen} : FilesTableHeaderProps) => {
     const tableId = table.options.meta?.tableId;
     const { data, settings, changes } = useSelector(optimizerData)
     let rows = table.getCoreRowModel().rows.map(r => r.original)
@@ -77,12 +75,6 @@ const FilesTableHeader = ({audit, table, tableFilterStates, updateFilter, open, 
                         )}
                     </div>
                 </div>
-                {/*{!!countOfChanges && (*/}
-                {/*    <>*/}
-                {/*        <span> · </span>*/}
-                {/*        <span className='text-xs text-blue-500 font-normal'>{countOfChanges} file change{countOfChanges > 1 && 's'}</span>*/}
-                {/*    </>*/}
-                {/*)}*/}
 
                 {(audit.settings.length > 0) && (
                     <div className='flex flex-col gap-3 px-4'>

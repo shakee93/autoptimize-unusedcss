@@ -40,12 +40,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         notify(true);
     }, []);
 
-    const [tableFilterStates, setTableFilterStates] = useState<{
-        [T:string] : string
-    }>({});
-
-
-
     const createTable = (index: number,headings : AuditHeadings[], items: AuditResource[], title: string, type?: string) => {
         const columnHelper = createColumnHelper<AuditResource>();
 
@@ -64,24 +58,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 }
             );
         });
-
-        const selectFilterFn: FilterFn<any> = (row, columnId, value, addMeta) => {
-
-            return true;
-            // console.log(row.original,columnId, tableId, tableFilterStates, value);
-
-            if (row.original.passed && value === 'on') {
-                return true;
-            }
-
-            if (row.original.passed) {
-                return false;
-            }
-
-            // Use currentTableFilterStates instead of tableFilterStates within this function
-            return true;
-        };
-
 
         const getHiddenColumns = () => {
 
@@ -115,30 +91,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 type,
                 tableId
             },
-            state: {
-                // globalFilter: tableFilterStates[tableId] || 'off',
-            },
-            // globalFilterFn: selectFilterFn,
             initialState : {
                 pagination : {
                     pageSize: 5
                 },
                 columnVisibility: getHiddenColumns()
             },
-            // onGlobalFilterChange: () => updateFilter(tableId),
-            // getFilteredRowModel: getFilteredRowModel(),
             autoResetPageIndex: false,
         });
-
-        // table.getAllLeafColumns().forEach(column => {
-        //     if (column.id === "node" && isImageAudit(audit.id) ) {
-        //         column.toggleVisibility(false);
-        //     }
-        //
-        //     if (["pattern", "file_type", 'passed'].includes(column.id)) {
-        //         column.toggleVisibility(false);
-        //     }
-        // })
 
         tables.push(table);
     };
@@ -173,13 +133,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         });
     }
 
-    const updateFilter = (tableId: string) => {
-        setTableFilterStates((prevFilterStates) => ({
-            ...prevFilterStates,
-            [tableId]: (prevFilterStates[tableId] && prevFilterStates[tableId] === 'on') ? 'off': 'on', // Update with the new filter value
-        }));
-    };
-
     let remainingSettings = audit
         .settings
         .filter(s => !tables.map(t => transformFileType(audit, t.options.meta?.type)).includes(s.category) )
@@ -209,8 +162,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                    notify={notify}
                    index={index}
                    audit={audit}
-                   tableFilterStates={tableFilterStates}
-                   updateFilter={updateFilter}
                    table={table}
                />
             ))}
