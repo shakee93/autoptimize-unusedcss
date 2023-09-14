@@ -21,6 +21,7 @@ import {
 } from "@tanstack/react-table";
 import FilesTable from "app/page-optimizer/components/audit/content/table";
 import {transformFileType} from "lib/utils";
+import Help from "app/page-optimizer/components/audit/Help";
 
 
 declare module '@tanstack/react-table' {
@@ -155,6 +156,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
         <div className="border-t w-full pt-4">
             <div className="pb-4 text-brand-700 dark:text-brand-300">
                 <div className="px-4 ml-2">
+                   {/*<Help audit={audit}/>*/}
                     <Description content={audit.description}/>
                 </div>
             </div>

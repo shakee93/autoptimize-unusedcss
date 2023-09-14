@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import "./index.css";
 import stylesUrl from './index.css?url';
 import App from "app/app";
@@ -16,6 +16,7 @@ import RootProvider from "./context/root";
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
 import {ErrorBoundary} from "react-error-boundary";
+import {isDev} from "lib/utils";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -64,12 +65,26 @@ const ApplicationCrashed = () => {
     )
 }
 
+interface ApplicationErrorBoundaryProps {
+    fallback: ReactNode
+    onError: any
+    children: ReactNode
+}
+
+const ApplicationErrorBoundary = ({ fallback, onError, children } : ApplicationErrorBoundaryProps) => {
+
+    if (isDev) {
+        return <div>{children}</div>
+    }
+
+    return <ErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>{children}</ErrorBoundary>
+}
 
 export class RapidLoadOptimizer {
     constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-           <ErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+           <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
                <RootProvider>
                    <ShadowRoot styles={stylesUrl}>
                        <Provider store={store}>
@@ -90,7 +105,7 @@ export class RapidLoadOptimizer {
                        </Provider>
                    </ShadowRoot>
                </RootProvider>
-           </ErrorBoundary>
+           </ApplicationErrorBoundary>
         );
     }
 }

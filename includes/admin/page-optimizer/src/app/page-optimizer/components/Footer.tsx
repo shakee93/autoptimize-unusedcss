@@ -202,7 +202,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                 {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
                                 Save Changes</AppButton>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className='w-full max-w-[520px]'>
                             <div>
                                 <AlertDialogHeader>
                                     <AlertDialogTitle>Save Changes?</AlertDialogTitle>
