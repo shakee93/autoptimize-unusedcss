@@ -18,7 +18,7 @@ import {
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import React, {useState, MouseEvent, useEffect, useRef} from "react";
+import React, {useState, MouseEvent, useEffect, useRef, useMemo} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -158,9 +158,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         };
     };
 
-    const dialogData = computeDialogData(data);
+    const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
 
-    const saveActions = [
+    const saveActions = useMemo(() => ( [
         {
             text: 'Save Changes',
             title: 'Save Changes?',
@@ -189,8 +189,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 submitSettings(false, true)
             }
         },
-    ]
-    
+    ]), [])
+
+
     return (
         <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
            <div className='flex gap-4 items-center'>
@@ -378,4 +379,4 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     );
 }
 
-export default Footer
+export default React.memo(Footer)

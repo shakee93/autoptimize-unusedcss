@@ -8,6 +8,7 @@ const useTable = (
     audit : Audit,
     headings : AuditHeadings[],
     items: AuditResource[],
+    type: string
 ) => {
     const columnHelper = createColumnHelper<AuditResource>();
 
@@ -55,7 +56,8 @@ const useTable = (
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         meta: {
-            tableId
+            tableId,
+            type
         },
         initialState : {
             pagination : {

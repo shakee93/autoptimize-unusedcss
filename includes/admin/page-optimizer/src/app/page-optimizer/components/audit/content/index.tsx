@@ -18,6 +18,7 @@ import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         tableId: string
+        type: string
     }
 }
 

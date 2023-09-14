@@ -151,8 +151,8 @@ export default function PageOptimizer() {
             <Header url={url}/>
 
             <div className={cn(
-                'relative overflow-auto w-full h-fit',
-                savingData && 'overflow-hidden h-[calc(100vh-130px)]'
+                'overflow-auto w-full h-fit',
+                savingData && 'relative overflow-hidden h-[calc(100vh-130px)]'
             )}>
 
                 {!loading ? (

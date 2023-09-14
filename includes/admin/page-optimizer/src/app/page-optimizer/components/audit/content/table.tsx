@@ -32,6 +32,7 @@ const FileTable = ({audit, group }: FileGroupProps) => {
         audit,
         audit?.files?.headings || [],
         group.items,
+        group.type
     )
 
     return (
@@ -123,4 +124,4 @@ const FileTable = ({audit, group }: FileGroupProps) => {
     );
 }
 
-export default FileTable
+export default React.memo(FileTable)
