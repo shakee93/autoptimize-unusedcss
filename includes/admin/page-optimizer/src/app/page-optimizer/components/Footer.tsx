@@ -275,7 +275,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                         {defaultAction > 0 ? saveActions[activeAction].text : saveActions[0].text}
                                     </AlertDialogTrigger>
 
-                                    <DropdownMenuTrigger className='hover:bg-slate-700 bg-slate-800 h-full px-2 pr-2.5'>
+                                    <DropdownMenuTrigger className='dark:hover:bg-zinc-300 hover:bg-slate-700 dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5'>
                                         <ChevronDown className='w-5'/>
                                     </DropdownMenuTrigger>
                                 </Button>
