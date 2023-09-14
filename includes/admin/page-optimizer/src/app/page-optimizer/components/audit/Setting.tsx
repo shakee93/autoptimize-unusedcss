@@ -208,7 +208,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                                     </div>
                                     <DialogFooter className='px-6 py-3 border-t'>
                                         <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
-                                        <AppButton onClick={e => setOpen(false)} dark={false} className='text-sm'>Close</AppButton>
+                                        <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>

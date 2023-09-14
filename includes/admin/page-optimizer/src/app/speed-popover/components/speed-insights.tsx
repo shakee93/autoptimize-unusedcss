@@ -140,7 +140,7 @@ const Content = () => {
             <>
                 {actions.map(action => (
                     <TooltipText key={action.icon} text={action.tooltip}>
-                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' dark={false}>
+                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' variant='outline'>
                             {icons[action.icon]} {action.loading && <span>
                             <Circle className='w-2 absolute stroke-none fill-blue-500'/>
                             <Circle className='w-2 relative motion-safe:animate-ping stroke-none fill-blue-500'/>

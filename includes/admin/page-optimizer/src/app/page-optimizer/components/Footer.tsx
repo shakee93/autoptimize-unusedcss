@@ -1,7 +1,18 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
-import {History, Redo2, SaveIcon, Undo2, User, UserCircle, UserPlus, UserPlus2, UserPlus2Icon} from "lucide-react";
+import {
+    History,
+    Loader,
+    Redo2,
+    SaveIcon,
+    Undo2,
+    User,
+    UserCircle,
+    UserPlus,
+    UserPlus2,
+    UserPlus2Icon
+} from "lucide-react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
@@ -199,8 +210,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <AlertDialog>
                         <AlertDialogTrigger>
                             <AppButton className='text-sm'>
-                                {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
-                                Save Changes</AppButton>
+                                {savingData ? <Loader className='w-5 -ml-1 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5 -ml-1'/>}
+                                Save Changes
+                            </AppButton>
                         </AlertDialogTrigger>
                         <AlertDialogContent className='w-full max-w-[520px]'>
                             <div>
@@ -217,7 +229,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                             </div>
                         </AlertDialogContent>
                     </AlertDialog>
-                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='outline'>Close</AppButton>
                 </Mode>
 
                 <Mode mode='onboard'>
@@ -276,7 +288,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                             </DialogContent>
                         </div>
                     </Dialog>
-                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
                 </Mode>
 
             </div>

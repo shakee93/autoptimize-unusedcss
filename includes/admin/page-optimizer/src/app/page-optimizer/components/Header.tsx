@@ -20,7 +20,7 @@ import {Monitor} from "lucide-react";
 
 const Header = ({ url }: { url: string}) => {
 
-    const { setShowOptimizer , options, version, manipulatingStyles } = useAppContext()
+    const { setShowOptimizer , options, version } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
 
@@ -58,7 +58,7 @@ const Header = ({ url }: { url: string}) => {
                     </div>
                     <div>
                         <TooltipText text='Analyze the page'>
-                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='rounded-full border-none' dark={false}>
+                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='rounded-full border-none' variant='outline'>
                                 <ArrowPathIcon className={cn(
                                     'w-5',
                                     loading ? 'animate-spin': ''
@@ -73,7 +73,6 @@ const Header = ({ url }: { url: string}) => {
             <div className='flex gap-8 items-center'>
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
                     <XMarkIcon className="h-6 w-6 dark:text-brand-300 text-brand-600" />
-                    {manipulatingStyles ?? 'closing..'}
                 </TooltipText>
             </div>
         </header>
