@@ -85,7 +85,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                 value: val
             }])
         }
-    }, [updates, settings])
+    }, [updates, settings, additionalInputs])
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,

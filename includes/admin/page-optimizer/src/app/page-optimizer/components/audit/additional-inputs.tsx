@@ -42,12 +42,11 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                     <>
                         <Label htmlFor="name" className="flex ml-4 text-left w-full">
                             <span>{input.control_label}</span>
-
                         </Label>
                         <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
                     </>
                 )
-            case "buttonx":
+            case "button-x":
                 return(
                     <>
                         <Label htmlFor="name" className="flex ml-4 text-left w-full">
