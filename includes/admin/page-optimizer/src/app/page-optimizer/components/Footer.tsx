@@ -18,7 +18,7 @@ import {
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import React, {useState, MouseEvent, useEffect, useRef, useMemo} from "react";
+import React, {useState, MouseEvent, useEffect, useRef, useMemo, useCallback} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -91,8 +91,6 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const defaultAction = 0
     const [activeAction, setActiveAction] = useState(defaultAction)
 
-    const { toast } = useToast()
-
     const submitSettings = async (analyze = false, global = false) => {
 
         if (savingData) {
@@ -135,12 +133,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     }
 
-    if (loading) {
-        return  <></>
-    }
-
-
-    const computeDialogData = (data: OptimizerResults | null | undefined) => {
+    const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {
             return null;
         }
@@ -156,9 +149,10 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             count,
             audits
         };
-    };
+    }, [data?.audits]);
 
     const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
+
 
     const saveActions = useMemo(() => ( [
         {
@@ -190,6 +184,20 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             }
         },
     ]), [])
+
+
+    const { toast } = useToast()
+
+
+
+    if (loading) {
+        return  <></>
+    }
+
+
+
+
+
 
 
     return (

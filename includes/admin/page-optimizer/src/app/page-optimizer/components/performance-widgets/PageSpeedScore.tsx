@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, {ReactNode, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {CheckBadgeIcon} from "@heroicons/react/24/solid";
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 import {useSelector} from "react-redux";
@@ -33,11 +33,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const handleCoreWebClick = () => {
+    const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
-    };
+    }, [isCoreWebClicked]);
 
-    const progressBarColorCode = () => {
+    const progressBarColorCode = useCallback( () => {
         const performance = data?.performance?? 0;
 
         if (performance < 50) {
@@ -50,7 +50,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             setProgressbarColor('#09B42F');
             setPerformanceIcon('pass')
         }
-    };
+    }, [data?.performance]);
 
     const FirstLettersComponent = ({ text }: { text: string }) => {
         const replacedText = text.replace(/_/g, ' ');
@@ -78,7 +78,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     }, [data, loading]);
 
-    const calculateOpacity = () => {
+    const calculateOpacity = useMemo( () => {
 
         if (!data) {
             return 0;
@@ -89,7 +89,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         const minOpacity = 0;
         const opacityIncrement = (maxOpacity - minOpacity) / targetNumber;
         return minOpacity + opacityIncrement * performance;
-    };
+    }, [performance]);
 
     const PerfCard = ({ children, className } : PerfCardProps) => {
 
@@ -128,7 +128,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                             })} value={performance}>
                                 <span
                                     style={{
-                                        opacity: calculateOpacity()
+                                        opacity: calculateOpacity
                                     }}
                                     className='text-5xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
                                 >{performance}</span>
@@ -221,4 +221,4 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     )
 }
 
-export default PageSpeedScore
+export default React.memo(PageSpeedScore)

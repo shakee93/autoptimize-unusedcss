@@ -1,69 +1,73 @@
-import {createColumnHelper, getCoreRowModel, getPaginationRowModel, useReactTable} from "@tanstack/react-table";
+import {
+    ColumnDef,
+    ColumnHelper,
+    createColumnHelper,
+    getCoreRowModel,
+    getPaginationRowModel,
+    useReactTable
+} from "@tanstack/react-table";
 import AuditColumns from "app/page-optimizer/components/audit/content/columns";
 import {isImageAudit} from "lib/utils";
-import React from "react";
-
+import React, { useMemo } from "react";
 
 const useTable = (
-    audit : Audit,
-    headings : AuditHeadings[],
+    audit: Audit,
+    headings: AuditHeadings[],
     items: AuditResource[],
     type: string
 ) => {
     const columnHelper = createColumnHelper<AuditResource>();
+    const tableId = `table_${audit.id}`;
 
-    const tableId = `table_${audit.id}`
+    // @ts-ignore
+    const columns: ColumnHelper<AuditResource, any>[] = useMemo(() => {
+        return headings.map((heading) => {
+            return columnHelper.accessor(
+                (row) => row[heading.key as keyof AuditResource],
+                {
+                    id: heading.key ? heading.key : "no-key",
+                    meta: heading,
+                    cell: (info) => <AuditColumns audit={audit} heading={heading} cell={info}/>,
+                    header: () => <span>{heading.label}</span>,
+                    enableHiding: true,
+                }
+            );
+        });
+    }, [headings, audit, columnHelper]);
 
-    const col = headings.map((heading) => {
-        return columnHelper.accessor(
-            (row) => row[heading.key as keyof AuditResource],
-            {
-                id: heading.key ? heading.key : "no-key",
-                meta: heading,
-                cell: (info) => <AuditColumns audit={audit} heading={heading} cell={info}/>,
-                header: () => <span>{heading.label}</span>,
-                enableHiding: true,
-
-            }
-        );
-    });
-
-    const getHiddenColumns = () => {
-
+    const hiddenColumns = useMemo(() => {
         let hiddenColumns: { [id: string]: boolean } = {
             pattern: false,
             file_type: false,
             passed: false
-        }
+        };
 
         if (isImageAudit(audit.id)) {
-            hiddenColumns.node = false
+            hiddenColumns.node = false;
         }
 
-        // check the first row to find any blank columns if found hide that column
         let firstRow = Object.keys(items[0]);
-        col.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
-            if(c.id) hiddenColumns[c.id] = false
-        })
+        columns.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
+            if (c.id) hiddenColumns[c.id] = false;
+        });
 
         return hiddenColumns;
-    }
+    }, [audit.id, columns, items]);
 
     const table = useReactTable({
         data: items,
-        // @ts-ignore
-        columns: col,
+        columns: columns ,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         meta: {
             tableId,
             type
         },
-        initialState : {
-            pagination : {
+        initialState: {
+            pagination: {
                 pageSize: 5
             },
-            columnVisibility: getHiddenColumns()
+            columnVisibility: hiddenColumns
         },
         autoResetPageIndex: false,
     });
@@ -71,4 +75,4 @@ const useTable = (
     return [table];
 };
 
-export default useTable
+export default useTable;
