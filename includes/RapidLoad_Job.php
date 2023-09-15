@@ -383,7 +383,7 @@ class RapidLoad_Job{
                 'regex' => '/https:\/\/www\.google\.com\/recaptcha\/api\.js/'
             ],
             [
-                'find' => '/^https:\/\/connect\.facebook\.net\/signals\/config\/\d+$/',
+                'find' => '/^https:\/\/connect\.facebook\.net\/signals\/config\/\d+/',
                 'regex' => '/https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js/'
             ]
         ];
