@@ -89,7 +89,7 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 </>
             )}
 
-            {/*<JsonView data={audit.files.items}/>*/}
+            <JsonView data={audit.files}/>
         </div>
     );
 };

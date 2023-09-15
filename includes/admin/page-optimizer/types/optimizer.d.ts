@@ -67,12 +67,6 @@ interface GroupedAuditResource {
 
 type FileTypes = 'css' | 'js' | 'image' | 'font' | string
 
-interface AuditListResource {
-    headings: AuditHeadings[]
-    items: AuditTableResource[]
-    type: 'table' | string
-}
-
 type AuditResource = AuditTableResource | AuditListResource
 
 type AuditFiles = TableItems | ListItems
@@ -95,8 +89,23 @@ interface AuditTableResource {
     } | string
     pattern?: string
     passed?: boolean
+    subItems?: AuditColumnSubItems
 }
 
+
+interface AuditListResource {
+    headings: AuditHeadings[]
+    items: AuditTableResource[]
+    type: 'table' | string
+    subItems?: AuditColumnSubItems
+}
+
+interface AuditColumnSubItems {
+    type: string
+    items: [{
+        [p: string]: string
+    }]
+}
 
 
 
