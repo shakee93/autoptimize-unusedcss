@@ -250,6 +250,9 @@ class RapidLoad_Optimizer
             if(isset($audit->settings)){
                 foreach ($audit->settings as $settings){
                     foreach ($settings->inputs as $input){
+                        if(!isset($input->key)){
+                            continue;
+                        }
                         if(isset(self::$merged_options[$input->key])){
                             if($input->key == "uucss_load_js_method"){
                                 $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
