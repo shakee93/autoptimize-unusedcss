@@ -55,7 +55,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const FirstLettersComponent = ({ text }: { text: string }) => {
         const replacedText = text.replace(/_/g, ' ');
         const firstLetters = replacedText.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
-        return <>{firstLetters}</>;
+        const shortenedText = firstLetters.slice(0, 3);
+        return <>{shortenedText}</>;
     };
 
 
@@ -102,6 +103,52 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             </div>
         )
     }
+
+    const desiredOrder = [
+        "First Contentful Paint",
+        "Largest Contentful Paint",
+        "Total Blocking Time",
+        "Cumulative Layout Shift",
+        "Speed Index",
+    ];
+    const sortedData = data?.metrics.sort((a, b) => {
+        const aIndex = desiredOrder.indexOf(a.title);
+        const bIndex = desiredOrder.indexOf(b.title);
+
+        // If either metric is not found in the desiredOrder array, place it at the end.
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+
+        // Sort based on the index in the desiredOrder array.
+        return aIndex - bIndex;
+    });
+
+    // const desiredOrderReal = [
+    //     "LARGEST_CONTENTFUL_PAINT_MS",
+    //     "FIRST_INPUT_DELAY_MS",
+    //     "CUMULATIVE_LAYOUT_SHIFT_SCORE",
+    //     "FIRST_CONTENTFUL_PAINT_MS",
+    //     "INTERACTION_TO_NEXT_PAINT",
+    //     "EXPERIMENTAL_TIME_TO_FIRST_BYTE",
+    // ];
+    //
+    // const sortedMetrics = Object.entries(data?.metrics)
+    //     .sort(([metricNameA], [metricNameB]) => {
+    //         const aIndex = desiredOrderReal.indexOf(metricNameA);
+    //         const bIndex = desiredOrderReal.indexOf(metricNameB);
+    //
+    //         // If either metric is not found in the desiredOrder array, place it at the end.
+    //         if (aIndex === -1) return 1;
+    //         if (bIndex === -1) return -1;
+    //
+    //         // Sort based on the index in the desiredOrder array.
+    //         return aIndex - bIndex;
+    //     })
+    //     .reduce((sortedObj, [metricName, metric]) => {
+    //         sortedObj[metricName] = metric;
+    //         return sortedObj;
+    //     }, {});
+
 
     return (
 
@@ -161,7 +208,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             </Card>
             <Card>
                 <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    {data?.metrics.map((s, index) => (
+                    {sortedData?.map((s, index) => (
 
                         <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                             <div className="flex">
