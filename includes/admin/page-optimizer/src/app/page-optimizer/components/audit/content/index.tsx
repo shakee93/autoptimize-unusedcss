@@ -72,8 +72,9 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                 )
             }
 
-            {((audit.files?.type === "list" ) &&
-                audit.files?.items.map((list, index) =>
+            {(audit.files?.type === "list" ) && (
+                <>
+                    {audit.files?.items.map((list, index) =>
                         (list?.type === 'table' && list.items?.length > 0) && (
                             <FileGroup
                                 key={index}
@@ -81,10 +82,14 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 audit={audit}
                                 group={list}
                                 notify={notify}
+                                type='list'
                             />
                         )
-                )
+                    )}
+                </>
             )}
+
+            {/*<JsonView data={audit.files.items}/>*/}
         </div>
     );
 };
