@@ -20,7 +20,7 @@ const PerformanceProgressBar = ({
 } : PerformanceProgressBarProps ) => {
 
     const [score, setScore] = useState(0);
-    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performance ? performance : 0);
+    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performance);
 
     useEffect(() => {
         if (performance) {
