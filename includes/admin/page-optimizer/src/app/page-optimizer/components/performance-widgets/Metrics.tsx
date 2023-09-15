@@ -5,6 +5,7 @@ import {JsonView} from "react-json-view-lite";
 import TooltipText from "components/ui/tooltip-text";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import PerformanceProgressBar from "components/performance-progress-bar";
+import {cn} from "lib/utils";
 
 
 interface MetricsProps {
@@ -19,7 +20,7 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
             <div className="flex flex-col w-full">
                 {metrics.map((s, index) => (
                     <div key={index}
-                         className='flex flex-row justify-between items-center border-t px-6 py-2.5'>
+                         className='group flex flex-row justify-between items-center border-t px-6 py-2.5'>
                         <div className='flex flex-col justify-between'>
                             <div className='text-sm font-medium'>
                                 {s.title}
@@ -32,7 +33,9 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
                                 {s.displayValue}
                             </div>
                         </div>
-                        <div>
+                        <div className={cn(
+                            'opacity-70 group-hover:opacity-100 transition-opacity'
+                        )}>
                             <PerformanceProgressBar
                                 background={false}
                                 stroke={10}
