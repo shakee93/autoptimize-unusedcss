@@ -450,7 +450,7 @@ class RapidLoad_Optimizer
                                 }
                             }
 
-                            if($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss"){
+                            if(isset($input->key) && ($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss")){
                                 if(isset($input->{'value_data'})){
                                     unset($input->{'value_data'});
                                 }
