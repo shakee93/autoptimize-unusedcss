@@ -30,6 +30,7 @@ import {AppAction, RootState} from "../../../store/app/appTypes";
 import {changeReport} from "../../../store/app/appActions";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {Toaster} from "components/ui/toaster";
+import PerformanceProgressBar from "components/performance-progress-bar";
 
 const Content = () => {
 
@@ -161,22 +162,7 @@ const Content = () => {
                         {loading || on ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
-                            <CircularProgressbarWithChildren
-                                strokeWidth={4}
-                                className='w-44 h-44 relative'
-                                styles={buildStyles({
-                                    pathColor: progressbarColor,
-                                    trailColor: '#eeeeee',
-                                    pathTransitionDuration: .5,
-                                    strokeLinecap: 'round'
-                            })} value={performance}>
-                                <span
-                                    style={{
-                                        opacity: calculateOpacity()
-                                    }}
-                                    className='text-5xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  font-bold'
-                                >{performance}</span>
-                            </CircularProgressbarWithChildren>
+                            <PerformanceProgressBar performance={data?.performance}></PerformanceProgressBar>
                         )}
                     </div>
 
@@ -249,7 +235,7 @@ const Content = () => {
                         <AppButton onClick={(e) => {
                             setShowOptimizer(true)
                         }}>
-                            <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Page Optimizer
+                            <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
                         </AppButton>
                         <PopupActions/>
                     </div>
