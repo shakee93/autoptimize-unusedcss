@@ -208,6 +208,8 @@ class RapidLoad_Optimizer
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
+        $url = "";
+
         if(!$result || $new){
 
             $api = new RapidLoad_Api();
@@ -250,6 +252,22 @@ class RapidLoad_Optimizer
             if(isset($audit->settings)){
                 foreach ($audit->settings as $settings){
                     foreach ($settings->inputs as $input){
+
+                        if(isset($input->control_type) && $input->control_type == "button"){
+
+                            switch ($input->action){
+                                case 'rapidload_purge_all':{
+                                    $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                    break;
+                                }
+                                case 'cpcss_purge_url':{
+                                    $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                    break;
+                                }
+                            }
+
+                        }
+
                         if(!isset($input->key)){
                             continue;
                         }
