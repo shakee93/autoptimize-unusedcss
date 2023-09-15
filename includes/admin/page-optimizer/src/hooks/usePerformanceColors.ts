@@ -1,13 +1,15 @@
 import {useCallback, useEffect, useState} from "react";
 
-const usePerformanceColors = (performance: number) => {
+const usePerformanceColors = (performance?: number) => {
 
     const [performanceIcon, setPerformanceIcon] = useState('fail');
     const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [progressbarBg, setProgressbarBg] = useState('#ECECED');
 
     const progressBarColorCode = useCallback( () => {
-        const bgOpacity = 0.05
+        const bgOpacity = 0.08
+
+        if(!performance) return
 
         if (performance < 50) {
             setProgressbarColor('#ff4e43');
@@ -27,6 +29,10 @@ const usePerformanceColors = (performance: number) => {
     useEffect(() => {
         progressBarColorCode()
     }, [])
+
+    useEffect(() => {
+        progressBarColorCode()
+    }, [performance])
 
     return [performanceIcon, progressbarColor, progressbarBg]
 }

@@ -8,7 +8,6 @@ interface PerformanceProgressBarProps {
     className?: string
     scoreClassName?: string
     background?: boolean
-    trail?: string
     stroke?: number
 }
 
@@ -17,7 +16,6 @@ const PerformanceProgressBar = ({
                                     className,
                                     scoreClassName,
                                     background = true,
-                                    trail = 'transparent',
                                     stroke = 4
 } : PerformanceProgressBarProps ) => {
 
@@ -49,13 +47,13 @@ const PerformanceProgressBar = ({
                 strokeWidth={stroke}
                 background={background}
                 className={cn(
-                    'w-44 h-44 relative',
+                    'h-44 relative',
                     className
                 )}
                 styles={
                     buildStyles({
                         pathColor: progressbarColor,
-                        trailColor: trail,
+                        trailColor: !background ? progressbarBg : 'transparent',
                         pathTransitionDuration: .5,
                         strokeLinecap: 'round',
                         backgroundColor: progressbarBg

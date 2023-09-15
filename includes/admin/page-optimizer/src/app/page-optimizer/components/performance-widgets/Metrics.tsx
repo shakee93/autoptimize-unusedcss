@@ -36,24 +36,11 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
                             <PerformanceProgressBar
                                 background={false}
                                 stroke={10}
-                                trail='rgb(232 232 232)'
                                 scoreClassName='text-[12px]'
                                 className='h-9'
                                 performance={s.score}/>
                         </div>
                     </div>
-                    // <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                    //     <div className="flex">
-                    //         <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
-                    //             <div><p className="text-xs font-medium">{s.title}</p></div>
-                    //             <div><span
-                    //                 className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                    //             <PerformanceIcons icon={s.icon}/>
-                    //         </span></div>
-                    //         </div>
-                    //     </div>
-                    //     <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
-                    // </div>
                 ))}
             </div>
             {/*<JsonView data={metrics}/>*/}
