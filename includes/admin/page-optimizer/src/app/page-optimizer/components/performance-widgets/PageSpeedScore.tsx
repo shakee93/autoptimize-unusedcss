@@ -11,6 +11,7 @@ import {JsonView} from "react-json-view-lite";
 import {cn} from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
+import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 
 
 
@@ -81,26 +82,12 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                 </div>
+                {data?.metrics && (
+                    <Metrics performance={data?.performance} metrics={data.metrics}/>
+                )}
             </Card>
-            <Card>
-                <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                    {data?.metrics.map((s, index) => (
 
-                        <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                            <div className="flex">
-                                <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
-                                    <div><p className="text-xs font-medium">{<FirstLettersComponent text={s.title} />}</p></div>
-                                    <div><span
-                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                                <PerformanceIcons icon={s.icon}/>
-                            </span></div>
-                                </div>
-                            </div>
-                            <p className="text-[22px] font-medium mr-2 mt-1 text-red">{s.displayValue}</p>
-                        </div>
-                    ))}
-                </div>
-            </Card>
+
 
             {data?.loadingExperience?.metrics && (
                 <Card>

@@ -179,7 +179,7 @@ const Content = () => {
                         </TooltipText>
                     </div>
 
-                    <div className="flex justify-around text-sm gap-4 font-light w-full">
+                    <div className="flex justify-around text-sm text-brand-700 dark:text-brand-300 gap-4 font-light w-full">
                         <div className='flex items-center gap-1'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
                                 <polygon points="5,0 0,10 10,10" fill="red"/>
