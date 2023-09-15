@@ -89,4 +89,4 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
     );
 };
 
-export default React.memo(AuditContent);
+export default AuditContent;
