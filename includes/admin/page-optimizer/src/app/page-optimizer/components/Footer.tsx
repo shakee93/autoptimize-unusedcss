@@ -1,11 +1,24 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
-import {History, Redo2, SaveIcon, Undo2, User, UserCircle, UserPlus, UserPlus2, UserPlus2Icon} from "lucide-react";
+import {
+    ChevronDown,
+    ChevronUp,
+    History,
+    Loader,
+    Redo2, RefreshCcw,
+    SaveIcon,
+    Undo2,
+    User,
+    UserCircle,
+    UserPlus,
+    UserPlus2,
+    UserPlus2Icon
+} from "lucide-react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import React, {useState, MouseEvent, useEffect} from "react";
+import React, {useState, MouseEvent, useEffect, useRef, useMemo, useCallback} from "react";
 import {cn} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -48,6 +61,17 @@ import Card from "components/ui/card";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import {Button} from "components/ui/button";
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel, DropdownMenuPortal,
+    DropdownMenuShortcut,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {fetchData} from "../../../store/app/appActions";
+
 interface FooterProps {
     url: string,
     togglePerformance: boolean
@@ -56,15 +80,18 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options , modeData} = useAppContext()
+    const { setShowOptimizer, options ,
+        modeData, savingData, setSavingData} = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading, revisions } = useSelector(optimizerData)
-    const [savingData, setSavingData] = useState<boolean>(false)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
-    const { toast } = useToast()
+    const refSaveButton = useRef<HTMLButtonElement | null>(null);
+    const [open, setOpen] = useState(false)
+    const defaultAction = 0
+    const [activeAction, setActiveAction] = useState(defaultAction)
 
-    const submitSettings = async (e: MouseEvent<HTMLButtonElement>) => {
+    const submitSettings = async (analyze = false, global = false) => {
 
         if (savingData) {
             return;
@@ -80,12 +107,19 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 url,
                 activeReport,
                 reload,
-                data
+                data,
+                global,
+                analyze
             );
 
             toast({
                 description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
             })
+
+            if (analyze) {
+                dispatch(fetchData(options, url, true));
+            }
+
 
         } catch (error: any) {
             toast({
@@ -99,12 +133,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     }
 
-    if (loading) {
-        return  <></>
-    }
-
-
-    const computeDialogData = (data: OptimizerResults | null | undefined) => {
+    const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {
             return null;
         }
@@ -120,12 +149,59 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             count,
             audits
         };
-    };
+    }, [data?.audits]);
 
-    const dialogData = computeDialogData(data);
-    
+    const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
+
+
+    const saveActions = useMemo(() => ( [
+        {
+            text: 'Save Changes',
+            title: 'Save Changes?',
+            description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
+            onClick : submitSettings
+        },
+        {
+            text: <div className='flex w-full items-center justify-between'>
+                Save & Analyze
+                {/*<TooltipText text='2 Optimizations are in progess'>*/}
+                {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
+                {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
+                {/*</TooltipText>*/}
+            </div>,
+            title: 'Save and analyze your page again?',
+            description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.",
+            onClick : () => {
+                submitSettings(true)
+            }
+        },
+        {
+            text: 'Save as Global Settings',
+            title: 'Save these settings as global settings?',
+            description: "You have made changes to your settings. Click 'Save Changes' to override global settings or 'Discard' to revert to the previous state.",
+            onClick : () => {
+                submitSettings(false, true)
+            }
+        },
+    ]), [])
+
+
+    const { toast } = useToast()
+
+
+
+    if (loading) {
+        return  <></>
+    }
+
+
+
+
+
+
+
     return (
-        <footer className='fixed flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
+        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
            <div className='flex gap-4 items-center'>
 
               <a target="_blank" href={url} className='flex flex-row gap-3 items-center'>
@@ -196,28 +272,55 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 </div>
 
                 <Mode>
-                    <AlertDialog>
-                        <AlertDialogTrigger>
-                            <AppButton className='text-sm'>
-                                {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <SaveIcon className='w-5 mr-0.5'/>}
-                                Save Changes</AppButton>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <div>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Save Changes?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogAction onClick={e => submitSettings(e)} >Save Changes</AlertDialogAction>
-                                    <AlertDialogCancel>Discard</AlertDialogCancel>
-                                </AlertDialogFooter>
-                            </div>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                    <div className='flex gap-4'>
+                        <AlertDialog open={open} onOpenChange={setOpen}>
+                            <DropdownMenu>
+                                <Button ref={refSaveButton} asChild
+                                        className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
+                                    <AlertDialogTrigger onClick={e => setActiveAction(0)} className='flex gap-2 items-center pl-3 pr-2 h-full'>
+                                        {savingData ?
+                                            <Loader className='w-5 mr-0.5 animate-spin'/> :
+                                            <SaveIcon className='w-5 mr-0.5'/>}
+                                        {defaultAction > 0 ? saveActions[activeAction].text : saveActions[0].text}
+                                    </AlertDialogTrigger>
+
+                                    <DropdownMenuTrigger className='dark:hover:bg-zinc-300 hover:bg-slate-700 dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5'>
+                                        <ChevronDown className='w-5'/>
+                                    </DropdownMenuTrigger>
+                                </Button>
+
+                                <DropdownMenuContent style={{
+                                    width: refSaveButton.current?.clientWidth || 200
+                                }} align='end'  sideOffset={6}
+                                                     className='z-[110000] relative min-w-[200px]'>
+                                    <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
+                                    {saveActions.filter((e, i) => defaultAction > 0 ? i !== activeAction : i !== 0).map((action, index) => (
+                                        <span key={index}>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={e => {
+                                                setActiveAction(saveActions.indexOf(action))
+                                                setOpen(true)
+                                            }}>{action.text}</DropdownMenuItem>
+                                        </span>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <AlertDialogContent className='w-full max-w-[520px]'>
+                                <div>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>{saveActions[activeAction].title}</AlertDialogTitle>
+                                        <AlertDialogDescription>{saveActions[activeAction].description}</AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogAction onClick={e => saveActions[activeAction].onClick()} >Save Changes</AlertDialogAction>
+                                        <AlertDialogCancel>Discard</AlertDialogCancel>
+                                    </AlertDialogFooter>
+                                </div>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                        <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='outline'>Close</AppButton>
+                    </div>
                 </Mode>
 
                 <Mode mode='onboard'>
@@ -276,7 +379,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                             </DialogContent>
                         </div>
                     </Dialog>
-                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} dark={false}>Close</AppButton>
+                    <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
                 </Mode>
 
             </div>
@@ -284,4 +387,4 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     );
 }
 
-export default Footer
+export default React.memo(Footer)

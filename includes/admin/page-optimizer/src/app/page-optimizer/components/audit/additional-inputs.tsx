@@ -1,6 +1,6 @@
 import {Label} from "components/ui/label";
 import {Input} from "components/ui/input";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Switch} from "components/ui/switch";
 import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -14,6 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "components/ui/select";
+import {Button} from "components/ui/button";
 
 interface AdditionalInputsProps {
     data: AuditSettingInput[]
@@ -27,22 +28,7 @@ interface AdditionalInputsProps {
 const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
 
 
-    const renderSelectItems = (values: string[]) => {
-
-        return values?.map((value: string) => (
-            <SelectItem
-                className="capitalize cursor-pointer"
-                key={value}
-                value={value}
-            >
-                {value}
-            </SelectItem>
-        ));
-    };
-
-
-
-    const fields = (input: AuditSettingInput) => {
+    const Fields = ({input}: { input: AuditSettingInput}) => {
 
         switch (input.control_type) {
             case "checkbox":
@@ -61,6 +47,14 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                         <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
                     </>
                 )
+            case "buttonx":
+                return(
+                    <>
+                        <Label htmlFor="name" className="flex ml-4 text-left w-full">
+                            <Button variant='outline'>{input.control_label}</Button>
+                        </Label>
+                    </>
+                )
             case "options":
                 return(
                     <>
@@ -73,7 +67,15 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
                                 <SelectContent className="z-[100001]">
                                     <SelectGroup>
                                         <SelectLabel>Actions</SelectLabel>
-                                        {renderSelectItems(input.control_values)}
+                                        {input?.control_values?.map((value: string) => (
+                                            <SelectItem
+                                                className="capitalize cursor-pointer"
+                                                key={value}
+                                                value={value}
+                                            >
+                                                {value}
+                                            </SelectItem>
+                                        ))}
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -96,8 +98,8 @@ const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
     return <>
         {
             data.map((input, index) => (
-                    <div key={index} className="flex flex-col justify-start items-center gap-3">
-                        {fields(input)}
+                    <div key={index} className="flex flex-col justify-start items-center gap-3 normal-case">
+                        <Fields input={input}/>
                     </div>
                 ))
         }

@@ -38,7 +38,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
 
-    if(!node && isDev) {
+    if(isDev) {
         return <>{children}</>
     }
 
@@ -68,7 +68,6 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     return (
         <>
-
             {portal}
             {!node && <div ref={hostRef}></div>}
         </>

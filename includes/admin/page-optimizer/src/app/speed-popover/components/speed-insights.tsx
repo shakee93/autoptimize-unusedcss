@@ -33,7 +33,7 @@ import {Toaster} from "components/ui/toaster";
 
 const Content = () => {
 
-    const {setShowOptimizer, options} = useAppContext()
+    const {setShowOptimizer, options, version} = useAppContext()
     const {data, error, loading, activeReport} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
@@ -140,7 +140,7 @@ const Content = () => {
             <>
                 {actions.map(action => (
                     <TooltipText key={action.icon} text={action.tooltip}>
-                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' dark={false}>
+                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' variant='outline'>
                             {icons[action.icon]} {action.loading && <span>
                             <Circle className='w-2 absolute stroke-none fill-blue-500'/>
                             <Circle className='w-2 relative motion-safe:animate-ping stroke-none fill-blue-500'/>
@@ -216,7 +216,7 @@ const Content = () => {
                 </div>
                 <div className='flex flex-col flex-grow'>
                     <div className='flex gap-2 text-md justify-between items-center font-medium text-left mb-3 px-3'>
-                        Speed insights
+                        <div className='flex gap-2 items-center'>Speed insights <span className='text-xxs leading-tight text-brand-400'>v{version}</span></div>
                         <div className='flex gap-2 text-brand-600 dark:text-brand-400'>
                             <TooltipText text='Go to Plugin Dashboard'>
                                 <a className='flex hover:dark:text-brand-100 justify-center rounded-full w-7 h-7 p-0.5 text-xs items-center gap-2' href={options?.dashboard_url ? options?.dashboard_url : '#'}>

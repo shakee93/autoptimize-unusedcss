@@ -28,7 +28,12 @@ const AuditColumnImage = ({ cell } : AuditColumnImageProps) => {
 
 
     let value = cell.getValue().url ? cell.getValue().url : cell.getValue()
-    const shouldFetch = value.includes('images.rapidload-cdn.io')
+
+    if (!value) {
+        return <></>
+    }
+
+    const shouldFetch = value.includes('images.rapidload-cdn.io');
     let snippet : any = '';
 
     if (cell.table.options.meta?.type === 'image' && cell.table.options.columns.find(c => c.id === 'node')) {
