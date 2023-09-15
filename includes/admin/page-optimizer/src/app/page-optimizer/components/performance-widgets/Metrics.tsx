@@ -16,11 +16,11 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
 
     return (
         <div>
-            <div className="flex flex-col w-full pt-2 pb-0">
+            <div className="flex flex-col w-full">
                 {metrics.map((s, index) => (
                     <div key={index}
-                         className='flex flex-row justify-between items-center border-t px-8 py-2'>
-                        <div className='flex flex-col'>
+                         className='flex flex-row justify-between items-center border-t px-6 py-2.5'>
+                        <div className='flex flex-col justify-between'>
                             <div className='text-sm font-medium'>
                                 {s.title}
                             </div>

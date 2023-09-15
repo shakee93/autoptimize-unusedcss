@@ -34,7 +34,8 @@ export interface AuditProps {
 const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTab, onHeightChange }, ref) => {
 
     // const [toggleFiles, setToggleFiles] = useState(false);
-    const [toggleFiles, setToggleFiles] = useState(index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0));
+    const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
+    const [toggleFiles, setToggleFiles] = useState( false);
 
     const {settings, activeReport} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
