@@ -381,6 +381,10 @@ class RapidLoad_Job{
             [
                 'find' => '/^https:\/\/www\.gstatic\.com\/recaptcha\/releases\/[A-Za-z0-9-]+\/recaptcha__en\.js$/',
                 'regex' => '/https:\/\/www\.google\.com\/recaptcha\/api\.js/'
+            ],
+            [
+                'find' => '/^https:\/\/connect\.facebook\.net\/signals\/config\/\d+$/',
+                'regex' => '/https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js/'
             ]
         ];
 
