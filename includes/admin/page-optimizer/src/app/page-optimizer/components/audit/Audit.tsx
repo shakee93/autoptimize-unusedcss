@@ -37,13 +37,14 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
     const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
     const [toggleFiles, setToggleFiles] = useState( false);
 
-    const {settings, activeReport} = useSelector(optimizerData);
+    const {settings, activeReport, data} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
     const {openAudits, setOpenAudits} = useAppContext()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
     const filesOrActions = (audit.files?.items?.length > 0 || audit.settings.length > 0)
+
 
     if (!audit?.id) {
         return <></>;
@@ -131,15 +132,23 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                         <div
                             className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
                             {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
-
                         </div>
                     </TooltipText>
                     <div className='flex flex-col justify-around'>
-                        <div className='flex gap-1 items-center'>
+                        <div className='flex gap-1.5 items-center'>
                             {audit.name}
                             {/*<span className='text-xxs leading-tight border border-purple-300 rounded-2xl py-0.5 px-2 bg-purple-100'>*/}
                             {/*    2 changes*/}
                             {/*</span>*/}
+
+                            {audit.metrics && (
+                                <div className='flex gap-1.5 text-xxs'>
+                                    { audit.metrics.map(metric => (
+                                        <div className='cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md' key={metric.id}>{metric.refs.acronym}</div>
+                                    ))}
+                                </div>
+                            )}
+
 
                             {(activeSettings.length > 0 && !toggleFiles) && (
                                 <HoverCard openDelay={0} >
@@ -165,6 +174,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                     )}
                                 </HoverCard>
                             )}
+
+
 
                         </div>
                         <span className='flex text-xxs leading-tight opacity-70'>

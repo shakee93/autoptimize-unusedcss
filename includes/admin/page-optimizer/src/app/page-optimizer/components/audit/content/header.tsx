@@ -24,11 +24,12 @@ const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps)
 
         let l = label.toLowerCase()
 
-        if (label === 'table') {
+        if (l === 'table') {
             return 'Additional Information'
         }
 
-        if (label === 'unknown') {
+
+        if (l === 'unknown') {
             return  'Unattributable items';
         }
 

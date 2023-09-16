@@ -14,8 +14,9 @@ import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
 
 
-const transformAudit = (audit: Audit) => {
+const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
+    audit.metrics = metrics.filter(m => m?.refs?.relevantAudits?.includes(audit.id))
 
     if (audit.files && (audit.files.type === 'opportunity' || audit.files.type === 'table')) {
 
@@ -55,7 +56,9 @@ const transformAudit = (audit: Audit) => {
 
 const transformData = (data: any) => {
     
-    let audits : Audit[] = data.data.page_speed.audits.sort((a: Audit, b: Audit) => a.score - b.score).map( (a: Audit) => transformAudit(a))
+    let audits : Audit[] = data.data.page_speed.audits
+        .sort((a: Audit, b: Audit) => a.score - b.score)
+        .map( (a: Audit) => transformAudit(a, data.data?.page_speed?.metrics))
 
     const sortAuditsWithActions = (a: Audit, b: Audit) => {
         const aFirstCondition = a.settings.filter(s => s.inputs[0].value).length > 0;

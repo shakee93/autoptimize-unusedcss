@@ -137,7 +137,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
         setSavingData(false)
 
-    }, [])
+    }, [data, reload, url, activeReport, activeAction])
 
     const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {

@@ -65,7 +65,9 @@ module.exports = {
         400 : '400ms'
       },
       fontSize: {
-        xxs: '10px',
+        xxs: ['10px', {
+          lineHeight: '1',
+        }],
       },
       colors: {
         border: "hsl(var(--border))",

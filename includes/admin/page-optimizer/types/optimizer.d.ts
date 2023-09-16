@@ -120,6 +120,7 @@ interface Audit {
     scoreDisplayMode: string;
     displayValue: string;
     settings: AuditSetting[];
+    metrics: Metric[]
 }
 
 interface AuditHeadings {
@@ -166,6 +167,10 @@ interface Metric {
     displayValue: string;
     icon: string;
     score: number;
+    refs: {
+        relevantAudits: string[]
+        acronym: string
+    }
 }
 
 type ReportType = 'mobile' | 'desktop'
