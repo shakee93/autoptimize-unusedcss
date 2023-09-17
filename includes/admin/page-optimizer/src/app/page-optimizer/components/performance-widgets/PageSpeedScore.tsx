@@ -141,9 +141,20 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             </span></div>
                                             </div>
                                         </div>
-                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{["FID", "CLS", "INP"].includes(metricName)
-                                            ? `${metric?.percentile} ms`
-                                            : `${metric?.percentile ? (metric.percentile / 1000).toFixed(2) : ''} s`}</p>
+                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">
+                                            {["FID", "CLS", "INP"].includes(metricName) ? (
+                                                <>
+                                                    {metric?.percentile}<span className="text-base"> ms</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {metric?.percentile
+                                                        ? `${(metric.percentile / 1000).toFixed(2)}`
+                                                        : ''}
+                                                    <span className="text-base"> s</span>
+                                                </>
+                                            )}
+                                        </p>
 
                                     </div>
                                 ))}
