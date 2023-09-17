@@ -55,10 +55,15 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
 }
 
 const transformData = (data: any) => {
+
+    let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
+        ...metric,
+        potentialGain: (metric.refs.weight - (metric.refs.weight / 100) * metric.score)
+    }))
     
     let audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
-        .map( (a: Audit) => transformAudit(a, data.data?.page_speed?.metrics))
+        .map( (a: Audit) => transformAudit(a, metrics))
 
     const sortAuditsWithActions = (a: Audit, b: Audit) => {
         const aFirstCondition = a.settings.filter(s => s.inputs[0].value).length > 0;
@@ -85,6 +90,7 @@ const transformData = (data: any) => {
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
+
             ...data.data.page_speed,
             grouped : {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit').sort(
@@ -94,7 +100,9 @@ const transformData = (data: any) => {
                 diagnostics:  audits.filter(audit => audit.type === "diagnostics")
                     .sort((a, b) => (a.scoreDisplayMode === 'informative' ? 1 : -1)),
             },
+            metrics : metrics,
         },
+
         success: data.success,
         settings: initiateSettings(audits),
         revisions: data.data.revisions,

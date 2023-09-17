@@ -13,6 +13,8 @@ interface OptimizerContextProps {
     savingData: boolean;
     setSavingData: Dispatch<SetStateAction<boolean>>;
     global: boolean
+    activeMetric: Metric | null
+    setActiveMetric: Dispatch<SetStateAction<Metric|null>>;
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -28,6 +30,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
 
     const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
+    const [activeMetric, setActiveMetric] = useState< Metric | null>(null);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
@@ -83,7 +86,9 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             manipulatingStyles,
             savingData,
             setSavingData,
-            global
+            global,
+            setActiveMetric,
+            activeMetric
         }}>
             {children}
         </AppContext.Provider>
