@@ -58,7 +58,7 @@ const transformData = (data: any) => {
 
     let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
-        potentialGain: (metric.refs.weight - (metric.refs.weight / 100) * metric.score)
+        potentialGain: (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score)
     }))
     
     let audits : Audit[] = data.data.page_speed.audits
