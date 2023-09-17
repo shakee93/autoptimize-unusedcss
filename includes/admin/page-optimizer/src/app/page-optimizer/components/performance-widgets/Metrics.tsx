@@ -18,21 +18,8 @@ interface MetricsProps {
 const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     const { setActiveMetric, activeMetric } = useAppContext()
-    const desiredMetricsOrder = [
-        "First Contentful Paint",
-        "Largest Contentful Paint",
-        "Total Blocking Time",
-        "Cumulative Layout Shift",
-        "Speed Index",
-    ];
-
-    const sortedMetricsData = metrics.sort((a, b) => {
-        const aIndex = desiredMetricsOrder.indexOf(a.title);
-        const bIndex = desiredMetricsOrder.indexOf(b.title);
-        if (aIndex === -1) return 1;
-        if (bIndex === -1) return -1;
-        return aIndex - bIndex;
-    });
+    const desiredMetricsOrder = ["First Contentful Paint", "Largest Contentful Paint", "Total Blocking Time", "Cumulative Layout Shift", "Speed Index"];
+    const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
 
 
     return (
