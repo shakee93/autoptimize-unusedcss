@@ -16,6 +16,27 @@ interface MetricsProps {
 
 const Metrics = ({ metrics, performance } : MetricsProps) => {
 
+    // reorder metrics start
+    const desiredOrder = [
+        "First Contentful Paint",
+        "Largest Contentful Paint",
+        "Total Blocking Time",
+        "Cumulative Layout Shift",
+        "Speed Index",
+    ];
+
+    const sortedData = metrics.sort((a, b) => {
+        const aIndex = desiredOrder.indexOf(a.title);
+        const bIndex = desiredOrder.indexOf(b.title);
+
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+
+        return aIndex - bIndex;
+    });
+    // reorder metrics end
+
+
     let weight = {
         'First Contentful Paint': 10,
         'Speed Index': 10,
@@ -26,7 +47,7 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
     return (
         <div>
             <div className="flex flex-col w-full">
-                {metrics.map((s, index) => (
+                {sortedData.map((s, index) => (
                     <div key={index}
                          className='group flex flex-row justify-between items-center border-t px-6 py-2.5'>
                         <div className='flex flex-col justify-between'>
