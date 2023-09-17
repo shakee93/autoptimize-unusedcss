@@ -53,12 +53,11 @@ const useTable = (
             if (c.id && !firstRow.includes('subItems')) hiddenColumns[c.id] = false;
         });
 
-        console.log(firstRow, hiddenColumns);
+        // console.log(firstRow, hiddenColumns);
 
         return hiddenColumns;
     }, [audit.id, columns, items]);
 
-    console.log(columns);
     const table = useReactTable({
         data: items,
         columns: columns ,

@@ -11,7 +11,7 @@ import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
-import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader} from "lucide-react";
+import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import {m, AnimatePresence} from "framer-motion";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
@@ -76,7 +76,7 @@ export default function PageOptimizer() {
                     key={tab.key}
                 >
                     {tab.name}
-                    {(data && data.audits?.length > 0) && (
+                    {(data && data?.audits.length > 0) && (
                         <div className={
                             cn(
                                 'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
@@ -84,7 +84,7 @@ export default function PageOptimizer() {
                                 (activeTab === tab.key) && tab.activeColor,
                             )}>
                             <span className={cn(
-                                '',
+                                'transition-colors',
                                 activeTab === tab.key && ' text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}
@@ -209,47 +209,69 @@ export default function PageOptimizer() {
                                     </Card>
                                 </div>
                                 <div className="audits pt-4 flex">
-                                    {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) && (
-                                        <AnimatePresence initial={false}>
+                                    <AnimatePresence initial={false}>
+                                        {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) ? (
+
                                             <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
                                                 <div className='col-span-12 flex flex-col gap-4'>
-                                                    {data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
-                                                        <m.div
-                                                            initial={{opacity: 0, y: 10}}
-                                                            animate={{opacity: 1, y: 0}}
-                                                            exit={{opacity: 0, y: -20}}
-                                                            transition={{delay: index * 0.03}}
-                                                            className='relative' key={audit.id}>
+                                                    {data?.grouped[activeTab] &&
+                                                        data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
+                                                            <m.div
+                                                                initial={{opacity: 0, y: 10}}
+                                                                animate={{opacity: 1, y: 0}}
+                                                                exit={{opacity: 0, y: -20}}
+                                                                transition={{delay: index * 0.03}}
+                                                                className='relative' key={audit.id}>
 
-                                                            {/*{ TODO: fix this with new animation }*/}
-                                                            {/*<div className={cn(*/}
-                                                            {/*    'h-3 absolute -left-6 text-center top-[1.5rem]',*/}
-                                                            {/*    // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'*/}
-                                                            {/*)}>*/}
-                                                            {/*        <span*/}
-                                                            {/*            className={`relative border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>*/}
-                                                            {/*    {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
-                                                            {/*        <span*/}
-                                                            {/*            style={{*/}
-                                                            {/*                height: componentHeights[index]*/}
-                                                            {/*            }}*/}
-                                                            {/*            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
+                                                                {/*{ TODO: fix this with new animation }*/}
+                                                                {/*<div className={cn(*/}
+                                                                {/*    'h-3 absolute -left-6 text-center top-[1.5rem]',*/}
+                                                                {/*    // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'*/}
+                                                                {/*)}>*/}
+                                                                {/*        <span*/}
+                                                                {/*            className={`relative border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>*/}
+                                                                {/*    {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
+                                                                {/*        <span*/}
+                                                                {/*            style={{*/}
+                                                                {/*                height: componentHeights[index]*/}
+                                                                {/*            }}*/}
+                                                                {/*            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
 
-                                                            {/*    )}*/}
-                                                            {/*</div>*/}
+                                                                {/*    )}*/}
+                                                                {/*</div>*/}
 
-                                                            <Audit
-                                                                activeTab={activeTab}
-                                                                onHeightChange={(height) => handleAuditHeightChange(index, height)}
-                                                                ref={(element) => (componentRefs.current[index] = element)}
-                                                                index={index} audit={audit}/>
-                                                        </m.div>
+                                                                <Audit
+                                                                    activeTab={activeTab}
+                                                                    onHeightChange={(height) => handleAuditHeightChange(index, height)}
+                                                                    ref={(element) => (componentRefs.current[index] = element)}
+                                                                    index={index} audit={audit}/>
+                                                            </m.div>
                                                         )
                                                     )}
                                                 </div>
                                             </div>
-                                        </AnimatePresence>
-                                    )}
+
+                                        ) : (
+                                            <m.div
+                                                initial={{opacity: 0, y: 10}}
+                                                animate={{opacity: 1, y: 0}}
+                                                exit={{opacity: 0, y: -20}}
+                                                className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
+
+                                                <div>
+                                                    <img className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                                </div>
+
+                                                <span className='flex gap-2'>
+                                                    Brilliantly done! It's clear you've mastered this.
+                                                {/*<ThumbsUp*/}
+                                                {/*    className='fill-green-600/80 stroke-green-700 -mt-1'/>*/}
+
+                                                </span>
+
+                                            </m.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </article>
                         </>}

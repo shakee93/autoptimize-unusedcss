@@ -151,7 +151,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                             'transition-colors flex gap-1 cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md',
                                         )} key={metric.id}>
                                             {metric.refs.acronym}
-                                            {audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0 && (
+                                            {(activeTab !== 'passed_audits' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
                                                 <TooltipText asChild text={`Potential +${metric.potentialGain.toFixed(0)} Score Boost`}>
                                                     {metric.potentialGain > 0 && (
                                                         <span className={cn(
