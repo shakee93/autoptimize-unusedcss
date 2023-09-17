@@ -34,11 +34,39 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     }, [isCoreWebClicked]);
 
 
-    const FirstLettersComponent = ({ text }: { text: string }) => {
-        const replacedText = text.replace(/_/g, ' ');
-        const firstLetters = replacedText.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
-        return <>{firstLetters}</>;
+    // reorder experience start
+    const metricNameMappings: Record<string, string> = {
+        "LARGEST_CONTENTFUL_PAINT_MS": "LCP",
+        "FIRST_INPUT_DELAY_MS": "FID",
+        "CUMULATIVE_LAYOUT_SHIFT_SCORE": "CLS",
+        "FIRST_CONTENTFUL_PAINT_MS": "FCP",
+        "INTERACTION_TO_NEXT_PAINT": "INP",
+        "EXPERIMENTAL_TIME_TO_FIRST_BYTE": "TTFB",
+
     };
+
+    const experianceOrder: string[] = [
+        "LARGEST_CONTENTFUL_PAINT_MS",
+        "FIRST_INPUT_DELAY_MS",
+        "CUMULATIVE_LAYOUT_SHIFT_SCORE",
+        "FIRST_CONTENTFUL_PAINT_MS",
+        "INTERACTION_TO_NEXT_PAINT",
+        "EXPERIMENTAL_TIME_TO_FIRST_BYTE",
+
+    ];
+
+    const getAbbreviation = (metricName: string): string => metricNameMappings[metricName] || metricName;
+
+    const sortedExperience = experianceOrder.map(metricName => ({
+        metricName: getAbbreviation(metricName),
+        metric: data?.loadingExperience?.metrics[metricName],
+    }));
+
+    const FirstLettersComponent = ({ text }: { text: string }) => {
+        const replacedText = getAbbreviation(text);
+        return <>{replacedText}</>;
+    };
+
 
 
     return (
@@ -102,18 +130,20 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         <div className='border-t dark:border-zinc-700'>
 
                             <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                                {Object.entries(data.loadingExperience.metrics).map(([metricName, metric], index) => (
+                                {sortedExperience.map(({ metricName, metric }, index) => (
                                     <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
                                         <div className="flex">
                                             <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
                                                 <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>
                                                 <div><span
                                                     className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
-                                <PerformanceIcons icon={metric.category}/>
+                                <PerformanceIcons icon={metric?.category || 'average'}/>
                             </span></div>
                                             </div>
                                         </div>
-                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{metric.percentile}</p>
+                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">{["FID", "CLS", "INP"].includes(metricName)
+                                            ? `${metric?.percentile} ms`
+                                            : `${metric?.percentile ? (metric.percentile / 1000).toFixed(2) : 'N/A'} s`}</p>
 
                                     </div>
                                 ))}
