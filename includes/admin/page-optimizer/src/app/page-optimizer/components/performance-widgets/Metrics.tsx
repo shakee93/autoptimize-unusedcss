@@ -18,11 +18,27 @@ interface MetricsProps {
 const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     const { setActiveMetric, activeMetric } = useAppContext()
+    const desiredMetricsOrder = [
+        "First Contentful Paint",
+        "Largest Contentful Paint",
+        "Total Blocking Time",
+        "Cumulative Layout Shift",
+        "Speed Index",
+    ];
+
+    const sortedMetricsData = metrics.sort((a, b) => {
+        const aIndex = desiredOrder.indexOf(a.title);
+        const bIndex = desiredOrder.indexOf(b.title);
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+        return aIndex - bIndex;
+    });
+
 
     return (
         <div>
             <div className="flex flex-col w-full">
-                {metrics
+                {sortedMetricsData
                     .sort((a,b) => b.potentialGain - a.potentialGain)
                     .map((metric, index) => (
                     <div key={index}
