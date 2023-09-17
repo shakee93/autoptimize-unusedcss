@@ -27,8 +27,8 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
     ];
 
     const sortedMetricsData = metrics.sort((a, b) => {
-        const aIndex = desiredOrder.indexOf(a.title);
-        const bIndex = desiredOrder.indexOf(b.title);
+        const aIndex = desiredMetricsOrder.indexOf(a.title);
+        const bIndex = desiredMetricsOrder.indexOf(b.title);
         if (aIndex === -1) return 1;
         if (bIndex === -1) return -1;
         return aIndex - bIndex;
