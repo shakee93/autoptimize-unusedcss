@@ -24,7 +24,7 @@ interface PageSpeedScoreProps {
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
-    const {setShowOptimizer} = useAppContext()
+    const {setShowOptimizer, activeMetric} = useAppContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
@@ -67,12 +67,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return <>{replacedText}</>;
     };
 
+    let gain = Number((activeMetric?.potentialGain ? activeMetric?.potentialGain : 0)?.toFixed(0))
 
 
     return (
 
         <div className='w-full flex flex-col gap-4'>
-            <Card>
+            <Card className='overflow-hidden'>
                 <div className="content flex flex-col items-center gap-3 mx-12 my-2.5">
 
                     <div className='flex gap-6'>
@@ -82,7 +83,16 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <PerformanceProgressBar performance={data?.performance}/>
+                                    <PerformanceProgressBar performance={data?.performance ? data.performance + gain : 0}>
+                                        {!!(activeMetric && gain) && (
+                                            <div className='flex gap-1 flex-col text-xxs font-normal'>
+                                                <span>
+                                                    {activeMetric?.title}
+                                                </span>
+                                                <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
+                                            </div>
+                                        )}
+                                    </PerformanceProgressBar>
                                 )}
                             </div>
                         </div>

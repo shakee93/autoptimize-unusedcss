@@ -7,6 +7,7 @@ import usePerformanceColors from "hooks/usePerformanceColors";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import {cn} from "lib/utils";
 import {Info} from "lucide-react";
+import {useAppContext} from "../../../../context/app";
 
 
 interface MetricsProps {
@@ -14,53 +15,43 @@ interface MetricsProps {
     performance: number
 }
 
-const Metrics = ({ metrics, performance } : MetricsProps) => {
+const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
-    // reorder metrics start
-    const desiredOrder = [
-        "First Contentful Paint",
-        "Largest Contentful Paint",
-        "Total Blocking Time",
-        "Cumulative Layout Shift",
-        "Speed Index",
-    ];
+    const { setActiveMetric, activeMetric } = useAppContext()
 
-    const sortedData = metrics.sort((a, b) => {
-        const aIndex = desiredOrder.indexOf(a.title);
-        const bIndex = desiredOrder.indexOf(b.title);
-
-        if (aIndex === -1) return 1;
-        if (bIndex === -1) return -1;
-
-        return aIndex - bIndex;
-    });
-    // reorder metrics end
-
-
-    let weight = {
-        'First Contentful Paint': 10,
-        'Speed Index': 10,
-        'Largest Contentful Paint': 25,
-        'Total Blocking Time': 30,
-        'Cumulative Layout Shift': 25,
-    }
     return (
         <div>
             <div className="flex flex-col w-full">
-                {sortedData.map((s, index) => (
+                {metrics
+                    .sort((a,b) => b.potentialGain - a.potentialGain)
+                    .map((metric, index) => (
                     <div key={index}
-                         className='group flex flex-row justify-between items-center border-t px-6 py-2.5'>
+                         onMouseEnter={e => setActiveMetric(metric)}
+                         onMouseLeave={e => setActiveMetric(null)}
+                         className='hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5'>
                         <div className='flex flex-col justify-between'>
-                            <div className='inline-flex gap-1.5 items-center text-sm font-medium'>
-                                {s.title} <Info className='w-4 text-brand-400'/>
+                            <div className='flex items-center gap-1.5 flex-row text-sm font-medium'>
+                                <div className='inline-flex flex-col'>
+                                    <span>
+                                        {metric.title}
+                                    </span>
+                                    <span className='text-xxs text-brand-500 font-light'>
+
+                                        {metric.potentialGain > 0 ?
+                                            <>Enhance this for <span className='group-hover:text-green-600'>{ metric.potentialGain.toFixed(0) } point boost.</span> </> :
+                                            `Looks great, well done!`}
+
+                                    </span>
+                                </div>
+
+                                {/*<Info className='w-4 text-brand-400'/>*/}
                             </div>
                             <div
                                 style={{
-                                    color:  usePerformanceColors(s.score)[1]
+                                    color:  usePerformanceColors(metric.score)[1]
                                 }}
                                 className='text-lg font-medium text-brand-500'>
-                                {s.displayValue}
-                                {/*- { (weight[s.title] - weight[s.title] / 100 * s.score).toFixed(0) }*/}
+                                {metric.displayValue}
                             </div>
                         </div>
                         <div className={cn(
@@ -71,7 +62,7 @@ const Metrics = ({ metrics, performance } : MetricsProps) => {
                                 stroke={10}
                                 scoreClassName='text-[12px]'
                                 className='h-9'
-                                performance={s.score}/>
+                                performance={metric.score}/>
                         </div>
                     </div>
                 ))}

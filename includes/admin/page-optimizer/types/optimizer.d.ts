@@ -170,7 +170,9 @@ interface Metric {
     refs: {
         relevantAudits: string[]
         acronym: string
+        weight: number
     }
+    potentialGain: number
 }
 
 type ReportType = 'mobile' | 'desktop'
