@@ -143,7 +143,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                         </div>
                                         <p className="text-[22px] font-medium mr-2 mt-1 text-red">{["FID", "CLS", "INP"].includes(metricName)
                                             ? `${metric?.percentile} ms`
-                                            : `${metric?.percentile ? (metric.percentile / 1000).toFixed(2) : 'N/A'} s`}</p>
+                                            : `${metric?.percentile ? (metric.percentile / 1000).toFixed(2) : ''} s`}</p>
 
                                     </div>
                                 ))}
