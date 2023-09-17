@@ -123,31 +123,16 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return aIndex - bIndex;
     });
 
-    // const desiredOrderReal = [
-    //     "LARGEST_CONTENTFUL_PAINT_MS",
-    //     "FIRST_INPUT_DELAY_MS",
-    //     "CUMULATIVE_LAYOUT_SHIFT_SCORE",
-    //     "FIRST_CONTENTFUL_PAINT_MS",
-    //     "INTERACTION_TO_NEXT_PAINT",
-    //     "EXPERIMENTAL_TIME_TO_FIRST_BYTE",
-    // ];
-    //
-    // const sortedMetrics = Object.entries(data?.metrics)
-    //     .sort(([metricNameA], [metricNameB]) => {
-    //         const aIndex = desiredOrderReal.indexOf(metricNameA);
-    //         const bIndex = desiredOrderReal.indexOf(metricNameB);
-    //
-    //         // If either metric is not found in the desiredOrder array, place it at the end.
-    //         if (aIndex === -1) return 1;
-    //         if (bIndex === -1) return -1;
-    //
-    //         // Sort based on the index in the desiredOrder array.
-    //         return aIndex - bIndex;
-    //     })
-    //     .reduce((sortedObj, [metricName, metric]) => {
-    //         sortedObj[metricName] = metric;
-    //         return sortedObj;
-    //     }, {});
+    const metricOrder = [
+        "LARGEST_CONTENTFUL_PAINT_MS",
+        "FIRST_INPUT_DELAY_MS",
+        "CUMULATIVE_LAYOUT_SHIFT_SCORE",
+        "FIRST_CONTENTFUL_PAINT_MS",
+        "INTERACTION_TO_NEXT_PAINT",
+        "EXPERIMENTAL_TIME_TO_FIRST_BYTE"
+    ];
+
+
 
 
     return (
@@ -263,6 +248,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 </Card>
             )}
+
+
 
         </div>
     )
