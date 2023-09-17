@@ -3,6 +3,7 @@ import {flexRender} from "@tanstack/react-table";
 import {cn} from "lib/utils";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import React from "react";
+import {JsonView} from "react-json-view-lite";
 
 interface FileGroupProps {
     audit: Audit
@@ -30,7 +31,7 @@ const FileTable = ({audit, group }: FileGroupProps) => {
 
     const [table] = useTable(
         audit,
-        audit?.files?.headings || [],
+        (group.headings ? group.headings : audit?.files?.headings) || [],
         group.items,
         group.type
     )

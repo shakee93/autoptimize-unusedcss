@@ -22,10 +22,12 @@ const useTable = (
     // @ts-ignore
     const columns: ColumnHelper<AuditResource, any>[] = useMemo(() => {
         return headings.map((heading) => {
+            heading.key = heading.key ? heading.key : (heading.label ? heading.label.toLowerCase() : 'no-key')
+
             return columnHelper.accessor(
                 (row) => row[heading.key as keyof AuditResource],
                 {
-                    id: heading.key ? heading.key : "no-key",
+                    id: heading.key,
                     meta: heading,
                     cell: (info) => <AuditColumns audit={audit} heading={heading} cell={info}/>,
                     header: () => <span>{heading.label}</span>,
@@ -48,12 +50,15 @@ const useTable = (
 
         let firstRow = Object.keys(items[0]);
         columns.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
-            if (c.id) hiddenColumns[c.id] = false;
+            if (c.id && !firstRow.includes('subItems')) hiddenColumns[c.id] = false;
         });
+
+        console.log(firstRow, hiddenColumns);
 
         return hiddenColumns;
     }, [audit.id, columns, items]);
 
+    console.log(columns);
     const table = useReactTable({
         data: items,
         columns: columns ,

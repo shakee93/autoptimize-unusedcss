@@ -28,9 +28,20 @@ interface AuditColumnProps {
 
 const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     let value = cell.getValue()
+    let subItems = cell.row.original?.subItems?.items[0] || {}
+
+    if (!value && subItems) {
+        return  <>
+            {(heading?.subItemsHeading?.key && heading?.subItemsHeading?.key in subItems) && (
+                <div className='px-2 pt-2 text-brand-500 dark:text-brand-300 min-w-max'>
+                    {subItems[heading.subItemsHeading.key]}
+                </div>
+            )}
+        </>;
+    }
 
     if (!value) {
-        return null
+        return <></>;
     }
 
     if (heading.valueType === 'url') {
@@ -50,7 +61,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     }
 
     if (heading.valueType === 'node') {
-        return <AuditNodeColumn cell={cell}/>
+        return <AuditNodeColumn heading={heading} cell={cell}/>
     }
 
     if (heading.valueType === 'numeric' && typeof value === 'number') {

@@ -11,11 +11,13 @@ import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import {optimizerData} from "../../store/app/appSelector";
-import {ArrowLeftToLine, ArrowRightToLine, Loader} from "lucide-react";
+import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import {m, AnimatePresence} from "framer-motion";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import {Toaster} from "components/ui/toaster";
+import usePerformanceColors from "hooks/usePerformanceColors";
+import Indicator from "components/indicator";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -25,6 +27,8 @@ export default function PageOptimizer() {
     const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
     const [togglePerformance, setTogglePerformance] = useState(true);
     const {data, loading, error} = useSelector(optimizerData);
+    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
+
     const {
         options,
         setOpenAudits,
@@ -180,7 +184,11 @@ export default function PageOptimizer() {
 
                             {togglePerformance && (
                                 <aside className="col-span-3">
-                                    <div className="text-lg ml-5 flex items-center gap-2">Speed Insights {togglePerformance && <TogglePerformanceComponent/>} </div>
+                                    <div className="text-lg ml-5 flex items-center gap-2">
+                                        <Circle style={{
+                                            fill: progressbarColor
+                                        }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
+                                        Speed Insights {togglePerformance && <TogglePerformanceComponent/>} </div>
                                     <div className="widgets pt-4 flex">
                                         <PageSpeedScore/>
                                     </div>
@@ -188,7 +196,6 @@ export default function PageOptimizer() {
                             )}
                             <article className={cn(
                                 togglePerformance ? 'col-span-9' : 'col-span-12',
-
                             )}>
 
 

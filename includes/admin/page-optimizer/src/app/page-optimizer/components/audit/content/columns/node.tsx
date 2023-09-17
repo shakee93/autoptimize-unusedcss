@@ -1,14 +1,18 @@
 import {CellContext} from "@tanstack/react-table";
 import Code from "components/ui/code";
 import {Tooltip, TooltipContent, TooltipTrigger} from "components/ui/tooltip";
+import React from "react";
+import {JsonView} from "react-json-view-lite";
 
 interface AuditNodeColumnProps {
     cell: CellContext<AuditResource, any>
+    heading: AuditHeadings
 }
 
-const AuditNodeColumn = ({cell}: AuditNodeColumnProps) => {
+const AuditNodeColumn = ({cell, heading}: AuditNodeColumnProps) => {
 
     let value = cell.getValue();
+    let subItems = cell.row.original?.subItems?.items[0] || {}
 
     if (!value) {
         return <></>
@@ -29,7 +33,13 @@ const AuditNodeColumn = ({cell}: AuditNodeColumnProps) => {
                     <Code lang='css' code={value?.selector} />
                 </TooltipContent>
             </Tooltip>
-            {/*<JsonView shouldInitiallyExpand={i => false} data={value}/>*/}
+
+            {(heading?.subItemsHeading?.key && heading?.subItemsHeading?.key in subItems) && (
+                <div className='px-2 pt-2  min-w-max'>
+                    {subItems[heading.subItemsHeading.key]}
+                </div>
+            )}
+
         </div>
     );
 }

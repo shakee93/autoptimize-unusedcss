@@ -12,15 +12,17 @@ interface OptimizerContextProps {
     manipulatingStyles: boolean
     savingData: boolean;
     setSavingData: Dispatch<SetStateAction<boolean>>;
+    global: boolean
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
-export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue } : {
+export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, global } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
-    initShowOptimizerValue?: boolean
+    initShowOptimizerValue?: boolean,
+    global: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
@@ -80,7 +82,8 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue }
             modeData,
             manipulatingStyles,
             savingData,
-            setSavingData
+            setSavingData,
+            global
         }}>
             {children}
         </AppContext.Provider>
