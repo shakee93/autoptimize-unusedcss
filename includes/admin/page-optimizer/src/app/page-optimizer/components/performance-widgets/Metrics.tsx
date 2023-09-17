@@ -19,14 +19,6 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     const { setActiveMetric, activeMetric } = useAppContext()
 
-    const enter = (metric: Metric) => {
-        setActiveMetric(metric)
-    }
-
-    const leave = () => {
-        setActiveMetric(null)
-    }
-
     return (
         <div>
             <div className="flex flex-col w-full">
@@ -34,8 +26,8 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                     .sort((a,b) => b.potentialGain - a.potentialGain)
                     .map((metric, index) => (
                     <div key={index}
-                         onMouseEnter={e => enter(metric)}
-                         onMouseLeave={e => leave()}
+                         onMouseEnter={e => setActiveMetric(metric)}
+                         onMouseLeave={e => setActiveMetric(null)}
                          className='hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5'>
                         <div className='flex flex-col justify-between'>
                             <div className='flex items-center gap-1.5 flex-row text-sm font-medium'>
@@ -46,7 +38,7 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                                     <span className='text-xxs text-brand-500 font-light'>
 
                                         {metric.potentialGain > 0 ?
-                                            `Enhance this for ${ metric.potentialGain.toFixed(0) } point boost.` :
+                                            <>Enhance this for <span className='group-hover:text-green-600'>{ metric.potentialGain.toFixed(0) } point boost.</span> </> :
                                             `Looks great, well done!`}
 
                                     </span>
