@@ -24,6 +24,7 @@ interface initRapidLoadOptimizerProps {
     popup?: HTMLElement | null
     mode?: RapidLoadOptimizerModes,
     modeData ?:RapidLoadOptimizerModeData
+    global ?: boolean
 }
 
 const logError = (error: Error, info: { componentStack: string }) => {
@@ -81,14 +82,21 @@ const ApplicationErrorBoundary = ({ fallback, onError, children } : ApplicationE
 }
 
 export class RapidLoadOptimizer {
-    constructor({ mode = 'normal', container, showOptimizer = false, popup = null, modeData} : initRapidLoadOptimizerProps) {
+    constructor({
+        mode = 'normal',
+        container,
+        showOptimizer = false,
+        popup = null,
+        modeData,
+        global = false
+    } : initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
            <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
                <RootProvider>
                    <ShadowRoot styles={stylesUrl}>
                        <Provider store={store}>
-                           <AppProvider initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
+                           <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
                                <TooltipProvider delayDuration={100}>
                                    <LazyMotion features={domAnimation}>
                                        {popup && (

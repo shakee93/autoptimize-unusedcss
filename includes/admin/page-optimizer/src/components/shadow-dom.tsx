@@ -12,7 +12,7 @@ interface ShadowDomProps {
 const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const hostRef = useRef<HTMLDivElement>(node as HTMLDivElement);
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
-    const { theme } = useRootContext();
+    const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
 
     useEffect(() => {
@@ -24,13 +24,17 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
         if (portalContainer) {
             if (theme === 'dark') {
                 portalContainer.classList.add(darkModeClass);
+                setIsDark(true)
             } else if (theme === 'light') {
                 portalContainer.classList.remove(darkModeClass);
+                setIsDark(false)
             } else if (theme === 'system') {
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     portalContainer.classList.add(darkModeClass);
+                    setIsDark(true)
                 } else {
                     portalContainer.classList.remove(darkModeClass);
+                    setIsDark(false)
                 }
             }
         }

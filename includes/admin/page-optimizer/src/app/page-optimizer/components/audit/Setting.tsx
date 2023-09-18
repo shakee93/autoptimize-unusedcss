@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
 import {
     CSSDelivery,
@@ -57,13 +57,15 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { mode } = useAppContext()
     const [open, setOpen] = React.useState(false);
-    const [mainInput, ...additionalInputs] = settings.inputs
+
+    const [mainInput, ...additionalInputs] = useMemo(() => settings.inputs, [settings])
+
     const [updates, setUpdates] = useState<{
         key: string,
         value: any
     }[]>(additionalInputs.map(({ key, value }) => ({ key, value })))
 
-    const update = (val: any, key: string) => {
+    const update = useCallback( (val: any, key: string) => {
         let changed = updates.find(i => i.key === key);
 
         if (changed) {
@@ -83,19 +85,19 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                 value: val
             }])
         }
-    }
+    }, [updates, settings, additionalInputs])
 
-    let icons = {
+    let icons = useMemo(() => ( {
         cache : <PageCache/>,
         image : <ImageDeliverySVG/>,
         javascript : <JavascriptDelivery/>,
         js : <JavascriptDelivery/>,
         font : <FontDelivery/>,
         css : <CSSDelivery/>,
-    }
+    }), [])
 
 
-    const updateValue = (value: any, key: string) => {
+    const updateValue = useCallback( (value: any, key: string) => {
 
         dispatch(updateSettings(
             audit,
@@ -103,21 +105,21 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
             key,
             value
         ));
-    }
+    }, [settings])
 
     // temporarily show this popup on render blocking resources audit
-    const showPopover = additionalInputs.length > 0
+    const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
 
-    const saveAdditionalSettings = () => {
+    const saveAdditionalSettings = useCallback( () => {
 
         updates.forEach(({key, value}) => {
             updateValue(value, key)
         })
 
         setOpen(false);
-    }
+    }, [updates, open])
 
-    const Status = ({ status } : { status: AuditSetting['status']}) => {
+    const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
 
         if (!status) {
             return  <></>
@@ -162,7 +164,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
         }
 
         return <></>;
-    }
+    })
 
     return (
         <div

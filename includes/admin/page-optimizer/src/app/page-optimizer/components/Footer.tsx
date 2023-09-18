@@ -80,18 +80,24 @@ interface FooterProps {
 const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { setShowOptimizer, options ,
-        modeData, savingData, setSavingData} = useAppContext()
+    const {
+        setShowOptimizer,
+        options ,
+        modeData,
+        savingData,
+        setSavingData,
+        global
+    } = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const { settings, data, loading, revisions } = useSelector(optimizerData)
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
     const refSaveButton = useRef<HTMLButtonElement | null>(null);
     const [open, setOpen] = useState(false)
-    const defaultAction = 0
+    const defaultAction = global ? 2 : 0
     const [activeAction, setActiveAction] = useState(defaultAction)
 
-    const submitSettings = async (analyze = false, global = false) => {
+    const submitSettings = useCallback(async (analyze = false, global = false) => {
 
         if (savingData) {
             return;
@@ -131,7 +137,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
         setSavingData(false)
 
-    }
+    }, [data, reload, url, activeReport, activeAction])
 
     const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {

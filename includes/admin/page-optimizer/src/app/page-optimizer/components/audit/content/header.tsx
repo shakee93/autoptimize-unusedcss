@@ -1,7 +1,7 @@
 import Settings from "app/page-optimizer/components/audit/Settings";
 import TooltipText from "components/ui/tooltip-text";
 import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import React, {Dispatch, SetStateAction} from "react";
+import React, {Dispatch, SetStateAction, useMemo} from "react";
 import {Table} from "@tanstack/react-table";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../../store/app/appSelector";
@@ -18,8 +18,24 @@ interface FilesTableHeaderProps {
 const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps) => {
 
 
+
     const label = (typeof group.items[0].url !== 'string' && group.items[0].url?.file_type?.label) || group.type
-    let title = label.toLowerCase() === 'unknown' ? 'Unattributable items' :`${label} Files`
+    let title = useMemo(() => {
+
+        let l = label.toLowerCase()
+
+        if (l === 'table') {
+            return 'Additional Information'
+        }
+
+
+        if (l === 'unknown') {
+            return  'Unattributable items';
+        }
+
+        return `${label} Files`;
+
+    }, [group])
 
     if ("grouped_items" in audit.files && audit.files.grouped_items.length === 1 && label.toLowerCase() === 'unknown') {
         title = ''
