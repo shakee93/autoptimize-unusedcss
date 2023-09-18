@@ -18,134 +18,57 @@ import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import {Toaster} from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import Indicator from "components/indicator";
+import Performance from "app/page-optimizer/spaces/Performance";
+import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
+import TogglePerformance from "components/toggle-performance";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
 
 export default function PageOptimizer() {
-    const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
-    const [togglePerformance, setTogglePerformance] = useState(true);
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
+    const { dispatch, common } = useCommonDispatch()
+    const { activeMetric } = common
 
     const {
         options,
         setOpenAudits,
         mode,
         manipulatingStyles,
-        savingData
+        savingData,
+        togglePerformance,
     } = useAppContext()
-
-    const tabs: Tab[] = [
-        // {
-        //     key: "attention_required",
-        //     name: "Attention Required",
-        //     color: 'border-red-400',
-        //     activeColor: 'bg-red-400'
-        // },
-        {
-            key: "opportunities",
-            name: "Opportunities",
-            color: 'border-orange-400',
-            activeColor: 'bg-orange-400',
-        },
-        {
-            key: "diagnostics",
-            name: "Diagnostics",
-            color: 'border-yellow-400 ',
-            activeColor: 'bg-yellow-400 '
-        },
-        {
-            key: "passed_audits",
-            name: "Passed Audits",
-            color: 'border-green-600',
-            activeColor: 'bg-green-600'
-        },
-    ];
-
-    const renderTabs = () => {
-
-
-        return tabs.map((tab) => {
-            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300";
-            return (
-                <div
-                    onClick={() => setActiveTab(tab.key)}
-                    className={cn(`cursor-pointer  flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
-                    key={tab.key}
-                >
-                    {tab.name}
-                    {(data && data?.audits.length > 0) && (
-                        <div className={
-                            cn(
-                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
-                                tab.color,
-                                (activeTab === tab.key) && tab.activeColor,
-                            )}>
-                            <span className={cn(
-                                'transition-colors',
-                                activeTab === tab.key && ' text-white dark:text-brand-900'
-                            )}>
-                                {data?.grouped[`${tab.key}`].length}
-                            </span>
-                        </div>
-                    )}
-
-                </div>
-            );
-        });
-    };
-
-    let xx = data?.grouped[activeTab]
-
-    const componentRefs = useRef<(AuditComponentRef | null)[]>(xx ? xx.map(() => null) : []);
-    const [componentHeights, setComponentHeights] = useState<number[]>([]);
-
-    useEffect(() => {
-
-        const heights = componentRefs.current.map((ref) => {
-            if (ref) {
-                // Get the height using the notifyHeightChange function
-                ref.notifyHeightChange();
-                return 45; // Temporary value
-            }
-            return 45;
-        });
-        setComponentHeights(heights);
-
-    }, [data]);
-
-    const handleAuditHeightChange = (index: number, height: number) => {
-        setComponentHeights((prevHeights) => {
-            const newHeights = [...prevHeights];
-            newHeights[index] = height;
-            return newHeights;
-        });
-    };
 
     let url = options?.optimizer_url;
 
 
-    const TogglePerformanceComponent = ({}) => {
+    const ActiveSpace = () => {
 
-        return (
-            <TooltipText text='Toggle Sidebar'>
-                <span className='cursor-pointer' onClick={() => {
-                    setTogglePerformance(prev => !prev)
-                }}>
-                            {(togglePerformance) ? <ArrowLeftToLine className="h-4 w-4 text-gray-500"/> :
-                                <ArrowRightToLine className="h-4 w-4 text-gray-500"/>}
-                        </span>
-            </TooltipText>
-        )
+        if (activeMetric) {
+            console.log('here');
+            return <m.div
+                key='childrenx'  // add a unique key
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0}}
+                exit={{opacity: 0, y: 10}}
+            >
+                <SpeedIndex/>
+            </m.div>
+        }
+
+        return  <m.div
+            key='childrenx'  // add a unique key
+            initial={{opacity: 0, y: 10}}
+            animate={{opacity: 1, y: 0}}
+            exit={{opacity: 0, y: 10}}
+        >
+            <Performance/>
+        </m.div>;
     }
 
-    // useEffect(() => {
-    //
-    //     setOpenAudits([]);
-    //
-    // }, [activeTab])
     return (
 
         <div
@@ -188,7 +111,7 @@ export default function PageOptimizer() {
                                         <Circle style={{
                                             fill: progressbarColor
                                         }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
-                                        Speed Insights {togglePerformance && <TogglePerformanceComponent/>} </div>
+                                        Speed Insights {togglePerformance && <TogglePerformance/>} </div>
                                     <div className="widgets pt-4 flex">
                                         <PageSpeedScore/>
                                     </div>
@@ -198,81 +121,27 @@ export default function PageOptimizer() {
                                 togglePerformance ? 'col-span-9' : 'col-span-12',
                             )}>
 
+                                <AnimatePresence initial={false}>
+                                    {false ?
+                                        <m.div
+                                            key='childrenx'  // add a unique key
+                                            initial={{opacity: 0, y: 10}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: 10}}
+                                        >
+                                            <SpeedIndex/>
+                                        </m.div> :
+                                        <m.div
+                                            key='childrenx'  // add a unique key
+                                            initial={{opacity: 0, y: 10}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: 10}}
+                                        >
+                                            <Performance/>
+                                        </m.div>
+                                    }
+                                </AnimatePresence>
 
-
-                                <h2 className="text-lg ml-5 flex gap-2 font-normal items-center">
-                                    {!togglePerformance && <TogglePerformanceComponent/>}
-                                    Fix Performance Issues</h2>
-                                <div className="tabs pt-4 flex">
-                                    <Card className='flex select-none p-0 px-6'>
-                                        {renderTabs()}
-                                    </Card>
-                                </div>
-                                <div className="audits pt-4 flex">
-                                    <AnimatePresence initial={false}>
-                                        {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) ? (
-
-                                            <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
-                                                <div className='col-span-12 flex flex-col gap-4'>
-                                                    {data?.grouped[activeTab] &&
-                                                        data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
-                                                            <m.div
-                                                                initial={{opacity: 0, y: 10}}
-                                                                animate={{opacity: 1, y: 0}}
-                                                                exit={{opacity: 0, y: -20}}
-                                                                transition={{delay: index * 0.03}}
-                                                                className='relative' key={audit.id}>
-
-                                                                {/*{ TODO: fix this with new animation }*/}
-                                                                {/*<div className={cn(*/}
-                                                                {/*    'h-3 absolute -left-6 text-center top-[1.5rem]',*/}
-                                                                {/*    // componentHeights[index] > 50 ? 'top-[22px]' :'top-1/2 -translate-y-1/2'*/}
-                                                                {/*)}>*/}
-                                                                {/*        <span*/}
-                                                                {/*            className={`relative border-2 inline-block w-3 h-3 dark:border-zinc-600 border-zinc-300 rounded-full ${index === 0 ? 'dark:bg-brand-600 bg-brand-300 ' : 'bg-transparent'}`}></span>*/}
-                                                                {/*    {(data?.grouped[activeTab] && (index !== (data?.grouped[activeTab].length - 1))) && (*/}
-                                                                {/*        <span*/}
-                                                                {/*            style={{*/}
-                                                                {/*                height: componentHeights[index]*/}
-                                                                {/*            }}*/}
-                                                                {/*            className={`min-h-[2.6rem] w-[2px] border-dashed border-zinc-300 dark:border-zinc-600 border-l-2 left-1/2 -translate-x-1/2 top-6 absolute`}></span>*/}
-
-                                                                {/*    )}*/}
-                                                                {/*</div>*/}
-
-                                                                <Audit
-                                                                    activeTab={activeTab}
-                                                                    onHeightChange={(height) => handleAuditHeightChange(index, height)}
-                                                                    ref={(element) => (componentRefs.current[index] = element)}
-                                                                    index={index} audit={audit}/>
-                                                            </m.div>
-                                                        )
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                        ) : (
-                                            <m.div
-                                                initial={{opacity: 0, y: 10}}
-                                                animate={{opacity: 1, y: 0}}
-                                                exit={{opacity: 0, y: -20}}
-                                                className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
-
-                                                <div>
-                                                    <img className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                                                </div>
-
-                                                <span className='flex gap-2'>
-                                                    Brilliantly done! It's clear you've mastered this.
-                                                {/*<ThumbsUp*/}
-                                                {/*    className='fill-green-600/80 stroke-green-700 -mt-1'/>*/}
-
-                                                </span>
-
-                                            </m.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
                             </article>
                         </>}
                     </section>

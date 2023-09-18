@@ -8,6 +8,8 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import {cn} from "lib/utils";
 import {Info} from "lucide-react";
 import {useAppContext} from "../../../../context/app";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
 
 
 interface MetricsProps {
@@ -17,20 +19,21 @@ interface MetricsProps {
 
 const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
-    const { setActiveMetric, activeMetric } = useAppContext()
-    // const desiredMetricsOrder = ["First Contentful Paint", "Largest Contentful Paint", "Total Blocking Time", "Cumulative Layout Shift", "Speed Index"];
-    // const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
+    const desiredMetricsOrder = ["First Contentful Paint", "Largest Contentful Paint", "Total Blocking Time", "Cumulative Layout Shift", "Speed Index"];
+    const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
+    const { dispatch, common} = useCommonDispatch()
+    const { activeMetric } = common
 
 
     return (
         <div>
             <div className="flex flex-col w-full">
-                {metrics
+                {sortedMetricsData
                     .sort((a,b) => b.potentialGain - a.potentialGain)
                     .map((metric, index) => (
                     <div key={index}
-                         onMouseEnter={e => setActiveMetric(metric)}
-                         onMouseLeave={e => setActiveMetric(null)}
+                         onMouseEnter={e => dispatch(setCommonState('activeMetric',metric))}
+                         onMouseLeave={e => dispatch(setCommonState('activeMetric',null))}
                          className='hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5'>
                         <div className='flex flex-col justify-between'>
                             <div className='flex items-center gap-1.5 flex-row text-sm font-medium'>

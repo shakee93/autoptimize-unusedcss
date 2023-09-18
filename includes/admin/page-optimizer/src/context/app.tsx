@@ -13,8 +13,8 @@ interface OptimizerContextProps {
     savingData: boolean;
     setSavingData: Dispatch<SetStateAction<boolean>>;
     global: boolean
-    activeMetric: Metric | null
-    setActiveMetric: Dispatch<SetStateAction<Metric|null>>;
+    togglePerformance: boolean;
+    setTogglePerformance: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -30,7 +30,6 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
 
     const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
-    const [activeMetric, setActiveMetric] = useState< Metric | null>(null);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
@@ -48,6 +47,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     } )
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
+    const [togglePerformance, setTogglePerformance] = useState(true);
 
     useEffect(() => setMounted(true), [])
 
@@ -84,11 +84,11 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             mode,
             modeData,
             manipulatingStyles,
+            global,
+            togglePerformance,
+            setTogglePerformance,
             savingData,
             setSavingData,
-            global,
-            setActiveMetric,
-            activeMetric
         }}>
             {children}
         </AppContext.Provider>
