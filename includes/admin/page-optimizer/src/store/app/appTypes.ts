@@ -1,6 +1,8 @@
+import {CommonState} from "../common/commonTypes";
 
 export interface RootState {
     app: AppState;
+    common: CommonState
 }
 
 export interface AppState {

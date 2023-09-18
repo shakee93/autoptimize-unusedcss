@@ -6,13 +6,15 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {useAppContext} from "../../../context/app";
 import {cn} from "lib/utils";
-import {AuditComponentRef} from "app/page-optimizer";
-import TooltipText from "components/ui/tooltip-text";
-import {ArrowLeftToLine, ArrowRightToLine} from "lucide-react";
 import TogglePerformance from "components/toggle-performance";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../store/common/commonActions";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
+
+    const { dispatch ,  common} = useCommonDispatch()
+    const { activeTab } = common
 
     const {
         options,
@@ -22,8 +24,6 @@ const Performance = () => {
         savingData,
         togglePerformance,
         setTogglePerformance,
-        activeTab,
-        setActiveTab
     } = useAppContext()
 
     const tabs: Tab[] = [
@@ -60,7 +60,7 @@ const Performance = () => {
             const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300";
             return (
                 <div
-                    onClick={() => setActiveTab(tab.key)}
+                    onClick={() => dispatch(setCommonState('activeTab', tab.key))}
                     className={cn(`cursor-pointer  flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
                     key={tab.key}
                 >

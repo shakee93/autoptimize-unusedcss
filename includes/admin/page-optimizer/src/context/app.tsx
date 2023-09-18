@@ -91,8 +91,6 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             mode,
             modeData,
             manipulatingStyles,
-            savingData,
-            setSavingData,
             global,
             setActiveMetric,
             activeMetric,
@@ -100,6 +98,8 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             setTogglePerformance,
             activeTab,
             setActiveTab,
+            savingData,
+            setSavingData,
         }}>
             {children}
         </AppContext.Provider>
