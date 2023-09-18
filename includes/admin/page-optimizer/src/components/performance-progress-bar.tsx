@@ -2,6 +2,7 @@ import {buildStyles, CircularProgressbarWithChildren} from "react-circular-progr
 import React, {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import {cn} from "lib/utils";
+import {AnimatePresence, m} from "framer-motion";
 
 interface PerformanceProgressBarProps {
     performance?: number
@@ -60,6 +61,7 @@ const PerformanceProgressBar = ({
                         strokeLinecap: 'round',
                         backgroundColor: progressbarBg
                     })} value={score}>
+                <AnimatePresence initial={false}>
                                 <div
                                     style={{
                                         color: progressbarColor
@@ -69,9 +71,21 @@ const PerformanceProgressBar = ({
                                         scoreClassName
                                     )}
                                 >
-                                   <span>{score}</span>
-                                    {children && children}
+
+                                        <span>{score}</span>
+                                        {children && (
+                                            <m.div
+                                                key='children'  // add a unique key
+                                                initial={{opacity: 0, y: 10}}
+                                                animate={{opacity: 1, y: 0}}
+                                                exit={{opacity: 0, y: 10}}
+                                            >
+                                                {children}
+                                            </m.div>
+                                        )}
+
                                 </div>
+                </AnimatePresence>
             </CircularProgressbarWithChildren>
         </>
     )

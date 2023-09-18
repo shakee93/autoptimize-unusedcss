@@ -59,7 +59,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     const sortedExperience = experianceOrder.map(metricName => ({
         metricName: getAbbreviation(metricName),
-        metric: data?.loadingExperience?.metrics[metricName],
+        metric: data?.loadingExperience?.metrics ? data?.loadingExperience?.metrics[metricName] : null,
     }));
 
     const FirstLettersComponent = ({ text }: { text: string }) => {
