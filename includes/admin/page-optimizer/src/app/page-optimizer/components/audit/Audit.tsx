@@ -27,15 +27,14 @@ import metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 
 export interface AuditProps {
     audit: Audit;
-    activeTab: Tab['key'],
     index?: number;
     onHeightChange?: (height: number) => void;
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTab, onHeightChange }, ref) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeightChange }, ref) => {
 
     // const [toggleFiles, setToggleFiles] = useState(false);
-    const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
+    // const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
     const [toggleFiles, setToggleFiles] = useState( false);
 
     const {settings, activeReport, data} = useSelector(optimizerData);
@@ -151,7 +150,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, activeTa
                                             'transition-colors flex gap-1 cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md',
                                         )} key={metric.id}>
                                             {metric.refs.acronym}
-                                            {(activeTab !== 'passed_audits' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
+                                            {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
                                                 <TooltipText asChild text={`Potential +${metric.potentialGain.toFixed(0)} Score Boost`}>
                                                     {metric.potentialGain > 0 && (
                                                         <span className={cn(

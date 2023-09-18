@@ -15,6 +15,11 @@ interface OptimizerContextProps {
     global: boolean
     activeMetric: Metric | null
     setActiveMetric: Dispatch<SetStateAction<Metric|null>>;
+    togglePerformance: boolean;
+    setTogglePerformance: Dispatch<SetStateAction<boolean>>;
+    activeTab: AuditTypes;
+    setActiveTab: Dispatch<SetStateAction<AuditTypes>>;
+
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -48,6 +53,8 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     } )
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
+    const [togglePerformance, setTogglePerformance] = useState(true);
+    const [activeTab, setActiveTab] = useState<AuditTypes>("opportunities");
 
     useEffect(() => setMounted(true), [])
 
@@ -88,7 +95,11 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             setSavingData,
             global,
             setActiveMetric,
-            activeMetric
+            activeMetric,
+            togglePerformance,
+            setTogglePerformance,
+            activeTab,
+            setActiveTab,
         }}>
             {children}
         </AppContext.Provider>
