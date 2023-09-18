@@ -347,7 +347,7 @@ class RapidLoad_Job{
                         'url' => $action->url,
                         'type' => $action->url_object->file_type->value,
                         'action' => isset($action->action) && isset($action->action->value) ? $action->action->value : (object)[],
-                        'regex' => $this->generateUrlRegex($action->url)
+                        'regex' => isset($action->url_object) && isset($action->url_object->regex) ? $action->url_object->regex : $this->generateUrlRegex($action->url)
                     ];
 
                 }
@@ -374,7 +374,7 @@ class RapidLoad_Job{
         $regexPattern = null;
 
         $patterns = [
-            [
+            /*[
                 'find' => '/^https:\/\/script\.hotjar\.com\/modules\.[a-zA-Z0-9]+\.js$/',
                 'regex' => '/static\.hotjar\.com\/c\/hotjar/'
             ],
@@ -383,9 +383,9 @@ class RapidLoad_Job{
                 'regex' => '/https:\/\/www\.google\.com\/recaptcha\/api\.js/'
             ],
             [
-                'find' => '/^https:\/\/connect\.facebook\.net\/signals\/config\/\d+$/',
+                'find' => '/^https:\/\/connect\.facebook\.net\/signals\/config\/\d+/',
                 'regex' => '/https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js/'
-            ]
+            ]*/
         ];
 
         $patterns = apply_filters('rapidload/optimizer/regex/js-scripts', $patterns);
