@@ -89,7 +89,10 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         global
     } = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const { settings, data, loading, revisions } = useSelector(optimizerData)
+
+    const { settings, data, loading, revisions } =
+        useSelector(optimizerData)
+
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const [reload, setReload] = useState<boolean>(false)
     const refSaveButton = useRef<HTMLButtonElement | null>(null);
@@ -97,7 +100,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const defaultAction = global ? 2 : 0
     const [activeAction, setActiveAction] = useState(defaultAction)
 
-    const submitSettings = async (analyze = false, global = false) => {
+    const submitSettings = useCallback(async (analyze = false, global = false) => {
 
         if (savingData) {
             return;
@@ -106,7 +109,6 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         setSavingData(true);
 
         const api = new ApiService(options);
-
 
         try {
             const res = await api.updateSettings(
@@ -137,7 +139,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
         setSavingData(false)
 
-    }
+    }, [data, activeReport, reload])
 
     const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {
@@ -189,7 +191,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 submitSettings(false, true)
             }
         },
-    ]), [])
+    ]), [data, activeReport, reload])
 
 
     const { toast } = useToast()
