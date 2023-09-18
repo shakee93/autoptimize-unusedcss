@@ -53,40 +53,6 @@ const Performance = () => {
         },
     ];
 
-    const renderTabs = () => {
-
-
-        return tabs.map((tab) => {
-            const isActive = activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300";
-            return (
-                <div
-                    onClick={() => dispatch(setCommonState('activeTab', tab.key))}
-                    className={cn(`cursor-pointer  flex items-center gap-2 px-4 py-3 text-sm font-medium`, isActive)}
-                    key={tab.key}
-                >
-                    {tab.name}
-                    {(data && data?.audits.length > 0) && (
-                        <div className={
-                            cn(
-                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
-                                tab.color,
-                                (activeTab === tab.key) && tab.activeColor,
-                            )}>
-                            <span className={cn(
-                                'transition-colors',
-                                activeTab === tab.key && ' text-white dark:text-brand-900'
-                            )}>
-                                {data?.grouped[`${tab.key}`].length}
-                            </span>
-                        </div>
-                    )}
-
-                </div>
-            );
-        });
-    };
-
-
     // useEffect(() => {
     //
     //     setOpenAudits([]);
@@ -100,7 +66,36 @@ const Performance = () => {
                 Fix Performance Issues</h2>
             <div className="tabs pt-4 flex">
                 <Card className='flex select-none p-0 px-6'>
-                    {renderTabs()}
+                    {tabs.map((tab) => {
+                        return (
+                            <div
+                                onClick={() => dispatch(setCommonState('activeTab', tab.key))}
+                                className={cn(
+                                    `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
+                                    activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
+                                )}
+                                key={tab.key}
+                            >
+                                {tab.name}
+                                {(data && data?.audits.length > 0) && (
+                                    <div className={
+                                        cn(
+                                            'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                            tab.color,
+                                            (activeTab === tab.key) && tab.activeColor,
+                                        )}>
+                            <span className={cn(
+                                'transition-colors',
+                                activeTab === tab.key && ' text-white dark:text-brand-900'
+                            )}>
+                                {data?.grouped[`${tab.key}`].length}
+                            </span>
+                                    </div>
+                                )}
+
+                            </div>
+                        )
+                    })}
                 </Card>
             </div>
             <div className="audits pt-4 flex">

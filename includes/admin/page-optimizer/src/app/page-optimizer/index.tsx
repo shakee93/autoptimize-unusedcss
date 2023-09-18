@@ -21,6 +21,7 @@ import Indicator from "components/indicator";
 import Performance from "app/page-optimizer/spaces/Performance";
 import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
 import TogglePerformance from "components/toggle-performance";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -29,6 +30,8 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
+    const { dispatch, common } = useCommonDispatch()
+    const { activeMetric } = common
 
     const {
         options,
@@ -37,7 +40,6 @@ export default function PageOptimizer() {
         manipulatingStyles,
         savingData,
         togglePerformance,
-        activeMetric
     } = useAppContext()
 
     let url = options?.optimizer_url;
@@ -45,9 +47,16 @@ export default function PageOptimizer() {
 
     const ActiveSpace = () => {
 
-        console.log('rendered');
-        if (!activeMetric) {
-            return <Performance/>
+        if (activeMetric) {
+            console.log('here');
+            return <m.div
+                key='childrenx'  // add a unique key
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0}}
+                exit={{opacity: 0, y: 10}}
+            >
+                <SpeedIndex/>
+            </m.div>
         }
 
         return  <m.div
@@ -56,7 +65,7 @@ export default function PageOptimizer() {
             animate={{opacity: 1, y: 0}}
             exit={{opacity: 0, y: 10}}
         >
-            <SpeedIndex/>
+            <Performance/>
         </m.div>;
     }
 
@@ -112,9 +121,26 @@ export default function PageOptimizer() {
                                 togglePerformance ? 'col-span-9' : 'col-span-12',
                             )}>
 
-                               <AnimatePresence initial={false}>
-                                   <Performance/>
-                               </AnimatePresence>
+                                <AnimatePresence initial={false}>
+                                    {false ?
+                                        <m.div
+                                            key='childrenx'  // add a unique key
+                                            initial={{opacity: 0, y: 10}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: 10}}
+                                        >
+                                            <SpeedIndex/>
+                                        </m.div> :
+                                        <m.div
+                                            key='childrenx'  // add a unique key
+                                            initial={{opacity: 0, y: 10}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: 10}}
+                                        >
+                                            <Performance/>
+                                        </m.div>
+                                    }
+                                </AnimatePresence>
 
                             </article>
                         </>}

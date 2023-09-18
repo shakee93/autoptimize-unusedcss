@@ -12,6 +12,7 @@ import {cn} from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 
 
@@ -24,10 +25,13 @@ interface PageSpeedScoreProps {
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
-    const {setShowOptimizer, activeMetric} = useAppContext()
+    const {setShowOptimizer} = useAppContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
+
+    const { dispatch, common} = useCommonDispatch()
+    const { activeMetric } = common
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
