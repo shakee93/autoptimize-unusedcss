@@ -87,7 +87,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <PerformanceProgressBar performance={(data?.performance && gain) ? data.performance + gain : data?.performance}>
+                                    <PerformanceProgressBar performance={(data?.performance && gain && activeMetric) ? data.performance + gain : data?.performance}>
                                         {!!(activeMetric && gain) && (
                                             <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>
