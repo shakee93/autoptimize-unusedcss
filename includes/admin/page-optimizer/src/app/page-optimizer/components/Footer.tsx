@@ -97,7 +97,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const defaultAction = global ? 2 : 0
     const [activeAction, setActiveAction] = useState(defaultAction)
 
-    const submitSettings = useCallback(async (analyze = false, global = false) => {
+    const submitSettings = async (analyze = false, global = false) => {
 
         if (savingData) {
             return;
@@ -137,7 +137,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
         setSavingData(false)
 
-    }, [data, reload, url, activeReport, activeAction])
+    }
 
     const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {
@@ -199,11 +199,6 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     if (loading) {
         return  <></>
     }
-
-
-
-
-
 
 
     return (
