@@ -10,17 +10,13 @@ interface FilesTableProps {
     audit: Audit
     group: any
     index: number
-    notify: (val: boolean) => void
     type?: 'list' | 'table'
 }
 
-const FilesGroup = ({ audit, index, group, notify, type = 'table' }: FilesTableProps) => {
+const FilesGroup = ({ audit, index, group, type = 'table' }: FilesTableProps) => {
 
     const [open, setOpen] = useState((type === 'table' && index === 0) || (type === 'list') )
 
-    useEffect(() => {
-        notify(true)
-    }, [open])
 
     return (
         <div className={cn(

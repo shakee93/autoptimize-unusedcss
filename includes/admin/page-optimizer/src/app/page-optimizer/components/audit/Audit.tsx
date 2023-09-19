@@ -28,10 +28,10 @@ import metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 export interface AuditProps {
     audit: Audit;
     index?: number;
-    onHeightChange?: (height: number) => void;
+    actions?: boolean
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeightChange }, ref) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions = true }, ref) => {
 
     // const [toggleFiles, setToggleFiles] = useState(false);
     // const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
@@ -39,7 +39,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
 
     const {settings, activeReport, data} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
-    const {openAudits, setOpenAudits, activeMetric} = useAppContext()
+    const {openAudits, setOpenAudits} = useAppContext()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
@@ -72,23 +72,9 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
         //     return prevOpenAudits; // Return the array unchanged if no action is taken
         // });
 
-        notifyHeightChange();
-
     }, [toggleFiles, activeReport]);
 
 
-    const notifyHeightChange = (initHeight = null) => {
-        if (divRef.current && typeof onHeightChange === 'function') {
-
-            setTimeout(() => {
-                const height = divRef?.current?.clientHeight || 0;
-                onHeightChange((initHeight ? initHeight : height) - 15);
-            }, 0)
-
-            return;
-        }
-        
-    };
 
     const summary = () => {
         const numItems = audit.files?.items?.length || 0;
@@ -121,7 +107,6 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
                   `overflow-hidden hover:opacity-100 w-full flex justify-center flex-col items-center p-0`,
-                  // activeMetric && audit.metrics.find(m => m.id === activeMetric) && 'shadow shadow--400/80',
                   toggleFiles ? 'shadow-xl dark:shadow-brand-800/70' : 'dark:hover:border-brand-500 hover:border-brand-400/60'
               )}
         >
@@ -216,7 +201,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                     )}
 
 
-                    <div>
+                    {actions &&
                         <TooltipText
                             text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
                         >
@@ -234,14 +219,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                                         <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
                                 ) : (
                                     (toggleFiles) ?
-                                    <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
-                                    <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
-                                    )}
+                                        <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
+                                        <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                )}
                             </div>
                         </TooltipText>
-
-                    </div>
-
+                    }
 
 
                 </div>
@@ -257,11 +240,10 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
             )}
 
             <Accordion
-                onHeightChange={notifyHeightChange}
-                onAnimationComplete={notifyHeightChange}
+
                 initialRender={true}
                 isOpen={toggleFiles}>
-                <AuditContent notify={notifyHeightChange} audit={audit} />
+                <AuditContent audit={audit} />
             </Accordion>
 
         </Card>

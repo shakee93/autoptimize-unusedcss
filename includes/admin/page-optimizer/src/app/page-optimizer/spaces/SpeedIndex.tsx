@@ -12,7 +12,6 @@ import {Separator} from "@radix-ui/react-dropdown-menu";
 
 const SpeedIndex = () => {
     const {data, loading, error} = useSelector(optimizerData);
-    console.log('render');
 
     const {
         togglePerformance,
@@ -45,11 +44,14 @@ const SpeedIndex = () => {
     return (
         <div>
             {/*<h2 className="text-lg ml-5 flex gap-2 font-normal items-center">*/}
-            {/*    {!togglePerformance && <TogglePerformance/>}*/}
+            {/*
             {/*    Enhance {activeMetric?.title}</h2>*/}
+            <div className='ml-6'>
+                {!togglePerformance && <TogglePerformance/>}
+            </div>
             <div className='flex flex-col gap-3 mt-16 ml-6'>
                 <div className='flex flex-col gap-3 border-b pb-6'>
-                    <div className='text-4xl font-medium'>{activeMetric?.title}</div>
+                    <div className='text-4xl font-medium'> {activeMetric?.title}</div>
                     <div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>
                     <div>
                         <ul className='flex text-sm gap-3 text-brand-500'>
@@ -68,7 +70,7 @@ const SpeedIndex = () => {
                             {audits.map((audit, index) => (
                                 <div  key={index} className='relative'>
                                     <Audit
-
+                                        actions={false}
                                         index={index} audit={audit}/>
                                 </div>
                             ))}
