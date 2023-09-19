@@ -1,6 +1,6 @@
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import Card from "components/ui/card";
-import React from "react";
+import React, {useEffect} from "react";
 import {JsonView} from "react-json-view-lite";
 import TooltipText from "components/ui/tooltip-text";
 import usePerformanceColors from "hooks/usePerformanceColors";
@@ -24,6 +24,11 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
     const { dispatch, common} = useCommonDispatch()
     const { activeMetric } = common
 
+    useEffect(() => {
+        console.log(metrics.find(m => m.refs.acronym === 'SI'));
+
+        dispatch(setCommonState('activeMetric',metrics.find(m => m.refs.acronym === 'SI')))
+    }, [])
 
     return (
         <div>

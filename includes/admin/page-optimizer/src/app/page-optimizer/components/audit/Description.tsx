@@ -1,10 +1,14 @@
+import {cn} from "lib/utils";
 
-const Description = ({ content} : {content: string}) => {
-    const parts = content.split(/\[(.*?)\]\((.*?)\)/);
+const Description = ({ content, className} : {content?: string, className?: string}) => {
+    const parts = content?.split(/\[(.*?)\]\((.*?)\)/);
 
     return (
-        <div className='text-sm py-0 px-2'>
-            {parts.map((part, index) => {
+        <div className={cn(
+            'text-sm py-0 px-2',
+            className
+        )}>
+            {parts?.map((part, index) => {
                 if (index % 3 === 1) {
                     // Creating anchor tag for links
                     const link = parts[index + 1];

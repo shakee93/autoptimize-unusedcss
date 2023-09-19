@@ -22,6 +22,8 @@ import Performance from "app/page-optimizer/spaces/Performance";
 import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import SlideUp from "components/animation/SlideUp";
+import {JsonView} from "react-json-view-lite";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -121,27 +123,17 @@ export default function PageOptimizer() {
                                 togglePerformance ? 'col-span-9' : 'col-span-12',
                             )}>
 
-                                <AnimatePresence initial={false}>
-                                    {false ?
-                                        <m.div
-                                            key='childrenx'  // add a unique key
-                                            initial={{opacity: 0, y: 10}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: 10}}
-                                        >
+                                <AnimatePresence initial={true} mode='wait'>
+                                    {activeMetric ? (
+                                        <SlideUp uuid='si'>
                                             <SpeedIndex/>
-                                        </m.div> :
-                                        <m.div
-                                            key='childrenx'  // add a unique key
-                                            initial={{opacity: 0, y: 10}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: 10}}
-                                        >
+                                        </SlideUp>
+                                    ) : (
+                                        <SlideUp uuid='perf'>
                                             <Performance/>
-                                        </m.div>
-                                    }
+                                        </SlideUp>
+                                    )}
                                 </AnimatePresence>
-
                             </article>
                         </>}
                     </section>
