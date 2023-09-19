@@ -28,7 +28,7 @@ class RapidLoad_Image
                     $a[$index]['url'] = self::get_replaced_url($src['url'],self::$image_indpoint, $src['value'], false, ['retina' => 'ret_img']);
                 }
             }
-            return [];
+            return $a;
         }, 10, 5);
 
         add_action('rapidload/job/handle', [$this, 'optimize_image'], 30, 2);
