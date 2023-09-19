@@ -21,14 +21,7 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     const desiredMetricsOrder = ["First Contentful Paint", "Largest Contentful Paint", "Total Blocking Time", "Cumulative Layout Shift", "Speed Index"];
     const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
-    const { dispatch, common} = useCommonDispatch()
-    const { activeMetric } = common
-
-    useEffect(() => {
-        console.log(metrics.find(m => m.refs.acronym === 'SI'));
-
-        dispatch(setCommonState('activeMetric',metrics.find(m => m.refs.acronym === 'SI')))
-    }, [])
+    const { dispatch, activeMetric} = useCommonDispatch()
 
     return (
         <div>
@@ -37,9 +30,20 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                     .sort((a,b) => b.potentialGain - a.potentialGain)
                     .map((metric, index) => (
                     <div key={index}
-                         onMouseEnter={e => dispatch(setCommonState('activeMetric',metric))}
-                         onMouseLeave={e => dispatch(setCommonState('activeMetric',null))}
-                         className='hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5'>
+                         onClick={e => {
+
+                             if (activeMetric?.id === metric.id) {
+                                 dispatch(setCommonState('activeMetric',null))
+                                 return
+                             }
+
+                             dispatch(setCommonState('activeMetric',metric))
+                         }}
+                         className={cn(
+                             'select-none cursor-pointer hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5',
+                             metric.id === activeMetric?.id && 'bg-brand-100/80'
+
+                         )}>
                         <div className='flex flex-col justify-between'>
                             <div className='flex items-center gap-1.5 flex-row text-sm font-medium'>
                                 <div className='inline-flex flex-col'>

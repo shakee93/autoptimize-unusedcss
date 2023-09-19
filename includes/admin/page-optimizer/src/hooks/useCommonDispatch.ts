@@ -11,7 +11,8 @@ const useCommonDispatch = () => {
 
     return {
         dispatch,
-        common
+        common,
+        ...common
     }
 }
 

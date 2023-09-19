@@ -29,9 +29,10 @@ export interface AuditProps {
     audit: Audit;
     index?: number;
     actions?: boolean
+    metrics?: boolean
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions = true }, ref) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions = true, metrics = true }, ref) => {
 
     // const [toggleFiles, setToggleFiles] = useState(false);
     // const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
@@ -128,7 +129,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                             {/*    2 changes*/}
                             {/*</span>*/}
 
-                            {audit.metrics && (
+                            {metrics && audit.metrics && (
                                 <div className='flex gap-1.5 text-xxs'>
                                     {  audit.metrics.map(metric => (
                                         <div className={cn(

@@ -13,6 +13,7 @@ import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
 
 
 
@@ -30,8 +31,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, common} = useCommonDispatch()
-    const { activeMetric } = common
+    const { dispatch, activeMetric} = useCommonDispatch()
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -78,7 +78,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         <div className='w-full flex flex-col gap-4'>
             <Card className='overflow-hidden'>
-                <div className="content flex flex-col items-center gap-3 mx-12 my-2.5">
+                <div
+                    onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                    className="content flex flex-col items-center gap-3 mx-12 my-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>

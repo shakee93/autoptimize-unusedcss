@@ -57,7 +57,7 @@ const SpeedIndex = () => {
                         <ul className='flex text-sm gap-3 text-brand-500'>
                             {points.map((point, index) => (
                                 point && (<li key={index} className='flex gap-1.5 items-center'>
-                                    <Circle className='w-2 stroke-none mt-[1px] fill-slate-700'/> <span>{point}</span>
+                                    <Circle className='w-2 stroke-none mt-[1px] fill-brand-300'/> <span>{point}</span>
                                 </li>)
                             ))}
                         </ul>
@@ -70,7 +70,7 @@ const SpeedIndex = () => {
                             {audits.map((audit, index) => (
                                 <div  key={index} className='relative'>
                                     <Audit
-                                        actions={false}
+                                        metrics={false}
                                         index={index} audit={audit}/>
                                 </div>
                             ))}
