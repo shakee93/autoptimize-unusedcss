@@ -14,6 +14,7 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../../store/common/commonActions";
+import {Activity, CircleEqual, Hash, Shapes} from "lucide-react";
 
 
 
@@ -79,7 +80,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         <div className='w-full flex flex-col gap-4'>
             <Card className='overflow-hidden'>
                 <div
-                    onClick={e => dispatch(setCommonState('activeMetric', null)) }
                     className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
                     <div className='flex gap-6'>
@@ -125,6 +125,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
 
+                </div>
+                <div
+                     onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                     className={cn(
+                         'flex gap-2 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
+                         !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
+                     )
+                     }>
+                   <Hash className='w-4 text-brand-400'/> All Audits
                 </div>
                 {data?.metrics && (
                     <Metrics performance={data?.performance} metrics={data.metrics}/>

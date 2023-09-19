@@ -44,6 +44,8 @@ const SpeedIndex = () => {
             <>Weighs <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
         ]
     }, [activeMetric])
+
+
     return (
         <SlideUp uuid={activeMetric?.id ? activeMetric.id : 'no-key'}>
             {/*<h2 className="text-lg ml-5 flex gap-2 font-normal items-center">*/}
