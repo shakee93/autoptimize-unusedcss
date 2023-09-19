@@ -125,9 +125,7 @@ export default function PageOptimizer() {
 
                                 <AnimatePresence initial={true} mode='wait'>
                                     {activeMetric ? (
-                                        <SlideUp uuid='si'>
-                                            <SpeedIndex/>
-                                        </SlideUp>
+                                        <SpeedIndex/>
                                     ) : (
                                         <SlideUp uuid='perf'>
                                             <Performance/>

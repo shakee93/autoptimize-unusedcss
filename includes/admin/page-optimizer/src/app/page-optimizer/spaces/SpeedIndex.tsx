@@ -8,6 +8,8 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import Description from "app/page-optimizer/components/audit/Description";
 import {Circle, Dot} from "lucide-react";
 import {Separator} from "@radix-ui/react-dropdown-menu";
+import {m} from "framer-motion";
+import SlideUp from "components/animation/SlideUp";
 
 
 const SpeedIndex = () => {
@@ -15,6 +17,7 @@ const SpeedIndex = () => {
 
     const {
         togglePerformance,
+        options
     } = useAppContext()
 
     const { common } = useCommonDispatch()
@@ -42,7 +45,7 @@ const SpeedIndex = () => {
         ]
     }, [activeMetric])
     return (
-        <div>
+        <SlideUp uuid={activeMetric?.id ? activeMetric.id : 'no-key'}>
             {/*<h2 className="text-lg ml-5 flex gap-2 font-normal items-center">*/}
             {/*
             {/*    Enhance {activeMetric?.title}</h2>*/}
@@ -63,7 +66,7 @@ const SpeedIndex = () => {
                         </ul>
                     </div>
                 </div>
-                {audits.length > 0 &&
+                {audits.length > 0 ?
                     <div className="flex gap-4 flex-col w-full">
                         <div className='borderx-b px-4 pt-4 w-full font-medium text-lg'>Related Audits</div>
                         <div className='flex flex-col gap-4'>
@@ -76,10 +79,25 @@ const SpeedIndex = () => {
                             ))}
                         </div>
                     </div>
+                : <m.div
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
+
+                        <div>
+                            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                        </div>
+
+                        <span className='flex gap-2'>
+                                Brilliantly done! It's clear you've mastered this.
+                            </span>
+
+                    </m.div>
                 }
 
             </div>
-        </div>
+        </SlideUp>
     )
 }
 
