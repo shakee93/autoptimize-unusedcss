@@ -40,8 +40,8 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                              dispatch(setCommonState('activeMetric',metric))
                          }}
                          className={cn(
-                             'select-none cursor-pointer hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5',
-                             metric.id === activeMetric?.id && 'bg-brand-100/80'
+                             'select-none cursor-pointer dark:hover:bg-brand-900/70 hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5',
+                             metric.id === activeMetric?.id && 'bg-brand-100/80 dark:bg-brand-900'
 
                          )}>
                         <div className='flex flex-col justify-between'>

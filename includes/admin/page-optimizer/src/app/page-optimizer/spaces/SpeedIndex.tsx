@@ -40,8 +40,8 @@ const SpeedIndex = () => {
     const points = useMemo(() => {
 
         return [
-            <>Weighs <span className='text-brand-800 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
             activeMetric?.potentialGain ? <>Enhance this to gain <span className='text-green-600 font-medium'>{activeMetric?.potentialGain.toFixed(1)} points boost</span> </> : null,
+            <>Weighs <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
         ]
     }, [activeMetric])
     return (
@@ -57,10 +57,10 @@ const SpeedIndex = () => {
                     <div className='text-4xl font-medium'> {activeMetric?.title}</div>
                     <div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>
                     <div>
-                        <ul className='flex text-sm gap-3 text-brand-500'>
+                        <ul className='flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
                             {points.map((point, index) => (
                                 point && (<li key={index} className='flex gap-1.5 items-center'>
-                                    <Circle className='w-2 stroke-none mt-[1px] fill-brand-300'/> <span>{point}</span>
+                                    <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
                                 </li>)
                             ))}
                         </ul>

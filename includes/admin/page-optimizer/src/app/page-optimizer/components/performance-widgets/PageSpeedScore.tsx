@@ -80,7 +80,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             <Card className='overflow-hidden'>
                 <div
                     onClick={e => dispatch(setCommonState('activeMetric', null)) }
-                    className="content flex flex-col items-center gap-3 mx-12 my-2.5">
+                    className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
