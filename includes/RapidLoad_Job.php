@@ -220,20 +220,26 @@ class RapidLoad_Job{
 
     }
 
-    function get_desktop_options($transformed = false){
+    function get_desktop_options($transformed = false, $recursive = false){
 
-        if(isset($this->desktop_options)){
+        if(isset($this->desktop_options) && !empty($this->mobile_options)){
             return !$transformed ? unserialize($this->desktop_options) : $this->transform_individual_file_actions(unserialize($this->desktop_options));
+        }
+        if(!$recursive){
+            return $this->get_mobile_options($transformed, true);
         }
         return [];
     }
 
-    function get_mobile_options($transformed = false){
+    function get_mobile_options($transformed = false, $recursive = false){
 
         if(isset($this->mobile_options) && !empty($this->mobile_options)){
             return !$transformed ? unserialize($this->mobile_options) : $this->transform_individual_file_actions(unserialize($this->mobile_options));
         }
-        return $this->get_desktop_options($transformed);
+        if(!$recursive){
+            return $this->get_desktop_options($transformed, true);
+        }
+        return [];
     }
 
     function set_desktop_options($options){
