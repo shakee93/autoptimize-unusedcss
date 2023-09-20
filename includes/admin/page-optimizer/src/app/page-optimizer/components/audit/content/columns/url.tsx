@@ -11,9 +11,11 @@ import TooltipText from "components/ui/tooltip-text";
 interface AuditColumnUrlProps {
     audit : Audit,
     cell: CellContext<AuditResource, any>
+    heading: AuditHeadings
+
 }
 
-const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
+const AuditColumnUrl = ({audit, cell, heading} : AuditColumnUrlProps) => {
 
     let value = cell.getValue()
     let passed = false
@@ -28,7 +30,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
         return (
             <a className='text-left' target='_blank'
                href={value}>
-                <span>{truncateMiddleOfURL(value, 50)}</span>
+                <span>{truncateMiddleOfURL(value, 60)}</span>
                 <ArrowTopRightOnSquareIcon className='w-4 inline-block ml-2'/>
             </a>
         );
@@ -46,7 +48,8 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
                         </TooltipText>
                     </span>
                 )}
-                <span className='items-center gap-2'>{truncateMiddleOfURL(value.url, 50)} <ArrowTopRightOnSquareIcon className='w-4 inline-block -mt-0.5'/></span>
+                <span className='items-center gap-2'>
+                    {truncateMiddleOfURL(value.url, 60)} <ArrowTopRightOnSquareIcon className='w-4 inline-block -mt-0.5'/></span>
             </a>
         );
     } else {

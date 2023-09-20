@@ -177,28 +177,21 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
 
                             {(activeSettings.length > 0 && !toggleFiles) && (
-                                <HoverCard openDelay={0} >
-                                    <HoverCardTrigger>
-                                        <div
-                                            onClick={() => setToggleFiles(prev => !prev)}
-                                            className={cn(
-                                                'cursor-pointer select-none text-xs p-1 text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
-                                                activeSettings.length > 1 && 'border py-0.5 px-2'
-                                            )}>
-                                            {activeSettings.length > 1 ? activeSettings.length : ''}
-                                            <div className='bg-blue-500 w-1.5 h-1.5 shadow-lg rounded-full -right-1 -top-1'></div>
-                                        </div>
-                                    </HoverCardTrigger>
-                                    {!toggleFiles && (
-                                        <HoverCardContent side='top' sideOffset={5}>
-                                     <span className='flex flex-col border gap-2 bg-white dark:bg-brand-950 rounded-lg py-2 px-2'>
-                                         <span className='text-sm text-center'>{activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}</span>
-                                         <Settings hideActions={true} className='flex flex-row' audit={audit} auditSettings={activeSettings}>
-                                         </Settings>
-                                     </span>
-                                        </HoverCardContent>
-                                    )}
-                                </HoverCard>
+                                <TooltipText text={
+                                    <span className='text-sm text-center'>
+                                             {activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}
+                                         </span>
+                                } className='flex flex-col border gap-2 bg-white dark:bg-brand-950 rounded-lg py-2 px-2'>
+                                    <div
+                                        onClick={() => setToggleFiles(prev => !prev)}
+                                        className={cn(
+                                            'cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
+                                            activeSettings.length > 1 && 'border py-0.5 px-2'
+                                        )}>
+                                        {activeSettings.length > 1 ? activeSettings.length : ''}
+                                        <div className='bg-blue-500 w-1.5 h-1.5 shadow-lg rounded-full -right-1 -top-1'></div>
+                                    </div>
+                                </TooltipText>
                             )}
 
 

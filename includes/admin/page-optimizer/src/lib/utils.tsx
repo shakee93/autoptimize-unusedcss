@@ -56,6 +56,9 @@ export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: 
 
     const parsedURL = new URL(url);
 
+    // Check if the URL has a trailing slash
+    const hasTrailingSlash = url.endsWith('/');
+
     // Check if the last part of the pathname is empty (no trailing slash)
     const isHomepage = parsedURL.pathname.split('/').pop() === '';
 
@@ -69,11 +72,15 @@ export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: 
     const penultimatePart = pathSegments[pathSegments.length - 2];
     const lastPart = pathSegments[pathSegments.length - 1];
 
-    const truncatedLastPart = lastPart.length <= maxLength ? lastPart : `...${lastPart.slice(-maxLength)}`;
+    let baseTruncatedURL = showDomain
+        ? `${parsedURL.protocol}//${parsedURL.host}/.../${penultimatePart}/`
+        : `.../${penultimatePart}/`;
 
-    const truncatedURL = showDomain
-        ? `${parsedURL.protocol}//${parsedURL.host}/.../${penultimatePart}/${truncatedLastPart}/`
-        : `.../${penultimatePart}/${truncatedLastPart}`;
+    if (baseTruncatedURL.length + lastPart.length > maxLength) {
+      baseTruncatedURL = `${baseTruncatedURL.slice(0, maxLength - lastPart.length - 3)}.../`;
+    }
+
+    const truncatedURL = baseTruncatedURL + lastPart + (hasTrailingSlash ? '/' : '');
 
     return truncatedURL;
   } catch (error) {
@@ -84,6 +91,7 @@ export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: 
     }
   }
 }
+
 
 
 export function formatNumberWithGranularity(number: number, granularity: number = 1): string {

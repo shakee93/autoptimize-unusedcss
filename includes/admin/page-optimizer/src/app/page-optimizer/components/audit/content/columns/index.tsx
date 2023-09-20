@@ -45,7 +45,7 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     }
 
     if (heading.valueType === 'url') {
-        return <AuditColumnUrl audit={audit} cell={cell}/>;
+        return <AuditColumnUrl heading={heading} audit={audit} cell={cell}/>;
     }
 
     if (heading.valueType === 'controls') {
