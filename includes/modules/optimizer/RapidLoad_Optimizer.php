@@ -313,6 +313,10 @@ class RapidLoad_Optimizer
 
                     if(isset($item->url) && isset($item->url->url)){
 
+                        if(!isset($item->url->regex)){
+                            $item->url->regex = self::$job->generateUrlRegex($item->url->url);
+                        }
+
                         if(!isset(self::$merged_options['individual-file-actions'])){
                             self::$merged_options['individual-file-actions'] = [];
                         }
@@ -490,6 +494,11 @@ class RapidLoad_Optimizer
                     foreach ($audit->files->items as $item){
 
                         if(isset($item->url) && isset($item->url->url)){
+
+                            if(!isset($item->url->regex)){
+                                $item->url->regex = self::$job->generateUrlRegex($item->url->url);
+                            }
+
                             if(!isset(self::$options['individual-file-actions'][$audit->id])){
                                 self::$options['individual-file-actions'][$audit->id] = [];
                             }
