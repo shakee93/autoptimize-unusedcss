@@ -72,7 +72,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return <>{replacedText}</>;
     };
 
-    let gain = Number((hoveredMetric?.potentialGain ? hoveredMetric?.potentialGain : 0)?.toFixed(0))
+    let metric = hoveredMetric
+
+    let gain = Number((metric?.potentialGain ? metric?.potentialGain : 0)?.toFixed(0))
 
 
     return (
@@ -90,13 +92,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
                                     <PerformanceProgressBar
-                                        performance={(data?.performance && gain && hoveredMetric) ?
+                                        performance={(data?.performance && gain && metric) ?
                                             (data.performance + gain >= 99) ? 99 :
                                                 data.performance + gain : data?.performance}>
-                                        {!!(activeMetric && gain) && (
+                                        {!!(metric && gain) && (
                                             <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>
-                                                    {activeMetric?.title}
+                                                    {metric?.title}
                                                 </span>
                                                 <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
                                             </div>

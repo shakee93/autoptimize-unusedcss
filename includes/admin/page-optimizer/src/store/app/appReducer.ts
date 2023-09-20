@@ -17,7 +17,7 @@ const initialState: AppState = {
         },
         data: null,
         error: null,
-        loading: true,
+        loading: false,
         settings: [],
         revisions: [],
     },
@@ -28,7 +28,7 @@ const initialState: AppState = {
         },
         data: null,
         error: null,
-        loading: true,
+        loading: false,
         settings: [],
         revisions: [],
     }
@@ -48,14 +48,14 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case FETCH_DATA_SUCCESS:
             return {
                 ...state,
-                [state.activeReport] : {
-                    ...state[state.activeReport],
-                    original: action.payload.data,
-                    data: action.payload.data,
+                [action.payload.activeReport] : {
+                    ...state[action.payload.activeReport],
+                    original: action.payload.data.data,
+                    data: action.payload.data.data,
                     error: null,
                     loading: false,
-                    settings: action.payload.settings,
-                    revisions: action.payload.revisions
+                    settings: action.payload.data.settings,
+                    revisions: action.payload.data.revisions
                 }
             };
         case FETCH_DATA_FAILURE:
