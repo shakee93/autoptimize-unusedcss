@@ -30,6 +30,7 @@ const RootProvider = ({ children }: RootProviderProps) => {
     useEffect(() => {
         typeof window !== 'undefined' && window.localStorage.setItem('rapidload-theme', theme)
     }, [theme])
+
     return (
         <RootContext.Provider value={{
             theme,
