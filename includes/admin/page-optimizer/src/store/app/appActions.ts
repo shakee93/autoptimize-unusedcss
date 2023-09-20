@@ -141,11 +141,15 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     return;
             // }
 
+            if (activeReportData.loading) {
+                return;
+            }
+
             if (activeReportData.data && !reload) {
                 return;
             }
 
-            dispatch({ type: FETCH_DATA_REQUEST });
+            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
 
             const response = await api.fetchPageSpeed(
                 url,
@@ -153,7 +157,10 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 reload
             );
             
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: transformData(response) });
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+                activeReport,
+                data: transformData(response)
+            }});
 
         } catch (error) {
             if (error instanceof Error) {

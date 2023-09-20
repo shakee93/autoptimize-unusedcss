@@ -40,12 +40,16 @@ export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 
 interface FetchDataRequestAction {
     type: typeof FETCH_DATA_REQUEST;
+    activeReport: ReportType
 }
 
 // Define action interfaces
 interface FetchDataSuccessAction {
     type: typeof FETCH_DATA_SUCCESS;
-    payload: any; // Replace 'any' with the actual type of data you expect from the API
+    payload: {
+        data: any
+        activeReport: ReportType
+    }
 }
 
 interface FetchDataFailureAction {
