@@ -129,11 +129,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 <div
                      onClick={e => dispatch(setCommonState('activeMetric', null)) }
                      className={cn(
-                         'flex gap-2 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
+                         'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
                          !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
                      )
                      }>
-                   <Hash className='w-4 text-brand-400'/> All Audits
+                   <span><Hash className='w-4 text-brand-400'/></span> All Audits
                 </div>
                 {data?.metrics && (
                     <Metrics performance={data?.performance} metrics={data.metrics}/>
@@ -197,4 +197,4 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     )
 }
 
-export default React.memo(PageSpeedScore)
+export default PageSpeedScore

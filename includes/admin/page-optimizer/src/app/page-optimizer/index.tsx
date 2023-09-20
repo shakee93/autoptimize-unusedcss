@@ -32,8 +32,7 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, common } = useCommonDispatch()
-    const { activeMetric } = common
+    const { dispatch, activeMetric } = useCommonDispatch()
 
     const {
         options,
@@ -42,34 +41,11 @@ export default function PageOptimizer() {
         manipulatingStyles,
         savingData,
         togglePerformance,
+        optimizerContainer
     } = useAppContext()
 
     let url = options?.optimizer_url;
 
-
-    const ActiveSpace = () => {
-
-        if (activeMetric) {
-            console.log('here');
-            return <m.div
-                key='childrenx'  // add a unique key
-                initial={{opacity: 0, y: 10}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 10}}
-            >
-                <SpeedIndex/>
-            </m.div>
-        }
-
-        return  <m.div
-            key='childrenx'  // add a unique key
-            initial={{opacity: 0, y: 10}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0, y: 10}}
-        >
-            <Performance/>
-        </m.div>;
-    }
 
     return (
 
@@ -85,7 +61,9 @@ export default function PageOptimizer() {
             )}>
 
                 {!loading ? (
-                    <section className={cn(
+                    <section
+                        ref={optimizerContainer}
+                        className={cn(
                         'container grid grid-cols-12 gap-8 pt-4',
                     )}>
 
