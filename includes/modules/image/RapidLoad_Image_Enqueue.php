@@ -95,11 +95,72 @@ class RapidLoad_Image_Enqueue
                     //$this->get_placeholder($img);
 
                     $img->$data_src = $url;
-                    unset($img->{'srcset'});
+                    //unset($img->{'srcset'});
 
                 }
 
             }
+        }
+
+        $srcset_attributes = [
+            [
+                'tag' => 'img',
+                'attr' => 'srcset'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-srcset'
+            ]
+        ];
+
+        foreach ($srcset_attributes as $srcset_attribute){
+
+            $srcsets = $this->dom->find( $srcset_attribute['tag'] . '[' . $srcset_attribute['attr'] . ']' );
+
+            if(!empty($srcsets)){
+
+                foreach ($srcsets as $srcset){
+
+                    if(isset($srcset->{$srcset_attribute['attr']}) && !empty($srcset->{$srcset_attribute['attr']})){
+
+                        $_sets = explode(",",$srcset->{$srcset_attribute['attr']});
+
+                        if(!empty($_sets)){
+
+                            foreach ($_sets as $set){
+
+                                $pattern = '/(https?:\/\/[^\s]+)\s(\d+)w/';
+
+                                if (preg_match_all($pattern, $set, $matches, PREG_SET_ORDER)) {
+                                    foreach ($matches as $match) {
+                                        if(isset($match[1]) && isset($match[2])){
+                                            $url = $match[1];
+                                            $width = intval($match[2]);
+                                            $_replaced = RapidLoad_Image::get_replaced_url($url,RapidLoad_Image::$image_indpoint, str_replace("w", "",$width), false, ['retina' => 'ret_img']);
+                                            $srcset->{$srcset_attribute['attr']} = str_replace($url . " " .  $width,$_replaced . " " . $width, $srcset->{$srcset_attribute['attr']});
+                                        }
+                                    }
+                                }
+
+                                /*$_set = explode($set," ");
+
+                                if(isset($_set[0]) && isset($_set[1])){
+
+                                    $_replaced = RapidLoad_Image::get_replaced_url($_set[0],RapidLoad_Image::$image_indpoint, str_replace("w", "", $_set[1]), false, ['retina' => 'ret_img']);
+
+                                    $srcset->srcset = str_replace($_set[0] . " " .  $_set[1],$_replaced . " " . $_set[1], $srcset->srcset);
+                                }*/
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
         }
 
         $videos = $this->dom->find( 'video[poster]' );
