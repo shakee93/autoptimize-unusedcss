@@ -28,10 +28,11 @@ import metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 export interface AuditProps {
     audit: Audit;
     index?: number;
-    onHeightChange?: (height: number) => void;
+    actions?: boolean
+    metrics?: boolean
 }
 
-const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeightChange }, ref) => {
+const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions = true, metrics = true }, ref) => {
 
     // const [toggleFiles, setToggleFiles] = useState(false);
     // const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
@@ -39,7 +40,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
 
     const {settings, activeReport, data} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
-    const {openAudits, setOpenAudits, activeMetric} = useAppContext()
+    const {openAudits, setOpenAudits} = useAppContext()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
@@ -72,23 +73,9 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
         //     return prevOpenAudits; // Return the array unchanged if no action is taken
         // });
 
-        notifyHeightChange();
-
     }, [toggleFiles, activeReport]);
 
 
-    const notifyHeightChange = (initHeight = null) => {
-        if (divRef.current && typeof onHeightChange === 'function') {
-
-            setTimeout(() => {
-                const height = divRef?.current?.clientHeight || 0;
-                onHeightChange((initHeight ? initHeight : height) - 15);
-            }, 0)
-
-            return;
-        }
-        
-    };
 
     const summary = () => {
         const numItems = audit.files?.items?.length || 0;
@@ -116,12 +103,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
     };
 
     const activeSettings = useMemo(() => (audit.settings.filter(s => s.inputs[0].value)), [audit.settings])
+    const totalMetricsGain = useMemo(() => audit.metrics.reduce((total,b) => b.potentialGain + total, 0), [audit.metrics])
 
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
                   `overflow-hidden hover:opacity-100 w-full flex justify-center flex-col items-center p-0`,
-                  // activeMetric && audit.metrics.find(m => m.id === activeMetric) && 'shadow shadow--400/80',
                   toggleFiles ? 'shadow-xl dark:shadow-brand-800/70' : 'dark:hover:border-brand-500 hover:border-brand-400/60'
               )}
         >
@@ -130,12 +117,11 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
             )}>
                 <div className='flex gap-3 font-normal  items-center text-base'>
 
-                    <TooltipText className='capitalize' text={audit.scoreDisplayMode === 'informative' ? 'Informative' : `Audit status: ${icon}`}>
-                        <div
-                            className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                            {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
-                        </div>
-                    </TooltipText>
+                    <div
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
+                        {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
+                    </div>
+
                     <div className='flex flex-col justify-around'>
                         <div className='flex gap-1.5 items-center'>
                             {audit.name}
@@ -143,11 +129,11 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                             {/*    2 changes*/}
                             {/*</span>*/}
 
-                            {audit.metrics && (
+                            {metrics && audit.metrics && (
                                 <div className='flex gap-1.5 text-xxs'>
-                                    {  audit.metrics.map(metric => (
+                                    {audit.metrics.map(metric => (
                                         <div className={cn(
-                                            'transition-colors flex gap-1 cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md',
+                                            'transition-colors flex gap-1 cursor-default hover:bg-brand-100 dark:hover:bg-brand-800 border py-1 px-1.5 rounded-md',
                                         )} key={metric.id}>
                                             {metric.refs.acronym}
                                             {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
@@ -162,9 +148,30 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                                         </div>
                                     ))}
 
-                                    {/*<div className='flex gap-1 cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md'>*/}
-                                    {/*    {audit.score}*/}
-                                    {/*</div>*/}
+                                    {/*{totalMetricsGain ? (*/}
+                                    {/*    <div className='flex group gap-2'>*/}
+                                    {/*        <div className='flex gap-1 cursor-default text-green-800 hover:bg-brand-100 border py-1 px-1.5 rounded-md'>*/}
+                                    {/*            {totalMetricsGain.toFixed(0)}+*/}
+                                    {/*        </div>*/}
+                                    {/*        {audit.metrics.map(metric => (*/}
+                                    {/*            <div className={cn(*/}
+                                    {/*                'group-hover:flex hidden transition-colors gap-1 cursor-default hover:bg-brand-100 border py-1 px-1.5 rounded-md',*/}
+                                    {/*            )} key={metric.id}>*/}
+                                    {/*                {metric.refs.acronym}*/}
+                                    {/*                {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (*/}
+                                    {/*                    <div key={index}>*/}
+                                    {/*                        {metric.potentialGain > 0 && (*/}
+                                    {/*                            <span className={cn(*/}
+                                    {/*                                'text-green-800',*/}
+                                    {/*                            )}> +{metric.potentialGain.toFixed(0)}</span>*/}
+                                    {/*                        )}*/}
+                                    {/*                    </div>*/}
+                                    {/*                )}*/}
+                                    {/*            </div>*/}
+                                    {/*        ))}*/}
+                                    {/*    </div>*/}
+                                    {/*) : ''}*/}
+
                                     </div>
                             )}
 
@@ -216,7 +223,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                     )}
 
 
-                    <div>
+                    {actions &&
                         <TooltipText
                             text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
                         >
@@ -234,14 +241,12 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
                                         <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
                                 ) : (
                                     (toggleFiles) ?
-                                    <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
-                                    <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
-                                    )}
+                                        <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
+                                        <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
+                                )}
                             </div>
                         </TooltipText>
-
-                    </div>
-
+                    }
 
 
                 </div>
@@ -257,11 +262,10 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, onHeight
             )}
 
             <Accordion
-                onHeightChange={notifyHeightChange}
-                onAnimationComplete={notifyHeightChange}
+
                 initialRender={true}
                 isOpen={toggleFiles}>
-                <AuditContent notify={notifyHeightChange} audit={audit} />
+                <AuditContent audit={audit} />
             </Accordion>
 
         </Card>

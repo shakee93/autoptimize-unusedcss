@@ -156,6 +156,7 @@ interface AuditSettingInput {
     control_label: string;
     value: any;
     key: any;
+    action: string
 }
 
 type ControlTypes = 'checkbox' | 'textarea' | string

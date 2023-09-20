@@ -103,7 +103,7 @@ const AuditColumnDropdown = ({ audit, heading, cell }: AuditColumnDropdownProps)
                     <TooltipText text={
                         <span className='flex gap-2 items-center'>
                             This action has been changed
-                            <button onClick={handleResetAction} className='flex gap-2 border px-2 hover:bg-brand-100 rounded-xl text-xs items-center'>
+                            <button onClick={handleResetAction} className='flex gap-2 border px-2 hover:bg-brand-100 dark:hover:bg-brand-800 rounded-xl text-xs items-center'>
                                 <Undo2 className='w-4 text-blue-500' /> Reset
                             </button>
                         </span>

@@ -5,7 +5,6 @@ import {JsonView} from "react-json-view-lite";
 
 interface AuditContentProps {
     audit: Audit;
-    notify: any;
 }
 
 import {
@@ -24,11 +23,7 @@ declare module '@tanstack/react-table' {
 
 
 
-const AuditContent = ({audit, notify}: AuditContentProps) => {
-
-    useEffect(() => {
-        notify(true);
-    }, []);
+const AuditContent = ({audit}: AuditContentProps) => {
 
     // TODO: render criticalrequestchain type properly
     if (audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
@@ -67,7 +62,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                         index={index}
                         audit={audit}
                         group={group}
-                        notify={notify}
                     />
                 )
             }
@@ -81,7 +75,6 @@ const AuditContent = ({audit, notify}: AuditContentProps) => {
                                 index={index}
                                 audit={audit}
                                 group={list}
-                                notify={notify}
                                 type='list'
                             />
                         )

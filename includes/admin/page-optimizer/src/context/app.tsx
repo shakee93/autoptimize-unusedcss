@@ -1,4 +1,14 @@
-import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react';
+import {
+    createContext,
+    Dispatch,
+    ReactNode,
+    RefObject,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useRef,
+    useState
+} from 'react';
 
 interface OptimizerContextProps {
     openAudits: string[],
@@ -15,6 +25,7 @@ interface OptimizerContextProps {
     global: boolean
     togglePerformance: boolean;
     setTogglePerformance: Dispatch<SetStateAction<boolean>>;
+    optimizerContainer: RefObject<HTMLElement>
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -48,6 +59,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
     const [togglePerformance, setTogglePerformance] = useState(true);
+    const optimizerContainer = useRef<HTMLElement|null>(null);
 
     useEffect(() => setMounted(true), [])
 
@@ -89,6 +101,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             setTogglePerformance,
             savingData,
             setSavingData,
+            optimizerContainer
         }}>
             {children}
         </AppContext.Provider>

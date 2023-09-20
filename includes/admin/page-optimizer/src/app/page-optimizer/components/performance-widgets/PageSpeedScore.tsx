@@ -13,6 +13,8 @@ import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
+import {Activity, CircleEqual, Hash, Shapes} from "lucide-react";
 
 
 
@@ -30,8 +32,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, common} = useCommonDispatch()
-    const { activeMetric } = common
+    const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -71,14 +72,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return <>{replacedText}</>;
     };
 
-    let gain = Number((activeMetric?.potentialGain ? activeMetric?.potentialGain : 0)?.toFixed(0))
+    let gain = Number((hoveredMetric?.potentialGain ? hoveredMetric?.potentialGain : 0)?.toFixed(0))
 
 
     return (
 
         <div className='w-full flex flex-col gap-4'>
             <Card className='overflow-hidden'>
-                <div className="content flex flex-col items-center gap-3 mx-12 my-2.5">
+                <div
+                    className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
@@ -87,7 +89,10 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <PerformanceProgressBar performance={(data?.performance && gain && activeMetric) ? data.performance + gain : data?.performance}>
+                                    <PerformanceProgressBar
+                                        performance={(data?.performance && gain && hoveredMetric) ?
+                                            (data.performance + gain >= 99) ? 99 :
+                                                data.performance + gain : data?.performance}>
                                         {!!(activeMetric && gain) && (
                                             <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>
@@ -123,6 +128,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
 
+                </div>
+                <div
+                     onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                     className={cn(
+                         'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
+                         !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
+                     )
+                     }>
+                   <span><Hash className='w-4 text-brand-400'/></span> All Audits
                 </div>
                 {data?.metrics && (
                     <Metrics performance={data?.performance} metrics={data.metrics}/>
@@ -186,4 +200,4 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     )
 }
 
-export default React.memo(PageSpeedScore)
+export default PageSpeedScore

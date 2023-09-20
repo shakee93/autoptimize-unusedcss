@@ -1,20 +1,20 @@
 import {isDev} from "lib/utils";
 
 class ApiService {
-    private baseURL: URL;
+    public baseURL: URL;
 
-    constructor(options: WordPressOptions, action?: string) {
+    constructor(options: WordPressOptions, query?: string, action?: string) {
         let base = options?.ajax_url
             ? options.ajax_url
             : "http://rapidload.local/wp-admin/admin-ajax.php";
 
-        const query = new URLSearchParams();
+        const queryParams = new URLSearchParams(query);
 
-        if (action) query.append("action", action);
+        if (action) queryParams.append("action", action);
 
-        if (options.nonce) query.append("nonce", options.nonce);
+        if (options.nonce && !queryParams.has('nonce')) queryParams.append("nonce", options.nonce);
 
-        this.baseURL = new URL(base + "?" + query.toString());
+        this.baseURL = new URL(base + "?" + queryParams.toString());
 
     }
 
@@ -83,6 +83,25 @@ class ApiService {
             });
 
 
+
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async post() {
+
+        try {
+            const query = new URLSearchParams();
+
+            const response = await fetch(this.baseURL, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
 
             return this.throwIfError(response);
         } catch (error) {
