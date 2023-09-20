@@ -94,7 +94,7 @@ class RapidLoad_Image_Enqueue
                     ]);
                     //$this->get_placeholder($img);
 
-                    $img->$data_src = $url;
+                    //$img->$data_src = $url;
                     //unset($img->{'srcset'});
 
                 }
