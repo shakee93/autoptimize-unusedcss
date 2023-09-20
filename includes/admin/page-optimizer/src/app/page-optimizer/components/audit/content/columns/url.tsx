@@ -42,7 +42,7 @@ const AuditColumnUrl = ({audit, cell} : AuditColumnUrlProps) => {
                         {/*    <div className='bg-blue-500 w-1.5 h-1.5 shadow-lg rounded-full'></div>*/}
                         {/*</TooltipText>*/}
                         <TooltipText text='Successfully Optimized file'>
-                            <CheckCircleIcon className='w-5 inline-block text-green-600 dark:text-brand-800'/>
+                            <CheckCircleIcon className='w-5 inline-block text-green-600'/>
                         </TooltipText>
                     </span>
                 )}

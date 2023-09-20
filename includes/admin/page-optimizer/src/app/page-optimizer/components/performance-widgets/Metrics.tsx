@@ -22,8 +22,7 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     const desiredMetricsOrder = ["First Contentful Paint", "Largest Contentful Paint", "Total Blocking Time", "Cumulative Layout Shift", "Speed Index"];
     const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
-    const { dispatch, activeMetric} = useCommonDispatch()
-    const [hoveredMetric, setHoveredMetric] = useState<Metric|null>(null)
+    const { dispatch, activeMetric, hoveredMetric} = useCommonDispatch()
 
     const { optimizerContainer } = useAppContext()
 
@@ -51,7 +50,6 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     return (
         <div>
-
             <div className="flex flex-col w-full">
                 {sortedMetricsData
                     .sort((a,b) => b.potentialGain - a.potentialGain)
@@ -66,8 +64,8 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
                              dispatch(setCommonState('activeMetric',metric))
                          }}
-                         onMouseEnter={() => setHoveredMetric(metric)}
-                         onMouseLeave={() => setHoveredMetric(null)}
+                         onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
+                         onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
                          className={cn(
                              'select-none cursor-pointer dark:hover:bg-brand-900/70 hover:bg-brand-50 transition-colors group flex flex-row justify-between items-center border-t px-6 py-2.5',
                              metric.id === activeMetric?.id && 'bg-brand-100/80 dark:bg-brand-900'

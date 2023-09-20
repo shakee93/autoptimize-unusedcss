@@ -32,7 +32,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, activeMetric} = useCommonDispatch()
+    const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -72,7 +72,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return <>{replacedText}</>;
     };
 
-    let gain = Number((activeMetric?.potentialGain ? activeMetric?.potentialGain : 0)?.toFixed(0))
+    let gain = Number((hoveredMetric?.potentialGain ? hoveredMetric?.potentialGain : 0)?.toFixed(0))
 
 
     return (
@@ -89,7 +89,10 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <PerformanceProgressBar performance={(data?.performance && gain && activeMetric) ? data.performance + gain : data?.performance}>
+                                    <PerformanceProgressBar
+                                        performance={(data?.performance && gain && hoveredMetric) ?
+                                            (data.performance + gain >= 99) ? 99 :
+                                                data.performance + gain : data?.performance}>
                                         {!!(activeMetric && gain) && (
                                             <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>

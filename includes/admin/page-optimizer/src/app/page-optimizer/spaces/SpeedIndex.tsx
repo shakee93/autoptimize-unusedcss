@@ -28,10 +28,10 @@ const SpeedIndex = () => {
         let audits = [
             ...data?.grouped?.opportunities || [],
             ...data?.grouped?.diagnostics || [],
-        ].filter(audit => audit.scoreDisplayMode !== 'informative')
+        ]
 
         if (activeMetric?.refs.acronym === 'SI') {
-            return  audits
+            return  audits.filter(audit => audit.scoreDisplayMode !== 'informative')
         }
 
         return audits.filter(audit => audit.metrics.find(metric => metric.id === activeMetric?.id));
