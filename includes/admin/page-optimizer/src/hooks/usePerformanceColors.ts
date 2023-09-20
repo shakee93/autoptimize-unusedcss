@@ -9,9 +9,7 @@ const usePerformanceColors = (performance?: number) => {
     const progressBarColorCode = useCallback( () => {
         const bgOpacity = 0.08
 
-        if(!performance) return
-
-        if (performance < 50) {
+        if (!performance || performance < 50) {
             setProgressbarColor('#ff4e43');
             setProgressbarBg(`rgb(255, 51, 51, ${bgOpacity} )`);
             setPerformanceIcon('fail')
