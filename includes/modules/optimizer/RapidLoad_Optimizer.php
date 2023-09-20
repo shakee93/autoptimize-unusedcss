@@ -219,7 +219,7 @@ class RapidLoad_Optimizer
 
 
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
-                $url = 'https://rapidload.io/';
+                $url = 'https://redshed.au/';
             }
 
             $result = $api->post('page-speed', [

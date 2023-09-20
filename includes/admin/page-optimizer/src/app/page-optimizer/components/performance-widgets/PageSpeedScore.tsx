@@ -86,7 +86,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
-
                             <div className='mt-6'>
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>

@@ -48,13 +48,12 @@ export function isUrl(input: string): boolean {
   }
 }
 
-export function truncateMiddleOfURL(url: string, maxLength: number) {
+export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: boolean = true) {
   try {
-
     if (url === 'Unattributable') {
       return url;
     }
-    
+
     const parsedURL = new URL(url);
 
     // Check if the last part of the pathname is empty (no trailing slash)
@@ -71,7 +70,10 @@ export function truncateMiddleOfURL(url: string, maxLength: number) {
     const lastPart = pathSegments[pathSegments.length - 1];
 
     const truncatedLastPart = lastPart.length <= maxLength ? lastPart : `...${lastPart.slice(-maxLength)}`;
-    const truncatedURL = `${parsedURL.protocol}//${parsedURL.host}/.../${penultimatePart}/${truncatedLastPart}`;
+
+    const truncatedURL = showDomain
+        ? `${parsedURL.protocol}//${parsedURL.host}/.../${penultimatePart}/${truncatedLastPart}/`
+        : `.../${penultimatePart}/${truncatedLastPart}`;
 
     return truncatedURL;
   } catch (error) {
@@ -82,6 +84,7 @@ export function truncateMiddleOfURL(url: string, maxLength: number) {
     }
   }
 }
+
 
 export function formatNumberWithGranularity(number: number, granularity: number = 1): string {
   const roundedValue = Math.round(number / granularity) * granularity;

@@ -27,7 +27,7 @@ const PerformanceProgressBar = ({
 
     useEffect(() => {
         if (performance) {
-            let currentNumber = 40;
+            let currentNumber = 0;
 
             const timer = setInterval(() => {
                 currentNumber += 1;

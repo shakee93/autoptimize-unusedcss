@@ -43,7 +43,7 @@ type AuditTypes = keyof OptimizerResults['grouped']
 
 interface AuditFileBase  {
     overallSavingsBytes: number;
-    type: 'list' | 'table' | 'opportunity';
+    type: 'list' | 'table' | 'opportunity' | 'criticalrequestchain';
     headings?: AuditHeadings[];
     sortedBy: string[];
     overallSavingsMs?: number;
@@ -60,6 +60,20 @@ interface TableItems extends AuditFileBase {
     grouped_items: GroupedAuditResource[];
 }
 
+interface CriticalRequestChainItems extends AuditFileBase {
+    type: 'criticalrequestchain'
+    chains: {
+        [key: string] : CriticalChainTreeNodeType
+    };
+    longestChain : {
+        transferSize: number
+        duration: number
+        length: number
+    }
+    grouped_items: GroupedAuditResource[];
+    items: any
+}
+
 interface GroupedAuditResource {
  type: string;
  items: AuditTableResource[]
@@ -69,7 +83,7 @@ type FileTypes = 'css' | 'js' | 'image' | 'font' | string
 
 type AuditResource = AuditTableResource | AuditListResource
 
-type AuditFiles = TableItems | ListItems
+type AuditFiles = TableItems | ListItems | CriticalRequestChainItems
 
 interface AuditTableResource {
     wastedBytes?: number;
@@ -185,4 +199,20 @@ interface Revision {
     strategy: ReportType
     data: OptimizerResults
 }
+
+type CriticalChainRequest = {
+    url: string;
+    startTime: number;
+    transferSize: number;
+    responseReceivedTime: number;
+    endTime: number;
+};
+
+// Define the tree node type
+type CriticalChainTreeNodeType = {
+    request: CriticalChainRequest;
+    children?: {
+        [key: string]: CriticalChainTreeNodeType;
+    };
+};
 

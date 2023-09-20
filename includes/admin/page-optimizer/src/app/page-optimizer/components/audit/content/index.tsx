@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-table";
 import {transformFileType} from "lib/utils";
 import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
+import Treeview from "components/tree-view";
 
 
 declare module '@tanstack/react-table' {
@@ -25,7 +26,7 @@ declare module '@tanstack/react-table' {
 
 const AuditContent = ({audit}: AuditContentProps) => {
 
-    // TODO: render criticalrequestchain type properly
+
     if (audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
         return <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>;
     }
@@ -54,6 +55,13 @@ const AuditContent = ({audit}: AuditContentProps) => {
                     <Settings audit={audit} auditSettings={remainingSettings}/>
                 </div>
             )}
+
+
+            {(audit.files.type === 'criticalrequestchain') &&
+                <div className='border-t'>
+                    <Treeview data={audit.files?.chains[Object.keys(audit.files.chains)[0]]}/>
+                </div>
+            }
 
             {((audit.files?.type === "opportunity" || audit.files?.type === "table")) &&
                 audit.files?.grouped_items?.map((group, index) =>
