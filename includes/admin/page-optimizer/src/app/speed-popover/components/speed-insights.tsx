@@ -22,7 +22,7 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import {HoverCardPortal} from "@radix-ui/react-hover-card";
-import {Archive, Circle, Dot, FileCode2, FileMinus2, GaugeCircle, Monitor} from "lucide-react";
+import {Archive, Circle, Dot, FileCode2, FileMinus2, GaugeCircle, Loader, Monitor} from "lucide-react";
 import {useToast} from "components/ui/use-toast";
 import {ComputerDesktopIcon, DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
 import {ThunkDispatch} from "redux-thunk";
@@ -106,10 +106,6 @@ const Content = () => {
 
         const triggerAction = async (action: RapidLoadGlobalAction) => {
 
-
-
-            return;
-
             try {
                 setActions(prev => prev.map(a =>
                     a.icon === action.icon ? {
@@ -141,11 +137,15 @@ const Content = () => {
             <>
                 {actions.map(action => (
                     <TooltipText key={action.icon} text={action.tooltip}>
-                        <AppButton onClick={e => triggerAction(action)} className='rounded-[15px]' variant='outline'>
-                            {icons[action.icon]} {action.loading && <span>
-                            <Circle className='w-2 absolute stroke-none fill-blue-500'/>
-                            <Circle className='w-2 relative motion-safe:animate-ping stroke-none fill-blue-500'/>
-                        </span>}
+                        <AppButton
+                            disabled={action.loading}
+                            onClick={e => triggerAction(action)} className='rounded-[15px]' variant='outline'>
+                            {action.loading &&
+                                <span>
+                                    <Loader className='motion-safe:animate-spin w-4'/>
+                                </span>
+                            }
+                            {icons[action.icon]}
                         </AppButton>
                     </TooltipText>
                 ))}
