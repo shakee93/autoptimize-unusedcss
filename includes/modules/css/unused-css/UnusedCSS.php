@@ -22,11 +22,13 @@ class UnusedCSS
 
         new UnusedCSS_Queue();
 
+        $this->file_system = new RapidLoad_FileSystem();
+
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
+
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_uucss'] = "" ){
             return;
         }
-
-        $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
             return;
@@ -37,8 +39,6 @@ class UnusedCSS
         }
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
-
-        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
