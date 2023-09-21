@@ -219,7 +219,10 @@ class RapidLoad_Optimizer
 
 
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
-                $url = 'https://redshed.au/';
+
+                if (defined('RAPIDLOAD_OPTIMIZER_TEST_URL')) {
+                    $url = RAPIDLOAD_OPTIMIZER_TEST_URL;
+                }
             }
 
             $result = $api->post('page-speed', [
