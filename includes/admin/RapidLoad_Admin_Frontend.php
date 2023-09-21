@@ -670,6 +670,16 @@ class RapidLoad_Admin_Frontend
                         $job = new RapidLoad_Job(['url' => $url]);
                         $job->save(true);
 
+                        $args = [
+                            'requeue' => true
+                        ];
+
+                        if($immediate){
+                            $args['immediate'] = true;
+                        }
+
+                        do_action('rapidload/job/purge', $job, $args);
+
                     }
 
                     $posts = new WP_Query(array(
