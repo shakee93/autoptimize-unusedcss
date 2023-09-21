@@ -138,7 +138,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                                             {metric.refs.acronym}
                                             {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
                                                 <TooltipText asChild text={`Potential +${metric.potentialGain.toFixed(0)} Score Boost`}>
-                                                    {metric.potentialGain > 0 && (
+                                                    {metric.potentialGain >= 0.5 && (
                                                         <span className={cn(
                                                             'text-green-800',
                                                         )}> +{metric.potentialGain.toFixed(0)}</span>

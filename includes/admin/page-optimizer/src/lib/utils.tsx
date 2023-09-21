@@ -76,11 +76,15 @@ export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: 
         ? `${parsedURL.protocol}//${parsedURL.host}/.../${penultimatePart}/`
         : `.../${penultimatePart}/`;
 
+    let finalLastPart = lastPart;
+
+    // If the constructed URL is longer than maxLength, trim the earlier portion of the filename
     if (baseTruncatedURL.length + lastPart.length > maxLength) {
-      baseTruncatedURL = `${baseTruncatedURL.slice(0, maxLength - lastPart.length - 3)}.../`;
+      const overflowLength = (baseTruncatedURL.length + lastPart.length) - maxLength;
+      finalLastPart = `...${lastPart.slice(overflowLength + 3)}`;
     }
 
-    const truncatedURL = baseTruncatedURL + lastPart + (hasTrailingSlash ? '/' : '');
+    const truncatedURL = baseTruncatedURL + finalLastPart + (hasTrailingSlash ? '/' : '');
 
     return truncatedURL;
   } catch (error) {
@@ -91,7 +95,6 @@ export function truncateMiddleOfURL(url: string, maxLength: number, showDomain: 
     }
   }
 }
-
 
 
 export function formatNumberWithGranularity(number: number, granularity: number = 1): string {
