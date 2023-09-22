@@ -132,8 +132,8 @@ class RapidLoad_htaccess
 	ExpiresByType image/x-icon                  "access plus 1 week"
 	# Media: images, video, audio
 	ExpiresByType image/gif                     "access plus 4 months"
-	ExpiresByType image/png                     "access plus 4 months"
-	ExpiresByType image/jpeg                    "access plus 4 months"
+	ExpiresByType image/png                     "access plus 1 year"
+	ExpiresByType image/jpeg                    "access plus 1 year"
 	ExpiresByType image/webp                    "access plus 4 months"
 	ExpiresByType video/ogg                     "access plus 4 months"
 	ExpiresByType audio/ogg                     "access plus 4 months"
@@ -168,14 +168,14 @@ HTACCESS;
         $rules .= '<IfModule mod_headers.c>' . PHP_EOL;
         $rules .= 'Header set X-Powered-By "RapidLoad/' . WP_ROCKET_VERSION . '"' . PHP_EOL;
         $rules .= 'Header unset Pragma' . PHP_EOL;
-        $rules .= 'Header append Cache-Control "public"' . PHP_EOL;
+        $rules .= 'Header append Cache-Control "public,max-age=31536000"' . PHP_EOL;
         $rules .= 'Header unset Last-Modified' . PHP_EOL;
         $rules .= '</IfModule>' . PHP_EOL;
         $rules .= '</FilesMatch>' . PHP_EOL . PHP_EOL;
         $rules .= '<FilesMatch "\.(css|htc|js|asf|asx|wax|wmv|wmx|avi|bmp|class|divx|doc|docx|eot|exe|gif|gz|gzip|ico|jpg|jpeg|jpe|json|mdb|mid|midi|mov|qt|mp3|m4a|mp4|m4v|mpeg|mpg|mpe|mpp|otf|odb|odc|odf|odg|odp|ods|odt|ogg|pdf|png|pot|pps|ppt|pptx|ra|ram|svg|svgz|swf|tar|tif|tiff|ttf|ttc|wav|wma|wri|xla|xls|xlsx|xlt|xlw|zip)$">' . PHP_EOL;
         $rules .= '<IfModule mod_headers.c>' . PHP_EOL;
         $rules .= 'Header unset Pragma' . PHP_EOL;
-        $rules .= 'Header append Cache-Control "public"' . PHP_EOL;
+        $rules .= 'Header append Cache-Control "public,max-age=31536000"' . PHP_EOL;
         $rules .= '</IfModule>' . PHP_EOL;
         $rules .= '</FilesMatch>' . PHP_EOL;
         $rules .= '</IfModule>' . PHP_EOL . PHP_EOL;
