@@ -101,6 +101,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_Sitemap' => __DIR__ . '/../..' . '/includes/RapidLoad_Sitemap.php',
         'RapidLoad_ThirdParty' => __DIR__ . '/../..' . '/includes/third-party/RapidLoad_ThirdParty.php',
         'RapidLoad_Utils' => __DIR__ . '/../..' . '/includes/RapidLoad_Utils.php',
+        'RapidLoad_htaccess' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_htaccess.php',
         'UnusedCSS' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS.php',
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS_DB.php',
         'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS_Enqueue.php',

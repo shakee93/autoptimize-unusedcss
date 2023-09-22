@@ -24,6 +24,10 @@ class RapidLoad_CDN
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_filter('rapidload/cdn/enabled', function (){
+            return true;
+        });
+
     }
 
     public function validate_cdn(){

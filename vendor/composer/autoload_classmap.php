@@ -73,6 +73,7 @@ return array(
     'RapidLoad_Sitemap' => $baseDir . '/includes/RapidLoad_Sitemap.php',
     'RapidLoad_ThirdParty' => $baseDir . '/includes/third-party/RapidLoad_ThirdParty.php',
     'RapidLoad_Utils' => $baseDir . '/includes/RapidLoad_Utils.php',
+    'RapidLoad_htaccess' => $baseDir . '/includes/admin/RapidLoad_htaccess.php',
     'UnusedCSS' => $baseDir . '/includes/modules/css/unused-css/UnusedCSS.php',
     'UnusedCSS_DB' => $baseDir . '/includes/modules/css/unused-css/UnusedCSS_DB.php',
     'UnusedCSS_Enqueue' => $baseDir . '/includes/modules/css/unused-css/UnusedCSS_Enqueue.php',
