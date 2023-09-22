@@ -32,6 +32,8 @@ class RapidLoad_htaccess
             return false;
         }
 
+        $file_system->copy(get_home_path() . '.htaccess', get_home_path() . '.htaccess-backup');
+
         return $file_system->put_contents( $htaccess_file, $htaccess_content );
     }
 

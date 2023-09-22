@@ -67,4 +67,8 @@ class RapidLoad_FileSystem
         }
         rmdir($dir);
     }
+
+    public function copy($source, $destination){
+        @copy($source, $destination);
+    }
 }
