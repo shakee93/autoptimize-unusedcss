@@ -267,6 +267,10 @@ class RapidLoad_Optimizer
                                     $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
                                     break;
                                 }
+                                case 'update_htaccess':{
+                                    $input->action = 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                    break;
+                                }
                             }
 
                         }
