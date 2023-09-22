@@ -230,7 +230,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                   )}
                   <div>
                       <span className='flex text-sm gap-1.5 items-center' >
-                          {url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+                          {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
                       <div className='text-xxs leading-relaxed text-brand-500'>Last Analyzed 2 days ago...</div>
                   </div>

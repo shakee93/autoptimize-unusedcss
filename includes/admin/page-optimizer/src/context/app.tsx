@@ -30,6 +30,7 @@ interface OptimizerContextProps {
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
+
 export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, global } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
@@ -61,7 +62,23 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     const [togglePerformance, setTogglePerformance] = useState(true);
     const optimizerContainer = useRef<HTMLElement|null>(null);
 
-    useEffect(() => setMounted(true), [])
+    useEffect(() => {
+        const updateData = (event: RapidLoadSetOptimizerEvent) => {
+            const { detail } = event
+
+            if (typeof detail?.status !== undefined) {
+                setShowOptimizer(detail?.status || false);
+            }
+        };
+
+        window.addEventListener('RapidLoadSetOptimizer', updateData);
+        
+        setMounted(true)
+
+        return () => {
+            window.removeEventListener('rpoShowOptimizer', updateData);
+        };
+    }, [])
 
     useEffect(() => {
 

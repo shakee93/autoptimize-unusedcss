@@ -216,3 +216,10 @@ type CriticalChainTreeNodeType = {
     };
 };
 
+interface RapidLoadSetOptimizerEvent extends Event {
+    detail?: {
+        status: boolean;
+    };
+}
+
+

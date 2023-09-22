@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import {useAppContext} from "../../../context/app";
 import TogglePerformance from "components/toggle-performance";
 import {useSelector} from "react-redux";
@@ -13,7 +13,40 @@ import SlideUp from "components/animation/SlideUp";
 
 
 const SpeedIndex = () => {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, error, activeReport} = useSelector(optimizerData);
+
+    const curves = {
+        mobile: {
+            FCP: {weight: 0.10, median: 3000, p10: 1800},
+            SI: {weight: 0.10, median: 5800, p10: 3387},
+            LCP: {weight: 0.25, median: 4000, p10: 2500},
+            TBT: {weight: 0.30, median: 600,  p10: 200},
+            CLS: {weight: 0.25, median: 0.25, p10: 0.1},
+        },
+        desktop: {
+            FCP: {weight: 0.10, median: 1600, p10: 934},
+            SI: {weight: 0.10, median: 2300, p10: 1311},
+            LCP: {weight: 0.25, median: 2400, p10: 1200},
+            TBT: {weight: 0.30, median: 350, p10: 150},
+            CLS: {weight: 0.25, median: 0.25, p10: 0.1},
+        },
+    }
+
+    function calculateMetricValuesForScores(curveDetails: any) {
+        const calculateMetricValue = (score: any, p10: any, median: any) => {
+            return (1/score - 1) * (median - p10) + p10;
+        };
+
+        const goodThreshold = calculateMetricValue(0.89, curveDetails.p10, curveDetails.median);
+        const averageThreshold = calculateMetricValue(0.49, curveDetails.p10, curveDetails.median);
+        const poorThreshold = calculateMetricValue(0.01, curveDetails.p10, curveDetails.median); // Using 0.01 instead of 0 to avoid division by zero
+
+        return {
+            good: `${Math.round(goodThreshold)} - ${Math.round(curveDetails.p10)}`,
+            average: `${Math.round(averageThreshold)}ms - ${Math.round(goodThreshold)}ms`,
+            poor: `${Math.round(poorThreshold)}ms - ${Math.round(averageThreshold)}ms`
+        };
+    }
 
     const {
         togglePerformance,
@@ -37,13 +70,18 @@ const SpeedIndex = () => {
         return audits.filter(audit => audit.metrics.find(metric => metric.id === activeMetric?.id));
     }, [data, activeMetric])
 
+    // @ts-ignore
+    let ranges = calculateMetricValuesForScores(curves[activeReport][activeMetric?.refs.acronym])
+
     const points = useMemo(() => {
 
+        let unit = activeMetric?.refs.acronym !== 'CLS' ? 'ms' : ''
         return [
             activeMetric?.potentialGain ? <>Enhance this to gain <span className='text-green-600 font-medium'>{activeMetric?.potentialGain.toFixed(1)} points boost</span> </> : null,
             <>Weighs <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
+            <>Bring this closer to {ranges?.good}{unit}</>
         ]
-    }, [activeMetric])
+    }, [activeMetric, activeReport])
 
 
     return (
@@ -65,6 +103,7 @@ const SpeedIndex = () => {
                                     <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
                                 </li>)
                             ))}
+
                         </ul>
                     </div>
                 </div>
