@@ -109,7 +109,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                     <div className="flex flex-col text-center gap-1">
-                        <div>Performance</div>
+                        <div>{metric ? 'Forecasted Score' : 'Performance'} </div>
                         <div className='text-xs text-brand-500 dark:text-brand-300 font-light'>
                             Values are estimated and may vary with Google Page Speed Insights.
                         </div>
@@ -146,56 +146,56 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
 
-            {data?.loadingExperience?.metrics && (
-                <Card>
-                    <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
-                        <div>
-                            <p className="">Real Experience (28 days)</p>
-                            <p className="text-xs opacity-60">Real user experience from Google</p>
-                        </div>
-                        <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
-                    </div>
-                    {isCoreWebClicked && (
-                        <div className='border-t dark:border-zinc-700'>
-
-                            <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                                {sortedExperience.map(({ metricName, metric }, index) => (
-                                    <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                                        <div className="flex">
-                                            <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
-                                                <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>
-                                                <div><span
-                                                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
-                                <PerformanceIcons icon={metric?.category || 'average'}/>
-                            </span></div>
-                                            </div>
-                                        </div>
-                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">
-                                            {["FID", "CLS", "INP"].includes(metricName) ? (
-                                                <>
-                                                    {metric?.percentile}<span className="text-base"> ms</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {metric?.percentile
-                                                        ? `${(metric.percentile / 1000).toFixed(2)}`
-                                                        : ''}
-                                                    <span className="text-base"> s</span>
-                                                </>
-                                            )}
-                                        </p>
-
-                                    </div>
-                                ))}
-
-
-                            </div>
-
-                        </div>
-                    )}
-
-                </Card>
-            )}
+            {/*{data?.loadingExperience?.metrics && (*/}
+            {/*    <Card>*/}
+            {/*        <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>*/}
+            {/*            <div>*/}
+            {/*                <p className="">Real Experience (28 days)</p>*/}
+            {/*                <p className="text-xs opacity-60">Real user experience from Google</p>*/}
+            {/*            </div>*/}
+            {/*            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>*/}
+            {/*        </div>*/}
+            {/*        {isCoreWebClicked && (*/}
+            {/*            <div className='border-t dark:border-zinc-700'>*/}
+            
+            {/*                <div className="p-5 grid grid-cols-3 gap-3 pl-6">*/}
+            {/*                    {sortedExperience.map(({ metricName, metric }, index) => (*/}
+            {/*                        <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>*/}
+            {/*                            <div className="flex">*/}
+            {/*                                <div className="grid grid-cols-2 gap-1.5 items-center justify-center">*/}
+            {/*                                    <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>*/}
+            {/*                                    <div><span*/}
+            {/*                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>*/}
+            {/*                    <PerformanceIcons icon={metric?.category || 'average'}/>*/}
+            {/*                </span></div>*/}
+            {/*                                </div>*/}
+            {/*                            </div>*/}
+            {/*                            <p className="text-[22px] font-medium mr-2 mt-1 text-red">*/}
+            {/*                                {["FID", "CLS", "INP"].includes(metricName) ? (*/}
+            {/*                                    <>*/}
+            {/*                                        {metric?.percentile}<span className="text-base"> ms</span>*/}
+            {/*                                    </>*/}
+            {/*                                ) : (*/}
+            {/*                                    <>*/}
+            {/*                                        {metric?.percentile*/}
+            {/*                                            ? `${(metric.percentile / 1000).toFixed(2)}`*/}
+            {/*                                            : ''}*/}
+            {/*                                        <span className="text-base"> s</span>*/}
+            {/*                                    </>*/}
+            {/*                                )}*/}
+            {/*                            </p>*/}
+            
+            {/*                        </div>*/}
+            {/*                    ))}*/}
+            
+            
+            {/*                </div>*/}
+            
+            {/*            </div>*/}
+            {/*        )}*/}
+            
+            {/*    </Card>*/}
+            {/*)}*/}
 
         </div>
     )

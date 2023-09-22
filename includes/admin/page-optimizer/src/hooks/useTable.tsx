@@ -53,7 +53,13 @@ const useTable = (
             if (c.id && !firstRow.includes('subItems')) hiddenColumns[c.id] = false;
         });
 
-        // console.log(firstRow, hiddenColumns);
+
+        // const blankKeys = items.flatMap(obj =>
+        //     Object.entries(obj)
+        //         .filter(([key, value]) => value === '' || (typeof value === 'object' && Object.keys(value).length === 0))
+        //         .map(([key]) => key)
+        // );
+        // blankKeys.forEach(key => hiddenColumns[key] = false)
 
         return hiddenColumns;
     }, [audit.id, columns, items]);
