@@ -434,6 +434,15 @@ export default {
       });
     }
 
+    if (window.RapidLoadOptimizer) {
+      let container = document.getElementById('rapidload-page-optimizer')
+
+      new window.RapidLoadOptimizer({
+        container,
+        showOptimizer: false
+      })
+    }
+
   },
   methods:{
 
@@ -589,13 +598,9 @@ export default {
 
     },
     openOptimizer() {
-      if (window.RapidLoadOptimizer) {
-        let container = document.getElementById('rapidload-page-optimizer')
 
-        new window.RapidLoadOptimizer({
-          container,
-          showOptimizer: true
-        })
+      if (window.RapidLoadOptimizer) {
+        window.RapidLoadOptimizer.showOptimizer(true)
       }
       
     }
