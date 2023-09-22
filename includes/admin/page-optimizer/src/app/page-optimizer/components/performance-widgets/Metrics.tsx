@@ -24,6 +24,8 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
     const sortedMetricsData = metrics.sort((a, b) => desiredMetricsOrder.indexOf(a.title) - desiredMetricsOrder.indexOf(b.title));
     const { dispatch, activeMetric, hoveredMetric} = useCommonDispatch()
 
+
+
     const { optimizerContainer } = useAppContext()
 
     const slideVariants = {
@@ -56,12 +58,6 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                     .map((metric, index) => (
                     <div key={index}
                          onClick={e => {
-
-                             if (activeMetric?.id === metric.id) {
-                                 dispatch(setCommonState('activeMetric',null))
-                                 return
-                             }
-
                              dispatch(setCommonState('activeMetric',metric))
                          }}
                          onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}

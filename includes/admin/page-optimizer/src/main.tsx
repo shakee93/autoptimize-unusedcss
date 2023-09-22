@@ -116,6 +116,17 @@ export class RapidLoadOptimizer {
            </ApplicationErrorBoundary>
         );
     }
+
+    static showOptimizer(value: boolean) {
+
+        const event =
+            new CustomEvent('RapidLoadSetOptimizer', { detail: {
+                status: value
+            }});
+
+        window.dispatchEvent(event);
+    }
+
 }
 
 // @ts-ignore
