@@ -48,17 +48,27 @@ const useTable = (
             hiddenColumns.node = false;
         }
 
+        const blankKeys = items.flatMap(obj =>
+            Object.entries(obj)
+                .filter(([key, value]) => value === '' || (typeof value === 'object' && Object.keys(value).length === 0))
+                .map(([key]) => key)
+        ); 
+
         let firstRow = Object.keys(items[0]);
-        columns.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
-            if (c.id && !firstRow.includes('subItems')) hiddenColumns[c.id] = false;
-        });
+
+        if (!firstRow.includes('subItems')) {
+
+            columns.filter(c => !firstRow.includes(c.id ? c.id : '')).forEach(c => {
+                if (c.id) hiddenColumns[c.id] = false;
+            });
+
+            blankKeys.forEach(key => hiddenColumns[key] = false)
+            
+        }
+        
 
 
-        // const blankKeys = items.flatMap(obj =>
-        //     Object.entries(obj)
-        //         .filter(([key, value]) => value === '' || (typeof value === 'object' && Object.keys(value).length === 0))
-        //         .map(([key]) => key)
-        // );
+        
         // blankKeys.forEach(key => hiddenColumns[key] = false)
 
         return hiddenColumns;
