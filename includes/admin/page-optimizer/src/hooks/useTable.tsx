@@ -65,11 +65,6 @@ const useTable = (
             blankKeys.forEach(key => hiddenColumns[key] = false)
             
         }
-        
-
-
-        
-        // blankKeys.forEach(key => hiddenColumns[key] = false)
 
         return hiddenColumns;
     }, [audit.id, columns, items]);
