@@ -208,6 +208,19 @@ class RapidLoad_Optimizer
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
+        $created_at = null;
+
+        if($result){
+            $created_at = $result->created_at;
+            $result = $result->data;
+        }
+
+        if(!isset($created_at)){
+            $created_at = new DateTime('now');
+            $created_at->setTimezone(new DateTimeZone('UTC'));
+            $created_at = $created_at->getTimestamp();
+        }
+
         $url = "";
 
         if(!$result || $new){
@@ -250,6 +263,8 @@ class RapidLoad_Optimizer
             wp_send_json_error([]);
         }
 
+        $result->loadingExperience->timestamp = $created_at;
+
         foreach ($result->audits as $audit){
 
             if(isset($audit->settings)){
@@ -258,18 +273,20 @@ class RapidLoad_Optimizer
 
                         if(isset($input->control_type) && $input->control_type == "button"){
 
-                            switch ($input->action){
-                                case 'rapidload_purge_all':{
-                                    $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
-                                    break;
-                                }
-                                case 'cpcss_purge_url':{
-                                    $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
-                                    break;
-                                }
-                                case 'update_htaccess':{
-                                    $input->action = 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' );
-                                    break;
+                            if(isset($input->action)){
+                                switch ($input->action){
+                                    case 'rapidload_purge_all':{
+                                        $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
+                                    case 'cpcss_purge_url':{
+                                        $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
+                                    case 'update_htaccess':{
+                                        $input->action = 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
                                 }
                             }
 
@@ -423,7 +440,7 @@ class RapidLoad_Optimizer
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
             'options' => self::$options,
-            'merged_options' => self::$merged_options
+            'merged_options' => self::$merged_options,
         ]);
 
 

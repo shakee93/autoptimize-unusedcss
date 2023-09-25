@@ -272,6 +272,13 @@ class RapidLoad_Job{
 
         foreach ($data as $d){
             $d->data = json_decode($d->data);
+            try {
+                $date = new DateTime($d->created_at);
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $d->timestamp = $date->getTimestamp();
+            }catch (Exception $exception){
+
+            }
         }
 
         return $data;
@@ -300,12 +307,20 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_results("SELECT created_at, data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
-        if(!$data){
+        if(!isset($data) || empty($data)) {
+            return false;
+        }
+        if(!isset($data[0])){
             return false;
         }else{
-            return json_decode($data);
+            $date = new DateTime($data[0]->created_at);
+            $date->setTimezone(new DateTimeZone('UTC'));
+            return (object)[
+                'data' => json_decode($data[0]->data),
+                'created_at' => $date->getTimestamp()
+            ];
         }
     }
 
