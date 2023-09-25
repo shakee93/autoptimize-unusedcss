@@ -50,7 +50,7 @@ const PerformanceProgressBar = ({
                 strokeWidth={stroke}
                 background={background}
                 className={cn(
-                    'h-44 relative',
+                    'relative',
                     className
                 )}
                 styles={
