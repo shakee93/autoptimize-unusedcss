@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 import Description from "app/page-optimizer/components/audit/Description";
 import Settings from "app/page-optimizer/components/audit/Settings";
 import {JsonView} from "react-json-view-lite";
@@ -13,6 +13,8 @@ import {
 import {transformFileType} from "lib/utils";
 import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 import Treeview from "components/tree-view";
+import {Circle} from "lucide-react";
+import {auditPoints} from "app/page-optimizer/components/audit/KeyPoints";
 
 
 declare module '@tanstack/react-table' {
@@ -38,12 +40,24 @@ const AuditContent = ({audit}: AuditContentProps) => {
         .filter(s => ! audit.files?.grouped_items?.map(group => transformFileType(audit, group.type))
             .includes(s.category) )
 
+    let points = useMemo(() => {
+        return auditPoints[audit.id] || []
+    }, [])
+
     return (
         <div className="border-t w-full pt-4">
             <div className="pb-4 text-brand-700 dark:text-brand-300">
                 <div className="px-4 ml-2">
                    {/*<Help audit={audit}/>*/}
                     <Description content={audit.description}/>
+
+                    <ul className='px-3 mt-2 flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
+                        {points.map((point, index) => (
+                            point && (<li key={index} className='flex gap-1.5 items-center'>
+                                <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
+                            </li>)
+                        ))}
+                    </ul>
                 </div>
             </div>
 
@@ -57,7 +71,7 @@ const AuditContent = ({audit}: AuditContentProps) => {
             )}
 
 
-            {(audit.files.type === 'criticalrequestchain') &&
+            {(audit.files?.type === 'criticalrequestchain') &&
                 <div className='border-t'>
                     <Treeview data={audit.files?.chains[Object.keys(audit.files.chains)[0]]}/>
                 </div>

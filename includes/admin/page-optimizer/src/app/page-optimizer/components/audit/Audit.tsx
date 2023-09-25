@@ -201,7 +201,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                              {audit.displayValue && (
                                  <span>{audit.displayValue}</span>
                              )}
-                            {/*{isDev && (<span> - {audit.id}</span>)}*/}
+                            {isDev && (<span> - {audit.id}</span>)}
                         </span>
                     </div>
 

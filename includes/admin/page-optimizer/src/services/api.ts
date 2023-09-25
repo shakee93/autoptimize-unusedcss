@@ -94,8 +94,6 @@ class ApiService {
     async post() {
 
         try {
-            const query = new URLSearchParams();
-
             const response = await fetch(this.baseURL, {
                 method: "GET",
                 headers: {

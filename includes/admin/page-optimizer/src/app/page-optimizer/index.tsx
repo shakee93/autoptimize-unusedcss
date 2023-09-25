@@ -56,7 +56,7 @@ export default function PageOptimizer() {
             <Header url={url}/>
 
             <div className={cn(
-                'overflow-auto w-full h-fit pb-20',
+                'overflow-y-auto scrollbar-stable w-full h-fit pb-20',
                 savingData && 'relative overflow-hidden h-[calc(100vh-130px)]'
             )}>
 
