@@ -104,12 +104,12 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
             add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
-            add_action("wp_ajax_update_htaccess", [$this, "update_htaccess"]);
+            add_action("wp_ajax_update_htaccess_file", [$this, "wp_ajax_update_htaccess_file"]);
         }
 
     }
 
-    public function update_htaccess(){
+    public function wp_ajax_update_htaccess_file(){
 
         self::verify_nonce();
 

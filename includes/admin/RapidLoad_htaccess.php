@@ -5,6 +5,12 @@ class RapidLoad_htaccess
 
     public static function update_htaccess($remove = false){
 
+        global $is_apache;
+
+        if ( ! $is_apache || ( apply_filters( 'rapidload_disable_htaccess', false ) && ! $remove ) ) {
+            return false;
+        }
+
         $htaccess_file = get_home_path() . '.htaccess';
 
         $file_system = new RapidLoad_FileSystem();
@@ -166,7 +172,7 @@ HTACCESS;
         $rules = '<IfModule mod_alias.c>' . PHP_EOL;
         $rules .= '<FilesMatch "\.(html|htm|rtf|rtx|txt|xsd|xsl|xml)$">' . PHP_EOL;
         $rules .= '<IfModule mod_headers.c>' . PHP_EOL;
-        $rules .= 'Header set X-Powered-By "RapidLoad/' . WP_ROCKET_VERSION . '"' . PHP_EOL;
+        $rules .= 'Header set X-Powered-By "RapidLoad/' . UUCSS_VERSION . '"' . PHP_EOL;
         $rules .= 'Header unset Pragma' . PHP_EOL;
         $rules .= 'Header append Cache-Control "public,max-age=31536000"' . PHP_EOL;
         $rules .= 'Header unset Last-Modified' . PHP_EOL;
