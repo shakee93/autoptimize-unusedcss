@@ -97,7 +97,7 @@ export class RapidLoadOptimizer {
                    <ShadowRoot styles={stylesUrl}>
                        <Provider store={store}>
                            <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                               <TooltipProvider delayDuration={100}>
+                               <TooltipProvider >
                                    <LazyMotion features={domAnimation}>
                                        {popup && (
                                            <ShadowRoot node={popup} styles={stylesUrl}>

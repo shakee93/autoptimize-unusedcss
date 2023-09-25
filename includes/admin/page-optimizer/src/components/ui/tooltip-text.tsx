@@ -14,7 +14,7 @@ interface TooltipTextProps {
 
 const TooltipText = ({ text, children, onClick, className, asChild = false} : TooltipTextProps) => {
     return (
-        <TooltipProvider disableHoverableContent={false} delayDuration={0}>
+        <TooltipProvider disableHoverableContent={false} >
             <Tooltip  >
                 <TooltipTrigger asChild={asChild} onClick={e => onClick && onClick()} className={cn(
                     'flex items-center',
