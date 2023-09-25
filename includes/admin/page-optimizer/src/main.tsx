@@ -60,7 +60,7 @@ const ApplicationCrashed = () => {
     return (
         <div className='rpo-app-crashed' style={containerStyles}>
             <div  className='rpo-error'>
-                RapidLoad Page Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
+                RapidLoad Titan Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
             </div>
         </div>
     )

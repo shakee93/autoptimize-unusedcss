@@ -2,6 +2,7 @@ import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {Bug, ChevronDown, Circle} from "lucide-react";
 import {useState} from "react";
 import Card from "components/ui/card";
+import {Accordion} from "components/accordion";
 
 const SpeedInsightGroup = ({ title, success = false,items = []}: {
     title: string
@@ -65,7 +66,8 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
                     <ChevronDown className='w-5' />
                 )}
             </div>
-            {isOpen && (
+            <Accordion isOpen={isOpen}>
+
                 <div className='w-full text-left flex flex-col'>
                     {items.map(i => (
                         <div className='flex text-sm items-center gap-2 border-t py-2 px-4' key={i.id}>
@@ -83,7 +85,8 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
                         </div>
                     )).slice(0, 3)}
                 </div>
-            )}
+            </Accordion>
+
         </Card>
     )
 }
