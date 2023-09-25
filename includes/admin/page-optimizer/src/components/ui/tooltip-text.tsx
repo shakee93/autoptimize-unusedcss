@@ -10,11 +10,12 @@ interface TooltipTextProps {
     className?: string
     onClick?: () => void,
     asChild?: boolean
+    delay?: number
 }
 
-const TooltipText = ({ text, children, onClick, className, asChild = false} : TooltipTextProps) => {
+const TooltipText = ({ text, children, onClick, className, asChild = false, delay = 500} : TooltipTextProps) => {
     return (
-        <TooltipProvider disableHoverableContent={false} >
+        <TooltipProvider disableHoverableContent={false} delayDuration={delay}>
             <Tooltip  >
                 <TooltipTrigger asChild={asChild} onClick={e => onClick && onClick()} className={cn(
                     'flex items-center',

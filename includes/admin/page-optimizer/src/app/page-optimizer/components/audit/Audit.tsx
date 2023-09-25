@@ -132,20 +132,45 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                             {metrics && audit.metrics && (
                                 <div className='flex gap-1.5 text-xxs'>
                                     {audit.metrics.map(metric => (
-                                        <div className={cn(
-                                            'transition-colors flex gap-1 cursor-default hover:bg-brand-100 dark:hover:bg-brand-800 border py-1 px-1.5 rounded-md',
-                                        )} key={metric.id}>
-                                            {metric.refs.acronym}
-                                            {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
-                                                <TooltipText asChild text={`Potential +${metric.potentialGain.toFixed(0)} Score Boost`}>
-                                                    {metric.potentialGain >= 0.5 && (
-                                                        <span className={cn(
-                                                            'text-green-800',
-                                                        )}> +{metric.potentialGain.toFixed(0)}</span>
-                                                    )}
-                                                </TooltipText>
-                                            )}
-                                        </div>
+                                        <>
+                                            {
+                                                ((audit.type !== 'passed_audit' || audit.scoreDisplayMode !== 'informative') && metric.potentialGain > 0) ?
+                                                    <TooltipText asChild
+                                                                 text={
+                                                                     (audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && `Potential +${metric.potentialGain.toFixed(0)} Score Boost`
+                                                                 }>
+                                                        <div className={cn(
+                                                            'transition-colors flex gap-1 cursor-default hover:bg-brand-100 dark:hover:bg-brand-800 border py-1 px-1.5 rounded-md',
+                                                        )} key={metric.id}>
+                                                            {metric.refs.acronym}
+                                                            {(audit.type !== 'passed_audit' && audit.scoreDisplayMode !== 'informative' && metric.potentialGain > 0) && (
+                                                                <>
+                                                                    {metric.potentialGain >= 0.5 && (
+                                                                        <span className={cn(
+                                                                            'text-green-800',
+                                                                        )}> +{metric.potentialGain.toFixed(0)}</span>
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </TooltipText>
+                                                    :
+                                                    <div className={cn(
+                                                        'transition-colors flex gap-1 cursor-default hover:bg-brand-100 dark:hover:bg-brand-800 border py-1 px-1.5 rounded-md',
+                                                    )} key={metric.id}>
+                                                        {metric.refs.acronym}
+                                                        <>
+                                                            {metric.potentialGain >= 0.5 && (
+                                                                <span className={cn(
+                                                                    'text-green-800',
+                                                                )}> +{metric.potentialGain.toFixed(0)}</span>
+                                                            )}
+                                                        </>
+                                                    </div>
+                                            }
+                                        </>
+
+
                                     ))}
 
                                     {/*{totalMetricsGain ? (*/}
@@ -177,7 +202,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
 
                             {(activeSettings.length > 0 && !toggleFiles) && (
-                                <TooltipText text={
+                                <TooltipText delay={0} text={
                                     <span className='text-sm text-center'>
                                              {activeSettings.length} Active Action{activeSettings.length > 1 ? 's' : ''}
                                          </span>
