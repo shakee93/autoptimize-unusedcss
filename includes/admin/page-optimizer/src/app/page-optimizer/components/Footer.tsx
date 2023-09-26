@@ -19,7 +19,7 @@ import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import React, {useState, MouseEvent, useEffect, useRef, useMemo, useCallback} from "react";
-import {cn} from "lib/utils";
+import {cn, timeAgo} from "lib/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {buildStyles, CircularProgressbar, CircularProgressbarWithChildren} from "react-circular-progressbar";
@@ -232,7 +232,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                       <span className='flex text-sm gap-1.5 items-center' >
                           {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
-                      <div className='text-xxs leading-relaxed text-brand-500'>Last Analyzed 2 days ago...</div>
+                      {data?.loadingExperience?.timestamp &&
+                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last Analyzed {timeAgo(data.loadingExperience.timestamp)}</div>
+                      }
                   </div>
             </a>
 

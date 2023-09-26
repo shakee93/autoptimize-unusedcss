@@ -101,3 +101,29 @@ export function formatNumberWithGranularity(number: number, granularity: number 
   const roundedValue = Math.round(number / granularity) * granularity;
   return roundedValue.toFixed(Math.max(0, Math.ceil(-Math.log10(granularity))));
 }
+
+export function timeAgo(timestamp: number) {
+  const date : Date = new Date(timestamp * 1000);
+  const now : Date= new Date();
+  // @ts-ignore
+  const secondsAgo = Math.round((now - date) / 1000);
+  const minutesAgo = Math.round(secondsAgo / 60);
+  const hoursAgo = Math.round(minutesAgo / 60);
+  const daysAgo = Math.round(hoursAgo / 24);
+  const monthsAgo = Math.round(daysAgo / 30.44);  // Using the average number of days in a month (365.24/12)
+  const yearsAgo = Math.round(daysAgo / 365.24);  // Using the average number of days in a year (considering leap years)
+
+  if (secondsAgo < 60) {
+    return `${secondsAgo} seconds ago`;
+  } else if (minutesAgo < 60) {
+    return `${minutesAgo} minutes ago`;
+  } else if (hoursAgo < 24) {
+    return `${hoursAgo} hours ago`;
+  } else if (daysAgo < 30) {
+    return `${daysAgo} days ago`;
+  } else if (monthsAgo < 12) {
+    return `${monthsAgo} months ago`;
+  } else {
+    return `${yearsAgo} years ago`;
+  }
+}
