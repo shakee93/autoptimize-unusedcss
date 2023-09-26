@@ -49,9 +49,16 @@ export default function PageOptimizer() {
 
     return (
 
-        <div
+        <m.div
+            initial={{ y: 20, opacity: 0, scale:0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 20, opacity: 0, scale: 0.98 }}
+            transition={{
+                ease: 'linear',
+                duration: 0.1,
+        }}
             id='rapidload-page-optimizer'
-            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
+            className={cn("rounded-md overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
 
             <Header url={url}/>
 
@@ -121,6 +128,6 @@ export default function PageOptimizer() {
                 <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
             )}
             <Toaster/>
-        </div>
+        </m.div>
     );
 }

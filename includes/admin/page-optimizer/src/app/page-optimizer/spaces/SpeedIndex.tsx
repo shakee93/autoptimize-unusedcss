@@ -10,51 +10,20 @@ import {Circle, Dot} from "lucide-react";
 import {Separator} from "@radix-ui/react-dropdown-menu";
 import {m} from "framer-motion";
 import SlideUp from "components/animation/SlideUp";
+import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
+import usePerformanceColors from "hooks/usePerformanceColors";
 
 
 const SpeedIndex = () => {
     const {data, loading, error, activeReport} = useSelector(optimizerData);
-
-    const curves = {
-        mobile: {
-            FCP: {weight: 0.10, median: 3000, p10: 1800},
-            SI: {weight: 0.10, median: 5800, p10: 3387},
-            LCP: {weight: 0.25, median: 4000, p10: 2500},
-            TBT: {weight: 0.30, median: 600,  p10: 200},
-            CLS: {weight: 0.25, median: 0.25, p10: 0.1},
-        },
-        desktop: {
-            FCP: {weight: 0.10, median: 1600, p10: 934},
-            SI: {weight: 0.10, median: 2300, p10: 1311},
-            LCP: {weight: 0.25, median: 2400, p10: 1200},
-            TBT: {weight: 0.30, median: 350, p10: 150},
-            CLS: {weight: 0.25, median: 0.25, p10: 0.1},
-        },
-    }
-
-    function calculateMetricValuesForScores(curveDetails: any) {
-        const calculateMetricValue = (score: any, p10: any, median: any) => {
-            return (1/score - 1) * (median - p10) + p10;
-        };
-
-        const goodThreshold = calculateMetricValue(0.89, curveDetails.p10, curveDetails.median);
-        const averageThreshold = calculateMetricValue(0.49, curveDetails.p10, curveDetails.median);
-        const poorThreshold = calculateMetricValue(0.01, curveDetails.p10, curveDetails.median); // Using 0.01 instead of 0 to avoid division by zero
-
-        return {
-            good: `${Math.round(goodThreshold)} - ${Math.round(curveDetails.p10)}`,
-            average: `${Math.round(averageThreshold)}ms - ${Math.round(goodThreshold)}ms`,
-            poor: `${Math.round(poorThreshold)}ms - ${Math.round(averageThreshold)}ms`
-        };
-    }
+    const { activeMetric } = useCommonDispatch()
+    const [ icon, color ] = usePerformanceColors(activeMetric?.score)
 
     const {
         togglePerformance,
         options
     } = useAppContext()
 
-    const { common } = useCommonDispatch()
-    const { activeMetric } = common
 
     const audits = useMemo(() => {
 
@@ -70,18 +39,94 @@ const SpeedIndex = () => {
         return audits.filter(audit => audit.metrics.find(metric => metric.id === activeMetric?.id));
     }, [data, activeMetric])
 
-    // @ts-ignore
-    let ranges = calculateMetricValuesForScores(curves[activeReport][activeMetric?.refs.acronym])
-
     const points = useMemo(() => {
 
         let unit = activeMetric?.refs.acronym !== 'CLS' ? 'ms' : ''
         return [
-            activeMetric?.potentialGain ? <>Enhance this to gain <span className='text-green-600 font-medium'>{activeMetric?.potentialGain.toFixed(1)} points boost</span> </> : null,
+            activeMetric?.potentialGain ? <>Potential gain <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.potentialGain.toFixed(0)} points</span> </> : null,
             <>Weighs <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
-            <>Bring this closer to {ranges?.good}{unit}</>
+            // <>Bring this closer to {ranges?.good}{unit}</>
         ]
     }, [activeMetric, activeReport])
+
+    const metricRanges = {
+        TBT : {
+            description: `Imagine you're reading a storybook and there's a sticker covering some words. TBT, or Total Blocking Time, is like the time you wait for someone to remove that sticker. In websites, it's the time you wait before you can play or interact with the site. The shorter the wait, the better! `,
+            learn_more: `https://web.dev/tbt/`
+        },
+        LCP : {
+            description: `Imagine you're waiting for a picture in your storybook to appear. LCP, or Largest Contentful Paint, is like the time it takes for the biggest and most important picture in the story to fully show up. On websites, it's how long you wait to see the main part of the page. The faster it appears, the better the website is at showing you its main content quickly!`,
+            learn_more: `https://web.dev/lcp/`
+        },
+        FCP : {
+            description: `Imagine opening a storybook, eager for the first picture. FCP, or First Contentful Paint, is the time it takes for that first image or word to appear. On websites, it's about how swiftly the starting content loads. The faster it appears, the sooner the website's story begins for you!`,
+            learn_more: `https://web.dev/fcp/`
+        },
+        SI : {
+            description: `Imagine cookies baking. SI, or Speed Index, measures how fast most cookies are ready. On websites, it's how quickly main content appears. Faster cookies (or content) mean a better experience!`,
+            learn_more: `https://web.dev/si/`
+        },
+        CLS : {
+            description: `While building a puzzle, imagine pieces suddenly shifting on their own. Confusing, right? CLS, or Cumulative Layout Shift, is like that for websites. It's when page elements move unexpectedly. The less they shift, the better the experience!`,
+            learn_more: `https://web.dev/cls/`
+        },
+    }
+
+    const metricPoorGood = {
+        mobile: {
+            LCP: {
+                good: 2500,
+                poor: 4000
+            },
+            FID: {
+                good: 100,
+                poor: 300
+            },
+            CLS: {
+                good: 0.1,
+                poor: 0.25
+            },
+            FCP: {
+                good: 1800,
+                poor: 3000
+            },
+            SI: {
+                good: 3400,
+                poor: 5800
+            },
+            TBT: {
+                good: 300,
+                poor: 600
+            }
+        },
+        desktop: {
+            LCP: {
+                good: 2000,
+                poor: 4000
+            },
+            FID: {
+                good: 100,
+                poor: 300
+            },
+            CLS: {
+                good: 0.1,
+                poor: 0.25
+            },
+            FCP: {
+                good: 1000,
+                poor: 3000
+            },
+            SI: {
+                good: 1300,
+                poor: 2500
+            },
+            TBT: {
+                good: 200,
+                poor: 600
+            }
+        }
+    }
+
 
 
     return (
@@ -95,12 +140,22 @@ const SpeedIndex = () => {
             <div className='flex flex-col gap-3 mt-16 ml-6'>
                 <div className='flex flex-col gap-3 border-b pb-6'>
                     <div className='text-4xl font-medium'> {activeMetric?.title}</div>
-                    <div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>
+                    {/*<div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>*/}
+                    <div className='text-brand-600 text-md '>
+                        <span>{metricRanges[activeMetric?.refs.acronym].description}</span> <a target='_blank' className='text-purple-750' href={metricRanges[activeMetric?.refs.acronym].learn_more} >Learn more</a>
+                    </div>
                     <div>
-                        <ul className='flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
+                        <ul className='flex ml-2 items-center text-sm gap-3 text-brand-500 dark:text-brand-400'>
+                            <li className='flex items-center gap-1.5'>
+                                <Circle style={{
+                                    fill:  usePerformanceColors(activeMetric?.score)[1]
+                                }} className='w-3 stroke-none mt-[1px] dark:fill-brand-700'/> <span>
+                                {activeMetric?.icon === 'pass' && <>Great! Above </>}{(activeMetric?.icon === 'fail' || activeMetric?.icon === 'average') && <>Should be below</>} <span className='text-brand-800 dark:text-brand-500 font-medium'>{metricPoorGood[activeReport][activeMetric?.refs.acronym].good}{activeMetric.refs.acronym !== 'CLS' && 'ms'}</span>
+                            </span>
+                            </li>
                             {points.map((point, index) => (
-                                point && (<li key={index} className='flex gap-1.5 items-center'>
-                                    <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
+                                point && (<li key={index} className='group flex gap-1.5 items-center'>
+                                    <Circle className='w-3 stroke-none mt-[1px] group-last:fill-brand-300 fill-green-600 :fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
                                 </li>)
                             ))}
 

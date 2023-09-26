@@ -1,24 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Pass, Fail, Average } from '../icons/icon-svg';
+import {cn} from "lib/utils";
 
 interface IconProps {
-    icon: string;
+    icon?: string;
     className?: string; // Add className prop
 }
 
 const PerformanceIcons = ({ icon, className }: IconProps) => {
-    let iconComponent = null;
+    let [iconComponent, setIcon] = useState(<></>);
 
-    if (icon === 'pass' || icon === 'FAST' || icon === 'passed_audit' ) {
-        iconComponent = <Pass />;
-    } else if (icon === 'average' || icon === 'AVERAGE') {
-        iconComponent = <Average />;
-    } else if (icon === 'fail' || icon === 'SLOW' ) {
-        iconComponent = <Fail />;
-    }
+
+    useEffect(() => {
+
+        if (icon === 'pass' || icon === 'FAST' || icon === 'passed_audit' ) {
+            setIcon(<Pass />)
+        } else if (icon === 'average' || icon === 'AVERAGE') {
+            setIcon(<Average />)
+        } else if (icon === 'fail' || icon === 'SLOW' ) {
+            setIcon(<Fail />)
+        }
+
+    }, [])
 
     return (
-        <span className={`${className}`}>
+        <span className={cn(
+            className
+        )}>
       {iconComponent}
     </span>
     );

@@ -131,8 +131,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
                             {metrics && audit.metrics && (
                                 <div className='flex gap-1.5 text-xxs'>
-                                    {audit.metrics.map(metric => (
-                                        <>
+                                    {audit.metrics.map((metric, index) => (
+                                        <div key={index}>
                                             {
                                                 ((audit.type !== 'passed_audit' || audit.scoreDisplayMode !== 'informative') && metric.potentialGain > 0) ?
                                                     <TooltipText asChild
@@ -168,7 +168,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                                                         </>
                                                     </div>
                                             }
-                                        </>
+                                        </div>
 
 
                                     ))}
