@@ -512,7 +512,9 @@ class RapidLoad_Optimizer
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
 
                     if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
-                        self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        if(isset($audit->files->headings)){
+                            self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        }
                     }
 
                     foreach ($audit->files->items as $item){
@@ -592,6 +594,12 @@ class RapidLoad_Optimizer
         }
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
+
+        if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
+            do_action('rapidload/validate-cdn');
+        }else{
+            do_action('rapidload/validate-cdn', true);
+        }
 
         $this->associate_domain(false);
 
