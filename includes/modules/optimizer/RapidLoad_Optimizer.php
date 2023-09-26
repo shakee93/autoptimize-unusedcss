@@ -76,11 +76,13 @@ class RapidLoad_Optimizer
         }
     }
 
-    public static function post_optimizer_function($data){
+    public static function post_optimizer_function($data, $force = false){
 
         if(!isset(self::$strategy) || !isset(self::$job) || !isset(self::$options)){
             return;
         }
+
+        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
         foreach (self::$options as $key => $option){
 
@@ -176,7 +178,7 @@ class RapidLoad_Optimizer
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
         $new_hash = hash('md5', json_encode($data));
 
-        if($hash != $new_hash){
+        if($hash != $new_hash && (!$new && $force)){
             $revision_count = self::$job->get_revision_count(self::$strategy);
 
             if($revision_count > (self::$revision_limit - 1)){
@@ -249,8 +251,6 @@ class RapidLoad_Optimizer
             error_log(json_encode($result, JSON_PRETTY_PRINT));
             wp_send_json_error([]);
         }
-
-        $result->loadingExperience->timestamp = $created_at;
 
         foreach ($result->audits as $audit){
 
@@ -590,7 +590,7 @@ class RapidLoad_Optimizer
 
         $this->associate_domain(false);
 
-        self::post_optimizer_function($result);
+        self::post_optimizer_function($result, true);
 
         wp_send_json_success('optimization updated successfully');
 

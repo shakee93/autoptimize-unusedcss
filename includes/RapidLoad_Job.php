@@ -268,7 +268,7 @@ class RapidLoad_Job{
             return [];
         }
 
-        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " LIMIT "  . $limit , OBJECT);
+        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT "  . $limit . " OFFSET 1", OBJECT);
 
         foreach ($data as $d){
             $d->data = json_decode($d->data);
@@ -307,7 +307,7 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_results("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
         if(!$data){
             return false;
