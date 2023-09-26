@@ -40,7 +40,7 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-4'>
                     <div className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
-                            'absolute shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] duration-400 transition-all -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                            'absolute dark:transition-none shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] duration-400 -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                             activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
                         )}>
                         </div>
@@ -58,10 +58,10 @@ const Header = ({ url }: { url: string}) => {
                     </div>
                     <div>
                         <TooltipText text='Analyze the page'>
-                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='rounded-full border-none' variant='outline'>
+                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='transition-none rounded-full border-none' variant='outline'>
                                 <ArrowPathIcon className={cn(
                                     'w-5',
-                                    loading ? 'animate-spin': ''
+                                    loading && 'animate-spin'
                                 )}/>
                             </AppButton>
                         </TooltipText>

@@ -233,7 +233,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
                       {data?.loadingExperience?.timestamp &&
-                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last Analyzed {timeAgo(data.loadingExperience.timestamp)}</div>
+                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last analyzed {timeAgo(data.loadingExperience.timestamp)}</div>
                       }
                   </div>
             </a>
