@@ -512,7 +512,9 @@ class RapidLoad_Optimizer
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
 
                     if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
-                        self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        if(isset($audit->files->headings)){
+                            self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        }
                     }
 
                     foreach ($audit->files->items as $item){
