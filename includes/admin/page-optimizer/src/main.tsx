@@ -120,7 +120,7 @@ export class RapidLoadOptimizer {
     static showOptimizer(value: boolean) {
 
         const event =
-            new CustomEvent('RapidLoadSetOptimizer', { detail: {
+            new CustomEvent('rapidLoad:set-optimizer', { detail: {
                 status: value
             }});
 

@@ -45,11 +45,18 @@ const SpeedIndex = () => {
         return [
             activeMetric?.potentialGain ? <>Potential gain <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.potentialGain.toFixed(0)} points</span> </> : null,
             <>Weighs <span className='text-brand-800 dark:text-brand-500 font-medium'>{activeMetric?.refs.weight}%</span> of your page speed score</>,
-            // <>Bring this closer to {ranges?.good}{unit}</>
         ]
     }, [activeMetric, activeReport])
 
-    const metricRanges = {
+    type Metrics = {
+        [key: string]: {
+            description: string;
+            learn_more: string;
+        };
+    };
+
+
+    const metricRanges: Metrics = {
         TBT : {
             description: `Imagine you're reading a storybook and there's a sticker covering some words. TBT, or Total Blocking Time, is like the time you wait for someone to remove that sticker. In websites, it's the time you wait before you can play or interact with the site. The shorter the wait, the better! `,
             learn_more: `https://web.dev/tbt/`
@@ -72,7 +79,27 @@ const SpeedIndex = () => {
         },
     }
 
-    const metricPoorGood = {
+
+    interface Metric {
+        good: number;
+        poor: number;
+    }
+
+    interface PerformanceMetrics {
+        LCP: Metric;
+        FID: Metric;
+        CLS: Metric;
+        FCP: Metric;
+        SI: Metric;
+        TBT: Metric;
+    }
+
+    interface DevicePerformance {
+        mobile: PerformanceMetrics;
+        desktop: PerformanceMetrics;
+    }
+
+    const metricPoorGood: DevicePerformance = {
         mobile: {
             LCP: {
                 good: 2500,
@@ -128,6 +155,9 @@ const SpeedIndex = () => {
     }
 
 
+    if (!activeMetric) {
+        return <></>
+    }
 
     return (
         <SlideUp uuid={activeMetric?.id ? activeMetric.id : 'no-key'}>
@@ -142,7 +172,7 @@ const SpeedIndex = () => {
                     <div className='text-4xl font-medium'> {activeMetric?.title}</div>
                     {/*<div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>*/}
                     <div className='text-brand-600 text-md '>
-                        <span>{metricRanges[activeMetric?.refs.acronym].description}</span> <a target='_blank' className='text-purple-750' href={metricRanges[activeMetric?.refs.acronym].learn_more} >Learn more</a>
+                        <span>{metricRanges[activeMetric.refs.acronym].description}</span> <a target='_blank' className='text-purple-750' href={metricRanges[activeMetric?.refs.acronym].learn_more} >Learn more</a>
                     </div>
                     <div>
                         <ul className='flex ml-2 items-center text-sm gap-3 text-brand-500 dark:text-brand-400'>
@@ -155,7 +185,7 @@ const SpeedIndex = () => {
                             </li>
                             {points.map((point, index) => (
                                 point && (<li key={index} className='group flex gap-1.5 items-center'>
-                                    <Circle className='w-3 stroke-none mt-[1px] group-last:fill-brand-300 fill-green-600 :fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
+                                    <Circle className='w-3 stroke-none mt-[1px] group-last:fill-brand-300 fill-green-600 :fill-brand-300 dark:fill-green-700'/> <span>{point}</span>
                                 </li>)
                             ))}
 
@@ -194,7 +224,7 @@ const SpeedIndex = () => {
 
             </div>
         </SlideUp>
-    )
+    );
 }
 
 export default React.memo(SpeedIndex)

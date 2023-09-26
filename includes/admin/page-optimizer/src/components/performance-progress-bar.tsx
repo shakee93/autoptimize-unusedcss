@@ -11,6 +11,7 @@ interface PerformanceProgressBarProps {
     background?: boolean
     stroke?: number
     children?: ReactNode
+    animate?: boolean
 }
 
 const PerformanceProgressBar = ({
@@ -19,14 +20,15 @@ const PerformanceProgressBar = ({
                                     scoreClassName,
                                     background = true,
                                     stroke = 4,
-                                    children
+                                    children,
+                                    animate= true
 } : PerformanceProgressBarProps ) => {
 
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(animate ? 0 : performance || 0);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performance);
 
     useEffect(() => {
-        if (performance) {
+        if (performance && animate) {
             let currentNumber = 0;
 
             const timer = setInterval(() => {
@@ -53,6 +55,7 @@ const PerformanceProgressBar = ({
                     'max-h-[176px] relative',
                     className
                 )}
+
                 styles={
                     buildStyles({
                         pathColor: progressbarColor,

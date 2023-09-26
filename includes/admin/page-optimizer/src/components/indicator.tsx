@@ -12,7 +12,7 @@ const Indicator = ({ className, children }: IndicatorProps) => {
 
 
     return (
-        <TooltipText text={<>{children}</>}>
+        <TooltipText delay={0} text={<>{children}</>}>
             <Circle className={cn(
                 'w-2.5 fill-blue-500 stroke-0',
                 className

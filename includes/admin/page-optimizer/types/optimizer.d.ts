@@ -199,6 +199,7 @@ interface Revision {
     job_id: number
     strategy: ReportType
     data: OptimizerResults
+    timestamp: number
 }
 
 type CriticalChainRequest = {
