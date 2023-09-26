@@ -593,6 +593,12 @@ class RapidLoad_Optimizer
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
+        if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
+            do_action('rapidload/validate-cdn');
+        }else{
+            do_action('rapidload/validate-cdn', true);
+        }
+
         $this->associate_domain(false);
 
         self::post_optimizer_function($result);
