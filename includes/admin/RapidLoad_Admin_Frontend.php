@@ -573,7 +573,7 @@ class RapidLoad_Admin_Frontend
                         'url' => $url
                     ]);
                 }else{
-                    RapidLoad_DB::clear_job_data($job_type);
+                    //RapidLoad_DB::clear_job_data($job_type);
                     RapidLoad_DB::clear_jobs($job_type);
                     do_action('rapidload/vanish');
                 }

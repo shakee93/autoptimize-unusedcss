@@ -310,6 +310,7 @@
                 clear: true,
                 nonce: uucss_global.nonce,
                 url: null,
+                job_type: 'url'
             }).done(function (d) {
                 window.location.reload();
             })

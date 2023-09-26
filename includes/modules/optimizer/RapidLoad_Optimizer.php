@@ -276,7 +276,7 @@ class RapidLoad_Optimizer
                             if(isset($input->action)){
                                 switch ($input->action){
                                     case 'rapidload_purge_all':{
-                                        $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        $input->action = 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
                                         break;
                                     }
                                     case 'cpcss_purge_url':{
