@@ -307,20 +307,12 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_results("SELECT created_at, data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_results("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
-        if(!isset($data) || empty($data)) {
-            return false;
-        }
-        if(!isset($data[0])){
+        if(!$data){
             return false;
         }else{
-            $date = new DateTime($data[0]->created_at);
-            $date->setTimezone(new DateTimeZone('UTC'));
-            return (object)[
-                'data' => json_decode($data[0]->data),
-                'created_at' => $date->getTimestamp()
-            ];
+            return json_decode($data);
         }
     }
 

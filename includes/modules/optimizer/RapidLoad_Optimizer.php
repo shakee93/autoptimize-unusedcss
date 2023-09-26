@@ -208,19 +208,6 @@ class RapidLoad_Optimizer
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
-        $created_at = null;
-
-        if($result){
-            $created_at = $result->created_at;
-            $result = $result->data;
-        }
-
-        if(!isset($created_at)){
-            $created_at = new DateTime('now');
-            $created_at->setTimezone(new DateTimeZone('UTC'));
-            $created_at = $created_at->getTimestamp();
-        }
-
         $url = "";
 
         if(!$result || $new){
