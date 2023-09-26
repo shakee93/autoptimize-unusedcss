@@ -16,6 +16,12 @@ import {
 } from "components/ui/select";
 import {Button} from "components/ui/button";
 import {isDev} from "lib/utils";
+import api from "../../../../services/api";
+import ApiService from "../../../../services/api";
+import {useAppContext} from "../../../../context/app";
+import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
+import {toast} from "components/ui/use-toast";
+import {Loader} from "lucide-react";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -29,8 +35,35 @@ interface AdditionalInputsProps {
 
 const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
+    const [loading, setLoading] = useState(false)
+    const { options } = useAppContext()
     if (!input) {
         return <></>
+    }
+
+    const buttonSubmit = async () => {
+        if (input.action) {
+            setLoading(true)
+
+            try {
+
+                const api = new ApiService(options, input.action)
+                await api.post()
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>Your action is successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                })
+
+            } catch (error: any) {
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                })
+
+
+            }
+            setLoading(false)
+        }
     }
 
     switch (input.control_type) {
@@ -57,8 +90,12 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
             return(
                 <>
                     <Label htmlFor="name" className="flex ml-4 text-left w-full">
-                        <Button variant='outline'>{input.control_label}</Button>
-                        {isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}
+                        <Button disabled={loading} className='flex gap-2' onClick={e => buttonSubmit()}
+                                variant='outline'>
+                            {loading && <Loader className='w-4 animate-spin -ml-1'/>}
+                            {input.control_label}
+                        </Button>
+                        {/*{isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}*/}
                     </Label>
                 </>
             );

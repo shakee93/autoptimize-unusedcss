@@ -13,6 +13,8 @@ import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
+import {Activity, CircleEqual, Hash, Shapes} from "lucide-react";
 
 
 
@@ -30,8 +32,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, common} = useCommonDispatch()
-    const { activeMetric } = common
+    const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -71,27 +72,32 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         return <>{replacedText}</>;
     };
 
-    let gain = Number((activeMetric?.potentialGain ? activeMetric?.potentialGain : 0)?.toFixed(0))
+    let metric = hoveredMetric
+
+    let gain = Number((metric?.potentialGain ? metric?.potentialGain : 0)?.toFixed(0))
 
 
     return (
 
         <div className='w-full flex flex-col gap-4'>
             <Card className='overflow-hidden'>
-                <div className="content flex flex-col items-center gap-3 mx-12 my-2.5">
+                <div
+                    className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
-
                             <div className='mt-6'>
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
-                                    <PerformanceProgressBar performance={(data?.performance && gain) ? data.performance + gain : data?.performance}>
-                                        {!!(activeMetric && gain) && (
+                                    <PerformanceProgressBar
+                                        performance={(data?.performance && gain && metric) ?
+                                            (data.performance + gain >= 99) ? 99 :
+                                                data.performance + gain : data?.performance}>
+                                        {!!(metric && gain) && (
                                             <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>
-                                                    {activeMetric?.title}
+                                                    {metric?.title}
                                                 </span>
                                                 <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
                                             </div>
@@ -103,7 +109,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                     <div className="flex flex-col text-center gap-1">
-                        <div>Performance</div>
+                        <div>{metric ? 'Forecasted Score' : 'Performance'} </div>
                         <div className='text-xs text-brand-500 dark:text-brand-300 font-light'>
                             Values are estimated and may vary with Google Page Speed Insights.
                         </div>
@@ -124,6 +130,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                 </div>
+                <div
+                     onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                     className={cn(
+                         'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
+                         !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
+                     )
+                     }>
+                   <span><Hash className='w-4 text-brand-400'/></span> All Audits
+                </div>
                 {data?.metrics && (
                     <Metrics performance={data?.performance} metrics={data.metrics}/>
                 )}
@@ -131,59 +146,59 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
 
-            {data?.loadingExperience?.metrics && (
-                <Card>
-                    <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>
-                        <div>
-                            <p className="">Real Experience (28 days)</p>
-                            <p className="text-xs opacity-60">Real user experience from Google</p>
-                        </div>
-                        <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>
-                    </div>
-                    {isCoreWebClicked && (
-                        <div className='border-t dark:border-zinc-700'>
-
-                            <div className="p-5 grid grid-cols-3 gap-3 pl-6">
-                                {sortedExperience.map(({ metricName, metric }, index) => (
-                                    <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>
-                                        <div className="flex">
-                                            <div className="grid grid-cols-2 gap-1.5 items-center justify-center">
-                                                <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>
-                                                <div><span
-                                                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>
-                                <PerformanceIcons icon={metric?.category || 'average'}/>
-                            </span></div>
-                                            </div>
-                                        </div>
-                                        <p className="text-[22px] font-medium mr-2 mt-1 text-red">
-                                            {["FID", "CLS", "INP"].includes(metricName) ? (
-                                                <>
-                                                    {metric?.percentile}<span className="text-base"> ms</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {metric?.percentile
-                                                        ? `${(metric.percentile / 1000).toFixed(2)}`
-                                                        : ''}
-                                                    <span className="text-base"> s</span>
-                                                </>
-                                            )}
-                                        </p>
-
-                                    </div>
-                                ))}
-
-
-                            </div>
-
-                        </div>
-                    )}
-
-                </Card>
-            )}
+            {/*{data?.loadingExperience?.metrics && (*/}
+            {/*    <Card>*/}
+            {/*        <div onClick={handleCoreWebClick} className={`flex justify-around px-6 py-4 cursor-pointer`}>*/}
+            {/*            <div>*/}
+            {/*                <p className="">Real Experience (28 days)</p>*/}
+            {/*                <p className="text-xs opacity-60">Real user experience from Google</p>*/}
+            {/*            </div>*/}
+            {/*            <CheckBadgeIcon className='w-[30px] h-[30px] ml-4 mt-1 text-green-600'/>*/}
+            {/*        </div>*/}
+            {/*        {isCoreWebClicked && (*/}
+            {/*            <div className='border-t dark:border-zinc-700'>*/}
+            
+            {/*                <div className="p-5 grid grid-cols-3 gap-3 pl-6">*/}
+            {/*                    {sortedExperience.map(({ metricName, metric }, index) => (*/}
+            {/*                        <div key={index} className={`${index % 3 === 2 ? 'mb-4' : ''}`}>*/}
+            {/*                            <div className="flex">*/}
+            {/*                                <div className="grid grid-cols-2 gap-1.5 items-center justify-center">*/}
+            {/*                                    <div><p className="text-xs font-medium">{<FirstLettersComponent text={metricName} />}</p></div>*/}
+            {/*                                    <div><span*/}
+            {/*                                        className={`inline-flex items-center justify-center w-6 h-6 rounded-full dark:bg-zinc-700 bg-zinc-100`}>*/}
+            {/*                    <PerformanceIcons icon={metric?.category || 'average'}/>*/}
+            {/*                </span></div>*/}
+            {/*                                </div>*/}
+            {/*                            </div>*/}
+            {/*                            <p className="text-[22px] font-medium mr-2 mt-1 text-red">*/}
+            {/*                                {["FID", "CLS", "INP"].includes(metricName) ? (*/}
+            {/*                                    <>*/}
+            {/*                                        {metric?.percentile}<span className="text-base"> ms</span>*/}
+            {/*                                    </>*/}
+            {/*                                ) : (*/}
+            {/*                                    <>*/}
+            {/*                                        {metric?.percentile*/}
+            {/*                                            ? `${(metric.percentile / 1000).toFixed(2)}`*/}
+            {/*                                            : ''}*/}
+            {/*                                        <span className="text-base"> s</span>*/}
+            {/*                                    </>*/}
+            {/*                                )}*/}
+            {/*                            </p>*/}
+            
+            {/*                        </div>*/}
+            {/*                    ))}*/}
+            
+            
+            {/*                </div>*/}
+            
+            {/*            </div>*/}
+            {/*        )}*/}
+            
+            {/*    </Card>*/}
+            {/*)}*/}
 
         </div>
     )
 }
 
-export default React.memo(PageSpeedScore)
+export default PageSpeedScore

@@ -19,6 +19,7 @@ const FileTable = ({audit, group }: FileGroupProps) => {
     const cellWidth = (valueType: string) => {
         switch (valueType) {
             case "timespanMs":
+            case "ms":
                 return "160px";
             case "bytes":
                 return "140px";
@@ -73,6 +74,7 @@ const FileTable = ({audit, group }: FileGroupProps) => {
                                     key={cell.id}
                                 >
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    {/*{cell.column.columnDef.meta?.valueType}*/}
                                 </td>
                             ))}
                         </tr>

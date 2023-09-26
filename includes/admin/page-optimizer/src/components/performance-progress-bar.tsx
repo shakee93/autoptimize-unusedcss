@@ -27,7 +27,7 @@ const PerformanceProgressBar = ({
 
     useEffect(() => {
         if (performance) {
-            let currentNumber = 40;
+            let currentNumber = 0;
 
             const timer = setInterval(() => {
                 currentNumber += 1;
@@ -50,7 +50,7 @@ const PerformanceProgressBar = ({
                 strokeWidth={stroke}
                 background={background}
                 className={cn(
-                    'h-44 relative',
+                    'max-h-[176px] relative',
                     className
                 )}
                 styles={

@@ -60,7 +60,7 @@ const ApplicationCrashed = () => {
     return (
         <div className='rpo-app-crashed' style={containerStyles}>
             <div  className='rpo-error'>
-                RapidLoad Page Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
+                RapidLoad Titan Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
             </div>
         </div>
     )
@@ -97,7 +97,7 @@ export class RapidLoadOptimizer {
                    <ShadowRoot styles={stylesUrl}>
                        <Provider store={store}>
                            <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                               <TooltipProvider delayDuration={100}>
+                               <TooltipProvider >
                                    <LazyMotion features={domAnimation}>
                                        {popup && (
                                            <ShadowRoot node={popup} styles={stylesUrl}>
@@ -116,6 +116,17 @@ export class RapidLoadOptimizer {
            </ApplicationErrorBoundary>
         );
     }
+
+    static showOptimizer(value: boolean) {
+
+        const event =
+            new CustomEvent('RapidLoadSetOptimizer', { detail: {
+                status: value
+            }});
+
+        window.dispatchEvent(event);
+    }
+
 }
 
 // @ts-ignore

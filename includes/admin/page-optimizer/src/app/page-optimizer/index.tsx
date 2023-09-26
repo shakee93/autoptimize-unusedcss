@@ -22,6 +22,8 @@ import Performance from "app/page-optimizer/spaces/Performance";
 import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import SlideUp from "components/animation/SlideUp";
+import {JsonView} from "react-json-view-lite";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -30,8 +32,7 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, common } = useCommonDispatch()
-    const { activeMetric } = common
+    const { dispatch, activeMetric } = useCommonDispatch()
 
     const {
         options,
@@ -40,50 +41,36 @@ export default function PageOptimizer() {
         manipulatingStyles,
         savingData,
         togglePerformance,
+        optimizerContainer
     } = useAppContext()
 
     let url = options?.optimizer_url;
 
 
-    const ActiveSpace = () => {
-
-        if (activeMetric) {
-            console.log('here');
-            return <m.div
-                key='childrenx'  // add a unique key
-                initial={{opacity: 0, y: 10}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 10}}
-            >
-                <SpeedIndex/>
-            </m.div>
-        }
-
-        return  <m.div
-            key='childrenx'  // add a unique key
-            initial={{opacity: 0, y: 10}}
-            animate={{opacity: 1, y: 0}}
-            exit={{opacity: 0, y: 10}}
-        >
-            <Performance/>
-        </m.div>;
-    }
-
     return (
 
-        <div
+        <m.div
+            initial={{ y: 20, opacity: 0, scale:0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 20, opacity: 0, scale: 0.98 }}
+            transition={{
+                ease: 'linear',
+                duration: 0.1,
+        }}
             id='rapidload-page-optimizer'
-            className={cn("fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
+            className={cn("rounded-md overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
 
             <Header url={url}/>
 
             <div className={cn(
-                'overflow-auto w-full h-fit pb-20',
+                'overflow-y-auto scrollbar-stable w-full h-fit pb-20',
                 savingData && 'relative overflow-hidden h-[calc(100vh-130px)]'
             )}>
 
                 {!loading ? (
-                    <section className={cn(
+                    <section
+                        ref={optimizerContainer}
+                        className={cn(
                         'container grid grid-cols-12 gap-8 pt-4',
                     )}>
 
@@ -107,7 +94,7 @@ export default function PageOptimizer() {
 
                             {togglePerformance && (
                                 <aside className="col-span-3">
-                                    <div className="text-lg ml-5 flex items-center gap-2">
+                                    <div className="text-lg ml-5  flex items-center gap-2">
                                         <Circle style={{
                                             fill: progressbarColor
                                         }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
@@ -121,27 +108,15 @@ export default function PageOptimizer() {
                                 togglePerformance ? 'col-span-9' : 'col-span-12',
                             )}>
 
-                                <AnimatePresence initial={false}>
-                                    {false ?
-                                        <m.div
-                                            key='childrenx'  // add a unique key
-                                            initial={{opacity: 0, y: 10}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: 10}}
-                                        >
-                                            <SpeedIndex/>
-                                        </m.div> :
-                                        <m.div
-                                            key='childrenx'  // add a unique key
-                                            initial={{opacity: 0, y: 10}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: 10}}
-                                        >
+                                <AnimatePresence initial={true} mode='wait'>
+                                    {activeMetric ? (
+                                        <SpeedIndex/>
+                                    ) : (
+                                        <SlideUp uuid='perf'>
                                             <Performance/>
-                                        </m.div>
-                                    }
+                                        </SlideUp>
+                                    )}
                                 </AnimatePresence>
-
                             </article>
                         </>}
                     </section>
@@ -153,6 +128,6 @@ export default function PageOptimizer() {
                 <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
             )}
             <Toaster/>
-        </div>
+        </m.div>
     );
 }

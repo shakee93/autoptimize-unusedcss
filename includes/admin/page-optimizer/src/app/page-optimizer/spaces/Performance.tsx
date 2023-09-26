@@ -61,7 +61,7 @@ const Performance = () => {
 
     return (
         <div>
-            <h2 className="text-lg ml-5 flex gap-2 font-normal items-center">
+            <h2 className="text-lg mt-0.5 ml-5 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
             <div className="tabs pt-4 flex">
@@ -128,13 +128,11 @@ const Performance = () => {
                             className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
 
                             <div>
-                                <img className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
                             </div>
 
                             <span className='flex gap-2'>
-                                                    Brilliantly done! It's clear you've mastered this.
-                                {/*<ThumbsUp*/}
-                                {/*    className='fill-green-600/80 stroke-green-700 -mt-1'/>*/}
+                                Brilliantly done! It's clear you've mastered this.
                             </span>
 
                         </m.div>

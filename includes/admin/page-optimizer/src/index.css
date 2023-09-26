@@ -1,7 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
+@layer utilities {
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

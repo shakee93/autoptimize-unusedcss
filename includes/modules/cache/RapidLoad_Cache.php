@@ -12,7 +12,7 @@ class RapidLoad_Cache
 
     public function __construct()
     {
-        self::$options = RapidLoad_Base::get_merged_options();
+        self::$options = RapidLoad_Base::fetch_options();
 
         if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
             return;
@@ -35,6 +35,14 @@ class RapidLoad_Cache
         add_action( 'wp_uninitialize_site', array( __CLASS__, 'uninstall_later' ) );
 
         add_filter('uucss/notifications', [$this, 'add_notification'], 10 , 1);
+
+        add_filter('uucss/third-party/plugins', function ($plugins){
+            $plugins[] = [
+                'category' => 'cache',
+                'plugin' => 'rapidload'
+            ];
+            return $plugins;
+        }, 10, 1 );
 
         add_action( 'upgrader_process_complete', array( __CLASS__, 'on_upgrade' ), 10, 2 );
         add_action( 'save_post', array( __CLASS__, 'on_save_trash_post' ) );

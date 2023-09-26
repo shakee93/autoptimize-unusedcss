@@ -104,7 +104,18 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
             add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
+            add_action("wp_ajax_update_htaccess_file", [$this, "wp_ajax_update_htaccess_file"]);
         }
+
+    }
+
+    public function wp_ajax_update_htaccess_file(){
+
+        self::verify_nonce();
+
+        RapidLoad_htaccess::update_htaccess(isset($_REQUEST['remove']));
+
+        wp_send_json_success(true);
 
     }
 
@@ -669,6 +680,16 @@ class RapidLoad_Admin_Frontend
 
                         $job = new RapidLoad_Job(['url' => $url]);
                         $job->save(true);
+
+                        $args = [
+                            'requeue' => true
+                        ];
+
+                        if($immediate){
+                            $args['immediate'] = true;
+                        }
+
+                        do_action('rapidload/job/purge', $job, $args);
 
                     }
 

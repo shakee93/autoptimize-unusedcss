@@ -29,12 +29,12 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='z-[110001] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
+        <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
                     {version && (
-                        <span className='absolute text-xxs left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
+                        <span className='absolute text-xxs left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
                     )}
                 </div>
                 <div className='flex flex-column items-center gap-4'>

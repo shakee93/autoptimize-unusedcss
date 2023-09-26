@@ -9,6 +9,7 @@ import {AppAction, AppState, RootState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import WebFont from "webfontloader";
+import {AnimatePresence} from "framer-motion";
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
@@ -53,9 +54,9 @@ const App = ({ popup, _showOptimizer = false }: {
     }, [dispatch, activeReport]);
 
     return (
-        <>
+        <AnimatePresence>
             {(mounted && showOptimizer) && <PageOptimizer/>}
-        </>
+        </AnimatePresence>
     );
 }
 

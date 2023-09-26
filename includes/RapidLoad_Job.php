@@ -220,20 +220,26 @@ class RapidLoad_Job{
 
     }
 
-    function get_desktop_options($transformed = false){
+    function get_desktop_options($transformed = false, $recursive = false){
 
-        if(isset($this->desktop_options)){
+        if(isset($this->desktop_options) && !empty($this->mobile_options)){
             return !$transformed ? unserialize($this->desktop_options) : $this->transform_individual_file_actions(unserialize($this->desktop_options));
+        }
+        if(!$recursive){
+            return $this->get_mobile_options($transformed, true);
         }
         return [];
     }
 
-    function get_mobile_options($transformed = false){
+    function get_mobile_options($transformed = false, $recursive = false){
 
         if(isset($this->mobile_options) && !empty($this->mobile_options)){
             return !$transformed ? unserialize($this->mobile_options) : $this->transform_individual_file_actions(unserialize($this->mobile_options));
         }
-        return $this->get_desktop_options($transformed);
+        if(!$recursive){
+            return $this->get_desktop_options($transformed, true);
+        }
+        return [];
     }
 
     function set_desktop_options($options){
@@ -266,6 +272,13 @@ class RapidLoad_Job{
 
         foreach ($data as $d){
             $d->data = json_decode($d->data);
+            try {
+                $date = new DateTime($d->created_at);
+                $date->setTimezone(new DateTimeZone('UTC'));
+                $d->timestamp = $date->getTimestamp();
+            }catch (Exception $exception){
+
+            }
         }
 
         return $data;
@@ -294,12 +307,20 @@ class RapidLoad_Job{
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_results("SELECT created_at, data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
 
-        if(!$data){
+        if(!isset($data) || empty($data)) {
+            return false;
+        }
+        if(!isset($data[0])){
             return false;
         }else{
-            return json_decode($data);
+            $date = new DateTime($data[0]->created_at);
+            $date->setTimezone(new DateTimeZone('UTC'));
+            return (object)[
+                'data' => json_decode($data[0]->data),
+                'created_at' => $date->getTimestamp()
+            ];
         }
     }
 

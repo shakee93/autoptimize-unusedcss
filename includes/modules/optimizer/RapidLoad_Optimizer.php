@@ -208,6 +208,19 @@ class RapidLoad_Optimizer
 
         $result = self::$job->get_last_optimization_revision(self::$strategy);
 
+        $created_at = null;
+
+        if($result){
+            $created_at = $result->created_at;
+            $result = $result->data;
+        }
+
+        if(!isset($created_at)){
+            $created_at = new DateTime('now');
+            $created_at->setTimezone(new DateTimeZone('UTC'));
+            $created_at = $created_at->getTimestamp();
+        }
+
         $url = "";
 
         if(!$result || $new){
@@ -219,7 +232,10 @@ class RapidLoad_Optimizer
 
 
             if ($isDev || defined('RAPIDLOAD_DEV_MODE')) {
-                $url = 'https://rapidload.io/';
+
+                if (defined('RAPIDLOAD_OPTIMIZER_TEST_URL')) {
+                    $url = RAPIDLOAD_OPTIMIZER_TEST_URL;
+                }
             }
 
             $result = $api->post('page-speed', [
@@ -247,6 +263,8 @@ class RapidLoad_Optimizer
             wp_send_json_error([]);
         }
 
+        $result->loadingExperience->timestamp = $created_at;
+
         foreach ($result->audits as $audit){
 
             if(isset($audit->settings)){
@@ -255,14 +273,20 @@ class RapidLoad_Optimizer
 
                         if(isset($input->control_type) && $input->control_type == "button"){
 
-                            switch ($input->action){
-                                case 'rapidload_purge_all':{
-                                    $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
-                                    break;
-                                }
-                                case 'cpcss_purge_url':{
-                                    $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
-                                    break;
+                            if(isset($input->action)){
+                                switch ($input->action){
+                                    case 'rapidload_purge_all':{
+                                        $input->action = 'action=rapidload_purge_all&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
+                                    case 'cpcss_purge_url':{
+                                        $input->action = 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
+                                    case 'update_htaccess':{
+                                        $input->action = 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' );
+                                        break;
+                                    }
                                 }
                             }
 
@@ -312,6 +336,10 @@ class RapidLoad_Optimizer
                 foreach ($audit->files->items as $item){
 
                     if(isset($item->url) && isset($item->url->url)){
+
+                        if(!isset($item->url->regex)){
+                            $item->url->regex = self::$job->generateUrlRegex($item->url->url);
+                        }
 
                         if(!isset(self::$merged_options['individual-file-actions'])){
                             self::$merged_options['individual-file-actions'] = [];
@@ -412,7 +440,7 @@ class RapidLoad_Optimizer
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
             'options' => self::$options,
-            'merged_options' => self::$merged_options
+            'merged_options' => self::$merged_options,
         ]);
 
 
@@ -484,12 +512,19 @@ class RapidLoad_Optimizer
                 if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
 
                     if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
-                        self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        if(isset($audit->files->headings)){
+                            self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
+                        }
                     }
 
                     foreach ($audit->files->items as $item){
 
                         if(isset($item->url) && isset($item->url->url)){
+
+                            if(!isset($item->url->regex)){
+                                $item->url->regex = self::$job->generateUrlRegex($item->url->url);
+                            }
+
                             if(!isset(self::$options['individual-file-actions'][$audit->id])){
                                 self::$options['individual-file-actions'][$audit->id] = [];
                             }
@@ -559,6 +594,12 @@ class RapidLoad_Optimizer
         }
 
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
+
+        if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
+            do_action('rapidload/validate-cdn');
+        }else{
+            do_action('rapidload/validate-cdn', true);
+        }
 
         $this->associate_domain(false);
 

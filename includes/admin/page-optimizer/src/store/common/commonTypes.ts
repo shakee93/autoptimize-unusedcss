@@ -2,6 +2,7 @@
 export interface CommonState {
     activeTab: AuditTypes,
     activeMetric: Metric | null
+    hoveredMetric: Metric | null
 }
 
 export const SET_STATE = 'SET_STATE';

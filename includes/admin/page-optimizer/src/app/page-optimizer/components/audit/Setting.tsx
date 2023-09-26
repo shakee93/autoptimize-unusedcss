@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon} from "@heroicons/react/24/solid";
+import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {
     CSSDelivery,
     JavascriptDelivery,
@@ -29,7 +29,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import {Circle, GanttChart, Lock, RefreshCcw, Settings, SettingsIcon} from "lucide-react";
+import {Circle, GanttChart, Loader, Lock, RefreshCcw, Settings, SettingsIcon} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -40,6 +40,11 @@ import {useAppContext} from "../../../../context/app";
 import Indicator from "components/indicator";
 import {cn} from "lib/utils";
 import InProgress from "components/in-progress";
+import {Button} from "components/ui/button";
+import ApiService from "../../../../services/api";
+import {toast} from "components/ui/use-toast";
+import SlideLeft from "components/animation/SlideLeft";
+import {AnimatePresence} from "framer-motion";
 
 interface SettingItemProps {
     audit: Audit
@@ -55,8 +60,9 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { mode } = useAppContext()
+    const { mode , options} = useAppContext()
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = useState(false)
 
     const [mainInput, ...additionalInputs] = useMemo(() => settings.inputs, [settings])
 
@@ -166,6 +172,29 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
         return <></>;
     })
 
+    const buttonAction = async (input: AuditSettingInput) => {
+        setLoading(true)
+
+        try {
+
+            let api = new ApiService(options, undefined, input.action || input.value || undefined )
+            await api.post()
+
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>Your action is successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
+            })
+
+        } catch (error: any) {
+
+            setLoading(false)
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+            })
+        }
+
+        setLoading(false);
+    }
+
     return (
         <div
             key={index}
@@ -178,8 +207,19 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                 <>
 
                     {mainInput && (
-                        // @ts-ignore
-                        <Switch disabled={['onboard', 'preview'].includes(mode)} checked={mainInput.value} onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
+                        <>
+                            {mainInput.control_type === 'checkbox' && (
+                                <Switch disabled={['onboard', 'preview'].includes(mode)}
+                                        checked={mainInput.value}
+                                        onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
+                            )}
+                            {mainInput.control_type === 'button' && (
+                                <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
+                                        className='flex -mr-0.5 gap-1 py-1 px-2.5 h-auto rounded-[8px]'>
+                                    <span className='text-xs py-1 px-0.5'>{mainInput.control_label}</span>
+                                </Button>
+                            )}
+                        </>
                     )}
 
                     {settings.status && (

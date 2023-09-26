@@ -18,6 +18,7 @@ import {formatNumberWithGranularity, isDev, truncateMiddleOfURL} from "lib/utils
 import AuditColumnUrl from "app/page-optimizer/components/audit/content/columns/url";
 import AuditColumnDropdown from "app/page-optimizer/components/audit/content/columns/dropdown";
 import AuditNodeColumn from "app/page-optimizer/components/audit/content/columns/node";
+import SourceColumn from "app/page-optimizer/components/audit/content/columns/source";
 
 
 interface AuditColumnProps {
@@ -44,8 +45,10 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
         return <></>;
     }
 
+
+
     if (heading.valueType === 'url') {
-        return <AuditColumnUrl audit={audit} cell={cell}/>;
+        return <AuditColumnUrl heading={heading} audit={audit} cell={cell}/>;
     }
 
     if (heading.valueType === 'controls') {
@@ -72,6 +75,10 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
         return <span>{(value.value as number)}</span>
     }
 
+    if (heading.valueType === 'source-location') {
+        return <SourceColumn cell={cell}/>
+    }
+
     if (typeof value === 'object') {
         return <span>{JSON.stringify(value)}</span>
     }
@@ -83,6 +90,8 @@ const AuditColumns = ({ audit, heading, cell } : AuditColumnProps) => {
     if (isDev) {
         console.log('col', value, heading.valueType, audit.id);
     }
+    
+
 
     return <span>{JSON.stringify(value)}</span>;
 
