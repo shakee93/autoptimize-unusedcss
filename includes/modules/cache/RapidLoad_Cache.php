@@ -36,6 +36,14 @@ class RapidLoad_Cache
 
         add_filter('uucss/notifications', [$this, 'add_notification'], 10 , 1);
 
+        add_filter('uucss/third-party/plugins', function ($plugins){
+            $plugins[] = [
+                'category' => 'cache',
+                'plugin' => 'rapidload'
+            ];
+            return $plugins;
+        }, 10, 1 );
+
         add_action( 'upgrader_process_complete', array( __CLASS__, 'on_upgrade' ), 10, 2 );
         add_action( 'save_post', array( __CLASS__, 'on_save_trash_post' ) );
         add_action( 'pre_post_update', array( __CLASS__, 'on_pre_post_update' ), 10, 2 );
