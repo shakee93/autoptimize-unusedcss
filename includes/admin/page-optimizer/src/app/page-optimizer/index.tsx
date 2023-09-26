@@ -58,7 +58,7 @@ export default function PageOptimizer() {
                 duration: 0.1,
         }}
             id='rapidload-page-optimizer'
-            className={cn("rounded-md overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-200 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
+            className={cn("rounded-md overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center dark:text-brand-300 text-brand-800 dark:bg-brand-930 bg-brand-50")}>
 
             <Header url={url}/>
 

@@ -108,8 +108,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
     return (
         <Card spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
-                  `overflow-hidden hover:opacity-100 w-full flex justify-center flex-col items-center p-0`,
-                  toggleFiles ? 'shadow-xl dark:shadow-brand-800/70' : 'dark:hover:border-brand-500 hover:border-brand-400/60'
+                  `overflow-hidden w-full flex justify-center flex-col items-center p-0`,
+                  toggleFiles ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
               )}
         >
             <div className={cn(
