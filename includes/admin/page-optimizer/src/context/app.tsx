@@ -71,12 +71,17 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             }
         };
 
-        window.addEventListener('RapidLoadSetOptimizer', updateData);
+        window.addEventListener('rapidLoad:set-optimizer', updateData);
         
         setMounted(true)
 
+        const event =
+            new CustomEvent('rapidLoad:optimizer-mounted');
+
+        window.dispatchEvent(event);
+
         return () => {
-            window.removeEventListener('rpoShowOptimizer', updateData);
+            window.removeEventListener('rapidLoad:set-optimizer', updateData);
         };
     }, [])
 

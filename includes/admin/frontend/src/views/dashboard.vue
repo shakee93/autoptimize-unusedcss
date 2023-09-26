@@ -382,9 +382,31 @@ export default {
 
   mounted() {
 
-    if (this.on_board_complete ==='' || window.location.href.indexOf("nonce") > -1) {
-        this.openOptimizer();
+    if (window.RapidLoadOptimizer) {
+
+      const container = document.getElementById('rapidload-page-optimizer');
+      const optimizerConfig = {
+        container,
+        showOptimizer: false,
+      };
+
+      if (this.on_board_complete === '') {
+        optimizerConfig.mode = 'onboard';
+        optimizerConfig.modeData = {
+          connect_url: this.license_information.connect_link,
+        };
+      }
+
+      new window.RapidLoadOptimizer(optimizerConfig);
     }
+
+    window.addEventListener('rapidLoad:optimizer-mounted', () => {
+
+      if (this.on_board_complete ==='' || window.location.href.indexOf("nonce") > -1) {
+        this.openOptimizer();
+      }
+
+    });
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
@@ -429,21 +451,7 @@ export default {
       });
     }
 
-    if (window.RapidLoadOptimizer) {
-      const container = document.getElementById('rapidload-page-optimizer');
-      const optimizerConfig = {
-        container,
-        showOptimizer: false,
-      };
 
-      if (this.on_board_complete === '') {
-        optimizerConfig.mode = 'onboard';
-        optimizerConfig.modeData = {
-          connect_url: this.license_information.connect_link,
-        };
-      }
-      new window.RapidLoadOptimizer(optimizerConfig);
-    }
 
   },
   methods:{
