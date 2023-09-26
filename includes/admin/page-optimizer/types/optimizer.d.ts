@@ -26,6 +26,7 @@ interface LoadingExperience {
     id: string
     initial_url: string
     overall_category: string,
+    timestamp: number,
     metrics: {
         [metricName: string]: {
             percentile: number;

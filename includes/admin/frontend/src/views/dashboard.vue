@@ -114,7 +114,6 @@
       </div>
     </div>
 
-<!--    <optimization class="mb-10"></optimization>-->
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
 
@@ -350,7 +349,7 @@
         <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
 
           <div class="col-start-1 col-end-3" >
-              <button @click="onboardOptimier" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
+              <button @click="openOptimizer" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
           </div>
 
         </div>
@@ -370,7 +369,6 @@ import config from "../config";
 import axios from 'axios';
 import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
-import optimization from "./optimization.vue";
 import popupModel from "../components/popupModel.vue";
 // import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
@@ -379,16 +377,13 @@ export default {
   components: {
     Vue3TagsInput,
     messageBox,
-    optimization,
     popupModel,
   },
 
   mounted() {
 
-    if (this.on_board_complete ==='') {
-      this.onboardOptimier();
-    }else if (window.location.href.indexOf("nonce") > -1) {
-      this.openOptimizer();
+    if (this.on_board_complete ==='' || window.location.href.indexOf("nonce") > -1) {
+        this.openOptimizer();
     }
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
@@ -435,12 +430,19 @@ export default {
     }
 
     if (window.RapidLoadOptimizer) {
-      let container = document.getElementById('rapidload-page-optimizer')
-
-      new window.RapidLoadOptimizer({
+      const container = document.getElementById('rapidload-page-optimizer');
+      const optimizerConfig = {
         container,
-        showOptimizer: false
-      })
+        showOptimizer: false,
+      };
+
+      if (this.on_board_complete === '') {
+        optimizerConfig.mode = 'onboard';
+        optimizerConfig.modeData = {
+          connect_url: this.license_information.connect_link,
+        };
+      }
+      new window.RapidLoadOptimizer(optimizerConfig);
     }
 
   },
@@ -579,30 +581,38 @@ export default {
           });
 
     },
-    onboardOptimier(){
-      if (window.RapidLoadOptimizer) {
-        let container = document.getElementById('rapidload-page-optimizer')
-
-        // open optimizer in onboard mode
-        new window.RapidLoadOptimizer({
-          container,
-          showOptimizer: true,
-          mode: 'onboard',
-          modeData: {
-            // this is the url where to redirect user when they press connect
-            connect_url: this.license_information.connect_link,
-            // target: '_blank'
-          }
-        });
-      }
-
-    },
+    // onboardOptimizer(){
+    //   if (window.RapidLoadOptimizer) {
+    //     let container = document.getElementById('rapidload-page-optimizer')
+    //
+    //     // open optimizer in onboard mode
+    //     new window.RapidLoadOptimizer({
+    //       container,
+    //       showOptimizer: false,
+    //       mode: 'onboard',
+    //       modeData: {
+    //         // this is the url where to redirect user when they press connect
+    //         connect_url: this.license_information.connect_link,
+    //         // target: '_blank'
+    //       }
+    //     });
+    //   }
+    // },
+    // normalOptimizer(){
+    //   if (window.RapidLoadOptimizer) {
+    //     let container = document.getElementById('rapidload-page-optimizer')
+    //
+    //     new window.RapidLoadOptimizer({
+    //       container,
+    //       showOptimizer: false
+    //     })
+    //   }
+    // },
     openOptimizer() {
-
+      console.log("Optimizer event fired");
       if (window.RapidLoadOptimizer) {
         window.RapidLoadOptimizer.showOptimizer(true)
       }
-      
     }
   },
 
