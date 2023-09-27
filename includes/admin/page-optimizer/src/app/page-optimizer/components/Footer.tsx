@@ -71,6 +71,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {fetchData} from "../../../store/app/appActions";
 import PerformanceProgressBar from "components/performance-progress-bar";
+import TimeAgo from "components/TimeAgo";
 
 interface FooterProps {
     url: string,
@@ -233,7 +234,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
                       {data?.loadingExperience?.timestamp &&
-                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last analyzed {timeAgo(data.loadingExperience.timestamp)}</div>
+                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/></div>
                       }
                   </div>
             </a>
@@ -242,32 +243,35 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-brand-600 dark:text-brand-400 '>
                     <Mode>
-                        <Popover>
-                            <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
-                                <TooltipText asChild text='Show Revisions'>
-                                    <History className='w-5 ' />
-                                </TooltipText>
-                            </PopoverTrigger>
-                            <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
-                                <div className='my-2 ml-4 font-medium '>Revisions</div>
-                                <ul className='border rounded-lg'>
-                                    {revisions?.map((rev: Revision, index: number) => {
-                                        return <li className={cn(
-                                            'flex items-center justify-between cursor-pointer px-4 py-1.5 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
-                                            index === 0 ? 'border-none' : 'border-t'
-                                        )} key={rev.id}>
-                                            <span className='text-xs text-brand-600 dark:text-brand-300'>{timeAgo(rev.timestamp)}</span>
-                                            <PerformanceProgressBar background={false}
-                                                                    animate={false}
-                                                                    stroke={10}
-                                                                    scoreClassName='text-xxs'
-                                                                    className='h-7'
-                                                                    performance={rev.data.performance}></PerformanceProgressBar>
-                                        </li>
-                                    })}
-                                </ul>
-                            </PopoverContent>
-                        </Popover>
+                        {revisions.length > 0 &&
+                            <Popover>
+                                <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
+                                    <TooltipText asChild text='Show Revisions'>
+                                        <History className='w-5 ' />
+                                    </TooltipText>
+                                </PopoverTrigger>
+                                <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
+                                    <div className='my-2 ml-4 font-medium '>Revisions</div>
+                                    <ul className='border rounded-lg'>
+                                        {revisions?.map((rev: Revision, index: number) => {
+                                            return <li className={cn(
+                                                'flex items-center justify-between cursor-pointer px-4 py-1.5 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
+                                                index === 0 ? 'border-none' : 'border-t'
+                                            )} key={rev.id}>
+                                                <span className='text-xs text-brand-600 dark:text-brand-300'>{timeAgo(rev.timestamp)}</span>
+                                                <PerformanceProgressBar background={false}
+                                                                        animate={false}
+                                                                        stroke={10}
+                                                                        scoreClassName='text-xxs'
+                                                                        className='h-7'
+                                                                        performance={rev.data.performance}></PerformanceProgressBar>
+                                            </li>
+                                        })}
+                                    </ul>
+                                </PopoverContent>
+                            </Popover>
+                        }
+
                     </Mode>
 
                     <TooltipText text='Switch theme'>
