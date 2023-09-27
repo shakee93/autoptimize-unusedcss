@@ -177,9 +177,10 @@ class RapidLoad_Optimizer
 
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
         $new_hash = hash('md5', json_encode($data));
+        $revision_count = self::$job->get_revision_count(self::$strategy);
 
-        if($hash != $new_hash && (!$new && $force)){
-            $revision_count = self::$job->get_revision_count(self::$strategy);
+        if(($hash != $new_hash && $force) || $revision_count == 0){
+
 
             if($revision_count > (self::$revision_limit - 1)){
                 self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
