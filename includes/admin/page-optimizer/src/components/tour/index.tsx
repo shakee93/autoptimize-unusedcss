@@ -2,6 +2,7 @@ import React, {ReactNode, useState} from "react";
 import {StepType, TourProvider, components} from "@reactour/tour";
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import {MousePointerClick} from "lucide-react";
+import {Button} from "components/ui/button";
 
 interface TourProviderProps {
     children: ReactNode
@@ -13,6 +14,7 @@ const AppTour = ({children}: TourProviderProps) => {
         {
             selector: '[data-tour="switch-report-strategy"]',
             content: {
+                // @ts-ignore
                 header : 'Select Mobile or Desktop',
                 body : 'Pick a device to analyze and optimize the page.'
             },
@@ -20,6 +22,7 @@ const AppTour = ({children}: TourProviderProps) => {
         {
             selector: '[data-tour="analyze"]',
             content: {
+                // @ts-ignore
                 header : `Refresh Speed Again`,
                 body : <> <MousePointerClick className='mb-2'/> Click to re-analyze the page speed using Google PageSpeed Insights.</>
             },
@@ -27,6 +30,7 @@ const AppTour = ({children}: TourProviderProps) => {
         {
             selector: '[data-tour="speed-insights"]',
             content: {
+                // @ts-ignore
                 header : `Your Speed Insights`,
                 body : 'See your overall website\'s speed rating, along with a breakdown of key metrics and performance scores.'
             },
@@ -35,6 +39,7 @@ const AppTour = ({children}: TourProviderProps) => {
         {
             selector: '[data-tour="metrics"]',
             content: {
+                // @ts-ignore
                 header : `Dive Deeper into Metrics`,
                 body : <> <MousePointerClick className='mb-2'/>
                     Click on individual metrics to uncover insights and get recommendations for enhancement.
@@ -43,8 +48,37 @@ const AppTour = ({children}: TourProviderProps) => {
             position: "right"
         },
         {
-            selector: '[data-tour="audit-tabs"]',
-            content: 'Your performance are organized to help you solve the issues faster! You can switch between those',
+            selector: '[data-tour="audits"]',
+            content: {
+                // @ts-ignore
+                header : `Performance Audits & Actions`,
+                body : <>
+                    Discover the top audits needing attention and follow our recommended actions to enhance your page's performance.
+                </>
+            },
+            position: "left"
+        },
+        {
+            selector: '[data-tour="audit-groups"]',
+            content: {
+                // @ts-ignore
+                header : `Dive into Audit Groups`,
+                body :
+                    <div className='flex flex-col gap-2 '>
+                        <MousePointerClick/>
+                        <div className='text-md border-b pb-4'>
+                            Click on each audit group to explore detailed insights and actions.
+                        </div>
+                        <div className='text-sm text-brand-600'>
+                            <ul className='flex flex-col gap-2 [&>*]:flex [&>*]:flex-col [&>*]:gap-1'>
+                                <li><span className='font-bold text-brand-800'>Opportunities</span> Recommendations from Google to enhance your page's speed and efficiency. </li>
+                                <li><span className='font-bold text-brand-800'>Diagnostics</span> In-depth feedback about your site's performance and potential issues.</li>
+                                <li><span className='font-bold text-brand-800'>Passed Audits</span> Areas where your website meets or exceeds performance standards.</li>
+                            </ul>
+                        </div>
+                    </div>
+            },
+            position: "left"
         },
     ])
 
@@ -63,17 +97,15 @@ const AppTour = ({children}: TourProviderProps) => {
         return <></>
     }
 
-    const Content = ({ content, currentStep, setIsOpen }) => {
+    const Content = ({ content, currentStep, setIsOpen }: any) => {
         
-        console.log(steps);
-
         return <div className='text-md flex flex-col px-4'>
-            <div className='flex justify-between items-center px-4 py-4 border-b -mx-4'>
+            <div className='flex justify-between items-center px-4 py-4 border-b -mx-[22px]'>
                 <span className='text-lg font-semibold leading-none tracking-tight'>
                    {content.header ? content.header :  `Let's Start`}
                 </span>
                 <button className='flex gap-2 items-center' onClick={e => setIsOpen(false) }>
-                    <span className='text-sm text-brand-500'>{currentStep + 1}/{steps?.length}</span> <XMarkIcon className='w-5'/>
+                    <span className='text-sm text-brand-500'>{currentStep + 1} of {steps?.length}</span> <XMarkIcon className='w-5'/>
                 </button>
             </div>
 
@@ -82,13 +114,13 @@ const AppTour = ({children}: TourProviderProps) => {
             )}
 
             {content.body && (
-                <div className='px-2 pt-2'>{content.body}</div>
+                <div className='pt-4'>{content.body}</div>
             )}
 
         </div>
     }
 
-    const Navigation = (props) => {
+    const Navigation = (props: any) => {
         return (
             <div className='px-4 pb-4'>
                 <components.Navigation  {...props}  />
@@ -107,7 +139,7 @@ const AppTour = ({children}: TourProviderProps) => {
                 popover : (base) => ({
                     ...base,
                     borderRadius: '10px',
-                    padding: '0',
+                    padding: '0 8px',
                 })
             }}
             onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {

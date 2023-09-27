@@ -234,7 +234,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                           {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url} <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                       </span>
                       {data?.loadingExperience?.timestamp &&
-                          <div data-timestamp={data.loadingExperience.timestamp} className='text-xxs leading-relaxed text-brand-500'>Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/></div>
+                          <div data-timestamp={data.loadingExperience.timestamp}
+                               className='text-xxs leading-relaxed text-brand-500'>Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/></div>
                       }
                   </div>
             </a>
@@ -258,7 +259,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                                 'flex items-center justify-between cursor-pointer px-4 py-1.5 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
                                                 index === 0 ? 'border-none' : 'border-t'
                                             )} key={rev.id}>
-                                                <span className='text-xs text-brand-600 dark:text-brand-300'>{timeAgo(rev.timestamp)}</span>
+                                                <span className='text-xs text-brand-600 dark:text-brand-300'>{timeAgo(rev.timestamp * 1000)}</span>
                                                 <PerformanceProgressBar background={false}
                                                                         animate={false}
                                                                         stroke={10}

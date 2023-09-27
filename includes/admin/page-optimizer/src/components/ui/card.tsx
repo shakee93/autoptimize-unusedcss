@@ -6,10 +6,10 @@ interface CardProps {
     spreader?: boolean
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, spreader = false }, ref) => {
+const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, spreader = false, ...props }, ref) => {
 
     return (
-        <div ref={ref} className={cn(
+        <div {...props} ref={ref} className={cn(
             `w-full dark:bg-brand-950 bg-brand-0 border rounded-3xl`,
             className,
             spreader ? 'mb-0' : ''

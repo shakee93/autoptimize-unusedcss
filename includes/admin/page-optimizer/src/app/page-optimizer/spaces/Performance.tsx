@@ -60,12 +60,12 @@ const Performance = () => {
     // }, [activeTab])
 
     return (
-        <div>
+        <div data-tour='audits'>
             <h2 className="text-lg mt-0.5 ml-5 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
-            <div className="tabs pt-4 flex">
-                <Card className='flex select-none p-0 px-6'>
+            <div  className="tabs pt-4 flex">
+                <Card data-tour='audit-groups' className='flex select-none p-0 px-6'>
                     {tabs.map((tab) => {
                         return (
                             <div
@@ -98,11 +98,11 @@ const Performance = () => {
                     })}
                 </Card>
             </div>
-            <div className="audits pt-4 flex">
+            <div className="audits pt-4 flex mb-24">
                 <AnimatePresence initial={false}>
                     {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) ? (
 
-                        <div className='grid grid-cols-12 gap-6 w-full relative mb-24'>
+                        <div className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
                                 {data?.grouped[activeTab] &&
                                     data?.grouped[activeTab]?.map((audit: Audit, index: number) => (

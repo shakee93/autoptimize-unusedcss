@@ -103,7 +103,7 @@ export function formatNumberWithGranularity(number: number, granularity: number 
 }
 
 export function timeAgo(timestamp: number) {
-  const date : Date = new Date(timestamp * 1000);
+  const date : Date = new Date(timestamp);
   const now : Date= new Date();
   // @ts-ignore
   const secondsAgo = Math.round((now - date) / 1000);
@@ -113,9 +113,7 @@ export function timeAgo(timestamp: number) {
   const monthsAgo = Math.round(daysAgo / 30.44);  // Using the average number of days in a month (365.24/12)
   const yearsAgo = Math.round(daysAgo / 365.24);  // Using the average number of days in a year (considering leap years)
 
-  if (secondsAgo <= 20) {
-    return `just now`;
-  } else if (secondsAgo < 60) {
+  if (secondsAgo < 60) {
     return `${secondsAgo} seconds ago`;
   } else if (minutesAgo < 60) {
     return `${minutesAgo} minutes ago`;
