@@ -40,7 +40,7 @@ const FileTable = ({audit, group }: FileGroupProps) => {
     return (
         <div className='px-4 py-3'>
             <div className="w-full border rounded-[20px] overflow-hidden">
-                <table className="w-full">
+                <table className="w-full dark:text-brand-300 text-brand-800">
                     <thead>
                     {table?.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
