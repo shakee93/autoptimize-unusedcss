@@ -17,12 +17,14 @@ import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {Monitor} from "lucide-react";
+import { useTour } from '@reactour/tour'
 
 const Header = ({ url }: { url: string}) => {
 
     const { setShowOptimizer , options, version } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
+    const { setIsOpen } = useTour()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -38,7 +40,7 @@ const Header = ({ url }: { url: string}) => {
                     )}
                 </div>
                 <div className='flex flex-column items-center gap-4'>
-                    <div className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
+                    <div data-tour='switch-report-strategy' className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
                             'absolute dark:transition-none shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] duration-400 -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                             activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
@@ -58,7 +60,7 @@ const Header = ({ url }: { url: string}) => {
                     </div>
                     <div>
                         <TooltipText text='Analyze the page'>
-                            <AppButton onClick={() =>  dispatch(fetchData(options, url, true)) } className='transition-none rounded-full border-none' variant='outline'>
+                            <AppButton data-tour='analyze' onClick={() =>  dispatch(fetchData(options, url, true)) } className='transition-none rounded-full border-none' variant='outline'>
                                 <ArrowPathIcon className={cn(
                                     'w-5',
                                     loading && 'animate-spin'
@@ -71,6 +73,7 @@ const Header = ({ url }: { url: string}) => {
 
 
             <div className='flex gap-8 items-center'>
+                {/*<button onClick={() => setIsOpen(true)}>Open Tour</button>*/}
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
                     <XMarkIcon className="h-6 w-6 dark:text-brand-300 text-brand-600" />
                 </TooltipText>

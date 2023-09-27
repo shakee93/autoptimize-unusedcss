@@ -84,3 +84,15 @@
 .rapidload-dark {
   color-scheme: dark;
 }
+
+.titan_tour_mask {
+  z-index: 150000 !important;
+}
+
+.reactour__popover {
+  z-index: 150000 !important;
+}
+
+.titan_tour_mask #hello_my_love rect:last-child {
+  rx: 6px !important;
+}

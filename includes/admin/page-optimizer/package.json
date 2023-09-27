@@ -50,6 +50,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.4",
     "@radix-ui/react-tooltip": "^1.0.6",
+    "@reactour/tour": "^3.6.1",
     "@tanstack/react-table": "^8.9.3",
     "@types/react-redux": "^7.1.25",
     "@wordpress/dom-ready": "^3.38.0",

@@ -10,18 +10,38 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import WebFont from "webfontloader";
 import {AnimatePresence} from "framer-motion";
+import {StepType, TourProvider} from '@reactour/tour'
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
     _showOptimizer?: boolean
 }) => {
+
+    const Steps: StepType[] = [
+        {
+            selector: '[data-tour="switch-report-strategy"]',
+            content: 'Switch the report type from here',
+        },
+        {
+            selector: '[data-tour="analyze"]',
+            content: 'Analyze your page hello',
+        },
+
+    ]
+
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
     const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
+    const [steps, setSteps] = useState(Steps)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+
+
+    useEffect(() => {
+        console.log('changed');
+    }, [steps])
 
     useEffect(() => {
 
@@ -53,10 +73,26 @@ const App = ({ popup, _showOptimizer = false }: {
         dispatch(fetchData(options, options.optimizer_url, false))
     }, [dispatch, activeReport]);
 
+
+
     return (
-        <AnimatePresence>
-            {(mounted && showOptimizer) && <PageOptimizer/>}
-        </AnimatePresence>
+        <TourProvider
+            highlightedMaskClassName='helloxxy'
+            maskClassName='titan_tour_mask'
+            maskId='hello_my_love'
+            onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {
+                if (steps) {
+                    if (currentStep === steps.length - 1) {
+                        setIsOpen(false)
+                    }
+                    setCurrentStep((s) => (s === steps.length - 1 ? 0 : s + 1))
+                }
+            }}
+            steps={steps}>
+            <AnimatePresence>
+                {(mounted && showOptimizer) && <PageOptimizer/>}
+            </AnimatePresence>
+        </TourProvider>
     );
 }
 
