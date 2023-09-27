@@ -130,17 +130,20 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
 
                 </div>
-                <div
-                     onClick={e => dispatch(setCommonState('activeMetric', null)) }
-                     className={cn(
-                         'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
-                         !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
-                     )
-                     }>
-                   <span><Hash className='w-4 text-brand-400'/></span> All Audits
-                </div>
+
                 {data?.metrics && (
-                    <Metrics performance={data?.performance} metrics={data.metrics}/>
+                    <div data-tour='metrics'>
+                        <div
+                            onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                            className={cn(
+                                'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
+                                !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
+                            )
+                            }>
+                            <span><Hash className='w-4 text-brand-400'/></span> All Audits
+                        </div>
+                        <Metrics performance={data?.performance} metrics={data.metrics}/>
+                    </div>
                 )}
             </Card>
 

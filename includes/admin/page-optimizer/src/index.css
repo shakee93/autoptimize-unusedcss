@@ -85,7 +85,7 @@
   color-scheme: dark;
 }
 
-.titan_tour_mask {
+.rpo-titan-tour {
   z-index: 150000 !important;
 }
 
@@ -93,6 +93,6 @@
   z-index: 150000 !important;
 }
 
-.titan_tour_mask #hello_my_love rect:last-child {
+.rpo-titan-tour #rpo-titan-tour-mask rect:last-child {
   rx: 6px !important;
 }

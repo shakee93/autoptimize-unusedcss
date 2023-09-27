@@ -51,11 +51,10 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
     }, [activeMetric])
 
     return (
-        <div>
-            <div className="flex flex-col w-full">
-                {sortedMetricsData
-                    .sort((a,b) => b.potentialGain - a.potentialGain)
-                    .map((metric, index) => (
+        <div className="flex flex-col w-full">
+            {sortedMetricsData
+                .sort((a,b) => b.potentialGain - a.potentialGain)
+                .map((metric, index) => (
                     <div key={index}
                          onClick={e => {
                              dispatch(setCommonState('activeMetric',metric))
@@ -118,8 +117,6 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                         </div>
                     </div>
                 ))}
-            </div>
-            {/*<JsonView data={metrics}/>*/}
         </div>
     )
 }
