@@ -100,7 +100,7 @@ const AuditColumnDropdown = ({ audit, heading, cell }: AuditColumnDropdownProps)
         <div className='relative'>
             {fileChanges && (fileChanges.length > 0 && fileChanges[0] !== fileChanges[fileChanges.length - 1]) && (
                 <span className='absolute -left-4 top-2'>
-                    <TooltipText text={
+                    <TooltipText delay={0} text={
                         <span className='flex gap-2 items-center'>
                             This action has been changed
                             <button onClick={handleResetAction} className='flex gap-2 border px-2 hover:bg-brand-100 dark:hover:bg-brand-800 rounded-xl text-xs items-center'>

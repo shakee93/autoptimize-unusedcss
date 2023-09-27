@@ -10,7 +10,6 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import WebFont from "webfontloader";
 import {AnimatePresence} from "framer-motion";
-import {StepType, TourProvider} from '@reactour/tour'
 import AppTour from "components/tour";
 
 const App = ({popup, _showOptimizer = false}: {

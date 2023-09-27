@@ -38,7 +38,7 @@ export default defineConfig((configEnv) => {
                             '@tanstack/react-table',
                             '@radix-ui/react-toast',
                             '@radix-ui/react-select',
-
+                            '@reactour/tour'
                         ]
                     },
                     entryFileNames: `assets/[name].js`,
