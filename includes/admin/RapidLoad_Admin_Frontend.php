@@ -85,7 +85,7 @@ class RapidLoad_Admin_Frontend
 
         add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
 
-
+        $this->rapidload_purge_all_process_request();
     }
 
     public function load_legacy_ajax(){
@@ -531,6 +531,34 @@ class RapidLoad_Admin_Frontend
                 'aoFiles' => !empty($original_files) ? array_values(array_column($original_files, 'original')) : []
             ]);
 
+    }
+
+    public function rapidload_purge_all_process_request(){
+
+        if ( empty( $_GET['_nonce'] ) || ! wp_verify_nonce( $_GET['_nonce'], 'uucss_nonce' ) ) {
+            return;
+        }
+
+        $job_type = isset($_GET['_job_type']) ? $_GET['_job_type'] : 'all';
+        $url = isset($_GET['_url']) ? $_GET['_url'] : false;
+        $clear = isset($_GET['_clear']) && boolval($_GET['_clear'] == 'true') ? true : false;
+
+        if($clear){
+            if ($url){
+                RapidLoad_DB::clear_job_data($job_type, [
+                    'url' => $url
+                ]);
+                RapidLoad_DB::clear_jobs($job_type, [
+                    'url' => $url
+                ]);
+            }else{
+                //RapidLoad_DB::clear_job_data($job_type);
+                RapidLoad_DB::clear_jobs($job_type);
+                do_action('rapidload/vanish');
+            }
+
+            wp_safe_redirect( remove_query_arg( array( '_job_type', '_url', '_clear', '_nonce' ) ) );
+        }
     }
 
     public function rapidload_purge_all(){

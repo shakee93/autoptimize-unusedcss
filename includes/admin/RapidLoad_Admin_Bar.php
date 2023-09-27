@@ -86,9 +86,9 @@ class RapidLoad_Admin_Bar {
                 [
                     'tooltip' => 'Clear CSS/JS/Font Optimizations',
                     'href' => wp_nonce_url( add_query_arg( array(
-                        'action' => 'rapidload_purge_all',
-                        'job_type' => 'url'
-                    ) ), 'uucss_nonce', 'nonce' ),
+                        '_action' => 'rapidload_purge_all',
+                        '_job_type' => 'url'
+                    ) ), 'uucss_nonce', '_nonce' ),
                     'icon' => 'clear_optimization'
                 ]
             ]
