@@ -27,7 +27,7 @@ const Header = ({ url }: { url: string}) => {
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
     const { setIsOpen, isOpen, setSteps, currentStep } = useTour()
-    const { optimizerRoot } = useCommonDispatch()
+    const { optimizerRoot, activeMetric } = useCommonDispatch()
     
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -132,7 +132,7 @@ const Header = ({ url }: { url: string}) => {
 
             <div className='flex gap-4 items-center'>
 
-                {data?.loadingExperience &&
+                {(data?.loadingExperience && !activeMetric) &&
                     <AppButton data-tour='analyze'
                                onClick={() => setIsOpen(true)}
                                className='transition-none h-12 rounded-2xl border-none' variant='outline'>
