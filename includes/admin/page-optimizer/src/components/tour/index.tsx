@@ -157,12 +157,7 @@ const AppTour = ({children}: TourProviderProps) => {
                 })
             }}
             onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {
-                if (steps) {
-                    if (currentStep === steps.length - 1) {
-                        setIsOpen(false)
-                    }
-                    setCurrentStep((s) => (s === steps.length - 1 ? 0 : s + 1))
-                }
+
             }}
             components={{
                 Badge : () => <></>,

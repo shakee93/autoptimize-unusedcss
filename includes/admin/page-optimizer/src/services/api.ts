@@ -1,4 +1,5 @@
 import {isDev} from "lib/utils";
+import {isArray} from "underscore";
 
 class ApiService {
     public baseURL: URL;
@@ -27,7 +28,16 @@ class ApiService {
         let data = await response.json();
 
         if (!data.success) {
-            throw new Error("Problem Retrieving Data: Our Apologies. For Assistance, Please Reach Out to Customer Support.");
+
+            if (isArray(data?.data)) {
+                throw new Error(
+                    `[Code:${data.data[0].code}] ${data.data[0].detail}`
+                );
+            }
+
+            throw new Error(
+                "Problem Retrieving Data: Our Apologies. For Assistance, Please Reach Out to Customer Support."
+            );
         }
 
         return data

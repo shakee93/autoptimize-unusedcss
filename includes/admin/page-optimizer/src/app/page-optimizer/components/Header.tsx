@@ -16,7 +16,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
-import {Monitor} from "lucide-react";
+import {GraduationCap, GraduationCapIcon, Monitor} from "lucide-react";
 import { useTour } from '@reactour/tour'
 
 const Header = ({ url }: { url: string}) => {
@@ -77,8 +77,22 @@ const Header = ({ url }: { url: string}) => {
             </div>
 
 
-            <div className='flex gap-8 items-center'>
-                <button onClick={() => setIsOpen(true)}>Open Tour</button>
+            <div className='flex gap-4 items-center'>
+
+                {data?.loadingExperience &&
+                    <AppButton data-tour='analyze'
+                               onClick={() => setIsOpen(true)}
+                               className='transition-none h-12 rounded-2xl border-none' variant='outline'>
+                        <div className='flex flex-col gap-1 items-center'>
+                            <GraduationCapIcon className={cn(
+                                'w-5',
+                                loading && 'animate-spin'
+                            )}/>
+                            <span className='text-xxs font-normal text-brand-500'>Get Started</span>
+                        </div>
+                    </AppButton>
+                }
+
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
                     <XMarkIcon className="h-6 w-6 dark:text-brand-300 text-brand-600" />
                 </TooltipText>
