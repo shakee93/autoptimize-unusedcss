@@ -1,16 +1,4 @@
 import React, {useState} from "react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "components/ui/tooltip";
-import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import {CircleDashed} from "lucide-react";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "components/ui/select";
 import prettyBytes from "pretty-bytes";
 import prettyMilliseconds from "pretty-ms";
 import {CellContext} from "@tanstack/react-table";

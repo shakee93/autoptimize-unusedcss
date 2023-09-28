@@ -97,7 +97,7 @@ const AuditColumnDropdown = ({ audit, heading, cell }: AuditColumnDropdownProps)
     }
 
     return (
-        <div className='relative'>
+        <div data-tour={`${audit.id}-file-action-${row.index}`} className='relative'>
             {fileChanges && (fileChanges.length > 0 && fileChanges[0] !== fileChanges[fileChanges.length - 1]) && (
                 <span className='absolute -left-4 top-2'>
                     <TooltipText delay={0} text={
@@ -116,7 +116,7 @@ const AuditColumnDropdown = ({ audit, heading, cell }: AuditColumnDropdownProps)
                 <SelectTrigger className="w-[180px] capitalize">
                     <SelectValue placeholder="Select action" />
                 </SelectTrigger>
-                <SelectContent className="z-[100001]">
+                <SelectContent data-tour={`${audit.id}-file-action-${row.index}-content`} className="z-[100001]">
                     <SelectGroup>
                         <SelectLabel>Actions</SelectLabel>
                         {renderSelectItems}

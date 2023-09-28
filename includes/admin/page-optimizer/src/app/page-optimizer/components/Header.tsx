@@ -18,6 +18,7 @@ import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {GraduationCap, GraduationCapIcon, Monitor} from "lucide-react";
 import { useTour } from '@reactour/tour'
+import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -28,6 +29,19 @@ const Header = ({ url }: { url: string}) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
+    useEffect(() => {
+
+
+        setSteps && setSteps(p => {
+            return [
+                ...Steps,
+                ...AuditSteps('render-blocking-resources'),
+                ...FinalSteps
+            ]
+        })
+
+
+    }, [data])
 
     return (
 

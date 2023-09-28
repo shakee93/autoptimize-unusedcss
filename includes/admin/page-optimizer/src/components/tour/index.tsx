@@ -1,9 +1,5 @@
 import React, {ReactNode, useEffect, useState} from "react";
 import {StepType, TourProvider, components, useTour, StylesObj} from "@reactour/tour";
-import {XMarkIcon} from "@heroicons/react/24/outline";
-import {MousePointerClick} from "lucide-react";
-import {Button} from "components/ui/button";
-import Steps from "components/tour/steps";
 import Content from "components/tour/content";
 import {doArrow} from "components/tour/arrow";
 import {PopoverStylesObj} from "@reactour/popover";
@@ -43,6 +39,8 @@ const AppTour = ({children}: TourProviderProps) => {
         })
     }
 
+    // NOTE: All the steps are initiated in Header.tsx
+
     return (
         <TourProvider
             showDots={true}
@@ -59,7 +57,7 @@ const AppTour = ({children}: TourProviderProps) => {
                 Content : (props) => <Content {...props} />,
                 Navigation : () => <></>
             }}
-            steps={Steps}>
+            steps={[]}>
             {children}
         </TourProvider>
     )
