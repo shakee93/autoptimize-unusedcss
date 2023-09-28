@@ -14,6 +14,7 @@ export const setCommonState = (
 
         dispatch({
             type: SET_STATE, payload : {
+                activeReport: 'mobile',
                 key,
                 value
             }

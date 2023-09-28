@@ -1,15 +1,16 @@
-
-export interface CommonState {
-    activeTab: AuditTypes,
-    activeMetric: Metric | null
-    hoveredMetric: Metric | null
-}
+export type CommonState = {
+    activeTab: AuditTypes;
+    activeMetric?: Metric | null;
+    hoveredMetric?: Metric | null;
+    openAudits: string[];
+};
 
 export const SET_STATE = 'SET_STATE';
 
 interface SetStateAction {
     type: typeof SET_STATE;
     payload: {
+        activeReport: ReportType,
         key: string,
         value: any
     }

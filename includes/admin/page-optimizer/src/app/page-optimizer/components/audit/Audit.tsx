@@ -1,6 +1,6 @@
 import Card from "@/components/ui/card";
 import {PlusCircleIcon, MinusCircleIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
-import React, {useState, useRef, useEffect, forwardRef, useMemo} from "react";
+import React, {useState, useRef, useEffect, forwardRef, useMemo, useCallback} from "react";
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
 import 'react-json-view-lite/dist/index.css';
 import AuditContent from "app/page-optimizer/components/audit/content";
@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/hover-card"
 import {toast} from "components/ui/use-toast";
 import metrics from "app/page-optimizer/components/performance-widgets/Metrics";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
 
 export interface AuditProps {
     audit: Audit;
@@ -34,48 +36,38 @@ export interface AuditProps {
 
 const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions = true, metrics = true }, ref) => {
 
-    // const [toggleFiles, setToggleFiles] = useState(false);
-    // const shouldOpen = index === 0 && ['opportunities', 'diagnostics'].includes(activeTab)  && (audit?.files?.items?.length > 0 || audit?.settings.length > 0)
-    const [toggleFiles, setToggleFiles] = useState( false);
-
     const {settings, activeReport, data} = useSelector(optimizerData);
     const divRef = useRef<HTMLDivElement>(null);
-    const {openAudits, setOpenAudits} = useAppContext()
+    const {dispatch, openAudits} = useCommonDispatch()
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
     const filesOrActions = (audit.files?.items?.length > 0 || audit.settings.length > 0)
 
 
+
     if (!audit?.id) {
         return <></>;
     }
+
+
+    const toggleFiles = useMemo(() =>  openAudits.includes(audit.id), [openAudits])
+    const setToggleFiles = useCallback(() => {
+        const isAuditOpen = openAudits.includes(audit.id);
+
+        const updatedAudits = isAuditOpen
+            ? openAudits.filter(openAudit => openAudit !== audit.id)
+            : [...openAudits, audit.id];
+
+        dispatch(setCommonState('openAudits', updatedAudits));
+
+    }, [openAudits]);
 
     let icon = audit.icon
 
     if (audit.type === 'passed_audit') {
         icon = 'pass'
     }
-
-    useEffect(() => {
-
-        // setOpenAudits(prevOpenAudits => {
-        //     if (toggleFiles) {
-        //         // Add if not present
-        //         if (!prevOpenAudits.includes(audit.id)) {
-        //             return [...prevOpenAudits, audit.id];
-        //         }
-        //     } else {
-        //         // Remove if present
-        //         return prevOpenAudits.filter(id => id !== audit.id);
-        //     }
-        //
-        //     return prevOpenAudits; // Return the array unchanged if no action is taken
-        // });
-
-    }, [toggleFiles, activeReport]);
-
-
 
     const summary = () => {
         const numItems = audit.files?.items?.length || 0;
@@ -104,6 +96,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
     const activeSettings = useMemo(() => (audit.settings.filter(s => s.inputs[0].value)), [audit.settings])
     const totalMetricsGain = useMemo(() => audit.metrics.reduce((total,b) => b.potentialGain + total, 0), [audit.metrics])
+
 
     return (
         <Card
@@ -210,7 +203,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                                          </span>
                                 } className='flex flex-col border gap-2 bg-white dark:bg-brand-950 rounded-lg py-2 px-2'>
                                     <div
-                                        onClick={() => setToggleFiles(prev => !prev)}
+                                        onClick={() => setToggleFiles()}
                                         className={cn(
                                             'cursor-pointer select-none text-xs text-brand-700 dark:text-brand-500 hover:bg-brand-100 dark:hover:bg-brand-800 transition-colors items-center flex gap-1.5 rounded-2xl',
                                             activeSettings.length > 1 && 'border py-0.5 px-2'
@@ -247,7 +240,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                         <TooltipText
                             text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
                         >
-                            <div onClick={() => setToggleFiles(prev => !prev)}
+                            <div onClick={() => setToggleFiles()}
                                  className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
 
                                 {filesOrActions ? (

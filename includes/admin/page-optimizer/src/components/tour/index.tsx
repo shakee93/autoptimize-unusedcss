@@ -28,7 +28,7 @@ const AppTour = ({children}: TourProviderProps) => {
         }),
         maskWrapper: (base) => ({
             ...base,
-            color: 'rgb(0,0,0,0.02)',
+            color: 'rgb(0,0,0,0.04)',
             opacity: 1
         }),
         highlightedArea: (base, { x, y, width, height } : any) => ({
