@@ -116,7 +116,7 @@ const Content = () => {
                     } : a
                 ))
 
-                let result = await fetch(action.href);
+                let result = await fetch(action.href.replace(/&amp;/g, '&'));
 
                 toast({
 
