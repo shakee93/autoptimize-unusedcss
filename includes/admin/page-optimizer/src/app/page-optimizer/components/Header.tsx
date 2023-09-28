@@ -24,7 +24,7 @@ const Header = ({ url }: { url: string}) => {
     const { setShowOptimizer , options, version } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
-    const { setIsOpen, isOpen } = useTour()
+    const { setIsOpen, isOpen, setSteps } = useTour()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
