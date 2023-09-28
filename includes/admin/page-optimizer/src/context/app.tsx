@@ -26,6 +26,8 @@ interface OptimizerContextProps {
     togglePerformance: boolean;
     setTogglePerformance: Dispatch<SetStateAction<boolean>>;
     optimizerContainer: RefObject<HTMLElement>
+    invalidatingCache: boolean
+    setInvalidatingCache: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -61,6 +63,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     const [savingData, setSavingData] = useState<boolean>(false)
     const [togglePerformance, setTogglePerformance] = useState(true);
     const optimizerContainer = useRef<HTMLElement|null>(null);
+    const [invalidatingCache, setInvalidatingCache] = useState<boolean>(false)
 
     useEffect(() => {
         const updateData = (event: RapidLoadSetOptimizerEvent) => {
@@ -123,7 +126,9 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
             setTogglePerformance,
             savingData,
             setSavingData,
-            optimizerContainer
+            optimizerContainer,
+            invalidatingCache,
+            setInvalidatingCache
         }}>
             {children}
         </AppContext.Provider>

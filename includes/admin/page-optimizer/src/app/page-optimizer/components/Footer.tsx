@@ -87,6 +87,8 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
         modeData,
         savingData,
         setSavingData,
+        invalidatingCache,
+        setInvalidatingCache,
         global
     } = useAppContext()
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
@@ -107,11 +109,18 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
             return;
         }
 
-        setSavingData(true);
-
         const api = new ApiService(options);
 
         try {
+
+            if (analyze) {
+                setInvalidatingCache(true)
+                await api.post('clear_page_cache')
+                setInvalidatingCache(false)
+            }
+
+            setSavingData(true);
+
             const res = await api.updateSettings(
                 url,
                 activeReport,
@@ -139,8 +148,9 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
 
         setSavingData(false)
+        setInvalidatingCache(false)
 
-    }, [data, activeReport, reload])
+    }, [data, activeReport, reload, savingData, invalidatingCache])
 
     const computeDialogData = useCallback((data: OptimizerResults | null | undefined) => {
         if (!data) {
@@ -163,7 +173,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
 
 
-    const saveActions = useMemo(() => ( [
+    const saveActions =[
         {
             text: 'Save Changes',
             title: 'Save Changes?',
@@ -192,7 +202,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                 submitSettings(false, true)
             }
         },
-    ]), [data, activeReport, reload])
+    ]
 
 
     const { toast } = useToast()
@@ -295,7 +305,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                 <Button data-tour='save-changes' ref={refSaveButton} asChild
                                         className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
                                     <AlertDialogTrigger onClick={e => setActiveAction(0)} className='flex gap-2 items-center pl-3 pr-2 h-full'>
-                                        {savingData ?
+                                        {(savingData || invalidatingCache) ?
                                             <Loader className='w-5 mr-0.5 animate-spin'/> :
                                             <SaveIcon className='w-5 mr-0.5'/>}
                                         {defaultAction > 0 ? saveActions[activeAction].text : saveActions[0].text}
@@ -315,8 +325,10 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                         <span key={index}>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem onClick={e => {
-                                                setActiveAction(saveActions.indexOf(action))
-                                                setOpen(true)
+                                               setTimeout(() => {
+                                                   setOpen(true)
+                                                   setActiveAction(saveActions.indexOf(action))
+                                               }, 100)
                                             }}>{action.text}</DropdownMenuItem>
                                         </span>
                                     ))}
@@ -331,7 +343,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogAction onClick={e => saveActions[activeAction].onClick()} >Save Changes</AlertDialogAction>
-                                        <AlertDialogCancel>Discard</AlertDialogCancel>
+                                        <AlertDialogCancel onClick={e => setOpen(false)}>Discard</AlertDialogCancel>
                                     </AlertDialogFooter>
                                 </div>
                             </AlertDialogContent>
@@ -404,4 +416,4 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
     );
 }
 
-export default React.memo(Footer)
+export default Footer

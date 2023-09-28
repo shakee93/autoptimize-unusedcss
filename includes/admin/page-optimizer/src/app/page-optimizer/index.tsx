@@ -39,7 +39,8 @@ export default function PageOptimizer() {
         options,
         savingData,
         togglePerformance,
-        optimizerContainer
+        optimizerContainer,
+        invalidatingCache
     } = useAppContext()
 
     let url = options?.optimizer_url;
@@ -75,10 +76,12 @@ export default function PageOptimizer() {
                         'container grid grid-cols-12 gap-8 pt-4',
                     )}>
 
-                        {savingData && (
+                        {(savingData || invalidatingCache) && (
                             <div className='fixed h-screen w-screen inset-0 z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
                                 <div className='flex gap-2 items-center absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2'>
-                                    <Loader className='w-5 animate-spin'/> Saving Changes...
+                                    <Loader className='w-5 animate-spin'/>
+                                    {savingData && 'Saving Changes...'}
+                                    {invalidatingCache && 'Flushing Cache...'}
                                 </div>
                             </div>
                         )}

@@ -180,7 +180,7 @@ const SpeedIndex = () => {
                                 <Circle style={{
                                     fill:  usePerformanceColors(activeMetric?.score)[1]
                                 }} className='w-3 stroke-none mt-[1px] dark:fill-brand-700'/> <span>
-                                {activeMetric?.icon === 'pass' && <>Great! Above </>}{(activeMetric?.icon === 'fail' || activeMetric?.icon === 'average') && <>Should be below</>} <span className='text-brand-800 dark:text-brand-500 font-medium'>{metricPoorGood[activeReport][activeMetric?.refs.acronym].good}{activeMetric.refs.acronym !== 'CLS' && 'ms'}</span>
+                                {activeMetric?.icon === 'pass' && <>Great! You kept it below </>}{(activeMetric?.icon === 'fail' || activeMetric?.icon === 'average') && <>Should be below</>} <span className='text-brand-800 dark:text-brand-500 font-medium'>{metricPoorGood[activeReport][activeMetric?.refs.acronym].good}{activeMetric.refs.acronym !== 'CLS' && 'ms'}</span>
                             </span>
                             </li>
                             {points.map((point, index) => (

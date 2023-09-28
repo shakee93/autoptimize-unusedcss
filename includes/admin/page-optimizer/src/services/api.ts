@@ -101,9 +101,12 @@ class ApiService {
         }
     }
 
-    async post() {
+    async post(action : string | null = null) {
 
         try {
+
+            if(action) this.baseURL.searchParams.append('action', action)
+
             const response = await fetch(this.baseURL, {
                 method: "GET",
                 headers: {
