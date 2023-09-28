@@ -1,6 +1,7 @@
-import {CommonAction, CommonState, SET_STATE} from "./commonTypes";
+import {CommonAction, CommonState, SET_ROOT_STATE, SET_STATE} from "./commonTypes";
 
 const initialState: CommonState = {
+    optimizerRoot: null,
     mobile: {
         activeTab: 'opportunities',
         openAudits: [],
@@ -26,6 +27,13 @@ const commonReducer = (state = initialState, action: CommonAction): CommonState 
                     ... {
                         [action.payload.key] : action.payload.value
                     }
+                }
+            };
+        case SET_ROOT_STATE:
+            return {
+                ...state,
+                ... {
+                    [action.payload.key] : action.payload.value
                 }
             };
         default:

@@ -7,12 +7,14 @@ const useCommonDispatch = () => {
 
     const dispatch: ThunkDispatch<RootState, unknown, CommonAction> = useDispatch();
     const common: CommonState['mobile'] = useSelector((state: RootState) => state.common[state.app.activeReport])
+    const root: CommonState = useSelector((state: RootState) => state.common)
 
 
     return {
         dispatch,
         common,
-        ...common
+        ...common,
+        ...root
     }
 }
 

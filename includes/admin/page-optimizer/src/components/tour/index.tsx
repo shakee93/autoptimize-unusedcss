@@ -43,7 +43,6 @@ const AppTour = ({children}: TourProviderProps) => {
 
     return (
         <TourProvider
-            showDots={true}
             maskClassName='rpo-titan-tour'
             maskId='rpo-titan-tour-mask'
             padding={{

@@ -19,14 +19,16 @@ import {cn} from "lib/utils";
 import {GraduationCap, GraduationCapIcon, Monitor} from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const Header = ({ url }: { url: string}) => {
 
-    const { setShowOptimizer , options, version } = useAppContext()
+    const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
-    const { setIsOpen, isOpen, setSteps } = useTour()
-
+    const { setIsOpen, isOpen, setSteps, currentStep } = useTour()
+    const { optimizerRoot } = useCommonDispatch()
+    
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     useEffect(() => {
@@ -54,15 +56,31 @@ const Header = ({ url }: { url: string}) => {
         }
 
         setSteps && setSteps(p => {
-            return [
+
+            let selector =
+                document.getElementById('rapidload-optimizer-shadow-dom')
+
+            let steps = [
                 ...Steps,
                 ...(tourAudit ? AuditSteps(tourAudit) : []),
-                ...FinalSteps
-            ]
+                ...(mode === 'normal' ? FinalSteps : [])
+            ].map(step => {
+
+                if (selector) {
+                    // @ts-ignore
+                    step.shadowSelector = typeof step.selector === 'string' ? step.selector : step.shadowSelector;
+                    // @ts-ignore
+                    step.selector = selector.shadowRoot?.querySelector(step.shadowSelector);
+                }
+
+                return step
+            })
+
+            return steps
         });
 
 
-    }, [data])
+    }, [activeReport, currentStep])
 
     return (
 

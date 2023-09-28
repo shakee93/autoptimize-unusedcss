@@ -3,7 +3,7 @@ import "./index.css";
 import stylesUrl from './index.css?url';
 import App from "app/app";
 import domReady from '@wordpress/dom-ready';
-import { LazyMotion, domAnimation } from "framer-motion"
+import {LazyMotion, domAnimation} from "framer-motion"
 
 
 import {createRoot} from 'react-dom/client';
@@ -23,8 +23,8 @@ interface initRapidLoadOptimizerProps {
     showOptimizer?: boolean
     popup?: HTMLElement | null
     mode?: RapidLoadOptimizerModes,
-    modeData ?:RapidLoadOptimizerModeData
-    global ?: boolean
+    modeData?: RapidLoadOptimizerModeData
+    global?: boolean
 }
 
 const logError = (error: Error, info: { componentStack: string }) => {
@@ -59,8 +59,9 @@ const ApplicationCrashed = () => {
 
     return (
         <div className='rpo-app-crashed' style={containerStyles}>
-            <div  className='rpo-error'>
-                RapidLoad Titan Optimizer crashed :( <button style={errorStyle} onClick={e => window.location.reload()}>Reload</button>
+            <div className='rpo-error'>
+                RapidLoad Titan Optimizer crashed :( <button style={errorStyle}
+                                                             onClick={e => window.location.reload()}>Reload</button>
             </div>
         </div>
     )
@@ -72,7 +73,7 @@ interface ApplicationErrorBoundaryProps {
     children: ReactNode
 }
 
-const ApplicationErrorBoundary = ({ fallback, onError, children } : ApplicationErrorBoundaryProps) => {
+const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErrorBoundaryProps) => {
 
     if (isDev) {
         return <div>{children}</div>
@@ -83,46 +84,51 @@ const ApplicationErrorBoundary = ({ fallback, onError, children } : ApplicationE
 
 export class RapidLoadOptimizer {
     constructor({
-        mode = 'normal',
-        container,
-        showOptimizer = false,
-        popup = null,
-        modeData,
-        global = false
-    } : initRapidLoadOptimizerProps) {
+                    mode = 'normal',
+                    container,
+                    showOptimizer = false,
+                    popup = null,
+                    modeData,
+                    global = false
+                }: initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-           <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
-               <RootProvider>
-                   <ShadowRoot styles={stylesUrl}>
-                       <Provider store={store}>
-                           <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode} modeData={modeData}>
-                               <TooltipProvider >
-                                   <LazyMotion features={domAnimation}>
-                                       {popup && (
-                                           <ShadowRoot node={popup} styles={stylesUrl}>
-                                               <SpeedPopover/>
-                                           </ShadowRoot>
-                                       )}
+            <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+                <Provider store={store}>
+                    <RootProvider>
+                        <ShadowRoot styles={stylesUrl}>
 
-                                       <App _showOptimizer={showOptimizer} popup={popup} />
+                            <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode}
+                                         modeData={modeData}>
+                                <TooltipProvider>
+                                    <LazyMotion features={domAnimation}>
+                                        {popup && (
+                                            <ShadowRoot node={popup} styles={stylesUrl}>
+                                                <SpeedPopover/>
+                                            </ShadowRoot>
+                                        )}
 
-                                   </LazyMotion>
-                               </TooltipProvider>
-                           </AppProvider>
-                       </Provider>
-                   </ShadowRoot>
-               </RootProvider>
-           </ApplicationErrorBoundary>
+                                        <App _showOptimizer={showOptimizer} popup={popup}/>
+
+                                    </LazyMotion>
+                                </TooltipProvider>
+                            </AppProvider>
+
+                        </ShadowRoot>
+                    </RootProvider>
+                </Provider>
+            </ApplicationErrorBoundary>
         );
     }
 
     static showOptimizer(value: boolean) {
 
         const event =
-            new CustomEvent('rapidLoad:set-optimizer', { detail: {
-                status: value
-            }});
+            new CustomEvent('rapidLoad:set-optimizer', {
+                detail: {
+                    status: value
+                }
+            });
 
         window.dispatchEvent(event);
     }
@@ -141,7 +147,7 @@ domReady(function () {
         const container = document.getElementById('rapidload-page-optimizer') as HTMLDivElement;
 
         // see if admin bar node is there get popup container
-        let popup =  replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+        let popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
 
 
         new RapidLoadOptimizer({
@@ -163,10 +169,10 @@ function replaceParentWithDiv(childElement: HTMLElement) {
     const newDiv = document.createElement('div');
     newDiv.innerHTML = parentElement?.innerHTML;
 
-    for(let i = 0; i < parentElement.attributes.length; i++) {
+    for (let i = 0; i < parentElement.attributes.length; i++) {
         const attr = parentElement.attributes[i];
 
-        if(attr.name === 'href') continue;
+        if (attr.name === 'href') continue;
 
         newDiv.setAttribute(attr.name, attr.value);
     }

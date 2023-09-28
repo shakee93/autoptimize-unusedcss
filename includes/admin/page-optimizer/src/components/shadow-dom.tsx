@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useRootContext } from '../context/root';
 import {isDev} from "lib/utils";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonRootState} from "../store/common/commonActions";
 
 interface ShadowDomProps {
     children: React.ReactNode;
@@ -14,12 +16,13 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
+    const { optimizerRoot, dispatch} = useCommonDispatch()
 
     useEffect(() => {
 
-        if (isDev) {
-            setPortalContainer(document.body as HTMLDivElement)
-        }
+        // if (isDev) {
+        //     setPortalContainer(document.body as HTMLDivElement)
+        // }
 
         if (portalContainer) {
             if (theme === 'dark') {
@@ -41,10 +44,10 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
 
     }, [theme, portalContainer, node]);
-
-    if(isDev) {
-        return <>{children}</>
-    }
+    //
+    // if(isDev) {
+    //     return <>{children}</>
+    // }
 
     useEffect(() => {
         if (hostRef.current) {
@@ -73,7 +76,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     return (
         <>
             {portal}
-            {!node && <div ref={hostRef}></div>}
+            {!node && <div id='rapidload-optimizer-shadow-dom' ref={hostRef}></div>}
         </>
     )
 };

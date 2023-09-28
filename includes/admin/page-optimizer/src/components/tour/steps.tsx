@@ -41,8 +41,6 @@ export const AuditSteps = (audit: Audit) : StepType[] => {
 
     let key = audit.id
 
-    console.log(audit.files?.headings?.find(h => h.valueType === 'controls'));
-
     const hasControls = !!audit.files?.headings?.find(h => h.valueType === 'controls')
     
     return  [
@@ -118,6 +116,11 @@ export const AuditSteps = (audit: Audit) : StepType[] => {
             ] : [])
         ] : [])
     ]
+}
+
+let getElement = (selector: string) => {
+
+    return document.querySelector('[data-tour="switch-report-strategy"]')
 }
 
 const Steps: StepType[] = [
