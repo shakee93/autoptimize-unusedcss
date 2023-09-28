@@ -1,5 +1,11 @@
 export type CommonState = {
-    [p: string]: {
+    mobile : {
+        activeTab: AuditTypes;
+        activeMetric?: Metric | null;
+        hoveredMetric?: Metric | null;
+        openAudits: string[];
+    }
+    desktop : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
