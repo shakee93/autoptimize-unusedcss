@@ -111,15 +111,16 @@ const AppTour = ({children}: TourProviderProps) => {
         return <></>
     }
 
-    const Content = ({ content, currentStep, setIsOpen }: any) => {
+    const Content = ({ content, currentStep, setIsOpen, setCurrentStep, }: any) => {
         
-        return <div className='text-md flex flex-col px-4'>
+        return <div className='text-md flex flex-col px-4 pb-4'>
             <div className='flex justify-between items-center px-4 py-4 border-b -mx-[22px]'>
                 <span className='text-lg font-semibold leading-none tracking-tight'>
                    {content.header ? content.header :  `Let's Start`}
                 </span>
                 <button className='flex gap-2 items-center' onClick={e => setIsOpen(false) }>
-                    <span className='text-sm text-brand-500'>{currentStep + 1} of {steps?.length}</span> <XMarkIcon className='w-5'/>
+
+                    <XMarkIcon className='w-5'/>
                 </button>
             </div>
 
@@ -131,6 +132,23 @@ const AppTour = ({children}: TourProviderProps) => {
                 <div className='pt-4'>{content.body}</div>
             )}
 
+            <div className='flex items-center justify-between pt-4'>
+                <span className='text-sm text-brand-500'>{currentStep + 1} of {steps.length}</span>
+                <Button onClick={e => {
+
+
+                    setCurrentStep((p: number) => {
+                        if (p < steps.length - 1) {
+                            return p + 1
+                        } else {
+                            setIsOpen(false)
+                            return 0
+                        }
+                    });
+                    
+                }} size='sm' >
+                    {currentStep < steps.length - 1 ? 'Next' : 'Finish'}</Button>
+            </div>
         </div>
     }
 
@@ -142,18 +160,73 @@ const AppTour = ({children}: TourProviderProps) => {
         )
     }
 
+    const opositeSide = {
+        top: "bottom",
+        bottom: "top",
+        right: "left",
+        left: "right",
+        custom: 'custom'
+    };
+
+    function doArrow(position:  keyof typeof opositeSide, verticalAlign: any, horizontalAlign : keyof typeof opositeSide ) {
+        if (!position || position === "custom") {
+            return {};
+        }
+
+        const width = 18;
+        const height = 10;
+        const color = "white";
+        const isVertical = position === "top" || position === "bottom";
+        const spaceFromSide = 10;
+
+        const obj = {
+            [`--rtp-arrow-${
+                isVertical ? opositeSide[horizontalAlign] : verticalAlign
+            }`]: height + spaceFromSide + "px",
+            [`--rtp-arrow-${opositeSide[position]}`]: -height + 2 + "px",
+            [`--rtp-arrow-border-${isVertical ? "left" : "top"}`]: `${
+                width / 2
+            }px solid transparent`,
+            [`--rtp-arrow-border-${isVertical ? "right" : "bottom"}`]: `${
+                width / 2
+            }px solid transparent`,
+            [`--rtp-arrow-border-${position}`]: `${height}px solid ${color}`
+        };
+        return obj;
+    }
+
     return (
         <TourProvider
+            showDots={true}
             maskClassName='rpo-titan-tour'
             maskId='rpo-titan-tour-mask'
             padding={{
-                popover: [15,15]
+                popover: [25,25]
             }}
             styles={{
-                popover : (base) => ({
+                popover : (base, state: any) => ({
                     ...base,
                     borderRadius: '10px',
                     padding: '0 8px',
+                    ...doArrow(state.position, state.verticalAlign, state.horizontalAlign)
+                }),
+                maskArea: (base) => ({ ...base,
+                    rx: 6,
+                }),
+                maskWrapper: (base) => ({
+                    ...base,
+                    color: 'rgb(0,0,0,0.03)',
+                    opacity: 1
+                }),
+                highlightedArea: (base, { x, y, width, height } : any) => ({
+                    ...base,
+                    display: "block",
+                    stroke: "#7f54b3",
+                    strokeWidth: 2,
+                    width: width,
+                    height: height,
+                    rx: 6,
+                    pointerEvents: "none"
                 })
             }}
             onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {
@@ -163,7 +236,7 @@ const AppTour = ({children}: TourProviderProps) => {
                 Badge : () => <></>,
                 Close : () => <></>,
                 Content,
-                Navigation
+                Navigation : () => <></>
             }}
             steps={steps}>
             {children}
