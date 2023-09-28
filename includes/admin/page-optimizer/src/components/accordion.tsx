@@ -27,11 +27,14 @@ export const Accordion: React.FC<AccordionProps> = ({
         closed: { height: 0, opacity: 0.5, overflow: 'hidden' },
     };
 
+    useEffect(() => {
+        setIsFirstRender(false);
+    }, []);
+
     return (
         <AnimatePresence mode='wait'>
             {isOpen && (
                 <m.div
-
                     ref={divRef}
                     className={cn(
                         'w-full', className
