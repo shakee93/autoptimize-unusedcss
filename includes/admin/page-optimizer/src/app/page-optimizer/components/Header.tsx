@@ -31,14 +31,35 @@ const Header = ({ url }: { url: string}) => {
 
     useEffect(() => {
 
+        let hasActions = true
+
+        let tourAudit = data?.grouped.opportunities.find(audit => {
+            return audit.settings.length > 0 && audit.files.items.length > 0;
+        })
+
+        if (!tourAudit) {
+            tourAudit = data?.grouped.diagnostics.find(audit => {
+                return audit.settings.length > 0 && audit.files.items.length > 0;
+            })
+        }
+
+        if (!tourAudit && data?.grouped?.opportunities?.length && data?.grouped?.opportunities?.length > 0) {
+            tourAudit = data?.grouped.opportunities[0]
+            hasActions = false
+        }
+
+        if(!tourAudit && data?.grouped?.diagnostics?.length && data?.grouped?.diagnostics?.length > 0) {
+            tourAudit = data?.grouped.diagnostics[0]
+            hasActions = false
+        }
 
         setSteps && setSteps(p => {
             return [
                 ...Steps,
-                ...AuditSteps('render-blocking-resources'),
+                ...(tourAudit ? AuditSteps(tourAudit) : []),
                 ...FinalSteps
             ]
-        })
+        });
 
 
     }, [data])

@@ -6,7 +6,7 @@ import {SET_STATE} from "./commonTypes";
 
 
 export const setCommonState = (
-    key : keyof CommonState[''],
+    key : keyof CommonState['mobile'],
     value: any,
 ):  ThunkAction<void, RootState, unknown, AnyAction> => {
     

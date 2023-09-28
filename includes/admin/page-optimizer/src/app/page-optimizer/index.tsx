@@ -37,9 +37,6 @@ export default function PageOptimizer() {
 
     const {
         options,
-        setOpenAudits,
-        mode,
-        manipulatingStyles,
         savingData,
         togglePerformance,
         optimizerContainer
@@ -93,13 +90,13 @@ export default function PageOptimizer() {
                         <>
 
                             {togglePerformance && (
-                                <aside data-tour='speed-insights' className="col-span-3">
+                                <aside className="col-span-3">
                                     <div className="text-lg ml-5  flex items-center gap-2">
                                         <Circle style={{
                                             fill: progressbarColor
                                         }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
                                         Speed Insights {togglePerformance && <TogglePerformance/>} </div>
-                                    <div className="widgets pt-4 flex">
+                                    <div   className="widgets pt-4 flex">
                                         <PageSpeedScore/>
                                     </div>
                                 </aside>

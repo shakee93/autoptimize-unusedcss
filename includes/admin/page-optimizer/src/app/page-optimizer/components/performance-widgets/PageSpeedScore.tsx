@@ -80,7 +80,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     return (
 
         <div className='w-full flex flex-col gap-4'>
-            <Card className='overflow-hidden'>
+            <Card data-tour='speed-insights' className='overflow-hidden'>
                 <div
                     className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
