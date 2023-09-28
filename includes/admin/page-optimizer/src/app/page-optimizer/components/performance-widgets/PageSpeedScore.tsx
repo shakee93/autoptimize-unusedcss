@@ -91,6 +91,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
                                     <PerformanceProgressBar
+                                        className='h-[176px]'
                                         performance={(data?.performance && gain && metric) ?
                                             (data.performance + gain >= 99) ? 99 :
                                                 data.performance + gain : data?.performance}>

@@ -164,7 +164,7 @@ const Content = () => {
                         {loading || on || error ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
-                            <PerformanceProgressBar performance={data?.performance}></PerformanceProgressBar>
+                            <PerformanceProgressBar className='h-[176px]' performance={data?.performance}></PerformanceProgressBar>
                         )}
                     </div>
 
