@@ -1,8 +1,10 @@
 export type CommonState = {
-    activeTab: AuditTypes;
-    activeMetric?: Metric | null;
-    hoveredMetric?: Metric | null;
-    openAudits: string[];
+    [p: string]: {
+        activeTab: AuditTypes;
+        activeMetric?: Metric | null;
+        hoveredMetric?: Metric | null;
+        openAudits: string[];
+    }
 };
 
 export const SET_STATE = 'SET_STATE';

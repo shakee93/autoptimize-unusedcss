@@ -6,15 +6,16 @@ import {SET_STATE} from "./commonTypes";
 
 
 export const setCommonState = (
-    key : keyof CommonState,
+    key : keyof CommonState[''],
     value: any,
 ):  ThunkAction<void, RootState, unknown, AnyAction> => {
     
     return async (dispatch: ThunkDispatch<RootState, unknown, CommonAction>, getState) => {
 
+        const activeReport = getState().app.activeReport
         dispatch({
             type: SET_STATE, payload : {
-                activeReport: 'mobile',
+                activeReport: activeReport,
                 key,
                 value
             }
