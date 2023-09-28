@@ -24,6 +24,7 @@ import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
 import {JsonView} from "react-json-view-lite";
+import ErrorFetch from "components/ErrorFetch";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -87,11 +88,7 @@ export default function PageOptimizer() {
 
                         {error ?
                             <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
-                                <ExclamationCircleIcon className='w-12 fill-red-500'/>
-                                <div className='flex flex-col gap-2'>
-                                    <span className='font-medium text-lg '>Oops! Something went wrong</span>
-                                    {error}
-                                </div>
+                                <ErrorFetch className='items-center' error={error}/>
                             </div> :
                         <>
 

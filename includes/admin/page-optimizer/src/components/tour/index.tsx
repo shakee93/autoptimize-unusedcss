@@ -78,6 +78,20 @@ const AppTour = ({children}: TourProviderProps) => {
                         </div>
                     </div>
             },
+            position: "left",
+            actionAfter: () => {
+                alert('ok')
+            }
+        },
+        {
+            selector: '[data-tour="audits"]',
+            content: {
+                // @ts-ignore
+                header : `Performance Audits & Actions`,
+                body : <>
+                    Discover the top audits needing attention and follow our recommended actions to enhance your page's performance.
+                </>
+            },
             position: "left"
         },
     ])

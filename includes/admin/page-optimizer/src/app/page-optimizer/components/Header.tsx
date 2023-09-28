@@ -60,11 +60,16 @@ const Header = ({ url }: { url: string}) => {
                     </div>
                     <div>
                         <TooltipText text='Analyze the page'>
-                            <AppButton data-tour='analyze' onClick={() =>  dispatch(fetchData(options, url, true)) } className='transition-none rounded-full border-none' variant='outline'>
-                                <ArrowPathIcon className={cn(
-                                    'w-5',
-                                    loading && 'animate-spin'
-                                )}/>
+                            <AppButton data-tour='analyze'
+                                       onClick={() =>  dispatch(fetchData(options, url, true)) }
+                                       className='transition-none h-12 rounded-2xl border-none' variant='outline'>
+                                <div className='flex flex-col gap-1 items-center'>
+                                    <ArrowPathIcon className={cn(
+                                        'w-5',
+                                        loading && 'animate-spin'
+                                    )}/>
+                                    <span className='text-xxs font-normal text-brand-500'>Analyze</span>
+                                </div>
                             </AppButton>
                         </TooltipText>
                     </div>

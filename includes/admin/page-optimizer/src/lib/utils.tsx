@@ -114,6 +114,8 @@ export function timeAgo(timestamp: number) {
   const yearsAgo = Math.round(daysAgo / 365.24);  // Using the average number of days in a year (considering leap years)
 
   if (secondsAgo < 60) {
+    return `just now`;
+  } else if (secondsAgo < 60) {
     return `${secondsAgo} seconds ago`;
   } else if (minutesAgo < 60) {
     return `${minutesAgo} minutes ago`;

@@ -31,6 +31,8 @@ import {changeReport} from "../../../store/app/appActions";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {Toaster} from "components/ui/toaster";
 import PerformanceProgressBar from "components/performance-progress-bar";
+import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
+import ErrorFetch from "components/ErrorFetch";
 
 const Content = () => {
 
@@ -159,7 +161,7 @@ const Content = () => {
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
                     <div className='mt-2'>
-                        {loading || on ? (
+                        {loading || on || error ? (
                             <Skeleton className="w-44 h-44 rounded-full"/>
                         ) : (
                             <PerformanceProgressBar performance={data?.performance}></PerformanceProgressBar>
@@ -216,21 +218,31 @@ const Content = () => {
                             </TooltipText>
                         </div>
                     </div>
-                    {loading || on ? (
+                    {error ?
                         <div className='flex flex-col gap-2'>
-                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
-                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
-                            <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                           <ErrorFetch error={error}/>
                         </div>
-                    ) : (
-                        <div className='flex flex-col gap-2'>
-                            <SpeedInsightGroup title='Opportunities' items={data?.grouped?.opportunities}/>
-                            <SpeedInsightGroup title='Diagnostics' items={data?.grouped?.diagnostics}/>
-                            <SpeedInsightGroup title='Passed Audits' success={true}
-                                               items={data?.grouped?.passed_audits}/>
-                        </div>
-                    )}
-                    <hr className='my-3 mx-6'/>
+                    : <>
+                            {loading || on  ? (
+                                <div className='flex flex-col gap-2'>
+                                    <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                                    <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                                    <Skeleton className="w-full h-[48px] rounded-[18px]"/>
+                                </div>
+                            ) : (
+                                <div className='flex flex-col gap-2'>
+                                    <SpeedInsightGroup title='Opportunities' items={data?.grouped?.opportunities}/>
+                                    <SpeedInsightGroup title='Diagnostics' items={data?.grouped?.diagnostics}/>
+                                    <SpeedInsightGroup title='Passed Audits' success={true}
+                                                       items={data?.grouped?.passed_audits}/>
+                                </div>
+                            )}
+                            <hr className='my-3 mx-6'/>
+                        </>
+                    }
+
+
+
                     <div className='flex gap-3 text-sm'>
                         <AppButton onClick={(e) => {
                             setShowOptimizer(true)
