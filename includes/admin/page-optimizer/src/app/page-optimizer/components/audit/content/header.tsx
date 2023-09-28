@@ -13,9 +13,10 @@ interface FilesTableHeaderProps {
     group: any
     open: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
+    index:number
 }
 
-const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps) => {
+const FilesTableHeader = ({audit, group, open, setOpen, index} : FilesTableHeaderProps) => {
 
 
 
@@ -54,6 +55,7 @@ const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps)
     return (
         <>
             <div
+                data-tour={`${audit.id}-file-group-${index}-header`}
                 className={cn(
                     'flex justify-between items-center gap-2 font-medium text-sm capitalize px-4 py-3',
                     open && 'border-b'
@@ -87,7 +89,9 @@ const FilesTableHeader = ({audit, group, open, setOpen} : FilesTableHeaderProps)
                 </div>
 
                 {(audit.settings.length > 0) && (
-                    <div className='flex flex-col gap-3 px-4'>
+                    <div
+                        data-tour={`${audit.id}-group-${index}-settings`}
+                        className='flex flex-col gap-3 px-4'>
                         <Settings type={group.type} audit={audit}/>
                     </div>
                 )}

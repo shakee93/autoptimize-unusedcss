@@ -79,37 +79,74 @@ const AppTour = ({children}: TourProviderProps) => {
                     </div>
             },
             position: "left",
-            actionAfter: () => {
-                alert('ok')
-            }
         },
         {
-            selector: '[data-tour="audits"]',
+            selector: '[data-tour="audit-unused-javascript"]',
             content: {
                 // @ts-ignore
-                header : `Performance Audits & Actions`,
+                header : `Explore Individual Audits`,
                 body : <>
-                    Discover the top audits needing attention and follow our recommended actions to enhance your page's performance.
+                    <MousePointerClick className='mb-2'/>
+                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed information on each performance audit and dive deeper.
                 </>
             },
-            position: "left"
+            position: "left",
+            resizeObservables: ['[data-tour="audit-unused-javascript"]'],
+        },
+        {
+            selector: '[data-tour="unused-javascript-group-0"]',
+            content: {
+                // @ts-ignore
+                header: `Resources are Grouped`,
+                body: <>
+                    <MousePointerClick className='mb-2'/>
+                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed
+                    information on each performance audit and dive deeper.
+                </>
+            },
+            position: "left",
+        },
+        {
+            selector: '[data-tour="unused-javascript-group-0-settings"]',
+            content: {
+                // @ts-ignore
+                header: `Settings for Each resource type`,
+                body: <>
+                    <MousePointerClick className='mb-2'/>
+                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed
+                    information on each performance audit and dive deeper.
+                </>
+            },
+            position: "top",
+        },
+        {
+            selector: '[data-tour="unused-javascript-group-0-table"]',
+            content: {
+                // @ts-ignore
+                header: `Your files`,
+                body: <>
+                    <MousePointerClick className='mb-2'/>
+                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed
+                    information on each performance audit and dive deeper.
+                </>
+            },
+            position: "top",
+        },
+        {
+            selector: '[data-tour="unused-javascript-group-0-table-action"]',
+            content: {
+                // @ts-ignore
+                header: `Your action`,
+                body: <>
+                    <MousePointerClick className='mb-2'/>
+                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed
+                    information on each performance audit and dive deeper.
+                </>
+            },
+            position: "top",
         },
     ])
 
-    const Close = ({onClick} :{ onClick?: () => void}) => {
-        return (
-            <button
-                onClick={onClick}
-                className='absolute right-2 top-2'
-            >
-                <XMarkIcon className='w-5'/>
-            </button>
-        )
-    }
-
-     const Badge = () => {
-        return <></>
-    }
 
     const Content = ({ content, currentStep, setIsOpen, setCurrentStep, }: any) => {
         
@@ -150,14 +187,6 @@ const AppTour = ({children}: TourProviderProps) => {
                     {currentStep < steps.length - 1 ? 'Next' : 'Finish'}</Button>
             </div>
         </div>
-    }
-
-    const Navigation = (props: any) => {
-        return (
-            <div className='px-4 pb-4'>
-                <components.Navigation  {...props}  />
-            </div>
-        )
     }
 
     const opositeSide = {
@@ -208,6 +237,7 @@ const AppTour = ({children}: TourProviderProps) => {
                     ...base,
                     borderRadius: '10px',
                     padding: '0 8px',
+                    zIndex: 150000,
                     ...doArrow(state.position, state.verticalAlign, state.horizontalAlign)
                 }),
                 maskArea: (base) => ({ ...base,
@@ -215,13 +245,13 @@ const AppTour = ({children}: TourProviderProps) => {
                 }),
                 maskWrapper: (base) => ({
                     ...base,
-                    color: 'rgb(0,0,0,0.03)',
+                    color: 'rgb(0,0,0,0.02)',
                     opacity: 1
                 }),
                 highlightedArea: (base, { x, y, width, height } : any) => ({
                     ...base,
                     display: "block",
-                    stroke: "#7f54b3",
+                    stroke: "#0e172a",
                     strokeWidth: 2,
                     width: width,
                     height: height,

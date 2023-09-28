@@ -24,7 +24,7 @@ const Header = ({ url }: { url: string}) => {
     const { setShowOptimizer , options, version } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
-    const { setIsOpen } = useTour()
+    const { setIsOpen, isOpen } = useTour()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -94,7 +94,10 @@ const Header = ({ url }: { url: string}) => {
                 }
 
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
-                    <XMarkIcon className="h-6 w-6 dark:text-brand-300 text-brand-600" />
+                    <XMarkIcon className={cn(
+                        'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
+                        isOpen && 'opacity-10'
+                    )} />
                 </TooltipText>
             </div>
         </header>

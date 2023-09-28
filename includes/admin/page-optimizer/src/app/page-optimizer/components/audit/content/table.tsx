@@ -8,9 +8,10 @@ import {JsonView} from "react-json-view-lite";
 interface FileGroupProps {
     audit: Audit
     group: any
+    index: number
 }
 
-const FileTable = ({audit, group }: FileGroupProps) => {
+const FileTable = ({audit, group, index }: FileGroupProps) => {
 
     if (!group?.items?.length) {
         return <></>
@@ -38,7 +39,9 @@ const FileTable = ({audit, group }: FileGroupProps) => {
     )
 
     return (
-        <div className='px-4 py-3'>
+        <div
+            data-tour={`${audit.id}-group-${index}-table`}
+            className='px-4 py-3'>
             <div className="w-full border rounded-[20px] overflow-hidden">
                 <table className="w-full dark:text-brand-300 text-brand-800">
                     <thead>

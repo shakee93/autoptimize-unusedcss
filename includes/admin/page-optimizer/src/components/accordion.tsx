@@ -1,12 +1,14 @@
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import {AnimatePresence, m, motion} from 'framer-motion';
+import {cn} from "lib/utils";
 
-interface AccordionProps {
+interface AccordionProps{
     isOpen: boolean;
     initialRender?: boolean
     onAnimationComplete?: () => void
     onHeightChange?: () => void
-    children: ReactNode
+    children: ReactNode,
+    className?: string
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
@@ -14,7 +16,9 @@ export const Accordion: React.FC<AccordionProps> = ({
                                                         initialRender = false,
                                                         children,
                                                         onAnimationComplete,
-                                                        onHeightChange
+                                                        onHeightChange,
+    className,
+                                                        ...props
                                                     }) => {
     const [isFirstRender, setIsFirstRender] = useState(!initialRender);
     const divRef = useRef(null); // Reference for the m.div
@@ -23,26 +27,15 @@ export const Accordion: React.FC<AccordionProps> = ({
         closed: { height: 0, opacity: 0.5, overflow: 'hidden' },
     };
 
-    useEffect(() => {
-        setIsFirstRender(false);
-    }, []);
-
-    // useEffect(() => {
-    //     if (divRef.current) {
-    //         const height = divRef.current.clientHeight;
-    //         console.log(height);
-    //         // onHeightChange && onHeightChange(height)
-    //         // You can call your function here and pass the height if needed
-    //     }
-    // }, [divRef.current?.clientHeight]);
-
-
     return (
         <AnimatePresence mode='wait'>
             {isOpen && (
                 <m.div
+
                     ref={divRef}
-                    className='w-full'
+                    className={cn(
+                        'w-full', className
+                    )}
                     variants={variants}
                     key="auditContent"
                     transition={{
@@ -53,6 +46,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                     animate='open'
                     exit='closed'
                     onAnimationComplete={() => onAnimationComplete && onAnimationComplete()}
+                    {...props}
                 >
                     { children }
                 </m.div>

@@ -19,13 +19,17 @@ const FilesGroup = ({ audit, index, group, type = 'table' }: FilesTableProps) =>
 
 
     return (
-        <div className={cn(
+        <div
+            data-tour={`${audit.id}-group-${index}`}
+            className={cn(
             "flex flex-col",
             type == 'table' && 'border-t'
         )}>
             {type == 'table' && (
                 <div className={cn('flex flex-col gap-3 justify-center ')}>
-                    <FilesTableHeader audit={audit}
+                    <FilesTableHeader
+                        index={index}
+                        audit={audit}
                                       open={open}
                                       setOpen={setOpen}
                                       group={group}
@@ -34,7 +38,9 @@ const FilesGroup = ({ audit, index, group, type = 'table' }: FilesTableProps) =>
             )}
 
             <Accordion isOpen={open}>
-                <FileTable group={group} audit={audit} />
+                <FileTable
+                    index={index}
+                    group={group} audit={audit} />
                 {/*<JsonView data={group}/>*/}
             </Accordion>
 
