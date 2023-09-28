@@ -1,6 +1,31 @@
-import {StepType} from "@reactour/tour";
-import React from "react";
+import {StepType, useTour} from "@reactour/tour";
+import React, {useEffect, useState} from "react";
 import {MousePointerClick} from "lucide-react";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../store/common/commonActions";
+
+
+const TourAuditOpen = () => {
+
+    const { dispatch, openAudits } = useCommonDispatch()
+
+    useEffect(() => {
+
+        const isAuditOpen = openAudits.includes('unused-javascript');
+
+        if (!isAuditOpen) {
+            dispatch(setCommonState('openAudits', [...openAudits, 'unused-javascript']));
+        }
+        
+    }, [])
+
+    
+    return  <>
+        <MousePointerClick className='mb-2'/>
+        Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed information on each performance audit and dive deeper.
+    </>
+}
+
 
 const Steps: StepType[] =[
         {
@@ -77,13 +102,16 @@ const Steps: StepType[] =[
             content: {
                 // @ts-ignore
                 header : `Explore Individual Audits`,
-                body : <>
-                    <MousePointerClick className='mb-2'/>
-                    Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed information on each performance audit and dive deeper.
-                </>
+                body : <TourAuditOpen/>
             },
             position: "left",
             resizeObservables: ['[data-tour="audit-unused-javascript"]'],
+            actionAfter: () => {
+
+
+
+
+            }
         },
         {
             selector: '[data-tour="unused-javascript-group-0"]',

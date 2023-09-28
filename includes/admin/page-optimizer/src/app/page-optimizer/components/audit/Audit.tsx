@@ -52,6 +52,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
 
     const toggleFiles = useMemo(() =>  openAudits.includes(audit.id), [openAudits])
+
     const setToggleFiles = useCallback(() => {
         const isAuditOpen = openAudits.includes(audit.id);
 
