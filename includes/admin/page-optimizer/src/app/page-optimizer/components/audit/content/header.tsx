@@ -44,9 +44,6 @@ const FilesTableHeader = ({audit, group, open, setOpen, index} : FilesTableHeade
 
     let rows = group.items
 
-    // TODO: count the file changes
-
-    // TODO: possible bug in list type table audits
     // @ts-ignore
     const resources = rows.filter((r) => !r?.passed) || []
     // @ts-ignore

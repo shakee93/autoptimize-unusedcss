@@ -17,10 +17,11 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
     const { optimizerRoot, dispatch} = useCommonDispatch()
+    const [forDev, setForDev] = useState(false)
 
     useEffect(() => {
 
-        if (isDev) {
+        if (isDev && forDev) {
             setPortalContainer(document.body as HTMLDivElement)
         }
 
@@ -45,7 +46,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
     //
-    if(isDev) {
+    if(isDev && forDev) {
         return <>{children}</>
     }
 

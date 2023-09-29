@@ -34,11 +34,13 @@ const AuditContent = ({audit}: AuditContentProps) => {
     }
 
 
-    let remainingSettings = audit
+    let remainingSettings = useMemo(() => (
+        audit
         .settings
         // @ts-ignore
         .filter(s => ! audit.files?.grouped_items?.map(group => transformFileType(audit, group.type))
-            .includes(s.category) )
+            .includes(s.category) )),
+        [])
 
     let points = useMemo(() => {
         return auditPoints[audit.id] || []
@@ -62,11 +64,13 @@ const AuditContent = ({audit}: AuditContentProps) => {
             </div>
 
             {(audit.settings.length > 0 && remainingSettings.length > 0) && (
-                <div className='flex flex-col border-t py-4 px-4 gap-3'>
-                    <div className='font-medium text-sm ml-2'>
-                        {audit.settings.length !== remainingSettings.length ? 'Additional Settings' : 'Recommended Settings'}
-                    </div>
-                    <Settings audit={audit} auditSettings={remainingSettings}/>
+                <div  className='border-t py-4 px-4'>
+                   <div data-tour={`${audit.id}-recommended-settings`} className='w-fit flex flex-col gap-3'>
+                       <div className='font-medium text-sm ml-2'>
+                           {audit.settings.length !== remainingSettings.length ? 'Additional Settings' : 'Recommended Settings'}
+                       </div>
+                       <Settings audit={audit} auditSettings={remainingSettings}/>
+                   </div>
                 </div>
             )}
 

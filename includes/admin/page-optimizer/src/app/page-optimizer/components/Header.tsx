@@ -22,6 +22,7 @@ import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
+import {setCommonState} from "../../../store/common/commonActions";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -29,8 +30,8 @@ const Header = ({ url }: { url: string}) => {
     const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
-    const { setIsOpen, isOpen, setSteps, currentStep } = useTour()
-    const { optimizerRoot, activeMetric } = useCommonDispatch()
+    const { setIsOpen, isOpen, setSteps, currentStep, setCurrentStep } = useTour()
+    const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
         return storedData ? JSON.parse(storedData) : true;
@@ -79,7 +80,6 @@ const Header = ({ url }: { url: string}) => {
                     // @ts-ignore
                     step.selector = selector.shadowRoot?.querySelector(step.shadowSelector);
                 }
-
                 return step
             })
 
@@ -92,6 +92,14 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
     }, [tourPrompt])
+
+    useEffect(() => {
+
+        if (!isOpen) {
+            setCurrentStep(0);
+        }
+
+    }, [activeTab, activeReport])
 
     return (
 
@@ -125,7 +133,10 @@ const Header = ({ url }: { url: string}) => {
                     <div>
                         <TooltipText text='Analyze the page'>
                             <AppButton data-tour='analyze'
-                                       onClick={() =>  dispatch(fetchData(options, url, true)) }
+                                       onClick={() =>  {
+                                           dispatch(fetchData(options, url, true))
+                                           commonDispatch(setCommonState('openAudits', []))
+                                       }}
                                        className='transition-none h-12 rounded-2xl border-none' variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>
                                     <ArrowPathIcon className={cn(

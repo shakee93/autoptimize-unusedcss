@@ -88,7 +88,7 @@ const Performance = () => {
             )}>
                 <Card data-tour='audit-groups'
                       className={cn(
-                          'flex transition-all justify-between items-center select-none p-0 pl-6 pr-3',
+                          'flex justify-between items-center select-none p-0 pl-6 pr-3',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
@@ -130,7 +130,7 @@ const Performance = () => {
 
                     <div className='flex items-center'>
                         <AnimatePresence>
-                            {openAudits.length > 0 &&
+                            {openAudits.length > 1 &&
                                 <ScaleUp>
                                     <div
                                         onClick={e => dispatch(setCommonState('openAudits', []))}

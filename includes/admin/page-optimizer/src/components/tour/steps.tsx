@@ -1,23 +1,24 @@
 import {StepType, useTour} from "@reactour/tour";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {MousePointerClick} from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../store/common/commonActions";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../store/app/appSelector";
+import {transformFileType} from "lib/utils";
 
 
-const TourAuditOpen = ({ audit } : { audit: Audit}) => {
+const TourAuditOpen = ({audit}: { audit: Audit }) => {
 
     const {dispatch, openAudits} = useCommonDispatch()
-    const { activeReport } = useSelector(optimizerData)
+    const {activeReport} = useSelector(optimizerData)
 
     useEffect(() => {
 
         const isAuditOpen = openAudits.includes(audit.id);
 
         dispatch(setCommonState('activeTab',
-            audit.type === 'opportunity' ? 'opportunities': audit.type
+            audit.type === 'opportunity' ? 'opportunities' : audit.type
         ));
 
         if (!isAuditOpen) {
@@ -37,13 +38,20 @@ const TourAuditOpen = ({ audit } : { audit: Audit}) => {
     </>
 }
 
-export const AuditSteps = (audit: Audit) : StepType[] => {
+export const AuditSteps = (audit: Audit): StepType[] => {
 
     let key = audit.id
 
     const hasControls = !!audit.files?.headings?.find(h => h.valueType === 'controls')
-    
-    return  [
+
+    let remainingSettings = audit
+        .settings
+        // @ts-ignore
+        .filter(s => !audit.files?.grouped_items?.map(group => transformFileType(audit, group.type))
+            .includes(s.category))
+
+
+    return [
         {
             selector: `[data-tour="audit-${key}"]`,
             content: {
@@ -59,6 +67,20 @@ export const AuditSteps = (audit: Audit) : StepType[] => {
                     `[data-tour="audit-${key}"] .audit-content`,
                 ],
         },
+        ...((audit.settings.length > 0 && remainingSettings.length > 0) ? [
+            {
+                selector: `[data-tour="${key}-recommended-settings"]`,
+                content: {
+                    // @ts-ignore
+                    header: `Tailored Recommendations`,
+                    body: <>
+                        Discover our suggestions for features. Toggle them on or off to fit your preferences seamlessly.
+                    </>
+                },
+                position: "top",
+            },
+
+        ] : []),
         ...(audit.files.items.length > 0 ? [
             {
                 selector: `[data-tour="${key}-group-0"]`,
@@ -66,54 +88,59 @@ export const AuditSteps = (audit: Audit) : StepType[] => {
                     // @ts-ignore
                     header: `Streamlined Audit Insights`,
                     body: <>
-                        Within every audit, discover thoughtfully arranged details and actions. Clarity, made simple.
+                        Within every audit, discover thoughtfully arranged details and actions. Clarity, made
+                        simple.
                     </>
                 },
                 position: "left",
                 resizeObservables: [`[data-tour="${key}-group-0"]`]
             },
-                ...(audit.settings.length > 0 ? [
-                    {
-                        selector: `[data-tour="${key}-group-0-settings"]`,
-                        content: {
-                            // @ts-ignore
-                            header: `Tailored Recommendations`,
-                            body: <>
-                                Discover our suggestions for features. Toggle them on or off to fit your preferences seamlessly.
-                            </>
-                        },
-                        position: "top",
-                    },
-                ] : []),
+
+        ] : []),
+        ...((audit.settings.length > 0 && remainingSettings.length === 0) ? [
+            {
+                selector: `[data-tour="${key}-group-0-settings"]`,
+                content: {
+                    // @ts-ignore
+                    header: `Tailored Recommendations`,
+                    body: <>
+                        Discover our suggestions for features. Toggle them on or off to fit your preferences
+                        seamlessly.
+                    </>
+                },
+                position: "top",
+            },
+        ] : []),
+        ...[
             {
                 selector: `[data-tour="${key}-group-0-table"]`,
                 content: {
                     // @ts-ignore
                     header: `Organizing Your Assets`,
                     body: <>
-                        Explore the table to find files and their associated actions.
+                        Explore the table to find resources and their associated actions.
                         Properly organized to help improve your page performance.
                     </>
                 },
                 position: "top",
-            },
-            ...(hasControls ? [
-                {
-                    selector: `[data-tour="${key}-file-action-0"]`,
-                    content: {
-                        // @ts-ignore
-                        header: `Adjusting File Actions`,
-                        body: <>
-                            <MousePointerClick className='mb-2'/>
-                            Click on the actions dropdown to change how each file behave.
-                            Adjust as needed to fine-tune your page's performance.
-                        </>
-                    },
-                    position: "top",
-                    resizeObservables: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
-                    highlightedSelectors: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
+            }
+        ],
+        ...(hasControls ? [
+            {
+                selector: `[data-tour="${key}-file-action-0"]`,
+                content: {
+                    // @ts-ignore
+                    header: `Adjusting File Actions`,
+                    body: <>
+                        <MousePointerClick className='mb-2'/>
+                        Click on the actions dropdown to change how each file behave.
+                        Adjust as needed to fine-tune your page's performance.
+                    </>
                 },
-            ] : [])
+                position: "top",
+                resizeObservables: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
+                highlightedSelectors: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
+            },
         ] : [])
     ]
 }
@@ -212,13 +239,14 @@ export const FinalSteps: StepType[] = [
             header: `Saving Your Optimizations`,
             body: <>
                 <MousePointerClick className='mb-2'/>
-                After making changes, remember to save. Tap the <span className='text-purple-750'>"Save Changes"</span> button to
+                After making changes, remember to save. Tap the <span
+                className='text-purple-750'>"Save Changes"</span> button to
                 ensure all your tweaks are updated.
             </>
         },
         position: "bottom",
         padding: {
-            popover: [100, 25 ]
+            popover: [100, 25]
         }
     },
 ]
