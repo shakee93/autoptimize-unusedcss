@@ -5,9 +5,10 @@ import React, {ReactNode} from "react";
 interface SlideUpProps {
     children: ReactNode
     uuid?: string | number
+    className?: string
 }
 
-const ScaleUp = ({ children, uuid = 'random' } : SlideUpProps) => {
+const ScaleUp = ({ children, uuid = 'random', className } : SlideUpProps) => {
 
     const variants = {
         hidden: { opacity: 0, scale: 0.9 },
@@ -22,6 +23,7 @@ const ScaleUp = ({ children, uuid = 'random' } : SlideUpProps) => {
                 animate='visible'
                 exit='hidden'
                 variants={variants}
+                className={className}
             >
                 {children}
             </m.div>

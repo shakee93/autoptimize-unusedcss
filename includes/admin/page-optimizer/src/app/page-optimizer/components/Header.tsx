@@ -20,14 +20,21 @@ import {GraduationCap, GraduationCapIcon, Monitor} from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {AnimatePresence} from "framer-motion";
+import ScaleUp from "components/animation/ScaleUp";
 
 const Header = ({ url }: { url: string}) => {
 
+    const tourPromptKey = 'titan-tour-prompt'
     const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
     const { setIsOpen, isOpen, setSteps, currentStep } = useTour()
     const { optimizerRoot, activeMetric } = useCommonDispatch()
+    const [tourPrompt, setTourPrompt] = useState(() => {
+        const storedData = localStorage.getItem(tourPromptKey);
+        return storedData ? JSON.parse(storedData) : true;
+    })
     
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -82,6 +89,10 @@ const Header = ({ url }: { url: string}) => {
 
     }, [activeReport, currentStep])
 
+    useEffect(() => {
+        localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
+    }, [tourPrompt])
+
     return (
 
         <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
@@ -130,20 +141,40 @@ const Header = ({ url }: { url: string}) => {
             </div>
 
 
-            <div className='flex gap-4 items-center'>
+            <div className='flex relative gap-4 items-center'>
+
+
 
                 {(data?.loadingExperience && !activeMetric) &&
-                    <AppButton data-tour='analyze'
-                               onClick={() => setIsOpen(true)}
-                               className='transition-none h-12 rounded-2xl border-none' variant='outline'>
-                        <div className='flex flex-col gap-1 items-center'>
-                            <GraduationCapIcon className={cn(
-                                'w-5',
-                                loading && 'animate-spin'
-                            )}/>
-                            <span className='text-xxs font-normal text-brand-500'>Get Started</span>
-                        </div>
-                    </AppButton>
+                    <>
+                        <AnimatePresence>
+                            {tourPrompt &&
+                                <ScaleUp className='flex cursor-pointer items-center'>
+                                    <div
+                                        onClick={e => setTourPrompt(false)}
+                                        className='absolute animate-bounce-horizontal text-sm -left-[270px] text-brand-400 font-normal'>
+                                        Ready to get Started? Take a quick tour 👉🏻
+                                    </div>
+                                </ScaleUp>
+                            }
+                        </AnimatePresence>
+
+                        <AppButton data-tour='analyze'
+                                   onClick={() => {
+                                       setIsOpen(true)
+                                       setTourPrompt(false)
+                                   }}
+                                   className=' transition-none h-12 rounded-2xl border-none' variant='outline'>
+                            <div className='flex flex-col gap-1 items-center'>
+                                <GraduationCapIcon className={cn(
+                                    'w-5',
+                                )}/>
+                                <span className='text-xxs font-normal text-brand-500'>Get Started</span>
+                            </div>
+
+
+                        </AppButton>
+                    </>
                 }
 
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>

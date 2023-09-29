@@ -138,6 +138,17 @@ module.exports = {
           '50%': {
             transform: 'translateX(250%)'
           }
+        },
+        'bounce-horizontal': {
+          '0%, 20%, 50%, 80%, 100%': {
+            transform: 'translateX(0)'
+          },
+          '40%': {
+            transform: 'translateX(-5px)'  // Reduced horizontal distance for subtleness
+          },
+          '60%': {
+            transform: 'translateX(3px)'   // Reduced horizontal distance for subtleness
+          }
         }
       },
       animation: {
@@ -145,6 +156,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         'rl-scale-in': 'rl-scale-in 0.1s ease-out',
         'rl-loading-loop': 'rl-loading-loop 1.8s ease-out infinite',
+        'bounce-horizontal': 'bounce-horizontal 1.5s infinite'
       },
     },
   },
