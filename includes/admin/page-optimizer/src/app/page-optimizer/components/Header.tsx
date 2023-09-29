@@ -101,6 +101,14 @@ const Header = ({ url }: { url: string}) => {
 
     }, [activeTab, activeReport])
 
+    useEffect(() => {
+
+        if (activeMetric) {
+            commonDispatch(setCommonState('activeMetric', null))
+        }
+
+    }, [currentStep])
+
     return (
 
         <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
