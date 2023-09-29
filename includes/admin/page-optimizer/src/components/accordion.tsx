@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import {AnimatePresence, m, motion} from 'framer-motion';
+import {AnimatePresence, m} from 'framer-motion';
 import {cn} from "lib/utils";
 
 interface AccordionProps{

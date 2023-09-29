@@ -1,5 +1,4 @@
 import {isDev} from "lib/utils";
-import {isArray} from "underscore";
 
 class ApiService {
     public baseURL: URL;
@@ -29,7 +28,7 @@ class ApiService {
 
         if (!data.success) {
 
-            if (isArray(data?.data)) {
+            if (Array.isArray(data?.data)) {
                 throw new Error(
                     `[Code:${data.data[0].code}] ${data.data[0].detail}`
                 );

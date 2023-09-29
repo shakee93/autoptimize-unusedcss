@@ -2,7 +2,6 @@ import Card from "@/components/ui/card";
 import {PlusCircleIcon, MinusCircleIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
 import React, {useState, useRef, useEffect, forwardRef, useMemo, useCallback} from "react";
 import PerformanceIcons from '../performance-widgets/PerformanceIcons';
-import 'react-json-view-lite/dist/index.css';
 import AuditContent from "app/page-optimizer/components/audit/content";
 import {JsonView} from "react-json-view-lite";
 import {useSelector} from "react-redux";
@@ -14,7 +13,6 @@ import {cn, isDev} from "lib/utils";
 import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import {AnimatePresence, m} from "framer-motion";
 import {Accordion} from "components/accordion";
-import Settings from "app/page-optimizer/components/audit/Settings";
 
 
 import {
@@ -269,11 +267,6 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
             </div>
 
-            {showJson && (
-                <div className='w-full p-4'>
-                    <JsonView data={audit} shouldInitiallyExpand={(level) => false} />
-                </div>
-            )}
 
             <Accordion
                 className='audit-content'

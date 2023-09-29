@@ -13,9 +13,9 @@ const ErrorFetch = ({ error, className }: { error: string, className?: string}) 
       </div>
        <div className='flex flex-col gap-1'>
            <span className='font-medium text-md '>Oops! Something went wrong</span>
-           <span className='text-sm text-brand-700'>Try to analyze the page, If this keeps happening
+           <span className='text-sm text-brand-700'>Refresh the page, If the error persists
                                         <br/>
-                                        please contact the <a target='_blank' className='text-purple-750' href='https://rapidload.zendesk.com/hc/en-us'>support</a>
+                                        please <a target='_blank' className='text-purple-750' href='https://rapidload.zendesk.com/hc/en-us'>contact support</a>
                                     </span>
            <span className='text-sm text-brand-500 border-t mt-2 pt-2 mb-6'><span className='font-medium text-brand-800'>Details:</span> {error}</span>
        </div>

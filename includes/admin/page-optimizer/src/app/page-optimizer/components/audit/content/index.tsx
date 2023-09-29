@@ -10,7 +10,7 @@ interface AuditContentProps {
 import {
     RowData
 } from "@tanstack/react-table";
-import {transformFileType} from "lib/utils";
+import {isDev, transformFileType} from "lib/utils";
 import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 import Treeview from "components/tree-view";
 import {Circle} from "lucide-react";
@@ -29,7 +29,7 @@ declare module '@tanstack/react-table' {
 const AuditContent = ({audit}: AuditContentProps) => {
 
 
-    if (audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
+    if (isDev && audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
         return <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>;
     }
 

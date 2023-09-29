@@ -26,7 +26,6 @@ export default defineConfig((configEnv) => {
             },
         },
         build: {
-            target: 'es2015',
             rollupOptions: {
                 output: {
                     manualChunks: {
