@@ -77,10 +77,10 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     let gain = Number((metric?.potentialGain ? metric?.potentialGain : 0)?.toFixed(0))
 
 
-    return (
+    return <>
 
         <div className='w-full flex flex-col gap-4'>
-            <Card data-tour='speed-insights' className='overflow-hidden'>
+            <Card data-tour='speed-insights' className='overflow-visible'>
                 <div
                     className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
@@ -133,7 +133,10 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 </div>
 
                 {data?.metrics && (
-                    <div data-tour='metrics'>
+                    <div className={cn(
+                        'sticky top-0'
+                    )
+                    } data-tour='metrics'>
                         <div
                             onClick={e => dispatch(setCommonState('activeMetric', null)) }
                             className={cn(
@@ -202,7 +205,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             {/*)}*/}
 
         </div>
-    )
+    </>
 }
 
 export default PageSpeedScore

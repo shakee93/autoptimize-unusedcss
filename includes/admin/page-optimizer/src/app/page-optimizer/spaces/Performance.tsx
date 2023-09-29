@@ -9,12 +9,16 @@ import {cn} from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../store/common/commonActions";
+import {CopyMinus, FoldVertical} from "lucide-react";
+import TooltipText from "components/ui/tooltip-text";
+import ScaleUp from "components/animation/ScaleUp";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
 
-    const { dispatch ,  common} = useCommonDispatch()
-    const { activeTab } = common
+    const { dispatch ,  activeTab, openAudits} = useCommonDispatch()
+    const [isSticky, setIsSticky] = useState(false);
+    const navbarRef = useRef(null);
 
     const {
         options,
@@ -53,49 +57,93 @@ const Performance = () => {
         },
     ];
 
-    // useEffect(() => {
-    //
-    //     setOpenAudits([]);
-    //
-    // }, [activeTab])
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
+                setIsSticky(!entry.isIntersecting);
+            },
+            { threshold: [1] }
+        );
+
+        if (navbarRef.current) {
+            observer.observe(navbarRef.current);
+        }
+
+        return () => {
+            if (navbarRef.current) {
+                observer.unobserve(navbarRef.current);
+            }
+        };
+    }, []);
     return (
         <div data-tour='audits'>
-            <h2 className="text-lg mt-0.5 ml-5 flex gap-2 font-normal items-center">
+            <h2 className="text-lg mt-0.5 ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
-            <div  className="tabs pt-4 flex">
-                <Card data-tour='audit-groups' className='flex select-none p-0 px-6'>
-                    {tabs.map((tab) => {
-                        return (
-                            <div
-                                onClick={() => dispatch(setCommonState('activeTab', tab.key))}
-                                className={cn(
-                                    `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
-                                    activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
-                                )}
-                                key={tab.key}
-                            >
-                                {tab.name}
-                                {(data && data?.audits.length > 0) && (
-                                    <div className={
-                                        cn(
-                                            'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
-                                            tab.color,
-                                            (activeTab === tab.key) && tab.activeColor,
-                                        )}>
+            <div ref={navbarRef} style={{ height: '1px' }}></div>
+            <div className={cn(
+                'tabs flex sticky -top-1 z-10',
+            )}>
+                <Card data-tour='audit-groups'
+                      className={cn(
+                          'flex transition-all justify-between items-center select-none p-0 pl-6 pr-3',
+                          isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
+                      )}
+
+                >
+                   <div className='flex'>
+                       {tabs.map((tab) => {
+                           return (
+                               <div
+                                   onClick={() => dispatch(setCommonState('activeTab', tab.key))}
+                                   className={cn(
+                                       `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
+                                       isSticky && 'py-3',
+                                       activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
+                                   )}
+                                   key={tab.key}
+                               >
+                                   {tab.name}
+                                   {(data && data?.audits.length > 0) && (
+                                       <div className={
+                                           cn(
+                                               'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                               isSticky && 'w-5 h-5 border',
+                                               tab.color,
+                                               (activeTab === tab.key) && tab.activeColor,
+                                           )}>
                             <span className={cn(
                                 'transition-colors',
                                 activeTab === tab.key && ' text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}
                             </span>
-                                    </div>
-                                )}
+                                       </div>
+                                   )}
 
-                            </div>
-                        )
-                    })}
+                               </div>
+                           )
+                       })}
+                   </div>
+
+                    <div className='flex items-center'>
+                        <AnimatePresence>
+                            {openAudits.length > 0 &&
+                                <ScaleUp>
+                                    <div
+                                        onClick={e => dispatch(setCommonState('openAudits', []))}
+                                        className='dark:hover:bg-brand-700 hover:bg-brand-100 w-9 h-9 rounded-full flex items-center justify-center'>
+                                        <TooltipText text='Collpase all Audits'>
+                                            <FoldVertical className='w-5 text-brand-500 dark:text-brand-200'/>
+                                        </TooltipText>
+                                    </div>
+                                </ScaleUp>
+                            }
+                        </AnimatePresence>
+
+                    </div>
                 </Card>
             </div>
             <div className="audits pt-4 flex mb-24">
