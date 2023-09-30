@@ -95,6 +95,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,
+        cdn : <CloudDelivery/>,
         image : <ImageDeliverySVG/>,
         javascript : <JavascriptDelivery/>,
         js : <JavascriptDelivery/>,
