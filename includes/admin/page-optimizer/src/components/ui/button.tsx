@@ -58,7 +58,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <AnimatePresence>
               {loading &&
                   <SlideLeft uuid={JSON.stringify(props)}>
-                      <Loader className='w-4 animate-spin'/>
+                      <Loader className='w-4 animate-spin '/>
                   </SlideLeft>
               }
           </AnimatePresence>

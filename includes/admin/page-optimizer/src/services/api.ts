@@ -10,9 +10,13 @@ class ApiService {
 
         const queryParams = new URLSearchParams(query);
 
-        if (action) queryParams.append("action", action);
+        if (action) {
+            queryParams.append("action", action);
+        }
 
-        if (options.nonce && !queryParams.has('nonce')) queryParams.append("nonce", options.nonce);
+        if (options.nonce && !queryParams.has('nonce')) {
+            queryParams.append("nonce", options.nonce);
+        }
 
         this.baseURL = new URL(base + "?" + queryParams.toString());
 

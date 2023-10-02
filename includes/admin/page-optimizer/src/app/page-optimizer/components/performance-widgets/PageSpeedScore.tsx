@@ -14,7 +14,8 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../../store/common/commonActions";
-import {Activity, CircleEqual, Hash, Shapes} from "lucide-react";
+import {Activity, Annoyed, CircleEqual, Frown, Hash, Meh, MehIcon, Shapes, Smile, SmilePlus} from "lucide-react";
+import Feedback from "app/page-optimizer/components/performance-widgets/Feedback";
 
 
 
@@ -75,6 +76,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     let metric = hoveredMetric
 
     let gain = Number((metric?.potentialGain ? metric?.potentialGain : 0)?.toFixed(0))
+
+
 
 
     return <>
@@ -152,6 +155,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             </Card>
 
 
+            <Feedback/>
 
             {/*{data?.loadingExperience?.metrics && (*/}
             {/*    <Card>*/}
