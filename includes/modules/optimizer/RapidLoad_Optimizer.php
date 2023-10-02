@@ -452,9 +452,31 @@ class RapidLoad_Optimizer
 
         $result = $data->data;
 
+        $preload_images = [];
+
         if(isset($result->audits) && is_array($result->audits)){
 
             foreach ($result->audits as $audit){
+
+                if($audit->id == "prioritize-lcp-image"){
+
+                    if(isset($audit->files) && isset($audit->files->debugData) && !empty($audit->files->debugData->initiatorPath)){
+
+                        foreach ($audit->files->debugData->initiatorPath as $path){
+
+                            if(isset($path->url)){
+
+                                if (preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
+                                    $preload_images[] = $path->url;
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
 
                 if(isset($audit->settings)){
                     foreach ($audit->settings as $settings){
@@ -553,7 +575,9 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_enable_image_delivery']);
         }
 
-
+        if(!empty($preload_images)){
+            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
+        }
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
             self::$options['uucss_enable_font_optimization'] = "1";
