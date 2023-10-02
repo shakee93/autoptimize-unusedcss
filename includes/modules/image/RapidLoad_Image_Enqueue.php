@@ -394,7 +394,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
+                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_image_preloaded($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -410,6 +410,29 @@ class RapidLoad_Image_Enqueue
 
             }
         }
+    }
+
+    public function is_image_preloaded($url){
+
+        if($this->str_contains($url, RapidLoad_Image::$image_indpoint)){
+            // Define a regular expression pattern to match URLs
+            $url_pattern = '/https?:\/\/\S+/';
+
+// Use preg_match_all to find all URLs in the string
+            preg_match_all($url_pattern, $url, $matches);
+
+// If there are URLs in the string, get the last one
+            if (!empty($matches[0])) {
+                $last_url = end($matches[0]);
+                $url = $last_url;
+            }
+        }
+
+        if(isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url)){
+            return true;
+        }
+
+        return false;
     }
 
     public function set_width_and_height(){
