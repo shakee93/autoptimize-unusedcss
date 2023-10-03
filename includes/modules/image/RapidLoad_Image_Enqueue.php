@@ -53,7 +53,7 @@ class RapidLoad_Image_Enqueue
 
         $this->set_width_and_height();
 
-        //$this->lazy_load_images();
+        $this->lazy_load_images();
 
         // replacing urls
 
@@ -321,8 +321,6 @@ class RapidLoad_Image_Enqueue
             //$style->__set('innertext', $cssDocument->render());
         }
 
-        $this->lazy_load_images();
-
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -396,7 +394,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_image_preloaded($img->src, $img->srcset)){
+                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -414,22 +412,43 @@ class RapidLoad_Image_Enqueue
         }
     }
 
-    public function is_image_preloaded($url, $srcset){
+    public function is_lcp_image($url){
 
         if($this->str_contains($url, RapidLoad_Image::$image_indpoint)){
-            $url_pattern = '/https?:\/\/\S+/';
-            preg_match_all($url_pattern, $url, $matches);
-            if (!empty($matches[0])) {
-                $url = end($matches[0]);
+
+            $url = str_replace(RapidLoad_Image::$image_indpoint, "", $url);
+
+            if (preg_match('/https:\/\/[^\s]+/', $url, $matches)) {
+                if (!empty($matches[0])) {
+                    $url = $matches[0];
+                }
+
             }
         }
 
-        if((isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url)) || (isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url))){
-            error_log("preloaded");
-            return true;
+        $found = false;
+
+        if(isset($this->options['uucss_exclude_above_the_fold_images']) && $this->options['uucss_exclude_above_the_fold_images'] == "1"){
+
+            if(isset($this->options['uucss_preload_lcp_image'])){
+
+                $images = explode("\n",$this->options['uucss_preload_lcp_image']);
+
+                foreach($images as $image){
+
+                    $_image = preg_replace('/-\d+x\d+/', '', $image);
+
+                    if($this->str_contains($_image,$url)){
+                        $found = true;
+                        break;
+                    }
+
+                }
+            }
+
         }
 
-        return false;
+        return $found;
     }
 
     public function set_width_and_height(){
