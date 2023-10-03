@@ -3,8 +3,8 @@ import {useCallback, useEffect, useState} from "react";
 const usePerformanceColors = (performance?: number) => {
 
     const [performanceIcon, setPerformanceIcon] = useState('fail');
-    const [progressbarColor, setProgressbarColor] = useState('#ECECED');
-    const [progressbarBg, setProgressbarBg] = useState('#ECECED');
+    const [progressbarColor, setProgressbarColor] = useState('transparent');
+    const [progressbarBg, setProgressbarBg] = useState('transparent');
 
     const progressBarColorCode = useCallback( () => {
         const bgOpacity = 0.08

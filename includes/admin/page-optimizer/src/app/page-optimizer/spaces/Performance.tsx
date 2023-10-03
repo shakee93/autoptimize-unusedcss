@@ -156,7 +156,7 @@ const Performance = () => {
                         <div className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
 
-                                <SetupChecklist/>
+                                {/*<SetupChecklist/>*/}
 
                                 {data?.grouped[activeTab] &&
                                     data?.grouped[activeTab]?.map((audit: Audit, index: number) => (

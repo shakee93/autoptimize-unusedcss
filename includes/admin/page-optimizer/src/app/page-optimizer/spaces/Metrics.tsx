@@ -199,7 +199,7 @@ const Metrics = () => {
                 </div>
                 {audits.length > 0 ?
                     <div className="flex gap-4 flex-col w-full">
-                        <div className='borderx-b px-4 pt-4 w-full font-medium text-lg'>Related Audits</div>
+                        <div className='borderx-b px-4 w-full font-medium text-lg'>Related Audits</div>
                         <div className='flex flex-col gap-4'>
                             {audits.map((audit, index) => (
                                 <div  key={index} className='relative'>
