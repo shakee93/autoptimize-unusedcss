@@ -109,6 +109,19 @@ const Header = ({ url }: { url: string}) => {
 
     }, [currentStep])
 
+
+    useEffect(() => {
+
+        const content =  document.getElementById('rapidload-page-optimizer-content')
+
+        if (isOpen && content) {
+            content.style.overflowY = 'hidden'
+        } else {
+            if(content) content.style.overflowY = 'auto'
+        }
+
+    }, [isOpen])
+
     return (
 
         <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>

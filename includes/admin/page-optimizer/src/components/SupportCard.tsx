@@ -18,8 +18,8 @@ const SupportCard = ({ title, reasons, learn_more}: SupportCardProps) => {
             </div>
 
             <ul className='text-sm pl-6 kids:mb-1 list-disc'>
-                {reasons.map(reason =>
-                    <li>{reason}</li>
+                {reasons.map((reason, index) =>
+                    <li key={index}>{reason}</li>
                 )}
             </ul>
 
