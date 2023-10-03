@@ -28,7 +28,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_list_module', [ $this, 'list_module' ] );
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
-            add_action('wp_ajax_update_feedback', [$this, 'update_feedback']);
+            add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
@@ -37,7 +37,21 @@ class RapidLoad_Admin
 
     }
 
-    public function update_feedback(){
+    public function rapidload_titan_feedback(){
+
+        $version = isset($_REQUEST['smiley']) ? $_REQUEST['smiley'] : 'good';
+        $reason = isset($_REQUEST['detail']) ? $_REQUEST['detail'] : '';
+
+        $api = new RapidLoad_Api();
+
+        $api->post('feedback', [
+           'url' => site_url(),
+           'type' => 'rapidload-optimizer',
+           'version' => $version,
+           'reason' => $reason
+        ]);
+
+        wp_send_json_success(true);
 
     }
 
