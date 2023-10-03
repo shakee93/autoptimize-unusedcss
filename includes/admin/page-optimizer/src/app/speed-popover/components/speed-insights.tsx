@@ -33,6 +33,7 @@ import {Toaster} from "components/ui/toaster";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import ErrorFetch from "components/ErrorFetch";
+import {cn} from "lib/utils";
 
 const Content = () => {
 
@@ -157,7 +158,10 @@ const Content = () => {
 
     return (
         <div
-            className='relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
+            className={cn(
+                'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
+                'backdrop-blur-md bg-brand-50/80 dark:bg-brand-900/90 shadow-xl rounded-[40px]'
+            )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
                     <div className='mt-2'>

@@ -12,7 +12,7 @@ const SupportCard = ({ title, reasons, learn_more}: SupportCardProps) => {
         <div className='pb-0.5'>
             {title}
         </div>
-        <div className='flex flex-col mt-2 gap-2 text-brand-700 border-t pt-3 pb-2 px-1'>
+        <div className='flex flex-col mt-2 gap-2 text-brand-700 dark:text-brand-300 border-t pt-3 pb-2 px-1'>
             <div className='text-sm'>
                 This could be due to one or more following reasons:
             </div>

@@ -32,7 +32,7 @@ const SetupChecklist = () => {
         }
     ]
 
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const { options } = useAppContext()
     const [checklist, setChecklist] = useState<ChecklistItem[]>([
         {
@@ -58,7 +58,7 @@ const SetupChecklist = () => {
             status: "warning",
             sections: {
                 warning : <>
-                    <div className='text-sm flex flex-col gap-4 text-brand-700 pt-3 pb-2 px-1'>
+                    <div className='text-sm flex flex-col gap-4 text-brand-700 dark:text-brand-300 pt-3 pb-2 px-1'>
                         <div className=''>
                             While RapidLoad is designed with integrated support for many plugins, occasional conflicts can arise due to the
                             complex nature of WordPress ecosystems. For optimal results with Titan Optimizer,
@@ -156,7 +156,7 @@ const SetupChecklist = () => {
                         setOpen(p => !p)
                     }}
                          className={
-                             `min-w-[125px] select-none cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-green-50/50 transition-colors border border-green-500 text-green-600 font-bold `}>
+                             `min-w-[125px] select-none cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-green-50/50 transition-colors border border-green-500 text-green-600 `}>
 
                         {open ? <>
                             Hide Checklist <MinusCircleIcon className='w-6 h-6 dark:text-green-600 text-green-800'/>
@@ -182,7 +182,7 @@ const SetupChecklist = () => {
                                     </div>
                                     <div>
                                         <div>{item.title}</div>
-                                        <div className='text-xs text-brand-500'>{item.description}</div>
+                                        <div className='text-xs text-brand-500 dark:text-brand-400'>{item.description}</div>
                                     </div>
                                 </div>
                                 {item.sections[item.status] && (

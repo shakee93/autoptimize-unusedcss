@@ -57,7 +57,7 @@ const Feedback = () => {
 
     return (
         <Card className={cn(
-            'flex flex-col gap-4 px-6 py-5 mb-12',
+            'flex flex-col gap-4 px-6 py-5 mb-12 backdrop-blur-md bg-brand-0/70',
             !activeFeedback && 'pb-1'
         )}>
             <div className='flex flex-col gap-0.5'>
@@ -72,7 +72,7 @@ const Feedback = () => {
                                         setActiveFeedback(p => (icon.value !== p) ? icon.value : null)}
                                     className={cn(
                                         'w-8 h-8 cursor-pointer text-brand-400 hover:text-brand-500',
-                                        activeFeedback === icon.value && 'text-slate-600'
+                                        activeFeedback === icon.value && 'text-brand-600 dark:text-brand-200'
                                     )}/>
                 ))}
             </div>

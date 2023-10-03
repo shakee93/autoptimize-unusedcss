@@ -111,7 +111,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
+        <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
@@ -145,7 +145,7 @@ const Header = ({ url }: { url: string}) => {
                                            dispatch(fetchData(options, url, true))
                                            commonDispatch(setCommonState('openAudits', []))
                                        }}
-                                       className='transition-none h-12 rounded-2xl border-none' variant='outline'>
+                                       className='transition-none h-12 rounded-2xl border-none backdrop-blur-sm' variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>
                                     <ArrowPathIcon className={cn(
                                         'w-5',
