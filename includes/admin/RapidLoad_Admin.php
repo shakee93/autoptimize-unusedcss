@@ -29,6 +29,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
+            add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
             add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
 
         }
@@ -40,6 +41,25 @@ class RapidLoad_Admin
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function titan_checklist_crawler(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('crawler-check',[
+            'url' => site_url()
+        ]);
+
+        if($result == "200"){
+            update_option('crawler_check_rapidload_success',"1");
+            wp_send_json_success(true);
+        }
+
+        wp_send_json_success(false);
 
     }
 
