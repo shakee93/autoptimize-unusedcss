@@ -46,7 +46,7 @@ class RapidLoad_Admin
 
         $api->post('feedback', [
            'url' => site_url(),
-           'type' => 'rapidload-optimizer',
+           'type' => 'titan_feedback',
            'version' => $version,
            'reason' => $reason
         ]);
