@@ -171,7 +171,7 @@ const Metrics = () => {
                 <div className='flex flex-col gap-3 border-b pb-6'>
                     <div className='text-4xl font-medium'> {activeMetric?.title}</div>
                     {/*<div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>*/}
-                    <div className='text-brand-600 text-md '>
+                    <div className='dark:text-brand-300 text-brand-600 text-md '>
                         <span>{metricRanges[activeMetric.refs.acronym].description}</span> <a target='_blank' className='text-purple-750' href={metricRanges[activeMetric?.refs.acronym].learn_more} >Learn more</a>
                     </div>
                     <div>

@@ -271,7 +271,7 @@ const SpeedInsights = ({children}: {
     const root = options?.plugin_url
 
     return (
-        <HoverCard open={true} openDelay={0}>
+        <HoverCard openDelay={0}>
             <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
                 <HoverCardTrigger asChild>
                     <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
