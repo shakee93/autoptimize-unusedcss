@@ -1,18 +1,139 @@
 import {CheckCircle, CheckCircle2, Circle, Layers, Loader, Minus} from "lucide-react";
 import {CheckCircleIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 import Card from "components/ui/card";
-import React, {useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {Accordion} from "components/accordion";
 import {ExclamationCircleIcon, RectangleStackIcon, StopCircleIcon} from "@heroicons/react/20/solid";
+import SupportCard from "components/SupportCard";
+import ApiService from "../../../services/api";
+import {useAppContext} from "../../../context/app";
+
+type ChecklistStatus = 'passed' | 'warning' | 'failed' | 'loading';
+
+interface ChecklistItem {
+    id: string;
+    title: string;
+    description: string;
+    fetch: string;
+    status: ChecklistStatus;
+    sections: {
+        [key in ChecklistStatus]?: ReactNode;
+    };
+}
 
 const SetupChecklist = () => {
-    const [open, setOpen] = useState(false)
+
+    const plugins = [
+        {
+            name: "Active Campaign"
+        },
+        {
+            name: "Autoptimize"
+        }
+    ]
+
+    const [open, setOpen] = useState(true)
+    const { options } = useAppContext()
+    const [checklist, setChecklist] = useState<ChecklistItem[]>([
+        {
+            id: 'cron',
+            title: "Verify WordPress Cron Activity",
+            description: "RapidLoad requires your site's WordPress cron to be operational for optimal performance.",
+            fetch: "titan_checklist_cron",
+            status: "failed",
+            sections: {
+                failed:  <SupportCard title="Your site's WordPress cron isn't operational" reasons={[
+                    "Some plugins might disable the WordPress cron to reduce server requests.",
+                    "Certain server settings, especially on shared hosting, can prevent the cron from running.",
+                    "Poorly coded themes or plugins can disrupt or halt scheduled tasks.",
+                    "Some servers disable loopback connections, which are essential for the WordPress cron system."
+                ]}/>
+            }
+        },
+        {
+            id: 'plugins',
+            title: "Review Potential Plugin Conflicts",
+            description: "Review active WordPress plugins for potential conflicts that might affect RapidLoad's optimal performance.",
+            fetch: "titan_checklist_plugins",
+            status: "warning",
+            sections: {
+                warning : <>
+                    <div className='text-sm flex flex-col gap-4 text-brand-700 pt-3 pb-2 px-1'>
+                        <div className=''>
+                            While RapidLoad is designed with integrated support for many plugins, occasional conflicts can arise due to the
+                            complex nature of WordPress ecosystems. For optimal results with Titan Optimizer,
+                            we recommend turning off certain features or deactivating these plugins:
+                        </div>
+
+                        <div className='flex gap-2'>
+                            {plugins.map((plugin, index) =>
+                                <div className='border px-4 py-2 rounded-xl font-medium'>
+                                    {plugin.name}
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
+                </>
+            }
+        },
+        {
+            id: 'crawler',
+            title: "RapidLoad Crawler Access",
+            description: "Check if the RapidLoad Crawler can access and interact with your website seamlessly.",
+            fetch: "titan_checklist_crawler",
+            status: "failed",
+            sections: {
+                failed:  <SupportCard title="Our Crawler couldn't access your website" reasons={[
+                    "Cloudflare BotFight Mode being enabled.",
+                    "Firewall restrictions blocking our Crawler.",
+                    "A password or other authentication is required to access the page."
+                ]}/>
+            }
+        }
+    ])
+
+    const updateItemStatus = (itemId: string, newStatus: ChecklistStatus) => {
+        setChecklist(prevChecklist => {
+            return prevChecklist.map(item => {
+                if (item.id === itemId) {
+                    return {
+                        ...item,
+                        status: newStatus
+                    };
+                }
+                return item;
+            });
+        });
+    }
+
+
+    useEffect(  () => {
+
+        const fetchData = async () => {
+            if (open) {
+                for (let item of checklist) {
+                    let api = new ApiService(options);
+
+                    try {
+                        await api.post(item.fetch);
+                        updateItemStatus(item.id, "passed")
+                    } catch (error: any) {
+                        updateItemStatus(item.id, "failed")
+                    }
+                }
+            }
+        };
+
+        // fetchData();
+
+    }, [open])
 
     return <>
         <Card className='flex flex-col justify-between items-center px-4 py-3'>
             <div className='flex justify-between items-center w-full'>
                 <div className='flex items-center gap-2.5 text-sm'>
-                    <div className='bg-green-500 w-10 h-10 flex items-center justify-center rounded-full text-white'>
+                    <div className='bg-green-600 w-10 h-10 flex items-center justify-center rounded-full text-white'>
                         <RectangleStackIcon className='w-6'/></div>
                     <div className='flex flex-col'>
                         <div className='font-medium'>
@@ -24,14 +145,18 @@ const SetupChecklist = () => {
                     </div>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <div className='text-xs text-brand-500'>
-                        1 out of 4 Completed
+                    <div className='text-xs text-brand-400'>
+                        {(checklist.filter(item => item.status === 'passed').length > 0) &&
+                            <>
+                                {checklist.filter(item => item.status === 'passed').length} out of 3 Completed
+                            </>
+                        }
                     </div>
                     <div onClick={() => {
                         setOpen(p => !p)
                     }}
                          className={
-                             `min-w-[125px] select-none cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors border border-green-500 text-green-600 font-bold `}>
+                             `min-w-[125px] select-none cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-green-50/50 transition-colors border border-green-500 text-green-600 font-bold `}>
 
                         {open ? <>
                             Hide Checklist <MinusCircleIcon className='w-6 h-6 dark:text-green-600 text-green-800'/>
@@ -45,84 +170,29 @@ const SetupChecklist = () => {
             <Accordion isOpen={open}>
                 <div className='px-14 py-8 pb-8 mt-3 border-t -mx-4'>
 
-                    <ul className='kids:flex kids:items-center kids:gap-3  font-normal flex flex-col gap-6'>
-                        <li>
-                            <div>
-                                <CheckCircleIcon className='w-7 text-green-600'/>
-                            </div>
-                            <div>
-                                <div>Verify WordPress Cron Activity</div>
-                                <div className='text-xs text-brand-500'>Ensure your site's WordPress cron is
-                                    operational.
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <ExclamationCircleIcon className='w-7 text-amber-400'/>
-                            </div>
-                            <div>
-                                <div>Review Potential Plugin Conflicts</div>
-                                <div className='text-xs text-brand-500'>
-                                    Review active WordPress plugins for potential conflicts that might affect
-                                    RapidLoad's optimal performance.
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <Loader className='w-7 text-brand-400 animate-spin'/>
-                            </div>
-                            <div>
-                                <div>PHP Version</div>
-                                <div className='text-xs text-brand-500'>
-                                    Ensure you're running a supported PHP version for optimal performance.
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div className='flex flex-col gap-2'>
+                    <ul className='kids:flex kids:flex-col kids:gap-3 font-normal flex flex-col gap-6'>
+                        {checklist.map((item, index) => (
+                            <li>
                                 <div className='flex items-center gap-3'>
                                     <div>
-                                        <MinusCircleIcon className='w-7 text-red-600'/>
+                                        {(item.status === 'passed') && <CheckCircleIcon className='w-7 text-green-600'/> }
+                                        {(item.status === 'warning') && <ExclamationCircleIcon className='w-7 text-amber-400'/> }
+                                        {(item.status === 'failed') && <MinusCircleIcon className='w-7 text-red-600'/> }
+                                        {(item.status === 'loading') && <Loader className='w-7 text-brand-400 animate-spin'/> }
                                     </div>
                                     <div>
-                                        <div>RapidLoad Crawler Access</div>
-                                        <div className='text-xs text-brand-500'>
-                                            Check if the RapidLoad Crawler can access and interact with your website seamlessly.
-                                        </div>
+                                        <div>{item.title}</div>
+                                        <div className='text-xs text-brand-500'>{item.description}</div>
                                     </div>
                                 </div>
-                                <div className='w-full ml-10 px-6 py-3 border rounded-2xl'>
-                                    <div className='pb-0.5'>
-                                        Our Crawler couldn't access your website.
+                                {item.sections[item.status] && (
+                                    <div className='w-fit ml-10 px-6 py-3 border rounded-2xl'>
+                                        {item.sections[item.status]}
                                     </div>
-                                    <div className='flex flex-col mt-2 gap-2 text-brand-800 border-t pt-3 pb-2 px-1'>
-                                        <div className='text-sm'>
-                                            The issue could be due to:
-                                        </div>
+                                )}
 
-                                        <ul className='text-sm pl-6 kids:mb-1 list-disc'>
-                                            <li>
-                                                Cloudflare's BotFight Mode being enabled.
-                                            </li>
-                                            <li>
-                                                Firewall restrictions blocking our Crawler.
-                                            </li>
-                                            <li>
-                                                A password or other authentication is required to access the page.
-                                            </li>
-                                        </ul>
-
-                                        <div className='text-sm'>
-                                            Please review these and try again. Need more guidance? <a className='text-purple-750' href='#'>
-                                            Learn More
-                                        </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </Accordion>
