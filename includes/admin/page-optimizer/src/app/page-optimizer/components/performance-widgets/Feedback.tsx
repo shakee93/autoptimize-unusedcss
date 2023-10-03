@@ -71,8 +71,8 @@ const Feedback = () => {
                                     onClick={e =>
                                         setActiveFeedback(p => (icon.value !== p) ? icon.value : null)}
                                     className={cn(
-                                        'w-8 h-8 cursor-pointer text-brand-400 hover:text-amber-400',
-                                        activeFeedback === icon.value && 'text-amber-500'
+                                        'w-8 h-8 cursor-pointer text-brand-400 hover:text-brand-500',
+                                        activeFeedback === icon.value && 'text-slate-600'
                                     )}/>
                 ))}
             </div>
