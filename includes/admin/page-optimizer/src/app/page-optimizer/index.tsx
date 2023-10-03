@@ -19,7 +19,7 @@ import {Toaster} from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import Indicator from "components/indicator";
 import Performance from "app/page-optimizer/spaces/Performance";
-import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
+import SpeedIndex from "app/page-optimizer/spaces/Metrics";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
@@ -56,7 +56,7 @@ export default function PageOptimizer() {
                 ease: 'linear',
                 duration: 0.1,
         }}
-            id='rapidload-page-optimizer'
+            id='rapidload-page-optimizer-wrapper'
             className={cn(
                 "rounded-md overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800 dark:bg-brand-930 bg-brand-50"
@@ -64,7 +64,9 @@ export default function PageOptimizer() {
 
             <Header url={url}/>
 
-            <div className={cn(
+            <div
+                id='rapidload-page-optimizer-content'
+                className={cn(
                 'overflow-y-auto scrollbar-stable w-full h-fit pb-20',
                 savingData && 'relative overflow-hidden h-[calc(100vh-130px)]'
             )}>

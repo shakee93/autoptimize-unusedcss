@@ -394,7 +394,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load')){
+                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -410,6 +410,45 @@ class RapidLoad_Image_Enqueue
 
             }
         }
+    }
+
+    public function is_lcp_image($url){
+
+        if($this->str_contains($url, RapidLoad_Image::$image_indpoint)){
+
+            $url = str_replace(RapidLoad_Image::$image_indpoint, "", $url);
+
+            if (preg_match('/https:\/\/[^\s]+/', $url, $matches)) {
+                if (!empty($matches[0])) {
+                    $url = $matches[0];
+                }
+
+            }
+        }
+
+        $found = false;
+
+        if(isset($this->options['uucss_exclude_above_the_fold_images']) && $this->options['uucss_exclude_above_the_fold_images'] == "1"){
+
+            if(isset($this->options['uucss_preload_lcp_image'])){
+
+                $images = explode("\n",$this->options['uucss_preload_lcp_image']);
+
+                foreach($images as $image){
+
+                    $_image = preg_replace('/-\d+x\d+/', '', $image);
+
+                    if($this->str_contains($_image,$url)){
+                        $found = true;
+                        break;
+                    }
+
+                }
+            }
+
+        }
+
+        return $found;
     }
 
     public function set_width_and_height(){

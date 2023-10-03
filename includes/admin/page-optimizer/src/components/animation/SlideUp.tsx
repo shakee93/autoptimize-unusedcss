@@ -1,4 +1,4 @@
-import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
+import SpeedIndex from "app/page-optimizer/spaces/Metrics";
 import {AnimatePresence, m} from "framer-motion";
 import React, {ReactNode} from "react";
 

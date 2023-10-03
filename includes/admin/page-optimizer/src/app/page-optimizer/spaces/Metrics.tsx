@@ -14,7 +14,7 @@ import PerformanceIcons from "app/page-optimizer/components/performance-widgets/
 import usePerformanceColors from "hooks/usePerformanceColors";
 
 
-const SpeedIndex = () => {
+const Metrics = () => {
     const {data, loading, error, activeReport} = useSelector(optimizerData);
     const { activeMetric } = useCommonDispatch()
     const [ icon, color ] = usePerformanceColors(activeMetric?.score)
@@ -232,4 +232,4 @@ const SpeedIndex = () => {
     );
 }
 
-export default React.memo(SpeedIndex)
+export default React.memo(Metrics)
