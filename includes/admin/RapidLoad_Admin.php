@@ -28,11 +28,16 @@ class RapidLoad_Admin
             add_action('wp_ajax_list_module', [ $this, 'list_module' ] );
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
+            add_action('wp_ajax_update_feedback', [$this, 'update_feedback']);
         }
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function update_feedback(){
 
     }
 
