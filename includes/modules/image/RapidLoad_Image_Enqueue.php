@@ -422,6 +422,8 @@ class RapidLoad_Image_Enqueue
             }
         }
 
+        error_log($this->options['uucss_preload_lcp_image']);
+
         if(isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url)){
             error_log($this->options['uucss_preload_lcp_image']);
             return true;
