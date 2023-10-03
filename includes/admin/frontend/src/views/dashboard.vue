@@ -77,6 +77,7 @@
       </div>
 
 
+
       <div class="-mt-[63px] -ml-[295px] flex">
         <div class="mr-1">
           <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
@@ -114,6 +115,8 @@
       </div>
     </div>
 
+    <optimization></optimization>
+
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
 
@@ -141,12 +144,14 @@
                 <button >Settings</button>
               </RouterLink>
 
-              <div @click="openOptimizer" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
+              <div @click="howtouse=true" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
                    :class="item.status? 'rl-Show': 'rl-Hide'"
                    class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
                           :to="item.link">
-                Open Optimizer
+                How to Use
               </div>
+
+
 
 
               <svg v-if="item.id === 'cdn'"  :class="loading? 'rl-Show': 'rl-Hide'" class="absolute" style="top:80.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -360,6 +365,10 @@
 
 
     <popupModel v-if="popupModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
+    <howtoUse v-if="howtouse" @cancel="howtouse=false" />
+    <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
+
+
   </main>
 </template>
 
@@ -370,6 +379,9 @@ import axios from 'axios';
 import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
 import popupModel from "../components/popupModel.vue";
+import howtoUse from "../components/howtoUse.vue";
+import welcome from "../components/welcome.vue";
+import optimization from "./optimization.vue";
 // import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
 export default {
@@ -378,6 +390,9 @@ export default {
     Vue3TagsInput,
     messageBox,
     popupModel,
+    howtoUse,
+    welcome,
+    optimization,
   },
 
   mounted() {
@@ -399,14 +414,14 @@ export default {
 
       new window.RapidLoadOptimizer(optimizerConfig);
     }
-
     window.addEventListener('rapidLoad:optimizer-mounted', () => {
-
-      if (this.on_board_complete ==='' || window.location.href.indexOf("nonce") > -1) {
+      if (this.on_board_complete ==='') {
+         this.welcomeModel=true;
+      }else if(window.location.href.indexOf("nonce") > -1){
         this.openOptimizer();
       }
-
     });
+
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
@@ -456,6 +471,10 @@ export default {
   },
   methods:{
 
+    startAnalyzing(){
+      this.openOptimizer();
+      this.welcomeModel=false;
+    },
     // whatsnext(){
     //   this.whatstips_count++;
     //   if(this.whatstips_count===4){
@@ -463,6 +482,14 @@ export default {
     //   }
     //
     // },
+
+    openOptimizer() {
+      if (window.RapidLoadOptimizer) {
+        window.RapidLoadOptimizer.showOptimizer(true)
+      }
+    },
+
+
     handleCancel(){
       this.popupModel = false;
       const currentDate = new Date().toLocaleDateString();
@@ -616,12 +643,7 @@ export default {
     //     })
     //   }
     // },
-    openOptimizer() {
-      console.log("Optimizer event fired");
-      if (window.RapidLoadOptimizer) {
-        window.RapidLoadOptimizer.showOptimizer(true)
-      }
-    }
+
   },
 
   data() {
@@ -629,6 +651,8 @@ export default {
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       popupModel: false,
+      howtouse: false,
+      welcomeModel: false,
       axios_request : null,
       tick_image: 'license-information.svg',
       whats_new: 'tips-whats.svg',
