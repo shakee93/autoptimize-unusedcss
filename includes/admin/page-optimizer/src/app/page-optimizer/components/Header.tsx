@@ -158,7 +158,7 @@ const Header = ({ url }: { url: string}) => {
                                            dispatch(fetchData(options, url, true))
                                            commonDispatch(setCommonState('openAudits', []))
                                        }}
-                                       className='transition-none h-12 rounded-2xl border-none backdrop-blur-sm' variant='outline'>
+                                       className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>
                                     <ArrowPathIcon className={cn(
                                         'w-5',
@@ -196,7 +196,7 @@ const Header = ({ url }: { url: string}) => {
                                        setIsOpen(true)
                                        setTourPrompt(false)
                                    }}
-                                   className=' transition-none h-12 rounded-2xl border-none' variant='outline'>
+                                   className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
                             <div className='flex flex-col gap-1 items-center'>
                                 <GraduationCapIcon className={cn(
                                     'w-5',

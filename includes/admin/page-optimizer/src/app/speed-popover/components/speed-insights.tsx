@@ -160,7 +160,7 @@ const Content = () => {
         <div
             className={cn(
                 'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
-                'backdrop-blur-md bg-brand-50/80 dark:bg-brand-900/90 shadow-xl rounded-[40px]'
+                'backdrop-blur-md bg-brand-50/80 dark:bg-brand-900/95 shadow-xl rounded-[40px] border border-brand-500/10 '
             )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
@@ -175,7 +175,7 @@ const Content = () => {
                     <div className='text-xs w-full flex justify-center'>
                         <TooltipText asChild text='Switch Report'>
                             <button onClick={() => dispatch(changeReport(activeReport === 'desktop' ? 'mobile' : 'desktop'))}
-                                    className='capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
+                                    className='backdrop-blur-md dark:bg-brand-950/10 bg-brand-50/50 capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
                                 {activeReport === 'desktop' ?
                                     <Monitor className="w-4 h-5" /> :
                                     <DevicePhoneMobileIcon  className="h-5" />
@@ -271,7 +271,7 @@ const SpeedInsights = ({children}: {
     const root = options?.plugin_url
 
     return (
-        <HoverCard openDelay={0}>
+        <HoverCard open={true} openDelay={0}>
             <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
                 <HoverCardTrigger asChild>
                     <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>

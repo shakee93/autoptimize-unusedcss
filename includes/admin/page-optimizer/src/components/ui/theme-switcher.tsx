@@ -10,9 +10,7 @@ const ThemeSwitcher = () => {
     const changeTheme = () => {
         if(theme === 'dark') {
             setTheme('light');
-        } else if(theme === 'light') {
-            setTheme('system');
-        } else {
+        }  else {
             setTheme('dark');
         }
     }
