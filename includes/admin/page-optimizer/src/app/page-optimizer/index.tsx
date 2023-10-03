@@ -19,7 +19,7 @@ import {Toaster} from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import Indicator from "components/indicator";
 import Performance from "app/page-optimizer/spaces/Performance";
-import SpeedIndex from "app/page-optimizer/spaces/SpeedIndex";
+import SpeedIndex from "app/page-optimizer/spaces/Metrics";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";

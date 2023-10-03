@@ -9,9 +9,12 @@ import {cn} from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../store/common/commonActions";
-import {CopyMinus, FoldVertical} from "lucide-react";
+import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
+import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -152,6 +155,9 @@ const Performance = () => {
 
                         <div className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
+
+                                <SetupChecklist/>
+
                                 {data?.grouped[activeTab] &&
                                     data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
                                             <m.div
