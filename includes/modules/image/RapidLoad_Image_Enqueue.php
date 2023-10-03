@@ -53,7 +53,7 @@ class RapidLoad_Image_Enqueue
 
         $this->set_width_and_height();
 
-        $this->lazy_load_images();
+        //$this->lazy_load_images();
 
         // replacing urls
 
@@ -321,6 +321,8 @@ class RapidLoad_Image_Enqueue
             //$style->__set('innertext', $cssDocument->render());
         }
 
+        $this->lazy_load_images();
+
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -394,7 +396,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_image_preloaded($img->src)){
+                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_image_preloaded($img->src, $img->srcset)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -412,7 +414,7 @@ class RapidLoad_Image_Enqueue
         }
     }
 
-    public function is_image_preloaded($url){
+    public function is_image_preloaded($url, $srcset){
 
         if($this->str_contains($url, RapidLoad_Image::$image_indpoint)){
             $url_pattern = '/https?:\/\/\S+/';
@@ -422,10 +424,8 @@ class RapidLoad_Image_Enqueue
             }
         }
 
-        error_log($this->options['uucss_preload_lcp_image']);
-
-        if(isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url)){
-            error_log($this->options['uucss_preload_lcp_image']);
+        if((isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url)) || (isset($this->options['uucss_preload_lcp_image']) && $this->str_contains($this->options['uucss_preload_lcp_image'], $url))){
+            error_log("preloaded");
             return true;
         }
 
