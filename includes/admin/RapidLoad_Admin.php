@@ -31,6 +31,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
             add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
+            add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
 
         }
 
@@ -41,6 +42,18 @@ class RapidLoad_Admin
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function titan_checklist_plugins(){
+
+        self::verify_nonce();
+
+        $plugins = apply_filters('uucss/third-party/plugins',[]);
+
+        error_log(json_encode($plugins));
+
+        wp_send_json_success();
 
     }
 
