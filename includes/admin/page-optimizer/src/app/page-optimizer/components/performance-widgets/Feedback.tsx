@@ -27,12 +27,21 @@ const Feedback = () => {
     ], []);
 
     const handleFeedback = async () => {
-        const api = new ApiService(options)
+
+        if (!activeFeedback) {
+            return;
+        }
+
+        const api = new ApiService(options);
 
         try {
             setLoading(true)
             await api.post(
-                'rapidload_titan_feedback'
+                'rapidload_titan_feedback',
+                {
+                    smiley: activeFeedback,
+                    detail: notes
+                }
             )
 
             toast({

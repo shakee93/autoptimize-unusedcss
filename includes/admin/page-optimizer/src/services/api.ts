@@ -104,11 +104,15 @@ class ApiService {
         }
     }
 
-    async post(action : string | null = null) {
+    async post(action : string | null = null, queryParams: {[p: string] : string} = {}) {
 
         try {
 
             if(action) this.baseURL.searchParams.append('action', action)
+
+            for (let key of Object.keys(queryParams)) {
+                this.baseURL.searchParams.append(key, queryParams[key])
+            }
 
             const response = await fetch(this.baseURL, {
                 method: "GET",
