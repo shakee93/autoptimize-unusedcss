@@ -5,7 +5,7 @@ import {
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
@@ -23,6 +23,8 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonState} from "../../../store/common/commonActions";
+import AppTour from "components/tour";
+import InitTour from "components/tour/InitTour";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -30,97 +32,18 @@ const Header = ({ url }: { url: string}) => {
     const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
-    const { setIsOpen, isOpen, setSteps, currentStep, setCurrentStep } = useTour()
     const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
+
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
         return storedData ? JSON.parse(storedData) : true;
     })
-    
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-
-    useEffect(() => {
-
-        let hasActions = true
-
-        let tourAudit = data?.grouped.opportunities.find(audit => {
-            return audit.settings.length > 0 && audit.files.items.length > 0;
-        })
-
-        if (!tourAudit) {
-            tourAudit = data?.grouped.diagnostics.find(audit => {
-                return audit.settings.length > 0 && audit.files.items.length > 0;
-            })
-        }
-
-        if (!tourAudit && data?.grouped?.opportunities?.length && data?.grouped?.opportunities?.length > 0) {
-            tourAudit = data?.grouped.opportunities[0]
-            hasActions = false
-        }
-
-        if(!tourAudit && data?.grouped?.diagnostics?.length && data?.grouped?.diagnostics?.length > 0) {
-            tourAudit = data?.grouped.diagnostics[0]
-            hasActions = false
-        }
-
-        setSteps && setSteps(p => {
-
-            let selector =
-                document.getElementById('rapidload-optimizer-shadow-dom')
-
-            let steps = [
-                ...Steps,
-                ...(tourAudit ? AuditSteps(tourAudit) : []),
-                ...(mode === 'normal' ? FinalSteps : [])
-            ].map(step => {
-
-                if (selector) {
-                    // @ts-ignore
-                    step.shadowSelector = typeof step.selector === 'string' ? step.selector : step.shadowSelector;
-                    // @ts-ignore
-                    step.selector = selector.shadowRoot?.querySelector(step.shadowSelector);
-                }
-                return step
-            })
-
-            return steps
-        });
-
-
-    }, [activeReport, currentStep])
 
     useEffect(() => {
         localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
     }, [tourPrompt])
 
-    useEffect(() => {
-
-        if (!isOpen) {
-            setCurrentStep(0);
-        }
-
-    }, [activeTab, activeReport])
-
-    useEffect(() => {
-
-        if (activeMetric) {
-            commonDispatch(setCommonState('activeMetric', null))
-        }
-
-    }, [currentStep])
-
-
-    useEffect(() => {
-
-        const content =  document.getElementById('rapidload-page-optimizer-content')
-
-        if (isOpen && content) {
-            content.style.overflowY = 'hidden'
-        } else {
-            if(content) content.style.overflowY = 'auto'
-        }
-
-    }, [isOpen])
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     return (
 
@@ -192,7 +115,12 @@ const Header = ({ url }: { url: string}) => {
 
                         <AppButton data-tour='analyze'
                                    onClick={() => {
-                                       setIsOpen(true)
+
+                                       const event =
+                                           new CustomEvent('rapidLoad:open-titan-tour', );
+
+                                       window.dispatchEvent(event);
+
                                        setTourPrompt(false)
                                    }}
                                    className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
@@ -211,7 +139,6 @@ const Header = ({ url }: { url: string}) => {
                 <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
                     <XMarkIcon className={cn(
                         'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
-                        isOpen && 'opacity-10'
                     )} />
                 </TooltipText>
             </div>

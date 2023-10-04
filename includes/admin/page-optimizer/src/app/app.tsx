@@ -11,6 +11,7 @@ import {Toaster} from "components/ui/toaster";
 import WebFont from "webfontloader";
 import {AnimatePresence} from "framer-motion";
 import AppTour from "components/tour";
+import InitTour from "components/tour/InitTour";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -61,9 +62,12 @@ const App = ({popup, _showOptimizer = false}: {
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
-                <AppTour>
+                <>
+                    <AppTour>
+                        <InitTour/>
+                    </AppTour>
                     <PageOptimizer/>
-                </AppTour>
+                </>
             }
         </AnimatePresence>
     );

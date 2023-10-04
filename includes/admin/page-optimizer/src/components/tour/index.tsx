@@ -20,7 +20,7 @@ const AppTour = ({children}: TourProviderProps) => {
             padding: '0 8px',
             zIndex: 150000,
             backdropFilter: 'blur(8px)',
-            backgroundColor: 'rgb(255, 255, 255, .6)',
+            backgroundColor: 'rgb(255, 255, 255, .5)',
             ...(isDark && {
                backgroundColor: 'rgb(43, 43, 43, .5)',
                 color: 'white'
