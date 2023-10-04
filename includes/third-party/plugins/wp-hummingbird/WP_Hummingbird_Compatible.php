@@ -9,6 +9,7 @@ class WP_Hummingbird_Compatible extends RapidLoad_ThirdParty{
         $this->plugin = 'wp-hummingbird/wp-hummingbird.php';
         $this->catgeory = 'cache';
         $this->name = 'wp-hummingbird';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

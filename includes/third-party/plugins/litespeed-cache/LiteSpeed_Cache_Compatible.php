@@ -9,6 +9,7 @@ class LiteSpeed_Cache_Compatible  extends RapidLoad_ThirdParty{
         $this->plugin = 'litespeed-cache/litespeed-cache.php';
         $this->catgeory = 'cache';
         $this->name = 'lightspeed-cache';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

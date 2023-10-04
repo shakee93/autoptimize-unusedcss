@@ -9,6 +9,7 @@ class WP_Optimize_Compatible  extends RapidLoad_ThirdParty{
         $this->plugin = 'wp-optimize/wp-optimize.php';
         $this->catgeory = 'cache';
         $this->name = 'wp-optimize';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

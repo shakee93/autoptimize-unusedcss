@@ -9,6 +9,7 @@ class Optimole_WP_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'optimole-wp/optimole-wp.php';
         $this->catgeory = 'cdn';
         $this->name = 'optimole-wp';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

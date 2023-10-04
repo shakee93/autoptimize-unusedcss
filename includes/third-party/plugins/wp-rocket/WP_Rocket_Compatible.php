@@ -9,6 +9,7 @@ class WP_Rocket_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'wp-rocket/wp-rocket.php';
         $this->catgeory = 'cache';
         $this->name = 'wp-rocket';
+        $this->has_conflict = true;
 
         parent::__construct();
     }
