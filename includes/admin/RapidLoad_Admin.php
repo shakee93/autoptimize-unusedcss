@@ -49,11 +49,22 @@ class RapidLoad_Admin
 
         self::verify_nonce();
 
-        $plugins = apply_filters('uucss/third-party/plugins',[]);
+        $cnflict_plugins = apply_filters('uucss/third-party/plugins',[]);
 
-        error_log(json_encode($plugins));
+        $plugins = get_plugins();
 
-        wp_send_json_success();
+        $conflict_plugin_names = [];
+
+        foreach($cnflict_plugins as $cnflict_plugin){
+
+            if(isset($cnflict_plugin['has_conflict']) && $cnflict_plugin['has_conflict'] && isset($plugins[$cnflict_plugin['path']])){
+                $conflict_plugin_names[] = $plugins[$cnflict_plugin['path']]['Name'];
+            }
+        }
+
+        error_log(json_encode($conflict_plugin_names));
+
+        wp_send_json_success($conflict_plugin_names);
 
     }
 

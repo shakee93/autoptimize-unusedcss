@@ -9,6 +9,7 @@ class Autoptimize_Beta_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'autoptimize-beta/autoptimize.php';
         $this->catgeory = 'optimize';
         $this->name = 'autoptimize-beta';
+        $this->has_conflict = true;
 
         parent::__construct();
     }
