@@ -8,7 +8,7 @@ const Content = ({  content, currentStep, setIsOpen, setCurrentStep } : any) => 
     const { steps } = useTour()
 
     return <div className='text-md flex flex-col px-4 pb-4'>
-        <div className='flex justify-between items-center px-4 py-4 border-b -mx-[22px]'>
+        <div className='flex justify-between items-center px-4 py-4 border-b dark:border-b-brand-700/40 -mx-[22px]'>
                 <span className='text-lg font-semibold leading-none tracking-tight'>
                    {content.header ? content.header :  `Let's Start`}
                 </span>

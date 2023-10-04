@@ -4,12 +4,14 @@ import Content from "components/tour/content";
 import {doArrow} from "components/tour/arrow";
 import {PopoverStylesObj} from "@reactour/popover";
 import {MaskStylesObj} from "@reactour/mask";
+import {useRootContext} from "../../context/root";
 
 interface TourProviderProps {
     children: ReactNode
 }
 
 const AppTour = ({children}: TourProviderProps) => {
+    const { theme, isDark } = useRootContext()
 
     const styles: StylesObj & PopoverStylesObj & MaskStylesObj = {
         popover : (base, state: any) => ({
@@ -17,20 +19,26 @@ const AppTour = ({children}: TourProviderProps) => {
             borderRadius: '10px',
             padding: '0 8px',
             zIndex: 150000,
-            ...doArrow(state.position, state.verticalAlign, state.horizontalAlign)
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgb(255, 255, 255, .6)',
+            ...(isDark && {
+               backgroundColor: 'rgb(43, 43, 43, .5)',
+                color: 'white'
+            }),
+            ...doArrow(state.position, state.verticalAlign, state.horizontalAlign, isDark)
         }),
         maskArea: (base) => ({ ...base,
             rx: 6,
         }),
         maskWrapper: (base) => ({
             ...base,
-            color: 'rgb(0,0,0,0.04)',
+            color: isDark ? 'rgb(0, 0,0,.4)' : 'rgb(0,0,0,0.04)',
             opacity: 1
         }),
         highlightedArea: (base, { x, y, width, height } : any) => ({
             ...base,
             display: "block",
-            stroke: "#0e172a",
+            stroke: isDark ? '#626874' : "#0e172a",
             strokeWidth: 2,
             width: width,
             height: height,

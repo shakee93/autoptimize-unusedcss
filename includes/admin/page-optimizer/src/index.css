@@ -44,6 +44,7 @@
   }
  
   .rapidload-dark {
+    --reactour-accent: #fafafa;
     --background: 240 10% 3.92%;
     --foreground: 210 40% 98%;
  

@@ -160,7 +160,7 @@ const Content = () => {
         <div
             className={cn(
                 'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
-                'backdrop-blur-md bg-brand-50/80 dark:bg-brand-900/95 shadow-xl rounded-[40px] border border-brand-500/20 '
+                'backdrop-blur-md bg-brand-50/75 dark:bg-brand-900/95 shadow-xl rounded-[40px] border border-brand-500/20 '
             )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>

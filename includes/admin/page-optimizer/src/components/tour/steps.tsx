@@ -212,14 +212,14 @@ const Steps: StepType[] = [
                         Click on each audit group to explore detailed insights and actions.
                     </div>
                     <div className='text-sm text-brand-600'>
-                        <ul className='flex flex-col gap-2 [&>*]:flex [&>*]:flex-col [&>*]:gap-1'>
-                            <li><span className='font-bold text-brand-800'>Opportunities</span> Recommendations from
+                        <ul className='dark:text-brand-200 text-brand-800 flex flex-col gap-2 [&>*]:flex [&>*]:flex-col [&>*]:gap-1'>
+                            <li><span className='font-bold '>Opportunities</span> Recommendations from
                                 Google to enhance your page's speed and efficiency.
                             </li>
-                            <li><span className='font-bold text-brand-800'>Diagnostics</span> In-depth feedback about
+                            <li><span className='font-bold d'>Diagnostics</span> In-depth feedback about
                                 your site's performance and potential issues.
                             </li>
-                            <li><span className='font-bold text-brand-800'>Passed Audits</span> Areas where your website
+                            <li><span className='font-bold '>Passed Audits</span> Areas where your website
                                 meets or exceeds performance standards.
                             </li>
                         </ul>
