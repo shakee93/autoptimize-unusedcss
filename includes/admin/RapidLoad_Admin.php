@@ -59,7 +59,7 @@ class RapidLoad_Admin
             wp_send_json_success(true);
         }
 
-        wp_send_json_success(false);
+        wp_send_json_error(false);
 
     }
 
@@ -75,7 +75,7 @@ class RapidLoad_Admin
                 wp_schedule_single_event(time()+1, 'cron_check_rapidload');
             }
 
-            wp_send_json_success(false);
+            wp_send_json_error(false);
 
         }
 
