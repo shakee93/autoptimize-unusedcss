@@ -33,6 +33,7 @@ import {Toaster} from "components/ui/toaster";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import ErrorFetch from "components/ErrorFetch";
+import {cn} from "lib/utils";
 
 const Content = () => {
 
@@ -157,7 +158,10 @@ const Content = () => {
 
     return (
         <div
-            className='relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center  min-w-[565px] min-h-[295px]  shadow-xl border w-fit py-6 px-6 rounded-[40px] mx-16 my-2 bg-brand-50 dark:bg-brand-900'>
+            className={cn(
+                'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
+                'backdrop-blur-md bg-brand-50/75 dark:bg-brand-900/95 shadow-xl rounded-[40px] border border-brand-500/20 '
+            )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
                     <div className='mt-2'>
@@ -171,7 +175,7 @@ const Content = () => {
                     <div className='text-xs w-full flex justify-center'>
                         <TooltipText asChild text='Switch Report'>
                             <button onClick={() => dispatch(changeReport(activeReport === 'desktop' ? 'mobile' : 'desktop'))}
-                                    className='capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
+                                    className='backdrop-blur-md dark:bg-brand-950/10 bg-brand-50/50 capitalize inline-flex gap-2 justify-center items-center border rounded-full py-1 px-3'>
                                 {activeReport === 'desktop' ?
                                     <Monitor className="w-4 h-5" /> :
                                     <DevicePhoneMobileIcon  className="h-5" />

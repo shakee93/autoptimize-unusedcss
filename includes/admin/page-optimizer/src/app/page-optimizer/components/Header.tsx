@@ -109,9 +109,22 @@ const Header = ({ url }: { url: string}) => {
 
     }, [currentStep])
 
+
+    useEffect(() => {
+
+        const content =  document.getElementById('rapidload-page-optimizer-content')
+
+        if (isOpen && content) {
+            content.style.overflowY = 'hidden'
+        } else {
+            if(content) content.style.overflowY = 'auto'
+        }
+
+    }, [isOpen])
+
     return (
 
-        <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b dark:bg-brand-950 bg-brand-0'>
+        <header className='z-[110000] w-full px-6 py-3 flex justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
@@ -122,11 +135,10 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-4'>
                     <div data-tour='switch-report-strategy' className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
-                            'absolute dark:transition-none shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] duration-400 -z-1  h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                            'absolute shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                             activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
                         )}>
                         </div>
-
 
                         <div onClick={() => dispatch(changeReport('mobile'))}
                              className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
@@ -145,7 +157,7 @@ const Header = ({ url }: { url: string}) => {
                                            dispatch(fetchData(options, url, true))
                                            commonDispatch(setCommonState('openAudits', []))
                                        }}
-                                       className='transition-none h-12 rounded-2xl border-none' variant='outline'>
+                                       className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>
                                     <ArrowPathIcon className={cn(
                                         'w-5',
@@ -183,7 +195,7 @@ const Header = ({ url }: { url: string}) => {
                                        setIsOpen(true)
                                        setTourPrompt(false)
                                    }}
-                                   className=' transition-none h-12 rounded-2xl border-none' variant='outline'>
+                                   className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
                             <div className='flex flex-col gap-1 items-center'>
                                 <GraduationCapIcon className={cn(
                                     'w-5',

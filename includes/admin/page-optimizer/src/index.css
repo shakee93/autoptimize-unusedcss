@@ -32,8 +32,8 @@
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 0 0% 93%;
+    --accent-foreground: 0 0% 11.2%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -44,6 +44,7 @@
   }
  
   .rapidload-dark {
+    --reactour-accent: #fafafa;
     --background: 240 10% 3.92%;
     --foreground: 210 40% 98%;
  
@@ -65,9 +66,9 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
  
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
+    --accent-foreground: 0 0% 93%;
+    --accent: 0 0% 11.2%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
  

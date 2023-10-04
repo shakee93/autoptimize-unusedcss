@@ -83,7 +83,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     return <>
 
         <div className='w-full flex flex-col gap-4'>
-            <Card data-tour='speed-insights' className='overflow-visible'>
+            <Card data-tour='speed-insights'
+                className='backdrop-blur-md bg-brand-0/50 overflow-visible'>
                 <div
                     className="content flex flex-col items-center gap-3 px-12 py-2.5">
 
@@ -143,8 +144,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         <div
                             onClick={e => dispatch(setCommonState('activeMetric', null)) }
                             className={cn(
-                                'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70 hover:bg-brand-50 px-6 py-3 border-t cursor-pointer text-sm',
-                                !activeMetric && 'bg-brand-100/80 dark:bg-brand-900'
+                                'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70  px-6 py-3 border-t cursor-pointer text-sm',
+                                !activeMetric && 'bg-brand-100/80 dark:bg-brand-900/80 '
                             )
                             }>
                             <span><Hash className='w-4 text-brand-400'/></span> All Audits

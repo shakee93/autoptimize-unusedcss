@@ -72,7 +72,7 @@ class RapidLoad_Admin
             wp_send_json_success(true);
         }
 
-        wp_send_json_success(false);
+        wp_send_json_error(false);
 
     }
 
@@ -88,7 +88,7 @@ class RapidLoad_Admin
                 wp_schedule_single_event(time()+1, 'cron_check_rapidload');
             }
 
-            wp_send_json_success(false);
+            wp_send_json_error(false);
 
         }
 
@@ -98,7 +98,11 @@ class RapidLoad_Admin
 
     public function rapidload_titan_feedback(){
 
-        $version = isset($_REQUEST['smiley']) ? $_REQUEST['smiley'] : 'good';
+        if (!isset($_REQUEST['smiley'])) {
+            wp_send_json_error(false);
+        }
+
+        $version = $_REQUEST['smiley'];
         $reason = isset($_REQUEST['detail']) ? $_REQUEST['detail'] : '';
 
         $api = new RapidLoad_Api();

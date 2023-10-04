@@ -91,7 +91,7 @@ const Performance = () => {
             )}>
                 <Card data-tour='audit-groups'
                       className={cn(
-                          'flex justify-between items-center select-none p-0 pl-6 pr-3',
+                          'backdrop-blur-sm dark:bg-brand-930/90 bg-brand-50/90 flex justify-between items-center select-none p-0 pl-6 pr-3',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
