@@ -403,6 +403,7 @@ export default {
       const optimizerConfig = {
         container,
         showOptimizer: false,
+        global: true,
       };
 
       if (this.on_board_complete === '') {
