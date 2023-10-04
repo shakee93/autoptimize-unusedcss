@@ -6,17 +6,15 @@ import {Accordion} from "components/accordion";
 import Card from "components/ui/card";
 import {Button} from "components/ui/button";
 import ApiService from "../../../../services/api";
-import api from "../../../../services/api";
-import {useAppContext} from "../../../../context/app";
 import {toast} from "components/ui/use-toast";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
+import { LazyMotion, domAnimation, m } from "framer-motion"
 
 const Feedback = () => {
 
     const [activeFeedback, setActiveFeedback] = useState<string | null>(null)
     const [notes, setNotes] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
-    const {options} = useAppContext()
 
     const FeedbackComponents = useMemo(() => [
         {Component: Annoyed, value: 'annoyed'},
@@ -32,7 +30,7 @@ const Feedback = () => {
             return;
         }
 
-        const api = new ApiService(options);
+        const api = new ApiService();
 
         try {
             setLoading(true)
@@ -74,6 +72,7 @@ const Feedback = () => {
                 <div className='text-xs text-brand-500'>Feedback helps us enhance and tailor the product just for you.
                 </div>
             </div>
+
             <div className='flex justify-start gap-4 select-none'>
                 {FeedbackComponents.map((icon, index) => (
                     <icon.Component key={index}
@@ -86,18 +85,20 @@ const Feedback = () => {
                 ))}
             </div>
             <div>
-                <Accordion isOpen={!!activeFeedback}>
-                    <div className='flex flex-col gap-2'>
-                        <Textarea value={notes} onChange={e => setNotes(e.target.value)}
-                                  placeholder='Optional: Tell us more about your experience...'/>
-                        <div className='flex justify-end'>
-                            <Button disabled={loading} className={cn(
-                                'flex gap-1.5 pl-4',
-                                loading && 'pl-2.5'
-                            )} loading={loading} onClick={e => handleFeedback()}>Submit</Button>
+                <LazyMotion features={domAnimation}>
+                    <Accordion isOpen={!!activeFeedback}>
+                        <div className='flex flex-col gap-2'>
+                            <Textarea value={notes} onChange={e => setNotes(e.target.value)}
+                                      placeholder='Optional: Tell us more about your experience...'/>
+                            <div className='flex justify-end'>
+                                <Button disabled={loading} className={cn(
+                                    'flex gap-1.5 pl-4',
+                                    loading && 'pl-2.5'
+                                )} loading={loading} onClick={e => handleFeedback()}>Submit</Button>
+                            </div>
                         </div>
-                    </div>
-                </Accordion>
+                    </Accordion>
+                </LazyMotion>
             </div>
         </Card>
     )

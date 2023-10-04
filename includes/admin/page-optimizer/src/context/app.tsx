@@ -42,7 +42,6 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
-    const DefaultShowOptimizer = false
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);

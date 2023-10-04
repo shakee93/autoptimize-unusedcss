@@ -138,8 +138,7 @@ export class RapidLoadOptimizer {
 // @ts-ignore
 window.RapidLoadOptimizer = RapidLoadOptimizer
 
-domReady(function () {
-
+document.addEventListener('DOMContentLoaded', () => {
 
     if (window?.rapidload_optimizer?.load_optimizer) {
 

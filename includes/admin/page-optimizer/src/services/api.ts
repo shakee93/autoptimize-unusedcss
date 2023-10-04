@@ -3,7 +3,12 @@ import {isDev} from "lib/utils";
 class ApiService {
     public baseURL: URL;
 
-    constructor(options: WordPressOptions, query?: string, action?: string) {
+    constructor(options?: WordPressOptions, query?: string, action?: string) {
+
+        if (!options) {
+            options = window.rapidload_optimizer
+        }
+
         let base = options?.ajax_url
             ? options.ajax_url
             : "http://rapidload.local/wp-admin/admin-ajax.php";

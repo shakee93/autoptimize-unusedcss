@@ -1,23 +1,24 @@
-import React, {ReactNode, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {CheckBadgeIcon} from "@heroicons/react/24/solid";
+import React, {ReactNode, Suspense, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
-import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useAppContext} from "../../../../context/app";
 import {Skeleton} from "components/ui/skeleton"
-import {JsonView} from "react-json-view-lite";
 import {cn} from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../../store/common/commonActions";
-import {Activity, Annoyed, CircleEqual, Frown, Hash, Meh, MehIcon, Shapes, Smile, SmilePlus} from "lucide-react";
-import Feedback from "app/page-optimizer/components/performance-widgets/Feedback";
+import {
+    Circle,
+    Hash,
+} from "lucide-react";
 
 
+const Feedback = React.lazy(() =>
+    import('app/page-optimizer/components/performance-widgets/Feedback'))
 
 interface PageSpeedScoreProps {
     pagespeed?: any;
@@ -28,7 +29,6 @@ interface PageSpeedScoreProps {
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
-    const {setShowOptimizer} = useAppContext()
     const {data, error, loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
@@ -77,7 +77,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     let gain = Number((metric?.potentialGain ? metric?.potentialGain : 0)?.toFixed(0))
 
+    const [key, setKey] = useState(1);
 
+    useEffect(() => {
+        setKey(prevKey => prevKey + 1);
+    }, []);
 
 
     return <>
@@ -156,7 +160,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             </Card>
 
 
-            <Feedback/>
+            <Suspense>
+                <Feedback key={key}/>
+            </Suspense>
 
             {/*{data?.loadingExperience?.metrics && (*/}
             {/*    <Card>*/}
