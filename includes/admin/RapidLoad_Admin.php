@@ -62,8 +62,6 @@ class RapidLoad_Admin
             }
         }
 
-        error_log(json_encode($conflict_plugin_names));
-
         wp_send_json_success($conflict_plugin_names);
 
     }
