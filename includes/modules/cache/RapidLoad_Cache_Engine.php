@@ -189,7 +189,26 @@ class RapidLoad_Cache_Engine
                     break;
             }
 
+            if(function_exists('fopen') && function_exists('fread')){
+                $filePointer = fopen($cache_file, 'r');
+                if ($filePointer) {
+
+                    while (!feof($filePointer)) {
+                        echo fread($filePointer, 8192);
+                        flush();
+                    }
+
+                    fclose($filePointer);
+                } else {
+
+                    echo 'Error opening cached file';
+                }
+
+                exit;
+            }
+
             readfile( $cache_file );
+
             exit;
         }
 
