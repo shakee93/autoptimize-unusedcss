@@ -201,6 +201,8 @@ class RapidLoad_Optimizer
 
     public function fetch_page_speed(){
 
+        self::verify_nonce();
+
         self::pre_optimizer_function();
 
         if(!isset(self::$job) || !isset(self::$strategy)){
@@ -209,7 +211,11 @@ class RapidLoad_Optimizer
 
         $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
-        $result = self::$job->get_last_optimization_revision(self::$strategy);
+        $result = isset($_REQUEST['page_speed']) ? $_REQUEST['page_speed'] : null;
+
+        if(!$result){
+            $result = self::$job->get_last_optimization_revision(self::$strategy);
+        }
 
         $url = "";
 
@@ -249,7 +255,6 @@ class RapidLoad_Optimizer
         }
 
         if(!isset($result->audits)){
-            error_log(json_encode($result, JSON_PRETTY_PRINT));
             wp_send_json_error([]);
         }
 
@@ -436,7 +441,7 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings(){
 
-//        self::verify_nonce();
+        self::verify_nonce();
 
         $data = json_decode(file_get_contents('php://input'));
 
