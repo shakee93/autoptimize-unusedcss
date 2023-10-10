@@ -197,6 +197,36 @@ class RapidLoad_Optimizer
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
+
+        $options = [
+            'uucss_support_next_gen_formats',
+            'uucss_image_optimize_level',
+            'uucss_self_host_google_fonts',
+            'uucss_set_width_and_height',
+            'uucss_minify',
+            'minify_js',
+            'uucss_enable_uucss',
+            'uucss_inline_css',
+            'uucss_enable_cpcss',
+            'uucss_enable_cpcss_mobile',
+            'uucss_additional_css',
+            'uucss_load_js_method',
+            'defer_inline_js',
+            'uucss_lazy_load_images',
+            'uucss_exclude_above_the_fold_images',
+            'uucss_lazy_load_iframes',
+        ];
+
+        if(isset($_REQUEST['global']) && $_REQUEST['global']){
+            foreach ($options as $key){
+                if(isset(self::$options[$key])){
+                    self::$global_options[$key] = self::$options[$key];
+                }
+            }
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+
     }
 
     public function fetch_page_speed(){
