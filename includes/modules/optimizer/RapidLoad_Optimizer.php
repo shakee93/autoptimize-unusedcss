@@ -41,6 +41,8 @@ class RapidLoad_Optimizer
             return;
         }
 
+        add_action('wp_ajax_latest_page_speed', [$this,'latest_page_speed']);
+
         if(!defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')){
             define('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED', true);
         }
@@ -51,6 +53,27 @@ class RapidLoad_Optimizer
         new OptimizerJS();
         new OptimizerImage();
         new OptimizerStyle();
+    }
+
+    public function latest_page_speed(){
+
+        self::verify_nonce();
+
+        $job = new RapidLoad_Job([
+            'url' => site_url()
+        ]);
+        if(!isset($job->id)){
+            wp_send_json_error();
+        }
+
+        $last_metrics = $job->get_last_optimization_revision('desktop');
+
+        if(!$last_metrics){
+            $last_metrics = $job->get_last_optimization_revision('mobile');
+        }
+
+        wp_send_json_success($last_metrics);
+
     }
 
     public static function   pre_optimizer_function(){
