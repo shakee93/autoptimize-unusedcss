@@ -10,7 +10,7 @@ import {transformFileType} from "lib/utils";
 
 const TourAuditOpen = ({audit}: { audit: Audit }) => {
 
-    const {dispatch, openAudits} = useCommonDispatch()
+    const {dispatch, openAudits, activeTab} = useCommonDispatch()
 
     useEffect(() => {
 
@@ -20,14 +20,24 @@ const TourAuditOpen = ({audit}: { audit: Audit }) => {
             dispatch(setCommonState('openAudits', [...openAudits, audit.id]));
         }
 
-        // dispatch(setCommonState('activeTab',
-        //     audit.type === 'opportunity' ? 'opportunities' : audit.type
-        // ));
+        let activeAuditTab = audit.type === 'opportunity' ? 'opportunities' : audit.type
+
+        if (activeAuditTab !== activeTab) {
+            dispatch(setCommonState('activeTab',
+                audit.type === 'opportunity' ? 'opportunities' : audit.type
+            ));
+        }
 
     }, [])
 
     return <>
-        <MousePointerClick className='mb-2'/>
+        <MousePointerClick
+            onClick={() => {
+
+
+
+            }}
+            className='mb-2'/>
         Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed information on each
         performance audit and dive deeper.
     </>

@@ -1,10 +1,3 @@
-import AppTour from "components/tour/index";
-import {AnimatePresence} from "framer-motion";
-import ScaleUp from "components/animation/ScaleUp";
-import AppButton from "components/ui/app-button";
-import {GraduationCapIcon} from "lucide-react";
-import {cn} from "lib/utils";
-import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
@@ -81,7 +74,7 @@ const InitTour = () => {
             setCurrentStep(0);
         }
 
-    }, [activeTab, activeReport])
+    }, [activeReport])
 
     useEffect(() => {
 
