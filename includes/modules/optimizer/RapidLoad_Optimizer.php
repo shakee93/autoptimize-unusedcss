@@ -41,6 +41,8 @@ class RapidLoad_Optimizer
             return;
         }
 
+        add_action('wp_ajax_latest_page_speed', [$this,'latest_page_speed']);
+
         if(!defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')){
             define('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED', true);
         }
@@ -51,6 +53,27 @@ class RapidLoad_Optimizer
         new OptimizerJS();
         new OptimizerImage();
         new OptimizerStyle();
+    }
+
+    public function latest_page_speed(){
+
+        self::verify_nonce();
+
+        $job = new RapidLoad_Job([
+            'url' => site_url()
+        ]);
+        if(!isset($job->id)){
+            wp_send_json_error();
+        }
+
+        $last_metrics = $job->get_last_optimization_revision('desktop');
+
+        if(!$last_metrics){
+            $last_metrics = $job->get_last_optimization_revision('mobile');
+        }
+
+        wp_send_json_success($last_metrics);
+
     }
 
     public static function   pre_optimizer_function(){
@@ -197,9 +220,41 @@ class RapidLoad_Optimizer
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
+
+        $options = [
+            'uucss_support_next_gen_formats',
+            'uucss_image_optimize_level',
+            'uucss_self_host_google_fonts',
+            'uucss_set_width_and_height',
+            'uucss_minify',
+            'minify_js',
+            'uucss_enable_uucss',
+            'uucss_inline_css',
+            'uucss_enable_cpcss',
+            'uucss_enable_cpcss_mobile',
+            'uucss_additional_css',
+            'uucss_load_js_method',
+            'defer_inline_js',
+            'uucss_lazy_load_images',
+            'uucss_exclude_above_the_fold_images',
+            'uucss_lazy_load_iframes',
+        ];
+
+        if(isset($_REQUEST['global']) && $_REQUEST['global']){
+            foreach ($options as $key){
+                if(isset(self::$options[$key])){
+                    self::$global_options[$key] = self::$options[$key];
+                }
+            }
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+
     }
 
     public function fetch_page_speed(){
+
+        self::verify_nonce();
 
         self::pre_optimizer_function();
 
@@ -209,7 +264,11 @@ class RapidLoad_Optimizer
 
         $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
-        $result = self::$job->get_last_optimization_revision(self::$strategy);
+        $result = isset($_REQUEST['page_speed']) ? $_REQUEST['page_speed'] : null;
+
+        if(!$result){
+            $result = self::$job->get_last_optimization_revision(self::$strategy);
+        }
 
         $url = "";
 
@@ -249,7 +308,6 @@ class RapidLoad_Optimizer
         }
 
         if(!isset($result->audits)){
-            error_log(json_encode($result, JSON_PRETTY_PRINT));
             wp_send_json_error([]);
         }
 
@@ -436,7 +494,7 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings(){
 
-//        self::verify_nonce();
+        self::verify_nonce();
 
         $data = json_decode(file_get_contents('php://input'));
 

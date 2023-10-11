@@ -199,12 +199,9 @@ class RapidLoad_Cache_Engine
                     }
 
                     fclose($filePointer);
-                } else {
-
-                    echo 'Error opening cached file';
+                    exit;
                 }
 
-                exit;
             }
 
             readfile( $cache_file );

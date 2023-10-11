@@ -96,7 +96,7 @@ class RapidLoad_Base
 
                 self::enqueueGlobalScript();
 
-                add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
+                //add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
             }
 
             $this->container['modules'] = new RapidLoad_Module();
