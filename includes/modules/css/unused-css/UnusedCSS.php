@@ -58,7 +58,7 @@ class UnusedCSS
 
             $this->cache_trigger_hooks();
 
-            add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+            //add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
             add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         }
