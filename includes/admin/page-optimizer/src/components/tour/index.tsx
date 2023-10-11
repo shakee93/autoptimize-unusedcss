@@ -8,10 +8,10 @@ import {useRootContext} from "../../context/root";
 
 interface TourProviderProps {
     children: ReactNode
+    isDark: boolean
 }
 
-const AppTour = ({children}: TourProviderProps) => {
-    const { theme, isDark } = useRootContext()
+const AppTour = ({children, isDark}: TourProviderProps) => {
 
     const styles: StylesObj & PopoverStylesObj & MaskStylesObj = {
         popover : (base, state: any) => ({

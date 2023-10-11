@@ -33,15 +33,15 @@ export default defineConfig((configEnv) => {
                 output: {
                     manualChunks: {
                         ['core-vendor']: [
-                            'react', 'react-dom',
-                          'tailwind-merge'
+                            'react',
+                            'react-dom',
+                            'tailwind-merge'
                         ],
                         vendor: [
                             'prism-react-renderer',
                             '@tanstack/react-table',
                             '@radix-ui/react-toast',
-                            '@radix-ui/react-select',
-                            '@reactour/tour'
+                            '@radix-ui/react-select'
                         ]
                     },
                     entryFileNames: `assets/[name].js`,

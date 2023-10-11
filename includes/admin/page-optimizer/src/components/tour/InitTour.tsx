@@ -9,7 +9,7 @@ import {AppAction, RootState} from "../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
-import {setCommonState} from "../../store/common/commonActions";
+import {setCommonRootState, setCommonState} from "../../store/common/commonActions";
 import {optimizerData} from "../../store/app/appSelector";
 import {useTour} from "@reactour/tour";
 import useCommonDispatch from "hooks/useCommonDispatch";
@@ -19,7 +19,7 @@ const InitTour = () => {
 
     const {data, loading} = useSelector(optimizerData);
     const { setIsOpen, isOpen, setSteps, currentStep, setCurrentStep } = useTour()
-    const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
+    const { activeTab, isTourOpen, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const { setShowOptimizer , options, version, mode } = useAppContext()
 
@@ -106,21 +106,20 @@ const InitTour = () => {
 
 
     useEffect(() => {
-        const updateData = (event: RapidLoadSetOptimizerEvent) => {
-            setIsOpen(true)
-        };
 
-        window.addEventListener('rapidLoad:open-titan-tour', updateData);
+        if (isTourOpen !== isOpen) {
+            setIsOpen(isTourOpen);
+        }
 
-        const event =
-            new CustomEvent('rapidLoad:titan-tour-mounted');
+    }, [isTourOpen])
 
-        window.dispatchEvent(event);
+    useEffect(() => {
 
-        return () => {
-            window.removeEventListener('rapidLoad:open-titan-tour', updateData);
-        };
-    }, [])
+        if (isTourOpen !== isOpen) {
+            commonDispatch(setCommonRootState('isTourOpen', isOpen))
+        }
+
+    }, [isOpen])
 
     return <></>
 }

@@ -11,25 +11,20 @@ import {transformFileType} from "lib/utils";
 const TourAuditOpen = ({audit}: { audit: Audit }) => {
 
     const {dispatch, openAudits} = useCommonDispatch()
-    const {activeReport} = useSelector(optimizerData)
 
     useEffect(() => {
 
         const isAuditOpen = openAudits.includes(audit.id);
 
-        dispatch(setCommonState('activeTab',
-            audit.type === 'opportunity' ? 'opportunities' : audit.type
-        ));
-
         if (!isAuditOpen) {
-            setTimeout(() => {
-                dispatch(setCommonState('openAudits', [...openAudits, audit.id]));
-            }, 0)
+            dispatch(setCommonState('openAudits', [...openAudits, audit.id]));
         }
 
+        // dispatch(setCommonState('activeTab',
+        //     audit.type === 'opportunity' ? 'opportunities' : audit.type
+        // ));
 
-    }, [activeReport, openAudits])
-
+    }, [])
 
     return <>
         <MousePointerClick className='mb-2'/>

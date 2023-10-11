@@ -22,9 +22,7 @@ import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
-import {setCommonState} from "../../../store/common/commonActions";
-import AppTour from "components/tour";
-import InitTour from "components/tour/InitTour";
+import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -33,17 +31,16 @@ const Header = ({ url }: { url: string}) => {
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {data, loading} = useSelector(optimizerData);
     const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
-
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
         return storedData ? JSON.parse(storedData) : true;
     })
 
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+
     useEffect(() => {
         localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
     }, [tourPrompt])
-
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     return (
 
@@ -116,11 +113,7 @@ const Header = ({ url }: { url: string}) => {
                         <AppButton data-tour='analyze'
                                    onClick={() => {
 
-                                       const event =
-                                           new CustomEvent('rapidLoad:open-titan-tour', );
-
-                                       window.dispatchEvent(event);
-
+                                       commonDispatch(setCommonRootState('isTourOpen', true))
                                        setTourPrompt(false)
                                    }}
                                    className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
