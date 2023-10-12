@@ -304,7 +304,7 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                             <DropdownMenu>
                                 <Button data-tour='save-changes' ref={refSaveButton} asChild
                                         className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
-                                    <AlertDialogTrigger onClick={e => setActiveAction(0)} className='flex gap-2 items-center pl-3 pr-2 h-full'>
+                                    <AlertDialogTrigger onClick={e => !global && setActiveAction(0)} className='flex gap-2 items-center pl-3 pr-2 h-full'>
                                         {(savingData || invalidatingCache) ?
                                             <Loader className='w-5 mr-0.5 animate-spin'/> :
                                             <SaveIcon className='w-5 mr-0.5'/>}

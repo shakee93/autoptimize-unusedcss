@@ -154,6 +154,8 @@ const SetupChecklist = () => {
                                 if (data.length > 0) {
                                     updateItemStatus(item.id, 'warning')
                                     setPlugins(p => data)
+                                } else {
+                                    updateItemStatus(item.id, 'passed')
                                 }
 
                                 continue;
