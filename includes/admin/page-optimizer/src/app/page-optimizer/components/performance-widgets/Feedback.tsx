@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Annoyed, Frown, MehIcon, Smile, SmilePlus} from "lucide-react";
 import {cn} from "lib/utils";
 import {Textarea} from "components/ui/textarea";
@@ -15,6 +15,7 @@ const Feedback = () => {
     const [activeFeedback, setActiveFeedback] = useState<string | null>(null)
     const [notes, setNotes] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const [showFeedback, setShowFeedback] = useState(false)
 
     const FeedbackComponents = useMemo(() => [
         {Component: Annoyed, value: 'annoyed'},
@@ -62,6 +63,18 @@ const Feedback = () => {
         }
     }
 
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            setShowFeedback(true)
+        }, 30 * 1000)
+    }, [])
+
+    if (!showFeedback) {
+        return <></>;
+    }
+
     return (
         <Card className={cn(
             'flex flex-col gap-4 px-6 py-5 mb-12 backdrop-blur-md bg-brand-0/70',
@@ -101,7 +114,7 @@ const Feedback = () => {
                 </LazyMotion>
             </div>
         </Card>
-    )
+    );
 }
 
 export default Feedback
