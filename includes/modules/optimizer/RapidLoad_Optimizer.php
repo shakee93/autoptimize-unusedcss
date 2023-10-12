@@ -254,9 +254,7 @@ class RapidLoad_Optimizer
 
     public function fetch_page_speed(){
 
-        if (!defined('RAPIDLOAD_DEV_MODE')) {
-            self::verify_nonce();
-        }
+        self::verify_nonce();
 
         self::pre_optimizer_function();
 

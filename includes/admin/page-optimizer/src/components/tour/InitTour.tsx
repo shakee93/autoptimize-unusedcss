@@ -8,13 +8,14 @@ import {useTour} from "@reactour/tour";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../context/app";
 
-const InitTour = () => {
+const InitTour = ({ mode }: {
+    mode: RapidLoadOptimizerModes
+}) => {
 
     const {data, loading} = useSelector(optimizerData);
     const { setIsOpen, isOpen, setSteps, currentStep, setCurrentStep } = useTour()
     const { activeTab, isTourOpen, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const { setShowOptimizer , options, version, mode } = useAppContext()
 
     useEffect(() => {
 

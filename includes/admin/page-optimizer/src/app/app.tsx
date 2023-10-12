@@ -69,7 +69,7 @@ const App = ({popup, _showOptimizer = false}: {
                 <>
                     <Suspense>
                         <AppTour isDark={isDark}>
-                            <InitTour/>
+                            <InitTour mode={mode}/>
                         </AppTour>
                     </Suspense>
 

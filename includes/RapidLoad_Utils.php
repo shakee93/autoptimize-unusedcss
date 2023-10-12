@@ -662,6 +662,11 @@ trait RapidLoad_Utils {
     }
 
     public static function verify_nonce($nonce = 'uucss_nonce' ){
+
+        if (defined('RAPIDLOAD_DEV_MODE')) {
+            return true;
+        }
+
         if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) ) {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }

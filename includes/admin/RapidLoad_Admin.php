@@ -29,10 +29,19 @@ class RapidLoad_Admin
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
+
+
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
             add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
             add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
+
+            if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action('wp_ajax_noriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
+                add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
+                add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
+            }
 
         }
 
