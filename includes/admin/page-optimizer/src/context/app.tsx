@@ -9,6 +9,8 @@ import {
     useRef,
     useState
 } from 'react';
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonRootState} from "../store/common/commonActions";
 
 interface OptimizerContextProps {
     openAudits: string[],
@@ -33,7 +35,7 @@ interface OptimizerContextProps {
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
 
-export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, global } : {
+export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -63,6 +65,7 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
     const [togglePerformance, setTogglePerformance] = useState(true);
     const optimizerContainer = useRef<HTMLElement|null>(null);
     const [invalidatingCache, setInvalidatingCache] = useState<boolean>(false)
+    const { dispatch } = useCommonDispatch()
 
     useEffect(() => {
         const updateData = (event: RapidLoadSetOptimizerEvent) => {
@@ -76,6 +79,14 @@ export const AppProvider = ({ children, mode, modeData, initShowOptimizerValue, 
         window.addEventListener('rapidLoad:set-optimizer', updateData);
         
         setMounted(true)
+
+        if (mode) {
+            dispatch(setCommonRootState('mode', mode));
+        }
+
+        if (modeData) {
+            dispatch(setCommonRootState('modeData', modeData));
+        }
 
         const event =
             new CustomEvent('rapidLoad:optimizer-mounted');

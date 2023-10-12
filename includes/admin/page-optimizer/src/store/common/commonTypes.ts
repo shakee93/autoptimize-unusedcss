@@ -1,5 +1,8 @@
 export type CommonState = {
     optimizerRoot: ShadowRoot | null
+    mode: RapidLoadOptimizerModes,
+    modeData?: RapidLoadOptimizerModeData
+    isTourOpen: boolean
     mobile : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;

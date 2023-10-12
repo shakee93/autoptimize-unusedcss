@@ -2,6 +2,8 @@ import {CommonAction, CommonState, SET_ROOT_STATE, SET_STATE} from "./commonType
 
 const initialState: CommonState = {
     optimizerRoot: null,
+    mode: "normal",
+    isTourOpen: false,
     mobile: {
         activeTab: 'opportunities',
         openAudits: [],

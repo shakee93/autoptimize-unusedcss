@@ -1,4 +1,4 @@
-import React, {ReactNode} from "react";
+import React, {ReactNode, Suspense} from "react";
 import "./index.css";
 import stylesUrl from './index.css?url';
 import App from "app/app";
@@ -93,31 +93,28 @@ export class RapidLoadOptimizer {
                 }: initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-            <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
-                <Provider store={store}>
-                    <RootProvider>
-                        <ShadowRoot styles={stylesUrl}>
+               <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+                   <Provider store={store}>
+                       <RootProvider>
+                               <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode}
+                                            modeData={modeData}>
+                                   <TooltipProvider>
+                                       <LazyMotion features={domAnimation}>
+                                           {popup && (
+                                               <ShadowRoot node={popup} styles={stylesUrl}>
+                                                   <SpeedPopover/>
+                                               </ShadowRoot>
+                                           )}
 
-                            <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode}
-                                         modeData={modeData}>
-                                <TooltipProvider>
-                                    <LazyMotion features={domAnimation}>
-                                        {popup && (
-                                            <ShadowRoot node={popup} styles={stylesUrl}>
-                                                <SpeedPopover/>
-                                            </ShadowRoot>
-                                        )}
-
-                                        <App _showOptimizer={showOptimizer} popup={popup}/>
-
-                                    </LazyMotion>
-                                </TooltipProvider>
-                            </AppProvider>
-
-                        </ShadowRoot>
-                    </RootProvider>
-                </Provider>
-            </ApplicationErrorBoundary>
+                                           <ShadowRoot styles={stylesUrl}>
+                                               <App _showOptimizer={showOptimizer} popup={popup}/>
+                                           </ShadowRoot>
+                                       </LazyMotion>
+                                   </TooltipProvider>
+                               </AppProvider>
+                       </RootProvider>
+                   </Provider>
+               </ApplicationErrorBoundary>
         );
     }
 

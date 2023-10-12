@@ -8,10 +8,10 @@ import {useRootContext} from "../../context/root";
 
 interface TourProviderProps {
     children: ReactNode
+    isDark: boolean
 }
 
-const AppTour = ({children}: TourProviderProps) => {
-    const { theme, isDark } = useRootContext()
+const AppTour = ({children, isDark}: TourProviderProps) => {
 
     const styles: StylesObj & PopoverStylesObj & MaskStylesObj = {
         popover : (base, state: any) => ({
@@ -20,7 +20,7 @@ const AppTour = ({children}: TourProviderProps) => {
             padding: '0 8px',
             zIndex: 150000,
             backdropFilter: 'blur(8px)',
-            backgroundColor: 'rgb(255, 255, 255, .6)',
+            backgroundColor: 'rgb(255, 255, 255, .5)',
             ...(isDark && {
                backgroundColor: 'rgb(43, 43, 43, .5)',
                 color: 'white'

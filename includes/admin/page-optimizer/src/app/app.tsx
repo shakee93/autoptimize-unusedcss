@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
 import SpeedPopover from "app/speed-popover";
@@ -10,7 +10,12 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import WebFont from "webfontloader";
 import {AnimatePresence} from "framer-motion";
-import AppTour from "components/tour";
+import {useRootContext} from "../context/root";
+
+const AppTour = React.lazy(() => import( 'components/tour'))
+const InitTour = React.lazy(() => import('components/tour/InitTour'))
+
+
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -22,9 +27,9 @@ const App = ({popup, _showOptimizer = false}: {
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
-
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {isDark } = useRootContext()
 
 
     useEffect(() => {
@@ -61,9 +66,16 @@ const App = ({popup, _showOptimizer = false}: {
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
-                <AppTour>
+                <>
+                    <Suspense>
+                        <AppTour isDark={isDark}>
+                            <InitTour mode={mode}/>
+                        </AppTour>
+                    </Suspense>
+
                     <PageOptimizer/>
-                </AppTour>
+
+                </>
             }
         </AnimatePresence>
     );

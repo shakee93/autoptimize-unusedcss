@@ -17,7 +17,7 @@ const ErrorFetch = ({ error, className }: { error: string, className?: string}) 
                                         <br/>
                                         please <a target='_blank' className='text-purple-750' href='https://rapidload.zendesk.com/hc/en-us'>contact support</a>
                                     </span>
-           <span className='text-sm text-brand-500 border-t mt-2 pt-2 mb-6'><span className='font-medium text-brand-800'>Details:</span> {error}</span>
+           <span className='text-sm text-brand-500 border-t mt-2 pt-2 mb-6 max-w-[350px]'><span className='font-medium text-brand-800'>Details:</span> {error}</span>
        </div>
    </div>
 }
