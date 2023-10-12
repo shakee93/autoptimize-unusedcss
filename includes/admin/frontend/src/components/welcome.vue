@@ -1,48 +1,47 @@
 <template>
   <div class="popup-confirmation">
-    <div class="">
-      <div class="max-w-lg w-full">
-        <div class="flex max-w-lg w-full mx-auto bg-white shadow-md rounded-[20px] overflow-hidden mt-4">
-          <div class="-mx-3 py-2 px-4">
-            <div class="mx-3 text-left p-5">
-              <div class="flex pb-4">
-                <div class="min-w-[245px]">
-                <span class="text-black-font font-semibold text-base">🎉 Welcome to RapidLoad 2.0!</span><br>
-                </div>
-                <div class="ml-[180px] hover:cursor-pointer" @click="cancel">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 17L9.00002 9.00003M9.00002 9.00003L17 1M9.00002 9.00003L1 1M9.00002 9.00003L17 17" stroke="#8D8D8D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                </div>
-              </div>
+    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
+      <div class="bg-white p-4 pt-6 pl-12 pr-12 rounded-3xl shadow-lg max-w-xl">
+        <!-- Close Button -->
+        <div class="flex justify-end">
+          <button class="text-gray-500" @click="cancel">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 17L9.00002 9.00003M9.00002 9.00003L17 1M9.00002 9.00003L1 1M9.00002 9.00003L17 17" stroke="#8D8D8D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="-mt-2 text-center">
+          <p class="text-[24px] font-semibold">Welcome to <span class="text-gray-font">RapidLoad</span></p>
+        </div>
 
-              <hr class="border-gray-border-line border-b-0 mt-1 -ml-[40px] -mr-[40px] pt-2 pb-2">
-              <p class="text-sm text-gray-font">Hello 👋</p><br>
-              <p class="text-sm text-gray-font">We're thrilled to have you on board with RapidLoad 2.0. Let's get Start to Analyze by clicking the button below</p><br>
+        <div class="mt-4 mb-2 text-center">
+          <img src="../assets/welcome.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-full">
+        </div>
 
-            </div>
-            <hr class="border-gray-border-line border-b-0 mt-1 -ml-[40px] -mr-[40px] pt-2">
-            <div class="flex justify-center">
+        <div class="mt-4 text-left text-base">
+          <p class="text-black pb-3">Get ready for an exhilarating journey as we guide you through our arsenal of powerful tools, including the groundbreaking Titan Optimizer, your key to lightning-fast websites. </p>
 
-              <button
-                  class="flex mb-3 cursor-pointer transition duration-300 font-semibold text-gray-l py-2 px-4"
-                  @click="getStarted"
-              >
-                Get Started
-              </button>
+          <p class="text-black">Stay with us as we embark on your first run job and unveil more exciting features to turbocharge your web experience!</p>
 
-<!--              <button-->
-<!--                  class="flex mb-3 mr-6 cursor-pointer transition duration-300 font-semibold text-arrow-message-tc py-2 px-4"-->
-<!--                  @click="cancel"-->
-<!--              >-->
-<!--                Close-->
-<!--              </button>-->
-            </div>
-          </div>
+        </div>
+
+        <div class="flex justify-end mt-4 -mr-2">
+
+          <button
+              class="text-[14px] bg-purple font-semibold text-white py-3 px-12 border rounded-full"
+              @click="getStarted"
+          >
+            Get Started
+          </button>
+
         </div>
       </div>
     </div>
   </div>
+
+
+
+
 </template>
 
 <script>
