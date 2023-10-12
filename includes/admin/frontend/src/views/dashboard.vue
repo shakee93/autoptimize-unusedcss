@@ -131,7 +131,7 @@
             <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
-          <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
+          <div class="actions p-4 mt-1 grid grid-cols-2 gap-4 items-center">
 
             <div class="col-start-1 col-end-3" >
               <RouterLink v-if="item.id !== 'cdn' && item.id !== 'page-optimizer' && license_information.licensed_domain" :class="item.status ? 'rl-Show' :'rl-Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
@@ -144,12 +144,12 @@
                 <button >Settings</button>
               </RouterLink>
 
-              <div @click="howtouse=true" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
+              <RouterLink @click="howtouse=true" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
                    :class="item.status? 'rl-Show': 'rl-Hide'"
                    class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
                           :to="item.link">
                 How to Use
-              </div>
+              </RouterLink>
 
 
 
@@ -364,7 +364,7 @@
     </ul>
 
 
-    <popupModel v-if="popupModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
+    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
     <howtoUse v-if="howtouse" @cancel="howtouse=false" />
     <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
 
