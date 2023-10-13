@@ -259,8 +259,6 @@ export const FinalSteps: StepType[] = [
             if (el) {
                 let rect = el.getBoundingClientRect()
 
-                console.log(rect, postionsProps);
-                console.log(Number(rect.x + rect.width) - postionsProps.width , rect.y - postionsProps.height - 25  , "top");
                 return [Number(rect.x + rect.width) - postionsProps.width , rect.y - postionsProps.height - 25 ];
             }
 

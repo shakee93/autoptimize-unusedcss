@@ -11,7 +11,11 @@ export const doArrow = (position:  keyof typeof oppositeSide, verticalAlign: any
     if (!position || position === "custom") {
         // force to top when custom pos sent
         position = 'top'
+        verticalAlign = 'bottom'
+        horizontalAlign = 'left'
     }
+
+    console.log(verticalAlign, horizontalAlign, position);
 
     const width = 18;
     const height = 10;
