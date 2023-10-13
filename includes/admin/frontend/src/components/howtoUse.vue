@@ -20,12 +20,29 @@
 
         <div class="mt-4 text-left ">
           <p class="text-black pb-3 text-lg">Access Titan</p>
-          <ul class="list-disc pl-4 pr-4">
-            <li class="text-black mb-0.5">Open the required page with the WordPress admin bar.</li>
-            <li class="text-black mb-0.5">Hover the RapidLoad Navigation button.</li>
-            <li class="text-black">Click Titan Optimizer. Voila, now the page is being analyzed.</li>
-          </ul>
+          <div class="flex items-center">
+            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 8 8">
+              <circle cx="4" cy="4" r="4" fill="black" />
+            </svg>
+            <p class="text-black mb-0.5">Open the required page with the WordPress admin bar.</p>
+          </div>
+
+          <div class="flex items-center">
+            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 8 8">
+              <circle cx="4" cy="4" r="4" fill="black" />
+            </svg>
+            <p class="text-black mb-0.5">Hover the RapidLoad Navigation button.</p>
+          </div>
+
+          <div class="flex items-center">
+          <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 8 8">
+            <circle cx="4" cy="4" r="4" fill="black" />
+          </svg>
+          <p class="text-black">Click Titan Optimizer. Voila, now the page is being analyzed.</p>
         </div>
+
+
+      </div>
 
         <div class="flex justify-center mt-4">
 
