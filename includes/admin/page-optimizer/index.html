@@ -7,37 +7,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RapidLoad Page Optimizer</title>
 
-<!--    <script>-->
+    <script>
 
-<!--      window.rapidload_optimizer = {-->
-<!--        "load_optimizer": "1",-->
-<!--              "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",-->
-<!--              "page_optimizer_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",-->
-<!--              "plugin_url": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/",-->
-<!--              "ajax_url": "http://rapidload.local/wp-admin/admin-ajax.php",-->
-<!--              "dashboard_url": "http://rapidload.local/wp-admin/admin.php?page=rapidload",-->
-<!--              "optimizer_url": "http://rapidload.local/",-->
-<!--              "nonce": "ba619ab406",-->
-<!--              "timezone": "",-->
-<!--              "actions": [-->
-<!--        {-->
-<!--          "tooltip": "Clear Site Cache",-->
-<!--          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=12379ab23b",-->
-<!--          "icon": "clear_cache"-->
-<!--        },-->
-<!--        {-->
-<!--          "tooltip": "Clear Page Cache",-->
-<!--          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_url=http%3A%2F%2Frapidload.local%2F&amp;_wpnonce=12379ab23b",-->
-<!--          "icon": "clear_page_cache"-->
-<!--        },-->
-<!--        {-->
-<!--          "tooltip": "Clear CSS/JS/Font Optimizations",-->
-<!--          "href": "/?_action=rapidload_purge_all&amp;nonce=ba619ab406",-->
-<!--          "icon": "clear_optimization"-->
-<!--        }-->
-<!--      ]-->
-<!--      }-->
-<!--    </script>-->
+//      window.rapidload_optimizer = {
+//        "load_optimizer": "1",
+//              "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+//              "page_optimizer_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+//              "plugin_url": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/",
+//              "ajax_url": "http://rapidload.local/wp-admin/admin-ajax.php",
+//              "dashboard_url": "http://rapidload.local/wp-admin/admin.php?page=rapidload",
+//              "optimizer_url": "http://rapidload.local/",
+//              "nonce": "ba619ab406",
+//              "timezone": "",
+//              "actions": [
+//        {
+//          "tooltip": "Clear Site Cache",
+//          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=12379ab23b",
+//          "icon": "clear_cache"
+//        },
+//        {
+//          "tooltip": "Clear Page Cache",
+//          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_url=http%3A%2F%2Frapidload.local%2F&amp;_wpnonce=12379ab23b",
+//          "icon": "clear_page_cache"
+//        },
+//        {
+//          "tooltip": "Clear CSS/JS/Font Optimizations",
+//          "href": "/?_action=rapidload_purge_all&amp;nonce=ba619ab406",
+//          "icon": "clear_optimization"
+//        }
+//      ]
+//      }
+    </script>
 
     <style>
       :root {
@@ -97,9 +97,10 @@
         --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
       }
 
-      /*body {*/
-      /*  background: var(--wp--preset--gradient--primary-secondary-tertiary);*/
-      /*}*/
+      body {
+        /*background: var(--wp--preset--gradient--primary-secondary-tertiary);*/
+        background: #002836;
+      }
 
     </style>
   </head>
@@ -119,7 +120,7 @@
           container,
           popup,
           showOptimizer: false,
-          global: true,
+          // global: true,
           // mode: 'onboard',
           modeData: {
             connect_url: 'http://localhost:5173/',

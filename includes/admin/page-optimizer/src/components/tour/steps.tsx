@@ -6,6 +6,7 @@ import {setCommonState} from "../../store/common/commonActions";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../store/app/appSelector";
 import {transformFileType} from "lib/utils";
+import {position} from "html2canvas/dist/types/css/property-descriptors/position";
 
 
 const TourAuditOpen = ({audit}: { audit: Audit }) => {
@@ -249,10 +250,23 @@ export const FinalSteps: StepType[] = [
                 ensure all your tweaks are updated.
             </>
         },
-        position: "bottom",
+        position: (postionsProps, prevRect) => {
+            let shadowRoot  =
+                document.getElementById('rapidload-optimizer-shadow-dom')
+            let el = shadowRoot?.shadowRoot?.querySelector('[data-tour="save-changes"]')
+
+
+            if (el) {
+                let rect = el.getBoundingClientRect()
+
+                return [Number(rect.x + rect.width) - postionsProps.width , rect.y - postionsProps.height - 25 ];
+            }
+
+            return "top"
+        },
         padding: {
             popover: [100, 25]
-        }
+        },
     },
 ]
 

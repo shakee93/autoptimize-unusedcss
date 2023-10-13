@@ -35,14 +35,18 @@ export default defineConfig((configEnv) => {
                         ['core-vendor']: [
                             'react',
                             'react-dom',
-                            'tailwind-merge'
+                            'tailwind-merge',
+                            'webfontloader'
                         ],
                         vendor: [
                             'prism-react-renderer',
                             '@tanstack/react-table',
                             '@radix-ui/react-toast',
                             '@radix-ui/react-select'
-                        ]
+                        ],
+                        animations: [
+                            'framer-motion',
+                        ],
                     },
                     entryFileNames: `assets/[name].js`,
                     chunkFileNames: `assets/[name].js`,

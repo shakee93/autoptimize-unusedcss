@@ -32,7 +32,7 @@ const AppTour = ({children, isDark}: TourProviderProps) => {
         }),
         maskWrapper: (base) => ({
             ...base,
-            color: isDark ? 'rgb(0, 0,0,.4)' : 'rgb(0,0,0,0.04)',
+            color: isDark ? 'rgb(0, 0,0,.4)' : 'rgb(0,0,0,0.05)',
             opacity: 1
         }),
         highlightedArea: (base, { x, y, width, height } : any) => ({

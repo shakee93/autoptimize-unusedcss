@@ -69,9 +69,9 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
             </div>
             <Accordion isOpen={isOpen}>
 
-                <div className='w-full text-left flex flex-col'>
+                <div className='w-full text-left flex flex-col divide-y'>
                     {items.map(i => (
-                        <div className='last:pb-3 flex text-sm items-center gap-2 border-t py-2 px-4' key={i.id}>
+                        <div className='last:pb-3 flex text-sm items-center gap-2 py-2 px-4' key={i.id}>
                             <span>
                                 <AuditIcon icon={i.icon}/>
                             </span>

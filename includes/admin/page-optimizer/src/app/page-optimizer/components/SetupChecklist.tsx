@@ -325,7 +325,7 @@ const SetupChecklist = () => {
                                                            <>{
                                                            // @ts-ignore
                                                            item.sections[item.status](plugins)}</> :
-                                                           <>item.sections[item.status]</>
+                                                           <>{item.sections[item.status]}</>
                                                    )}
                                                </div>
                                            </Accordion>

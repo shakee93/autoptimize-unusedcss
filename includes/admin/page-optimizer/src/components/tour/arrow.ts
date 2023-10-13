@@ -1,5 +1,5 @@
 
-const opositeSide = {
+const oppositeSide = {
     top: "bottom",
     bottom: "top",
     right: "left",
@@ -7,10 +7,15 @@ const opositeSide = {
     custom: 'custom'
 };
 
-export const doArrow = (position:  keyof typeof opositeSide, verticalAlign: any, horizontalAlign : keyof typeof opositeSide, isDark : boolean ) => {
+export const doArrow = (position:  keyof typeof oppositeSide, verticalAlign: any, horizontalAlign : keyof typeof oppositeSide, isDark : boolean ) => {
     if (!position || position === "custom") {
-        return {};
+        // force to top when custom pos sent
+        position = 'top'
+        verticalAlign = 'bottom'
+        horizontalAlign = 'left'
     }
+
+    console.log(verticalAlign, horizontalAlign, position);
 
     const width = 18;
     const height = 10;
@@ -20,9 +25,9 @@ export const doArrow = (position:  keyof typeof opositeSide, verticalAlign: any,
 
     const obj = {
         [`--rtp-arrow-${
-            isVertical ? opositeSide[horizontalAlign] : verticalAlign
+            isVertical ? oppositeSide[horizontalAlign] : verticalAlign
         }`]: height + spaceFromSide + "px",
-        [`--rtp-arrow-${opositeSide[position]}`]: -height + "px",
+        [`--rtp-arrow-${oppositeSide[position]}`]: -height + "px",
         [`--rtp-arrow-border-${isVertical ? "left" : "top"}`]: `${
             width / 2
         }px solid transparent`,
