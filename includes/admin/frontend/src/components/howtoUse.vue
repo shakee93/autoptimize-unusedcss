@@ -10,8 +10,8 @@
             </svg>
           </button>
         </div>
-        <div class="-mt-6 text-center">
-          <p class="text-[24px] font-semibold">How to Access</p>
+        <div class="-mt-[26px] text-center">
+          <p class="text-[24px] font-semibold">Access Titan</p>
         </div>
 
         <div class="mt-4 text-center">
@@ -20,9 +20,11 @@
 
         <div class="mt-4 text-left ">
           <p class="text-black pb-3 text-lg">Access Titan</p>
-          <p class="text-black pb-3">1. Open the required page with the WordPress admin bar.</p>
-          <p class="text-black pb-3">2. Hover the RapidLoad Navigation button.</p>
-          <p class="text-black">3. Click Titan Optimizer. Voila, now the page is being analyzed.</p>
+          <ul class="list-disc pl-4 pr-4">
+            <li class="text-black mb-0.5">Open the required page with the WordPress admin bar.</li>
+            <li class="text-black mb-0.5">Hover the RapidLoad Navigation button.</li>
+            <li class="text-black">Click Titan Optimizer. Voila, now the page is being analyzed.</li>
+          </ul>
         </div>
 
 
