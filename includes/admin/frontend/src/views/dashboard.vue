@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <main>
 
@@ -119,7 +115,7 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-
+      <performanceWidget></performanceWidget>
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
@@ -381,6 +377,7 @@ import Vue3TagsInput from "vue3-tags-input";
 import popupModel from "../components/popupModel.vue";
 import howtoUse from "../components/howtoUse.vue";
 import welcome from "../components/welcome.vue";
+import performanceWidget from "../components/performanceWidget.vue";
 import optimization from "./optimization.vue";
 // import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
@@ -393,6 +390,8 @@ export default {
     howtoUse,
     welcome,
     optimization,
+    performanceWidget,
+
   },
 
   mounted() {

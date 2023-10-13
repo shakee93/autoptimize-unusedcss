@@ -20,9 +20,7 @@
 
         <div class="mt-4 text-left text-base">
           <p class="text-black pb-3">Get ready for an exhilarating journey as we guide you through our arsenal of powerful tools, including the groundbreaking Titan Optimizer, your key to lightning-fast websites. </p>
-
           <p class="text-black">Stay with us as we embark on your first run job and unveil more exciting features to turbocharge your web experience!</p>
-
         </div>
 
         <div class="flex justify-end mt-4 -mr-2">
