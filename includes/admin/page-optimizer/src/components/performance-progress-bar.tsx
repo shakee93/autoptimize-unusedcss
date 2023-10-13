@@ -63,7 +63,7 @@ const PerformanceProgressBar = ({
                         pathTransitionDuration: .5,
                         strokeLinecap: 'round',
                         backgroundColor: progressbarBg
-                    })} value={score}>
+                    })} value={score.toFixed() as unknown as number}>
                 <AnimatePresence initial={false}>
                                 <div
                                     style={{
@@ -75,7 +75,7 @@ const PerformanceProgressBar = ({
                                     )}
                                 >
 
-                                        <span>{score}</span>
+                                        <span>{score.toFixed(0) as unknown as number}</span>
                                         {children && (
                                             <m.div
                                                 key='children'  // add a unique key
