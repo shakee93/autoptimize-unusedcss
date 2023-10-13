@@ -142,7 +142,8 @@ const Content = () => {
                     <TooltipText key={action.icon} text={action.tooltip}>
                         <AppButton
                             disabled={action.loading}
-                            onClick={e => triggerAction(action)} className='rounded-[15px]' variant='outline'>
+                            onClick={e => triggerAction(action)}
+                            className='rounded-[15px] dark:bg-brand-950/50 bg-brand-100/50' variant='outline'>
                             {action.loading &&
                                 <span>
                                     <Loader className='motion-safe:animate-spin w-4'/>
@@ -160,7 +161,7 @@ const Content = () => {
         <div
             className={cn(
                 'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
-                'backdrop-blur-md bg-brand-50/75 dark:bg-brand-900/95 shadow-xl rounded-[40px] border border-brand-500/20 '
+                'backdrop-blur-md bg-brand-100/90 dark:bg-brand-900/95 shadow-xl rounded-[50px] border border-brand-500/20 '
             )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
@@ -271,7 +272,9 @@ const SpeedInsights = ({children}: {
     const root = options?.plugin_url
 
     return (
-        <HoverCard openDelay={0}>
+        <HoverCard
+            // open={true}
+            openDelay={0}>
             <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
                 <HoverCardTrigger asChild>
                     <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>

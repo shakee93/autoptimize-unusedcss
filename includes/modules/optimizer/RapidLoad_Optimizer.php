@@ -264,7 +264,13 @@ class RapidLoad_Optimizer
 
         $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
-        $result = isset($_REQUEST['page_speed']) ? $_REQUEST['page_speed'] : null;
+        $body = file_get_contents('php://input');
+
+        $result = ($body) ? json_decode($body) : null;
+
+        if ($result && isset($result->page_speed)) {
+            $result = $result->page_speed;
+        }
 
         if(!$result){
             $result = self::$job->get_last_optimization_revision(self::$strategy);

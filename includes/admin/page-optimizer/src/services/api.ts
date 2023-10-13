@@ -55,6 +55,26 @@ class ApiService {
 
 
         try {
+
+            let data = null
+            // if (reload) {
+            //
+            //     const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
+            //
+            //     pageSpeedURL.searchParams.append('url', 'https://rapidload.io')
+            //     pageSpeedURL.searchParams.append('strategy', activeReport)
+            //
+            //     const pageSpeed = await fetch(pageSpeedURL, {
+            //         method: "POST",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         }
+            //     });
+            //
+            //     data = await pageSpeed.json()
+            //
+            // }
+
             const query = new URLSearchParams();
 
             this.baseURL.searchParams.append('action', 'fetch_page_speed')
@@ -64,10 +84,17 @@ class ApiService {
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
 
             const response = await fetch(this.baseURL, {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
+                // ...(
+                //     data && {
+                //             body : JSON.stringify( {
+                //                 page_speed: data
+                //             })
+                //     }
+                // )
             });
 
             return this.throwIfError(response);
