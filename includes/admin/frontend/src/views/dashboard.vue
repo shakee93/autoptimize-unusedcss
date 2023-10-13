@@ -361,7 +361,7 @@
 
 
     <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
-    <howtoUse v-if="howtouse" @cancel="howtouse=false" />
+    <howtoUse v-if="howtouse" @cancel="howtouse=false" @goto="gotoHome"/>
     <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
 
 
@@ -471,6 +471,10 @@ export default {
   },
   methods:{
 
+    gotoHome(){
+
+      window.open(this.home_url, '_blank');
+    },
     startAnalyzing(){
       this.openOptimizer();
       this.welcomeModel=false;
@@ -650,6 +654,7 @@ export default {
     return {
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
+      home_url: window.uucss_global.home_url,
       popupModel: false,
       howtouse: false,
       welcomeModel: false,

@@ -27,7 +27,16 @@
           </ul>
         </div>
 
+        <div class="flex justify-center mt-4">
 
+          <button
+              class="text-[14px] bg-purple font-semibold text-white py-3 px-12 border rounded-full"
+              @click="gotoHome"
+          >
+            Go to Home
+          </button>
+
+        </div>
       </div>
     </div>
   </div>
@@ -44,6 +53,10 @@ export default {
     // },
   },
   methods: {
+    gotoHome() {
+      this.$emit("goto");
+
+    },
     cancel() {
       this.$emit("cancel");
 
