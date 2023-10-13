@@ -249,7 +249,7 @@ export const FinalSteps: StepType[] = [
                 ensure all your tweaks are updated.
             </>
         },
-        position: "bottom",
+        position: "top",
         padding: {
             popover: [100, 25]
         }
