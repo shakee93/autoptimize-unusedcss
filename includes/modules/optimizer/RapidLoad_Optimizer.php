@@ -60,7 +60,7 @@ class RapidLoad_Optimizer
         self::verify_nonce();
 
         $job = new RapidLoad_Job([
-            'url' => site_url()
+            'url' => $this->transform_url(site_url())
         ]);
         if(!isset($job->id)){
             wp_send_json_error();
