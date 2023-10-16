@@ -219,10 +219,26 @@ body .rapidload {
     /*    transition: 0.3s;*/
     /*}*/
 
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+            stroke-dasharray: 0 502.4;
+        }
+        50% {
+            transform: rotate(180deg);
+            stroke-dasharray: 502.4;
+        }
+        100% {
+            transform: rotate(360deg);
+            stroke-dasharray: 0 502.4
+        }
+    }
 
-
+    .animate-progress{
+        animation: rotate 2s linear infinite;
+    }
     .performance-circle .inner-circle {
-        stroke: #ECECED;
+        /*stroke: #ECECED;*/
         /*stroke-width: 26px;*/
         stroke-dasharray: 0;
         fill: none;
@@ -232,7 +248,9 @@ body .rapidload {
         transition-duration: 300ms;
     }
 
+
     .progress-bar {
+
         fill: none;
         /*stroke-width: 27px;*/
         /*stroke: #09B42F;*/

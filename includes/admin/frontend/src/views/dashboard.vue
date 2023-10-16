@@ -115,7 +115,7 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-      <performanceWidget></performanceWidget>
+      <performanceWidget :score="score"></performanceWidget>
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
@@ -446,7 +446,7 @@ export default {
     }else{
       this.update_license()
     }
-
+    this.getPerformanceScore();
 
     const activeModules = [];
 
@@ -508,6 +508,28 @@ export default {
       if(this.improvetips_count===5){
         this.improvetips_count = 0;
       }
+    },
+
+    getPerformanceScore(){
+
+      axios.post(window.uucss_global?.ajax_url + '?action=latest_page_speed&nonce='+window.uucss_global?.nonce,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      }).then((response)=>{
+        console.log(response);
+        if(response.data?.success){
+          //this.license_loading = false;
+        }else{
+          //this.license_loading = false;
+          if(typeof response.data?.data === "string"){
+          //  this.connect_with_license_error = response.data?.data
+          }else{
+           // this.connect_with_license_error = "Invalid License Key"
+          }
+        }
+      })
+
     },
     connect_license(){
       this.license_loading = true;
@@ -652,6 +674,7 @@ export default {
 
   data() {
     return {
+      score: 85,
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       home_url: window.uucss_global.home_url,

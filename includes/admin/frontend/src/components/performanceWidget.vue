@@ -15,12 +15,18 @@
 
     <hr class="border-gray-border-line border-b-0">
 
-    <div class="p-2 pl-4 pr-4 pb-1 pt-6">
+    <div class="p-2 pl-4 pr-4 pb-1 flex justify-center items-center">
 
-      <circle-progress :transition="500" :percent="80" :viewport="true" :show-percent="true" :fill-color="'#0EBFE6'" :background="'#0EBFE6'"/>
+<!--      <circle-progress :transition="500" :percent="80" :viewport="true" :show-percent="true" :fill-color="'#0EBFE6'" :background="'#0EBFE6'"/>-->
 
-
-
+      <div class="performance-circle">
+        <svg width="155" height="155">
+          <rect width="100%" height="100%" :fill="this.performanceColor" fill-opacity="0.1" rx="50%" ry="50%"/>
+          <circle class="inner-circle" cx="77.5" cy="77.5" r="72" stroke-width="10" />
+          <circle ref="progressBar" class="progress-bar animate-progress" cx="77.5" cy="77.5" r="72" stroke-width="10" :stroke="this.performanceColor" />
+          <text x="50%" y="50%" text-anchor="middle" dy=".3em" class="text-[28px] text-black">{{ progress }}</text>
+        </svg>
+      </div>
 
 
     </div>
@@ -47,11 +53,14 @@ export default {
   },
 
   props: {
-    // default: {
-    //   type: String,
-    //   required: false,
-    //   default: null,
-    // },
+    score: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+  },
+  mounted(){
+    //this.animateProgressBar();
   },
   methods: {
     getStarted() {
@@ -62,11 +71,42 @@ export default {
       this.$emit("cancel");
 
     },
+
+    animateProgressBar() {
+      const progressBar = this.$refs.progressBar;
+      const radius = progressBar.r.baseVal.value;
+      const circumference = 2 * Math.PI * radius;
+      let progress = 0;
+      let performance = this.score;
+      progressBar.style.strokeDasharray = circumference;
+      progressBar.style.strokeDashoffset = circumference;
+
+      if(performance < 50){
+        this.performanceColor = '#FF3333';
+      }else if(performance < 90){
+        this.performanceColor = '#FFAA33';
+      }else if(performance < 101){
+        this.performanceColor = '#09B42F';
+      }
+
+      const interval = setInterval(() => {
+        if (progress >= performance) {
+          clearInterval(interval);
+        } else {
+          progress += 1;
+          const offset = circumference - progress / 100 * circumference;
+          progressBar.style.strokeDashoffset = offset;
+          this.progress = progress;
+        }
+      }, 10);
+    },
   },
   data(){
     return{
-      name: this.default ? this.default : null,
+      performanceScore: this.score ? this.score : null,
       back: '/',
+      progress: 0,
+      performanceColor: '#09B42F',
     }
   }
 };
