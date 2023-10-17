@@ -248,7 +248,28 @@ body .rapidload {
         transition-duration: 300ms;
     }
 
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
 
+    .animate-fade-in {
+        animation: fade-in 1.5s ease-out infinite;
+    }
+
+    .change-color{
+        stroke: #7F54B3;
+    }
+    .fill-color{
+        fill: #7F54B3;
+    }
     .progress-bar {
 
         fill: none;
