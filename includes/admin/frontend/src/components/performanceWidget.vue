@@ -4,6 +4,7 @@
     <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
       <div class="col-start-1 col-end-3" >
         <h4 class="heading-margin text-gray-h text-base font-semibold">Performance</h4>
+
       </div>
 <!--      <div class="col-end-7 col-span-2">-->
 <!--        <svg class="heading-margin"  width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">-->

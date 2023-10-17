@@ -20,24 +20,22 @@
 
         <div class="mt-4 text-left ">
           <div class="flex items-center">
-            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 8 8">
-              <circle cx="4" cy="4" r="4" fill="black" />
-            </svg>
-            <p class="text-black mb-0.5">Open the required page with the WordPress admin bar.</p>
+<!--            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 8 8">-->
+<!--              <circle cx="4" cy="4" r="4" fill="black" />-->
+<!--            </svg>-->
+            <p class="text-black mb-0.5">1. Get to Your Page</p>
+            <p class="text-black mb-1 pl-1">a. Open up the page you want to analyze, ensure the WordPress admin bar is visible.</p>
           </div>
 
           <div class="flex items-center">
-            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 8 8">
-              <circle cx="4" cy="4" r="4" fill="black" />
-            </svg>
-            <p class="text-black mb-0.5">Hover the RapidLoad Navigation button.</p>
+            <p class="text-black mb-0.5">2. Find RapidLoad</p>
+            <p class="text-black mb-1 pl-1">a. Just slide your cursor over to the RapidLoad Button in the admin bar.</p>
           </div>
 
           <div class="flex items-center">
-          <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 8 8">
-            <circle cx="4" cy="4" r="4" fill="black" />
-          </svg>
-          <p class="text-black">Click Titan Optimizer. Voila, now the page is being analyzed.</p>
+
+            <p class="text-black mb-0.5">3. Let It Analyze</p>
+            <p class="text-black mb-1 pl-1">a.  Click "Titan Optimizer" – and watch your page get checked and ready to be tweaked.</p>
         </div>
 
 

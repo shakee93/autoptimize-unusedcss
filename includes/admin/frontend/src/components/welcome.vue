@@ -5,8 +5,8 @@
         <!-- Close Button -->
         <div class="flex justify-end">
           <button class="text-gray-500" @click="cancel">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 17L9.00002 9.00003M9.00002 9.00003L17 1M9.00002 9.00003L1 1M9.00002 9.00003L17 17" stroke="#8D8D8D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 15L8.50002 8.50003M15 2L8.50002 8.50003M8.50002 8.50003L2 2M8.50002 8.50003L15 15" stroke="#CACACA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="mt-4 text-left text-base">
-          <p class="text-black pb-3">Get ready for an exhilarating journey as we guide you through our arsenal of powerful tools, including the groundbreaking Titan Optimizer, your key to lightning-fast websites. </p>
+          <p class="text-black pb-3">Get ready for an exhilarating journey as we guide you through our robust collection of tools, including the all-new Titan Optimizer, your key to lightning-fast websites.</p>
           <p class="text-black">Stay with us as we embark on your first run job and unveil more exciting features to turbocharge your web experience!</p>
         </div>
 
