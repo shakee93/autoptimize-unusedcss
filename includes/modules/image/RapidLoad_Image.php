@@ -125,9 +125,14 @@ class RapidLoad_Image
             $options .= ',to_avif';
         }
 
-        if($width && $height){
+        if($width){
 
-            $options .= ',w_' . str_replace("px", "", $width) . ',h_' . str_replace("px", "", $height);
+            $options .= ',w_' . str_replace("px", "", $width);
+        }
+
+        if($height){
+
+            $options .=  ',h_' . str_replace("px", "", $height);
         }
 
         return $cdn . $options . '/' . $url;
