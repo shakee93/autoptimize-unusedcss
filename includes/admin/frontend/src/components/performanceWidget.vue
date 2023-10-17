@@ -21,10 +21,10 @@
 
       <div class="performance-circle">
         <svg width="155" height="155">
-          <rect width="100%" height="100%" :fill="this.performanceColor" fill-opacity="0.1" rx="50%" ry="50%"/>
+          <rect :class="this.loading? 'fill-color': ''" width="100%" height="100%" :fill="this.performanceColor" fill-opacity="0.1" rx="50%" ry="50%"/>
           <circle class="inner-circle" cx="77.5" cy="77.5" r="72" stroke-width="10" />
-          <circle ref="progressBar" class="progress-bar animate-progress" cx="77.5" cy="77.5" r="72" stroke-width="10" :stroke="this.performanceColor" />
-          <text x="50%" y="50%" text-anchor="middle" dy=".3em" class="text-[28px] text-black">{{ progress }}</text>
+          <circle ref="progressBar" class="progress-bar" :class="this.loading? 'animate-progress change-color': ''" cx="77.5" cy="77.5" r="72" stroke-width="10" :stroke="this.performanceColor" />
+          <text :class="this.loading? 'animate-fade-in': ''" x="50%" y="50%" text-anchor="middle" dy=".3em" class="text-[28px] text-black">{{ progress }}</text>
         </svg>
       </div>
 
@@ -42,6 +42,7 @@
 
 import "vue3-circle-progress/dist/circle-progress.css";
 import CircleProgress from "vue3-circle-progress";
+import axios from "axios";
 
 
 export default {
@@ -53,16 +54,50 @@ export default {
   },
 
   props: {
-    score: {
-      type: Number,
-      required: false,
-      default: null,
-    },
+    // score: {
+    //   type: Number,
+    //   required: false,
+    //   default: null,
+    // },
   },
   mounted(){
-    //this.animateProgressBar();
+
+    this.getPerformanceScore();
   },
   methods: {
+
+    getPerformanceScore(){
+      this.loading= true;
+      this.progress = "loading...";
+      axios.post(window.uucss_global?.ajax_url + '?action=latest_page_speed&nonce='+window.uucss_global?.nonce,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      }).then((response)=>{
+
+        if(response.data?.success){
+          console.log(response.data?.data.performance);
+          if(response.data?.data.performance){
+            this.score = response.data?.data.performance;
+            if(this.score> 0){
+              this.loading= false;
+              this.animateProgressBar();
+            }
+          }
+
+        }else{
+          //this.license_loading = false;
+          this.loading = true;
+          if(typeof response.data?.data === "string"){
+            //  this.connect_with_license_error = response.data?.data
+          }else{
+            // this.connect_with_license_error = "Invalid License Key"
+          }
+        }
+      })
+
+    },
+
     getStarted() {
       this.$emit("start");
 
@@ -105,8 +140,10 @@ export default {
     return{
       performanceScore: this.score ? this.score : null,
       back: '/',
-      progress: 0,
+      progress: '',
       performanceColor: '#09B42F',
+      score:0,
+      loading: true,
     }
   }
 };
