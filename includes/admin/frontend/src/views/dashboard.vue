@@ -115,7 +115,7 @@
 
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-      <performanceWidget></performanceWidget>
+      <performanceWidget :class="{disableBlock: !license_information.licensed_domain}"></performanceWidget>
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
@@ -360,7 +360,7 @@
     </ul>
 
 
-    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>
+<!--    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
     <howtoUse v-if="howtouse" @cancel="howtouse=false" @goto="gotoHome"/>
     <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
 
