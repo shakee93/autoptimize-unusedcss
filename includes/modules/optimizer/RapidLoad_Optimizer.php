@@ -271,7 +271,7 @@ class RapidLoad_Optimizer
 
         $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
-        $body = file_get_contents('php://input');
+        /*$body = file_get_contents('php://input');
 
         $result = ($body) ? json_decode($body) : null;
 
@@ -281,7 +281,9 @@ class RapidLoad_Optimizer
 
         if(!$result){
             $result = self::$job->get_last_optimization_revision(self::$strategy);
-        }
+        }*/
+
+        $result = self::$job->get_last_optimization_revision(self::$strategy);
 
         $url = "";
 
@@ -388,7 +390,7 @@ class RapidLoad_Optimizer
                             $settings->{'status'} = [
                                 'status' => @file_exists($cache_file),
                                 'file' => $cache_file,
-                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
+                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
                             ];
                         }
                     }
