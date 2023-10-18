@@ -77,7 +77,7 @@ export default {
       }).then((response)=>{
 
         if(response.data?.success){
-          console.log(response.data?.data.performance);
+         // console.log(response.data?.data.performance);
           if(response.data?.data.performance){
             this.score = response.data?.data.performance;
             if(this.score> 0){
@@ -88,6 +88,7 @@ export default {
 
         }else{
           //this.license_loading = false;
+          this.getPerformanceScore();
           this.loading = true;
           if(typeof response.data?.data === "string"){
             //  this.connect_with_license_error = response.data?.data

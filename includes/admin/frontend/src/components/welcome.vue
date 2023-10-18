@@ -10,7 +10,7 @@
             </svg>
           </button>
         </div>
-        <div class="-mt-2 text-center">
+        <div class="-mt-[26px] text-center">
           <p class="text-[24px] font-semibold">Welcome to <span class="text-gray-font">RapidLoad</span></p>
         </div>
 
@@ -23,7 +23,7 @@
           <p class="text-black">Stay with us as we embark on your first run job and unveil more exciting features to turbocharge your web experience!</p>
         </div>
 
-        <div class="flex justify-end mt-4 -mr-2">
+        <div class="flex justify-end mt-4">
 
           <button
               class="text-[14px] bg-purple font-semibold text-white py-3 px-12 border rounded-full"
