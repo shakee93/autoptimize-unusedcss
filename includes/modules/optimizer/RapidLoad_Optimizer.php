@@ -376,6 +376,13 @@ class RapidLoad_Optimizer
                                 'error' => $data->get_error()
                             ];
                         }
+                        $cache_file = RapidLoad_Cache_Store::get_cache_file(self::$job->url);
+                        if($input->key == "uucss_enable_cache"){
+                            $settings->{'status'} = [
+                                'status' => @file_exists($cache_file),
+                                'file' => $cache_file
+                            ];
+                        }
                     }
                 }
             }

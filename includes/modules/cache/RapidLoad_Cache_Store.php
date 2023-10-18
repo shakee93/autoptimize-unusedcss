@@ -841,7 +841,7 @@ class RapidLoad_Cache_Store
         return $settings;
     }
 
-    public static function get_cache_file() {
+    public static function get_cache_file($url = null) {
 
         if ( ! empty( self::$cache_file ) ) {
             return self::$cache_file;
@@ -849,7 +849,7 @@ class RapidLoad_Cache_Store
 
         self::$cache_file = sprintf(
             '%s/%s',
-            self::get_cache_dir(),
+            self::get_cache_dir($url),
             self::get_cache_file_name()
         );
 
