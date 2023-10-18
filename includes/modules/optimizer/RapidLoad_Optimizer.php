@@ -271,7 +271,7 @@ class RapidLoad_Optimizer
 
         $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
 
-        /*$body = file_get_contents('php://input');
+        $body = file_get_contents('php://input');
 
         $result = ($body) ? json_decode($body) : null;
 
@@ -281,13 +281,15 @@ class RapidLoad_Optimizer
 
         if(!$result){
             $result = self::$job->get_last_optimization_revision(self::$strategy);
-        }*/
+        }
 
-        $result = self::$job->get_last_optimization_revision(self::$strategy);
+        //$result = self::$job->get_last_optimization_revision(self::$strategy);
 
         $url = "";
 
-        if(!$result || $new){
+        if(!$result){
+
+            wp_send_json_error('page speed data not found');
 
             $api = new RapidLoad_Api();
 
