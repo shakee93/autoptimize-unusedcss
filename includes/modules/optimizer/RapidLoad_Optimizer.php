@@ -252,6 +252,13 @@ class RapidLoad_Optimizer
 
     }
 
+    function formatSize($bytes) {
+        $sizes = array("Bytes", "KB", "MB", "GB", "TB");
+        if ($bytes == 0) return '0 Byte';
+        $i = intval(floor(log($bytes, 1024)));
+        return round($bytes / pow(1024, $i), 2) . ' ' . $sizes[$i];
+    }
+
     public function fetch_page_speed(){
 
         self::verify_nonce();
@@ -380,7 +387,8 @@ class RapidLoad_Optimizer
                         if($input->key == "uucss_enable_cache"){
                             $settings->{'status'} = [
                                 'status' => @file_exists($cache_file),
-                                'file' => $cache_file
+                                'file' => $cache_file,
+                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
                             ];
                         }
                     }
