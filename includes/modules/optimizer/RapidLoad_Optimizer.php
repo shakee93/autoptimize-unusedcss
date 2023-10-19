@@ -275,7 +275,7 @@ class RapidLoad_Optimizer
 
         $result = ($body) ? json_decode($body) : null;
 
-        if ($result && isset($result->page_speed)) {
+        if (!$new && $result && isset($result->page_speed)) {
             $result = $result->page_speed;
         }
 
