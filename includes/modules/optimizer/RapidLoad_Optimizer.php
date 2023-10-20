@@ -275,7 +275,7 @@ class RapidLoad_Optimizer
 
         $result = ($body) ? json_decode($body) : null;
 
-        if (!$new && $result && isset($result->page_speed)) {
+        if ($result && isset($result->page_speed)) {
             $result = $result->page_speed;
         }
 
@@ -289,7 +289,9 @@ class RapidLoad_Optimizer
 
         if(!$result){
 
-            wp_send_json_error('page speed data not found');
+            wp_send_json_error([
+                'reload' => true
+            ]);
 
             $api = new RapidLoad_Api();
 
