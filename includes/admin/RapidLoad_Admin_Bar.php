@@ -66,6 +66,7 @@ class RapidLoad_Admin_Bar {
             'optimizer_url' => defined('RAPIDLOAD_OPTIMIZER_TEST_URL') ? RAPIDLOAD_OPTIMIZER_TEST_URL : $this->transform_url($this->get_current_url()),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
             'timezone' => get_option('timezone_string', 'UTC'),
+            'rapidload_version' => UUCSS_VERSION,
             'actions' => [
                 [
                     'tooltip' => 'Clear Site Cache',

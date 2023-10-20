@@ -14,6 +14,7 @@ interface WordPressOptions {
     load_optimizer: boolean
     actions: RapidLoadGlobalAction[]
     admin_url?: string
+    rapidload_version: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
