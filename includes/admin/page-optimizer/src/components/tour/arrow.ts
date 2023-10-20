@@ -15,8 +15,6 @@ export const doArrow = (position:  keyof typeof oppositeSide, verticalAlign: any
         horizontalAlign = 'left'
     }
 
-    console.log(verticalAlign, horizontalAlign, position);
-
     const width = 18;
     const height = 10;
     const color = isDark ? "rgb(43, 43, 43, 0.65)" : "rgb(255, 255, 255, .7)";

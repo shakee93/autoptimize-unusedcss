@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {
     CSSDelivery,
@@ -125,6 +125,15 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
         setOpen(false);
     }, [updates, open])
+
+
+
+    useEffect(() => {
+        const content =  document.getElementById('rapidload-page-optimizer-content')
+        content?.scrollTo(0, 0)
+
+    }, [open])
+
 
     const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
 

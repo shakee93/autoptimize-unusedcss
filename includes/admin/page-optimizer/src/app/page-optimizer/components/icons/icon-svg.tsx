@@ -21,7 +21,7 @@ export const FontDelivery = () => (
 );
 
 export const CloudDelivery = () => (
-    <svg  width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"></rect><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" strokeWidth="1.5" strokeLinejoin="round"></path><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"></rect><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" strokeWidth="1.5" stroke-linecap="round" strokeLinejoin="round"></path></svg>
+    <svg  width="35" height="29" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"></rect><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" strokeWidth="1.5" strokeLinejoin="round"></path><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"></rect><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"></rect><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
 );
 
 export const PageCache = () => (
