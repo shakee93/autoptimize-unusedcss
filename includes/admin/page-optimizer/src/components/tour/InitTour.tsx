@@ -111,8 +111,6 @@ const InitTour = ({ mode }: {
             setIsOpen(isTourOpen);
         }
 
-        console.log('hello');
-
     }, [isTourOpen])
 
     useEffect(() => {

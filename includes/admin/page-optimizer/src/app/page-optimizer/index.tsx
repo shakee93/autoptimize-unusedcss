@@ -46,6 +46,7 @@ export default function PageOptimizer() {
     let url = options?.optimizer_url;
 
 
+    // TODO: temp fix for scroll view leakage
     useEffect(() => {
         const content =  document.getElementById('rapidload-page-optimizer-content')
         content?.scrollTo(0, 0)
