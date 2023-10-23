@@ -10,7 +10,7 @@ import {AuditComponentRef} from "app/page-optimizer";
 import TooltipText from "components/ui/tooltip-text";
 import {useAppContext} from "../../../../context/app";
 import {cn, isDev} from "lib/utils";
-import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
+import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon, QuestionMarkCircleIcon} from "@heroicons/react/20/solid";
 import {AnimatePresence, m} from "framer-motion";
 import {Accordion} from "components/accordion";
 
@@ -24,6 +24,7 @@ import {toast} from "components/ui/use-toast";
 import metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../../store/common/commonActions";
+import {HelpCircle} from "lucide-react";
 
 export interface AuditProps {
     audit: Audit;
@@ -40,6 +41,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
     const [showJson, setShowJson] = useState<boolean>(false)
     const [filesMounted, setFilesMounted] = useState(false)
+    const [helpOpen, setHelpOpen] = useState(false)
     const filesOrActions = (audit.files?.items?.length > 0 || audit.settings.length > 0)
 
 
@@ -109,6 +111,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
             <div className={cn(
                 'min-h-[56px] relative flex justify-between w-full py-2 px-4',
             )}>
+
                 <div className='flex gap-3 font-normal  items-center text-base'>
 
                     <div
@@ -202,13 +205,36 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
                 </div>
 
-                <div className='flex gap-4 items-center'>
+                <div className='flex gap-3 items-center'>
 
-                    { (audit.files?.items?.length > 0 || audit.settings.length > 0) && (
+                    { (!toggleFiles && (audit.files?.items?.length > 0 || audit.settings.length > 0) ) && (
                         <div className='text-xs opacity-50'>
                             {summary()}
                         </div>
                     )}
+
+
+                    {/*{ toggleFiles &&*/}
+                    {/*    <TooltipText*/}
+                    {/*        text={filesOrActions ? 'Get step-by-step Help' : 'Learn more about this audit'}*/}
+                    {/*    >*/}
+                    {/*        <div onClick={() => setHelpOpen(p => !p)}*/}
+                    {/*             className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>*/}
+
+                    {/*            {filesOrActions ? (*/}
+                    {/*                toggleFiles ? 'Titan Help' : 'Show Actions'*/}
+                    {/*            ) : 'Learn More'}*/}
+
+
+                    {/*            {*/}
+                    {/*                (helpOpen) ?*/}
+                    {/*                    <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>:*/}
+                    {/*                    <QuestionMarkCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>*/}
+                    {/*            }*/}
+
+                    {/*        </div>*/}
+                    {/*    </TooltipText>*/}
+                    {/*}*/}
 
 
                     {actions &&
@@ -248,7 +274,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                 className='audit-content'
                 initialRender={true}
                 isOpen={toggleFiles}>
-                <AuditContent audit={audit} />
+                <AuditContent helpOpen={helpOpen} setHelpOpen={setHelpOpen} audit={audit} />
             </Accordion>
 
         </Card>
