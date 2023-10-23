@@ -1,10 +1,12 @@
-import React, {useEffect, useMemo} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useMemo} from "react";
 import Description from "app/page-optimizer/components/audit/Description";
 import Settings from "app/page-optimizer/components/audit/Settings";
 import {JsonView} from "react-json-view-lite";
 
 interface AuditContentProps {
     audit: Audit;
+    helpOpen: boolean
+    setHelpOpen: Dispatch<SetStateAction<boolean>>
 }
 
 import {
@@ -13,8 +15,10 @@ import {
 import {isDev, transformFileType} from "lib/utils";
 import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 import Treeview from "components/tree-view";
-import {Circle} from "lucide-react";
+import {Circle, XIcon} from "lucide-react";
 import {auditPoints} from "app/page-optimizer/components/audit/KeyPoints";
+import {XCircleIcon} from "@heroicons/react/24/solid";
+import SupportCard from "app/page-optimizer/components/audit/SupportCard";
 
 
 declare module '@tanstack/react-table' {
@@ -26,7 +30,7 @@ declare module '@tanstack/react-table' {
 
 
 
-const AuditContent = ({audit}: AuditContentProps) => {
+const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
 
 
     if (isDev && audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
@@ -47,7 +51,10 @@ const AuditContent = ({audit}: AuditContentProps) => {
     }, [])
 
     return (
-        <div className="border-t w-full pt-4">
+        <div className="relative border-t w-full pt-4">
+            {helpOpen &&
+                <SupportCard setHelpOpen={setHelpOpen} audit={audit}/>
+            }
             <div className="pb-4 text-brand-700 dark:text-brand-300">
                 <div className="px-4 ml-2">
                    {/*<Help audit={audit}/>*/}
