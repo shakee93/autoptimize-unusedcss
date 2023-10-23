@@ -2,7 +2,7 @@ window.rapidload_replace_image_src = function () {
     var images = document.getElementsByTagName('img');
     for (var i = 0; i < images.length; i++) {
         var image = images[i];
-        var url = image.getAttribute('data-original-src');
+        var url = image.getAttribute('data-rp-src');
         if (window.rapidload_io_data && url) {
             var options = "ret_img";
             if (window.rapidload_io_data.optimize_level) {
@@ -44,7 +44,7 @@ var callback = function (mutationList, observer) {
                     if (imageTags.length) {
                         for (var k = 0; k < imageTags.length; k++) {
                             var img = imageTags[k];
-                            var url = img.getAttribute("data-original-src");
+                            var url = img.getAttribute("data-rp-src");
                             if (window.rapidload_io_data && url) {
                                 var options = "ret_img";
                                 if (window.rapidload_io_data.optimize_level) {
