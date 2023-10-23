@@ -15,68 +15,43 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 **Automated site speed optimization for WordPress [PAID PREMIUM PLUGIN]**
 
-With RapidLoad, you can say goodbye to user frustration and skyrocket your conversion rates. effortless installation and the intuitive onboarding process seamlessly connects you to the rapidload.io service. Watch your website transform before your eyes as you witness remarkable speed improvements.
+RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
 
-RapidLoad amplifies your website by optimizing CSS, JavaScript, images, fonts, and more. It delivers content lightning-fast with its global content delivery network (CDN) spanning over 112 edge locations, ensuring low latency and rapid content delivery to users worldwide.
+## Unlock the Benefits of RapidLoad
 
-Here are the benefits you will have when you get RapidLoad.
+**<img src="https://ps.w.org/unusedcss/assets/ttan.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />TITAN OPTIMIZER**
 
-## Relentless CSS optimization
+Introducing Titan Optimizer, the ultimate tool for boosting your WordPress website's speed and performance. In today's digital world, having a fast, user-friendly site is crucial. Titan comes with an inbuilt Google PageSpeed Insights report generator, saving you the hassle of using external tools. It provides a thorough analysis of your site's performance, covering everything from audits to diagnostics, all within your content management system (CMS).
 
-CSS is the “Wardrobe” for an attractive website yet every CSS file doesn’t have a positive impact on your website so RapidLoad has some of the industry’s best tools to optimize and deliver CSS.
+But Titan doesn't stop at analysis; it offers practical solutions to improve identified issues. It not only diagnoses problems but also gives you clear steps to fix them. With Titan, you'll not only understand your site's performance but also have a roadmap for making it better.
 
-**RapidLoad is the #1 CSS optimization tool for WordPress**
+If you want an all-in-one solution to supercharge your WordPress site's speed and user experience, Titan Optimizer is your answer. Say goodbye to the confusion of multiple tools and hello to streamlined web optimization with Titan.
 
-Starting things off with “Removing Unused CSS”: RapidLoad's Unused CSS Removal tool seamlessly scans your stylesheets, identifying and removing unused code. Helping you to achieve the best experience of faster loading times, improved user experiences, and better search engine rankings.
+<img src="https://ps.w.org/unusedcss/assets/titan_screenshot.png" alt="Titan Optimizer" style="width: 100%;margin-top:15px;margin-bottom:15px;" />
 
-Next in line is “Generating Critical CSS”: Experience the power of Critical CSS by RapidLoad. Generating a Critical CSS stylesheet that contains only the essential CSS for above-the-fold content allows your above-the-fold content to appear instantaneously, captivating visitors from the moment they enter your website.
+**<img src="https://ps.w.org/unusedcss/assets/css.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CSS DELIVERY**
 
-With RapidLoad, CSS minification eliminates unnecessary characters, streamlining your code for lightning-fast loading times.
+RapidLoad is a specialized CSS optimization tool for WordPress websites. It improves site performance through several key features. First, it identifies and removes unused CSS, resulting in faster loading times and better user experiences. Second, it generates Critical CSS, ensuring above-the-fold content loads instantly. Additionally, RapidLoad minimizes CSS code by eliminating unnecessary characters, further speeding up loading times. It offers various other CSS optimization features, making it a comprehensive solution for enhancing website speed and user satisfaction. This optimization not only improves user experience but can also positively impact search engine rankings, making it a valuable tool for website owners.
 
-That's not all. We have many other features stored to optimize CSS code.
+**<img src="https://ps.w.org/unusedcss/assets/image-delivery.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />IMAGE DELIVERY**
 
-## Image Delivery
+RapidLoad offers powerful image optimization to enhance your website's visual appeal and performance. It balances faster load times with maintaining stunning image quality. With advanced compression techniques – lossy, glossy, and lossless – you can choose the right balance between speed and quality. Lossy achieves the highest compression rate, glossy retains image authenticity, and lossless preserves the original quality, making it ideal for various image types.
 
-Images of a website are the “Visual Palette” similar to how our eyes perceive and interpret the world around us. Dazzle your website's Visual Palette with RapidLoad's image optimization. Reducing load times and enhancing performance while preserving stunning visual quality and making your images truly captivating to grab visitors' attention
+RapidLoad also introduces efficient lazy-loading for images and iframes, reducing initial page load times and improving user experience. Plus, the Priority LCP Images feature prioritizes and preloads above-the-fold images, ensuring a seamless browsing experience from the moment your site loads, keeping users engaged and satisfied. It's a comprehensive solution to captivate visitors with visually stunning and high-performing web content.
 
-Advanced Image Compression Technique: RapidLoad revolutionizes image optimization with its versatile compression techniques. Choose from three powerful options: lossy, glossy, and lossless.
+**<img src="https://ps.w.org/unusedcss/assets/cdn.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CDN DELIVERY**
 
- 1. **Lossy**:- Our advanced lossy compression achieves the highest compression rate and results in the smallest optimized image size that loads lightning-fast. Strike the perfect balance between speed and quality with RapidLoad and deliver an exceptional browsing experience to your users.
- 2. **Glossy**:- RapidLoad's glossy compression is a secret weapon for professionals working with high-quality images to achieve remarkable results. Experience image optimization that retains the authenticity of the image while significantly reducing file sizes.
- 3. **Lossless**:- Serve the perfect image with RapidLoad's lossless compression. Hold on to the exact quality of your original images while still having significant size reduction. Ideal for technical drawings, vector graphics, and images with transparent backgrounds, RapidLoad's lossless compression ensures image integrity.
+RapidLoad utilizes a global Content Delivery Network (CDN) with 112 strategically located edge servers worldwide to efficiently distribute website content. With a remarkable 27ms latency, it ensures rapid access to resources, resulting in faster page loading and an exceptional user experience. RapidLoad's CDN accelerates content delivery, making slow loading times a thing of the past, ultimately delighting your audience with seamless browsing and faster website performance.
 
-Intriguing Lazy-Load Image and iFrame:- Restructure your website's performance with RapidLoad's optimal lazy-load image and iFrame functionality. This loads images and iframes only when users enter the user's viewport, RapidLoad significantly reduces initial page load time, resulting in faster overall performance. Improve user experience, boost engagement, and optimize your website effortlessly
+**<img src="https://ps.w.org/unusedcss/assets/js.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />JS DELIVERY**
 
-Priority LCP Images:- Give your visitors an instant visual delight with RapidLoad's Priority LCP (Largest Contentful Paint) Images feature. By prioritizing and preloading above-the-fold images, your website delivers a seamless browsing experience from the moment it loads. Keeping your users engaged and satisfied.
+RapidLoad offers top-tier tools to optimize JavaScript for superior performance and user experiences. With its JavaScript minification, you can shrink file sizes and streamline code, resulting in faster load times, increased user engagement, and higher conversions. RapidLoad also excels in JavaScript deferring, intelligently delaying non-critical script loading for quicker initial page loads. Moreover, you can enhance user interaction by postponing JavaScript until needed, ensuring a seamless and immersive browsing experience while preventing slowdowns during the initial page load.
 
-## CDN Delivery
+**<img src="https://ps.w.org/unusedcss/assets/font.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />FONT DELIVERY**
 
-A CDN (Content Delivery Network) can be described as the "global distribution network" of a website, efficiently delivering content to users worldwide from various edge locations, reducing latency, and ensuring fast and reliable access to website resources.
+Fonts play a crucial role in a website's character, and RapidLoad's font delivery enhances this aspect. It offers self-hosted Google Fonts, allowing you to store and serve fonts from your server, giving you more control over your website's voice and reducing reliance on external resources. Additionally, you can improve speed with font URL preloading, downloading font files before they're needed, reducing page load times, ensuring faster font rendering, and enhancing user experience, making your content more accessible and visible.
 
-Harness the power of RapidLoad's extensive content delivery network (CDN) with 112 edge locations strategically positioned worldwide. Accelerate resource file loading with an impressive 27ms latency, ensuring your content reaches users with unparalleled speed. Delight your audience with faster page loads, seamless browsing, and an exceptional user experience. Supercharge your website's performance with RapidLoad's Cloud Delivery (CDN) and leave slow loading times in the past.
-
-
-## JS Delivery
-
-JavaScript is the "brain" of a website, RapidLoad provides top-notch tools to optimize and deliver JavaScript, ensuring efficient performance and an exceptional user experience.
-
-Top of the game Javascript minification: RapidLoad's Javascript minification tool helps you reduce JavaScript file sizes, streamlines JS code, and accelerates your website's performance. Boosting user engagement and increasing conversions
-
-Quickest JavaScript deferring:- RapidLoad has the best intelligent tool that delays non-critical JavaScript loading, which ensures a faster initial page load and provides a seamless browsing experience.
-
-Delay Javascript to Load on User Interaction: Capture user attention and improve performance by using RapidLoad's ability to delay JavaScript loading until user interaction. Helping you Boost engagement and streamline your website. Providing your visitors with a truly immersive experience by preventing slowdown during the initial page load
-
-
-
-## Font Delivery
-
-Fonts can be described as the "voice" of a website, RapidLoad font delivery will add personality and convey the tone of the content, enhancing readability, and contributing to the overall visual aesthetics and branding.
-
-Take Control of Your Website's Voice with RapidLoad's Self-Hosted Google Fonts: Embrace seamless font delivery and elevate your website's performance with RapidLoad's self-hosted Google Fonts feature. Storing and serving Google Fonts from your own server, Making you the master of your website voice and reducing dependency on other resources.
-
-Preload font URLs: Maximize your website's speed with RapidLoad's font URL preloading feature. Downloading font files before they are required helps to reduce page load time. Delivering an exceptional user experience with lightning-fast font rendering and ensuring your content is visible and accessible.
-
-## Page Cache
+**<img src="https://ps.w.org/unusedcss/assets/page_cache.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />PAGE CACHE**
 
 Page Cache is the "memory" of a website, storing previously accessed data or resources to be quickly retrieved, reducing server load, and enhancing page loading speed for a greater user experience.
 
