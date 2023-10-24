@@ -10,23 +10,23 @@
             </svg>
           </button>
         </div>
-        <div class="-mt-[26px] text-center">
+        <div class="-mt-[27px] text-center">
           <p class="text-[24px] font-semibold">Experience the <span class="text-gray-font">Titan Optimizer</span></p>
         </div>
 
         <div class="mt-4 mb-2 text-center">
-          <img src="../assets/titan-optimizer.svg" alt="Welcome" class="w-80 h-80	mx-auto rounded-lg">
+          <img src="../assets/titan-optimizer.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-lg">
         </div>
 
         <div class="mt-4 text-left text-base">
-          <p class="text-black pb-3">With RapidLoad 2.1, we've introduced the Titan Optimizer for a more efficient optimization process. To unlock its full potential, please update your database.</p>
+          <p class="text-black">With RapidLoad 2.1, we've introduced the Titan Optimizer for a more efficient optimization process. To unlock its full potential, please update your database.</p>
         </div>
 
         <div class="mt-4 text-center text-base">
           <p class="text-arrow-message-tc pb-3">{{this.message}}</p>
         </div>
 
-        <div class="flex justify-end">
+        <div class="flex justify-center">
 
           <button
               class="text-[14px] bg-purple font-semibold text-white py-3 px-12 border rounded-full"
