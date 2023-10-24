@@ -119,6 +119,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.0 - 24/10/2023 =
+ * feat: integrate Titan Optimizer
+
 = 2.0.28 - 11/09/2023 =
  * fix: google font stylesheet not removing
 
