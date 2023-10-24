@@ -1,4 +1,4 @@
-=== RapidLoad Power-Up for Autoptimize ===
+=== RapidLoad 2.1 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
@@ -118,7 +118,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 2.1.1 - 24/10/2023 =
+= 2.1.3 - 24/10/2023 =
  * feat: Introducing Titan Optimizer
 
 = 2.1.0 - 24/10/2023 =
