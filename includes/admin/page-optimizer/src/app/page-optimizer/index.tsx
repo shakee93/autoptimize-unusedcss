@@ -46,6 +46,13 @@ export default function PageOptimizer() {
     let url = options?.optimizer_url;
 
 
+    // TODO: temp fix for scroll view leakage
+    useEffect(() => {
+        const content =  document.getElementById('rapidload-page-optimizer-content')
+        content?.scrollTo(0, 0)
+
+    }, [savingData])
+
     return (
 
         <m.div
@@ -69,19 +76,20 @@ export default function PageOptimizer() {
                 className={cn(
                 'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
                 'backdrop-blur-md dark:bg-brand-930/95 bg-brand-50/90 min-h-screen',
-                savingData && 'relative overflow-hidden h-[calc(100vh-130px)]'
+                    // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
+                savingData && 'relative overflow-hidden'
             )}>
 
                 {!loading ? (
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                        'container grid grid-cols-12 gap-8 pt-[84px]',
+                        'relative container grid grid-cols-12 gap-8 pt-[84px]',
                     )}>
 
                         {(savingData || invalidatingCache) && (
-                            <div className='fixed h-screen w-screen inset-0 z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
-                                <div className='flex gap-2 items-center absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2'>
+                            <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                                <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
                                     <Loader className='w-5 animate-spin'/>
                                     {savingData && 'Saving Changes...'}
                                     {invalidatingCache && 'Flushing Cache...'}

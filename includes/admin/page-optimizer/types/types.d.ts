@@ -13,7 +13,8 @@ interface WordPressOptions {
     timezone: string
     load_optimizer: boolean
     actions: RapidLoadGlobalAction[]
-    admin_url: string
+    admin_url?: string
+    rapidload_version: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'

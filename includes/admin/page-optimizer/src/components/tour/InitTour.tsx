@@ -88,6 +88,12 @@ const InitTour = ({ mode }: {
 
     useEffect(() => {
 
+
+
+    }, [isOpen])
+
+
+    const onOpenChange = () => {
         const content =  document.getElementById('rapidload-page-optimizer-content')
 
         if (isOpen && content) {
@@ -95,13 +101,13 @@ const InitTour = ({ mode }: {
         } else {
             if(content) content.style.overflowY = 'auto'
         }
-
-    }, [isOpen])
-
+    }
 
     useEffect(() => {
 
         if (isTourOpen !== isOpen) {
+
+            onOpenChange()
             setIsOpen(isTourOpen);
         }
 
@@ -110,6 +116,8 @@ const InitTour = ({ mode }: {
     useEffect(() => {
 
         if (isTourOpen !== isOpen) {
+
+            onOpenChange()
             commonDispatch(setCommonRootState('isTourOpen', isOpen))
         }
 

@@ -88,7 +88,7 @@ class RapidLoad_Image_Enqueue
 
                 if (in_array($urlExt, $this->imgExt)) {
 
-                    $data_src = 'data-original-src';
+                    $data_src = 'data-rp-src';
                     $img->{$attribute['attr']} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
                         'optimize_level' => 'lqip'
                     ]);
@@ -181,7 +181,7 @@ class RapidLoad_Image_Enqueue
 
             if (in_array($urlExt, $this->imgExt)) {
 
-                $data_src = 'data-original-poster';
+                $data_src = 'data-rp-poster';
                 $video->{'poster'} = RapidLoad_Image::get_replaced_url($url, null, $video->width, $video->height, [
                     'optimize_level' => 'lqip'
                 ]);

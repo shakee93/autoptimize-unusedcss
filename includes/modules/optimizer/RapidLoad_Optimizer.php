@@ -252,6 +252,13 @@ class RapidLoad_Optimizer
 
     }
 
+    function formatSize($bytes) {
+        $sizes = array("Bytes", "KB", "MB", "GB", "TB");
+        if ($bytes == 0) return '0 Byte';
+        $i = intval(floor(log($bytes, 1024)));
+        return round($bytes / pow(1024, $i), 2) . ' ' . $sizes[$i];
+    }
+
     public function fetch_page_speed(){
 
         self::verify_nonce();
@@ -276,9 +283,15 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
+        //$result = self::$job->get_last_optimization_revision(self::$strategy);
+
         $url = "";
 
-        if(!$result || $new){
+        if(!$result){
+
+            wp_send_json_error([
+                'reload' => true
+            ]);
 
             $api = new RapidLoad_Api();
 
@@ -380,7 +393,8 @@ class RapidLoad_Optimizer
                         if($input->key == "uucss_enable_cache"){
                             $settings->{'status'} = [
                                 'status' => @file_exists($cache_file),
-                                'file' => $cache_file
+                                'file' => $cache_file,
+                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
                             ];
                         }
                     }

@@ -30,12 +30,16 @@ class ApiService {
     async throwIfError(response: Response) {
 
         if (!response.ok) {
-            throw new Error("Network response was not ok");
+            throw new Error("Oops! The request failed");
         }
 
         let data = await response.json();
 
         if (!data.success) {
+
+            if (data.data.reload) {
+                return data.data
+            }
 
             if (Array.isArray(data?.data)) {
                 throw new Error(
@@ -51,29 +55,28 @@ class ApiService {
         return data
     }
 
-    async fetchPageSpeed(url: string, activeReport: string, reload: boolean) {
+    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
 
 
         try {
 
             let data = null
-            // if (reload) {
-            //
-            //     const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
-            //
-            //     pageSpeedURL.searchParams.append('url', 'https://rapidload.io')
-            //     pageSpeedURL.searchParams.append('strategy', activeReport)
-            //
-            //     const pageSpeed = await fetch(pageSpeedURL, {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         }
-            //     });
-            //
-            //     data = await pageSpeed.json()
-            //
-            // }
+
+            if (reload) {
+                data = await this.analyzeViaAPI(url, activeReport);
+
+                if(data?.errors) {
+                    if (Array.isArray(data?.errors)) {
+                        throw new Error(
+                            `[Code:${data.errors[0].code}] ${data.errors[0].detail}`
+                        );
+                    }
+
+                    throw new Error(
+                        `Oops! Something went wrong :(`
+                    );
+                }
+            }
 
             const query = new URLSearchParams();
 
@@ -88,20 +91,51 @@ class ApiService {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // ...(
-                //     data && {
-                //             body : JSON.stringify( {
-                //                 page_speed: data
-                //             })
-                //     }
-                // )
+                ...(
+                    data ? {
+                            body : JSON.stringify( {
+                                page_speed: data
+                            })
+                    } : {}
+                )
             });
 
-            return this.throwIfError(response);
+
+            let responseData = await this.throwIfError(response);
+
+            if (responseData?.reload) {
+                return await this.fetchPageSpeed(url, activeReport, true);
+            }
+
+            return responseData
+
         } catch (error) {
             console.error(error);
             throw error;
         }
+    }
+
+    async analyzeViaAPI(url: string, strategy: string) {
+
+       try {
+           const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
+
+           pageSpeedURL.searchParams.append('url', url)
+           pageSpeedURL.searchParams.append('strategy', strategy)
+
+           const pageSpeed = await fetch(pageSpeedURL, {
+               method: "POST",
+               headers: {
+                   "Content-Type": "application/json",
+               }
+           });
+
+           return await pageSpeed.json()
+
+       } catch (error) {
+           console.error(error);
+           throw error;
+       }
     }
 
     async updateSettings(url: string, activeReport: string, reload: boolean, data: any, global: boolean, analyze: boolean) {
