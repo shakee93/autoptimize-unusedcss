@@ -11,11 +11,11 @@
           </button>
         </div>
         <div class="-mt-[26px] text-center">
-          <p class="text-[24px] font-semibold">Access Titan</p>
+          <p class="text-[24px] font-semibold">How to Access Titan Optimizer</p>
         </div>
 
         <div class="mt-4 text-center">
-          <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[450px]	mx-auto rounded-md">
+          <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[490px]	mx-auto rounded-md">
         </div>
 
         <div class="mt-4 text-left pl-4 pr-4">
@@ -23,18 +23,18 @@
 <!--            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 8 8">-->
 <!--              <circle cx="4" cy="4" r="4" fill="black" />-->
 <!--            </svg>-->
-            <p class="text-black mb-0.5">1. &nbsp;Get to Your Page</p>
-            <p class="text-black mb-1 pl-5">a. &nbsp;Open up the page you want to analyze, ensure the WordPress admin bar is visible.</p>
+            <p class="text-black mb-0.5 font-medium		"><span class="inline-block bg-gray-lite-background text-black rounded-full px-2.5 py-1 mr-2">1</span>Get to Your Page</p>
+            <p class="text-black mb-1 pl-[35px] text-dark-gray-font">Open up the page you want to analyze, ensure the WordPress admin bar is visible.</p>
           </div>
 
           <div class="mt-2">
-            <p class="text-black mb-0.5">2. &nbsp;Find RapidLoad</p>
-            <p class="text-black mb-1 pl-5">a. &nbsp;Just slide your cursor over to the RapidLoad Button in the admin bar.</p>
+            <p class="text-black mb-0.5 font-medium	"><span class="inline-block bg-gray-lite-background text-black rounded-full px-2.5 py-1 mr-2">2</span>Find RapidLoad</p>
+            <p class="text-black mb-1 pl-[35px] text-dark-gray-font">Just slide your cursor over to the RapidLoad Button in the admin bar.</p>
           </div>
 
           <div class="mt-2">
-            <p class="text-black mb-0.5">3. &nbsp;Let It Analyze</p>
-            <p class="text-black mb-1 pl-5">a. &nbsp;Click "Titan Optimizer" – and watch your page get checked and ready to be tweaked.</p>
+            <p class="text-black mb-0.5 font-medium	"><span class="inline-block bg-gray-lite-background text-black rounded-full px-2.5 py-1 mr-2">3</span>Let It Analyze</p>
+            <p class="text-black mb-1 pl-[35px] text-dark-gray-font">Click "Titan Optimizer" – and watch your page get checked and ready to be tweaked.</p>
         </div>
 
 
