@@ -363,7 +363,7 @@
 <!--    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
     <howtoUse v-if="howtouse" @cancel="howtouse=false" @goto="gotoHome"/>
     <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
-
+    <update v-if="db_tobe_updated" @update="updateDatabase" @cancel="db_tobe_updated = false" :message="this.updateError"/>
 
   </main>
 </template>
@@ -379,6 +379,8 @@ import howtoUse from "../components/howtoUse.vue";
 import welcome from "../components/welcome.vue";
 import performanceWidget from "../components/performanceWidget.vue";
 import optimization from "./optimization.vue";
+import update from "../components/update.vue";
+
 // import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
 export default {
@@ -391,6 +393,7 @@ export default {
     welcome,
     optimization,
     performanceWidget,
+    update
 
   },
 
@@ -477,6 +480,22 @@ export default {
     startAnalyzing(){
       this.openOptimizer();
       this.welcomeModel=false;
+    },
+    updateDatabase(){
+
+      axios.post(window.uucss_global?.ajax_url + '?action=rapidload_db_update&nonce='+window.uucss_global?.nonce,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      }).then((response)=>{
+
+        if(response.data?.success){
+          window.location.reload();
+        }else{
+          this.updateError = response.data?.error;
+        }
+      })
+
     },
     // whatsnext(){
     //   this.whatstips_count++;
@@ -658,6 +677,8 @@ export default {
       popupModel: false,
       howtouse: false,
       welcomeModel: false,
+      updateError:"",
+      db_tobe_updated: window.uucss_global.db_tobe_updated,
       axios_request : null,
       tick_image: 'license-information.svg',
       whats_new: 'tips-whats.svg',
