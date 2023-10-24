@@ -388,7 +388,7 @@ class RapidLoad_Base
                     <strong>Heads up, New RapidLoad comes in as ALL-IN-ONE solution for page-speed optimization.</strong>
                 </div>
                 <div class="rapidload-major-update-message-content-description">
-                    RapidLoad 2.1 is getting back into the game with a new kit and it is loaded with <strong>Titan Optimizer</strong>
+                    RapidLoad 2.1 unveils the revolutionary <strong>Titan Optimizer</strong> for page optimization.
                 </div>
             </div>
         </div>
