@@ -119,6 +119,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.1 - 24/10/2023 =
+ * feat: Introducing Titan Optimizer
+
 = 2.1.0 - 24/10/2023 =
  * feat: integrate Titan Optimizer
 
