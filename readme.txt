@@ -113,7 +113,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 == Screenshots ==
 
 1. Titan Optimizer analyze.
-2. Titan Optimizer.
+2. Titan Optimizer metrics.
 3. RapidLoad Dashboard.
 
 == Changelog ==
