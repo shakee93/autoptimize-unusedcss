@@ -3,7 +3,7 @@
     <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
       <div class="bg-white p-4 pt-6 pl-12 pr-12 rounded-3xl shadow-lg max-w-xl">
         <!-- Close Button -->
-        <div class="flex justify-end">
+        <div class="flex justify-end -mt-[2px] -mr-[23px]">
           <button class="text-gray-500" @click="cancel">
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 15L8.50002 8.50003M15 2L8.50002 8.50003M8.50002 8.50003L2 2M8.50002 8.50003L15 15" stroke="#CACACA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
