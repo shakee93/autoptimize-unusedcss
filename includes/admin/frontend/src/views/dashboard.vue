@@ -715,6 +715,15 @@ export default {
       ],
       items: [
         {
+          id : "page-optimizer",
+          title: "Titan Optimizer",
+          description: 'Effortlessly optimize your site’s speed with on-the-spot actionable fixes',
+          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#6F2DBD"/><path d="M28 25L21.1605 29.3505L23.932 30.9643L21 35L27.8396 30.7114L25.0716 29.1031L28 25Z" fill="white"/><path d="M18.1962 28.3053C17.09 27.7681 16.1326 26.9566 15.4111 25.9446C14.6896 24.9326 14.2267 23.7522 14.0646 22.5107C13.9026 21.2692 14.0464 20.006 14.4831 18.8358C14.9197 17.6656 15.6354 16.6256 16.565 15.8103C17.4946 14.995 18.6086 14.4303 19.8059 14.1674C21.0032 13.9045 22.2457 13.9519 23.4205 14.3051C24.5953 14.6584 25.6652 15.3063 26.5329 16.1901C27.4006 17.0739 28.0387 18.1655 28.389 19.3656H30.268C31.4767 19.3635 32.6403 19.8354 33.5192 20.6842C34.3981 21.5329 34.9254 22.6941 34.9927 23.9285C35.0599 25.1629 34.662 26.3768 33.8807 27.3202C33.0995 28.2636 31.9944 28.8648 30.7929 29" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          link: '/#',
+          status: false,
+          isDisabled: true
+        },
+        {
           id : "css",
           title: "CSS Delivery",
           description: 'Deliver CSS files by removing unused CSS and prioritizing critical CSS.',
@@ -756,15 +765,6 @@ export default {
           description: 'Load resource files faster by using 112 edge locations with only 27ms latency.',
           image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#09B42F"/><path d="M20 28V34H17.5M24 26V36.5M28 28V34C28 34 28.9379 34 30.5 34" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><rect x="30" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="16" y="33" width="2" height="2" rx="0.5" stroke="white"/><rect x="23" y="36" width="2" height="2" rx="0.5" stroke="white"/><path d="M32 29.6073C33.4937 29.0221 35 27.6889 35 25C35 21 31.6667 20 30 20C30 18 30 14 24 14C18 14 18 18 18 20C16.3333 20 13 21 13 25C13 27.6889 14.5063 29.0221 16 29.6073" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           link: '/cdn',
-          status: false,
-          isDisabled: true
-        },
-        {
-          id : "page-optimizer",
-          title: "Titan Optimizer",
-          description: 'Effortlessly optimize your site’s speed with on-the-spot actionable fixes',
-          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#6F2DBD"/><path d="M28 25L21.1605 29.3505L23.932 30.9643L21 35L27.8396 30.7114L25.0716 29.1031L28 25Z" fill="white"/><path d="M18.1962 28.3053C17.09 27.7681 16.1326 26.9566 15.4111 25.9446C14.6896 24.9326 14.2267 23.7522 14.0646 22.5107C13.9026 21.2692 14.0464 20.006 14.4831 18.8358C14.9197 17.6656 15.6354 16.6256 16.565 15.8103C17.4946 14.995 18.6086 14.4303 19.8059 14.1674C21.0032 13.9045 22.2457 13.9519 23.4205 14.3051C24.5953 14.6584 25.6652 15.3063 26.5329 16.1901C27.4006 17.0739 28.0387 18.1655 28.389 19.3656H30.268C31.4767 19.3635 32.6403 19.8354 33.5192 20.6842C34.3981 21.5329 34.9254 22.6941 34.9927 23.9285C35.0599 25.1629 34.662 26.3768 33.8807 27.3202C33.0995 28.2636 31.9944 28.8648 30.7929 29" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-          link: '/#',
           status: false,
           isDisabled: true
         },
