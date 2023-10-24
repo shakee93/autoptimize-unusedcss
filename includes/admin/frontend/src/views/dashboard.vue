@@ -362,8 +362,8 @@
 
 <!--    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
     <howtoUse v-if="howtouse" @cancel="howtouse=false" @goto="gotoHome"/>
-    <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
-    <update v-if="db_tobe_updated" @update="updateDatabase" @cancel="db_tobe_updated = false" :message="this.updateError"/>
+    <welcome v-if="welcomeModel && !db_tobe_updated" @start="startAnalyzing" @cancel="welcomeModel = false" />
+    <update v-if="db_tobe_updated && !welcomeModel" @update="updateDatabase" @cancel="db_tobe_updated = false" :message="this.updateError"/>
 
   </main>
 </template>
