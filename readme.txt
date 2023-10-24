@@ -61,12 +61,6 @@ RapidLoad goes the extra mile to optimize your website's mobile experience. Our 
 
 Elevate your mobile website's speed with RapidLoad cache and let your users get the best website experience from any device.
 
-**API usage**
-
-RapidLoad can significantly reduce load times and increase visual display for a smooth user experience.  It even improves the performance of other optimizing plugins and extensions. RapidLoad integrates with the 3rd party service rapidload.io API to provide a seamless optimization process. (See Pricing plans – https://rapidload.io/pricing)
-
-Simply install, activate the plugin, and follow the onboarding steps. This will quickly connect you to the rapidload.io service, and you can see the ground-breaking results for yourself.
-
 == Installation ==
 
 This section describes how to install the plugin and get it working.
