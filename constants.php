@@ -7,7 +7,7 @@ $rapidload_constants = [
     'RAPIDLOAD_CACHE_DIR' => WP_CONTENT_DIR . '/cache/rapidload-cache',
     'RAPIDLOAD_CONSTANT_FILE' => __DIR__ . '/constants.php',
     'RAPIDLOAD_INDEX_FILE'     => ABSPATH . 'index.php',
-    'UUCSS_VERSION' => '2.0.28.1',
+    'UUCSS_VERSION' => '2.1.0',
     'UUCSS_CACHE_CHILD_DIR' =>  '/cache/rapidload/',
 ];
 
