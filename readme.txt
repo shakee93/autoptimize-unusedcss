@@ -112,10 +112,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Screenshots ==
 
-1. RapidLoad 2.0 Dashboard
-2. Analyze the site before connecting to the service.
-3. Successfully completed jobs.
-4. Google page speed insight + GTMetrix test.
+1. Titan Optimizer analyze.
+2. Titan Optimizer.
+3. RapidLoad Dashboard.
 
 == Changelog ==
 
