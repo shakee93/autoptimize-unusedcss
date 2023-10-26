@@ -125,16 +125,16 @@ class RapidLoad_Base
 
         $this->url = $this->transform_url($this->url);
 
-        $job = new RapidLoad_Job(['url' => $this->url]);
+        RapidLoad_Enqueue::$job = new RapidLoad_Job(['url' => $this->url]);
 
-        if(isset($job->id)){
+        if(isset(RapidLoad_Enqueue::$job->id)){
 
             $strategy = $this->is_mobile() ? 'mobile' : 'desktop';
 
             if($strategy == "mobile"){
-                $page_options = $job->get_mobile_options(true);
+                $page_options = RapidLoad_Enqueue::$job->get_mobile_options(true);
             }else{
-                $page_options = $job->get_desktop_options(true);
+                $page_options = RapidLoad_Enqueue::$job->get_desktop_options(true);
             }
 
             foreach ($page_options as $key => $op){
