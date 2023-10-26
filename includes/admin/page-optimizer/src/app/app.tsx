@@ -8,7 +8,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState, RootState} from "../store/app/appTypes";
 import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
-import WebFont from "webfontloader";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
 
@@ -37,12 +36,6 @@ const App = ({popup, _showOptimizer = false}: {
         if (_showOptimizer) {
             setShowOptimizer(true)
         }
-
-        WebFont.load({
-            google: {
-                families: ['Lexend:wght@100;200;300;400;700&display=swap'],
-            },
-        });
 
         document.body.classList.add('rl-page-optimizer-loaded');
         document.body.classList.add('rpo-loaded');

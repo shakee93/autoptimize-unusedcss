@@ -53,7 +53,7 @@ const Header = ({ url }: { url: string}) => {
                     )}
                 </div>
                 <div className='flex flex-column items-center gap-4'>
-                    <div data-tour='switch-report-strategy' className='relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
+                    <div data-tour='switch-report-strategy' className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
                             'absolute shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                             activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
