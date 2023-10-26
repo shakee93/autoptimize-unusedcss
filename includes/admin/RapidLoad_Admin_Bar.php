@@ -93,6 +93,23 @@ class RapidLoad_Admin_Bar {
                     ) ), 'uucss_nonce', '_nonce' ),
                     'icon' => 'clear_optimization'
                 ]
+            ],
+            'group_by_conditions' => [
+                [
+                    'label' => 'Entire Site',
+                    'value' => 'all'
+                ],
+                [
+                    'label' => 'Archives',
+                    'value' => 'archive',
+                    'options' => [
+                        [
+                            'label' => 'All Archives',
+                            'value' => 'all'
+                        ],
+
+                    ]
+                ]
             ]
         );
 

@@ -36,6 +36,10 @@ class RapidLoad_Enqueue {
 
                     $this->group = $this->get_current_group();
 
+                    error_log(get_month_link(2023, 10));
+
+                    error_log(json_encode($this->group, JSON_PRETTY_PRINT));
+
                     $this->rule = $this->get_current_rule();
 
                 }
@@ -389,19 +393,16 @@ class RapidLoad_Enqueue {
     }
 
     function get_current_page_type() {
-        if (is_singular() || is_front_page()) {
+        if (is_singular()) {
             if (class_exists('WooCommerce') && is_woocommerce()) {
                 return 'woocommerce';
             }
             return 'single';
-        } elseif (is_archive()) {
+        } elseif (is_archive() || is_home() || is_front_page() || is_category() || is_tag() || is_tax()) {
             if (class_exists('WooCommerce') && is_woocommerce()) {
                 return 'woocommerce';
-            } elseif (is_category() || is_tag() || is_tax()) {
-                return 'archive';
-            } else{
-                return 'archive';
             }
+            return 'archive';
         }
         return 'general';
     }
@@ -447,7 +448,7 @@ class RapidLoad_Enqueue {
                 return preg_replace('/\s+/', '_', strtolower($tax_name));
             }
             return 'tax';
-        } elseif (is_post_type_archive()) {
+        }elseif (is_post_type_archive()) {
             if (function_exists('is_shop') && is_shop()) {
                 return 'shop';
             }
@@ -457,8 +458,15 @@ class RapidLoad_Enqueue {
             }
             return 'archive';
         }elseif (is_archive()) {
+            if(is_author()){
+                return 'author';
+            }else if(is_date()){
+                return 'date';
+            }
             return 'archive';
-        } else{
+        }elseif (is_home()){
+            return 'posts';
+        }else{
             return 'general';
         }
     }
