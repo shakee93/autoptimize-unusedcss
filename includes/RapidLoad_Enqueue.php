@@ -9,6 +9,7 @@ class RapidLoad_Enqueue {
     private $options;
     private $url;
     private $rule;
+    public static $job;
 
     public static $frontend_debug = false;
 
@@ -300,11 +301,13 @@ class RapidLoad_Enqueue {
 
         }*/
 
-        $job = new RapidLoad_Job([
-            'url' => $url
-        ]);
+        if(!isset(RapidLoad_Enqueue::$job)){
+            RapidLoad_Enqueue::$job = new RapidLoad_Job([
+                'url' => $url
+            ]);
+        }
 
-        if(!isset($job->rule_id) && $this->rule && $job->rule_note != "detached") {
+        if(!isset($job->rule_id) && $this->rule && RapidLoad_Enqueue::$job->rule_note != "detached") {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
@@ -312,10 +315,10 @@ class RapidLoad_Enqueue {
                 'regex' => $this->rule->regex,
             ]);
 
-            $job->rule_id = $rule->id;
-            $job->status = 'rule-based';
-            $job->parent = $rule;
-            $job->save();
+            RapidLoad_Enqueue::$job->rule_id = $rule->id;
+            RapidLoad_Enqueue::$job->status = 'rule-based';
+            RapidLoad_Enqueue::$job->parent = $rule;
+            RapidLoad_Enqueue::$job->save();
 
         }
 
@@ -324,20 +327,20 @@ class RapidLoad_Enqueue {
             isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] != "1";
 
 
-        if(!isset($job->id)){
+        if(!isset(RapidLoad_Enqueue::$job->id)){
 
-            $job->save();
+            RapidLoad_Enqueue::$job->save();
 
         }
 
-        do_action('rapidload/job/handle', $job, $args);
+        do_action('rapidload/job/handle', RapidLoad_Enqueue::$job, $args);
 
-        $front_end_enabled['job_id_set'] = isset($job->id);
+        $front_end_enabled['job_id_set'] = isset(RapidLoad_Enqueue::$job->id);
         $front_end_enabled['enabled'] = $this->enabled_frontend();
         $front_end_enabled['no_uucss'] = !isset( $_REQUEST['no_uucss'] );
 
         if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled'] && $front_end_enabled['no_uucss']){
-            $this->replace_css($job);
+            $this->replace_css(RapidLoad_Enqueue::$job);
         }
 
     }
