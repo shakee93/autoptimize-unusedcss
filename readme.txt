@@ -22,7 +22,7 @@ RapidLoad is a tool that can greatly improve your website's performance and user
 ### Unlock the speed monster in you with these features
 
 - **Titan Optimizer**
-    - Built in Google Page Insight Reports
+    - Built-in Google Page Insight Reports
     - Recommended Actions for Audits
     - No more back and forth switching between websites
     - See all optimization status in one place
