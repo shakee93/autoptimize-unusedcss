@@ -35,8 +35,6 @@ class RapidLoad_Enqueue {
 
                     $this->group = $this->get_current_group();
 
-                    error_log(json_encode($this->group, JSON_PRETTY_PRINT));
-
                     $this->rule = $this->get_current_rule();
 
                 }
