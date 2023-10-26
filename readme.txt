@@ -25,7 +25,7 @@ RapidLoad is a tool that can greatly improve your website's performance and user
     - Built in Google Page Insight Reports
     - Recommended Actions for Audits
     - No more back and forth switching between websites
-    - See all optimizations status'es in one place
+    - See all optimization status in one place
 - **RapidLoad CDN**
     - Tier 1 Global Network
     - 121 Edge Locations
