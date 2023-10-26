@@ -877,13 +877,13 @@ class RapidLoad_Cache_Store
             $cache_keys['scheme'] = 'https-';
         } elseif ( isset( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == '443' ) {
             $cache_keys['scheme'] = 'https-';
-        } elseif ( RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Proto'] === 'https'
-            || RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Scheme'] === 'https'
+        } elseif ( isset(RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Proto']) && RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Proto'] === 'https'
+            || isset(RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Scheme']) && RapidLoad_Cache_Engine::$request_headers['X-Forwarded-Scheme'] === 'https'
         ) {
             $cache_keys['scheme'] = 'https-';
         }
 
-        if ( RapidLoad_Cache_Engine::$settings['mobile_cache'] ) {
+        if ( isset(RapidLoad_Cache_Engine::$settings['mobile_cache']) && RapidLoad_Cache_Engine::$settings['mobile_cache'] ) {
             if ( strpos( RapidLoad_Cache_Engine::$request_headers['User-Agent'], 'Mobile' ) !== false
                 || strpos( RapidLoad_Cache_Engine::$request_headers['User-Agent'], 'Android' ) !== false
                 || strpos( RapidLoad_Cache_Engine::$request_headers['User-Agent'], 'Silk/' ) !== false
@@ -896,13 +896,13 @@ class RapidLoad_Cache_Store
             }
         }
 
-        if ( RapidLoad_Cache_Engine::$settings['convert_image_urls_to_webp'] ) {
+        if ( isset(RapidLoad_Cache_Engine::$settings['convert_image_urls_to_webp']) && RapidLoad_Cache_Engine::$settings['convert_image_urls_to_webp'] ) {
             if ( strpos( RapidLoad_Cache_Engine::$request_headers['Accept'], 'image/webp' ) !== false ) {
                 $cache_keys['webp'] = '-webp';
             }
         }
 
-        if ( RapidLoad_Cache_Engine::$settings['compress_cache'] ) {
+        if ( isset(RapidLoad_Cache_Engine::$settings['compress_cache']) && RapidLoad_Cache_Engine::$settings['compress_cache'] ) {
             if ( function_exists( 'brotli_compress' )
                 && $cache_keys['scheme'] === 'https-'
                 && strpos( RapidLoad_Cache_Engine::$request_headers['Accept-Encoding'], 'br' ) !== false

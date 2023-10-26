@@ -36,6 +36,10 @@ class RapidLoad_Enqueue {
 
                     $this->group = $this->get_current_group();
 
+                    error_log(is_post_type_archive( 'product' ));
+
+                    error_log(json_encode($this->group, JSON_PRETTY_PRINT));
+
                     $this->rule = $this->get_current_rule();
 
                 }
@@ -390,12 +394,15 @@ class RapidLoad_Enqueue {
 
     function get_current_page_type() {
         if (is_singular() || is_front_page()) {
+            if (class_exists('WooCommerce') && is_woocommerce()) {
+                return 'woocommerce';
+            }
             return 'single';
         } elseif (is_archive()) {
-            if (is_category() || is_tag() || is_tax()) {
-                return 'archive';
-            } elseif (class_exists('WooCommerce') && is_woocommerce()) {
+            if (class_exists('WooCommerce') && is_woocommerce()) {
                 return 'woocommerce';
+            } elseif (is_category() || is_tag() || is_tax()) {
+                return 'archive';
             } else{
                 return 'archive';
             }
@@ -407,8 +414,14 @@ class RapidLoad_Enqueue {
         if (is_front_page()) {
             return 'front_page';
         } elseif (is_page()) {
+            if (function_exists('is_account_page') && is_account_page()) {
+                return 'account';
+            }
             return 'page';
         } elseif (is_single()) {
+            if (function_exists('is_product') && is_product()) {
+                return 'product';
+            }
             $post_type = get_post_type();
             if ($post_type) {
                 return $post_type;
@@ -428,12 +441,20 @@ class RapidLoad_Enqueue {
             }
             return 'tag';
         } elseif (is_tax()) {
+            if (function_exists('is_product_category') && is_product_category()) {
+                return 'product_category';
+            }elseif (function_exists('is_product_tag') && is_product_tag()) {
+                return 'product_tag';
+            }
             $tax_name = single_term_title('', false);
             if ($tax_name) {
                 return preg_replace('/\s+/', '_', strtolower($tax_name));
             }
             return 'tax';
         } elseif (is_post_type_archive()) {
+            if (function_exists('is_shop') && is_shop()) {
+                return 'shop';
+            }
             $post_type = get_post_type();
             if ($post_type) {
                 return $post_type;
