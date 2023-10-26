@@ -307,7 +307,7 @@ class RapidLoad_Enqueue {
             ]);
         }
 
-        if(!isset($job->rule_id) && $this->rule && RapidLoad_Enqueue::$job->rule_note != "detached") {
+        if(!isset(RapidLoad_Enqueue::$job->rule_id) && $this->rule && RapidLoad_Enqueue::$job->rule_note != "detached") {
 
             $rule = new RapidLoad_Job([
                 'url' => $url,
