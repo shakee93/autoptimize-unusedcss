@@ -75,9 +75,9 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                                     <span>
                                         {metric.title}
                                     </span>
-                                    <span className='text-xxs text-brand-500 font-light'>
+                                    <span className='text-xs text-brand-500 font-normal'>
 
-                                        {metric.potentialGain > 0 ?
+                                        {metric.potentialGain > 1 ?
                                             <>Enhance this for <span className='group-hover:text-green-600'>{ metric.potentialGain.toFixed(0) } point boost.</span> </> :
                                             `Looks great, well done!`}
 

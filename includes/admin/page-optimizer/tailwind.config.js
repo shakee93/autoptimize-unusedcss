@@ -43,8 +43,7 @@ module.exports = {
 	],
   theme: {
     fontFamily: {
-      'sans': ['Lexend', ...defaultTheme.fontFamily.sans],
-      ...defaultTheme.fontFamily
+      'sans': ['Inter Variable', ...defaultTheme.fontFamily.sans]
     },
     // to fix font-size: 62% problem
     fontSize: rem2px(defaultTheme.fontSize),

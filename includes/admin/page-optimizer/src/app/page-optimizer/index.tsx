@@ -65,8 +65,8 @@ export default function PageOptimizer() {
         }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
-                "overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
-                "dark:text-brand-300 text-brand-800 "
+                "font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
+                "dark:text-brand-300 text-brand-800"
             )}>
 
             <Header url={url}/>

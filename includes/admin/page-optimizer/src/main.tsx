@@ -5,6 +5,7 @@ import App from "app/app";
 import domReady from '@wordpress/dom-ready';
 import {LazyMotion, domAnimation} from "framer-motion"
 
+import "@fontsource-variable/inter";
 
 import {createRoot} from 'react-dom/client';
 import {AppProvider, useAppContext} from "./context/app";
