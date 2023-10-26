@@ -104,7 +104,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
             data-tour={`audit-${audit.id}`}
             spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
-                  `overflow-hidden w-full flex justify-center flex-col items-center p-0`,
+                  `w-full flex justify-center flex-col items-center p-0`,
                   toggleFiles ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
               )}
         >
@@ -115,10 +115,9 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                 <div className='flex gap-3 font-normal  items-center text-base'>
 
                     <div
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-100`}>
-                        {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
+                        {audit.scoreDisplayMode === 'informative' ? <span className='w-3 h-3 border-2 border-brand-400/60 rounded-full'></span> : <PerformanceIcons icon={icon}/> }
                     </div>
-
                     <div className='flex flex-col justify-around'>
                         <div className='flex gap-1.5 items-center'>
                             {audit.name}

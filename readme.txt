@@ -1,9 +1,9 @@
 === RapidLoad 2.1 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
-Requires at least: 4.0
-Tested up to: 6.2
+Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
+Requires at least: 5.0
+Tested up to: 6.4
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
@@ -17,7 +17,45 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
 
-## Unlock the Benefits of RapidLoad
+
+
+### Unlock the speed monster in you with these features
+
+- **Titan Optimizer**
+    - Built-in Google Page Insight Reports
+    - Recommended Actions for Audits
+    - No more back and forth switching between websites
+    - See all optimization status in one place
+- **RapidLoad CDN**
+    - Tier 1 Global Network
+    - 121 Edge Locations
+    - 24 ms Average Worldwide Latency
+    - NVMe+ SSD Servers
+- **Image Delivery**
+    - Automatic on-the-fly Image Optimization
+    - Modern WEBP, AVIF Support
+    - Built in Image CDN
+    - Adaptive Responsive Images
+    - Automatic width height setup
+    - Automatic LCP image prioritization
+    - Lazy Load Images
+- **CSS Delivery**
+    - Unused CSS Removal
+    - Critical CSS Generation
+    - Minify
+- **Javascript Delivery**
+    - Defer Javascript
+    - Delay non-critical Javascript
+    - Minify
+- **Font Delivery**
+   - Self-Host Google Fonts
+   - Preload Fonts
+- **Page Cache**
+    - Automatic Page Cache
+    - Cache Preloading
+    - Cache Purging
+
+## More about what's in RapidLoad
 
 **<img src="https://ps.w.org/unusedcss/assets/ttan.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />TITAN OPTIMIZER**
 
@@ -117,6 +155,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.1.4 - 26/10/2023 =
+ * fix: Titan Optimizer not working for subpages
 
 = 2.1.3 - 24/10/2023 =
  * feat: Introducing Titan Optimizer

@@ -124,7 +124,7 @@
             <span v-html="item.image"></span>
 
             <h4 class="heading-margin text-black font-medium text-base opacity-80">{{ item.title }}</h4>
-            <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
+            <span class="dashboard-p text-xm text-slate-700 leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
           <div class="actions p-4 mt-1 grid grid-cols-2 gap-4 items-center">
@@ -739,7 +739,7 @@ export default {
           id : "page-optimizer",
           title: "Titan Optimizer",
           description: 'Effortlessly optimize your site’s speed with on-the-spot actionable fixes',
-          image: '<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="49" height="49" rx="15" fill="#6F2DBD"/><path d="M28 25L21.1605 29.3505L23.932 30.9643L21 35L27.8396 30.7114L25.0716 29.1031L28 25Z" fill="white"/><path d="M18.1962 28.3053C17.09 27.7681 16.1326 26.9566 15.4111 25.9446C14.6896 24.9326 14.2267 23.7522 14.0646 22.5107C13.9026 21.2692 14.0464 20.006 14.4831 18.8358C14.9197 17.6656 15.6354 16.6256 16.565 15.8103C17.4946 14.995 18.6086 14.4303 19.8059 14.1674C21.0032 13.9045 22.2457 13.9519 23.4205 14.3051C24.5953 14.6584 25.6652 15.3063 26.5329 16.1901C27.4006 17.0739 28.0387 18.1655 28.389 19.3656H30.268C31.4767 19.3635 32.6403 19.8354 33.5192 20.6842C34.3981 21.5329 34.9254 22.6941 34.9927 23.9285C35.0599 25.1629 34.662 26.3768 33.8807 27.3202C33.0995 28.2636 31.9944 28.8648 30.7929 29" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          image: '<svg width="49" height="49" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 20.34 20.3"><defs><style>.cls-1{fill:#190028;}.cls-2{fill:#fff;}</style></defs><rect class="cls-1" x="0.25" y="0.27" width="19.75" height="19.75" rx="6.39"/><polygon class="cls-2" points="9.19 5.67 7.18 11.22 9.19 11.26 7.52 15.47 12.82 9.27 10.72 9.22 13.07 5.63 9.19 5.67"/></svg>',
           link: '/#',
           status: false,
           isDisabled: true
