@@ -105,9 +105,19 @@ class RapidLoad_Admin_Bar {
                     'options' => [
                         [
                             'label' => 'All Archives',
-                            'value' => 'all'
+                            'value' => 'all',
+                            'group' => null
                         ],
-
+                        [
+                            'label' => 'Author Archive',
+                            'value' => 'author',
+                            'group' => null
+                        ],
+                        [
+                            'label' => 'Posts Archive',
+                            'value' => 'author',
+                            'group' => 'Posts Archive'
+                        ],
                     ]
                 ]
             ]
