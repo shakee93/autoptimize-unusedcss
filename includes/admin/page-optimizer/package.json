@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.0.50",
+  "version": "1.0.51",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
@@ -38,11 +38,6 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.15",
-    "@fontsource/inter": "^5.0.15",
-    "@fontsource/lexend": "^5.0.17",
-    "@fontsource/manrope": "^5.0.17",
-    "@fontsource/poppins": "^5.0.8",
-    "@fontsource/roboto": "^5.0.8",
     "@heroicons/react": "2.0.13",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.4",

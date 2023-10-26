@@ -104,7 +104,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
             data-tour={`audit-${audit.id}`}
             spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(
-                  `overflow-hidden w-full flex justify-center flex-col items-center p-0`,
+                  `w-full flex justify-center flex-col items-center p-0`,
                   toggleFiles ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
               )}
         >

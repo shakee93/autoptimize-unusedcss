@@ -75,7 +75,7 @@ export default function PageOptimizer() {
                 id='rapidload-page-optimizer-content'
                 className={cn(
                 'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
-                'backdrop-blur-md dark:bg-brand-930/95 bg-brand-50/90 min-h-screen',
+                'dark:backdrop-blur-md dark:bg-brand-930/95 bg-brand-50 min-h-screen',
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                 savingData && 'relative overflow-hidden'
             )}>
