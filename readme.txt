@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.5 - 26/10/2023 =
+ * fix: remove duplicate queries
+
 = 2.1.4 - 26/10/2023 =
  * fix: Titan Optimizer not working for subpages
 
