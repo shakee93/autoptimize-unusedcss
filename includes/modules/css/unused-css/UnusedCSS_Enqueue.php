@@ -346,6 +346,10 @@ class UnusedCSS_Enqueue
 
     private function inline_sheet( $sheet, $link ) {
 
+        if(isset($sheet->{'data-media'}) && $sheet->{'data-media'} == "print"){
+            return;
+        }
+
         $inline = $this->get_inline_content( $link );
 
         if ( ! isset( $inline['size'] ) || $inline['size'] >= apply_filters( 'uucss/enqueue/inline-css-limit', 5 * 1000 ) ) {
