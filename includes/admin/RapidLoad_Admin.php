@@ -28,11 +28,179 @@ class RapidLoad_Admin
             add_action('wp_ajax_list_module', [ $this, 'list_module' ] );
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
+            add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
+
+
+            add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+            add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
+            add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
+            add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
+
+            if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action('wp_ajax_noriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
+                add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
+                add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
+            }
+
         }
+
+        add_action('cron_check_rapidload', function (){
+            update_option('cron_check_rapidload_success',"1");
+        });
 
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function titan_checklist_status(){
+
+        self::verify_nonce();
+
+        if(isset($_REQUEST['status'])){
+            RapidLoad_Base::update_option('titan_checklist_status', $_REQUEST['status']);
+            wp_send_json_success(true);
+        }
+
+        $updated_status = RapidLoad_Base::get_option('titan_checklist_status', 'pending');
+
+        if(isset($updated_status) && !empty($updated_status)){
+            wp_send_json_success($updated_status);
+        }
+
+        wp_send_json_error();
+    }
+
+    public function titan_checklist_plugins(){
+
+        self::verify_nonce();
+
+        $cnflict_plugins = apply_filters('uucss/third-party/plugins',[]);
+
+        $plugins = get_plugins();
+
+        $conflict_plugin_names = [];
+
+        foreach($cnflict_plugins as $cnflict_plugin){
+
+            if(isset($cnflict_plugin['has_conflict']) && $cnflict_plugin['has_conflict'] && isset($plugins[$cnflict_plugin['path']])){
+                $conflict_plugin_names[] = $plugins[$cnflict_plugin['path']]['Name'];
+            }
+        }
+
+        wp_send_json_success($conflict_plugin_names);
+
+    }
+
+    public function titan_checklist_crawler(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('crawler-check',[
+            'url' => site_url()
+        ]);
+
+        if($result == "200"){
+            update_option('crawler_check_rapidload_success',"1");
+            wp_send_json_success(true);
+        }
+
+        wp_send_json_error(false);
+
+    }
+
+    public function titan_checklist_cron(){
+
+        self::verify_nonce();
+
+        if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+            wp_send_json_error( 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.' );
+        }
+
+        if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
+            wp_send_json_error( 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.' );
+        }
+
+        $spawn = self::get_cron_spawn();
+
+        if ( is_wp_error( $spawn ) ) {
+            wp_send_json_error( sprintf( 'WP-Cron spawn failed with error: %s', $spawn->get_error_message() ) );
+        }
+
+        $code    = wp_remote_retrieve_response_code( $spawn );
+        $message = wp_remote_retrieve_response_message( $spawn );
+
+        if ( 200 === $code ) {
+            wp_send_json_success( 'WP-Cron spawning is working as expected.' );
+        } else {
+            wp_send_json_error( sprintf( 'WP-Cron spawn returned HTTP status code: %1$s %2$s', $code, $message ) );
+        }
+
+        /*$status = get_option("cron_check_rapidload_success","0");
+
+        if($status != "1"){
+
+            if ( ! wp_next_scheduled( 'cron_check_rapidload' )) {
+                wp_schedule_single_event(time()+1, 'cron_check_rapidload');
+            }
+
+            wp_send_json_error(false);
+
+        }
+
+        wp_send_json_success(true);*/
+
+    }
+
+    public function get_cron_spawn() {
+
+        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+
+        $cron_request_array = array(
+            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
+            'key'  => $doing_wp_cron,
+            'args' => array(
+                'timeout'   => 3,
+                'blocking'  => true,
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
+            ),
+        );
+
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+        $cron_request = apply_filters( 'cron_request', $cron_request_array );
+
+        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
+        $cron_request['args']['blocking'] = true;
+
+        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
+
+        return $result;
+    }
+
+    public function rapidload_titan_feedback(){
+
+        if (!isset($_REQUEST['smiley'])) {
+            wp_send_json_error(false);
+        }
+
+        $version = $_REQUEST['smiley'];
+        $reason = isset($_REQUEST['detail']) ? $_REQUEST['detail'] : '';
+
+        $api = new RapidLoad_Api();
+
+        $api->post('feedback', [
+           'url' => site_url(),
+           'type' => 'titan_feedback',
+           'version' => $version,
+           'reason' => $reason
+        ]);
+
+        wp_send_json_success(true);
 
     }
 
@@ -410,6 +578,10 @@ class RapidLoad_Admin
                 'cache_expires' => 0,
                 'cache_expiry_time' => 0,
                 'mobile_cache' => 0,
+                'excluded_post_ids'=> '',
+                'excluded_page_paths' => '',
+                'excluded_query_strings' => '',
+                'excluded_cookies' => ''
             ];
 
             if(isset($_REQUEST['cache_expires'])){
@@ -427,6 +599,30 @@ class RapidLoad_Admin
             if(isset($_REQUEST['mobile_cache'])){
 
                 $args['mobile_cache'] = ($_REQUEST['mobile_cache'] == 'true' ? 1 : 0);
+
+            }
+
+            if(isset($_REQUEST['excluded_post_ids']) && !empty($_REQUEST['excluded_post_ids'])){
+
+                $args['excluded_post_ids'] = $_REQUEST['excluded_post_ids'];
+
+            }
+
+            if(isset($_REQUEST['excluded_page_paths']) && !empty($_REQUEST['excluded_page_paths'])){
+
+                $args['excluded_page_paths'] = $_REQUEST['excluded_page_paths'];
+
+            }
+
+            if(isset($_REQUEST['excluded_query_strings']) && !empty($_REQUEST['excluded_query_strings'])){
+
+                $args['excluded_query_strings'] = $_REQUEST['excluded_query_strings'];
+
+            }
+
+            if(isset($_REQUEST['excluded_cookies']) && !empty($_REQUEST['excluded_cookies'])){
+
+                $args['excluded_cookies'] = $_REQUEST['excluded_cookies'];
 
             }
 

@@ -5,7 +5,7 @@
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
-            <button
+            <button id="rp-back"
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -32,6 +32,21 @@
 
           </div>
         </div>
+        <div class="ml-[285px]">
+          <div>
+          <button @click="ruleSettingsLegacy"
+                  class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
+            Legacy Dashboard
+          </button>
+          </div>
+<!--          <div class="pb-6 pt-4">-->
+<!--            <a :href="ruleSettingsLegacy()"-->
+<!--               class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">-->
+<!--              Legacy Dashboard-->
+<!--            </a>-->
+<!--          </div>-->
+
+        </div>
       </div>
 
       <div>
@@ -41,9 +56,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="uucss_minify = !uucss_minify" :class="uucss_minify? 'bg-purple':''"
+                  <div @click="onData.uucss_minify = !onData.uucss_minify" :class="onData.uucss_minify? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="uucss_minify" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_minify" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -52,7 +67,7 @@
                 </div>
               </div>
               <div>
-                <h1 @click="uucss_minify = !uucss_minify" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
+                <h1 @click="onData.uucss_minify = !onData.uucss_minify" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
                 <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files.</p>
               </div>
             </div>
@@ -83,9 +98,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="uucss_inline_css = !uucss_inline_css" :class="uucss_inline_css? 'bg-purple':''"
+                  <div @click="onData.uucss_inline_css = !onData.uucss_inline_css" :class="onData.uucss_inline_css? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -93,7 +108,7 @@
                 </div>
               </div>
               <div>
-                <h1 @click="uucss_inline_css = !uucss_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline Small CSS Files</h1>
+                <h1 @click="onData.uucss_inline_css = !onData.uucss_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline Small CSS Files</h1>
                 <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS will be inlined.</p>
               </div>
             </div>
@@ -103,9 +118,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="critical_css.status = !critical_css.status" :class="critical_css.status? 'bg-purple':''"
+                  <div @click="onData.critical_css.status = !onData.critical_css.status" :class="onData.critical_css.status? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="critical_css.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.critical_css.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -114,19 +129,19 @@
                 </div>
               </div>
               <div>
-                <h1 @click="critical_css.status = !critical_css.status" class="font-normal text-base text-black-font cursor-pointer">Critical CSS</h1>
+                <h1 @click="onData.critical_css.status = !onData.critical_css.status" class="font-normal text-base text-black-font cursor-pointer">Critical CSS</h1>
                 <p class="text-sm text-gray-font">Extract and prioritize above-the-fold CSS.</p>
               </div>
             </div>
 
-            <div :class="!critical_css.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.critical_css.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css"
-                         :class="critical_css.mobile_critical_css? 'bg-purple':''"
+                    <div @click="onData.critical_css.mobile_critical_css = !onData.critical_css.mobile_critical_css"
+                         :class="onData.critical_css.mobile_critical_css? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="critical_css.mobile_critical_css" xmlns="http://www.w3.org/2000/svg"
+                      <svg v-if="onData.critical_css.mobile_critical_css" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -135,7 +150,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="critical_css.mobile_critical_css = !critical_css.mobile_critical_css" class="font-normal text-base text-black-font cursor-pointer">Mobile Critical CSS</h1>
+                  <h1 @click="onData.critical_css.mobile_critical_css = !onData.critical_css.mobile_critical_css" class="font-normal text-base text-black-font cursor-pointer">Mobile Critical CSS</h1>
                   <p class="text-sm text-gray-font">Extract critical CSS for mobile screens.</p>
                 </div>
               </div>
@@ -145,9 +160,9 @@
                 <p class="text-sm pb-3 text-gray-font">Include any CSS content you need to load above the fold.</p>
                 <div class="grid mb-5">
                 <textarea
-                    v-model="critical_css.additional_critical_css"
+                    v-model="onData.critical_css.additional_critical_css"
                     @focus="focus='above'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='above'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -159,10 +174,10 @@
               <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="critical_css.remove_cpcss_on_user_interaction = !critical_css.remove_cpcss_on_user_interaction"
-                         :class="critical_css.remove_cpcss_on_user_interaction? 'bg-purple':''"
+                    <div @click="onData.critical_css.remove_cpcss_on_user_interaction = !onData.critical_css.remove_cpcss_on_user_interaction"
+                         :class="onData.critical_css.remove_cpcss_on_user_interaction? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="critical_css.remove_cpcss_on_user_interaction" xmlns="http://www.w3.org/2000/svg"
+                      <svg v-if="onData.critical_css.remove_cpcss_on_user_interaction" xmlns="http://www.w3.org/2000/svg"
                            viewBox="0 0 24 24" fill="white" class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -171,7 +186,7 @@
                   </div>
                 </div>
                 <div class="mt-2.5">
-                  <h1 @click="critical_css.remove_cpcss_on_user_interaction = !critical_css.remove_cpcss_on_user_interaction" class="font-normal text-base text-black-font cursor-pointer">Remove Critical CSS on User Interaction</h1>
+                  <h1 @click="onData.critical_css.remove_cpcss_on_user_interaction = !onData.critical_css.remove_cpcss_on_user_interaction" class="font-normal text-base text-black-font cursor-pointer">Remove Critical CSS on User Interaction</h1>
 <!--                  <p class="text-sm text-gray-font">Remove on User Interaction</p>-->
                 </div>
               </div>
@@ -183,9 +198,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="remove_unused_css = !remove_unused_css" :class="remove_unused_css? 'bg-purple':''"
+                  <div @click="onData.remove_unused_css = !onData.remove_unused_css" :class="onData.remove_unused_css? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="remove_unused_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.remove_unused_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -194,13 +209,13 @@
                 </div>
               </div>
               <div>
-                <h1 @click="remove_unused_css = !remove_unused_css" class="font-normal text-base text-black-font cursor-pointer">Remove Unused CSS</h1>
+                <h1 @click="onData.remove_unused_css = !onData.remove_unused_css" class="font-normal text-base text-black-font cursor-pointer">Remove Unused CSS</h1>
                 <p class="text-sm text-gray-font">Remove unused CSS for each page and reduce page size.</p>
               </div>
             </div>
 
 
-            <div :class="!remove_unused_css? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.remove_unused_css? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <RouterLink :to="unused_css_settings_link">
                   <button
@@ -212,13 +227,13 @@
             </div>
           </div>
 
-          <div :class="turn_on_group_by_pages" class="mb-5">
+          <div :class="onData.turn_on_group_by_pages" class="mb-5">
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="saveRuleBased" :class="uucss_enable_rules? 'bg-purple':''"
+                  <div @click="saveRuleBased" :class="onData.uucss_enable_rules? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="uucss_enable_rules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_enable_rules" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -226,13 +241,13 @@
                 </div>
               </div>
               <div>
-                <h1 @click="uucss_enable_rules = !uucss_enable_rules" class="font-normal text-base text-black-font cursor-pointer">Group by Pages</h1>
+                <h1 @click="onData.uucss_enable_rules = !onData.uucss_enable_rules" class="font-normal text-base text-black-font cursor-pointer">Group by Pages</h1>
                 <p class="text-sm text-gray-font">Define rules to group pages that have the same page structure.</p>
               </div>
             </div>
 
 
-            <div :class="!uucss_enable_rules? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.uucss_enable_rules? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <button @click="ruleSettings"
                         class="bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent mt-2 rounded-lg">
@@ -262,9 +277,9 @@
 
             <div class="grid mb-5">
                 <textarea
-                    v-model="uucss_excluded_files"
+                    v-model="onData.uucss_excluded_files"
                     @focus="focus='exclude'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -296,7 +311,7 @@
       <div class="pb-6">
       </div>
     </div>
-
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
   </main>
 
 </template>
@@ -307,6 +322,7 @@ import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../../components/dropDown.vue'
 import messageBox from "../../../components/messageBox.vue";
 import axios from "axios";
+import popup from "../../../components/popup.vue";
 
 export default {
   name: "css",
@@ -315,6 +331,7 @@ export default {
     Vue3TagsInput,
     dropDown,
     messageBox,
+    popup,
   },
 
   mounted() {
@@ -332,20 +349,22 @@ export default {
         if (this.id === this.css_config[key].id) {
           const option = this.css_config[key].options;
           //console.log(option)
-          this.critical_css.status = option.critical_css.status === 'on';
-          this.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
-          this.critical_css.remove_cpcss_on_user_interaction = option.critical_css.options.remove_cpcss_on_user_interaction;
-          this.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
-          this.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
-          this.remove_unused_css = option.unused_css.status === 'on';
-          this.uucss_enable_rules = option.uucss_enable_rules;
-          this.uucss_minify = option.uucss_minify;
-          this.turn_on_group_by_pages = window.uucss_global.total_jobs > 200;
-          this.uucss_inline_css = option.unused_css.options.uucss_inline_css;
-          this.rapidload_aggregate_css = option.rapidload_aggregate_css;
+          this.onData.critical_css.status = option.critical_css.status === 'on';
+          this.onData.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
+          this.onData.critical_css.remove_cpcss_on_user_interaction = option.critical_css.options.remove_cpcss_on_user_interaction;
+          this.onData.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
+          this.onData.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
+          this.onData.remove_unused_css = option.unused_css.status === 'on';
+          this.onData.uucss_enable_rules = option.uucss_enable_rules;
+          this.onData.uucss_minify = option.uucss_minify;
+          this.onData.turn_on_group_by_pages = window.uucss_global.total_jobs > 200;
+          this.onData.uucss_inline_css = option.unused_css.options.uucss_inline_css;
+          this.onData.rapidload_aggregate_css = option.rapidload_aggregate_css;
         }
 
       });
+      this.beforeSave = this.onData;
+      this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
 
     const href = new URL(window.location.href);
@@ -356,6 +375,21 @@ export default {
   },
 
   methods: {
+    handleConfirm() {
+      this.saveSettings();
+      this.handleDontSave();
+    },
+
+    handleDontSave(){
+      this.confirmStatus = true;
+      this.popupVisible= false;
+      const back = document.getElementById('rp-back');
+      back.click();
+    },
+    handleCancel() {
+      this.popupVisible= false;
+    },
+
     doc(){
       window.open('https://docs.rapidload.io/features/css-delivery', '_blank');
     },
@@ -364,16 +398,16 @@ export default {
       this.loading = true;
 
       const data = {
-        uucss_additional_css: this.critical_css.additional_critical_css,
-        uucss_enable_cpcss_mobile: this.critical_css.mobile_critical_css,
-        remove_cpcss_on_user_interaction: this.critical_css.remove_cpcss_on_user_interaction,
-        uucss_excluded_files: this.uucss_excluded_files,
-        uucss_enable_cpcss: this.critical_css.status,
-        uucss_enable_rules: this.uucss_enable_rules,
-        uucss_minify: this.uucss_minify,
-        uucss_enable_uucss: this.remove_unused_css,
-        uucss_inline_css: this.uucss_inline_css,
-        rapidload_aggregate_css: this.rapidload_aggregate_css,
+        uucss_additional_css: this.onData.critical_css.additional_critical_css,
+        uucss_enable_cpcss_mobile: this.onData.critical_css.mobile_critical_css,
+        remove_cpcss_on_user_interaction: this.onData.critical_css.remove_cpcss_on_user_interaction,
+        uucss_excluded_files: this.onData.uucss_excluded_files,
+        uucss_enable_cpcss: this.onData.critical_css.status,
+        uucss_enable_rules: this.onData.uucss_enable_rules,
+        uucss_minify: this.onData.uucss_minify,
+        uucss_enable_uucss: this.onData.remove_unused_css,
+        uucss_inline_css: this.onData.uucss_inline_css,
+        rapidload_aggregate_css: this.onData.rapidload_aggregate_css,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
@@ -393,6 +427,8 @@ export default {
         this.dataSaved();
       });
 
+      this.originalData = JSON.parse(JSON.stringify(data));
+      this.beforeSave = JSON.parse(JSON.stringify(data));
     },
 
     dataSaved(){
@@ -402,9 +438,9 @@ export default {
 
     saveRuleBased() {
 
-      this.uucss_enable_rules = !this.uucss_enable_rules
+      this.onData.uucss_enable_rules = !this.onData.uucss_enable_rules
       const data = {
-        uucss_enable_rules: this.uucss_enable_rules,
+        uucss_enable_rules: this.onData.uucss_enable_rules,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
@@ -426,8 +462,22 @@ export default {
 
     ruleSettings() {
       window.location.href = window.uucss_global.setting_url;
-    }
+    },
+    ruleSettingsLegacy() {
+      window.location.href = window.uucss_global.setting_url+'&uucss_jobs';
+    },
+  },
 
+  beforeRouteLeave(to, from, next) {
+    if(JSON.stringify(this.originalData) !== JSON.stringify(this.beforeSave) && !this.confirmStatus){
+      this.popupVisible = true;
+      this.confirmStatus = false;
+    }
+    if(this.popupVisible){
+      next(false);
+    }else{
+      next();
+    }
   },
 
   data() {
@@ -438,23 +488,31 @@ export default {
       focus: null,
       saved: false,
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/',
-      uucss_minify: false,
-      rapidload_aggregate_css: false,
-      remove_unused_css: false,
-      uucss_excluded_files: '',
-      uucss_inline_css: false,
-      uucss_enable_rules: false,
       unused_css_settings_link: '/css/unused-css',
-      turn_on_group_by_pages: false,
       devmode: false,
       uucss_url: '',
+
+      onData:{
+      rapidload_aggregate_css: false,
+      uucss_inline_css: false,
+      turn_on_group_by_pages: false,
+      uucss_minify: false,
+      uucss_enable_rules: false,
+      remove_unused_css: false,
+      uucss_excluded_files: '',
       critical_css: {
         status: false,
         mobile_critical_css: false,
         remove_cpcss_on_user_interaction: false,
         additional_critical_css: [],
       },
+      },
       back: '/',
+
+      beforeSave:{},
+      originalData: {},
+      popupVisible: false,
+      confirmStatus: false,
 
     }
   },

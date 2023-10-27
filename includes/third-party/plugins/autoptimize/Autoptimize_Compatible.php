@@ -9,6 +9,7 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'autoptimize/autoptimize.php';
         $this->catgeory = 'optimize';
         $this->name = 'autoptimize';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

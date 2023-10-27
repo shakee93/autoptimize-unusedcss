@@ -9,6 +9,7 @@ class RapidLoad_CDN_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -29,6 +30,10 @@ class RapidLoad_CDN_Enqueue
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
         }
 
         $links = $this->dom->find( 'link' );
@@ -89,7 +94,8 @@ class RapidLoad_CDN_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
 
     }

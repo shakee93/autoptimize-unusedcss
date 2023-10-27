@@ -25,7 +25,7 @@
                 }
 
                 let link = file.cloneNode()
-                link.href = original.original
+                link.href = original.original_relative ? original.original_relative : original.original
                 link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.removeAttribute('data-href')
@@ -67,7 +67,7 @@
                 link.rel  = 'stylesheet';
                 link.as  = 'style';
                 link.type = 'text/css';
-                link.href = original.original;
+                link.href = original.original_relative ? original.original_relative : original.original
                 link.media = inlines_style.getAttribute('data-media');
                 link.prev = inlines_style
 
@@ -84,6 +84,10 @@
         this.add_events = function () {
 
             if (!window.rapidload || !window.rapidload.files || !window.rapidload.files.length) {
+                return;
+            }
+
+            if(window.rapidload.do_not_load_original_css){
                 return;
             }
 

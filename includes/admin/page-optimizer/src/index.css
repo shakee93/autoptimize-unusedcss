@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+  }
+}
+
+@layer base {
+  :root {
+    --reactour-accent: #0e172a;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.92%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.92%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.92%;
+ 
+    --border: 0 0% 88%;
+    --input: 214.3 31.8% 91.4%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 0 0% 93%;
+    --accent-foreground: 0 0% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --ring: 215 20.2% 65.1%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .rapidload-dark {
+    --reactour-accent: #fafafa;
+    --background: 240 10% 3.92%;
+    --foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --popover: 240 10% 3.92%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --card: 240 10% 3.92%;
+    --card-foreground: 210 40% 98%;
+ 
+    --border: 0 0% 12%;
+    --input:0 0% 12%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --accent-foreground: 0 0% 93%;
+    --accent: 0 0% 11.2%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+ 
+    --ring: 217.2 32.6% 17.5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+}
+
+.rapidload-dark {
+  color-scheme: dark;
+}
+
+.rpo-titan-tour {
+  z-index: 150000 !important;
+}
+
+.reactour__popover {
+  z-index: 150000 !important;
+}
+
+.reactour__popover:after {
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: var(--rtp-arrow-top, auto);
+  right: var(--rtp-arrow-right, auto);
+  bottom: var(--rtp-arrow-bottom, auto);
+  left: var(--rtp-arrow-left, auto);
+  border-top: var(--rtp-arrow-border-top);
+  border-right: var(--rtp-arrow-border-right);
+  border-bottom: var(--rtp-arrow-border-bottom);
+  border-left: var(--rtp-arrow-border-left);
+}

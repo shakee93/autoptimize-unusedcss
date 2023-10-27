@@ -9,6 +9,7 @@ abstract class RapidLoad_ThirdParty
     public $plugin = null;
     public $catgeory = null;
     public $name = null;
+    public $has_conflict = false;
 
     public function __construct(){
 
@@ -37,7 +38,9 @@ abstract class RapidLoad_ThirdParty
         add_filter('uucss/third-party/plugins', function ($plugins){
             $plugins[] = [
                 'category' => $this->catgeory,
-                'plugin' => $this->name
+                'plugin' => $this->name,
+                'path' => $this->plugin,
+                'has_conflict' => $this->has_conflict
             ];
             return $plugins;
         }, 10, 1 );

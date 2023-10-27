@@ -18,13 +18,17 @@ class UnusedCSS
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
+
+        new UnusedCSS_Queue();
+
+        $this->file_system = new RapidLoad_FileSystem();
+
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_uucss'] = "" ){
             return;
         }
-
-        $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
             return;
@@ -35,8 +39,6 @@ class UnusedCSS
         }
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
-
-        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
@@ -56,12 +58,10 @@ class UnusedCSS
 
             $this->cache_trigger_hooks();
 
-            add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
+            //add_action( 'admin_notices', [ $this, 'first_uucss_job' ] );
             add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
             add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         }
-
-        new UnusedCSS_Queue();
     }
 
     public function add_meta_boxes()
@@ -225,7 +225,6 @@ class UnusedCSS
                         $link['rule_status'] = $job_data->status;
                         $link['rule_hits'] = $job_data->hits;
                         $link['applied_links'] = count($job->get_urls());
-                        $link['applied_successful_links'] = 0;
                     }
 
                     if(!isset($link['status'])){
@@ -242,6 +241,10 @@ class UnusedCSS
                     $link['time'] = isset( $job_data->created_at ) ? strtotime( $job_data->created_at ) : null;
                     $link['attempts'] = isset( $job_data->attempts ) ? $job_data->attempts : null;
                     $link['rule'] = $job_data->job->rule;
+
+                    if(boolval($link['meta']['warnings']) == false){
+                        $link['meta']['warnings'] = [];
+                    }
                 }
 
             }
@@ -333,6 +336,10 @@ class UnusedCSS
     function cache_uucss($job, $args = []){
 
         if(!$job || !isset($job->id)){
+            return false;
+        }
+
+        if(isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" && !wp_doing_ajax()){
             return false;
         }
 

@@ -15,7 +15,7 @@ class RapidLoad_Admin_Frontend
 
         add_action('admin_menu', [$this, 'menu_item']);
 
-        add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
+        new RapidLoad_Admin_Bar();
 
         if($this->is_rapidload_legacy_page()){
 
@@ -58,9 +58,9 @@ class RapidLoad_Admin_Frontend
 
         }
 
-        if($this->is_rapidload_page_optimizer()){
+        /*if($this->is_rapidload_page_optimizer()){
 
-            $this->load_optimizer_scripts();
+            //$this->load_optimizer_scripts();
 
             // TODO: temporary should be removed so it supports all the browsers
             add_filter('script_loader_tag', function ($tag, $handle) {
@@ -72,7 +72,7 @@ class RapidLoad_Admin_Frontend
 
             }, 10, 2);
 
-        }
+        }*/
 
         if(is_admin()){
 
@@ -85,32 +85,7 @@ class RapidLoad_Admin_Frontend
 
         add_action( "uucss_run_gpsi_test_for_all", [ $this, 'run_gpsi_test_for_all' ]);
 
-
-    }
-
-    public function add_rapidload_admin_bar_menu($wp_admin_bar){
-
-        if(apply_filters('rapidload/tool-bar-menu',true)){
-
-            $wp_admin_bar->add_node( array(
-                'id'    => 'rapidload',
-                'title' => '<img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="">'.__( 'RapidLoad', 'rapidload' ),
-                'href'  => admin_url( 'admin.php?page=rapidload' ),
-                'meta'  => array( 'class' => 'bullet-green rapidload ab-item' ),
-            ));
-
-            $wp_admin_bar->add_node( array(
-                'id'    => 'rapidload-clear-cache',
-                'title' => '<span class="ab-label">' . __( 'Clear CSS/JS Optimizations', 'clear_optimization' ) . '</span>',
-                //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
-                'href'   => wp_nonce_url( add_query_arg( array(
-                    '_action' => 'rapidload_purge_all',
-                ) ), 'uucss_nonce', 'nonce' ),
-                'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
-                'parent' => 'rapidload'
-            ));
-        }
-
+        $this->rapidload_purge_all_process_request();
     }
 
     public function load_legacy_ajax(){
@@ -129,7 +104,18 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_mark_faqs_read', [$this, 'mark_faqs_read']);
             add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
+            add_action("wp_ajax_update_htaccess_file", [$this, "wp_ajax_update_htaccess_file"]);
         }
+
+    }
+
+    public function wp_ajax_update_htaccess_file(){
+
+        self::verify_nonce();
+
+        RapidLoad_htaccess::update_htaccess(isset($_REQUEST['remove']));
+
+        wp_send_json_success(true);
 
     }
 
@@ -384,6 +370,7 @@ class RapidLoad_Admin_Frontend
             if($status_filter == 'warning'){
 
                 $filters[] = " warnings IS NOT NULL ";
+
             }else{
 
                 $filters[] = " status = '". $status_filter . "' AND warnings IS NULL ";
@@ -450,8 +437,8 @@ class RapidLoad_Admin_Frontend
         wp_send_json([
             'data' => $data,
             "draw" => (int)$draw,
-            "recordsTotal" => RapidLoad_DB::get_total_job_count(),
-            "recordsFiltered" => RapidLoad_DB::get_total_job_count(),
+            "recordsTotal" => RapidLoad_DB::get_total_job_count($type == "path" ? " where rule = 'is_url' and regex = '/'" : " where rule != 'is_url'"),
+            "recordsFiltered" => RapidLoad_DB::get_total_job_count($where_clause),
             "success" => true
         ]);
 
@@ -546,6 +533,34 @@ class RapidLoad_Admin_Frontend
 
     }
 
+    public function rapidload_purge_all_process_request(){
+
+        if ( empty( $_GET['_nonce'] ) || ! wp_verify_nonce( $_GET['_nonce'], 'uucss_nonce' ) ) {
+            return;
+        }
+
+        $job_type = isset($_GET['_job_type']) ? $_GET['_job_type'] : 'all';
+        $url = isset($_GET['_url']) ? $_GET['_url'] : false;
+        $clear = isset($_GET['_clear']) && boolval($_GET['_clear'] == 'true') ? true : false;
+
+        if($clear){
+            if ($url){
+                RapidLoad_DB::clear_job_data($job_type, [
+                    'url' => $url
+                ]);
+                RapidLoad_DB::clear_jobs($job_type, [
+                    'url' => $url
+                ]);
+            }else{
+                //RapidLoad_DB::clear_job_data($job_type);
+                RapidLoad_DB::clear_jobs($job_type);
+                do_action('rapidload/vanish');
+            }
+
+            wp_safe_redirect( remove_query_arg( array( '_job_type', '_url', '_clear', '_nonce' ) ) );
+        }
+    }
+
     public function rapidload_purge_all(){
 
         self::verify_nonce();
@@ -570,9 +585,6 @@ class RapidLoad_Admin_Frontend
             }else{
 
                 if($rule && $regex){
-                    self::log([
-                        'log' => 'job cleared for rule ' . $rule . ' and regex ' . $regex
-                    ]);
                     RapidLoad_DB::clear_job_data($job_type, [
                         'rule' => $rule,
                         'regex' => $regex
@@ -582,10 +594,6 @@ class RapidLoad_Admin_Frontend
                         'regex' => $regex
                     ]);
                 }elseif ($url){
-                    self::log([
-                        'log' => 'job cleared for url ' . $url,
-                        'url' => $url
-                    ]);
                     RapidLoad_DB::clear_job_data($job_type, [
                         'url' => $url
                     ]);
@@ -593,10 +601,7 @@ class RapidLoad_Admin_Frontend
                         'url' => $url
                     ]);
                 }else{
-                    self::log([
-                        'log' => 'all jobs cleared'
-                    ]);
-                    RapidLoad_DB::clear_job_data($job_type);
+                    //RapidLoad_DB::clear_job_data($job_type);
                     RapidLoad_DB::clear_jobs($job_type);
                     do_action('rapidload/vanish');
                 }
@@ -703,6 +708,16 @@ class RapidLoad_Admin_Frontend
 
                         $job = new RapidLoad_Job(['url' => $url]);
                         $job->save(true);
+
+                        $args = [
+                            'requeue' => true
+                        ];
+
+                        if($immediate){
+                            $args['immediate'] = true;
+                        }
+
+                        do_action('rapidload/job/purge', $job, $args);
 
                     }
 
@@ -916,12 +931,16 @@ class RapidLoad_Admin_Frontend
     public function load_optimizer_scripts()
     {
 
-        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],'1.71');
+        wp_enqueue_style( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], '1.71');
+        wp_register_script( 'rapidload_page_optimizer', UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist/assets/index.js',[], UUCSS_VERSION);
 
         $data = array(
-            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist'
+            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
+            'plugin_url' => UUCSS_PLUGIN_URL,
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'optimizer_url' => $this->transform_url($this->get_current_url()),
+            'nonce' => wp_create_nonce( 'uucss_nonce' ),
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_admin', $data );

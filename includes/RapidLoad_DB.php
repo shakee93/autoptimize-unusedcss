@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.5";
+    static $db_version = "1.6";
     static $db_option = "rapidload_migration";
     static $current_version = "1.4";
     static $map_key = 'uucss_map';
@@ -62,6 +62,7 @@ abstract class RapidLoad_DB
         $rapidload_uucss_rule = $wpdb->prefix . $blog_id . 'rapidload_uucss_rule';
         $rapidload_job = $wpdb->prefix . $blog_id . 'rapidload_job';
         $rapidload_job_data = $wpdb->prefix . $blog_id . 'rapidload_job_data';
+        $rapidload_job_optimizations = $wpdb->prefix . $blog_id . 'rapidload_job_optimizations';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -110,6 +111,8 @@ abstract class RapidLoad_DB
 		url longtext NOT NULL,
 		rule longtext NOT NULL,
 		regex longtext NOT NULL,
+		desktop_options longtext NULL,
+		mobile_options longtext NULL,
 		rule_id INT NULL,
 		rule_note longtext NULL,
 		status varchar(15) NULL,
@@ -132,7 +135,16 @@ abstract class RapidLoad_DB
 		PRIMARY KEY  (id),
 		KEY idx_rapidload_job_data_job_id (job_id),       
 		KEY idx_rapidload_job_data_job_type (job_type)            
-	) ;";
+	) ;
+	    CREATE TABLE $rapidload_job_optimizations (
+		id INT NOT NULL AUTO_INCREMENT,
+		job_id INT NOT NULL,
+		strategy varchar(15) NOT NULL,
+		data longtext NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		PRIMARY KEY  (id),
+		KEY idx_rapidload_job_optimizations_job_id (job_id)          
+	);";
 
         dbDelta( $sql );
         return $wpdb->last_error;
@@ -205,8 +217,8 @@ abstract class RapidLoad_DB
 
             }
 
-            RapidLoad_Base::update_option( self::$db_option, self::$db_version );
-            self::$current_version = self::$db_version;
+            //RapidLoad_Base::update_option( self::$db_option, self::$db_version );
+            //self::$current_version = self::$db_version;
 
         }catch (Exception $ex){
 
@@ -480,7 +492,16 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job_data {$where}");
+        $where = str_replace("[job_table_name]","{$wpdb->prefix}rapidload_job", $where);
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM (select * from (select 
+        job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
+        cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
+        
+        from (select (case when rule_id is not null then rule_id else id end) as id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table) as derived_tbale_2 {$where}");
 
         $error = $wpdb->last_error;
 
@@ -530,10 +551,11 @@ abstract class RapidLoad_DB
 
         $data = $wpdb->get_results("select * from (select 
         job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
+        (case when job.rule = 'is_url' then 0 else (select count(id) from {$wpdb->prefix}rapidload_job where rule_id = job.id and rule = 'is_url') end) as applied_successful_links,
         uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
         cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
         
-        from {$wpdb->prefix}rapidload_job as job
+        from (select (case when rule_id is not null then rule_id else id end) as id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
 
@@ -555,17 +577,20 @@ abstract class RapidLoad_DB
         $data['id'] = isset($link->id) ? $link->id : null;
         $data['url'] = isset( $link->url ) ? $link->url : null;
         $data['regex'] = isset( $link->regex ) ? $link->regex : null;
+        $data['rule'] = isset( $link->rule ) ? $link->rule : null;
         $data['rule_id'] = isset( $link->rule_id ) ? $link->rule_id : null;
         $data['job_status'] = isset( $link->job_status ) ? $link->job_status : null;
         $data['created_at'] = isset( $link->job_created_at ) ? $link->job_created_at : null;
+        $data['hits'] = isset( $link->hits ) ? $link->hits : null;
+        $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
 
         if(isset($data['rule_id'])){
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
-            $data['rule'] = $job_url->rule;
             $data['base'] = $job_url->url;
-            if($data['regex'] == "/" && $data['rule'] == "is_url"){
+            if($data['rule'] == "is_url"){
                 $data['status'] = 'rule-based';
             }
+
         }
 
         return apply_filters('uucss/link', $data);

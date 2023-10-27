@@ -6,7 +6,7 @@
       <div class="flex border-y border-gray-border-line p-4 mb-6 pr-8 border-t-0">
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
-            <button
+            <button id="rp-back"
                 class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -46,9 +46,9 @@
             <p class="text-sm pb-3 text-gray-font">URLs that needs to be excluded from the whole RapidLoad optimization.</p>
 
                 <textarea
-                    v-model="uucss_excluded_links"
+                    v-model="onData.uucss_excluded_links"
                     @focus="focus='exclude'" @blur="focus = null"
-                    class="resize-none z-50 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
               <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
                    class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
@@ -62,9 +62,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="rapidload_minify_html = !rapidload_minify_html" :class="rapidload_minify_html? 'bg-purple':''"
+                    <div @click="onData.rapidload_minify_html = !onData.rapidload_minify_html" :class="onData.rapidload_minify_html? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="rapidload_minify_html" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.rapidload_minify_html" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -73,7 +73,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="rapidload_minify_html = !rapidload_minify_html" class="font-normal text-base text-black-font cursor-pointer">Minify Html</h1>
+                  <h1 @click="onData.rapidload_minify_html = !onData.rapidload_minify_html" class="font-normal text-base text-black-font cursor-pointer">Minify Html</h1>
                   <p class="text-sm text-gray-font">Minify the html output of your pages.</p>
                 </div>
               </div>
@@ -85,9 +85,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_query_string = !uucss_query_string" :class="uucss_query_string? 'bg-purple':''"
+                    <div @click="onData.uucss_query_string = !onData.uucss_query_string" :class="onData.uucss_query_string? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_query_string" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.uucss_query_string" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -96,7 +96,7 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="uucss_query_string = !uucss_query_string" class="font-normal text-base text-black-font cursor-pointer">Query String</h1>
+                  <h1 @click="onData.uucss_query_string = !onData.uucss_query_string" class="font-normal text-base text-black-font cursor-pointer">Query String</h1>
                   <p class="text-sm text-gray-font">Identify URLs with query strings as separate URLs.</p>
                 </div>
               </div>
@@ -108,9 +108,9 @@
               <div class="flex">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
-                    <div @click="uucss_enable_debug = !uucss_enable_debug" :class="uucss_enable_debug? 'bg-purple':''"
+                    <div @click="onData.uucss_enable_debug = !onData.uucss_enable_debug" :class="onData.uucss_enable_debug? 'bg-purple':''"
                          class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="uucss_enable_debug" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                      <svg v-if="onData.uucss_enable_debug" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                            class="transform scale-125">
                         <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                       </svg>
@@ -119,18 +119,18 @@
                   </div>
                 </div>
                 <div>
-                  <h1 @click="uucss_enable_debug = !uucss_enable_debug" class="font-normal text-base text-black-font cursor-pointer">Debug Mode</h1>
-                  <p class="text-sm text-gray-font">Enable debug logs for RapidLoad. <RouterLink v-if="uucss_enable_debug" :to="debug_logs_settings"><span class="text-purple cursor-pointer">View logs</span></RouterLink></p>
+                  <h1 @click="onData.uucss_enable_debug = !onData.uucss_enable_debug" class="font-normal text-base text-black-font cursor-pointer">Debug Mode</h1>
+                  <p class="text-sm text-gray-font">Enable debug logs for RapidLoad. <RouterLink v-if="onData.uucss_enable_debug" :to="debug_logs_settings"><span class="text-purple cursor-pointer">View logs</span></RouterLink></p>
                 </div>
               </div>
             </div>
 
 
-          <div class="flex mt-5 pb-1 transition duration-300 hover:cursor-pointer rounded" @click="queue_option.default=!queue_option.default">
+          <div class="flex mt-5 pb-1 transition duration-300 hover:cursor-pointer rounded" @click="onData.queue_option.default=!onData.queue_option.default">
             <div class="pr-1">
               <div class="flex items-center mr-4 mt-3">
 
-                <svg class="ml-[-3px]" :class="{'advanced-after': queue_option.default , 'advanced-before' : !queue_option.default }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="ml-[-3px]" :class="{'advanced-after': onData.queue_option.default , 'advanced-before' : !onData.queue_option.default }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
                 </svg>
               </div>
@@ -141,7 +141,7 @@
             </div>
           </div>
 
-          <div :class="{ expand: queue_option.default}" class="mt-3 pl-6 not-expand main-border">
+          <div :class="{ expand: onData.queue_option.default}" class="mt-3 pl-6 not-expand main-border">
 
             <div class="flex">
               <div>
@@ -150,18 +150,18 @@
                 <div class="flex">
                   <p class="text-sm text-gray-font pr-3 pt-1">Run</p>
 
-                  <dropDown v-if="queue_option.uucss_jobs_per_queue"
-                      :options="queue_jobs_options"
-                      :default="queue_option.uucss_jobs_per_queue"
+                  <dropDown v-if="onData.queue_option.uucss_jobs_per_queue"
+                      :options="onData.queue_jobs_options"
+                      :default="onData.queue_option.uucss_jobs_per_queue"
                       class="select mr-3"
-                      @input="queue_option.uucss_jobs_per_queue=$event"
+                      @input="onData.queue_option.uucss_jobs_per_queue=$event"
                   />
                   <p class="text-sm text-gray-font pr-3 pt-1">Per</p>
-                  <dropDown v-if="queue_option.uucss_queue_interval"
-                      :options="jobs_timing_options"
-                      :default="queue_option.uucss_queue_interval"
+                  <dropDown v-if="onData.queue_option.uucss_queue_interval"
+                      :options="onData.jobs_timing_options"
+                      :default="onData.queue_option.uucss_queue_interval"
                       class="select mr-3" style="min-width: 110px"
-                      @input="queue_option.uucss_queue_interval=$event"
+                      @input="onData.queue_option.uucss_queue_interval=$event"
                   />
                 </div>
               </div>
@@ -169,9 +169,9 @@
             <div class="flex mt-5">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="queue_option.uucss_disable_add_to_queue = !queue_option.uucss_disable_add_to_queue" :class="queue_option.uucss_disable_add_to_queue? 'bg-purple':''"
+                  <div @click="onData.queue_option.uucss_disable_add_to_queue = !onData.queue_option.uucss_disable_add_to_queue" :class="onData.queue_option.uucss_disable_add_to_queue? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="queue_option.uucss_disable_add_to_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.queue_option.uucss_disable_add_to_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -180,16 +180,16 @@
                 </div>
               </div>
               <div>
-                <h1 @click="queue_option.uucss_disable_add_to_queue = !queue_option.uucss_disable_add_to_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Auto Queue</h1>
+                <h1 @click="onData.queue_option.uucss_disable_add_to_queue = !onData.queue_option.uucss_disable_add_to_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Auto Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs adding to queue on user visits.</p>
               </div>
             </div>
             <div class="flex mt-5 mb-2">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="queue_option.uucss_disable_add_to_re_queue = !queue_option.uucss_disable_add_to_re_queue" :class="queue_option.uucss_disable_add_to_re_queue? 'bg-purple':''"
+                  <div @click="onData.queue_option.uucss_disable_add_to_re_queue = !onData.queue_option.uucss_disable_add_to_re_queue" :class="onData.queue_option.uucss_disable_add_to_re_queue? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="queue_option.uucss_disable_add_to_re_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.queue_option.uucss_disable_add_to_re_queue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -198,7 +198,7 @@
                 </div>
               </div>
               <div>
-                <h1 @click="queue_option.uucss_disable_add_to_re_queue = !queue_option.uucss_disable_add_to_re_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Re-Queue</h1>
+                <h1 @click="onData.queue_option.uucss_disable_add_to_re_queue = !onData.queue_option.uucss_disable_add_to_re_queue" class="font-normal text-base text-black-font cursor-pointer">Disable Re-Queue</h1>
                 <p class="text-sm text-gray-font">Disable jobs re-queuing on warnings.</p>
               </div>
             </div>
@@ -209,7 +209,7 @@
             <div class="pr-1">
               <div class="flex items-center mr-4 mt-3">
 
-                <svg class="ml-[-3px]" :class="{'advanced-after': misc_option , 'advanced-before' : !misc_option }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="ml-[-3px]" :class="{'advanced-after': onData.misc_option , 'advanced-before' : !onData.misc_option }" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
                 </svg>
               </div>
@@ -220,7 +220,7 @@
             </div>
           </div>
 
-          <div :class="{ expand: misc_option}" class="mt-3 pl-6 not-expand main-border">
+          <div :class="{ expand: onData.misc_option}" class="mt-3 pl-6 not-expand main-border">
               <div class="">
                 <button @click="ruleSettings"
                         class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
@@ -250,6 +250,7 @@
       <div class="pb-6">
       </div>
     </div>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
 
   </main>
 
@@ -261,6 +262,7 @@ import Vue3TagsInput from 'vue3-tags-input';
 import dropDown from '../../components/dropDown.vue'
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
+import popup from "../../components/popup.vue";
 
 export default {
   name: "general-settings",
@@ -269,6 +271,7 @@ export default {
     Vue3TagsInput,
     dropDown,
     messageBox,
+    popup,
   },
 
   mounted() {
@@ -284,27 +287,44 @@ export default {
         if (this.id === this.general_config[key].id) {
           const option = this.general_config[key].options;
 
-          this.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
-          this.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
-          this.uucss_enable_debug = option.uucss_enable_debug;
-          this.uucss_excluded_links = option.uucss_excluded_links?.replace(/,/g, '\n');
-          this.uucss_query_string = option.uucss_query_string;
-          this.rapidload_minify_html = option.rapidload_minify_html;
-          this.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
-          this.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
+          this.onData.queue_option.uucss_disable_add_to_queue = option.uucss_disable_add_to_queue;
+          this.onData.queue_option.uucss_disable_add_to_re_queue = option.uucss_disable_add_to_re_queue;
+          this.onData.uucss_enable_debug = option.uucss_enable_debug;
+          this.onData.uucss_excluded_links = option.uucss_excluded_links?.replace(/,/g, '\n');
+          this.onData.uucss_query_string = option.uucss_query_string;
+          this.onData.rapidload_minify_html = option.rapidload_minify_html;
+          this.onData.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
+          this.onData.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
 
 
         }
 
       });
+      this.beforeSave = this.onData;
+      this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
   },
 
   methods:{
+    handleConfirm() {
+      this.saveSettings();
+      this.handleDontSave();
+    },
+
+    handleDontSave(){
+      this.confirmStatus = true;
+      this.popupVisible= false;
+      const back = document.getElementById('rp-back');
+      back.click();
+    },
+    handleCancel() {
+      this.popupVisible= false;
+    },
+
     saveRuleBased() {
-      this.misc_option=!this.misc_option;
+      this.onData.misc_option=!this.onData.misc_option;
       const data = {
-        uucss_enable_rules: this.misc_option,
+        uucss_enable_rules: this.onData.misc_option,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
         headers: {
@@ -337,7 +357,7 @@ export default {
     getLog(){
       axios.get(window.uucss_global.ajax_url + '?action=uucss_logs')
           .then(response => {
-            this.debug_log = response.data.data;
+            this.onData.debug_log = response.data.data;
 
           })
           .catch(error => {
@@ -348,14 +368,14 @@ export default {
     saveSettings(){
       this.loading = true;
       const data = {
-        uucss_enable_debug : this.uucss_enable_debug,
-        uucss_query_string : this.uucss_query_string,
-        rapidload_minify_html : this.rapidload_minify_html,
-        uucss_excluded_links : this.uucss_excluded_links?.replace(/\n/g, ","),
-        uucss_jobs_per_queue : this.queue_option.uucss_jobs_per_queue?.replace(/\D/g,''),
-        uucss_queue_interval : this.queue_option.uucss_queue_interval === '1 Hour' ? this.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
-        uucss_disable_add_to_queue : this.queue_option.uucss_disable_add_to_queue,
-        uucss_disable_add_to_re_queue : this.queue_option.uucss_disable_add_to_re_queue,
+        uucss_enable_debug : this.onData.uucss_enable_debug,
+        uucss_query_string : this.onData.uucss_query_string,
+        rapidload_minify_html : this.onData.rapidload_minify_html,
+        uucss_excluded_links : this.onData.uucss_excluded_links?.replace(/\n/g, ","),
+        uucss_jobs_per_queue : this.onData.queue_option.uucss_jobs_per_queue?.replace(/\D/g,''),
+        uucss_queue_interval : this.onData.queue_option.uucss_queue_interval === '1 Hour' ? this.onData.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.onData.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
+        uucss_disable_add_to_queue : this.onData.queue_option.uucss_disable_add_to_queue,
+        uucss_disable_add_to_re_queue : this.onData.queue_option.uucss_disable_add_to_re_queue,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce , data,{
         headers: {
@@ -373,10 +393,23 @@ export default {
               this.loading = false;
               this.dataSaved();
           });
-
+      this.originalData = JSON.parse(JSON.stringify(data));
+      this.beforeSave = JSON.parse(JSON.stringify(data));
     }
   },
-
+  beforeRouteLeave(to, from, next) {
+    this.onData.queue_option.default = false;
+    this.onData.misc_option = false;
+    if(JSON.stringify(this.originalData) !== JSON.stringify(this.beforeSave) && !this.confirmStatus){
+      this.popupVisible = true;
+      this.confirmStatus = false;
+    }
+    if(this.popupVisible){
+      next(false);
+    }else{
+      next();
+    }
+  },
   data() {
     return {
       general_config:[],
@@ -387,25 +420,31 @@ export default {
       back: '/',
       loading : false,
       debug_logs_settings: '/debug-logs',
-      uucss_enable_debug: false,
-      uucss_query_string: false,
-      rapidload_minify_html: false,
-      uucss_excluded_links: [],
-      queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
-      jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
-      debug_log: null,
-      misc_option: false,
-      queue_option: {
-        default: false,
-        queue: false,
-        uucss_disable_add_to_queue: false,
-        uucss_disable_add_to_re_queue: false,
-        uucss_jobs_per_queue:'',
-        uucss_queue_interval:'',
-        test: 4 +" test",
+
+      onData: {
+        uucss_enable_debug: false,
+        uucss_query_string: false,
+        rapidload_minify_html: false,
+        uucss_excluded_links: [],
+        queue_jobs_options: ['1 Job', '2 Jobs', '4 Jobs', '8 Jobs', '16 Jobs'],
+        jobs_timing_options: ['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'],
+        debug_log: null,
+        misc_option: false,
+        queue_option: {
+          default: false,
+          queue: false,
+          uucss_disable_add_to_queue: false,
+          uucss_disable_add_to_re_queue: false,
+          uucss_jobs_per_queue: '',
+          uucss_queue_interval: '',
+          test: 4 + " test",
+        },
       },
 
-
+      beforeSave:{},
+      originalData: {},
+      popupVisible: false,
+      confirmStatus: false,
     }
   },
 

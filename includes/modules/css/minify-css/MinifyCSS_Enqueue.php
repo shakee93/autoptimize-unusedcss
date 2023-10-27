@@ -11,6 +11,7 @@ class MinifyCSS_Enqueue
     private $options;
     private $file_system;
     private $settings;
+    private $strategy;
 
     public function __construct($job)
     {
@@ -34,12 +35,18 @@ class MinifyCSS_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         $links = $this->dom->find( 'link' );
 
         foreach ( $links as $link ) {
 
 
             $this->minify_css($link);
+
+            do_action('rapidload/enqueue/after-minify-css', $link, $this->job, $this->strategy);
 
         }
 
@@ -54,7 +61,8 @@ class MinifyCSS_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 
@@ -87,9 +95,9 @@ class MinifyCSS_Enqueue
         }
 
         if($this->str_contains($filename, ".min.css")){
-            $filename = str_replace(".min.css","-{$version}.rapidload.min.css", $filename);
+            $filename = str_replace(".min.css","-{$version}.min.css", $filename);
         }else if($this->str_contains($filename, ".css")){
-            $filename = str_replace(".css","-{$version}.rapidload.min.css", $filename);
+            $filename = str_replace(".css","-{$version}.min.css", $filename);
         }
 
         $minified_file = MinifyCSS::$base_dir . '/' . $filename;
@@ -111,7 +119,7 @@ class MinifyCSS_Enqueue
 
         $version = substr(md5($style->innertext), 0, 12);
 
-        $filename = $version . 'rapidload.min.css';
+        $filename = $version . '.min.css';
 
         $minified_file = MinifyCSS::$base_dir . '/' . $filename;
 

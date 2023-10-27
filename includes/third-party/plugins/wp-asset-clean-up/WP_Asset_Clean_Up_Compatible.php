@@ -7,6 +7,7 @@ class WP_Asset_Clean_Up_Compatible extends RapidLoad_ThirdParty{
         $this->plugin = 'wp-asset-clean-up/wpacu.php';
         $this->catgeory = 'cache-bust';
         $this->name = 'wp-asset-clean-up';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

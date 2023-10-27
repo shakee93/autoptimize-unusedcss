@@ -156,6 +156,14 @@ body .rapidload {
         border: 1px solid #7F54B3 !important;
         box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
     }
+    .cdn.zone{
+        border: 1px solid #7F54B3 !important;
+        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
+    }
+    .cdn.dns{
+        border: 1px solid #7F54B3 !important;
+        box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
+    }
     .date-picker .date{
         border: 1px solid #7F54B3 !important;
         box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) rgb(127 84 179) !important;
@@ -211,10 +219,26 @@ body .rapidload {
     /*    transition: 0.3s;*/
     /*}*/
 
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+            stroke-dasharray: 0 502.4;
+        }
+        50% {
+            transform: rotate(180deg);
+            stroke-dasharray: 502.4;
+        }
+        100% {
+            transform: rotate(360deg);
+            stroke-dasharray: 0 502.4
+        }
+    }
 
-
+    .animate-progress{
+        animation: rotate 2s linear infinite;
+    }
     .performance-circle .inner-circle {
-        stroke: #ECECED;
+        /*stroke: #ECECED;*/
         /*stroke-width: 26px;*/
         stroke-dasharray: 0;
         fill: none;
@@ -224,7 +248,30 @@ body .rapidload {
         transition-duration: 300ms;
     }
 
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 1.5s ease-out infinite;
+    }
+
+    .change-color{
+        stroke: #7F54B3;
+    }
+    .fill-color{
+        fill: #7F54B3;
+    }
     .progress-bar {
+
         fill: none;
         /*stroke-width: 27px;*/
         /*stroke: #09B42F;*/
@@ -250,8 +297,8 @@ body .rapidload {
 }
 
 .v3ti .v3ti-new-tag{
-    pointer-events: none;
-    display: none;
+    /*pointer-events: none;*/
+    /*display: none;*/
 }
 .v3ti .v3ti-tag{
     background: #7F54B3 !important;
@@ -272,6 +319,7 @@ body .rapidload {
     border-radius: 0.5rem !important;
     border-color: #CBCBCB !important;
     cursor: default;
+    min-width: 325px !important;
 }
 .v3ti.focus-tags {
     border: 1px solid #7F54B3 !important;
@@ -279,6 +327,11 @@ body .rapidload {
 }
 .v3ti .v3ti-new-tag {
     padding: 0 4px 0 5px !important;
+
+}
+.v3ti--focus {
+    border-color: #7F54B3 !important;
+    box-shadow: 0 0 0 1px #7F54B3 !important;
 }
 
 
@@ -365,7 +418,7 @@ body .rapidload {
 .rapidload .flex{
     display: flex !important;
     margin-bottom: auto !important;
-    align-items: start !important;
+    /*align-items: start !important;*/
 }
 .popup-confirmation{
     position: fixed;
@@ -378,6 +431,6 @@ body .rapidload {
     align-items: center;
     justify-content: center;
 }
-.mt-2{
+.heading-margin{
     margin-top: 8px !important;
 }

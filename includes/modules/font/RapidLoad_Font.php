@@ -12,7 +12,7 @@ class RapidLoad_Font
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         if(!isset($this->options['uucss_enable_font_optimization']) || $this->options['uucss_enable_font_optimization'] == ""){
             return;
@@ -130,7 +130,7 @@ class RapidLoad_Font
 
     public function optimize_font($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_font'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_font'] )){
             return false;
         }
 

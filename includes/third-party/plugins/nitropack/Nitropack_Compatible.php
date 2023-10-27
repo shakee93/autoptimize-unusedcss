@@ -9,6 +9,7 @@ class Nitropack_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'nitropack/main.php';
         $this->catgeory = 'cache';
         $this->name = 'nitropack';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

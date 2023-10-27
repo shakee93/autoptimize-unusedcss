@@ -93,7 +93,17 @@ class RapidLoad_Module
             'group' => 'cache',
             'status' => 'on',
             'class' => RapidLoad_Cache::class,
-            'global' => 'font'
+            'global' => 'cache'
+        ];
+
+        $this->modules['page-optimizer'] = [
+            'id' => 'page-optimizer',
+            'title' => 'Page Optimizer',
+            'description' => 'Page Optimizer',
+            'group' => 'optimize',
+            'status' => 'on',
+            'class' => RapidLoad_Optimizer::class,
+            'global' => 'optimizer'
         ];
 
     }
@@ -224,6 +234,10 @@ class RapidLoad_Module
 
                 break;
             }
+            case 'page-optimizer' : {
+                $options['uucss_enable_page_optimizer'] = $active == "on" ? "1" : "";
+                break;
+            }
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
@@ -234,6 +248,7 @@ class RapidLoad_Module
     public function active_modules(){
 
         $options = RapidLoad_Base::fetch_options();
+        $cache_options = RapidLoad_Cache::get_settings();
 
         $options = [
             'general' => [
@@ -259,7 +274,7 @@ class RapidLoad_Module
                         'options' => [
                             'uucss_enable_cpcss_mobile' =>  isset($options['uucss_enable_cpcss_mobile']) && $options['uucss_enable_cpcss_mobile'] == "1" ? true : false,
                             'remove_cpcss_on_user_interaction' =>  isset($options['remove_cpcss_on_user_interaction']) && $options['remove_cpcss_on_user_interaction'] == "1" ? true : false,
-                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? $options['uucss_additional_css'] : null,
+                            'uucss_additional_css' => isset($options['uucss_additional_css']) ? stripslashes($options['uucss_additional_css']) : null,
                         ]
                     ],
                     'unused_css' => [
@@ -274,6 +289,7 @@ class RapidLoad_Module
                             'uucss_safelist' => isset($options['uucss_safelist']) ? $options['uucss_safelist'] : null,
                             'uucss_blocklist' => isset($options['uucss_blocklist']) ? $options['uucss_blocklist'] : null,
                             'whitelist_packs' => isset($options['whitelist_packs']) ? $options['whitelist_packs'] : [],
+                            'suggested_whitelist_packs' => isset($options['suggested_whitelist_packs']) ? $options['suggested_whitelist_packs'] : [],
                             'uucss_inline_css' => isset($options['uucss_inline_css']) && $options['uucss_inline_css'] == "1" ? true : false,
                         ]
                     ],
@@ -330,6 +346,19 @@ class RapidLoad_Module
             'cache' => [
                 'id' => 'cache',
                 'status' => isset($options['uucss_enable_cache']) && $options['uucss_enable_cache'] == "1" ? "on" : "off",
+                'options' => [
+                    'cache_expires' => isset($cache_options['cache_expires']) ? $cache_options['cache_expires'] : 0,
+                    'cache_expiry_time' => isset($cache_options['cache_expiry_time']) ? $cache_options['cache_expiry_time'] : 0,
+                    'mobile_cache' => isset($cache_options['mobile_cache']) ? $cache_options['mobile_cache'] : 0,
+                    'excluded_post_ids'=> isset($cache_options['excluded_post_ids']) ? $cache_options['excluded_post_ids'] : '',
+                    'excluded_page_paths' => isset($cache_options['excluded_page_paths']) ? $cache_options['excluded_page_paths'] : '',
+                    'excluded_query_strings' => isset($cache_options['excluded_query_strings']) ? $cache_options['excluded_query_strings'] : '',
+                    'excluded_cookies' => isset($cache_options['excluded_cookies']) ? $cache_options['excluded_cookies'] : '',
+                ]
+            ],
+            'page-optimizer' => [
+                'id' => 'page-optimizer',
+                'status' => isset($options['uucss_enable_page_optimizer']) && $options['uucss_enable_page_optimizer'] == "1" ? "on" : "off",
             ]
         ];
 

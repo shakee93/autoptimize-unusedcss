@@ -9,6 +9,7 @@ class RapidLoad_Font_Enqueue
     private $dom;
     private $inject;
     private $options;
+    private $strategy;
     private $file_system;
 
     public function __construct($job)
@@ -33,6 +34,10 @@ class RapidLoad_Font_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         $this->add_display_swap_to_inline_styles();
 
         $this->add_display_swap_to_google_fonts();
@@ -50,7 +55,8 @@ class RapidLoad_Font_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 
@@ -68,8 +74,6 @@ class RapidLoad_Font_Enqueue
             if(isset($script[0]) && isset($inlne_script[0])){
                 $script[0]->{'data-rapidload-src'} = $script[0]->src;
                 unset($script[0]->src);
-
-                error_log($inlne_script[0]->innertext());
 
                 $script[0]->onload = 'if(document.getElementById("'. $id .'-after")) {var newScript = document.createElement("script");
                                 var inlineScript = document.createTextNode(document.getElementById("'. $id .'-after").innerHTML);
@@ -90,6 +94,10 @@ class RapidLoad_Font_Enqueue
         $font_urls = isset($this->options['uucss_preload_font_urls']) ?
             explode(",", $this->options['uucss_preload_font_urls']) :
             [];
+
+        $font_urls = apply_filters('rapidload/enqueue/preload/fonts', $font_urls, $this->job, $this->strategy);
+
+        $font_urls = array_unique($font_urls);
 
         foreach ($font_urls as $url) {
             if(empty($url)){
@@ -147,19 +155,52 @@ class RapidLoad_Font_Enqueue
             }
 
             if (is_file($file_path)) {
-                $google_font->href = $file_url;
-                if(isset($google_font->id)){
-                    $google_font->{'data-id'} = $google_font->id;
-                    $google_font->id = 'rapidload-google-font-' . $version;
-                    $google_font->onload = null;
-                    $google_font->as = null;
-                    $google_font->rel = 'stylesheet';
+
+                if(apply_filters('uucss/enqueue/inline/google-font', true)){
+                    $content = @file_get_contents($file_path);
+                    $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
+                    $title_content = $this->dom->find( 'title' )[0]->outertext;
+                    $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
+                }else{
+                    $google_font->href = $file_url;
+                    if(isset($google_font->id)){
+                        $google_font->{'data-id'} = $google_font->id;
+                        $google_font->id = 'rapidload-google-font-' . $version;
+                        $google_font->onload = null;
+                        $google_font->as = null;
+                        $google_font->rel = 'stylesheet';
+                    }
+                }
+
+            }
+        }
+
+        $inline_styles = $this->dom->find('style');
+        $pattern = "/@import\s*'(https:\/\/fonts.googleapis.com[^']+)';/";
+        foreach ($inline_styles as $inline_style){
+            if (preg_match($pattern, $inline_style->innertext(), $matches)) {
+                if(isset($matches[1])){
+                    $googleFontsUrl = $matches[1];
+                    $version = substr(md5($googleFontsUrl), 0, 15);
+                    $filename = $version . ".google-font.css";
+
+                    $file_path = RapidLoad_Font::$base_dir . '/' . $filename;
+
+                    if (!is_file($file_path)) {
+                        RapidLoad_Font::self_host_style_sheet($googleFontsUrl, $file_path);
+                    }
+
+                    if (is_file($file_path)) {
+                        $content = @file_get_contents($file_path);
+                        $inline_style->__set('innertext', $content);
+                    }
                 }
             }
         }
 
         $preload_fonts = $this->dom->find(
-            'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            //'link[rel*=pre][href*=fonts.gstatic.com],link[rel*=pre][href*=fonts.googleapis.com]'
+            'link[href*=fonts.googleapis.com]'
         );
 
         foreach ($preload_fonts as $preload_font) {

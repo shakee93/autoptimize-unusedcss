@@ -9,6 +9,7 @@ class W3_Total_Cache_Compatible extends RapidLoad_ThirdParty {
         $this->plugin = 'w3-total-cache/w3-total-cache.php';
         $this->catgeory = 'cache';
         $this->name = 'w3-total-cache';
+        $this->has_conflict = true;
 
         parent::__construct();
     }

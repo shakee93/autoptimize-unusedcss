@@ -22,7 +22,6 @@ class RapidLoad_FileSystem
         try{
             return @mkdir($dir, 0755, true);
         }catch(Exception $exception){
-            error_log(json_encode($dir));
             return false;
         }
     }
@@ -67,5 +66,9 @@ class RapidLoad_FileSystem
             }
         }
         rmdir($dir);
+    }
+
+    public function copy($source, $destination){
+        @copy($source, $destination);
     }
 }

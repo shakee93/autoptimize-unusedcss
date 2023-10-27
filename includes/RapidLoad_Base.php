@@ -7,6 +7,7 @@ class RapidLoad_Base
     use RapidLoad_Utils;
 
     public static $options;
+    public static $paged_options;
 
     public $url = null;
     public $rule = null;
@@ -34,6 +35,10 @@ class RapidLoad_Base
     public function __construct()
     {
         self::fetch_options();
+
+        add_filter('rapidload/options', [$this, 'merge_job_options']);
+
+        self::get_merged_options();
 
         add_action('init', function (){
 
@@ -76,28 +81,30 @@ class RapidLoad_Base
 
             }, 10 , 1);
 
+            add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
+
+            add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
+                $this,
+                'add_plugin_action_link'
+            ] );
+
+            $this->add_plugin_update_message();
+
             if(is_admin()){
-
-                add_filter('plugin_row_meta',[$this, 'add_plugin_row_meta_links'],10,4);
-
-                add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), [
-                    $this,
-                    'add_plugin_action_link'
-                ] );
-
-                $this->add_plugin_update_message();
 
                 RapidLoad_DB::check_db_updates();
 
                 self::enqueueGlobalScript();
 
-                add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
+                //add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
             }
 
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
+
+            //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
 
         });
 
@@ -110,6 +117,33 @@ class RapidLoad_Base
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
+    }
+
+    function merge_job_options($option){
+
+        $this->url = $this->get_current_url();
+
+        $this->url = $this->transform_url($this->url);
+
+        RapidLoad_Enqueue::$job = new RapidLoad_Job(['url' => $this->url]);
+
+        if(isset(RapidLoad_Enqueue::$job->id)){
+
+            $strategy = $this->is_mobile() ? 'mobile' : 'desktop';
+
+            if($strategy == "mobile"){
+                $page_options = RapidLoad_Enqueue::$job->get_mobile_options(true);
+            }else{
+                $page_options = RapidLoad_Enqueue::$job->get_desktop_options(true);
+            }
+
+            foreach ($page_options as $key => $op){
+                $option[$key] = $op;
+            }
+
+        }
+
+        return $option;
     }
 
     function rapidload_display_global_notification() {
@@ -211,7 +245,7 @@ class RapidLoad_Base
 
                 'main_action' => [
                     'key'   => 'Get Started',
-                    'value' => admin_url( 'options-general.php?page=rapidload-on-board' )
+                    'value' => admin_url( 'options-general.php?page=rapidload' )
                 ],
                 'type'        => 'warning'
             ];
@@ -288,7 +322,8 @@ class RapidLoad_Base
                 'activation_url' => self::activation_url('authorize' ),
                 'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
-                'total_jobs' => RapidLoad_DB::get_total_job_count()
+                'total_jobs' => RapidLoad_DB::get_total_job_count(),
+                'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
@@ -354,15 +389,7 @@ class RapidLoad_Base
                     <strong>Heads up, New RapidLoad comes in as ALL-IN-ONE solution for page-speed optimization.</strong>
                 </div>
                 <div class="rapidload-major-update-message-content-description">
-                    RapidLoad 2.0 is getting back into the game with a new kit and it is loaded with exciting features:
-                    <ol>
-                        <li>Unused CSS + Critical CSS</li>
-                        <li>On-the-fly Image Optimization</li>
-                        <li>Built in CDN</li>
-                        <li>Font Optimization</li>
-                        <li>JS Optimization</li>
-                        <li>Page Cache</li>
-                    </ol>
+                    RapidLoad 2.1 unveils the revolutionary <strong>Titan Optimizer</strong> for page optimization.
                 </div>
             </div>
         </div>
@@ -374,7 +401,7 @@ class RapidLoad_Base
     function add_plugin_row_meta_links($plugin_meta, $plugin_file, $plugin_data, $status)
     {
         if(isset($plugin_data['TextDomain']) && $plugin_data['TextDomain'] == 'autoptimize-unusedcss'){
-            $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us" target="_blank">Documentation</a>';
+            $plugin_meta[] = '<a href="https://docs.rapidload.io/" target="_blank">Documentation</a>';
             $plugin_meta[] = '<a href="https://rapidload.zendesk.com/hc/en-us/requests/new" target="_blank">Submit Ticket</a>';
         }
         return $plugin_meta;
@@ -411,6 +438,21 @@ class RapidLoad_Base
         }
 
         return self::$options;
+    }
+
+    public static function get_merged_options(){
+
+        if(!isset(self::$options)){
+            self::$options = self::fetch_options();
+        }
+
+        if(isset(self::$paged_options)){
+            return self::$paged_options;
+        }
+
+        self::$paged_options = apply_filters('rapidload/options', self::$options);
+
+        return self::$paged_options;
     }
 
     public static function get_option($name, $default = null)
@@ -586,14 +628,13 @@ class RapidLoad_Base
             'url'     => site_url()
         ] );
 
-        if ( wp_doing_ajax()) {
+        if(isset($data) && isset($data->data) && is_array($data->data)){
+            self::$options['suggested_whitelist_packs'] = $data->data;
+            self::update_option( 'autoptimize_uucss_settings', self::$options );
 
-            if(isset($data) && isset($data->data) && is_array($data->data)){
-                wp_send_json_success( $data->data );
-            }else{
-                wp_send_json_error($data);
+            if(wp_doing_ajax()){
+                wp_send_json_success( $data->data);
             }
-
         }
 
         return isset($data) && isset($data->data) && is_array($data->data) ? $data->data : [];
@@ -675,7 +716,7 @@ class RapidLoad_Base
     public static function display_get_start_link() {
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
             $_links = array(
-                '<a href="' . admin_url( 'options-general.php?page=rapidload-on-board' ) . '">Get Started <span>⚡️</span> </a>',
+                '<a href="' . admin_url( 'options-general.php?page=rapidload' ) . '">Get Started <span>⚡️</span> </a>',
             );
 
             return array_merge( $_links, $links );

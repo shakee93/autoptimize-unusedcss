@@ -1,9 +1,9 @@
-=== RapidLoad Power-Up for Autoptimize ===
+=== RapidLoad 2.1 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, unused css, criticlcss, criticl css, autoptimize, rapidload
-Requires at least: 4.0
-Tested up to: 6.2
+Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
+Requires at least: 5.0
+Tested up to: 6.4
 Stable tag: trunk
 Requires PHP: 5.4
 License: GPLv3
@@ -15,68 +15,81 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 **Automated site speed optimization for WordPress [PAID PREMIUM PLUGIN]**
 
-With RapidLoad, you can say goodbye to user frustration and skyrocket your conversion rates. effortless installation and the intuitive onboarding process seamlessly connects you to the rapidload.io service. Watch your website transform before your eyes as you witness remarkable speed improvements.
-
-RapidLoad amplifies your website by optimizing CSS, JavaScript, images, fonts, and more. It delivers content lightning-fast with its global content delivery network (CDN) spanning over 112 edge locations, ensuring low latency and rapid content delivery to users worldwide.
-
-Here are the benefits you will have when you get RapidLoad.
-
-## Relentless CSS optimization
-
-CSS is the “Wardrobe” for an attractive website yet every CSS file doesn’t have a positive impact on your website so RapidLoad has some of the industry’s best tools to optimize and deliver CSS.
-
-**RapidLoad is the #1 CSS optimization tool for WordPress**
-
-Starting things off with “Removing Unused CSS”: RapidLoad's Unused CSS Removal tool seamlessly scans your stylesheets, identifying and removing unused code. Helping you to achieve the best experience of faster loading times, improved user experiences, and better search engine rankings.
-
-Next in line is “Generating Critical CSS”: Experience the power of Critical CSS by RapidLoad. Generating a Critical CSS stylesheet that contains only the essential CSS for above-the-fold content allows your above-the-fold content to appear instantaneously, captivating visitors from the moment they enter your website.
-
-With RapidLoad, CSS minification eliminates unnecessary characters, streamlining your code for lightning-fast loading times.
-
-That's not all. We have many other features stored to optimize CSS code.
-
-## Image Delivery
-
-Images of a website are the “Visual Palette” similar to how our eyes perceive and interpret the world around us. Dazzle your website's Visual Palette with RapidLoad's image optimization. Reducing load times and enhancing performance while preserving stunning visual quality and making your images truly captivating to grab visitors' attention
-
-Advanced Image Compression Technique: RapidLoad revolutionizes image optimization with its versatile compression techniques. Choose from three powerful options: lossy, glossy, and lossless.
-
- 1. **Lossy**:- Our advanced lossy compression achieves the highest compression rate and results in the smallest optimized image size that loads lightning-fast. Strike the perfect balance between speed and quality with RapidLoad and deliver an exceptional browsing experience to your users.
- 2. **Glossy**:- RapidLoad's glossy compression is a secret weapon for professionals working with high-quality images to achieve remarkable results. Experience image optimization that retains the authenticity of the image while significantly reducing file sizes.
- 3. **Lossless**:- Serve the perfect image with RapidLoad's lossless compression. Hold on to the exact quality of your original images while still having significant size reduction. Ideal for technical drawings, vector graphics, and images with transparent backgrounds, RapidLoad's lossless compression ensures image integrity.
-
-Intriguing Lazy-Load Image and iFrame:- Restructure your website's performance with RapidLoad's optimal lazy-load image and iFrame functionality. This loads images and iframes only when users enter the user's viewport, RapidLoad significantly reduces initial page load time, resulting in faster overall performance. Improve user experience, boost engagement, and optimize your website effortlessly
-
-Priority LCP Images:- Give your visitors an instant visual delight with RapidLoad's Priority LCP (Largest Contentful Paint) Images feature. By prioritizing and preloading above-the-fold images, your website delivers a seamless browsing experience from the moment it loads. Keeping your users engaged and satisfied.
-
-## CDN Delivery
-
-A CDN (Content Delivery Network) can be described as the "global distribution network" of a website, efficiently delivering content to users worldwide from various edge locations, reducing latency, and ensuring fast and reliable access to website resources.
-
-Harness the power of RapidLoad's extensive content delivery network (CDN) with 112 edge locations strategically positioned worldwide. Accelerate resource file loading with an impressive 27ms latency, ensuring your content reaches users with unparalleled speed. Delight your audience with faster page loads, seamless browsing, and an exceptional user experience. Supercharge your website's performance with RapidLoad's Cloud Delivery (CDN) and leave slow loading times in the past.
-
-
-## JS Delivery
-
-JavaScript is the "brain" of a website, RapidLoad provides top-notch tools to optimize and deliver JavaScript, ensuring efficient performance and an exceptional user experience.
-
-Top of the game Javascript minification: RapidLoad's Javascript minification tool helps you reduce JavaScript file sizes, streamlines JS code, and accelerates your website's performance. Boosting user engagement and increasing conversions
-
-Quickest JavaScript deferring:- RapidLoad has the best intelligent tool that delays non-critical JavaScript loading, which ensures a faster initial page load and provides a seamless browsing experience.
-
-Delay Javascript to Load on User Interaction: Capture user attention and improve performance by using RapidLoad's ability to delay JavaScript loading until user interaction. Helping you Boost engagement and streamline your website. Providing your visitors with a truly immersive experience by preventing slowdown during the initial page load
+RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
 
 
 
-## Font Delivery
+### Unlock the speed monster in you with these features
 
-Fonts can be described as the "voice" of a website, RapidLoad font delivery will add personality and convey the tone of the content, enhancing readability, and contributing to the overall visual aesthetics and branding.
+- **Titan Optimizer**
+    - Built-in Google Page Insight Reports
+    - Recommended Actions for Audits
+    - No more back and forth switching between websites
+    - See all optimization status in one place
+- **RapidLoad CDN**
+    - Tier 1 Global Network
+    - 121 Edge Locations
+    - 24 ms Average Worldwide Latency
+    - NVMe+ SSD Servers
+- **Image Delivery**
+    - Automatic on-the-fly Image Optimization
+    - Modern WEBP, AVIF Support
+    - Built in Image CDN
+    - Adaptive Responsive Images
+    - Automatic width height setup
+    - Automatic LCP image prioritization
+    - Lazy Load Images
+- **CSS Delivery**
+    - Unused CSS Removal
+    - Critical CSS Generation
+    - Minify
+- **Javascript Delivery**
+    - Defer Javascript
+    - Delay non-critical Javascript
+    - Minify
+- **Font Delivery**
+   - Self-Host Google Fonts
+   - Preload Fonts
+- **Page Cache**
+    - Automatic Page Cache
+    - Cache Preloading
+    - Cache Purging
 
-Take Control of Your Website's Voice with RapidLoad's Self-Hosted Google Fonts: Embrace seamless font delivery and elevate your website's performance with RapidLoad's self-hosted Google Fonts feature. Storing and serving Google Fonts from your own server, Making you the master of your website voice and reducing dependency on other resources.
+## More about what's in RapidLoad
 
-Preload font URLs: Maximize your website's speed with RapidLoad's font URL preloading feature. Downloading font files before they are required helps to reduce page load time. Delivering an exceptional user experience with lightning-fast font rendering and ensuring your content is visible and accessible.
+**<img src="https://ps.w.org/unusedcss/assets/ttan.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />TITAN OPTIMIZER**
 
-## Page Cache
+Introducing Titan Optimizer, the ultimate tool for boosting your WordPress website's speed and performance. In today's digital world, having a fast, user-friendly site is crucial. Titan comes with an inbuilt Google PageSpeed Insights report generator, saving you the hassle of using external tools. It provides a thorough analysis of your site's performance, covering everything from audits to diagnostics, all within your content management system (CMS).
+
+But Titan doesn't stop at analysis; it offers practical solutions to improve identified issues. It not only diagnoses problems but also gives you clear steps to fix them. With Titan, you'll not only understand your site's performance but also have a roadmap for making it better.
+
+If you want an all-in-one solution to supercharge your WordPress site's speed and user experience, Titan Optimizer is your answer. Say goodbye to the confusion of multiple tools and hello to streamlined web optimization with Titan.
+
+<img src="https://ps.w.org/unusedcss/assets/titan_screenshot.png" alt="Titan Optimizer" style="width: 100%;margin-top:15px;margin-bottom:15px;" />
+
+**<img src="https://ps.w.org/unusedcss/assets/css.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CSS DELIVERY**
+
+RapidLoad is a specialized CSS optimization tool for WordPress websites. It improves site performance through several key features. First, it identifies and removes unused CSS, resulting in faster loading times and better user experiences. Second, it generates Critical CSS, ensuring above-the-fold content loads instantly. Additionally, RapidLoad minimizes CSS code by eliminating unnecessary characters, further speeding up loading times. It offers various other CSS optimization features, making it a comprehensive solution for enhancing website speed and user satisfaction. This optimization not only improves user experience but can also positively impact search engine rankings, making it a valuable tool for website owners.
+
+**<img src="https://ps.w.org/unusedcss/assets/image-delivery.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />IMAGE DELIVERY**
+
+RapidLoad offers powerful image optimization to enhance your website's visual appeal and performance. It balances faster load times with maintaining stunning image quality. With advanced compression techniques – lossy, glossy, and lossless – you can choose the right balance between speed and quality. Lossy achieves the highest compression rate, glossy retains image authenticity, and lossless preserves the original quality, making it ideal for various image types.
+
+RapidLoad also introduces efficient lazy-loading for images and iframes, reducing initial page load times and improving user experience. Plus, the Priority LCP Images feature prioritizes and preloads above-the-fold images, ensuring a seamless browsing experience from the moment your site loads, keeping users engaged and satisfied. It's a comprehensive solution to captivate visitors with visually stunning and high-performing web content.
+
+**<img src="https://ps.w.org/unusedcss/assets/cdn.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CDN DELIVERY**
+
+RapidLoad utilizes a global Content Delivery Network (CDN) with 112 strategically located edge servers worldwide to efficiently distribute website content. With a remarkable 27ms latency, it ensures rapid access to resources, resulting in faster page loading and an exceptional user experience. RapidLoad's CDN accelerates content delivery, making slow loading times a thing of the past, ultimately delighting your audience with seamless browsing and faster website performance.
+
+**<img src="https://ps.w.org/unusedcss/assets/js.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />JS DELIVERY**
+
+RapidLoad offers top-tier tools to optimize JavaScript for superior performance and user experiences. With its JavaScript minification, you can shrink file sizes and streamline code, resulting in faster load times, increased user engagement, and higher conversions. RapidLoad also excels in JavaScript deferring, intelligently delaying non-critical script loading for quicker initial page loads. Moreover, you can enhance user interaction by postponing JavaScript until needed, ensuring a seamless and immersive browsing experience while preventing slowdowns during the initial page load.
+
+**<img src="https://ps.w.org/unusedcss/assets/font.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />FONT DELIVERY**
+
+Fonts play a crucial role in a website's character, and RapidLoad's font delivery enhances this aspect. It offers self-hosted Google Fonts, allowing you to store and serve fonts from your server, giving you more control over your website's voice and reducing reliance on external resources. Additionally, you can improve speed with font URL preloading, downloading font files before they're needed, reducing page load times, ensuring faster font rendering, and enhancing user experience, making your content more accessible and visible.
+
+**<img src="https://ps.w.org/unusedcss/assets/page_cache.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />PAGE CACHE**
 
 Page Cache is the "memory" of a website, storing previously accessed data or resources to be quickly retrieved, reducing server load, and enhancing page loading speed for a greater user experience.
 
@@ -85,12 +98,6 @@ RapidLoad empowers your website with a cutting-edge page cache, resembling a pow
 RapidLoad goes the extra mile to optimize your website's mobile experience. Our innovative mobile cache ensures lightning-fast loading times and a seamless browsing experience for your mobile users. Benefit from reduced latency minimized data usage, and enhanced mobile performance with RapidLoad's dedicated mobile cache.
 
 Elevate your mobile website's speed with RapidLoad cache and let your users get the best website experience from any device.
-
-**API usage**
-
-RapidLoad can significantly reduce load times and increase visual display for a smooth user experience.  It even improves the performance of other optimizing plugins and extensions. RapidLoad integrates with the 3rd party service rapidload.io API to provide a seamless optimization process. (See Pricing plans – https://rapidload.io/pricing)
-
-Simply install, activate the plugin, and follow the onboarding steps. This will quickly connect you to the rapidload.io service, and you can see the ground-breaking results for yourself.
 
 == Installation ==
 
@@ -143,12 +150,77 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Screenshots ==
 
-1. RapidLoad 2.0 Dashboard
-2. Analyze the site before connecting to the service.
-3. Successfully completed jobs.
-4. Google page speed insight + GTMetrix test.
+1. Titan Optimizer analyze.
+2. Titan Optimizer metrics.
+3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.1.5 - 26/10/2023 =
+ * fix: remove duplicate queries
+
+= 2.1.4 - 26/10/2023 =
+ * fix: Titan Optimizer not working for subpages
+
+= 2.1.3 - 24/10/2023 =
+ * feat: Introducing Titan Optimizer
+
+= 2.1.0 - 24/10/2023 =
+ * feat: integrate Titan Optimizer
+
+= 2.0.28 - 11/09/2023 =
+ * fix: google font stylesheet not removing
+
+= 2.0.27 - 01/09/2023 =
+ * fix: some inline style images not optimizing
+
+= 2.0.26 - 31/08/2023 =
+ * fix: skipping gtag js on optimization
+
+= 2.0.25 - 29/08/2023 =
+ * improve: add default exclusions for javascript optimizations
+
+= 2.0.24 - 28/07/2023 =
+ * fix: selector pack items being duplicate
+
+= 2.0.23 - 20/07/2023 =
+ * feat: switch cdn staging to live
+ * fix: all jobs getting cleared when all rules cleared
+ * fix: remove backslashes from additional critical css content
+ * fix: original css files not loading if mobile critical css enabled
+ * fix: extract image url with https
+
+= 2.0.22 - 17/07/2023 =
+ * feat: add filter to prevent load original css on user interaction
+ * fix: exclude background images being lazy loaded not working
+ * fix: display RapidLoad menu in admin bar only to users with manage options permission
+
+= 2.0.21 - 11/07/2023 =
+ * feat: improve inline js optimization
+
+= 2.0.20 - 11/07/2023 =
+ * feat: improve inline js optimization
+
+= 2.0.19 - 03/07/2023 =
+ * feat: load original css with relative path urls
+
+= 2.0.18 - 03/07/2023 =
+ * feat: load original css with relative path urls
+
+= 2.0.17 - 03/07/2023 =
+ * feat: add support for data-src tag on image optimization
+ * feat: load original css with relative path urls
+ * feat: update new documentation link
+ * improve: mobile critical css to eliminate reduce unused css
+
+= 2.0.16 - 15/06/2023 =
+ * feat: improved iframe lazy-loading
+
+= 2.0.15 - 12/06/2023 =
+ * fix: migration tables not creating on update
+
+= 2.0.14 - 09/06/2023 =
+ * fix: minor UI improvements
 
 = 2.0.13 - 06/06/2023 =
  * feat: add filter to change the RapidLoad root url

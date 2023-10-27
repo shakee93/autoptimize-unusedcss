@@ -16,10 +16,11 @@ class UnusedCSS_Enqueue
     private $files;
     private $warnings;
     private $is_mobile;
+    private $strategy;
 
     public function __construct($job_data)
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         $this->file_system = new RapidLoad_FileSystem();
 
@@ -40,7 +41,8 @@ class UnusedCSS_Enqueue
 
             wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js?v=i', [ 'jquery' ], UUCSS_VERSION );
             wp_localize_script( 'rapidload', 'rapidload', [
-                'files' => $this->files
+                'files' => $this->files,
+                'do_not_load_original_css' => apply_filters('rapidload/frontend/do-not-load/original-css', false),
             ] );
             wp_enqueue_script( 'rapidload' );
 
@@ -62,13 +64,18 @@ class UnusedCSS_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         if(!isset($this->job_data->id) || $this->job_data->status != 'success'){
             //$this->inject->rapidload = false;
             //$this->inject->successfully_injected = false;
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -87,7 +94,8 @@ class UnusedCSS_Enqueue
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
 
         }
@@ -101,6 +109,8 @@ class UnusedCSS_Enqueue
         $sheets = $this->dom->find( 'link' );
 
         foreach ( $sheets as $sheet ) {
+
+            do_action('rapidload/enqueue/before-optimize-css', $sheet, $this->job_data, $this->strategy);
 
             $parent = $sheet->parent();
 
@@ -180,6 +190,8 @@ class UnusedCSS_Enqueue
                     }
 
                     array_push( $this->inject->injected_css_files, $newLink );
+
+                    do_action('rapidload/enqueue/after-optimize-css', $sheet, $this->job_data, $this->strategy);
 
                 }
                 else {

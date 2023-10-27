@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <main>
 
@@ -18,7 +14,7 @@
       </div>
       </div>
 
-      <div class="content pl-6 pr-6 pt-1 min-h-[76px]">
+      <div class="pl-6 pr-6 pt-1 min-h-[76px]">
         <h2 class="mb-1 text-xsm text-purple-tips-text font-semibold">RapidLoad support is here</h2>
         <p class="text-xsmm text-purple-tips-text font-normal">If you need an extra hand, We are here to help. Take a look at our knowledge base or feel free to reach us.</p>
       </div>
@@ -48,7 +44,7 @@
           </div>
         </div>
 
-        <div class="content pl-6 pr-6 pt-1 min-h-[76px] flex">
+        <div class="pl-6 pr-6 pt-1 min-h-[76px] flex">
           <div  :class="improvetips_count=== improvetips_count? 'tips-slide':'tips-hidden'">
             <h2 class="mb-1 text-xsm text-tips-dark-green-font font-semibold" >{{tips[improvetips_count].title}}</h2>
             <p class="text-xsmm text-tips-dark-green-font font-normal" v-html="tips[improvetips_count].description"></p>
@@ -75,6 +71,7 @@
 
         </div>
       </div>
+
 
 
       <div class="-mt-[63px] -ml-[295px] flex">
@@ -114,32 +111,43 @@
       </div>
     </div>
 
-<!--    <optimization class="mb-10"></optimization>-->
+<!--    <optimization></optimization>-->
+
     <ul class="nav-items inline-grid grid grid-cols-3 gap-8">
       <messageBox></messageBox>
-
+<!--      <performanceWidget :class="{disableBlock: !license_information.licensed_domain}"></performanceWidget>-->
       <li v-for="item in items" :key="item.id"
           :class="{disableBlock: !license_information.licensed_domain}" class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
         <div>
-          <div class="content p-4 pb-6">
+          <div class="p-4 pb-6">
 <!--            <img v-if="item.image" :src="base + item.image" :alt="item.title" width="49" height="49">-->
             <span v-html="item.image"></span>
 
-            <h4 class="mt-2 text-black font-medium text-base opacity-80">{{ item.title }}</h4>
-            <span class="dashboard-p text-xm text-black leading-db-lh m-0">{{ item.description }}</span>
+            <h4 class="heading-margin text-black font-medium text-base opacity-80">{{ item.title }}</h4>
+            <span class="dashboard-p text-xm text-slate-700 leading-db-lh m-0">{{ item.description }}</span>
           </div>
           <hr class="border-gray-border-line border-b-0 mt-1">
-          <div class="actions p-4 mt-1 grid grid-cols-2 gap-4">
+          <div class="actions p-4 mt-1 grid grid-cols-2 gap-4 items-center">
 
             <div class="col-start-1 col-end-3" >
-              <RouterLink v-if="item.id !== 'cdn' && license_information.licensed_domain" :class="item.status ? 'rl-Show' :'rl-Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
+              <RouterLink v-if="item.id !== 'cdn' && item.id !== 'page-optimizer' && license_information.licensed_domain" :class="item.status ? 'rl-Show' :'rl-Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
+
               <RouterLink v-if="item.id === 'cdn' && license_information.licensed_domain" :class="item.status && !loading? 'rl-Show': 'rl-Hide'" class=" text-xs bg-transparent mb-3 text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg"
                           :to="item.link">
                 <button >Settings</button>
               </RouterLink>
+
+              <RouterLink @click="howtouse=true" v-if="item.id === 'page-optimizer' && license_information.licensed_domain"
+                   :class="item.status? 'rl-Show': 'rl-Hide'"
+                   class="cursor-pointer w-fit text-xs bg-transparent text-black-b transition duration-300 hover:bg-purple font-medium hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg"
+                          :to="item.link">
+                How to Use
+              </RouterLink>
+
+
 
 
               <svg v-if="item.id === 'cdn'"  :class="loading? 'rl-Show': 'rl-Hide'" class="absolute" style="top:80.5%;" width="25" height="25" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -193,13 +201,13 @@
 
           <hr class="border-gray-border-line border-b-0">
 
-          <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+          <div class="p-2 pl-4 pr-4 pb-1 font-normal">
             <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
               bounce rates</b> and one of the root causes of
               <b>poor Google Rankings.</b></p>
           </div>
 
-          <div class="content p-2 pl-4 pr-4 pb-2.5 pt-1 mt-4">
+          <div class="p-2 pl-4 pr-4 pb-2.5 pt-1 mt-4">
 
             <div class="grid">
 <!--              <div :class="connect_with_license_error.length ? 'Show' : 'Hide'" class="mt-0.5 license-error-popup" >-->
@@ -242,13 +250,13 @@
 
         <!--        ends here-->
 
-        <div class="content pl-4 pr-4 pb-2 pt-2">
-          <h4 class="mt-2 text-gray-h text-base font-semibold">Connect your website</h4>
+        <div class="pl-4 pr-4 pb-2 pt-2">
+          <h4 class="heading-margin text-gray-h text-base font-semibold">Connect your website</h4>
         </div>
 
         <hr class="border-gray-border-line border-b-0">
 
-        <div class="content p-2 pl-4 pr-4 pb-1 font-normal">
+        <div class="p-2 pl-4 pr-4 pb-1 font-normal">
           <p class="mb-1 text-gray-p text-xss"><b>Slow load times</b> are the <b>#1 reason</b> for <b>high
             bounce rates</b> and one of the root causes of
             <b>poor Google Rankings.</b></p>
@@ -285,12 +293,12 @@
 
       <div v-if="license_information.licensed_domain"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
 
-        <div class="content pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+        <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
           <div class="col-start-1 col-end-3" >
-            <h4 class="mt-2 text-gray-h text-base font-semibold">License Information</h4>
+            <h4 class="heading-margin text-gray-h text-base font-semibold">License Information</h4>
           </div>
           <div class="col-end-7 col-span-2">
-            <svg class="mt-2" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="heading-margin" v-if="tick_image" width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="11.5" cy="11.5" r="11.5" fill="#09B42F"/>
               <path d="M7 11.3455L10.4068 15L16 9" stroke="white" stroke-width="2.5"/>
             </svg>
@@ -299,7 +307,7 @@
 
         <hr class="border-gray-border-line border-b-0">
 
-        <div class="content p-2 pl-4 pr-4 pb-1 pt-6">
+        <div class="p-2 pl-4 pr-4 pb-1 pt-6">
           <p class="mb-1 text-xm text-black font-medium">Name: <span class="text-color-grey">{{license_information.name}}</span></p>
           <p class="mb-1 text-xm text-black font-medium">Expiration Date: <span class="text-color-grey">{{license_information.exp_date.toLocaleDateString()}}</span></p>
           <p class="mb-1 text-xm text-black font-medium">License: <span class="text-color-grey">{{license_information.license}}</span></p>
@@ -317,10 +325,45 @@
         </div>
       </div>
 
+      <div v-if="on_board_complete===''"  class="w-72 h-56 drop-shadow-sm rounded-xl border border-gray-border-line bg-white">
+
+        <div class="pl-4 pr-4 pb-2 pt-2 grid grid-cols-2 gap-4 items-center">
+          <div class="col-start-1 col-end-3" >
+            <h4 class="heading-margin text-gray-h text-base font-semibold">Onboard Pending</h4>
+          </div>
+          <div class="col-end-7 col-span-2">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 0C17.0775 0 22 4.9225 22 11C22 17.0775 17.0775 22 11 22C4.9225 22 0 17.0775 0 11C0 4.9225 4.9225 0 11 0ZM12.5538 12.8975L13.035 4.015H8.965L9.44625 12.8975H12.5538ZM12.43 17.5175C12.76 17.2013 12.9387 16.7612 12.9387 16.1975C12.9387 15.62 12.7738 15.18 12.4438 14.8638C12.1138 14.5475 11.6325 14.3825 10.9862 14.3825C10.34 14.3825 9.85875 14.5475 9.515 14.8638C9.17125 15.18 9.00625 15.62 9.00625 16.1975C9.00625 16.7612 9.185 17.2013 9.52875 17.5175C9.88625 17.8337 10.3675 17.985 10.9862 17.985C11.605 17.985 12.0863 17.8337 12.43 17.5175Z" fill="#EED202"/>
+            </svg>
+          </div>
+        </div>
+
+        <hr class="border-gray-border-line border-b-0">
+
+        <div class="p-2 pl-4 pr-4 pb-1 pt-6">
+          <p class="mb-1 text-xm text-black font-medium">You have not completed the onboard
+            process. Please complete it by pressing
+            the continue onboard button.  </p>
+        </div>
+
+        <!--        <p class="mb-1 text-sm mt-1 text-gray-500 pl-4">Want to change plan?</p>-->
+        <div class="actions pt-1 pl-4 pr-4 pb-2 grid grid-cols-2 gap-4">
+
+          <div class="col-start-1 col-end-3" >
+              <button @click="openOptimizer" class="text-xs bg-transparent mb-3 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent mt-5 rounded-lg">Continue Onboard</button>
+          </div>
+
+        </div>
+      </div>
+
 
     </ul>
 
 
+<!--    <popupModel v-if="popupModel && !welcomeModel" @dont="handleDont" @cancel="handleCancel" :default="license_information.name"/>-->
+    <howtoUse v-if="howtouse" @cancel="howtouse=false" @goto="gotoHome"/>
+    <welcome v-if="welcomeModel" @start="startAnalyzing" @cancel="welcomeModel = false" />
+    <update v-if="db_tobe_updated==='1' && !welcomeModel" @update="updateDatabase" @cancel="db_tobe_updated = false" :message="this.updateError"/>
 
   </main>
 </template>
@@ -331,17 +374,57 @@ import config from "../config";
 import axios from 'axios';
 import messageBox from "../components/messageBox.vue";
 import Vue3TagsInput from "vue3-tags-input";
+import popupModel from "../components/popupModel.vue";
+import howtoUse from "../components/howtoUse.vue";
+import welcome from "../components/welcome.vue";
+import performanceWidget from "../components/performanceWidget.vue";
 import optimization from "./optimization.vue";
+import update from "../components/update.vue";
+
+// import onboard from "../../../on-board/on-board-view/src/views/onboard";
 
 export default {
 
   components: {
     Vue3TagsInput,
     messageBox,
+    popupModel,
+    howtoUse,
+    welcome,
     optimization,
+    performanceWidget,
+    update
+
   },
 
   mounted() {
+
+    if (window.RapidLoadOptimizer) {
+
+      const container = document.getElementById('rapidload-page-optimizer');
+      const optimizerConfig = {
+        container,
+        showOptimizer: false,
+        global: true,
+      };
+
+      if (this.on_board_complete === '') {
+        optimizerConfig.mode = 'onboard';
+        optimizerConfig.modeData = {
+          connect_url: this.license_information.connect_link,
+        };
+      }
+
+      new window.RapidLoadOptimizer(optimizerConfig);
+    }
+    window.addEventListener('rapidLoad:optimizer-mounted', () => {
+      if (this.on_board_complete ==='') {
+         this.welcomeModel=true;
+      }else if(window.location.href.indexOf("nonce") > -1){
+        this.openOptimizer();
+      }
+    });
+
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
@@ -353,11 +436,19 @@ export default {
         this.license_information.license = data.plan
         this.license_information.licensed_domain = data.licensedDomain
       })
-      this.update_license()
+      this.update_license();
+
+      const lastExecutionDate = localStorage.getItem('RapidLoadDashboardPopupModellastExecutionDate');
+      const currentDate = new Date().toLocaleDateString();
+      if (lastExecutionDate !== currentDate) {
+        this.popupModel = !localStorage.getItem('RapidLoadDashboardPopupModel');
+
+      }
+
+
     }else{
       this.update_license()
     }
-
 
     const activeModules = [];
 
@@ -376,9 +467,36 @@ export default {
         })
       });
     }
+
+
+
   },
   methods:{
 
+    gotoHome(){
+
+      window.open(this.home_url, '_blank');
+    },
+    startAnalyzing(){
+      this.openOptimizer();
+      this.welcomeModel=false;
+    },
+    updateDatabase(){
+
+      axios.post(window.uucss_global?.ajax_url + '?action=rapidload_db_update&nonce='+window.uucss_global?.nonce,{
+        headers: {
+          'Content-Type':'multipart/form-data'
+        }
+      }).then((response)=>{
+
+        if(response.data?.success){
+          window.location.reload();
+        }else{
+          this.updateError = response.data?.error;
+        }
+      })
+
+    },
     // whatsnext(){
     //   this.whatstips_count++;
     //   if(this.whatstips_count===4){
@@ -386,12 +504,30 @@ export default {
     //   }
     //
     // },
+
+    openOptimizer() {
+      if (window.RapidLoadOptimizer) {
+        window.RapidLoadOptimizer.showOptimizer(true)
+      }
+    },
+
+
+    handleCancel(){
+      this.popupModel = false;
+      const currentDate = new Date().toLocaleDateString();
+      localStorage.setItem('RapidLoadDashboardPopupModellastExecutionDate', currentDate);
+    },
+    handleDont(){
+      this.popupModel = false;
+      localStorage.setItem('RapidLoadDashboardPopupModel', 'false')
+    },
     tipsimprovenext(){
       this.improvetips_count++;
       if(this.improvetips_count===5){
         this.improvetips_count = 0;
       }
     },
+
     connect_license(){
       this.license_loading = true;
       this.connect_with_license_error = "";
@@ -399,7 +535,7 @@ export default {
         license_key:this.license_information.key,
 
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_connect&nonce='+window.uucss_global.nonce, data,{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_connect&nonce='+window.uucss_global?.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -424,7 +560,7 @@ export default {
       const data = {
         disconnect:true,
       }
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce, data,{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_license&nonce='+window.uucss_global?.nonce, data,{
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -433,10 +569,10 @@ export default {
     },
     update_license(){
 
-      axios.post(window.uucss_global.ajax_url + '?action=uucss_license&nonce='+window.uucss_global.nonce).then((response)=>{
+      axios.post(window.uucss_global?.ajax_url + '?action=uucss_license&nonce='+window.uucss_global?.nonce).then((response)=>{
         if(response.data?.data){
 
-          if(response.data?.data === 'License key authentication failed'){
+          if(response.data?.data === 'License key authentication failed' || response.data?.data?.licensed_domain === null){
             this.disconnect_license();
             localStorage.clear();
             this.license_information.name = null
@@ -445,7 +581,7 @@ export default {
             this.license_information.licensed_domain = null
             this.license_information.key = ''
 
-          }else{
+          }else if(response.data?.data !== "cURL error 6: Could not resolve host: api.rapidload.io"){
             const licenseData = []
             licenseData.push(response.data?.data)
             localStorage.setItem('rapidLoadLicense', JSON.stringify(licenseData))
@@ -484,7 +620,7 @@ export default {
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
 
-      axios.post(window.uucss_global.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global.nonce, {
+      axios.post(window.uucss_global?.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global?.nonce, {
         cancelToken: cancelToken
       })
           .then(response => {
@@ -503,11 +639,46 @@ export default {
           });
 
     },
+    // onboardOptimizer(){
+    //   if (window.RapidLoadOptimizer) {
+    //     let container = document.getElementById('rapidload-page-optimizer')
+    //
+    //     // open optimizer in onboard mode
+    //     new window.RapidLoadOptimizer({
+    //       container,
+    //       showOptimizer: false,
+    //       mode: 'onboard',
+    //       modeData: {
+    //         // this is the url where to redirect user when they press connect
+    //         connect_url: this.license_information.connect_link,
+    //         // target: '_blank'
+    //       }
+    //     });
+    //   }
+    // },
+    // normalOptimizer(){
+    //   if (window.RapidLoadOptimizer) {
+    //     let container = document.getElementById('rapidload-page-optimizer')
+    //
+    //     new window.RapidLoadOptimizer({
+    //       container,
+    //       showOptimizer: false
+    //     })
+    //   }
+    // },
 
   },
 
   data() {
     return {
+      on_board_complete: window.uucss_global.on_board_complete,
+      onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
+      home_url: window.uucss_global.home_url,
+      popupModel: false,
+      howtouse: false,
+      welcomeModel: false,
+      updateError:"",
+      db_tobe_updated: window.uucss_global.db_tobe_updated,
       axios_request : null,
       tick_image: 'license-information.svg',
       whats_new: 'tips-whats.svg',
@@ -528,9 +699,9 @@ export default {
             exp_date:new Date(),
             license:'',
             status: true,
-            link: window.uucss_global.app_url,
+            link: window.uucss_global?.app_url,
             licensed_domain: null,
-            connect_link: window.uucss_global.activation_url,
+            connect_link: window.uucss_global?.activation_url,
             activation_nonce: null,
           },
       items_data: [],
@@ -564,6 +735,15 @@ export default {
         },
       ],
       items: [
+        {
+          id : "page-optimizer",
+          title: "Titan Optimizer",
+          description: 'Effortlessly optimize your site’s speed with on-the-spot actionable fixes',
+          image: '<svg width="49" height="49" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 20.34 20.3"><defs><style>.cls-1{fill:#190028;}.cls-2{fill:#fff;}</style></defs><rect class="cls-1" x="0.25" y="0.27" width="19.75" height="19.75" rx="6.39"/><polygon class="cls-2" points="9.19 5.67 7.18 11.22 9.19 11.26 7.52 15.47 12.82 9.27 10.72 9.22 13.07 5.63 9.19 5.67"/></svg>',
+          link: '/#',
+          status: false,
+          isDisabled: true
+        },
         {
           id : "css",
           title: "CSS Delivery",
@@ -618,6 +798,7 @@ export default {
           status: false,
           isDisabled: true
         },
+
 
       ],
       base: config.is_plugin ? config.public_base + 'images/' : 'public/images/'

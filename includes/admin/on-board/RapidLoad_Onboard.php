@@ -112,7 +112,7 @@ class RapidLoad_Onboard{
             wp_redirect( admin_url( 'admin.php?page=rapidload' ) );
         } else if ( RapidLoad_Base::get_option( 'rapidload_do_activation_redirect' ) ) {
             RapidLoad_Base::delete_option( 'rapidload_do_activation_redirect' );
-            wp_redirect( '/wp-admin/options-general.php?page=rapidload-on-board' );
+            wp_redirect( '/wp-admin/options-general.php?page=rapidload' );
         }
     }
 
@@ -356,7 +356,7 @@ class RapidLoad_Onboard{
     public static function display_get_start_link() {
         add_filter( 'plugin_action_links_' . plugin_basename( UUCSS_PLUGIN_FILE ), function ( $links ) {
             $_links = array(
-                '<a href="' . admin_url( 'options-general.php?page=rapidload-on-board' ) . '">Get Started <span>⚡️</span> </a>',
+                '<a href="' . admin_url( 'options-general.php?page=rapidload' ) . '">Get Started <span>⚡️</span> </a>',
             );
 
             return array_merge( $_links, $links );

@@ -11,6 +11,7 @@ class RapidLoad_CSS_Aggregator_Enqueue
     private $options;
     private $file_system;
     private $settings;
+    private $strategy;
 
     private $aggregated_css = "";
 
@@ -34,6 +35,10 @@ class RapidLoad_CSS_Aggregator_Enqueue
 
         if(isset($state['options'])){
             $this->options = $state['options'];
+        }
+
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
         }
 
         $links = $this->dom->find( 'link' );
@@ -72,7 +77,8 @@ class RapidLoad_CSS_Aggregator_Enqueue
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
-            'options' => $this->options
+            'options' => $this->options,
+            'strategy' => $this->strategy
         ];
     }
 

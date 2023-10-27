@@ -12,7 +12,7 @@ class MinifyCSS
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_minify']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_minify'] = "" ){
             return;
@@ -43,7 +43,7 @@ class MinifyCSS
 
     public function minify_css($job, $args){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_mincss'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_mincss'] )){
             return false;
         }
 

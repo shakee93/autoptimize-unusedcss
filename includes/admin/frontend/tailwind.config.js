@@ -32,6 +32,7 @@ module.exports = {
       'blue': '#185EF3',
       'gray': '#E8E8E8',
       'gray-p': '#6F6F6F',
+      'gray-l': '#B8B8B8',
       'gray-h': '#332247',
       'w-color': '#F0F0F1',
       'message-green': '#48BB78',

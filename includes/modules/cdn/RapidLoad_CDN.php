@@ -10,6 +10,10 @@ class RapidLoad_CDN
     {
         $this->options = RapidLoad_Base::fetch_options();
 
+        add_action('wp_ajax_validate_cdn', [$this, 'validate_cdn']);
+
+        add_action('rapidload/validate-cdn', [$this, 'validate_cdn']);
+
         if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] == ""){
             return;
         }
@@ -22,6 +26,61 @@ class RapidLoad_CDN
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_filter('rapidload/cdn/enabled', function (){
+            return true;
+        });
+
+    }
+
+    public function validate_cdn($remove = false){
+
+        $api = new RapidLoad_Api();
+
+        if($remove){
+            unset($this->options['uucss_cdn_dns_id']);
+            unset($this->options['uucss_cdn_zone_id']);
+            unset($this->options['uucss_cdn_url']);
+            unset($this->options['uucss_enable_cdn']);
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
+            return true;
+        }
+
+        $response = $api->post('cdn',[
+            'url' => trailingslashit(site_url())
+        ]);
+
+        if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
+
+            if(isset($this->options['uucss_cdn_zone_id']) && isset($this->options['uucss_cdn_dns_id'])){
+
+                if($this->options['uucss_cdn_zone_id'] != $response->zone_id){
+
+                    $api->post('delete-cdn',[
+                        'dns_id' => $this->options['uucss_cdn_dns_id'],
+                        'zone_id' => $this->options['uucss_cdn_zone_id']
+                    ]);
+
+                }
+
+            }
+
+            $this->options['uucss_cdn_zone_id'] = $response->zone_id;
+            $this->options['uucss_cdn_dns_id'] = $response->dns_id;
+            $this->options['uucss_cdn_url'] = $response->cdn_url;
+            $this->options['uucss_enable_cdn'] = "1";
+        }
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
+
+        if(wp_doing_ajax()){
+            wp_send_json_success([
+                'uucss_cdn_zone_id' => $response->zone_id,
+                'uucss_cdn_dns_id' => $response->dns_id,
+                'uucss_cdn_url' => $response->cdn_url
+            ]);
+        }
+
+        return true;
     }
 
     public function vanish(){
@@ -62,7 +121,7 @@ class RapidLoad_CDN
 
     public function replace_cdn_html($job){
 
-        if(!$job || !isset($job->id) || isset( $_REQUEST['no_cdn'] )){
+        if(!$job || !isset($job->id) || isset( $_REQUEST['no_rapidload_cdn'] )){
             return false;
         }
 

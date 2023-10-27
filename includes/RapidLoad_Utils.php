@@ -35,6 +35,10 @@ trait RapidLoad_Utils {
 
 	    }
 
+        if(isset($_SERVER['REQUEST_URI'])){
+            return home_url(add_query_arg(array(), $_SERVER['REQUEST_URI']));
+        }
+
 	    return null;
     }
 
@@ -285,6 +289,10 @@ trait RapidLoad_Utils {
 
 	function transform_url( $url ) {
 
+        if (!$url) {
+            return $url;
+        }
+
 		$url_parts = parse_url( $url );
 
 		$options = RapidLoad_Base::fetch_options();
@@ -482,7 +490,25 @@ trait RapidLoad_Utils {
 
     protected function is_mobile(){
 
-        return function_exists('wp_is_mobile') && wp_is_mobile();
+        return $this->source_is_mobile();
+    }
+
+    function source_is_mobile() {
+        if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+            $is_mobile = false;
+        } elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Mobile' ) !== false // Many mobile devices (all iPhone, iPad, etc.)
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) !== false
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'Silk/' ) !== false
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'Kindle' ) !== false
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'BlackBerry' ) !== false
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'Opera Mini' ) !== false
+            || strpos( $_SERVER['HTTP_USER_AGENT'], 'Opera Mobi' ) !== false ) {
+            $is_mobile = true;
+        } else {
+            $is_mobile = false;
+        }
+
+        return $is_mobile;
     }
 
     protected function get_user_agent(){
@@ -562,10 +588,10 @@ trait RapidLoad_Utils {
                 }
 
                 if(self::str_contains( $pattern, '*' ) && self::is_path_glob_matched(urldecode($url), $pattern)){
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped glob matched : ' . $url );
                     return false;
                 }else if ( self::str_contains( urldecode($url), $pattern ) ) {
-                    $this->log( 'skipped : ' . $url );
+                    $this->log( 'skipped str contains: ' . $url );
                     return false;
                 }
 
@@ -575,12 +601,12 @@ trait RapidLoad_Utils {
         $url_parts = parse_url( $url );
 
         if(isset($url_parts['query']) && $this->str_contains($url_parts['query'], 'customize_changeset_uuid')){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped  query contains : ' . $url );
             return false;
         }
 
         if(!apply_filters('uucss/url/exclude', $url)){
-            $this->log( 'skipped : ' . $url );
+            $this->log( 'skipped  url exclude : ' . $url );
             return false;
         }
 
@@ -636,6 +662,11 @@ trait RapidLoad_Utils {
     }
 
     public static function verify_nonce($nonce = 'uucss_nonce' ){
+
+        if (defined('RAPIDLOAD_DEV_MODE')) {
+            return true;
+        }
+
         if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) ) {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
@@ -649,4 +680,25 @@ trait RapidLoad_Utils {
         return apply_filters('rapidload/root-url', content_url($path));
     }
 
+    public static function get_relative_url($fullUrl) {
+        $parsedUrl = parse_url($fullUrl);
+
+        if ( strpos( $fullUrl, site_url() ) === false ) {
+            return $fullUrl;
+        }
+
+        // Get the path of the URL
+        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+
+        // Get the query string of the URL
+        $queryString = isset($parsedUrl['query']) ? $parsedUrl['query'] : '';
+
+        // Combine the path and query string to get the relative URL
+        $relativeUrl = $path;
+        if ($queryString !== '') {
+            $relativeUrl .= '?' . $queryString;
+        }
+
+        return $relativeUrl;
+    }
 }

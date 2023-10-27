@@ -1,29 +1,9 @@
-# page-optimizer
+<p align='center'>
+  <img src='https://rapidload.rapidload-cdn.io/wp-content/uploads/2022/07/Rapidload.svg' alt='RapidLoad Page Optimizer' width='200'/>
+</p>
 
-This template should help get you started developing with Vue 3 in Vite.
+<p align='center'>
+<b>RapidLoad Page Optimizer </b> 
+<br>Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)
+</p>
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```

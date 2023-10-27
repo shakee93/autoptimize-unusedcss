@@ -15,6 +15,7 @@ class CriticalCSS_Enqueue
     private $data;
     private $warnings;
     private $is_mobile;
+    private $strategy;
 
     public function __construct($job_data)
     {
@@ -42,13 +43,18 @@ class CriticalCSS_Enqueue
             $this->options = $state['options'];
         }
 
+        if(isset($state['strategy'])){
+            $this->strategy = $state['strategy'];
+        }
+
         if(!isset($this->job_data->id) || $this->job_data->status != 'success'){
             //$this->inject->rapidload = false;
             //$this->inject->successfully_injected = false;
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -72,7 +78,8 @@ class CriticalCSS_Enqueue
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -83,7 +90,8 @@ class CriticalCSS_Enqueue
             return [
                 'dom' => $this->dom,
                 'inject' => $this->inject,
-                'options' => $this->options
+                'options' => $this->options,
+                'strategy' => $this->strategy
             ];
         }
 
@@ -123,9 +131,17 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            $sheet->onload = "this.onload=null;this.rel='stylesheet'";
-            $sheet->rel = "preload";
-            $sheet->as = "style";
+            if(!$this->is_mobile){
+                $sheet->onload = "this.onload=null;this.rel='stylesheet'";
+                $sheet->rel = "preload";
+                $sheet->as = "style";
+            }else{
+                if(!apply_filters('rapidload/frontend/do-not-load/original-css', false) && isset($sheet->{'data-href'})){
+                    unset($sheet->href);
+                }
+            }
+
+
 
         }
     }
@@ -140,7 +156,7 @@ class CriticalCSS_Enqueue
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
 
-            $critical_css_content .= $this->options['uucss_additional_css'];
+            $critical_css_content .= stripslashes($this->options['uucss_additional_css']);
 
         }
 

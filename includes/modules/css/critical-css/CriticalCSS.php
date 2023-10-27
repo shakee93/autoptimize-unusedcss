@@ -20,17 +20,21 @@ class CriticalCSS
 
     public function __construct()
     {
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
 
         add_action('uucss/options/css', [$this, 'render_options']);
 
+        $this->file_system = new RapidLoad_FileSystem();
+
+        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
+
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
+
+        new CriticalCSS_Queue();
 
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_cpcss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_cpcss'] = "" || !empty(self::$cpcss_other_plugins)){
             return;
         }
-
-        $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
             return;
@@ -55,8 +59,6 @@ class CriticalCSS
             $this->cache_trigger_hooks();
 
         }
-
-        new CriticalCSS_Queue();
     }
 
     public function render_options($args){
@@ -83,7 +85,6 @@ class CriticalCSS
         add_action( 'save_post', [ $this, 'cache_on_actions' ], 110, 3 );
         add_action( 'untrash_post', [ $this, 'cache_on_actions' ], 10, 1 );
         add_action( 'wp_trash_post', [ $this, 'clear_on_actions' ], 10, 1 );
-        add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
     }
 
     public function vanish() {
@@ -308,6 +309,10 @@ class CriticalCSS
     function cache_cpcss($job, $args = []){
 
         if(!$job || !isset($job->id)){
+            return false;
+        }
+
+        if(isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] == "1" && !wp_doing_ajax()){
             return false;
         }
 

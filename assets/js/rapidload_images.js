@@ -2,14 +2,14 @@ window.rapidload_replace_image_src = function () {
     var images = document.getElementsByTagName('img');
     for (var i = 0; i < images.length; i++) {
         var image = images[i];
-        var url = image.getAttribute('data-original-src');
+        var url = image.getAttribute('data-rp-src');
         if (window.rapidload_io_data && url) {
             var options = "ret_img";
             if (window.rapidload_io_data.optimize_level) {
                 options += ",q_" + window.rapidload_io_data.optimize_level;
             }
             if (window.rapidload_io_data.support_next_gen_format) {
-                options += ",to_auto";
+                options += ",to_avif";
             }
             if (image.width !== 0) {
                 options += ",w_" + image.width;
@@ -44,14 +44,14 @@ var callback = function (mutationList, observer) {
                     if (imageTags.length) {
                         for (var k = 0; k < imageTags.length; k++) {
                             var img = imageTags[k];
-                            var url = img.getAttribute("data-original-src");
+                            var url = img.getAttribute("data-rp-src");
                             if (window.rapidload_io_data && url) {
                                 var options = "ret_img";
                                 if (window.rapidload_io_data.optimize_level) {
                                     options += ",q_" + window.rapidload_io_data.optimize_level;
                                 }
                                 if (window.rapidload_io_data.support_next_gen_format) {
-                                    options += ",to_auto";
+                                    options += ",to_avif";
                                 }
                                 if(img.getBoundingClientRect().width !== 0){
                                     options += ",w_" + img.getBoundingClientRect().width;
@@ -74,8 +74,12 @@ var observer_bg = new IntersectionObserver(function (elements) {
                 observer_bg.unobserve(element.target);
                 var attributes = element.target.getAttribute("data-rapidload-lazy-attributes").split(",");
                 attributes.forEach(function (attribute) {
-                    var value = element.target.getAttribute("data-rapidload-lazy-" + attribute);
-                    element.target.style.backgroundImage = 'url(' + value.replace("ret_blank", "ret_img") + ')';
+                    if(element.target.tagName === 'IFRAME'){
+                        element.target.setAttribute(attribute, element.target.getAttribute("data-rapidload-lazy-" + attribute))
+                    }else{
+                        var value = element.target.getAttribute("data-rapidload-lazy-" + attribute);
+                        element.target.style.backgroundImage = 'url(' + value.replace("ret_blank", "ret_img") + ')';
+                    }
                 });
             }
         });
@@ -98,30 +102,3 @@ if(lazyElements && lazyElements.length){
     });
 }
 window.rapidload_replace_image_src();
-window.rapidload_lcp_images = function (){
-
-    var isChrome = /Chrome/.test(navigator.userAgent);
-
-    var lcp_image_urls = []
-
-    if (isChrome && 'PerformanceObserver' in window) {
-        new PerformanceObserver((entryList) => {
-            for (const entry of entryList.getEntries()) {
-                entry.url && lcp_image_urls.push(entry.url);
-            }
-        }).observe({type: 'largest-contentful-paint', buffered: true});
-    }
-
-    /*var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', window.rapidload_io_data.ajax_url, true);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.responseType = 'json';
-
-    var requestData = {
-
-    };*/
-
-}
