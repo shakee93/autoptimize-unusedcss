@@ -61,6 +61,92 @@ class RapidLoad_Admin_Bar {
             $current_url = site_url();
         }
 
+        $group_by_conditions = [
+            'entire_site' => [
+                'label' => 'Entire Site',
+                'value' => 'all'
+            ],
+            'archive' => [
+                'label' => 'Archives',
+                'value' => 'archive',
+                'options' => [
+                    [
+                        'label' => 'All Archives',
+                        'value' => 'all',
+                        'group' => null
+                    ],
+                    [
+                        'label' => 'Author Archive',
+                        'value' => 'author',
+                        'group' => null
+                    ],
+                    [
+                        'label' => 'Date Archive',
+                        'value' => 'date',
+                        'group' => null
+                    ],
+                    [
+                        'label' => 'Posts Archive',
+                        'value' => 'author',
+                        'group' => 'Posts Archive'
+                    ],
+                    [
+                        'label' => 'Categories',
+                        'value' => 'category',
+                        'group' => 'Posts Archive'
+                    ],
+                    [
+                        'label' => 'Tags',
+                        'value' => 'tag',
+                        'group' => 'Posts Archive'
+                    ],
+                ]
+            ],
+            'singular' => [
+                'label' => 'Singular',
+                'value' => 'singular',
+                'options' => [
+                    [
+                        'label' => 'All Singular',
+                        'value' => 'all',
+                        'group' => null
+                    ],
+                    [
+                        'label' => 'Front Page',
+                        'value' => 'front_page',
+                        'group' => null,
+                    ],
+                    [
+                        'label' => 'Posts',
+                        'value' => 'posts',
+                        'group' => 'Posts',
+                    ],
+                    [
+                        'label' => 'In Category',
+                        'value' => 'categories',
+                        'group' => 'Posts',
+                    ],
+                    [
+                        'label' => 'In Tag',
+                        'value' => 'tags',
+                        'group' => 'Posts',
+                    ],
+                    [
+                        'label' => 'Pages',
+                        'value' => 'pages',
+                        'group' => 'Pages',
+                    ],
+                    [
+                        'label' => 'By Author',
+                        'value' => 'author',
+                        'group' => null,
+                    ]
+                ]
+            ]
+        ];
+
+        $group_by_conditions = apply_filters('rapidload/group-by/conditions', $group_by_conditions);
+
         $data = array(
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
@@ -100,48 +186,7 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            'group_by_conditions' => [
-                [
-                    'label' => 'Entire Site',
-                    'value' => 'all'
-                ],
-                [
-                    'label' => 'Archives',
-                    'value' => 'archive',
-                    'options' => [
-                        [
-                            'label' => 'All Archives',
-                            'value' => 'all',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Author Archive',
-                            'value' => 'author',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Date Archive',
-                            'value' => 'date',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Posts Archive',
-                            'value' => 'author',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Categories',
-                            'value' => 'category',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Tags',
-                            'value' => 'tag',
-                            'group' => 'Posts Archive'
-                        ],
-                    ]
-                ]
-            ]
+            'group_by_conditions' => $group_by_conditions
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );

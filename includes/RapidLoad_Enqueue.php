@@ -398,7 +398,7 @@ class RapidLoad_Enqueue {
             if (class_exists('WooCommerce') && is_woocommerce()) {
                 return 'woocommerce';
             }
-            return 'single';
+            return 'singular';
         } elseif (is_archive() || is_home() || is_front_page() || is_category() || is_tag() || is_tax()) {
             if (class_exists('WooCommerce') && is_woocommerce()) {
                 return 'woocommerce';
@@ -415,7 +415,7 @@ class RapidLoad_Enqueue {
             if (function_exists('is_account_page') && is_account_page()) {
                 return 'account';
             }
-            return 'page';
+            return 'pages';
         } elseif (is_single()) {
             if (function_exists('is_product') && is_product()) {
                 return 'product';
@@ -424,20 +424,20 @@ class RapidLoad_Enqueue {
             if ($post_type) {
                 return $post_type;
             } else {
-                return 'post';
+                return 'posts';
             }
         } elseif (is_category()) {
             /*$category_name = single_cat_title('', false);
             if ($category_name) {
                 return preg_replace('/\s+/', '_', strtolower($category_name));
             }*/
-            return 'category';
+            return 'categories';
         } elseif (is_tag()) {
             /*$tag_name = single_tag_title('', false);
             if ($tag_name) {
                 return preg_replace('/\s+/', '_', strtolower($tag_name));
             }*/
-            return 'tag';
+            return 'tags';
         } elseif (is_tax()) {
             if (function_exists('is_product_category') && is_product_category()) {
                 return 'product_category';
@@ -448,7 +448,7 @@ class RapidLoad_Enqueue {
             if ($tax_name) {
                 return preg_replace('/\s+/', '_', strtolower($tax_name));
             }*/
-            return 'taxonomy';
+            return 'taxonomies';
         }elseif (is_post_type_archive()) {
             if (function_exists('is_shop') && is_shop()) {
                 return 'shop';
