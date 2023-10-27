@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.6 - 27/10/2023 =
+ * fix: media library section break
+
 = 2.1.5 - 26/10/2023 =
  * fix: remove duplicate queries
 
