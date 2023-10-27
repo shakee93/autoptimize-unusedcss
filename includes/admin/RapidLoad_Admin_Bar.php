@@ -57,6 +57,10 @@ class RapidLoad_Admin_Bar {
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
 
+        if($this->is_admin_url($current_url)){
+            $current_url = site_url();
+        }
+
         $data = array(
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
@@ -116,8 +120,23 @@ class RapidLoad_Admin_Bar {
                             'group' => null
                         ],
                         [
+                            'label' => 'Date Archive',
+                            'value' => 'date',
+                            'group' => null
+                        ],
+                        [
                             'label' => 'Posts Archive',
                             'value' => 'author',
+                            'group' => 'Posts Archive'
+                        ],
+                        [
+                            'label' => 'Categories',
+                            'value' => 'category',
+                            'group' => 'Posts Archive'
+                        ],
+                        [
+                            'label' => 'Tags',
+                            'value' => 'tag',
                             'group' => 'Posts Archive'
                         ],
                     ]
@@ -229,5 +248,13 @@ class RapidLoad_Admin_Bar {
         }
 
 
+    }
+
+    function is_admin_url($url){
+        $_url = parse_url(untrailingslashit(admin_url()));
+        if(isset($_url['path']) && $this->str_contains($url, $_url['path'])){
+            return true;
+        }
+        return false;
     }
 }
