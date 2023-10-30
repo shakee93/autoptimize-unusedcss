@@ -33,7 +33,7 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
 
-        if(!isset(self::$global_options['uucss_enable_page_optimizer']) || self::$global_options['uucss_enable_page_optimizer'] == ""){
+        if(!isset(self::$global_options['uucss_enable_page_optimizer']) || self::$global_options['uucss_enable_page_optimizer'] != "1"){
             return;
         }
 

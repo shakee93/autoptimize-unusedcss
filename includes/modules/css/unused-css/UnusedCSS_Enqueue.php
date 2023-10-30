@@ -184,7 +184,7 @@ class UnusedCSS_Enqueue
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
 
-                    if ( isset( $this->options['uucss_inline_css'] ) ) {
+                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1") {
 
                         $this->inline_sheet($sheet, $uucss_file);
                     }
@@ -345,6 +345,10 @@ class UnusedCSS_Enqueue
     }
 
     private function inline_sheet( $sheet, $link ) {
+
+        if(isset($sheet->{'data-media'}) && $sheet->{'data-media'} == "print"){
+            return;
+        }
 
         $inline = $this->get_inline_content( $link );
 
