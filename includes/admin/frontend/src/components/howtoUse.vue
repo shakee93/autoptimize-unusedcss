@@ -1,7 +1,7 @@
 <template>
   <div class="popup-confirmation">
     <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
-      <div class="bg-white p-6 rounded-3xl shadow-lg max-w-xl min-w-xl">
+      <div class="bg-white p-6 rounded-3xl shadow-lg max-w-xl min-w-xl lg:mt-[30px]">
         <!-- Close Button -->
         <div class="flex justify-end">
           <button class="text-gray-500" @click="cancel">
@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-4 text-center">
-          <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[490px]	mx-auto rounded-md">
+          <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[490px]	mx-auto rounded-md xl:w-[490px] lg:w-[365px]">
         </div>
 
         <div class="mt-4 text-left pl-4 pr-4">
