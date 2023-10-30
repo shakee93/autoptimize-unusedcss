@@ -308,7 +308,7 @@ class RapidLoad_Optimizer
 
             $result = $api->post('page-speed', [
                 'url' => $url,
-                'mobile' => self::$strategy
+                'strategy' => self::$strategy
             ]);
 
             if(is_wp_error($result)){
