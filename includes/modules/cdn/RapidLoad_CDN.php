@@ -14,7 +14,7 @@ class RapidLoad_CDN
 
         add_action('rapidload/validate-cdn', [$this, 'validate_cdn']);
 
-        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] == ""){
+        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] != "1"){
             return;
         }
 
