@@ -15,6 +15,7 @@ interface WordPressOptions {
     actions: RapidLoadGlobalAction[]
     admin_url?: string
     rapidload_version: string
+    titan_stylesheet_url: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'

@@ -9,7 +9,7 @@
 }
 
 @layer base {
-  :root {
+  :host, :root {
     --reactour-accent: #0e172a;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.92%;
