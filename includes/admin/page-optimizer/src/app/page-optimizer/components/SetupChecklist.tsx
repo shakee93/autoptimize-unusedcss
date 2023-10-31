@@ -2,7 +2,7 @@ import {CheckCircle, CheckCircle2, Circle, Layers, Loader, Minus} from "lucide-r
 import {CheckCircleIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 import Card from "components/ui/card";
 import React, {Dispatch, ReactComponentElement, ReactNode, SetStateAction, useEffect, useState} from "react";
-import {Accordion} from "components/accordion";
+import Accordion from "components/accordion";
 import {ExclamationCircleIcon, RectangleStackIcon, StopCircleIcon} from "@heroicons/react/20/solid";
 import SupportCard from "components/SupportCard";
 import ApiService from "../../../services/api";

@@ -20,13 +20,13 @@ const AuditList =({ activeTab }: Props) => {
 
 
     return <AnimatePresence initial={false}>
-        {activeData?.map((audit: Audit, index: number) => (
+        {activeData.slice(0,10)?.map((audit: Audit, index: number) => (
 
                     <m.div
                         key={audit.id}
-                        initial={{opacity: 0, y: 15}}
+                        initial={{opacity: 0, y: -5}}
                         animate={{opacity: 1, y: 0}}
-                        transition={{delay: index < 5 ? index * 0.02 : index * 0.01}}
+                        transition={{delay: index * 0.005}}
                         className='relative' >
                         <Audit
                             index={index} audit={audit}/>

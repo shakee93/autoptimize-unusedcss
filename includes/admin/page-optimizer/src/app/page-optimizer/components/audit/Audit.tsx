@@ -12,7 +12,7 @@ import {useAppContext} from "../../../../context/app";
 import {cn, isDev} from "lib/utils";
 import {Cog6ToothIcon, HandRaisedIcon, InformationCircleIcon, QuestionMarkCircleIcon} from "@heroicons/react/20/solid";
 import {AnimatePresence, m} from "framer-motion";
-import {Accordion} from "components/accordion";
+import Accordion from "components/accordion";
 
 
 import {
@@ -271,6 +271,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
 
             <Accordion
+                id={audit.id}
                 className='audit-content'
                 initialRender={true}
                 isOpen={toggleFiles}>
