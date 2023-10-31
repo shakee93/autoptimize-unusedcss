@@ -19,6 +19,7 @@ const initialState: AppState = {
         error: null,
         loading: false,
         settings: [],
+        originalSettings: [],
         revisions: [],
     },
     desktop: {
@@ -30,6 +31,7 @@ const initialState: AppState = {
         error: null,
         loading: false,
         settings: [],
+        originalSettings: [],
         revisions: [],
     }
 };
@@ -55,6 +57,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     error: null,
                     loading: false,
                     settings: action.payload.data.settings,
+                    originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
                     revisions: action.payload.data.revisions
                 }
             };

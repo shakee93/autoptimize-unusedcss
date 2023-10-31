@@ -121,7 +121,21 @@ const initiateSettings = (audits: Audit[]) => {
     const flattenedSettings = settings.flat();
 
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-    return uniqueSettings;
+
+
+    // convert 1's to true and false in checkbox
+    return uniqueSettings.map((s: AuditSetting) => ({
+        ...s,
+        inputs: s.inputs.map(input => ({
+            ...input,
+            ...(
+                input.control_type === 'checkbox' &&
+                {
+                    value: input.value === '1'
+                }
+            )
+        }))
+    }))
 }
 
 export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
