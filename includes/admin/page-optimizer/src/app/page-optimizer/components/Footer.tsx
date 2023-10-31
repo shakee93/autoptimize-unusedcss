@@ -1,4 +1,5 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
+import ApplyConditions from "components/ui/apply-conditions";
 import ApiService from '../../../services/api'
 import AppButton from "components/ui/app-button";
 import {
@@ -175,6 +176,14 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
 
     const saveActions =[
         {
+            text: 'Apply Conditions',
+            title: 'Apply Conditions settings?',
+            description: "You have made changes to your settings. Click 'Save Changes' to override global settings or 'Discard' to revert to the previous state.",
+            onClick : () => {
+                submitSettings(false, true)
+            }
+        },
+        {
             text: 'Save Changes',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
@@ -288,6 +297,11 @@ const Footer = ({ url, togglePerformance } : FooterProps) => {
                     <TooltipText text='Switch theme'>
                         <div className='hover:dark:text-brand-100'>
                             <ThemeSwitcher></ThemeSwitcher>
+                        </div>
+                    </TooltipText>
+                    <TooltipText text='Apply Conditions'>
+                        <div className='hover:dark:text-brand-100'>
+                            <ApplyConditions></ApplyConditions>
                         </div>
                     </TooltipText>
                     {/*<TooltipText text='Undo'>*/}
