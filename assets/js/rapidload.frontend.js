@@ -36,7 +36,9 @@
                 }
                 link.prev = file
                 link.addEventListener('load',function (e) {
-                    if (this.prev) this.prev.remove();
+                    setTimeout(function (element){
+                        if (element.prev) element.prev.remove();
+                    }, 5000, this)
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);
                 fired = true
@@ -72,7 +74,9 @@
                 link.prev = inlines_style
 
                 link.addEventListener('load',function (e) {
-                    if (this.prev) this.prev.remove()
+                    setTimeout(function (element){
+                        if (element.prev) element.prev.remove();
+                    }, 5000, this)
                 });
 
                 inlines_style.parentNode.insertBefore(link, inlines_style.nextSibling);
