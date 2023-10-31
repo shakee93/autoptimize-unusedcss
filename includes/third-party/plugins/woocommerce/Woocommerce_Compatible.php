@@ -18,6 +18,7 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
         add_filter('uucss/rules', [$this, 'handle'], 50, 1);
         add_filter('uucss/url/exclude', [$this, 'exclude']);
         add_filter('rapidload/group-by/conditions', [$this, 'group_by_conditions'], 10, 1);
+        add_filter('rapidload/group-by/possible/conditions', [$this, 'group_by_possible_conditions'], 10, 1);
     }
 
     public function handle($args)
@@ -110,6 +111,68 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
     }
 
     public function group_by_conditions($condition){
+
+        $condition['woocommerce'] = [
+            'label' => 'WooCommerce',
+            'value' => 'woocommerce',
+            'options' => [
+                [
+                    'label' => 'Entire Shop',
+                    'value' => 'all',
+                    'group' => null
+                ],
+                [
+                    'label' => 'All Product Archives',
+                    'value' => 'product_archives',
+                    'group' => 'Product Archive'
+                ],
+                [
+                    'label' => 'Shop Page',
+                    'value' => 'shop_page',
+                    'group' => 'Product Archive'
+                ],
+                [
+                    'label' => 'Product Categories',
+                    'value' => 'product_category',
+                    'group' => 'Product Archive'
+                ],
+                [
+                    'label' => 'Product Tags',
+                    'value' => 'product_tag',
+                    'group' => 'Product Archive'
+                ],
+                [
+                    'label' => 'Products',
+                    'value' => 'products',
+                    'group' => 'Product'
+                ],
+                [
+                    'label' => 'In Product Category',
+                    'value' => 'in_product_category',
+                    'group' => 'Product'
+                ],
+                [
+                    'label' => 'In Child Product Category',
+                    'value' => 'in_child_product_category',
+                    'group' => 'Product'
+                ],
+                [
+                    'label' => 'In Product Tag',
+                    'value' => 'in_product_tag',
+                    'group' => 'Product'
+                ],
+                [
+                    'label' => 'Products By Author',
+                    'value' => 'by_author',
+                    'group' => 'Product'
+                ],
+            ]
+        ];
+
+        return $condition;
+    }
+
+    public function group_by_possible_conditions($condition){
 
         return $condition;
     }
