@@ -96,6 +96,16 @@ class RapidLoad_Admin_Bar {
                         'group' => 'Posts Archive'
                     ],
                     [
+                        'label' => 'Direct Child Category of',
+                        'value' => 'direct_child_category_of',
+                        'group' => 'Posts Archive'
+                    ],
+                    [
+                        'label' => 'Any Child Category of',
+                        'value' => 'any_child_category_of',
+                        'group' => 'Posts Archive'
+                    ],
+                    [
                         'label' => 'Tags',
                         'value' => 'tag',
                         'group' => 'Posts Archive'
@@ -123,12 +133,12 @@ class RapidLoad_Admin_Bar {
                     ],
                     [
                         'label' => 'In Category',
-                        'value' => 'categories',
+                        'value' => 'in_category_of',
                         'group' => 'Posts',
                     ],
                     [
                         'label' => 'In Tag',
-                        'value' => 'tags',
+                        'value' => 'in_tag',
                         'group' => 'Posts',
                     ],
                     [
@@ -138,7 +148,7 @@ class RapidLoad_Admin_Bar {
                     ],
                     [
                         'label' => 'By Author',
-                        'value' => 'author',
+                        'value' => 'by_author',
                         'group' => null,
                     ]
                 ]

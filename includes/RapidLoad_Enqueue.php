@@ -385,13 +385,61 @@ class RapidLoad_Enqueue {
             $current_page_id = null;
         }
 
-        return[
-            untrailingslashit($current_page_type . "/" . $current_page_content_type . "/" . $current_page_id),
-            $current_page_type . "/" . $current_page_content_type . "/all",
-            $current_page_type . "/all",
-            'all',
+        $possible_groups = [
+            "25" => untrailingslashit($current_page_type . "/" . $current_page_content_type . "/" . $current_page_id),
+            "50" => $current_page_type . "/" . $current_page_content_type . "/all",
+            "75" => $current_page_type . "/all",
+            "100" => 'all',
         ];
+
+        if($current_page_type == "archive"){
+            if(is_category()){
+                $category = get_term($current_page_id, 'category');
+                if(isset($category) && $category->parent != 0 ){
+                    $possible_groups["30"] = untrailingslashit($current_page_type . "/direct_child_category_of/" . $category->parent);
+                    $root_category = $this->get_root_parent_category($current_page_id);
+                    if($root_category){
+                        $possible_groups["40"] = untrailingslashit($current_page_type . "/any_child_category_of/" . $root_category);
+                    }
+                }
+
+            }
+        }
+        elseif ($current_page_type == "singular"){
+            $category_ids = wp_get_post_categories($current_page_id);
+            foreach ($category_ids as $key => $category_id){
+                $possible_groups["40." . $key] = untrailingslashit($current_page_type . "/in_category_of/" . $category_id);
+            }
+            $tags = wp_get_post_tags($current_page_id);
+            foreach ($tags as $key => $tag){
+                $possible_groups["41." . $key] = untrailingslashit($current_page_type . "/in_tag/" . $tag->term_id);
+            }
+
+            $author_id = get_post_field('post_author', $current_page_id);
+            $possible_groups["42"] = untrailingslashit($current_page_type . "/by_author/" . $author_id);
+        }
+
+        ksort($possible_groups);
+        return array_values($possible_groups);
     }
+
+    function get_root_parent_category($category_id) {
+        $category = get_term($category_id, 'category');
+
+        if (is_wp_error($category)) {
+            return null;
+        }
+
+        while ($category->parent != 0) {
+            $category = get_term($category->parent, 'category');
+            if (is_wp_error($category)) {
+                return false;
+            }
+        }
+
+        return $category->term_id;
+    }
+
 
     function get_current_page_type() {
         if (is_singular()) {
