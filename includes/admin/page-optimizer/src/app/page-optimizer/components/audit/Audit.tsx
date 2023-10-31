@@ -101,6 +101,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
     return (
         <Card
+            key={audit.id}
             data-tour={`audit-${audit.id}`}
             spreader={(!!audit?.files?.items?.length) && !toggleFiles} ref={divRef}
               className={cn(

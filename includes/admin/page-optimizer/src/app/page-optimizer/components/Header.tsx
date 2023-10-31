@@ -5,7 +5,7 @@ import {
     DevicePhoneMobileIcon, XMarkIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
@@ -23,13 +23,14 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
+import equal from 'fast-deep-equal/es6/react'
 
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
     const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const {data, loading} = useSelector(optimizerData);
+    const {data, settings, original, loading} = useSelector(optimizerData);
     const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
@@ -41,6 +42,11 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
     }, [tourPrompt])
+
+    // const isChanged = useMemo(() => {
+    //     console.log('changed', equal(data.audits, original.audits));
+    //     return true
+    // }, [data?.audits, settings])
 
     return (
 

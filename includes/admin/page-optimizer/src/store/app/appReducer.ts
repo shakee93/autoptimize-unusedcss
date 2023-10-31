@@ -50,7 +50,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 [action.payload.activeReport] : {
                     ...state[action.payload.activeReport],
-                    original: action.payload.data.data,
+                    original: JSON.parse(JSON.stringify(action.payload.data.data)),
                     data: action.payload.data.data,
                     error: null,
                     loading: false,
