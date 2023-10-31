@@ -6,7 +6,7 @@ class RapidLoad_Admin_Bar {
     public function __construct()
     {
 
-        add_action( is_admin() ? 'admin_head' : 'admin_bar_init', [$this,'rapidload_admin_bar_css'] );
+        add_action( 'wp_after_admin_bar_render', [$this,'rapidload_admin_bar_css'] );
         add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
 //        wp_register_script( 'rapidload-page-optimizer-data', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/page-optimizer/dist/page-optimizer-data.min.js', null, 111);

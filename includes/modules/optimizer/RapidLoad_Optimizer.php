@@ -173,6 +173,7 @@ class RapidLoad_Optimizer
                     case 'uucss_lazy_load_images':
                     case 'uucss_exclude_above_the_fold_image_count':
                     case 'uucss_lazy_load_iframes':
+                    case 'uucss_exclude_above_the_fold_images':
                         self::$options['uucss_enable_image_delivery'] = "1";
                         break;
                 }
@@ -238,6 +239,9 @@ class RapidLoad_Optimizer
             'uucss_lazy_load_images',
             'uucss_exclude_above_the_fold_images',
             'uucss_lazy_load_iframes',
+            'uucss_enable_javascript',
+            'uucss_enable_font_optimization',
+            'uucss_enable_image_delivery'
         ];
 
         if(isset($_REQUEST['global']) && $_REQUEST['global']){
@@ -308,7 +312,7 @@ class RapidLoad_Optimizer
 
             $result = $api->post('page-speed', [
                 'url' => $url,
-                'mobile' => self::$strategy
+                'strategy' => self::$strategy
             ]);
 
             if(is_wp_error($result)){
@@ -667,7 +671,7 @@ class RapidLoad_Optimizer
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
             self::$options['uucss_enable_font_optimization'] = "1";
         }else{
-            unset(self::$options['uucss_self_host_google_fonts']);
+            unset(self::$options['uucss_enable_font_optimization']);
         }
 
         if(isset(self::$options['uucss_minify']) && self::$options['uucss_minify'] ||
