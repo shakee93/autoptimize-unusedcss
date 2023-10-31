@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import {Annoyed, Frown, MehIcon, Smile, SmilePlus} from "lucide-react";
 import {cn} from "lib/utils";
 import {Textarea} from "components/ui/textarea";
-import {Accordion} from "components/accordion";
+import Accordion from "components/accordion";
 import Card from "components/ui/card";
 import {Button} from "components/ui/button";
 import ApiService from "../../../../services/api";
