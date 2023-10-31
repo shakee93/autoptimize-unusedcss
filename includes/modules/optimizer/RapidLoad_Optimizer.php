@@ -655,8 +655,6 @@ class RapidLoad_Optimizer
 
         }
 
-        error_log(json_encode(self::$options, JSON_PRETTY_PRINT));
-
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";
             if(isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1" ){
