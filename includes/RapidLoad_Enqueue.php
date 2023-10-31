@@ -420,7 +420,8 @@ class RapidLoad_Enqueue {
         }
 
         ksort($possible_groups);
-        return array_values($possible_groups);
+
+        return apply_filters('rapidload/group-by/possible/conditions', array_values($possible_groups));
     }
 
     function get_root_parent_category($category_id) {
