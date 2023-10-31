@@ -36,7 +36,9 @@ class RapidLoad_Base
     {
         self::fetch_options();
 
-        add_filter('rapidload/options', [$this, 'merge_job_options']);
+        if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
+            add_filter('rapidload/options', [$this, 'merge_job_options']);
+        }
 
         self::get_merged_options();
 

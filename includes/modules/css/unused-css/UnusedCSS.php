@@ -26,7 +26,7 @@ class UnusedCSS
 
         add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
-        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] == "" || $this->options['uucss_enable_uucss'] = "" ){
+        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_uucss'] != "1"){
             return;
         }
 

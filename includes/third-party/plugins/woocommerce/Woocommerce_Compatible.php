@@ -17,6 +17,7 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
     {
         add_filter('uucss/rules', [$this, 'handle'], 50, 1);
         add_filter('uucss/url/exclude', [$this, 'exclude']);
+        add_filter('rapidload/group-by/conditions', [$this, 'group_by_conditions'], 10, 1);
     }
 
     public function handle($args)
@@ -106,6 +107,11 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
         }
 
         return $args;
+    }
+
+    public function group_by_conditions($condition){
+
+        return $condition;
     }
 
     public function is_mu_plugin()
