@@ -30,7 +30,7 @@ const Header = ({ url }: { url: string}) => {
     const tourPromptKey = 'titan-tour-prompt'
     const { setShowOptimizer , options, version, mode } = useAppContext()
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const {data, settings, original, loading} = useSelector(optimizerData);
+    const {isChanged, data, settings, originalSettings, original, loading} = useSelector(optimizerData);
     const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
@@ -42,11 +42,6 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
     }, [tourPrompt])
-
-    // const isChanged = useMemo(() => {
-    //     console.log('changed', equal(data.audits, original.audits));
-    //     return true
-    // }, [data?.audits, settings])
 
     return (
 
@@ -83,16 +78,22 @@ const Header = ({ url }: { url: string}) => {
                                            dispatch(fetchData(options, url, true))
                                            commonDispatch(setCommonState('openAudits', []))
                                        }}
-                                       className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
+                                       className={cn(
+                                           'transition-none h-12 rounded-2xl border-none bg-transparent',
+                                           isChanged && 'opacity-50'
+                                       )}
+                                       variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>
                                     <ArrowPathIcon className={cn(
                                         'w-5',
                                         loading && 'animate-spin'
                                     )}/>
-                                    <span className='text-xxs font-normal text-brand-500'>Analyze</span>
+                                    <span className='text-xxs font-normal text-brand-500'>Analyze </span>
                                 </div>
                             </AppButton>
                         </TooltipText>
+
+
                     </div>
                 </div>
             </div>
