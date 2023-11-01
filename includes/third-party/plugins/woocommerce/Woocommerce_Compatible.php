@@ -18,7 +18,6 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
         add_filter('uucss/rules', [$this, 'handle'], 50, 1);
         add_filter('uucss/url/exclude', [$this, 'exclude']);
         add_filter('rapidload/group-by/conditions', [$this, 'group_by_conditions'], 10, 1);
-        add_filter('rapidload/group-by/possible/conditions', [$this, 'group_by_possible_conditions'], 10, 1);
     }
 
     public function handle($args)
@@ -128,7 +127,7 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                 ],
                 [
                     'label' => 'Shop Page',
-                    'value' => 'shop_page',
+                    'value' => 'shop',
                     'group' => 'Product Archive'
                 ],
                 [
@@ -168,11 +167,6 @@ class Woocommerce_Compatible extends RapidLoad_ThirdParty{
                 ],
             ]
         ];
-
-        return $condition;
-    }
-
-    public function group_by_possible_conditions($condition){
 
         return $condition;
     }
