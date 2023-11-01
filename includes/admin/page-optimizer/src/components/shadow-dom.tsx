@@ -56,10 +56,18 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
 
             if (styles) {
+                // in here for backward compatibility
                 const originalStyles = document.getElementById('rapidload_page_optimizer-css') as HTMLLinkElement;
+                let styleSheetURL = window.rapidload_optimizer.titan_stylesheet_url;
+
+
+                if (!styleSheetURL) {
+                    styleSheetURL = originalStyles.href
+                }
+
                 const styleLink = document.createElement('link');
                 styleLink.setAttribute('rel', 'stylesheet');
-                styleLink.setAttribute('href', originalStyles?.href ? originalStyles.href : styles);
+                styleLink.setAttribute('href', styleSheetURL ? styleSheetURL : styles);
                 shadowRoot.appendChild(styleLink);
             }
 

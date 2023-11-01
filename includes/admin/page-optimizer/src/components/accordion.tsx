@@ -3,6 +3,7 @@ import {AnimatePresence, m} from 'framer-motion';
 import {cn} from "lib/utils";
 
 interface AccordionProps{
+    id?: string,
     isOpen: boolean;
     initialRender?: boolean
     onAnimationComplete?: () => void
@@ -11,7 +12,8 @@ interface AccordionProps{
     className?: string
 }
 
-export const Accordion: React.FC<AccordionProps> = ({
+ const Accordion: React.FC<AccordionProps> = ({
+    id= 'auditContent',
                                                         isOpen,
                                                         initialRender = false,
                                                         children,
@@ -24,7 +26,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     const divRef = useRef(null); // Reference for the m.div
     const variants = {
         open: { height: 'auto', opacity: 1, overflow: 'visible' },
-        closed: { height: 0, opacity: 0.5, overflow: 'hidden' },
+        closed: { height: 0, opacity: 0, overflow: 'hidden' },
     };
 
     useEffect(() => {
@@ -40,15 +42,13 @@ export const Accordion: React.FC<AccordionProps> = ({
                         'w-full', className
                     )}
                     variants={variants}
-                    key="auditContent"
+                    key={id}
                     transition={{
-                        duration: 0.2,
-                        ease: [0.04, 0.62, 0.23, 0.98]
+                        duration: 0.1,
                     }}
                     initial={isFirstRender ? "open" : "closed"}
                     animate='open'
                     exit='closed'
-                    onAnimationComplete={() => onAnimationComplete && onAnimationComplete()}
                     {...props}
                 >
                     { children }
@@ -57,3 +57,6 @@ export const Accordion: React.FC<AccordionProps> = ({
         </AnimatePresence>
     );
 }
+
+
+export default React.memo(Accordion);

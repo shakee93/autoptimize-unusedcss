@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.9 - 31/10/2023 =
+ * fix: Dashboard UI
+
 = 2.1.8 - 31/10/2023 =
  * fix: Dashboard UI
  * fix: CDN purging

@@ -51,7 +51,7 @@ class RapidLoad_Admin_Bar {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
         }
 
-        wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
+        //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
 
@@ -158,6 +158,7 @@ class RapidLoad_Admin_Bar {
         $group_by_conditions = apply_filters('rapidload/group-by/conditions', $group_by_conditions);
 
         $data = array(
+            'titan_stylesheet_url' => $package .  '/assets/index.css',
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
