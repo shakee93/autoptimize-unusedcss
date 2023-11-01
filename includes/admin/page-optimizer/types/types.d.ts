@@ -15,7 +15,23 @@ interface WordPressOptions {
     actions: RapidLoadGlobalAction[]
     admin_url?: string
     rapidload_version: string
-    titan_stylesheet_url: string
+    group_by_conditions: GroupByConditions
+}
+interface GroupByConditions {
+    archive: Group
+    entire_site: Group
+    singular: Group
+}
+
+interface Group {
+    label: string;
+    value: string;
+    options: Option[];
+}
+interface Option {
+    label: string;
+    value: string;
+    group: string | null;
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
