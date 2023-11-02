@@ -136,7 +136,7 @@ export default function PageOptimizer() {
                 )}
             </div>
             {!error && (
-                <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
+                <Footer url={options.optimizer_url} />
             )}
             <Toaster/>
         </m.div>
