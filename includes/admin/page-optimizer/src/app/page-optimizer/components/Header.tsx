@@ -28,10 +28,29 @@ import equal from 'fast-deep-equal/es6/react'
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
-    const { setShowOptimizer , options, version, mode } = useAppContext()
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const {isChanged, data, settings, originalSettings, original, loading} = useSelector(optimizerData);
-    const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
+
+    const {
+        setShowOptimizer ,
+        options,
+        version,
+        mode
+    } = useAppContext()
+
+    const { activeReport,
+        touched,
+        data,
+        settings,
+        originalSettings,
+        original,
+        loading
+    } = useSelector(optimizerData);
+
+    const {
+        activeTab,
+        activeMetric,
+        dispatch: commonDispatch
+    } = useCommonDispatch()
+
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
         return storedData ? JSON.parse(storedData) : true;
@@ -80,7 +99,7 @@ const Header = ({ url }: { url: string}) => {
                                        }}
                                        className={cn(
                                            'transition-none h-12 rounded-2xl border-none bg-transparent',
-                                           isChanged && 'opacity-50'
+                                           touched && 'opacity-50'
                                        )}
                                        variant='outline'>
                                 <div className='flex flex-col gap-1 items-center'>

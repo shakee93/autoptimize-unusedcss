@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.0.51",
+  "version": "1.0.53",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
