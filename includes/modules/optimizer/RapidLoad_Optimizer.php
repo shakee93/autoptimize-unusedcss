@@ -606,6 +606,7 @@ class RapidLoad_Optimizer
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
             'options' => self::$options,
             'merged_options' => self::$merged_options,
+            'job_id' => self::$job->id
         ]);
 
 
