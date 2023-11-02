@@ -23,7 +23,7 @@ interface FooterProps {
 
 const Footer = ({ } : FooterProps) => {
 
-    const {  loading, revisions } =
+    const {  loading, revisions , fresh } =
         useSelector(optimizerData)
 
     if (loading) {
@@ -76,6 +76,10 @@ const Footer = ({ } : FooterProps) => {
                             <ThemeSwitcher></ThemeSwitcher>
                         </div>
                     </TooltipText>
+
+                    <div>
+                        {fresh ? 'yes' : 'no'}
+                    </div>
                 </div>
 
                 <SaveChanges/>

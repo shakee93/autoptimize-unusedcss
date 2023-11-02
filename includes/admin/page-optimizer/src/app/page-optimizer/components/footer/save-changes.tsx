@@ -29,6 +29,7 @@ import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
+import {cn} from "lib/utils";
 
 const SaveChanges = () => {
 
@@ -58,7 +59,12 @@ const SaveChanges = () => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
-    const { touched, activeReport, settings, data, loading, revisions } =
+    const {
+        fresh,
+        touched,
+        activeReport,
+        data,
+    } =
         useSelector(optimizerData)
 
 
@@ -177,24 +183,38 @@ const SaveChanges = () => {
 
     const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
 
+    const savable = fresh ? true : (touched)
 
     return <>
         <Mode>
             <div className='flex gap-4'>
                 <AlertDialog open={open} onOpenChange={setOpen}>
                     <DropdownMenu>
-                        <Button data-tour='save-changes' ref={refSaveButton} asChild
-                                className='min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0'>
+                        <Button
+                            disabled={!savable}
+                            data-tour='save-changes' ref={refSaveButton} asChild
+                                className={cn(
+                                    'min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0',
+                                    !savable && 'opacity-80'
+                                )}>
                             <AlertDialogTrigger
+                                disabled={!savable}
                                 onClick={e => setModalAction(activeAction)}
-                                className='flex gap-2 items-center pl-3 pr-2 h-full'>
+                                className={cn(
+                                    'flex gap-2 items-center pl-3 pr-2 h-full'
+                                )}>
                                 {(savingData || invalidatingCache) ?
                                     <Loader className='w-5 mr-0.5 animate-spin'/> :
                                     <SaveIcon className='w-5 mr-0.5'/>}
                                 {saveActions[activeAction].text}
                             </AlertDialogTrigger>
 
-                            <DropdownMenuTrigger className='dark:hover:bg-zinc-300 hover:bg-slate-700 dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5'>
+                            <DropdownMenuTrigger
+                                disabled={!savable}
+                                className={cn(
+                                    ' dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5',
+                                    savable && 'dark:hover:bg-zinc-300 hover:bg-slate-700'
+                                )}>
                                 <ChevronDown className='w-5'/>
                             </DropdownMenuTrigger>
                         </Button>

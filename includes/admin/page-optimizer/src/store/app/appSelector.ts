@@ -43,7 +43,8 @@ export const optimizerData = createSelector(
         return {
             ...state[state.activeReport],
             activeReport: state.activeReport,
-            touched: !equal(state[state.activeReport].originalSettings, state[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed)
+            touched: !equal(state[state.activeReport].originalSettings, state[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed),
+            fresh : state[state.activeReport].revisions.length ===  0
         }
     }
 );
