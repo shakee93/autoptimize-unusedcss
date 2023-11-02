@@ -487,7 +487,6 @@ class RapidLoad_Enqueue {
         return $category->term_id;
     }
 
-
     function get_current_page_type() {
         if (is_singular()) {
             if (class_exists('WooCommerce') && is_woocommerce()) {
