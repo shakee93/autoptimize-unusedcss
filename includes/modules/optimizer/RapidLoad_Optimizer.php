@@ -59,6 +59,8 @@ class RapidLoad_Optimizer
 
     public function get_optimizer_condition_data(){
 
+        self::verify_nonce();
+
         if(!isset($_REQUEST['query']) || !isset($_REQUEST['type'])){
             wp_send_json_error(false);
         }
