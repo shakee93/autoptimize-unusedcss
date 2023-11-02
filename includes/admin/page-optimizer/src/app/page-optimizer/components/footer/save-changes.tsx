@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger
 } from "components/ui/dropdown-menu";
 import {Button} from "components/ui/button";
-import {ChevronDown, Loader, SaveIcon, UserCircle} from "lucide-react";
+import {ChevronDown, ChevronUp, Loader, SaveIcon, UserCircle} from "lucide-react";
 import AppButton from "components/ui/app-button";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "components/ui/dialog";
 import {ArrowPathIcon, CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
@@ -30,6 +30,9 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
+import {CSSDelivery} from "app/page-optimizer/components/icons/icon-svg";
+import {Status} from "app/page-optimizer/components/audit/Setting";
+import Accordion from "components/accordion";
 
 const SaveChanges = () => {
 
@@ -51,6 +54,7 @@ const SaveChanges = () => {
 
     const defaultAction = global ? 2 : 0
     const [open, setOpen] = useState(false)
+    const [inProgress, setInProgress] = useState(false)
     const refSaveButton = useRef<HTMLButtonElement | null>(null);
     const [activeAction, setActiveAction] = useState(defaultAction)
     const [modalAction, setModalAction] = useState(defaultAction)
@@ -64,6 +68,7 @@ const SaveChanges = () => {
         touched,
         activeReport,
         data,
+        settings
     } =
         useSelector(optimizerData)
 
@@ -130,6 +135,17 @@ const SaveChanges = () => {
 
     }, [data, activeReport, reload, savingData, invalidatingCache])
 
+    const status = {
+        queued: 'Waiting in the queue...',
+        processing: 'Waiting in the queue...',
+        success: 'Successfully Optimized',
+        failed: 'Error while optimizing'
+    }
+
+    const inProgressSettings = useMemo(() => {
+        return settings?.filter(s => ['Critical CSS', 'Remove Unused CSS'].includes(s.name) && s.status?.status !== 'success') || []
+    }, [ settings ])
+
 
     const saveActions =[
         {
@@ -146,11 +162,61 @@ const SaveChanges = () => {
                 {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
                 {/*</TooltipText>*/}
             </div>,
-            title: 'Save and analyze your page again?',
-            description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.",
+            title: 'Save Changes and Analyze?',
+            description: <div className=''>
+                {/*{inProgressSettings.length > 0 ?*/}
+                    {false ?
+                    <div className='flex flex-col gap-6'>
+                        <div>
+                            You've made changes to your settings. However, some processes are still in the queue. To get the most accurate results, it's best to wait until all tasks are complete before saving and re-analyzing.
+                        </div>
+                        <div className='flex flex-col gap-4 mb-4'>
+
+                            <div className='flex gap-3 items-center ml-4'>
+                                <div>
+                                    <Loader className='animate-spin'/>
+                                </div>
+                                <div>
+                                    <button onClick={e => setInProgress(p => !p)} className='font-medium flex gap-1 items-center'>
+                                        Tasks in Progress {!inProgress ? <ChevronDown className='w-4'/> : <ChevronUp className='w-4'/>}
+                                    </button>
+                                    <div className='text-sm text-zinc-400'>
+                                        This could take 1-3 minutes to complete.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Accordion isOpen={inProgress}>
+                                <div className='pl-14'>
+                                    {inProgressSettings.map(i => (
+                                        <div className='font-medium flex gap-2 items-center'>
+                                            <div className='mt-0.5'>
+                                                <CSSDelivery/>
+                                            </div>
+                                            <div className='flex text-zinc-700 flex-col'>
+                                                <div className='flex items-center gap-2'>  {i.name} <Status status={i.status}/></div>
+                                                {i.status?.status &&
+                                                    <div className='text-xs font-normal opacity-70'>{status[i.status?.status]}</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Accordion>
+
+
+                        </div>
+                    </div>
+                :
+                    <div>
+                        You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.
+                    </div>
+                }
+            </div>,
             onClick : () => {
                 submitSettings(true)
-            }
+            },
+            action_text: "Save & Analyze"
         },
         {
             text: 'Save as Global Settings',
@@ -183,7 +249,9 @@ const SaveChanges = () => {
 
     const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
 
-    const savable = fresh ? true : (touched)
+    const savable = useMemo(() => {
+        return  fresh ? true : (touched)
+    }, [fresh, touched])
 
     return <>
         <Mode>
@@ -195,13 +263,14 @@ const SaveChanges = () => {
                             data-tour='save-changes' ref={refSaveButton} asChild
                                 className={cn(
                                     'min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0',
-                                    !savable && 'opacity-80'
+                                    !savable && 'opacity-80 '
                                 )}>
                             <AlertDialogTrigger
                                 disabled={!savable}
                                 onClick={e => setModalAction(activeAction)}
                                 className={cn(
-                                    'flex gap-2 items-center pl-3 pr-2 h-full'
+                                    'flex gap-2 items-center pl-3 pr-2 h-full',
+                                    !savable && 'cursor-not-allowed'
                                 )}>
                                 {(savingData || invalidatingCache) ?
                                     <Loader className='w-5 mr-0.5 animate-spin'/> :
@@ -213,7 +282,7 @@ const SaveChanges = () => {
                                 disabled={!savable}
                                 className={cn(
                                     ' dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5',
-                                    savable && 'dark:hover:bg-zinc-300 hover:bg-slate-700'
+                                    savable ? 'dark:hover:bg-zinc-300 hover:bg-slate-700' : 'cursor-not-allowed'
                                 )}>
                                 <ChevronDown className='w-5'/>
                             </DropdownMenuTrigger>
@@ -245,7 +314,9 @@ const SaveChanges = () => {
                                 <AlertDialogDescription>{saveActions[modalAction].description}</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogAction onClick={e => saveActions[modalAction].onClick()} >Save Changes</AlertDialogAction>
+                                <AlertDialogAction onClick={e => saveActions[modalAction].onClick()} >
+                                    {saveActions[modalAction]?.action_text ? saveActions[modalAction].action_text : 'Save Changes'}
+                                    </AlertDialogAction>
                                 <AlertDialogCancel onClick={e => setOpen(false)}>Discard</AlertDialogCancel>
                             </AlertDialogFooter>
                         </div>

@@ -98,7 +98,7 @@ const Header = ({ url }: { url: string}) => {
                                            commonDispatch(setCommonState('openAudits', []))
                                        }}
                                        className={cn(
-                                           'transition-none h-12 rounded-2xl border-none bg-transparent',
+                                           'transition-none h-12 rounded-2xl border-none bg-transparent hover:opacity-100',
                                            touched && 'opacity-50'
                                        )}
                                        variant='outline'>
@@ -138,7 +138,6 @@ const Header = ({ url }: { url: string}) => {
 
                         <AppButton data-tour='analyze'
                                    onClick={() => {
-
                                        commonDispatch(setCommonRootState('isTourOpen', true))
                                        setTourPrompt(false)
                                    }}

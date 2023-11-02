@@ -53,6 +53,54 @@ interface SettingItemProps {
     hideActions?: boolean
 }
 
+export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
+
+    if (!status) {
+        return  <></>
+    }
+
+    if (status.status === 'failed') {
+        return (
+            <Indicator className='fill-rose-600'>
+                <div className='flex flex-col gap-0.5'>
+                        <span className='flex gap-2 items-center'>
+                            <Circle className='w-2 fill-rose-500 stroke-0'/>
+                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
+                        </span>
+                    <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
+                </div>
+            </Indicator>
+        );
+    }
+
+    if(status.status === 'queued') {
+        return (
+            <Indicator className='animate-pulse fill-amber-500'>
+                <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
+                    Waiting in the queue
+                </div>
+            </Indicator>
+        )
+    }
+
+    if(status.status === 'processing') {
+        return <InProgress/>
+    }
+
+    if(status.status === 'success') {
+        return (
+            <Indicator className='fill-green-600'>
+                <div className='flex gap-2 items-center'>
+                    <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
+                </div>
+            </Indicator>
+        )
+    }
+
+    return <></>;
+})
+
+
 const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
     if (!settings) {
@@ -129,58 +177,14 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
-        const content =  document.getElementById('rapidload-page-optimizer-content')
-        content?.scrollTo(0, 0)
-
+        if (open) {
+            const content =  document.getElementById('rapidload-page-optimizer-content');
+            content?.scrollTo(0, 0)
+        }
     }, [open])
 
 
-    const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
 
-        if (!status) {
-            return  <></>
-        }
-
-        if (status.status === 'failed') {
-            return (
-                <Indicator className='fill-rose-600'>
-                    <div className='flex flex-col gap-0.5'>
-                        <span className='flex gap-2 items-center'>
-                            <Circle className='w-2 fill-rose-500 stroke-0'/>
-                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
-                        </span>
-                        <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
-                    </div>
-                </Indicator>
-            );
-        }
-
-        if(status.status === 'queued') {
-            return (
-                <Indicator className='animate-pulse fill-amber-500'>
-                    <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
-                        Waiting in the queue
-                    </div>
-                </Indicator>
-            )
-        }
-
-        if(status.status === 'processing') {
-            return <InProgress/>
-        }
-
-        if(status.status === 'success') {
-            return (
-                <Indicator className='fill-green-600'>
-                    <div className='flex gap-2 items-center'>
-                        <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
-                    </div>
-                </Indicator>
-            )
-        }
-
-        return <></>;
-    })
 
     const buttonAction = async (input: AuditSettingInput) => {
         setLoading(true)

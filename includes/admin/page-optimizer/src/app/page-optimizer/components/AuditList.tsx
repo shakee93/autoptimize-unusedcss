@@ -18,7 +18,7 @@ const AuditList =({ activeTab }: Props) => {
 
 
     return <AnimatePresence initial={false}>
-        {activeData.slice(0,10)?.map((audit: Audit, index: number) => (
+        {activeData?.map((audit: Audit, index: number) => (
 
                     <m.div
                         key={audit.id}
