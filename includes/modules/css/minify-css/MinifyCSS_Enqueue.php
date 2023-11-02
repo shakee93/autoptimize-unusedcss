@@ -121,7 +121,7 @@ class MinifyCSS_Enqueue
 
         $filename = $version . '.min.css';
 
-        $minified_file = MinifyCSS::$base_dir . '/' . $filename;
+        $minified_file = MinifyCSS::$base_dir . '/rpd-inline-style-' . $filename;
 
         $file_exist = $this->file_system->exists($minified_file);
 

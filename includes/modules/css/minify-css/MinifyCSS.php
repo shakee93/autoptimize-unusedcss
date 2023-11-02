@@ -31,6 +31,26 @@ class MinifyCSS
         add_action('rapidload/job/handle', [$this, 'minify_css'], 40, 2);
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
+
+        add_action('cron_rapidload_minify_css_storage_clean', [$this, 'clean_minify_file_storage']);
+
+        if (!wp_next_scheduled('cron_rapidload_minify_css_storage_clean')) {
+            wp_schedule_event(current_time('timestamp'), 'daily', 'cron_rapidload_minify_css_storage_clean');
+        }
+
+    }
+
+    public function clean_minify_file_storage() {
+        $directory_path = MinifyCSS::$base_dir;
+        $days_to_keep = 7;
+        $current_time = time();
+        $files = scandir($directory_path);
+        foreach ($files as $file) {
+            $file_path = $directory_path . '/' . $file;
+            if (is_file($file_path) && $this->str_contains($file_path, 'rpd-inline-style-') && (filemtime($file_path) < ($current_time - ($days_to_keep * 86400)))) {
+                unlink($file_path);
+            }
+        }
     }
 
     public function vanish() {
