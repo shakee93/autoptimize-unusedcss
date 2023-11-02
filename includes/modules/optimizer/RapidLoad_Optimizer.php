@@ -71,7 +71,7 @@ class RapidLoad_Optimizer
             case 'product':
             case 'post':{
                 $results = $this->search_content_by_type($query, [$type]);
-                error_log(json_encode($results, JSON_PRETTY_PRINT));
+                wp_send_json_success($results);
                 break;
             }
             case 'product_cat':
