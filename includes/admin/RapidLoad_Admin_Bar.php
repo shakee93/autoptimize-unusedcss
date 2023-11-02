@@ -78,7 +78,8 @@ class RapidLoad_Admin_Bar {
                     [
                         'label' => 'Author Archive',
                         'value' => 'author',
-                        'group' => null
+                        'group' => null,
+                        'query_type' => 'author'
                     ],
                     [
                         'label' => 'Date Archive',
@@ -87,28 +88,33 @@ class RapidLoad_Admin_Bar {
                     ],
                     [
                         'label' => 'Posts Archive',
-                        'value' => 'author',
-                        'group' => 'Posts Archive'
+                        'value' => 'posts',
+                        'group' => 'Posts Archive',
+                        'query_type' => 'post'
                     ],
                     [
                         'label' => 'Categories',
                         'value' => 'category',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Direct Child Category of',
                         'value' => 'direct_child_category_of',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Any Child Category of',
                         'value' => 'any_child_category_of',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Tags',
                         'value' => 'tag',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'post_tag'
                     ],
                 ]
             ],
@@ -130,26 +136,31 @@ class RapidLoad_Admin_Bar {
                         'label' => 'Posts',
                         'value' => 'posts',
                         'group' => 'Posts',
+                        'query_type' => 'post'
                     ],
                     [
                         'label' => 'In Category',
                         'value' => 'in_category_of',
                         'group' => 'Posts',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'In Tag',
                         'value' => 'in_tag',
                         'group' => 'Posts',
+                        'query_type' => 'post_tag'
                     ],
                     [
                         'label' => 'Pages',
                         'value' => 'pages',
                         'group' => 'Pages',
+                        'query_type' => 'page'
                     ],
                     [
                         'label' => 'By Author',
                         'value' => 'by_author',
                         'group' => null,
+                        'query_type' => 'author'
                     ]
                 ]
             ]

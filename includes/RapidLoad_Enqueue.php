@@ -30,7 +30,7 @@ class RapidLoad_Enqueue {
 
             $this->url = $this->transform_url($this->url);
 
-            if($this->enabled($this->url)){error_log('hello');
+            if($this->enabled($this->url)){
 
                 $this->group = $this->get_current_group();
 
