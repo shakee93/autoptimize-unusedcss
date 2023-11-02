@@ -307,11 +307,15 @@ const SaveChanges = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <AlertDialogContent className='w-full max-w-[520px]'>
+                    <AlertDialogContent asChild className='w-full max-w-[520px]'>
                         <div>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>{saveActions[modalAction].title}</AlertDialogTitle>
-                                <AlertDialogDescription>{saveActions[modalAction].description}</AlertDialogDescription>
+                                <AlertDialogDescription>
+                                    <div>
+                                        {saveActions[modalAction].description}
+                                    </div>
+                                </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogAction onClick={e => saveActions[modalAction].onClick()} >

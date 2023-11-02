@@ -24,6 +24,7 @@ import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -118,6 +119,7 @@ const Header = ({ url }: { url: string}) => {
             </div>
 
 
+
             <div className='flex relative gap-4 items-center'>
 
 
@@ -154,11 +156,15 @@ const Header = ({ url }: { url: string}) => {
                     </>
                 }
 
-                <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
-                    <XMarkIcon className={cn(
-                        'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
-                    )} />
-                </TooltipText>
+
+
+                <UnsavedChanges  onClick={() => { setShowOptimizer(false) }} >
+                    <TooltipText text='Close Optimizer'>
+                        <XMarkIcon className={cn(
+                            'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
+                        )} />
+                    </TooltipText>
+                </UnsavedChanges>
             </div>
         </header>
 
