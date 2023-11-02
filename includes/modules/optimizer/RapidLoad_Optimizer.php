@@ -106,6 +106,10 @@ class RapidLoad_Optimizer
                 error_log(json_encode($results, JSON_PRETTY_PRINT));
                 break;
             }
+            default:{
+                $results = $this->search_content_by_type($query, [$type]);
+                wp_send_json_success($results);
+            }
         }
 
     }
