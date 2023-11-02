@@ -138,7 +138,7 @@ class ApiService {
        }
     }
 
-    async updateSettings(url: string, activeReport: string, reload: boolean, data: any, global: boolean, analyze: boolean) {
+    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 
             const query = new URLSearchParams();

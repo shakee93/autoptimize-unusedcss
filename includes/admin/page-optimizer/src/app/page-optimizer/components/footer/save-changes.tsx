@@ -33,6 +33,8 @@ import {cn} from "lib/utils";
 import {CSSDelivery} from "app/page-optimizer/components/icons/icon-svg";
 import {Status} from "app/page-optimizer/components/audit/Setting";
 import Accordion from "components/accordion";
+import useSubmitSettings from "hooks/useSubmitSettings";
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 
 const SaveChanges = () => {
 
@@ -51,6 +53,8 @@ const SaveChanges = () => {
     let url = options?.optimizer_url;
     const { toast } = useToast()
 
+    const { submitSettings } = useSubmitSettings()
+
 
     const defaultAction = global ? 2 : 0
     const [open, setOpen] = useState(false)
@@ -58,8 +62,6 @@ const SaveChanges = () => {
     const refSaveButton = useRef<HTMLButtonElement | null>(null);
     const [activeAction, setActiveAction] = useState(defaultAction)
     const [modalAction, setModalAction] = useState(defaultAction)
-
-    const [reload, setReload] = useState<boolean>(false)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -86,54 +88,6 @@ const SaveChanges = () => {
 
     }, [touched])
 
-    const submitSettings = useCallback(async (analyze = false, global = false) => {
-
-        if (savingData) {
-            return;
-        }
-
-        const api = new ApiService(options);
-
-        try {
-
-            if (analyze) {
-                setInvalidatingCache(true)
-                await api.post('clear_page_cache')
-                setInvalidatingCache(false)
-            }
-
-            setSavingData(true);
-
-            const res = await api.updateSettings(
-                url,
-                activeReport,
-                reload,
-                data,
-                global,
-                analyze
-            );
-
-            toast({
-                description: <div className='flex w-full gap-2 text-center'>Your settings have been saved successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
-            })
-
-            if (analyze) {
-                dispatch(fetchData(options, url, true));
-            }
-
-
-        } catch (error: any) {
-            toast({
-                description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
-            })
-
-        }
-
-
-        setSavingData(false)
-        setInvalidatingCache(false)
-
-    }, [data, activeReport, reload, savingData, invalidatingCache])
 
     const status = {
         queued: 'Waiting in the queue...',
@@ -164,8 +118,8 @@ const SaveChanges = () => {
             </div>,
             title: 'Save Changes and Analyze?',
             description: <div className=''>
-                {/*{inProgressSettings.length > 0 ?*/}
-                    {false ?
+                {/*{false ?*/}
+                {inProgressSettings.length > 0 ?
                     <div className='flex flex-col gap-6'>
                         <div>
                             You've made changes to your settings. However, some processes are still in the queue. To get the most accurate results, it's best to wait until all tasks are complete before saving and re-analyzing.
@@ -326,7 +280,9 @@ const SaveChanges = () => {
                         </div>
                     </AlertDialogContent>
                 </AlertDialog>
-                <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='outline'>Close</AppButton>
+                <UnsavedChanges onClick={() => setShowOptimizer(false)}>
+                    <AppButton className='text-sm'  variant='outline'>Close</AppButton>
+                </UnsavedChanges>
             </div>
         </Mode>
 
