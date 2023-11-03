@@ -90,7 +90,6 @@ class RapidLoad_Admin_Bar {
                         'label' => 'Posts Archive',
                         'value' => 'posts',
                         'group' => 'Posts Archive',
-                        'query_type' => 'post'
                     ],
                     [
                         'label' => 'Categories',
