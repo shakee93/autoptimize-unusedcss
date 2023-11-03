@@ -96,11 +96,17 @@ const Header = ({ url }: { url: string}) => {
                             title='Analyze without Saving?'
                             description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
                             action='Save & Analyze'
+                            cancel='Discard & Analyze'
+                            onCancel={() => {
+                                dispatch(fetchData(options, url, true))
+                                commonDispatch(setCommonState('openAudits', []))
+                            }}
                             onClick={() =>  {
                             dispatch(fetchData(options, url, true))
                             commonDispatch(setCommonState('openAudits', []))
                         }} >
-                            <TooltipText text='Analyze the page'>
+                            <TooltipText
+                                text='Analyze the page'>
                                 <AppButton data-tour='analyze'
 
                                            className={cn(
