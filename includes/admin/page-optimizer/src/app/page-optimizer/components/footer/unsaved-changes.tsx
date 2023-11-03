@@ -9,14 +9,21 @@ import {ReactNode} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import useSubmitSettings from "hooks/useSubmitSettings";
-
+import {XIcon} from "lucide-react";
+import { Cancel } from "@radix-ui/react-alert-dialog"
+import TooltipText from "components/ui/tooltip-text";
 
 interface Props {
     children: ReactNode
     onClick: () => void
+    onCancel?: () => void
+    title?: string
+    description?: string
+    action?: string
+    cancel?: string
 }
 
-const UnsavedChanges = ({children , onClick }: Props) => {
+const UnsavedChanges = ({children , onClick, title, description, action = 'Save & Exit', onCancel, cancel }: Props) => {
 
     const { touched, fresh } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
@@ -25,6 +32,17 @@ const UnsavedChanges = ({children , onClick }: Props) => {
         return <div onClick={e => onClick()} >
             {children}
         </div>
+    }
+
+
+    const submit = async () => {
+
+        await submitSettings(action === 'Save & Analyze');
+
+        setTimeout(() => {
+            onClick();
+        }, 800);
+
     }
 
     return (
@@ -37,23 +55,27 @@ const UnsavedChanges = ({children , onClick }: Props) => {
             <AlertDialogContent>
                <div>
                    <AlertDialogHeader>
-                       <AlertDialogTitle>Continue without Saving?</AlertDialogTitle>
+                       <AlertDialogTitle className='flex justify-between items-center'>{title ? title: 'Continue without Saving?'}
+
+                           <TooltipText text='Close the Alert'>
+                               <Cancel asChild>
+                                   <XIcon className='stroke-1'/>
+                               </Cancel>
+                           </TooltipText>
+                       </AlertDialogTitle>
                        <AlertDialogDescription>
                            <div>
-                               You have changes that haven't been saved. If you leave or re-analyze now, your edits will be lost.
+                               {description ? description : 'You have changes that haven\'t been saved. If you are leave now, your edits will be lost.'}
                            </div>
                        </AlertDialogDescription>
+
                    </AlertDialogHeader>
                    <AlertDialogFooter>
-                       <AlertDialogAction onClick={async e => {
-                           await submitSettings();
+                       <AlertDialogAction onClick={async e => submit()}>{action}</AlertDialogAction>
 
-                           setTimeout(() => {
-                               onClick();
-                           }, 800)
-
-                       }}>Save & Exit</AlertDialogAction>
-                       <AlertDialogCancel>Discard</AlertDialogCancel>
+                       <AlertDialogCancel onClick={e => onCancel && onCancel() }>
+                           {cancel ? cancel : 'Discard'}
+                       </AlertDialogCancel>
                    </AlertDialogFooter>
                </div>
             </AlertDialogContent>

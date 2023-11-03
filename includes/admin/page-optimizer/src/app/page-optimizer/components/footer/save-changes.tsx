@@ -78,7 +78,6 @@ const SaveChanges = () => {
     useEffect(() => {
 
         if (touched && !global) {
-            console.log('here');
             setActiveAction(1)
         } else  if (global) {
             setActiveAction(2)
@@ -122,7 +121,7 @@ const SaveChanges = () => {
                 {inProgressSettings.length > 0 ?
                     <div className='flex flex-col gap-6'>
                         <div>
-                            You've made changes to your settings. However, some processes are still in the queue. To get the most accurate results, it's best to wait until all tasks are complete before saving and re-analyzing.
+                            You've made changes to your settings. For accurate results, wait for all tasks to complete before saving and re-analyzing.
                         </div>
                         <div className='flex flex-col gap-4 mb-4'>
 
@@ -140,10 +139,10 @@ const SaveChanges = () => {
                                 </div>
                             </div>
 
-                            <Accordion isOpen={inProgress}>
+                            <Accordion  isOpen={inProgress}>
                                 <div className='pl-14'>
-                                    {inProgressSettings.map(i => (
-                                        <div className='font-medium flex gap-2 items-center'>
+                                    {inProgressSettings.map((i, index) => (
+                                        <div key={index} className='font-medium flex gap-2 items-center'>
                                             <div className='mt-0.5'>
                                                 <CSSDelivery/>
                                             </div>
@@ -280,7 +279,10 @@ const SaveChanges = () => {
                         </div>
                     </AlertDialogContent>
                 </AlertDialog>
-                <UnsavedChanges onClick={() => setShowOptimizer(false)}>
+                <UnsavedChanges
+                    onCancel={() => { setShowOptimizer(false) }}
+                    cancel='Discard & Leave'
+                    onClick={() => setShowOptimizer(false)}>
                     <AppButton className='text-sm'  variant='outline'>Close</AppButton>
                 </UnsavedChanges>
             </div>

@@ -92,28 +92,31 @@ const Header = ({ url }: { url: string}) => {
                         </div>
                     </div>
                     <div>
-                        <TooltipText text='Analyze the page'>
-                            <AppButton data-tour='analyze'
-                                       onClick={() =>  {
-                                           dispatch(fetchData(options, url, true))
-                                           commonDispatch(setCommonState('openAudits', []))
-                                       }}
-                                       className={cn(
-                                           'transition-none h-12 rounded-2xl border-none bg-transparent hover:opacity-100',
-                                           touched && 'opacity-50'
-                                       )}
-                                       variant='outline'>
-                                <div className='flex flex-col gap-1 items-center'>
-                                    <ArrowPathIcon className={cn(
-                                        'w-5',
-                                        loading && 'animate-spin'
-                                    )}/>
-                                    <span className='text-xxs font-normal text-brand-500'>Analyze </span>
-                                </div>
-                            </AppButton>
-                        </TooltipText>
+                        <UnsavedChanges
+                            title='Analyze without Saving?'
+                            description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
+                            action='Save & Analyze'
+                            onClick={() =>  {
+                            dispatch(fetchData(options, url, true))
+                            commonDispatch(setCommonState('openAudits', []))
+                        }} >
+                            <TooltipText text='Analyze the page'>
+                                <AppButton data-tour='analyze'
 
-
+                                           className={cn(
+                                               'transition-none h-12 rounded-2xl border-none bg-transparent hover:opacity-100',
+                                           )}
+                                           variant='outline'>
+                                    <div className='flex flex-col gap-1 items-center'>
+                                        <ArrowPathIcon className={cn(
+                                            'w-5',
+                                            loading && 'animate-spin'
+                                        )}/>
+                                        <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                    </div>
+                                </AppButton>
+                            </TooltipText>
+                        </UnsavedChanges>
                     </div>
                 </div>
             </div>
@@ -158,7 +161,10 @@ const Header = ({ url }: { url: string}) => {
 
 
 
-                <UnsavedChanges  onClick={() => { setShowOptimizer(false) }} >
+                <UnsavedChanges
+                    onCancel={() => { setShowOptimizer(false) }}
+                    cancel='Discard & Leave'
+                    onClick={() => { setShowOptimizer(false) }} >
                     <TooltipText text='Close Optimizer'>
                         <XMarkIcon className={cn(
                             'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',

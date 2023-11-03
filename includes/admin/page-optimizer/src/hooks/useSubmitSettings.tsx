@@ -51,9 +51,19 @@ const useSubmitSettings = () => {
         try {
 
             if (analyze) {
-                setInvalidatingCache(true)
-                await api.post('clear_page_cache')
-                setInvalidatingCache(false)
+
+                try{
+                    setInvalidatingCache(true)
+                    await api.post('clear_page_cache')
+                    setInvalidatingCache(false)
+                }
+                catch (e: any) {
+                    setInvalidatingCache(false)
+                    toast({
+                        description: <div className='flex w-full gap-2 text-center'>{e.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                    })
+                }
+
             }
 
             setSavingData(true);
