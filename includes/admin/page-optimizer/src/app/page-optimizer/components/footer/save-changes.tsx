@@ -212,18 +212,15 @@ const SaveChanges = () => {
                 <AlertDialog open={open} onOpenChange={setOpen}>
                     <DropdownMenu>
                         <Button
-                            disabled={!savable}
                             data-tour='save-changes' ref={refSaveButton} asChild
                                 className={cn(
                                     'min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0',
-                                    !savable && 'opacity-80 '
+                                    !savable && 'opacity-[90%]'
                                 )}>
                             <AlertDialogTrigger
-                                disabled={!savable}
                                 onClick={e => setModalAction(activeAction)}
                                 className={cn(
                                     'flex gap-2 items-center pl-3 pr-2 h-full',
-                                    !savable && 'cursor-not-allowed'
                                 )}>
                                 {(savingData || invalidatingCache) ?
                                     <Loader className='w-5 mr-0.5 animate-spin'/> :
@@ -232,10 +229,9 @@ const SaveChanges = () => {
                             </AlertDialogTrigger>
 
                             <DropdownMenuTrigger
-                                disabled={!savable}
                                 className={cn(
                                     ' dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5',
-                                    savable ? 'dark:hover:bg-zinc-300 hover:bg-slate-700' : 'cursor-not-allowed'
+                                    savable && 'dark:hover:bg-zinc-300 hover:bg-slate-700'
                                 )}>
                                 <ChevronDown className='w-5'/>
                             </DropdownMenuTrigger>
