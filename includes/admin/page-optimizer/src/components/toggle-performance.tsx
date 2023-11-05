@@ -15,8 +15,8 @@ const TogglePerformance = () => {
                 <span className='cursor-pointer' onClick={() => {
                     setTogglePerformance(prev => !prev)
                 }}>
-                            {(togglePerformance) ? <ArrowLeftToLine className="h-4 w-4 text-gray-500"/> :
-                                <ArrowRightToLine className="h-4 w-4 text-gray-500"/>}
+                            {(togglePerformance) ? <ArrowLeftToLine className="rotate-90 xl:rotate-0 h-4 w-4 text-gray-500"/> :
+                                <ArrowRightToLine className="rotate-90 xl:rotate-0 h-4 w-4 text-gray-500"/>}
                         </span>
         </TooltipText>
     )

@@ -88,9 +88,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='speed-insights'
-                className='backdrop-blur-md bg-brand-0/50 overflow-visible'>
+                className='overflow-hidden flex lg:flex-col justify-around'>
                 <div
-                    className="content flex flex-col items-center gap-3 px-12 py-2.5">
+                    className="content flex w-1/2 xl:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 xl:px-12 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
@@ -124,15 +124,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
                     <div className="flex justify-around text-sm gap-4 font-normal w-full mb-5 text-brand-700 dark:text-brand-300">
-                        <div className="flex items-center gap-1">
+                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
                             <PerformanceIcons icon={'fail'}/>
                             0-49
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
                             <PerformanceIcons icon={'average'}/>
                             50-89
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
                             <PerformanceIcons icon={'pass'}/>
                             89-100
                         </div>
@@ -142,7 +142,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 {data?.metrics && (
                     <div className={cn(
-                        'sticky top-0'
+                        'sticky top-0 w-1/2 xl:w-full border-l xl:border-l-0'
                     )
                     } data-tour='metrics'>
                         <div

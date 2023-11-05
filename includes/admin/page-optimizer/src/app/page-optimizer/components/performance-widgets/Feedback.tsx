@@ -77,7 +77,7 @@ const Feedback = () => {
 
     return (
         <Card className={cn(
-            'flex flex-col gap-4 px-6 py-5 mb-12 backdrop-blur-md bg-brand-0/70',
+            'flex flex-col gap-4 px-6 py-5 xl:mb-12 backdrop-blur-md bg-brand-0/70',
             !activeFeedback && 'pb-1'
         )}>
             <div className='flex flex-col gap-0.5'>
