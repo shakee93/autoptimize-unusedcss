@@ -94,7 +94,7 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                                 {metric.displayValue}
                             </div>
                         </div>
-                        <div>
+                        <div className='hidden xl:block'>
                             { hoveredMetric?.id === metric.id ?
                                 <div
                                     className={cn(

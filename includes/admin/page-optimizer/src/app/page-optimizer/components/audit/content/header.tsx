@@ -54,7 +54,7 @@ const FilesTableHeader = ({audit, group, open, setOpen, index} : FilesTableHeade
             <div
                 data-tour={`${audit.id}-file-group-${index}-header`}
                 className={cn(
-                    'flex justify-between items-center gap-2 font-medium text-sm capitalize px-4 py-3',
+                    'flex flex-col xl:flex-row justify-between xl:items-center gap-3 xl:gap-2 font-medium text-sm capitalize px-4 py-3',
                     open && 'border-b'
                 )
                 }>
@@ -88,7 +88,7 @@ const FilesTableHeader = ({audit, group, open, setOpen, index} : FilesTableHeade
                 {(audit.settings.length > 0) && (
                     <div
                         data-tour={`${audit.id}-group-${index}-settings`}
-                        className='flex flex-col gap-3 px-4'>
+                        className='flex flex-col gap-3 xl:px-4'>
                         <Settings type={group.type} audit={audit}/>
                     </div>
                 )}
