@@ -66,7 +66,7 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                          onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
                          className={cn(
                              'lg:last:rounded-b-3xl select-none cursor-pointer dark:hover:bg-brand-900/50 hover:bg-brand-100/50 group flex flex-row justify-between items-center ' +
-                             'last:border-b-0 border-b lg:border-b-0 lg:border-t even:border-l px-3 lg:px-6 py-2.5',
+                             'last:border-b-0 border-b lg:border-b-0 lg:border-t lg:even:border-l-0 even:border-l px-3 lg:px-6 py-2.5',
                              metric.id === activeMetric?.id && 'bg-brand-100/80 dark:bg-brand-900/80 '
 
                          )}>
