@@ -60,13 +60,16 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
                    {/*<Help audit={audit}/>*/}
                     <Description content={audit.description}/>
 
-                    <ul className='px-3 mt-2 flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
-                        {points.map((point, index) => (
-                            point && (<li key={index} className='flex gap-1.5 items-center'>
-                                <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
-                            </li>)
-                        ))}
-                    </ul>
+                    {points.length > 0 &&
+                        <ul className='px-3 mt-2 flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
+                            {points.map((point, index) => (
+                                point && (<li key={index} className='flex gap-1.5 items-center'>
+                                    <Circle className='w-2 stroke-none mt-[1px] fill-brand-300 dark:fill-brand-700'/> <span>{point}</span>
+                                </li>)
+                            ))}
+                        </ul>
+                    }
+
                 </div>
             </div>
 
