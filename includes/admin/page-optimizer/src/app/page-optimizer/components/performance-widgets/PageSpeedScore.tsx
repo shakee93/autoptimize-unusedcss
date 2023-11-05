@@ -88,9 +88,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='speed-insights'
-                className='overflow-hidden flex lg:flex-col justify-around'>
+                className='overflow-hidden flex flex-col sm:flex-row lg:flex-col justify-around'>
                 <div
-                    className="content flex w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 xl:px-8 py-2.5">
+                    className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 xl:px-8 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
@@ -142,7 +142,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 {data?.metrics && (
                     <div className={cn(
-                        'sticky top-0 w-1/2 lg:w-full border-l lg:border-l-0'
+                        'sticky top-0 w-full sm:w-1/2 lg:w-full border-l lg:border-l-0'
                     )
                     } data-tour='metrics'>
                         <div
