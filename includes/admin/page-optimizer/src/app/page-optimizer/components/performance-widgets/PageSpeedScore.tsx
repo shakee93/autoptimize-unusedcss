@@ -148,7 +148,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         <div
                             onClick={e => dispatch(setCommonState('activeMetric', null)) }
                             className={cn(
-                                'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70  px-6 py-3 border-t cursor-pointer text-sm',
+                                'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70  px-6 py-3 border-b lg:border-b-0 lg:border-t cursor-pointer text-sm',
                                 !activeMetric && 'bg-brand-100/80 dark:bg-brand-900/80 '
                             )
                             }>
