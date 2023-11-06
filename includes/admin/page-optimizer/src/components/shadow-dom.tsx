@@ -17,7 +17,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
     const { optimizerRoot, dispatch} = useCommonDispatch()
-    const [forDev, setForDev] = useState(false)
+    const [forDev, setForDev] = useState(true)
 
     useEffect(() => {
 

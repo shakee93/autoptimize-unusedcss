@@ -35,7 +35,10 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <>
+  <DialogPortal container={
+      document.getElementById('rapidload-optimizer-shadow-dom')?.shadowRoot?.getElementById('rapidload-page-optimizer-wrapper')
+      || document.body
+  }>
     <DialogOverlay className='cursor-auto' />
     <DialogPrimitive.Content asChild
       ref={ref}
@@ -52,7 +55,7 @@ const DialogContent = React.forwardRef<
           </DialogPrimitive.Close>
       </div>
     </DialogPrimitive.Content>
-  </>
+  </DialogPortal>
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
