@@ -111,7 +111,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                         key={audit.id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: (index || 1) * 0.01 }}
+                        transition={{ delay: (index || 1) * 0.005 }}
                         className='relative'
                     >
                         <Card
