@@ -34,9 +34,9 @@ class MinifyCSS
 
         add_action('cron_rapidload_minify_css_storage_clean', [$this, 'clean_minify_file_storage']);
 
-        if (!wp_next_scheduled('cron_rapidload_minify_css_storage_clean')) {
+        /*if (!wp_next_scheduled('cron_rapidload_minify_css_storage_clean')) {
             wp_schedule_event(current_time('timestamp'), 'daily', 'cron_rapidload_minify_css_storage_clean');
-        }
+        }*/
 
     }
 
