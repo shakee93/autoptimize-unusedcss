@@ -176,12 +176,12 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
 
     // TODO: temp fix for scroll view leakage
-    useEffect(() => {
-        if (open) {
-            const content =  document.getElementById('rapidload-page-optimizer-content');
-            content?.scrollTo(0, 0)
-        }
-    }, [open])
+    // useEffect(() => {
+    //     if (open) {
+    //         const content =  document.getElementById('rapidload-page-optimizer-content');
+    //         content?.scrollTo(0, 0)
+    //     }
+    // }, [open])
 
 
 
@@ -253,6 +253,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                                     </div>
                                 </DialogTrigger>
                                 <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
+
                                     <DialogHeader className='border-b px-6 py-7'>
                                         <DialogTitle>{settings.name} Settings</DialogTitle>
                                         <DialogDescription>

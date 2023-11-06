@@ -37,6 +37,16 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [loading, setLoading] = useState(false)
     const { options } = useAppContext()
+
+    const value = useMemo(() => {
+
+        if (!input) {
+            return '';
+        }
+
+        return updates.find(i => i.key === input.key)?.value;
+    }, [input, updates])
+
     if (!input) {
         return <></>
     }
@@ -72,7 +82,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 <Label htmlFor="name" className="flex gap-2 items-center ml-4 text-left w-full">
                     <span>{input.control_label}</span>
                     <Switch
-                        checked={updates.find(i => i.key === input.key)?.value}
+                        checked={value}
                         onCheckedChange={(c: boolean) => update(c, input.key)}/>
 
                 </Label>
@@ -83,7 +93,9 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     <Label htmlFor="name" className="flex ml-4 text-left w-full">
                         <span>{input.control_label}</span>
                     </Label>
-                    <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
+                    <textarea value={value} onChange={e => update(e.target.value, input.key)} >
+
+                    </textarea>
                 </>
             );
         case "button":
@@ -104,7 +116,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 <>
                     <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
                         <span>{input.control_label}</span>
-                        <Select value={updates.find(i => i.key === input.key)?.value}  onValueChange={v => update(v, input.key)}>
+                        <Select value={value}  onValueChange={v => update(v, input.key)}>
                             <SelectTrigger className="w-[180px] capitalize">
                                 <SelectValue placeholder="Select action"/>
                             </SelectTrigger>
@@ -140,11 +152,32 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 const AdditionalInputs = ({ data, updates, update }: AdditionalInputsProps) => {
 
+    const value = useCallback((input: AuditSettingInput) => {
+
+        if (!input) {
+            return '';
+        }
+
+        return updates.find(i => i.key === input.key)?.value;
+    }, [updates])
+
     return <>
         {
             data?.map((input, index) => (
                     <div key={index} className="flex flex-col justify-start items-center gap-3 normal-case">
-                        <Fields input={input} updates={updates} update={update}/>
+                        {/*<Fields input={input} updates={updates} update={update}/>*/}
+
+                        {/*{input.control_type === 'checkbox' &&*/}
+
+                        {/*    <Label htmlFor="name" className="flex gap-2 items-center ml-4 text-left w-full">*/}
+                        {/*        <span>{input.control_label}</span>*/}
+                        {/*        <Switch*/}
+                        {/*            checked={value(input)}*/}
+                        {/*            onCheckedChange={(c: boolean) => update(c, input.key)}/>*/}
+
+                        {/*    </Label>*/}
+
+                        {/*}*/}
                     </div>
                 ))
         }

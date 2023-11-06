@@ -17,7 +17,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
     const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
     const { optimizerRoot, dispatch} = useCommonDispatch()
-    const [forDev, setForDev] = useState(true)
+    const [forDev, setForDev] = useState(false)
 
     useEffect(() => {
 
@@ -58,16 +58,18 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
             if (styles) {
                 // in here for backward compatibility
                 const originalStyles = document.getElementById('rapidload_page_optimizer-css') as HTMLLinkElement;
-                let styleSheetURL = window.rapidload_optimizer.titan_stylesheet_url;
+                let styleSheetURL = window?.rapidload_optimizer?.titan_stylesheet_url;
 
 
                 if (!styleSheetURL) {
-                    styleSheetURL = originalStyles.href
+                    styleSheetURL = originalStyles?.href || styles
                 }
+
+
 
                 const styleLink = document.createElement('link');
                 styleLink.setAttribute('rel', 'stylesheet');
-                styleLink.setAttribute('href', styleSheetURL ? styleSheetURL : styles);
+                styleLink.setAttribute('href', styleSheetURL);
                 shadowRoot.appendChild(styleLink);
             }
 

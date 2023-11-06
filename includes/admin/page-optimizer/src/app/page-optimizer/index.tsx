@@ -48,20 +48,23 @@ export default function PageOptimizer() {
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
-        const content =  document.getElementById('rapidload-page-optimizer-content')
-        content?.scrollTo(0, 0)
+
+        if (savingData) {
+            const content =  document.getElementById('rapidload-page-optimizer-content');
+            content?.scrollTo(0, 0)
+        }
 
     }, [savingData])
 
     return (
 
         <m.div
-            initial={{ y: 20, opacity: 0, scale:0.98 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 20, opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{
                 ease: 'linear',
-                duration: 0.1,
+                duration: 0.04,
         }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(

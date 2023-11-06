@@ -2,7 +2,6 @@ import React, {ReactNode, Suspense, useCallback, useEffect, useMemo, useRef, use
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
-import 'react-circular-progressbar/dist/styles.css';
 import {useAppContext} from "../../../../context/app";
 import {Skeleton} from "components/ui/skeleton"
 import {cn} from "lib/utils";
@@ -38,7 +37,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
     }, [isCoreWebClicked]);
-
 
     // reorder experience start
     const metricNameMappings: Record<string, string> = {
