@@ -117,7 +117,7 @@ class MinifyCSS_Enqueue
 
     public function minify_inline_css($style){
 
-        $version = substr(md5($style->innertext), 0, 12);
+        /*$version = substr(md5($style->innertext), 0, 12);
 
         $filename = $version . '.min.css';
 
@@ -134,7 +134,10 @@ class MinifyCSS_Enqueue
 
         if($this->file_system->exists($minified_file)){
             $style->__set('innertext',file_get_contents($minified_file));
-        }
+        }*/
+        $minifier = new \MatthiasMullie\Minify\CSS();
+        $minifier->add($style->innertext);
+        $style->__set('innertext',$minifier->minify());
     }
 
     private static function is_css( $el ) {
