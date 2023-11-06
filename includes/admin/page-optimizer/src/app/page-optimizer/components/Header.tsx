@@ -24,14 +24,34 @@ import {AnimatePresence} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
-    const { setShowOptimizer , options, version, mode } = useAppContext()
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const {isChanged, data, settings, originalSettings, original, loading} = useSelector(optimizerData);
-    const { activeTab, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
+
+    const {
+        setShowOptimizer ,
+        options,
+        version,
+        mode
+    } = useAppContext()
+
+    const { activeReport,
+        touched,
+        data,
+        settings,
+        originalSettings,
+        original,
+        loading
+    } = useSelector(optimizerData);
+
+    const {
+        activeTab,
+        activeMetric,
+        dispatch: commonDispatch
+    } = useCommonDispatch()
+
     const [tourPrompt, setTourPrompt] = useState(() => {
         const storedData = localStorage.getItem(tourPromptKey);
         return storedData ? JSON.parse(storedData) : true;
@@ -72,31 +92,41 @@ const Header = ({ url }: { url: string}) => {
                         </div>
                     </div>
                     <div>
-                        <TooltipText text='Analyze the page'>
-                            <AppButton data-tour='analyze'
-                                       onClick={() =>  {
-                                           dispatch(fetchData(options, url, true))
-                                           commonDispatch(setCommonState('openAudits', []))
-                                       }}
-                                       className={cn(
-                                           'transition-none h-12 rounded-2xl border-none bg-transparent',
-                                           isChanged && 'opacity-50'
-                                       )}
-                                       variant='outline'>
-                                <div className='flex flex-col gap-1 items-center'>
-                                    <ArrowPathIcon className={cn(
-                                        'w-5',
-                                        loading && 'animate-spin'
-                                    )}/>
-                                    <span className='text-xxs font-normal text-brand-500'>Analyze </span>
-                                </div>
-                            </AppButton>
-                        </TooltipText>
+                        <UnsavedChanges
+                            title='Analyze without Saving?'
+                            description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
+                            action='Save & Analyze'
+                            cancel='Discard & Analyze'
+                            onCancel={() => {
+                                dispatch(fetchData(options, url, true))
+                                commonDispatch(setCommonState('openAudits', []))
+                            }}
+                            onClick={() =>  {
+                            dispatch(fetchData(options, url, true))
+                            commonDispatch(setCommonState('openAudits', []))
+                        }} >
+                            <TooltipText
+                                text='Analyze the page'>
+                                <AppButton data-tour='analyze'
 
-
+                                           className={cn(
+                                               'transition-none h-12 rounded-2xl border-none bg-transparent hover:opacity-100',
+                                           )}
+                                           variant='outline'>
+                                    <div className='flex flex-col gap-1 items-center'>
+                                        <ArrowPathIcon className={cn(
+                                            'w-5',
+                                            loading && 'animate-spin'
+                                        )}/>
+                                        <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                    </div>
+                                </AppButton>
+                            </TooltipText>
+                        </UnsavedChanges>
                     </div>
                 </div>
             </div>
+
 
 
             <div className='flex relative gap-4 items-center'>
@@ -119,7 +149,6 @@ const Header = ({ url }: { url: string}) => {
 
                         <AppButton data-tour='analyze'
                                    onClick={() => {
-
                                        commonDispatch(setCommonRootState('isTourOpen', true))
                                        setTourPrompt(false)
                                    }}
@@ -136,11 +165,18 @@ const Header = ({ url }: { url: string}) => {
                     </>
                 }
 
-                <TooltipText onClick={() => { setShowOptimizer(false) }} text='Close Optimizer'>
-                    <XMarkIcon className={cn(
-                        'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
-                    )} />
-                </TooltipText>
+
+
+                <UnsavedChanges
+                    onCancel={() => { setShowOptimizer(false) }}
+                    cancel='Discard & Leave'
+                    onClick={() => { setShowOptimizer(false) }} >
+                    <TooltipText text='Close Optimizer'>
+                        <XMarkIcon className={cn(
+                            'h-6 w-6 dark:text-brand-300 text-brand-600 transition-opacity',
+                        )} />
+                    </TooltipText>
+                </UnsavedChanges>
             </div>
         </header>
 

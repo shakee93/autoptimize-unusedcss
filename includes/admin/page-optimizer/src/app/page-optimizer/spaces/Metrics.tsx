@@ -167,7 +167,7 @@ const Metrics = () => {
             <div className='ml-6'>
                 {!togglePerformance && <TogglePerformance/>}
             </div>
-            <div className='flex flex-col gap-3 mt-16 ml-6'>
+            <div className='flex flex-col gap-3 lg:mt-16 ml-6'>
                 <div className='flex flex-col gap-3 border-b pb-6'>
                     <div className='text-4xl font-medium'> {activeMetric?.title}</div>
                     {/*<div><Description className='pl-0 text-md' content={activeMetric?.description}/></div>*/}

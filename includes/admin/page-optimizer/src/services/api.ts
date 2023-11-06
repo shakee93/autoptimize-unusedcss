@@ -87,7 +87,7 @@ class ApiService {
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
 
             const response = await fetch(this.baseURL, {
-                method: "POST",
+                method: data ? "POST": "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -138,7 +138,7 @@ class ApiService {
        }
     }
 
-    async updateSettings(url: string, activeReport: string, reload: boolean, data: any, global: boolean, analyze: boolean) {
+    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 
             const query = new URLSearchParams();

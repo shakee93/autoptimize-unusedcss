@@ -31,11 +31,18 @@ const AlertDialogOverlay = React.forwardRef<
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
+type AlertDialogContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+    container?: typeof document.body;
+};
+
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
+    AlertDialogContentProps
 >(({ className, ...props }, refEl) => (
-  <>
+  <AlertDialogPortal container={
+      document.getElementById('rapidload-optimizer-shadow-dom')?.shadowRoot?.getElementById('rapidload-page-optimizer-wrapper')
+      || document.body
+  }>
     <AlertDialogOverlay />
     <AlertDialogPrimitive.Content
         asChild
@@ -46,7 +53,7 @@ const AlertDialogContent = React.forwardRef<
       )}
       {...props}
     />
-  </>
+  </AlertDialogPortal>
 ))
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
@@ -95,6 +102,7 @@ const AlertDialogDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Description
+      asChild
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}

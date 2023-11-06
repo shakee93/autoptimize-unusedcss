@@ -131,7 +131,7 @@ const initiateSettings = (audits: Audit[]) => {
             ...(
                 input.control_type === 'checkbox' &&
                 {
-                    value: input.value === '1'
+                    value: input.value === '1' || input.value === true
                 }
             )
         }))

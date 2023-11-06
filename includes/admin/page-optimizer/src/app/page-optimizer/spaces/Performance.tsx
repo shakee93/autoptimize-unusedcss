@@ -152,31 +152,33 @@ const Performance = () => {
             </div>
             <div className="audits pt-4 flex mb-24">
                 <div className='w-full'>
-                    <div className='grid grid-cols-12 gap-6 w-full relative '>
-                        <div className='col-span-12 flex flex-col gap-4'>
-                            <SetupChecklist/>
-                            <AuditList activeTab={activeTab}/>
-                        </div>
-                    </div>
                     <AnimatePresence initial={false}>
-                        {(!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0) && (
-                            <m.div
-                                initial={{opacity: 0, y: 10}}
-                                animate={{opacity: 1, y: 0}}
-                                exit={{opacity: 0, y: -20}}
-                                className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
+                        <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
+                            <div className='col-span-12 flex flex-col gap-4'>
+                                <SetupChecklist/>
+                                <AuditList activeTab={activeTab}/>
+                            </div>
+                        </div>
+                        <div key='audit-blank'>
+                            {(!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0) && (
+                                <m.div
+                                    initial={{opacity: 0, y: 10}}
+                                    animate={{opacity: 1, y: 0}}
+                                    exit={{opacity: 0, y: -20}}
+                                    className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
 
-                                <div>
-                                    <img alt='Good Job!' className='w-64'
-                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                                </div>
+                                    <div>
+                                        <img alt='Good Job!' className='w-64'
+                                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                    </div>
 
-                                <span className='flex gap-2'>
+                                    <span className='flex gap-2'>
                                     Brilliantly done! It's clear you've mastered this.
                                 </span>
-                            </m.div>
+                                </m.div>
 
-                        )}
+                            )}
+                        </div>
                     </AnimatePresence>
                 </div>
             </div>

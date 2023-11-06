@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.0.51",
+  "version": "1.0.57",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
@@ -34,7 +34,10 @@
     "build": "vite build",
     "test": "jest",
     "prepare": "tw-patch",
-    "version": "npm run build"
+    "version": "npm run build",
+    "release:beta": "npm version prerelease --preid=beta",
+    "release:patch": "npm version patch",
+    "publish:beta": "npm publish --tag beta"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.15",

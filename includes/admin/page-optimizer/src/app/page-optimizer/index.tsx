@@ -84,7 +84,7 @@ export default function PageOptimizer() {
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                        'relative container grid grid-cols-12 gap-8 pt-[84px]',
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px]',
                     )}>
 
                         {(savingData || invalidatingCache) && (
@@ -104,7 +104,7 @@ export default function PageOptimizer() {
                         <>
 
                             {togglePerformance && (
-                                <aside className="col-span-3">
+                                <aside className="col-span-12 lg:col-span-3">
                                     <div className="text-lg ml-5  flex items-center gap-2">
                                         <Circle style={{
                                             fill: progressbarColor
@@ -116,7 +116,7 @@ export default function PageOptimizer() {
                                 </aside>
                             )}
                             <article className={cn(
-                                togglePerformance ? 'col-span-9' : 'col-span-12',
+                                togglePerformance ? 'col-span-12 lg:col-span-9' : 'col-span-12',
                             )}>
 
                                 <AnimatePresence initial={true} mode='wait'>
@@ -136,7 +136,7 @@ export default function PageOptimizer() {
                 )}
             </div>
             {!error && (
-                <Footer togglePerformance={togglePerformance} url={options.optimizer_url} />
+                <Footer />
             )}
             <Toaster/>
         </m.div>
