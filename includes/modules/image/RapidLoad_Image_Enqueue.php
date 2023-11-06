@@ -197,11 +197,51 @@ class RapidLoad_Image_Enqueue
 
         foreach ($data_attributes as $data_attribute){
 
-            $_data_attribute = $this->dom->find( 'div[' . $data_attribute . ']' );
+            try {
+                if(isset($data_attribute['tag']) && isset($data_attribute['attr'])){
+                    $_data_attribute_elements = $this->dom->find( $data_attribute['tag'] . '[' . $data_attribute['attr'] . ']' );
 
-            if(!empty($_data_attribute) && isset($_data_attribute[0])){
-                $_data_attribute = $_data_attribute[0];
-                $_data_attribute->{$data_attribute} = RapidLoad_Image::get_replaced_url($_data_attribute->{$data_attribute}, null, null, null, ['retina' => 'ret_img']);
+                    foreach ($_data_attribute_elements as $attribute_element){
+
+                        if(isset($attribute_element->{$data_attribute['attr']})){
+
+                            $data = $attribute_element->{$data_attribute['attr']};
+
+                            $string = str_replace(['"', '"', '&quot;'], '"', $data);
+
+                            $attribute_element->{$data_attribute['attr']} = $string;
+
+                            preg_match_all('/https?:\\\\\\/\\\\\\/[^"]+/', $string, $matches);
+
+                            if(isset($matches[0])){
+                                foreach ($matches[0] as $match){
+                                    if(filter_var(str_replace("\/","/", $match), FILTER_VALIDATE_URL)){
+                                        $_url = RapidLoad_Image::get_replaced_url(str_replace("\/","/", $match), null, null, null, [
+                                            'optimize_level' => 'ret_img'
+                                        ]);
+                                        error_log(str_replace("/","\/", $_url));
+                                        $string = str_replace($match, $_url, $string);
+                                    }
+                                }
+                            }
+
+                            $attribute_element->{$data_attribute['attr']} = $string;
+
+                            /*foreach ($results as $result){
+                                if(isset($result['url']) && isset($result['optimized_url'])){
+
+                                    $attribute_element->{$data_attribute['attr']} = str_replace(json_encode($result['url']),json_encode($result['optimized_url']), $attribute_element->{$data_attribute['attr']});
+
+                                }
+                            }*/
+
+                        }
+
+                    }
+
+                }
+            }catch (Exception $ex){
+
             }
         }
 
