@@ -373,7 +373,7 @@ class RapidLoad_Optimizer
                         }
                         if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if($data->exist()){
+                            if(!$data->exist()){
                                 $data->save();
                             }
                             $settings->{'status'} = [
@@ -385,7 +385,7 @@ class RapidLoad_Optimizer
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if($data->exist()){
+                            if(!$data->exist()){
                                 $data->save();
                             }
                             $settings->{'status'} = [
