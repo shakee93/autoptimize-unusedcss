@@ -87,7 +87,7 @@ class ApiService {
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
 
             const response = await fetch(this.baseURL, {
-                method: "GET",
+                method: data ? "POST": "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
