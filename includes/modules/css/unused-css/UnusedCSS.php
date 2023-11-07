@@ -26,6 +26,8 @@ class UnusedCSS
 
         add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
+
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_uucss'] != "1"){
             return;
         }
@@ -43,8 +45,6 @@ class UnusedCSS
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_uucss'], 20, 2);
-
-        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         add_filter('uucss/link', [$this, 'update_link']);
 

@@ -28,6 +28,8 @@ class CriticalCSS
 
         add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
 
+        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
+
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
 
         new CriticalCSS_Queue();
@@ -47,8 +49,6 @@ class CriticalCSS
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
-
-        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         add_filter('uucss/link', [$this, 'update_link']);
 
