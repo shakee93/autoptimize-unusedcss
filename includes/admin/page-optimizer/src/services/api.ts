@@ -118,7 +118,7 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
+           const pageSpeedURL = new URL('http://localhost:3001/api/v1/page-speed');
 
            pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', strategy)

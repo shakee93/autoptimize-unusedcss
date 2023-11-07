@@ -49,6 +49,12 @@ class RapidLoad_CDN
             'url' => trailingslashit(site_url())
         ]);
 
+        if(is_wp_error($response)){
+            if(wp_doing_ajax() && isset($_REQUEST['dashboard_cdn_validator'])){
+                wp_send_json_error($api->extract_error($response));
+            }
+        }
+
         if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
 
             if(isset($this->options['uucss_cdn_zone_id']) && isset($this->options['uucss_cdn_dns_id'])){
@@ -72,7 +78,7 @@ class RapidLoad_CDN
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
 
-        if(wp_doing_ajax()){
+        if(wp_doing_ajax() && isset($_REQUEST['dashboard_cdn_validator'])){
             wp_send_json_success([
                 'uucss_cdn_zone_id' => $response->zone_id,
                 'uucss_cdn_dns_id' => $response->dns_id,
