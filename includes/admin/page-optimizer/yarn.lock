@@ -656,15 +656,15 @@
   resolved "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.1.tgz"
   integrity sha512-EsBwpc7hBUJWAsNPBmJy4hxWx12v6bshQsldrVmjxJoc3isbxhOrF2IcCpaXxfvq03NwkI7sbsOLXbYuqF/8Ww==
 
-"@esbuild/darwin-x64@0.18.20":
+"@esbuild/darwin-arm64@0.18.20":
   version "0.18.20"
-  resolved "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.18.20.tgz"
-  integrity sha512-pc5gxlMDxzm513qPGbCbDukOdsGtKhfxD1zJKXjCCcU7ju50O7MeAZ8c4krSJcOIJGFR+qx21yMMVYwiQvyTyQ==
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.18.20.tgz"
+  integrity sha512-bxRHW5kHU38zS2lPTPOyuyTm+S+eobPUnTNkdJEfAddYgEcll4xkT8DB9d2008DtTbl7uJag2HuE5NZAZgnNEA==
 
-"@esbuild/darwin-x64@0.19.3":
+"@esbuild/darwin-arm64@0.19.3":
   version "0.19.3"
-  resolved "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.19.3.tgz"
-  integrity sha512-tPfZiwF9rO0jW6Jh9ipi58N5ZLoSjdxXeSrAYypy4psA2Yl1dAMhM71KxVfmjZhJmxRjSnb29YlRXXhh3GqzYw==
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.19.3.tgz"
+  integrity sha512-kw7e3FXU+VsJSSSl2nMKvACYlwtvZB8RUIeVShIEY6PVnuZ3c9+L9lWB2nWeeKWNNYDdtL19foCQ0ZyUL7nqGw==
 
 "@eslint/eslintrc@^1.4.1":
   version "1.4.1"
@@ -1534,10 +1534,10 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@swc/core-darwin-x64@1.3.91":
+"@swc/core-darwin-arm64@1.3.91":
   version "1.3.91"
-  resolved "https://registry.npmjs.org/@swc/core-darwin-x64/-/core-darwin-x64-1.3.91.tgz"
-  integrity sha512-8SpU18FbFpZDVzsHsAwdI1thF/picQGxq9UFxa8W+T9SDnbsqwFJv/6RqKJeJoDV6qFdl2OLjuO0OL7xrp0qnQ==
+  resolved "https://registry.npmjs.org/@swc/core-darwin-arm64/-/core-darwin-arm64-1.3.91.tgz"
+  integrity sha512-7kHGiQ1he5khcEeJuHDmLZPM3rRL/ith5OTmV6bOPsoHi46kLeixORW+ts1opC3tC9vu6xbk16xgX0QAJchc1w==
 
 "@swc/core@^1.3.61", "@swc/core@>=1.2.50":
   version "1.3.91"

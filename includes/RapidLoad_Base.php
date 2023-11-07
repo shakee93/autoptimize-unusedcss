@@ -48,6 +48,7 @@ class RapidLoad_Base
 
             self::activateByLicenseKey();
             self::activate();
+            self::flush_rapidload();
 
             if(is_admin()){
 

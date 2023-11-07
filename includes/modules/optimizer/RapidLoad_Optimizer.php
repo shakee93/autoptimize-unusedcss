@@ -151,7 +151,7 @@ class RapidLoad_Optimizer
 
             }
 
-            if(isset(self::$options[$key]) && (self::$options[$key] != "" || !self::$options[$key])){
+            if(isset(self::$options[$key]) && (self::$options[$key] != "" && !self::$options[$key] && !empty(self::$options[$key]))){
 
                 switch ($key){
                     case 'uucss_enable_uucss':
