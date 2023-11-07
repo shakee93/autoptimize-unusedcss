@@ -558,6 +558,14 @@ class RapidLoad_Base
 
     }
 
+    public static function flush_rapidload(){
+
+        if(isset($_REQUEST['flush_rapidload'])){
+            RapidLoad_DB::flush_all_rapidload(get_current_blog_id());
+        }
+
+    }
+
     public static function activate() {
 
         if ( ! isset( $_REQUEST['token'] ) || empty( $_REQUEST['token'] ) ) {

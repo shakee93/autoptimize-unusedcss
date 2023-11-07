@@ -745,4 +745,30 @@ abstract class RapidLoad_DB
         return $first_link;
 
     }
+
+    static function flush_all_rapidload($blog_id = ''){
+
+        global $wpdb;
+
+        $tableArray = [
+            $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "rapidload_uucss_job",
+            $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "rapidload_uucss_rule",
+            $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "rapidload_job_optimizations",
+            $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "rapidload_job_data",
+            $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "rapidload_job",
+        ];
+
+        foreach ($tableArray as $tablename) {
+            $wpdb->query("DELETE FROM $tablename");
+            error_log($tablename);
+        }
+
+        $option_table = $wpdb->prefix . ($blog_id != '' ? $blog_id . '_' : '') . "options";
+
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'autoptimize_uucss_settings'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_migration'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_cache'");
+
+
+    }
 }
