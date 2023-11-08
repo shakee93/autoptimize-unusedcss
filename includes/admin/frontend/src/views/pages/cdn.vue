@@ -241,7 +241,7 @@ export default {
     },
     validateCDN(){
       this.refresh_element = true;
-      axios.post(window.uucss_global.ajax_url + '?action=validate_cdn' , {
+      axios.post(window.uucss_global.ajax_url + '?action=validate_cdn&dashboard_cdn_validator' , {
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -256,7 +256,7 @@ export default {
           } )
           .catch(error => {
             this.errorMessage = error.message;
-
+            this.refresh_element = false;
           });
     },
     saveSettings(){
