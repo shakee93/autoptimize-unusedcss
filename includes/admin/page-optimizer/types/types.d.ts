@@ -18,9 +18,7 @@ interface WordPressOptions {
     group_by_conditions: GroupByConditions
 }
 interface GroupByConditions {
-    archive: Group
-    entire_site: Group
-    singular: Group
+    [key: string]: Group;
 }
 
 interface Group {
@@ -32,6 +30,7 @@ interface Option {
     label: string;
     value: string;
     group: string | null;
+    query_type: string;
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'

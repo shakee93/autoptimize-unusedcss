@@ -14,15 +14,23 @@ import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
 import AppButton from "components/ui/app-button";
 import Mode from "app/page-optimizer/components/Mode";
-import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import ConditionsDropdown from "components/ui/apply-conditions-dropdown";
 
 const ApplyConditions = () => {
     const [open, setOpen] = React.useState(false);
-    const [options, setOptions] = useState(window?.rapidload_optimizer )
+    const [groupByConditions, setgroupByConditions] = useState(window?.rapidload_optimizer?.group_by_conditions )
+    const [selectedOptions, setSelectedOptions] = useState('');
+    const [selectedGroup, setSelectedGroup] = useState('');
+
+    const handleSecondDropdownSelect = (selectedOption: string) => {
+        const selectedGroupKey = Object.keys(groupByConditions).find(
+            (key) => groupByConditions[key].label === selectedOption
+        );
+        setSelectedOptions(selectedGroupKey || '');
+    };
 
     const apply = () => {
-        console.log("Apply Conditions");
-        console.log("Here : ", options.group_by_conditions);
+         console.log("Hello : ", groupByConditions);
     }
 
     return (
@@ -37,35 +45,45 @@ const ApplyConditions = () => {
                                 </TooltipText>
                             </div>
                         </DialogTrigger>
-                        <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
+                        <DialogContent asChild className="sm:max-w-[450px] cursor-auto inline-table">
                             <DialogHeader className='border-b px-6 py-7'>
                                 <DialogTitle>Apply Conditions</DialogTitle>
                                 <DialogDescription>
                                     Make changes to your <span className='lowercase'>Test</span> settings here. Click save when you're done.
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="grid gap-4 px-6 py-4">
-                                <div
-                                    className="w-full dark:bg-brand-950 bg-brand-0 border rounded-3xl flex flex-col justify-between items-center px-4 py-3">
-                                    {/*<div*/}
-                                    {/*     className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors `}>*/}
+                            <div className="flex gap-4 px-6 py-4">
+                                <ConditionsDropdown
+                                    optionsData={['Include', 'Exclude']}
+                                    onSelect={(selectedOption) => {
+                                        // Handle the selected option here
+                                    }}
+                                />
+                                <ConditionsDropdown
+                                    // optionsData={Object.keys(groupByConditions)}
+                                    optionsData={Object.values(groupByConditions).map((condition) => condition.label)}
+                                    onSelect={handleSecondDropdownSelect}
+                                />
 
-                                    {/*    {filesOrActions ? (*/}
-                                    {/*        toggleFiles ? 'Hide Actions' : 'Show Actions'*/}
-                                    {/*    ) : 'Learn More'}*/}
+                                {selectedOptions && groupByConditions[selectedOptions]?.options && (
+                                    <ConditionsDropdown
+                                        optionsData={groupByConditions[selectedOptions].options.map((option) => option.label)}
+                                        onSelect={(selectedOption) => {
+                                            const selectedGroup = groupByConditions[selectedOptions]?.options.find((option) => option.label === selectedOption)?.group;
+                                            setSelectedGroup(selectedGroup || '');
+                                            //console.log(selectedGroup);
+                                        }}
 
-
-                                    {/*    {filesOrActions ? (*/}
-                                    {/*        (toggleFiles) ?*/}
-                                    {/*            <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :*/}
-                                    {/*            <PlusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>*/}
-                                    {/*    ) : (*/}
-                                    {/*        (toggleFiles) ?*/}
-                                    {/*            <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :*/}
-                                    {/*            <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>*/}
-                                    {/*    )}*/}
-                                    {/*</div>*/}
-                            </div>
+                                    />
+                                )}
+                                {selectedGroup != '' && (
+                                    <ConditionsDropdown
+                                        optionsData={['search']}
+                                        onSelect={(selectedOption) => {
+                                            //console.log(selectedOption);
+                                        }}
+                                    />
+                                )}
                             </div>
                             <DialogFooter className='px-6 py-3 border-t'>
                                 <AppButton className='text-sm'>Save changes</AppButton>
