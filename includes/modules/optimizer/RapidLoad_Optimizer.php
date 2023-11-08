@@ -151,7 +151,7 @@ class RapidLoad_Optimizer
 
             }
 
-            if(isset(self::$options[$key]) && (self::$options[$key] != "" || !self::$options[$key])){
+            if(isset(self::$options[$key]) && (self::$options[$key] != "" && !self::$options[$key] && !empty(self::$options[$key]))){
 
                 switch ($key){
                     case 'uucss_enable_uucss':
@@ -197,6 +197,26 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
+        }
+
+        if(isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] == "1"){
+            $job_data = new RapidLoad_Job_Data(self::$job, 'uucss');
+            if(!isset($job_data->id)){
+                $job_data->save();
+            }
+            do_action('uucss_async_queue', $job_data, [
+                'immediate' => true
+            ]);
+        }
+
+        if(isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] == "1"){
+            $job_data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+            if(!isset($job_data->id)){
+                $job_data->save();
+            }
+            do_action('cpcss_async_queue', $job_data, [
+                'immediate' => true
+            ]);
         }
 
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
@@ -373,7 +393,7 @@ class RapidLoad_Optimizer
                         }
                         if($input->key == "uucss_enable_uucss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if($data->exist()){
+                            if(!$data->exist()){
                                 $data->save();
                             }
                             $settings->{'status'} = [
@@ -385,7 +405,7 @@ class RapidLoad_Optimizer
                         }
                         if($input->key == "uucss_enable_cpcss"){
                             $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if($data->exist()){
+                            if(!$data->exist()){
                                 $data->save();
                             }
                             $settings->{'status'} = [

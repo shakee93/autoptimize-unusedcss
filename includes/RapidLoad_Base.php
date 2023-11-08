@@ -48,6 +48,7 @@ class RapidLoad_Base
 
             self::activateByLicenseKey();
             self::activate();
+            self::flush_rapidload();
 
             if(is_admin()){
 
@@ -507,12 +508,12 @@ class RapidLoad_Base
             'uucss_enable_css' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
-            'uucss_inline_css' => "1",
             'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
+            'uucss_enable_page_optimizer' => "1"
         ];
     }
 
@@ -554,6 +555,14 @@ class RapidLoad_Base
 
             header( 'Location: ' . admin_url( 'admin.php?page=rapidload') );
             exit;
+        }
+
+    }
+
+    public static function flush_rapidload(){
+
+        if(isset($_REQUEST['flush_rapidload'])){
+            RapidLoad_DB::flush_all_rapidload(get_current_blog_id());
         }
 
     }
