@@ -13,6 +13,7 @@ export interface AppState {
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[],
+        originalSettings?: AuditSetting[],
         revisions: Revision[],
         changes: {
             files: Array<any>
@@ -24,6 +25,7 @@ export interface AppState {
         error?: string | null;
         loading: boolean
         settings?: AuditSetting[]
+        originalSettings?: AuditSetting[],
         revisions: Revision[],
         changes: {
             files: Array<any>

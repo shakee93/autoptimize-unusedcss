@@ -43,6 +43,8 @@ class RapidLoad_Optimizer
 
         add_action('wp_ajax_latest_page_speed', [$this,'latest_page_speed']);
 
+        add_action('wp_ajax_get_optimizer_condition_data', [$this, 'get_optimizer_condition_data']);
+
         if(!defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')){
             define('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED', true);
         }
@@ -53,6 +55,92 @@ class RapidLoad_Optimizer
         new OptimizerJS();
         new OptimizerImage();
         new OptimizerStyle();
+    }
+
+    public function get_optimizer_condition_data(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['query']) || !isset($_REQUEST['type'])){
+            wp_send_json_error(false);
+        }
+
+        $query = $_REQUEST['query'];
+        $type = $_REQUEST['type']; // post,
+
+        switch ($type){
+            case 'page':
+            case 'product':
+            case 'post':{
+                $results = $this->search_content_by_type($query, [$type]);
+                wp_send_json_success($results);
+                break;
+            }
+            case 'product_cat':
+            case 'product_tag':
+            case 'category':
+            case 'post_tag':{
+                $query_results = get_terms($type, array('name__like' => $query));
+                $results = [];
+                foreach ($query_results as $query_result) {
+                    $results[] = [
+                        'title' => $query_result->name,
+                        'id' => $query_result->term_id,
+                    ];
+                }
+                error_log(json_encode($results, JSON_PRETTY_PRINT));
+                break;
+            }
+            case 'author':{
+                $author_results = get_users(array(
+                    //'search' => $query,
+                    'role__in' => array('author', 'editor', 'administrator'), // You can specify the roles to search for
+                ));
+                $results = [];
+                foreach ($author_results as $author) {
+                    $results[] = [
+                        'title' => $author->display_name,
+                        'id' => $author->ID
+                    ];
+                }
+                error_log(json_encode($results, JSON_PRETTY_PRINT));
+                break;
+            }
+            default:{
+                $results = $this->search_content_by_type($query, [$type]);
+                wp_send_json_success($results);
+            }
+        }
+
+    }
+
+    private function search_content_by_type($query, $types) {
+        $args = array(
+            'post_type' => $types,
+            'posts_per_page' => -1,
+            's' => $query,
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1,
+            'orderby' => 'title',
+            'order' => 'ASC',
+        );
+
+        $query = new WP_Query($args);
+
+        $results = array();
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $results[] = [
+                    'title' => get_the_title(),
+                    'id' => get_the_ID()
+                ];
+            }
+            wp_reset_postdata();
+        }
+
+        return $results;
     }
 
     public function latest_page_speed(){
@@ -518,6 +606,7 @@ class RapidLoad_Optimizer
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
             'options' => self::$options,
             'merged_options' => self::$merged_options,
+            'job_id' => self::$job->id
         ]);
 
 

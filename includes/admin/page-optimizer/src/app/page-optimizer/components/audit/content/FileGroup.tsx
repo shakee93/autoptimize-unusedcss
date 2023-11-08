@@ -1,7 +1,7 @@
 import {cn} from "lib/utils";
 import React, {useEffect, useState} from "react";
 import FilesTableHeader from "app/page-optimizer/components/audit/content/header";
-import {Accordion} from "components/accordion";
+import Accordion from "components/accordion";
 import FileTable from "app/page-optimizer/components/audit/content/table";
 import {JsonView} from "react-json-view-lite";
 

@@ -32,11 +32,11 @@ class RapidLoad_Enqueue {
 
             if($this->enabled($this->url)){
 
+                $this->group = $this->get_current_group();
+
+                error_log(json_encode($this->group, JSON_PRETTY_PRINT));
+
                 if(RapidLoad_Base::get()->rules_enabled()){
-
-                    $this->group = $this->get_current_group();
-
-                    error_log(json_encode($this->group, JSON_PRETTY_PRINT));
 
                     $this->rule = $this->get_current_rule();
 
@@ -418,9 +418,56 @@ class RapidLoad_Enqueue {
             $author_id = get_post_field('post_author', $current_page_id);
             $possible_groups["42"] = untrailingslashit($current_page_type . "/by_author/" . $author_id);
         }
+        elseif ($current_page_type == "woocommerce"){
+
+            if (is_shop() || is_product_category() || is_product_tag()) {
+                $possible_groups["40"] = $current_page_type . "/product_archives";
+            }
+            if($current_page_content_type == "product"){
+                $category_ids = wp_get_post_terms($current_page_id, 'product_cat', array('fields' => 'ids'));
+                foreach ($category_ids as $key => $category_id){
+                    $possible_groups["41." . $key] = untrailingslashit($current_page_type . "/in_product_category/" . $category_id);
+                    $root_category = $this->get_root_product_category_id($category_id);
+                    if($root_category){
+                        $possible_groups["42." . $key] = untrailingslashit($current_page_type . "/in_child_product_category/" . $root_category);
+                    }
+                }
+                $product_tags = wp_get_post_terms($current_page_id, 'product_tag');
+                foreach ($product_tags as $key => $tag) {
+                    $possible_groups["43." . $key] = untrailingslashit($current_page_type . "/in_product_tag/" . $tag->term_id);
+                }
+                $author_id = get_post_field('post_author', $current_page_id);
+                $possible_groups["44"] = untrailingslashit($current_page_type . "/by_author/" . $author_id);
+            }
+
+        }
 
         ksort($possible_groups);
-        return array_values($possible_groups);
+
+        return apply_filters('rapidload/group-by/possible/conditions', array_values($possible_groups), $current_page_type, $current_page_content_type, $current_page_id);
+    }
+
+    function get_root_product_category_id($category_id) {
+        $root_category_id = $category_id;
+
+        while ($category_id) {
+            $category = get_term($category_id, 'product_cat');
+
+            if (is_wp_error($category)) {
+                break;
+            }
+
+            $parent_id = isset($category->parent) ? $category->parent : 0;
+
+            if ($parent_id == 0) {
+                $root_category_id = $category_id;
+                break;
+            }
+
+            $category_id = $parent_id;
+        }
+
+        return $root_category_id;
     }
 
     function get_root_parent_category($category_id) {
@@ -439,7 +486,6 @@ class RapidLoad_Enqueue {
 
         return $category->term_id;
     }
-
 
     function get_current_page_type() {
         if (is_singular()) {

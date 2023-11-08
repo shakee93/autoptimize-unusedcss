@@ -2,7 +2,7 @@ import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {Bug, ChevronDown, Circle} from "lucide-react";
 import {useState} from "react";
 import Card from "components/ui/card";
-import {Accordion} from "components/accordion";
+import Accordion from "components/accordion";
 
 const SpeedInsightGroup = ({ title, success = false,items = []}: {
     title: string

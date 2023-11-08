@@ -51,7 +51,7 @@ class RapidLoad_Admin_Bar {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
         }
 
-        wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
+        //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
 
@@ -78,7 +78,8 @@ class RapidLoad_Admin_Bar {
                     [
                         'label' => 'Author Archive',
                         'value' => 'author',
-                        'group' => null
+                        'group' => null,
+                        'query_type' => 'author'
                     ],
                     [
                         'label' => 'Date Archive',
@@ -87,28 +88,32 @@ class RapidLoad_Admin_Bar {
                     ],
                     [
                         'label' => 'Posts Archive',
-                        'value' => 'author',
-                        'group' => 'Posts Archive'
+                        'value' => 'posts',
+                        'group' => 'Posts Archive',
                     ],
                     [
                         'label' => 'Categories',
                         'value' => 'category',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Direct Child Category of',
                         'value' => 'direct_child_category_of',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Any Child Category of',
                         'value' => 'any_child_category_of',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'Tags',
                         'value' => 'tag',
-                        'group' => 'Posts Archive'
+                        'group' => 'Posts Archive',
+                        'query_type' => 'post_tag'
                     ],
                 ]
             ],
@@ -130,26 +135,31 @@ class RapidLoad_Admin_Bar {
                         'label' => 'Posts',
                         'value' => 'posts',
                         'group' => 'Posts',
+                        'query_type' => 'post'
                     ],
                     [
                         'label' => 'In Category',
                         'value' => 'in_category_of',
                         'group' => 'Posts',
+                        'query_type' => 'category'
                     ],
                     [
                         'label' => 'In Tag',
                         'value' => 'in_tag',
                         'group' => 'Posts',
+                        'query_type' => 'post_tag'
                     ],
                     [
                         'label' => 'Pages',
                         'value' => 'pages',
                         'group' => 'Pages',
+                        'query_type' => 'page'
                     ],
                     [
                         'label' => 'By Author',
                         'value' => 'by_author',
                         'group' => null,
+                        'query_type' => 'author'
                     ]
                 ]
             ]
@@ -158,6 +168,7 @@ class RapidLoad_Admin_Bar {
         $group_by_conditions = apply_filters('rapidload/group-by/conditions', $group_by_conditions);
 
         $data = array(
+            'titan_stylesheet_url' => $package .  '/assets/index.css',
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
