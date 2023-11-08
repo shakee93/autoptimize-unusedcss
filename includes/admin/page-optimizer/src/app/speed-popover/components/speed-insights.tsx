@@ -4,7 +4,6 @@ import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon} from "@her
 import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
 import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import {useAppContext} from "../../../context/app";
 import {useDispatch, useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
