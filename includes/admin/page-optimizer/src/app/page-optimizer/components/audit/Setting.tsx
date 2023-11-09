@@ -240,7 +240,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
                     <Mode>
                         {showPopover && (
-                            <Dialog open={open} onOpenChange={setOpen}>
+                            <Dialog open={open} onOpenChange={setOpen} >
                                 <DialogTrigger disabled asChild>
                                     <div >
                                         <TooltipText text={`${settings.name} Settings`}>

@@ -83,7 +83,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     <Label htmlFor="name" className="flex ml-4 text-left w-full">
                         <span>{input.control_label}</span>
                     </Label>
-                    <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}/>
+                    <Textarea value={updates.find(i => i.key === input.key)?.value} onChange={e => update(e.target.value, input.key)}
+                           />
                 </>
             );
         case "button":
