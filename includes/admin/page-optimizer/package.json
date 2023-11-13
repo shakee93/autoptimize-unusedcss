@@ -76,6 +76,7 @@
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^4.0.11",
+    "react-focus-lock": "^2.9.6",
     "react-is": "^18.2.0",
     "react-json-view-lite": "^0.9.7",
     "react-redux": "^8.1.1",
