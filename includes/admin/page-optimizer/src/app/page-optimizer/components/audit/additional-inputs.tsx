@@ -4,6 +4,7 @@ import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Switch} from "components/ui/switch";
 import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
+import FocusLock from "react-focus-lock";
 
 import {
     Select,
@@ -97,12 +98,13 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                <Label htmlFor="name" className="flex ml-4 text-left w-full">
                    <span>{input.control_label}</span>
                </Label>
-               <Textarea value={value} onChange={e =>  {
+               <FocusLock>
+               <Textarea className="focus:outline-none focus-visible:ring-0" value={value} onChange={e =>  {
                    e.preventDefault()
                    update(e.target.value, input.key)
                    e.target.focus()
                }} />
-
+               </FocusLock>
            </>
 
        }
