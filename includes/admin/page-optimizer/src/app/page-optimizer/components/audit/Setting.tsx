@@ -105,34 +105,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 })
 
 
-
-// interface ModalProps {
-//     children: React.ReactNode;
-// }
-//
-// const Modal: React.FC<ModalProps> = ({ children }) => {
-//     const shadowRoot = document.getElementById('rapidload-optimizer-shadow-dom')?.shadowRoot;
-//
-//     // Create a container element within the shadow DOM
-//     const modalContainer = document.createElement('div');
-//
-//     React.useEffect(() => {
-//         if (shadowRoot) {
-//             // Append the modal content to the container in the shadow DOM
-//             shadowRoot.appendChild(modalContainer);
-//         }
-//         return () => {
-//             if (shadowRoot) {
-//                 // Remove the container and its content when the modal is closed
-//                 shadowRoot.removeChild(modalContainer);
-//             }
-//         };
-//     }, [modalContainer, shadowRoot]);
-//
-//     // Render the modal content inside the container
-//     return ReactDOM.createPortal(children, modalContainer);
-// };
-
 const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
     if (!settings) {
@@ -309,54 +281,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                                 </DialogContent>
                             </Dialog>
 
-                            // <>
-                            //     <TooltipText text={`${settings.name} Settings`}>
-                            //         <Cog6ToothIcon className='w-5 text-brand-400' onClick={() => setOpen(true)} />
-                            //     </TooltipText>
-                            //
-                            //     {open && (
-                            //
-                            //         <Modal>
-                            //             <Transition show={open} as={React.Fragment}>
-                            //                 <Dialog onClose={() => setOpen(false)}>
-                            //                     <Dialog.Overlay className="fixed inset-0 bg-black opacity-30 z-[120000]" />
-                            //
-                            //                     <Transition.Child
-                            //                         as={React.Fragment}
-                            //                         enter="transform transition-opacity ease-in-out duration-300"
-                            //                         enterFrom="opacity-0 scale-95"
-                            //                         enterTo="opacity-100 scale-100"
-                            //                         leave="transform transition-opacity ease-in-out duration-300"
-                            //                         leaveFrom="opacity-100 scale-100"
-                            //                         leaveTo="opacity-0 scale-95"
-                            //                     >
-                            //                         <Dialog.Panel className="fixed inset-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-8">
-                            //                             <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">
-                            //                                 {settings.name} Settings
-                            //                             </Dialog.Title>
-                            //                             <Dialog.Description className="text-sm text-muted-foreground">
-                            //                                 Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
-                            //                             </Dialog.Description>
-                            //
-                            //                             <div className="grid gap-4">
-                            //                                 <AdditionalInputs updates={updates} update={update} data={additionalInputs} />
-                            //                             </div>
-                            //
-                            //                             <div className="flex justify-end mt-4 space-x-2">
-                            //                                 <button className="text-sm" onClick={() => saveAdditionalSettings()}>
-                            //                                     Save changes
-                            //                                 </button>
-                            //                                 <button className="text-sm" onClick={() => setOpen(false)}>
-                            //                                     Close
-                            //                                 </button>
-                            //                             </div>
-                            //                         </Dialog.Panel>
-                            //                     </Transition.Child>
-                            //                 </Dialog>
-                            //             </Transition>
-                            //         </Modal>
-                            //     )}
-                            // </>
+
                         )}
 
 
