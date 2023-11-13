@@ -55,51 +55,51 @@ const SetupChecklist = () => {
             },
             show_section: false
         },
-        {
-            id: 'plugins',
-            title: "Review Potential Plugin Conflicts",
-            description: "Review active WordPress plugins for potential conflicts that might affect RapidLoad's optimal performance.",
-            fetch: "titan_checklist_plugins",
-            status: "loading",
-            show_section: true,
-            sections: {
-                warning : (plugins: string[]) => {
-
-                    return (
-                        <>
-                            <div className='text-sm flex flex-col gap-4 text-brand-700 dark:text-brand-300 pt-3 pb-2 px-1'>
-                                <div className=''>
-                                    While RapidLoad is designed with integrated support for many plugins, occasional conflicts can arise due to the
-                                    complex nature of WordPress ecosystems. For optimal results with Titan Optimizer,
-                                    we recommend <b>turning off certain features</b> or <b>deactivating</b> these plugins:
-                                </div>
-
-                                <div className='flex justify-between'>
-
-                                    {plugins.length > 0 &&
-                                        <div className='flex flex-wrap gap-2'>
-                                            {plugins.map((plugin, index) =>
-                                                <div key={index} className='border px-4 py-2 rounded-xl font-medium cursor-default select-none'>
-                                                    {plugin}
-                                                </div>
-                                            )}
-                                        </div>
-                                    }
-
-                                </div>
-
-                                <div className='flex'>
-                                    <a target='_blank' href={options.admin_url ? options.admin_url + '/plugins.php' : '#'}>
-                                        <Button size='sm'>Manage Plugins</Button>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </>
-                    )
-                }
-            }
-        },
+        // {
+        //     id: 'plugins',
+        //     title: "Review Potential Plugin Conflicts",
+        //     description: "Review active WordPress plugins for potential conflicts that might affect RapidLoad's optimal performance.",
+        //     fetch: "titan_checklist_plugins",
+        //     status: "loading",
+        //     show_section: true,
+        //     sections: {
+        //         warning : (plugins: string[]) => {
+        //
+        //             return (
+        //                 <>
+        //                     <div className='text-sm flex flex-col gap-4 text-brand-700 dark:text-brand-300 pt-3 pb-2 px-1'>
+        //                         <div className=''>
+        //                             While RapidLoad is designed with integrated support for many plugins, occasional conflicts can arise due to the
+        //                             complex nature of WordPress ecosystems. For optimal results with Titan Optimizer,
+        //                             we recommend <b>turning off certain features</b> or <b>deactivating</b> these plugins:
+        //                         </div>
+        //
+        //                         <div className='flex justify-between'>
+        //
+        //                             {plugins.length > 0 &&
+        //                                 <div className='flex flex-wrap gap-2'>
+        //                                     {plugins.map((plugin, index) =>
+        //                                         <div key={index} className='border px-4 py-2 rounded-xl font-medium cursor-default select-none'>
+        //                                             {plugin}
+        //                                         </div>
+        //                                     )}
+        //                                 </div>
+        //                             }
+        //
+        //                         </div>
+        //
+        //                         <div className='flex'>
+        //                             <a target='_blank' href={options.admin_url ? options.admin_url + '/plugins.php' : '#'}>
+        //                                 <Button size='sm'>Manage Plugins</Button>
+        //                             </a>
+        //                         </div>
+        //
+        //                     </div>
+        //                 </>
+        //             )
+        //         }
+        //     }
+        // },
         {
             id: 'crawler',
             title: "RapidLoad Server Crawler Access",
