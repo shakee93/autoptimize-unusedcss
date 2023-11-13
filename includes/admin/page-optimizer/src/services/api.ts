@@ -118,7 +118,7 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const pageSpeedURL = new URL('http://localhost:3001/api/v1/page-speed');
+           const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
 
            pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', strategy)
@@ -143,7 +143,11 @@ class ApiService {
 
             const query = new URLSearchParams();
 
-            this.baseURL.searchParams.append('action', 'optimizer_update_settings')
+            if (this.baseURL.searchParams.get('action')) {
+                this.baseURL.searchParams.delete('action')
+            }
+
+            this.baseURL.searchParams.append('action', 'optimizer_update_settings');
 
             if(global) this.baseURL.searchParams.append('global', 'true')
             if(analyze) this.baseURL.searchParams.append('analyze', 'true')
@@ -174,7 +178,12 @@ class ApiService {
 
         try {
 
-            if(action) this.baseURL.searchParams.append('action', action)
+            if(action) {
+                if (this.baseURL.searchParams.get('action')) {
+                    this.baseURL.searchParams.delete('action')
+                }
+                this.baseURL.searchParams.append('action', action)
+            }
 
             for (let key of Object.keys(queryParams)) {
                 this.baseURL.searchParams.append(key, queryParams[key])

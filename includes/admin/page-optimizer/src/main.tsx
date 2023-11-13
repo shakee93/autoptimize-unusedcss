@@ -4,6 +4,7 @@ import stylesUrl from './index.css?url';
 import App from "app/app";
 import domReady from '@wordpress/dom-ready';
 import {LazyMotion, domAnimation} from "framer-motion"
+import 'react-circular-progressbar/dist/styles.css';
 
 import "@fontsource-variable/inter";
 

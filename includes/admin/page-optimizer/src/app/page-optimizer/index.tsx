@@ -48,20 +48,23 @@ export default function PageOptimizer() {
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
-        const content =  document.getElementById('rapidload-page-optimizer-content')
-        content?.scrollTo(0, 0)
+
+        if (savingData) {
+            const content =  document.getElementById('rapidload-page-optimizer-content');
+            content?.scrollTo(0, 0)
+        }
 
     }, [savingData])
 
     return (
 
         <m.div
-            initial={{ y: 20, opacity: 0, scale:0.98 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 20, opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{
                 ease: 'linear',
-                duration: 0.1,
+                duration: 0.04,
         }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
@@ -88,7 +91,7 @@ export default function PageOptimizer() {
                     )}>
 
                         {(savingData || invalidatingCache) && (
-                            <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                            <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
                                 <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
                                     <Loader className='w-5 animate-spin'/>
                                     {savingData && 'Saving Changes...'}

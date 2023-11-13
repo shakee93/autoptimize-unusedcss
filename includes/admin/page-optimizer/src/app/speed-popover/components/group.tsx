@@ -43,7 +43,7 @@ const SpeedInsightGroup = ({ title, success = false,items = []}: {
 
     return (
         <Card
-            className='cursor-pointer backdrop-blur-md dark:bg-brand-950/10 bg-brand-0/10'
+            className='cursor-pointer dark:bg-brand-950/10 bg-brand-0/10'
         >
             <div onClick={() => { setIsOpen(p => !p)}}
                  className='select-none flex justify-between w-full items-center py-2.5 px-4'>

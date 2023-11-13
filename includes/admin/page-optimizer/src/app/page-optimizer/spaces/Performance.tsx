@@ -119,7 +119,6 @@ const Performance = () => {
                                                (activeTab === tab.key) && tab.activeColor,
                                            )}>
                             <span className={cn(
-                                'transition-colors',
                                 activeTab === tab.key && ' text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}

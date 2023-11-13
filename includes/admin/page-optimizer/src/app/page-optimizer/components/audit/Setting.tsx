@@ -37,7 +37,7 @@ import {Circle, GanttChart, Loader, Lock, RefreshCcw, Settings, SettingsIcon} fr
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
-import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import TooltipText from "components/ui/tooltip-text";
 import Mode from "app/page-optimizer/components/Mode";
 import {useAppContext} from "../../../../context/app";
@@ -208,12 +208,12 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
 
     // TODO: temp fix for scroll view leakage
-    useEffect(() => {
-        if (open) {
-            const content =  document.getElementById('rapidload-page-optimizer-content');
-            content?.scrollTo(0, 0)
-        }
-    }, [open])
+    // useEffect(() => {
+    //     if (open) {
+    //         const content =  document.getElementById('rapidload-page-optimizer-content');
+    //         content?.scrollTo(0, 0)
+    //     }
+    // }, [open])
 
 
 
@@ -294,7 +294,11 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                                     </DialogHeader>
 
                                     <div className="grid gap-4 px-6 py-4">
-                                        <AdditionalInputs updates={updates} update={update} data={additionalInputs}/>
+                                        {additionalInputs.map((input, index) =>
+                                            <div key={index} >
+                                                <Fields input={input} updates={updates} update={update} />
+                                            </div>
+                                        )}
                                     </div>
 
                                     <DialogFooter className='px-6 py-3 border-t'>
