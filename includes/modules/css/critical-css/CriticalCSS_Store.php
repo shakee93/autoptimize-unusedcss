@@ -21,7 +21,7 @@ class CriticalCSS_Store
 
         $this->job_data = $job_data;
         $this->args = $args;
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
         $this->file_system = new RapidLoad_FileSystem();
 
     }

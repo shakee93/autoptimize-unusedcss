@@ -14,6 +14,10 @@ class RapidLoad_Cache
     {
         self::$options = RapidLoad_Base::fetch_options();
 
+        add_action( 'uucss/cached', [$this, 'clear_cache'], 10, 2 );
+
+        add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
+
         if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
             return;
         }
@@ -25,10 +29,6 @@ class RapidLoad_Cache
         add_filter('rapidload/active-module/options', [$this, 'update_module_options']);
 
         add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_items' ), 90 );
-
-        add_action( 'uucss/cached', [$this, 'clear_cache'], 10, 2 );
-
-        add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
         add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
 
@@ -550,6 +550,7 @@ class RapidLoad_Cache
 
         if ( isset( $args['url'] ) ) {
             self::clear_page_cache_by_url( $args['url'] );
+            wp_remote_get( $args['url'] );
         }
 
     }

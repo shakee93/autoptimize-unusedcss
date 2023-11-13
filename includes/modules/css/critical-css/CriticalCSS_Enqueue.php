@@ -58,7 +58,7 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']);
+        $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1";
 
         if($this->is_mobile){
             $this->data = str_replace(".css","-mobile.css", $this->data);

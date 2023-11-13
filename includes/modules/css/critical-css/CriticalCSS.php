@@ -34,11 +34,11 @@ class CriticalCSS
 
         new CriticalCSS_Queue();
 
-        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_cpcss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_cpcss'] != "1" || !empty(self::$cpcss_other_plugins)){
+        if( ! $this->initFileSystem() ){
             return;
         }
 
-        if( ! $this->initFileSystem() ){
+        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_cpcss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_cpcss'] != "1" || !empty(self::$cpcss_other_plugins)){
             return;
         }
 

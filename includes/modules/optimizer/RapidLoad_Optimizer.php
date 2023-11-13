@@ -708,18 +708,18 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_enable_javascript']);
         }
 
-        foreach (self::$options as $key => $value){
-            if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
-                unset(self::$options[$key]);
-            }
-        }
-
         RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
 
         if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
             do_action('rapidload/validate-cdn');
         }else{
             do_action('rapidload/validate-cdn', true);
+        }
+
+        foreach (self::$options as $key => $value){
+            if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
+                unset(self::$options[$key]);
+            }
         }
 
         $this->associate_domain(false);

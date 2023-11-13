@@ -28,11 +28,11 @@ class UnusedCSS
 
         add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
-        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_uucss'] != "1"){
+        if( ! $this->initFileSystem() ){
             return;
         }
 
-        if( ! $this->initFileSystem() ){
+        if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_uucss'] != "1"){
             return;
         }
 
