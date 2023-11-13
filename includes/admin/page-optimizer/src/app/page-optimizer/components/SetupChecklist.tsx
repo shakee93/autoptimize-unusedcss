@@ -269,7 +269,7 @@ const SetupChecklist = () => {
                                <div className='text-xs text-brand-400'>
                                    {(checklist.filter(item => item.status === 'passed').length > 0) &&
                                        <>
-                                           {checklist.filter(item => item.status === 'passed').length} out of 3 Completed
+                                           {checklist.filter(item => item.status === 'passed').length} out of {checklist.length} Completed
                                        </>
                                    }
                                </div>
