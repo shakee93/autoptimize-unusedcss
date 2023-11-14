@@ -42,7 +42,8 @@ export default defineConfig((configEnv) => {
                             'prism-react-renderer',
                             '@tanstack/react-table',
                             '@radix-ui/react-toast',
-                            '@radix-ui/react-select'
+                            '@radix-ui/react-select',
+                            'focus-lock'
                         ],
                         animations: [
                             'framer-motion',
