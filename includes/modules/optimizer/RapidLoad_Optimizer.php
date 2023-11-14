@@ -348,6 +348,12 @@ class RapidLoad_Optimizer
                 wp_send_json_error([]);
             }
 
+        }else{
+
+            if(isset($_REQUEST['url']) && !empty($_REQUEST['url'])){
+                $url = $_REQUEST['url'];
+            }
+
         }
 
         if(!isset($result->audits)){
