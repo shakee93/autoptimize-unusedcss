@@ -351,7 +351,9 @@ class RapidLoad_Optimizer
         }
 
         if(!isset($result->audits)){
-            wp_send_json_error([]);
+            wp_send_json_error([
+                'reload' => true
+            ]);
         }
 
         foreach ($result->audits as $audit){
