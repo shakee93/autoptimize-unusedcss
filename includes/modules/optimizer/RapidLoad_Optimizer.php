@@ -369,9 +369,8 @@ class RapidLoad_Optimizer
                     foreach ($settings->inputs as $input){
 
                         if(isset($input->control_type) && $input->control_type == "button"){
-
-                            if(isset($input->action)){
-                                switch ($input->action){
+                            if(isset($input->key)){
+                                switch ($input->key){
                                     case 'rapidload_purge_all':{
                                         $input->action = 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' );
                                         break;
