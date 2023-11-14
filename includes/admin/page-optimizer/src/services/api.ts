@@ -2,12 +2,16 @@ import {isDev} from "lib/utils";
 
 class ApiService {
     public baseURL: URL;
+    private options: WordPressOptions;
+
 
     constructor(options?: WordPressOptions, query?: string, action?: string) {
 
         if (!options) {
             options = window.rapidload_optimizer
         }
+
+        this.options = options
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -118,7 +122,8 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const pageSpeedURL = new URL('https://api.rapidload.io/api/v1/page-speed');
+           const api_root = this.options?.api_root || 'https://api.rapidload.io';
+           const pageSpeedURL = new URL(`${api_root}/api/v1/page-speed`);
 
            pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', strategy)
