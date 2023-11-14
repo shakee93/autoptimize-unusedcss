@@ -457,6 +457,7 @@ export default {
     });
 
     this.items_data = activeModules
+    console.log(this.items_data);
 
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
@@ -619,6 +620,7 @@ export default {
 
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
+      console.log(cancelToken)
 
       axios.post(window.uucss_global?.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global?.nonce, {
         cancelToken: cancelToken
