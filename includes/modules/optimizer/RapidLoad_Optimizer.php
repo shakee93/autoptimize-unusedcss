@@ -205,7 +205,7 @@ class RapidLoad_Optimizer
                 $job_data->save();
             }
             do_action('uucss_async_queue', $job_data, [
-                'immediate' => true
+                //'immediate' => true
             ]);
         }
 
@@ -215,7 +215,7 @@ class RapidLoad_Optimizer
                 $job_data->save();
             }
             do_action('cpcss_async_queue', $job_data, [
-                'immediate' => true
+                //'immediate' => true
             ]);
         }
 
