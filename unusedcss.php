@@ -3,7 +3,7 @@
 Plugin Name: RapidLoad 2.1 - Speed Monster in One Plugin
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     2.1.12
+Version:     2.1.13
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */
