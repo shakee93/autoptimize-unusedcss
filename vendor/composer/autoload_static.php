@@ -11,6 +11,10 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         array (
             'Sabberworm\\CSS\\' => 15,
         ),
+        'P' => 
+        array (
+            'Peast\\' => 6,
+        ),
         'M' => 
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
@@ -22,6 +26,10 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
+        ),
+        'Peast\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mck89/peast/lib/Peast',
         ),
         'MatthiasMullie\\PathConverter\\' => 
         array (
