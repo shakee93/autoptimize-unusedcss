@@ -17,7 +17,7 @@ if(isset($_REQUEST['no_rapidload'])){
     return;
 }
 
-require __DIR__ . '/constants.php';
+/*require __DIR__ . '/constants.php';
 
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 define('UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ));
@@ -48,9 +48,9 @@ if(is_admin()){
  * @type $uucss UnusedCSS_Autoptimize
  */
 
-global $rapidload;
+/*global $rapidload;
 
-$rapidload = RapidLoad_Base::get();
+$rapidload = RapidLoad_Base::get();*/
 
 
 
