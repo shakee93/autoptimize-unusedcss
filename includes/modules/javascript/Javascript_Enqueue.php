@@ -92,8 +92,17 @@ class Javascript_Enqueue
             // Inject header delay script
             $title = $this->dom->find('title', 0);
 
+
+
             // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
             $content = "//!injected by RapidLoad \n!function(){var i=['DOMContentLoaded','readystatechanges','load'],o=[window,document],t=EventTarget.prototype.dispatchEvent,r=EventTarget.prototype.addEventListener,s=EventTarget.prototype.removeEventListener,a=[];EventTarget.prototype.addEventListener=function(t,e,...n){i.includes(t)&&o.includes(this)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{e.call(this,new Event(t))},100):a.push({target:this,type:t,listener:e,options:n})),r.call(this,t,e,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){i.includes(e)&&o.includes(this)&&(a=a.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),s.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return i.includes(e.type)&&o.includes(this)&&(a=a.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},i.forEach(function(e){o.forEach(function(t){t.addEventListener(e,function(){})})})}();";
+
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
+
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+            }
+
             $node = $this->dom->createElement('script', "" . $content . "");
 
             $node->setAttribute('type', 'text/javascript');
@@ -105,6 +114,13 @@ class Javascript_Enqueue
 
             // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
             $content = "//!injected by RapidLoad \ndocument.addEventListener('DOMContentLoaded',function(e){var a=0,t=0;function n(){var e;++t===a&&(e=new Event('RapidLoad:DelayedScriptsLoaded'),document.dispatchEvent(e))}['mousemove','touchstart','keydown'].forEach(function(t){function d(){removeEventListener(t,d);var e=document.querySelectorAll('[data-rapidload-src]');a=e.length,e.forEach(function(e){e.addEventListener('load',n),e.setAttribute('src',e.getAttribute('data-rapidload-src')),e.removeAttribute('data-rapidload-src')}),0===a&&document.dispatchEvent(new Event('RapidLoad:DelayedScriptsLoaded'))}addEventListener(t,d)})});";
+
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
+
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+            }
+
             $node = $this->dom->createElement('script', "" . $content . "");
 
             $node->setAttribute('type', 'text/javascript');
@@ -139,6 +155,7 @@ class Javascript_Enqueue
                 $data_attr = "data-rapidload-src";
                 $link->{$data_attr} = $link->src;
                 unset($link->src);
+                unset($link->defer);
 
             }
 
