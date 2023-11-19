@@ -420,7 +420,8 @@ export default {
     window.addEventListener('rapidLoad:optimizer-mounted', () => {
       if (this.on_board_complete ==='') {
          this.welcomeModel=true;
-      }else if(window.location.href.indexOf("nonce") > -1){
+      }else if(window.location.href.indexOf("nonce") > -1 && localStorage.getItem('RapidLoadOptimizer') !== 'true'){
+        localStorage.setItem('RapidLoadOptimizer', 'true');
         this.openOptimizer();
       }
     });

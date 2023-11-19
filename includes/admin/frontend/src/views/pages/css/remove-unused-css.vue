@@ -390,8 +390,9 @@ export default {
                  return value.id + ':' + value.name;
                })
                const uniqueWhitelist = newWhitelist.map(function (wp) {
-                 console.log('New Whitelist: ', wp);
+
                  let item = wp.split(':')
+                 console.log('New Whitelist: ', item[1]);
                  return item[1];
 
                })
@@ -410,8 +411,13 @@ export default {
 
                    this.onData.suggested_whitelist_packs = newWhitelist;
                  }
+               }else if(this.onData.suggested_whitelist_packs.length === 0){
+                 // console.log("Filterd text on empty load :", uniqueWhitelist)
+                 //
+                 // this.onData.suggested_whitelist_packs = newWhitelist;
+                 location.reload();
                }
-               console.log('unique suggested : ', this.onData.suggested_whitelist_packs);
+              // console.log('unique suggested : ', this.onData.suggested_whitelist_packs);
 
                const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
 
