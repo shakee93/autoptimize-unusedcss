@@ -331,6 +331,7 @@ export default {
     whitelist_render(){
      // return this.whitelist_packs = ['Elementor','pluginone']
       return this.onData.whitelist_packs.map(function (wp) {
+        console.log("i am here", wp)
         let item = wp.split(':')
         return item[1];
       })
@@ -412,12 +413,9 @@ export default {
                    this.onData.suggested_whitelist_packs = newWhitelist;
                  }
                }else if(this.onData.suggested_whitelist_packs.length === 0){
-                 // console.log("Filterd text on empty load :", uniqueWhitelist)
-                 //
-                 // this.onData.suggested_whitelist_packs = newWhitelist;
-                 location.reload();
+                 const pushWhiteList = newWhitelist.map((item)=>{return item});
+                 //this.onData.whitelist_packs = pushWhiteList;
                }
-              // console.log('unique suggested : ', this.onData.suggested_whitelist_packs);
 
                const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
 
