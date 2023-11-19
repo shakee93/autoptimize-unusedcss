@@ -414,7 +414,7 @@ export default {
                  }
                }else if(this.onData.suggested_whitelist_packs.length === 0){
                  const pushWhiteList = newWhitelist.map((item)=>{return item});
-                 //this.onData.whitelist_packs = pushWhiteList;
+                 this.onData.whitelist_packs = pushWhiteList;
                }
 
                const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
