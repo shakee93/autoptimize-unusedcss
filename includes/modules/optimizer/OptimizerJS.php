@@ -53,6 +53,7 @@ class OptimizerJS
                                                 }
                                             }
                                         }
+                                        break;
                                     }
                                     case 'remove' : {
                                         if(Javascript_Enqueue::is_js($link)){
