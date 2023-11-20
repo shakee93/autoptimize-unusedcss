@@ -105,7 +105,7 @@ class RapidLoad_Optimizer
             return;
         }
 
-        $new = isset($_REQUEST['new']) && $_REQUEST['new'] === 'true';
+        $global = isset($_REQUEST['global']) && $_REQUEST['global'];
 
         foreach (self::$options as $key => $option){
 
@@ -151,22 +151,31 @@ class RapidLoad_Optimizer
 
             }
 
-            if(isset(self::$options[$key]) && (self::$options[$key] != "" && !self::$options[$key] && !empty(self::$options[$key]))){
-
+            if(isset(self::$options[$key]) && (self::$options[$key] != "" && self::$options[$key] && !empty(self::$options[$key]))){
                 switch ($key){
                     case 'uucss_enable_uucss':
                     case 'uucss_inline_css':
                     case 'uucss_enable_cpcss':
                     case 'uucss_minify':
                         self::$options['uucss_enable_css'] = "1";
+                        if($global){
+                            RapidLoad_Base::update_option('rapidload_module_css',"1");
+                        }
                         break;
                     case 'uucss_self_host_google_fonts':
                         self::$options['uucss_enable_font_optimization'] = "1";
+                        if($global){
+                            error_log("updated");
+                            RapidLoad_Base::update_option('rapidload_module_font',"1");
+                        }
                         break;
                     case 'defer_inline_js':
                     case 'minify_js':
                     case 'uucss_load_js_method':
                         self::$options['uucss_enable_javascript'] = "1";
+                        if($global){
+                            RapidLoad_Base::update_option('rapidload_module_js',"1");
+                        }
                         break;
                     case 'uucss_support_next_gen_formats':
                     case 'uucss_set_width_and_height':
@@ -175,6 +184,9 @@ class RapidLoad_Optimizer
                     case 'uucss_lazy_load_iframes':
                     case 'uucss_exclude_above_the_fold_images':
                         self::$options['uucss_enable_image_delivery'] = "1";
+                        if($global){
+                            RapidLoad_Base::update_option('rapidload_module_image',"1");
+                        }
                         break;
                 }
 
@@ -261,10 +273,9 @@ class RapidLoad_Optimizer
             'uucss_lazy_load_iframes',
             'uucss_enable_javascript',
             'uucss_enable_font_optimization',
-            'uucss_enable_image_delivery'
         ];
 
-        if(isset($_REQUEST['global']) && $_REQUEST['global']){
+        if($global){
             foreach ($options as $key){
                 if(isset(self::$options[$key])){
                     self::$global_options[$key] = self::$options[$key];
