@@ -40,7 +40,7 @@ interface LoadingExperience {
     }
 }
 
-type AuditTypes = keyof OptimizerResults['grouped']
+type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations'
 
 interface AuditFileBase  {
     overallSavingsBytes: number;

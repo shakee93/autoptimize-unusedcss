@@ -109,3 +109,24 @@
   border-bottom: var(--rtp-arrow-border-bottom);
   border-left: var(--rtp-arrow-border-left);
 }
+
+.circle-container {
+  position: relative;
+  width: 200px; /* Diameter of the main circle */
+  height: 200px; /* Diameter of the main circle */
+  border-radius: 50%;
+  border: 1px solid #000; /* Border for the main circle */
+  margin: 50px; /* Space around the component */
+}
+
+.small-circle {
+  position: absolute;
+  width: 20px; /* Diameter of the small circles */
+  height: 20px; /* Diameter of the small circles */
+  border-radius: 50%;
+  background-color: black;
+  top: 50%;
+  left: 50%;
+  margin-top: -10px; /* Half of the height to center vertically */
+  margin-left: -10px; /* Half of the width to center horizontally */
+}

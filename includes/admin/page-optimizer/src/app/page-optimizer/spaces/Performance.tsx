@@ -13,9 +13,10 @@ import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
 import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
+import Configurations from "app/page-optimizer/spaces/Configurations";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -35,12 +36,7 @@ const Performance = () => {
     } = useAppContext()
 
     const tabs: Tab[] = [
-        // {
-        //     key: "attention_required",
-        //     name: "Attention Required",
-        //     color: 'border-red-400',
-        //     activeColor: 'bg-red-400'
-        // },
+
         {
             key: "opportunities",
             name: "Opportunities",
@@ -58,6 +54,12 @@ const Performance = () => {
             name: "Passed Audits",
             color: 'border-green-600',
             activeColor: 'bg-green-600'
+        },
+        {
+            key: "configurations",
+            name: "Speed Settings",
+            color: 'border-orange-400',
+            activeColor: 'bg-orange-400',
         },
     ];
 
@@ -110,7 +112,7 @@ const Performance = () => {
                                    key={tab.key}
                                >
                                    {tab.name}
-                                   {(data && data?.audits.length > 0) && (
+                                   {(tab.key !== 'configurations' && data && data?.audits.length > 0) && (
                                        <div className={
                                            cn(
                                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
@@ -154,12 +156,18 @@ const Performance = () => {
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
-                                <SetupChecklist/>
-                                <AuditList activeTab={activeTab}/>
+                                {activeTab === 'configurations' ?
+                                   <>
+                                       {/*<SetupChecklist/>*/}
+                                       <Configurations/>
+                                   </>
+                                    : <AuditList activeTab={activeTab}/>
+                                }
+
                             </div>
                         </div>
                         <div key='audit-blank'>
-                            {(!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0) && (
+                            {(activeTab !== 'configurations' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
                                 <m.div
                                     initial={{opacity: 0, y: 10}}
                                     animate={{opacity: 1, y: 0}}

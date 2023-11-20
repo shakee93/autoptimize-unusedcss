@@ -51,9 +51,10 @@ import SlideLeft from "components/animation/SlideLeft";
 import {AnimatePresence} from "framer-motion";
 
 interface SettingItemProps {
-    audit: Audit
+    updateValue: ( setting: AuditSetting, value: any, key: any ) => void
     settings?: AuditSetting;
     index: number;
+    showIcons?: boolean
     hideActions?: boolean
 }
 
@@ -105,7 +106,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 })
 
 
-const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
+const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: SettingItemProps) => {
 
     if (!settings) {
         return <></>
@@ -156,23 +157,13 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     }), [])
 
 
-    const updateValue = useCallback( (value: any, key: string) => {
-
-        dispatch(updateSettings(
-            audit,
-            settings,
-            key,
-            value
-        ));
-    }, [settings])
-
     // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
 
     const saveAdditionalSettings = useCallback( () => {
 
         updates.forEach(({key, value}) => {
-            updateValue(value, key)
+            updateValue(settings, value, key)
         })
 
         setOpen(false);
@@ -216,10 +207,14 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
+            className={cn(
+                'relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pr-2 py-1',
+                showIcons ? 'px-0.5': 'px-2'
+            )}
         >
 
-            {icons[settings.category as keyof typeof icons]} {settings.name}
+            {showIcons && icons[settings.category as keyof typeof icons]}
+            {settings.name}
 
             {!hideActions && (
                 <>
@@ -229,7 +224,7 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                             {mainInput.control_type === 'checkbox' && (
                                 <Switch disabled={['onboard', 'preview'].includes(mode)}
                                         checked={mainInput.value}
-                                        onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
+                                        onCheckedChange={(c: boolean) => updateValue(settings, c, mainInput.key)}/>
                             )}
                             {mainInput.control_type === 'button' && (
                                 <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
