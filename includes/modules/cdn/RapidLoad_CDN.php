@@ -42,6 +42,7 @@ class RapidLoad_CDN
             unset($this->options['uucss_cdn_url']);
             unset($this->options['uucss_enable_cdn']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
+            RapidLoad_Base::update_option('rapidload_module_cdn',"");
             return true;
         }
 
@@ -73,7 +74,7 @@ class RapidLoad_CDN
             $this->options['uucss_cdn_zone_id'] = $response->zone_id;
             $this->options['uucss_cdn_dns_id'] = $response->dns_id;
             $this->options['uucss_cdn_url'] = $response->cdn_url;
-            $this->options['uucss_enable_cdn'] = "1";
+            RapidLoad_Base::update_option('rapidload_module_cdn',"1");
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);

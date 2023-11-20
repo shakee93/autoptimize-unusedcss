@@ -715,7 +715,11 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_enable_javascript']);
         }
 
-        RapidLoad_Cache::setup_cache(isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "");
+        $cache_enabled = isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "";
+
+        RapidLoad_Base::update_option('rapidload_module_cache',$cache_enabled);
+
+        RapidLoad_Cache::setup_cache($cache_enabled);
 
         if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
             do_action('rapidload/validate-cdn');
