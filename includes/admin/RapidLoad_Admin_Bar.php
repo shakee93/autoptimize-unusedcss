@@ -143,7 +143,8 @@ class RapidLoad_Admin_Bar {
                     ]
                 ]
             ],
-            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1'
+            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
+            'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );

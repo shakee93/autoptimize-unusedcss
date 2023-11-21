@@ -354,6 +354,10 @@ class RapidLoad_Admin
 
                 $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
 
+            }else{
+
+                $options['whitelist_packs'] = [];
+
             }
 
 

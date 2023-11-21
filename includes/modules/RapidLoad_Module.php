@@ -198,14 +198,13 @@ class RapidLoad_Module
                 $options = RapidLoad_Base::fetch_options();
                 if($cdn == "1" && !isset($options['uucss_cdn_url'])){
                     $response = $api->post('cdn',[
-                        'url' => trailingslashit(site_url())
+                        'url' => trailingslashit(site_url()),
+                        'validate' => isset($options['uucss_cdn_dns_id']) && isset($options['uucss_cdn_zone_id']) && isset($options['uucss_cdn_url'])
                     ]);
                     if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
                         $options['uucss_cdn_zone_id'] = $response->zone_id;
                         $options['uucss_cdn_dns_id'] = $response->dns_id;
                         $options['uucss_cdn_url'] = $response->cdn_url;
-                    }else{
-                        $options['uucss_enable_cdn'] = "";
                     }
 
                 }else{
