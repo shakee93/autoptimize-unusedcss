@@ -216,7 +216,6 @@ class RapidLoad_Image_Enqueue
 
             foreach ($style_lines as $style_line) {
 
-                // Check for both 'background' and 'background-image'
                 if (!$this->str_contains($style_line, "background")) {
                     $_style_lines[] = $style_line;
                 } else {
