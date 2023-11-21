@@ -12,7 +12,7 @@ import {setCommonState} from "../../../store/common/commonActions";
 import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
-import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
 import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
@@ -55,12 +55,7 @@ const Performance = () => {
             color: 'border-green-600',
             activeColor: 'bg-green-600'
         },
-        {
-            key: "configurations",
-            name: "Speed Settings",
-            color: 'border-orange-400',
-            activeColor: 'bg-orange-400',
-        },
+
     ];
 
 
@@ -90,8 +85,18 @@ const Performance = () => {
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 z-10',
+                'tabs flex sticky gap-2 -top-1 z-10',
             )}>
+                <div>
+                    <div
+
+                        onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
+                        className={cn(
+                            `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-3xl cursor-pointer w-[180px]  flex items-center gap-2 px-5 py-3.5 text-sm font-medium`,
+                            " dark:hover:text-brand-300"
+                        )}
+                    > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+                </div>
                 <Card data-tour='audit-groups'
                       className={cn(
                           'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3',

@@ -13,6 +13,7 @@ import Setting from "app/page-optimizer/components/audit/Setting";
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {CheckCircleIcon} from "@heroicons/react/24/solid";
 
 const Configurations = () => {
 
@@ -85,7 +86,17 @@ const Configurations = () => {
         <ul>
             {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
-                    {item.audits.length > 0 &&
+                    {(item.audits.length > 0
+                            &&
+                            (
+                                item.inputs[0].value
+                                && item.audits.filter((a: Audit) => a.type === 'passed_audit').length > 0
+                            )
+                        ||
+                            (
+                                item.audits.filter((a: Audit) => a.type !== 'passed_audit').length > 0
+                            )
+                        ) &&
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
 
                             <Setting showIcons={false} settings={item} updateValue={() => {}} index={itemIndex}/>
@@ -104,12 +115,18 @@ const Configurations = () => {
                                             }, 100)
                                         }}
                                         className='flex cursor-pointer items-center gap-1.5 text-sm px-2 py-1 rounded-xl' key={index}>
-                                        <Circle className={cn(
-                                            'w-2 stroke-0',
-                                            audit.type === 'passed_audit' && 'fill-green-600',
-                                            audit.type === 'opportunity' && 'fill-orange-600',
-                                            audit.type === 'diagnostics' && 'fill-yellow-400',
-                                        )} /> {audit.name}
+                                        {audit.type === 'passed_audit' ?
+                                            <CheckCircleIcon className='w-5 fill-green-600'/> :
+                                            <Circle className={cn(
+                                                'w-2 stroke-0',
+                                                audit.type === 'passed_audit' && 'fill-green-600',
+                                                audit.type === 'opportunity' && 'fill-orange-600',
+                                                audit.type === 'diagnostics' && 'fill-yellow-400',
+                                            )} />
+                                        }
+
+
+                                        {audit.name}
                                     </li>
                                 )}
                             </ul>
