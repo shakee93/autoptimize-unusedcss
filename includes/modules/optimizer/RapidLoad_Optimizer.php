@@ -165,7 +165,6 @@ class RapidLoad_Optimizer
                     case 'uucss_self_host_google_fonts':
                         self::$options['uucss_enable_font_optimization'] = "1";
                         if($global){
-                            error_log("updated");
                             RapidLoad_Base::update_option('rapidload_module_font',"1");
                         }
                         break;
