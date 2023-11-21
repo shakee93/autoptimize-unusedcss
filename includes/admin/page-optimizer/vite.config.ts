@@ -6,7 +6,8 @@ import packageJson from './package.json';
 import {dynamicBase} from "vite-plugin-dynamic-base";
 export default defineConfig((configEnv) => {
     const isDevelopment = configEnv.mode === "development";
-
+    const generateSourceMaps = process.env.GENERATE_SOURCE_MAPS === 'true';
+    const outDir = generateSourceMaps ? 'dist-debug' : 'dist';
     return {
         base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
         plugins: [
@@ -29,6 +30,8 @@ export default defineConfig((configEnv) => {
             },
         },
         build: {
+            outDir: outDir,
+            sourcemap: generateSourceMaps,
             rollupOptions: {
                 output: {
                     manualChunks: {

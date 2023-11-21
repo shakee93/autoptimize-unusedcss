@@ -121,4 +121,6 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
     );
 };
 
+AuditContent.displayName= 'AuditContent'
+
 export default AuditContent;

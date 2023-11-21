@@ -51,6 +51,12 @@ class RapidLoad_Admin_Bar {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
         }
 
+        $debug_titan = apply_filters('rapidload/titan/debug', false);
+
+        if ($debug_titan) {
+            $package .= '-debug';
+        }
+
         //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
