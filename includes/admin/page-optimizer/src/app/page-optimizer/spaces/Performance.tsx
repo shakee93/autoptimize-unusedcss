@@ -87,16 +87,14 @@ const Performance = () => {
             <div className={cn(
                 'tabs flex sticky gap-2 -top-1 z-10',
             )}>
-                <div>
-                    <div
+                <div
 
-                        onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
-                        className={cn(
-                            `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-3xl cursor-pointer w-[180px]  flex items-center gap-2 px-5 py-3.5 text-sm font-medium`,
-                            " dark:hover:text-brand-300"
-                        )}
-                    > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
-                </div>
+                    onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
+                    className={cn(
+                        `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-3xl cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        " dark:hover:text-brand-300"
+                    )}
+                > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
                 <Card data-tour='audit-groups'
                       className={cn(
                           'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3',
