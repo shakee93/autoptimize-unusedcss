@@ -47,7 +47,8 @@ class RapidLoad_CDN
         }
 
         $response = $api->post('cdn',[
-            'url' => trailingslashit(site_url())
+            'url' => trailingslashit(site_url()),
+            'validate' => isset($this->options['uucss_cdn_dns_id']) && isset($this->options['uucss_cdn_zone_id']) && isset($this->options['uucss_cdn_url'])
         ]);
 
         if(is_wp_error($response)){

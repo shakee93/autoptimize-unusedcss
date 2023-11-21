@@ -777,4 +777,19 @@ abstract class RapidLoad_DB
 
 
     }
+
+    static function get_optimization_count(){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
+    }
 }
