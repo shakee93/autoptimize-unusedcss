@@ -33,6 +33,10 @@ class UnusedCSS_Store
 
         if(isset($this->args['immediate'])){
 
+            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
+
             $api_options = ( isset( $this->args['options'] ) ) ? $this->args['options'] : [];
 
             if(empty($api_options)){

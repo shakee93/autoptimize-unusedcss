@@ -76,10 +76,10 @@ class RapidLoad_Optimizer
 
     }
 
-    public static function   pre_optimizer_function(){
+    public function  pre_optimizer_function(){
         if(isset($_REQUEST['url']) && !empty($_REQUEST['url']) && filter_var($_REQUEST['url'], FILTER_VALIDATE_URL) !== false){
             self::$job = new RapidLoad_Job([
-                'url' => $_REQUEST['url']
+                'url' => $this->transform_url($_REQUEST['url'])
             ]);
             if(!isset(self::$job->id)){
                 self::$job->save();
@@ -157,9 +157,29 @@ class RapidLoad_Optimizer
                     case 'uucss_inline_css':
                     case 'uucss_enable_cpcss':
                     case 'uucss_minify':
-                        self::$options['uucss_enable_css'] = "1";
                         if($global){
                             RapidLoad_Base::update_option('rapidload_module_css',"1");
+                        }
+                        self::$options['uucss_enable_css'] = "1";
+                        if($key == "uucss_enable_uucss"){
+                            $job_data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                            if(!isset($job_data->id)){
+                                $job_data->save();
+                            }
+                            do_action('uucss_async_queue', $job_data, [
+                                'immediate' => true,
+                                'titan' => true,
+                            ]);
+                        }
+                        if($key == "uucss_enable_cpcss"){
+                            $job_data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                            if(!isset($job_data->id)){
+                                $job_data->save();
+                            }
+                            do_action('cpcss_async_queue', $job_data, [
+                                'immediate' => true,
+                                'titan' => true,
+                            ]);
                         }
                         break;
                     case 'uucss_self_host_google_fonts':
@@ -208,26 +228,6 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
-        }
-
-        if(isset(self::$options['uucss_enable_uucss']) && self::$options['uucss_enable_uucss'] == "1"){
-            $job_data = new RapidLoad_Job_Data(self::$job, 'uucss');
-            if(!isset($job_data->id)){
-                $job_data->save();
-            }
-            do_action('uucss_async_queue', $job_data, [
-                //'immediate' => true
-            ]);
-        }
-
-        if(isset(self::$options['uucss_enable_cpcss']) && self::$options['uucss_enable_cpcss'] == "1"){
-            $job_data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-            if(!isset($job_data->id)){
-                $job_data->save();
-            }
-            do_action('cpcss_async_queue', $job_data, [
-                //'immediate' => true
-            ]);
         }
 
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
@@ -297,7 +297,7 @@ class RapidLoad_Optimizer
 
         self::verify_nonce();
 
-        self::pre_optimizer_function();
+        $this->pre_optimizer_function();
 
         if(!isset(self::$job) || !isset(self::$strategy)){
             wp_send_json_error();
@@ -570,7 +570,7 @@ class RapidLoad_Optimizer
             wp_send_json_error('Missing required data to save the settings!');
         }
 
-        self::pre_optimizer_function();
+        $this->pre_optimizer_function();
 
         if(!isset(self::$options)){
             wp_send_json_error('Missing options data to save the settings!');
@@ -610,7 +610,7 @@ class RapidLoad_Optimizer
                             switch($input->control_type ){
 
                                 case 'checkbox' :{
-                                    if(isset($input->value) && isset($input->key) && $input->value){
+                                    if(isset($input->value) && isset($input->key) && ($input->value || $input->value == "1")){
                                         if($input->key == "uucss_load_js_method"){
                                             self::$options[$input->key] = "defer";
                                         }else{
@@ -735,12 +735,6 @@ class RapidLoad_Optimizer
             do_action('rapidload/validate-cdn');
         }else{
             do_action('rapidload/validate-cdn', true);
-        }
-
-        foreach (self::$options as $key => $value){
-            if(isset(self::$global_options[$key]) && gettype($value) == "string" && self::$global_options[$key] == $value){
-                unset(self::$options[$key]);
-            }
         }
 
         $this->associate_domain(false);
