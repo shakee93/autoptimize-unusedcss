@@ -86,7 +86,7 @@ const transformData = (data: any) => {
 
         return 0;
     }
-
+    
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
@@ -106,7 +106,8 @@ const transformData = (data: any) => {
         success: data.success,
         settings: initiateSettings(audits),
         revisions: data.data.revisions,
-        individual_file_actions: data.data['individual-file-actions']
+        individual_file_actions: data.data['individual-file-actions'],
+        state: data.state
     };
 
     return _data

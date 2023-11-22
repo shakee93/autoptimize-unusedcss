@@ -54,7 +54,9 @@ const useSubmitSettings = () => {
 
                 try{
                     setInvalidatingCache(true)
-                    await api.post('clear_page_cache')
+                    await api.post('clear_page_cache', {
+                        url
+                    })
                     setInvalidatingCache(false)
                 }
                 catch (e: any) {
