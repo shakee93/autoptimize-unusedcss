@@ -107,7 +107,7 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            'group_by_conditions' => [
+            /*'group_by_conditions' => [
                 [
                     'label' => 'Entire Site',
                     'value' => 'all'
@@ -148,7 +148,7 @@ class RapidLoad_Admin_Bar {
                         ],
                     ]
                 ]
-            ],
+            ],*/
             'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2
         );

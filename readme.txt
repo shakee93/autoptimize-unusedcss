@@ -156,6 +156,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.1.14 - 22/11/2023 =
+ * feat: add debug mode to titan
+ * fix: inline background images not optimizing
+ * fix: known bugs
+
 = 2.1.13 - 14/11/2023 =
  * fix: known bugs
 
