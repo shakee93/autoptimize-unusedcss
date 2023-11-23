@@ -50,23 +50,6 @@ const useSubmitSettings = () => {
 
         try {
 
-            if (analyze) {
-
-                try{
-                    setInvalidatingCache(true)
-                    await api.post('clear_page_cache', {
-                        url
-                    })
-                    setInvalidatingCache(false)
-                }
-                catch (e: any) {
-                    setInvalidatingCache(false)
-                    toast({
-                        description: <div className='flex w-full gap-2 text-center'>{e.message} <XCircleIcon className='w-5 text-red-600'/></div>,
-                    })
-                }
-
-            }
 
             setSavingData(true);
 
@@ -83,6 +66,22 @@ const useSubmitSettings = () => {
             })
 
             if (analyze) {
+                setSavingData(false)
+
+                try{
+                    setInvalidatingCache(true)
+                    await api.post('clear_page_cache', {
+                        url
+                    })
+                    setInvalidatingCache(false)
+                }
+                catch (e: any) {
+                    setInvalidatingCache(false)
+                    toast({
+                        description: <div className='flex w-full gap-2 text-center'>{e.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                    })
+                }
+
                 dispatch(fetchData(options, url, true));
             }
 
