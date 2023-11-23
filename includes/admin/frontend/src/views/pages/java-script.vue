@@ -167,7 +167,7 @@
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Delaying</h1>
                 <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
 
-                <div v-if="onData.uucss_load_scripts_on_user_interaction!==''" class="grid pb-5">
+                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='' || onData.uucss_load_scripts_on_user_interaction != null" class="grid pb-5">
                 <textarea
                     v-model="onData.uucss_load_scripts_on_user_interaction"
                     @focus="focus='delay'" @blur="focus = null"
