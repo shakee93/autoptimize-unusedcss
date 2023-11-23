@@ -157,7 +157,7 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
-            if(!self::is_file_excluded($link->src) ){
+            if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
 
                 $data_attr = "data-rapidload-src";
                 $link->{$data_attr} = $link->src;
@@ -168,7 +168,7 @@ class Javascript_Enqueue
 
         }else if(self::is_inline_script($link)){
 
-            if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
+            if(!self::is_file_excluded($link->innertext()) && !self::is_file_excluded($link->innertext(),'uucss_exclude_files_from_delay_js')){
 
                 $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
 
