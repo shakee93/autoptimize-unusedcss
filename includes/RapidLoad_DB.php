@@ -767,7 +767,29 @@ abstract class RapidLoad_DB
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'autoptimize_uucss_settings'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_migration'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_cache'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_cache'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_cdn'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_css'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_font'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_js'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_image'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_titan'");
 
 
+    }
+
+    static function get_optimization_count(){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
     }
 }

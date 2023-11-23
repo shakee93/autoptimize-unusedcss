@@ -31,7 +31,7 @@ class ApiService {
 
     }
 
-    async throwIfError(response: Response) {
+    async throwIfError(response: Response, state: any = null) {
 
         if (!response.ok) {
             throw new Error("Oops! The request failed");
@@ -56,14 +56,17 @@ class ApiService {
             );
         }
 
-        return data
+        return {
+            ...data,
+            state
+        }
     }
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
 
 
         try {
-
+            let fresh = reload
             let data = null
 
             if (reload) {
@@ -105,11 +108,14 @@ class ApiService {
             });
 
 
-            let responseData = await this.throwIfError(response);
+            let responseData = await this.throwIfError(response, {
+                fresh: reload
+            });
 
             if (responseData?.reload) {
                 return await this.fetchPageSpeed(url, activeReport, true);
             }
+
 
             return responseData
 

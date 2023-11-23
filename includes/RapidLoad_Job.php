@@ -222,7 +222,7 @@ class RapidLoad_Job{
 
     function get_desktop_options($transformed = false, $recursive = false){
 
-        if(isset($this->desktop_options) && !empty($this->mobile_options)){
+        if(isset($this->desktop_options) && !empty($this->desktop_options)){
             return !$transformed ? unserialize($this->desktop_options) : $this->transform_individual_file_actions(unserialize($this->desktop_options));
         }
         if(!$recursive){

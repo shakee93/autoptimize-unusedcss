@@ -354,6 +354,10 @@ class RapidLoad_Admin
 
                 $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
 
+            }else{
+
+                $options['whitelist_packs'] = [];
+
             }
 
 
@@ -412,6 +416,12 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_load_scripts_on_user_interaction'])){
 
             $options['uucss_load_scripts_on_user_interaction'] = $_REQUEST['uucss_load_scripts_on_user_interaction'];
+
+        }
+
+        if(isset($_REQUEST['uucss_exclude_files_from_delay_js'])){
+
+            $options['uucss_exclude_files_from_delay_js'] = $_REQUEST['uucss_exclude_files_from_delay_js'];
 
         }
 

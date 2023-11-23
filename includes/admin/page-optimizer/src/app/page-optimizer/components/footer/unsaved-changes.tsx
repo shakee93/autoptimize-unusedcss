@@ -28,6 +28,9 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
     const { touched, fresh } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
 
+    // console.log(fresh, touched);
+    // return <>{children}</>;
+
     if (!(fresh ? true : touched)) {
         return <div onClick={e => onClick()} >
             {children}
