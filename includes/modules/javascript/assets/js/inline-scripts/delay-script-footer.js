@@ -34,7 +34,6 @@
         }
 
         if (totalScripts.filter(s => s.loaded).length === totalScripts.length) {
-            console.log('fired: all scripts event');
             // All scripts are loaded, fire the custom event
             var allScriptsLoadedEvent = document.createEvent('Event');
             allScriptsLoadedEvent.initEvent('RapidLoad:DelayedScriptsLoaded', true, true);
