@@ -164,9 +164,21 @@
             </div>
             <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-5">
               <div>
-                <div class="grid">
+                <div v-if="onData.uucss_load_scripts_on_user_interaction!==''" class="grid pb-5">
                 <textarea
                     v-model="onData.uucss_load_scripts_on_user_interaction"
+                    @focus="focus='delay'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
+                  </div>
+                </div>
+
+                <div class="grid">
+                <textarea
+                    v-model="onData.uucss_exclude_files_from_delay_js"
                     @focus="focus='delay'" @blur="focus = null"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
@@ -255,6 +267,7 @@ export default {
           this.onData.uucss_excluded_js_files = options.uucss_excluded_js_files
           this.onData.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
           this.onData.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
+          this.onData.uucss_exclude_files_from_delay_js = options.uucss_exclude_files_from_delay_js
           this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
         }
 
@@ -302,6 +315,7 @@ export default {
         uucss_excluded_js_files: this.onData.uucss_excluded_js_files,
         uucss_load_js_method: this.onData.uucss_load_js_method.status ? 'defer' : 'none',
         uucss_load_scripts_on_user_interaction: this.onData.uucss_load_scripts_on_user_interaction,
+        uucss_exclude_files_from_delay_js: this.onData.uucss_exclude_files_from_delay_js,
         uucss_excluded_js_files_from_defer: this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer,
 
       }
@@ -362,6 +376,7 @@ export default {
         },
         uucss_excluded_js_files: [],
         uucss_load_scripts_on_user_interaction: [],
+        uucss_exclude_files_from_delay_js: [],
       },
 
       beforeSave:{},
