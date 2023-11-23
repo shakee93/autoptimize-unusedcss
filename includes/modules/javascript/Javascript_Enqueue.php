@@ -4,7 +4,8 @@ use MatthiasMullie\Minify;
 use Peast\Peast;
 use Peast\Query;
 use Peast\Traverser;
-
+use Peast\Renderer;
+use Peast\Formatter\PrettyPrint;
 class Javascript_Enqueue
 {
     use RapidLoad_Utils;
@@ -12,6 +13,7 @@ class Javascript_Enqueue
     private $job = null;
 
     private $dom;
+    private $global_scripts;
     private $inject;
     private $options;
     private $strategy;
@@ -52,6 +54,10 @@ class Javascript_Enqueue
 
     public function update_content($state){
 
+        global $wp_scripts;
+
+        $this->global_scripts = $wp_scripts;
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -91,8 +97,6 @@ class Javascript_Enqueue
 
             // Inject header delay script
             $title = $this->dom->find('title', 0);
-
-
 
             // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
             $content = "//!injected by RapidLoad \n!function(){var i=['DOMContentLoaded','readystatechanges','load'],o=[window,document],t=EventTarget.prototype.dispatchEvent,r=EventTarget.prototype.addEventListener,s=EventTarget.prototype.removeEventListener,a=[];EventTarget.prototype.addEventListener=function(t,e,...n){i.includes(t)&&o.includes(this)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{e.call(this,new Event(t))},100):a.push({target:this,type:t,listener:e,options:n})),r.call(this,t,e,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){i.includes(e)&&o.includes(this)&&(a=a.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),s.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return i.includes(e.type)&&o.includes(this)&&(a=a.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},i.forEach(function(e){o.forEach(function(t){t.addEventListener(e,function(){})})})}();";
@@ -236,6 +240,17 @@ class Javascript_Enqueue
 
     public function optimize_js_delivery($link){
 
+        $handle = str_replace('-js', '', $link->id);
+
+        if ($handle === 'jquery-core') {
+            $handle = 'jquery';
+        }
+
+        $wp_script = $this->global_scripts->query($handle);
+
+//        error_log(json_encode([$link->defer && $wp_script && !count($wp_script->deps), $handle, self::is_js($link)], 128));
+
+
         if(!isset($link->type)){
             $link->type = 'text/javascript';
         }
@@ -245,7 +260,6 @@ class Javascript_Enqueue
         }
 
         if(
-            !$link->defer &&
             self::is_js($link) &&
             isset($this->options['uucss_load_js_method']) &&
             ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1") &&
@@ -293,19 +307,36 @@ class Javascript_Enqueue
 //                return;
 //            }
 
-            if (!$this->analyze_js_code($inner_text)) {
-                return;
-            }
-
             if(!empty($this->default_inline_js_exclusion_pattern) && preg_match( "/({$this->default_inline_js_exclusion_pattern})/msi", $inner_text )){
                 return;
             }
 
+            $startTime = microtime(true);
+
+// Execute the function
+            $manipulated_snippet = $this->analyzeJavaScriptCode($inner_text);
+
+// Record the end time
+            $endTime = microtime(true);
+
+// Calculate the duration
+            $duration = ($endTime - $startTime) * 1000;
+
+// Log the time taken
+            error_log("analyzeJavaScriptCode execution time: " . $duration . " milliseconds");
+
+            if (!$manipulated_snippet) {
+                return;
+            } else {
+                $inner_text = $manipulated_snippet;
+            }
+
+
+
             //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
             //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
 
-            $event =  isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" ? 'RapidLoad:DelayedScriptsLoaded' : 'DOMContentLoaded';
-            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript"> document.addEventListener("'. $event .'", function() { ' . $inner_text . ' }); </script>');
+            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript">' . $inner_text . '</script>');
         }
 
 
@@ -448,36 +479,105 @@ class Javascript_Enqueue
     }
 
 
-    public function analyze_js_code($snippet)
+    public function analyzeJavaScriptCode($jsSnippet)
     {
         try {
-            if (preg_match('/window\._wpemojiSettings|data-rapidload-delayed/', $snippet)) {
+            // Determine the global event based on the 'delay_javascript' option
+            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"
+                ? 'RapidLoad:DelayedScriptsLoaded'
+                : 'DOMContentLoaded';
+
+            // Skip processing for specific cases
+            if (preg_match('/window\._wpemojiSettings|data-rapidload-delayed/', $jsSnippet)) {
                 return false;
             }
 
-            $ast = Peast::latest($snippet)->parse();
+            // Parse the JavaScript snippet into an AST (Abstract Syntax Tree)
+            $parsedAst = Peast::latest($jsSnippet)->parse();
 
-            $data = $ast->query('CallExpression')->get(0);
+            // Configure the AST traverser
+            $astTraverser = new Traverser([
+                'passParentNode' => true,
+                'skipStartingNode' => true,
+            ]);
 
+            // Define a renderer for pretty printing the AST
+            $astRenderer = new Renderer();
+            $astRenderer->setFormatter(new PrettyPrint());
+            $rootStatements = [];
 
-            if ($data instanceof \Peast\Syntax\Node\CallExpression) {
-                $callee = $data->getCallee()->getType();
-                return true;
-//            if ($callee !== 'Identifier') {
-//                return false;
-//            }
+            // Traverse and modify the AST
+            $updatedSnippet = $astTraverser->addFunction(function ($currentNode) use ($eventToBind, $astRenderer, &$rootStatements) {
 
-//            error_log($snippet);
-//            error_log(get_class($data));
-//            error_log(json_encode($data->getCallee()->getType()));
-//            error_log(json_encode($data, JSON_PRETTY_PRINT));
+                $type = $currentNode->getType();
+
+                if ($type !== 'EmptyStatement') {
+                    $rootStatements[] = (object) [
+                        'type' => $type
+                    ];
+                }
+
+                if ($type === 'FunctionDeclaration') {
+                    $updatedNode = $this->assignWindow($currentNode);
+                    return array($updatedNode, Traverser::DONT_TRAVERSE_CHILD_NODES);
+                }
+
+                if ($type === 'VariableDeclaration') {
+                    $updatedNode = $this->assignWindow($currentNode);
+                    return array($updatedNode, Traverser::DONT_TRAVERSE_CHILD_NODES);
+                }
+
+                return Traverser::DONT_TRAVERSE_CHILD_NODES;
+
+            })->traverse($parsedAst)->render(new PrettyPrint());
+
+            if (count(array_filter($rootStatements, function ($statement) {
+                    return $statement->type == 'VariableDeclaration';
+                })) === count($rootStatements)) {
+                return $updatedSnippet;
             }
 
-            return false;
-        } catch (Exception $e) {
-            return false;
+            // Return the original JavaScript snippet
+            return $this->wrapWithJavaScriptEvent($eventToBind, $updatedSnippet);
+        } catch (Exception $exception) {
+            // Log any exceptions that occur
+            error_log('RapidLoad:Error in JS Optimization: ' . $exception->getMessage());
+            return $this->wrapWithJavaScriptEvent($eventToBind, $jsSnippet);
+
         }
     }
 
+    public function wrapWithJavaScriptEvent($event, $codeSnippet)
+    {
+        // Wrap the given code snippet in a JavaScript event listener
+        return "document.addEventListener('$event', function(){ " . $codeSnippet . "});";
+    }
 
+    public function assignWindow($node)
+    {
+        $id = null;
+        $type = $node->getType();
+        $defineWindow = '';
+
+
+        if ($type === 'FunctionDeclaration') {
+            $id = $node->getId()->getRawName();
+            $defineWindow = $id ? "window." . $id . "=" : "";
+        }
+
+        if ($type === 'VariableDeclaration' && count($node->getDeclarations()) === 1) {
+            $id = $node->getDeclarations()[0]->getId()->getRawName();
+            $node->getDeclarations()[0]->getId()->setRawName('window.' . $id);
+            $node->setKind('');
+        }
+
+        if (!$id) {
+            return $node;
+        }
+
+        $renderedFunction = $node->render(new PrettyPrint());
+
+        $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
+        return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
+    }
 }
