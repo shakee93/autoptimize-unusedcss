@@ -97,9 +97,8 @@ class Javascript_Enqueue
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" || apply_filters('rapidload/delay-script/enable', false)){
 
-
             // Inject header delay script
-            $title = $this->dom->find('title', 0);
+            $title = $this->dom->find('title')[0];
 
             // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
             $content = "//!injected by RapidLoad \n!function(){var i=['DOMContentLoaded','readystatechanges','load'],o=[window,document],t=EventTarget.prototype.dispatchEvent,r=EventTarget.prototype.addEventListener,s=EventTarget.prototype.removeEventListener,a=[];EventTarget.prototype.addEventListener=function(t,e,...n){i.includes(t)&&o.includes(this)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{e.call(this,new Event(t))},100):a.push({target:this,type:t,listener:e,options:n})),r.call(this,t,e,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){i.includes(e)&&o.includes(this)&&(a=a.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),s.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return i.includes(e.type)&&o.includes(this)&&(a=a.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},i.forEach(function(e){o.forEach(function(t){t.addEventListener(e,function(){})})})}();";
@@ -110,10 +109,11 @@ class Javascript_Enqueue
 //                $content = file_get_contents($filePath);
 //            }
 
-            $node = $this->dom->createElement('script', "" . $content . "");
+            $node_header = '<script type="text/javascript" >' . $content . '</script>';
 
-            $node->setAttribute('type', 'text/javascript');
-            $title->outertext = $title->outertext . $node->outertext;
+            $title_content = $title->outertext;
+
+            $title->__set('outertext', $title_content . $node_header);
 
 
             // Inject footer delay script
@@ -239,17 +239,6 @@ class Javascript_Enqueue
 
     public function optimize_js_delivery($link){
 
-        $handle = str_replace('-js', '', $link->id);
-
-        if ($handle === 'jquery-core') {
-            $handle = 'jquery';
-        }
-
-        $wp_script = $this->global_scripts->query($handle);
-
-//        error_log(json_encode([$link->defer && $wp_script && !count($wp_script->deps), $handle, self::is_js($link)], 128));
-
-
         if(!isset($link->type)){
             $link->type = 'text/javascript';
         }
@@ -258,43 +247,43 @@ class Javascript_Enqueue
             return;
         }
 
-        if(
-            self::is_js($link) &&
-            isset($this->options['uucss_load_js_method']) &&
-            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1") &&
-            !self::is_file_excluded($link->src) &&
-            !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')
-        ){
+        if(isset($this->options['uucss_load_js_method']) &&
+            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1")){
 
-            if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
-                return;
+            if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                if(isset($link->defer) && isset($link->async)){
+                    return;
+                }
+
+                if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
+                    return;
+                }
+
+                $link->defer = true;
+                unset($link->async);
             }
 
-            $link->defer = true;
-            unset($link->async);
-        }
+            if(!self::is_js($link) && self::is_inline_script($link)){
 
-        if(
-            !self::is_js($link) && (
-            isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" ||
-            isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1" &&
-            self::is_inline_script($link))
-        ){
+                if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
 
-            if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
+                    $this->defer_inline_js($link);
 
-                $this->defer_inline_js($link);
+                }
 
             }
 
         }
+
+
     }
 
     public function defer_inline_js($link){
-        $inner_text = $link->innertext();
-        if(!empty($inner_text)){
 
-            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'delayer|jQuery|\$\.\(|\$\(' );
+        $inner_text = $link->innertext();
+
+        if(!empty($inner_text)){
 
             if ( isset($link->type) && preg_match( '/(application\/ld\+json)/i', $link->type ) ) {
                 return;
@@ -308,16 +297,9 @@ class Javascript_Enqueue
 
             if (!$manipulated_snippet) {
                 return;
-            } else {
-                $inner_text = $manipulated_snippet;
             }
 
-
-
-            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-
-            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript">' . $inner_text . '</script>');
+            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript">' . $manipulated_snippet . '</script>');
         }
 
 
