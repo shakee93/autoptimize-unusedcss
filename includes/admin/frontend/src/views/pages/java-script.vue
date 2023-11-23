@@ -167,18 +167,6 @@
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Delaying</h1>
                 <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
 
-                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='' || onData.uucss_load_scripts_on_user_interaction != null" class="grid pb-5">
-                <textarea
-                    v-model="onData.uucss_load_scripts_on_user_interaction"
-                    @focus="focus='delay'" @blur="focus = null"
-                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                    id="force-include" type="text" placeholder=""></textarea>
-                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
-                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
-                  </div>
-                </div>
-
                 <div class="grid">
                 <textarea
                     v-model="onData.uucss_exclude_files_from_delay_js"
@@ -190,6 +178,21 @@
                     <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
                   </div>
                 </div>
+                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='' && onData.uucss_load_scripts_on_user_interaction != null" class="grid pb-5">
+                  <h1 class="font-normal text-base text-black-font pb-3 pt-5">Delay Javascript on Load (Legacy)</h1>
+
+                  <textarea
+                    v-model="onData.uucss_load_scripts_on_user_interaction"
+                    @focus="focus='delay'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
+                  </div>
+                </div>
+
+
 
               </div>
             </div>
