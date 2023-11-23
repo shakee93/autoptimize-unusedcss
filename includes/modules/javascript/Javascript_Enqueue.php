@@ -243,39 +243,44 @@ class Javascript_Enqueue
             return;
         }
 
-        if(isset($this->options['uucss_load_js_method']) &&
-            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1")){
+        $js_to_be_defer = isset($this->options['uucss_load_js_method']) &&
+            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1");
 
-            if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+        $js_to_be_delay = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1";
 
-                if(isset($link->defer) && isset($link->async)){
-                    return;
+        if(self::is_js($link)){
+
+            if($js_to_be_defer){
+
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                    if(isset($link->defer) && isset($link->async)){
+                        return;
+                    }
+
+                    if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
+                        return;
+                    }
+
+                    $link->defer = true;
+                    unset($link->async);
                 }
-
-                if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
-                    return;
-                }
-
-                $link->defer = true;
-                unset($link->async);
-            }
-
-        }
-
-        if(
-            !self::is_js($link) &&
-            (isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" || isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1" &&
-            self::is_inline_script($link))
-        ){
-
-            if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
-
-                $this->defer_inline_js($link);
 
             }
 
-        }
+        }elseif (self::is_inline_script($link)){
 
+            if($js_to_be_delay || $js_to_be_defer){
+
+                if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
+
+                    $this->defer_inline_js($link);
+
+                }
+
+            }
+
+        }
 
     }
 
