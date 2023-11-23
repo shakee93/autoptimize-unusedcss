@@ -1,5 +1,36 @@
 //!injected by RapidLoad \n
 (function () {
+
+    function groupScripts(scripts) {
+        // Create a map for easy access to scripts by id
+        const scriptMap = new Map(scripts.map(script => [script.id, script]));
+
+        // Helper function to determine the maximum batch number among dependencies
+        const maxBatchNumberOfDependencies = script => {
+            return Math.max(0, ...script.dependencies.map(dep => scriptMap.get(dep).batch || 0));
+        };
+
+        // Sort scripts to ensure zero-dependency scripts come first
+        scripts.sort((a, b) => a.dependencies.length - b.dependencies.length);
+
+        // Assign batch numbers based on dependencies
+        scripts.forEach(script => {
+            script.batch = maxBatchNumberOfDependencies(script) + 1;
+        });
+
+        // Group scripts by their batch number
+        const batchMap = new Map();
+        scripts.forEach(script => {
+            if (!batchMap.has(script.batch)) {
+                batchMap.set(script.batch, []);
+            }
+            batchMap.get(script.batch).push(script);
+        });
+
+        // Convert the map to a sorted array of batches
+        return Array.from(batchMap.values());
+    } 
+    
     function rpDebug(method = 'log', ...args) {
         if (window.location.search.includes('rapidload_debug_js_scripts')) {
             console[method](...args);
@@ -7,6 +38,7 @@
     }
 
     var totalScripts = []
+    var groupedScripts = [];
     var loadedScripts = 0;
     var loadedScriptsWithNoDependant = 0;
 
@@ -18,28 +50,28 @@
             success: success
         } : s)
 
-        if (script.dependencies.length === 0) {
-            loadedScriptsWithNoDependant++;
-        } else {
-            loadedScripts++;
-        }
+        if(totalScripts.filter(s => s.batch === script.batch).length ===
+            totalScripts.filter(s => s.batch === script.batch && s.loaded ).length) {
+            var batchLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptBatchLoaded', {
+                detail: { batch: script.batch },
+                bubbles: true,
+                cancelable: true
+            });
 
-        if (script.dependencies.length === 0 &&
-            loadedScriptsWithNoDependant === totalScripts.filter(s => s.dependencies.length === 0).length) {
-            // All scripts are loaded, fire the custom event
-            var allScriptsLoadedNoDepEvent = document.createEvent('Event');
-            allScriptsLoadedNoDepEvent.initEvent('RapidLoad:DelayedScriptNoDepsLoaded', true, true);
-            document.dispatchEvent(allScriptsLoadedNoDepEvent);
-            rpDebug('log', 'fired: RapidLoad:DelayedScriptNoDepsLoaded')
+            document.dispatchEvent(batchLoadedEvent);
+            rpDebug('log', 'fired: RapidLoad:DelayedScriptBatchLoaded', script.batch)
         }
 
         if (totalScripts.filter(s => s.loaded).length === totalScripts.length) {
-            // All scripts are loaded, fire the custom event
-            var allScriptsLoadedEvent = document.createEvent('Event');
-            allScriptsLoadedEvent.initEvent('RapidLoad:DelayedScriptsLoaded', true, true);
+
+            var allScriptsLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptsLoaded', {
+                bubbles: true,
+                cancelable: true
+            });
+
             document.dispatchEvent(allScriptsLoadedEvent);
             rpDebug('log', 'fired: RapidLoad:DelayedScriptsLoaded')
-
+            rpDebug('table', totalScripts)
         }
     }
 
@@ -59,10 +91,10 @@
             })
         });
 
+        groupedScripts = groupScripts(totalScripts);
+        rpDebug('table', totalScripts)
 
-        rpDebug('log', totalScripts)
-
-        totalScripts.filter(s => s.dependencies.length === 0).forEach(function (script) {
+        totalScripts.filter(s => s.batch === 1).forEach(function (script) {
             var scriptElement = script.scriptElement;
             scriptElement.addEventListener('load', () => onScriptLoad(script));
             scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
@@ -70,8 +102,15 @@
             scriptElement.removeAttribute('data-rapidload-src');
         });
 
-        document.addEventListener('RapidLoad:DelayedScriptNoDepsLoaded', () => {
-            totalScripts.filter(s => s.dependencies.length > 0).forEach(function (script) {
+        document.addEventListener('RapidLoad:DelayedScriptBatchLoaded', (event) => {
+
+            var batch = Number(event.detail.batch) + 1;
+
+            if (batch > totalScripts.filter(s => s.batch).length) {
+                return;
+            }
+
+            totalScripts.filter(s => s.batch === batch).forEach(function (script) {
                 var scriptElement = script.scriptElement;
                 scriptElement.addEventListener('load', () => onScriptLoad(script));
                 scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors

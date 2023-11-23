@@ -103,11 +103,11 @@ class Javascript_Enqueue
             // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
             $content = "//!injected by RapidLoad \n!function(){var i=['DOMContentLoaded','readystatechanges','load'],o=[window,document],t=EventTarget.prototype.dispatchEvent,r=EventTarget.prototype.addEventListener,s=EventTarget.prototype.removeEventListener,a=[];EventTarget.prototype.addEventListener=function(t,e,...n){i.includes(t)&&o.includes(this)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{e.call(this,new Event(t))},100):a.push({target:this,type:t,listener:e,options:n})),r.call(this,t,e,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){i.includes(e)&&o.includes(this)&&(a=a.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),s.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return i.includes(e.type)&&o.includes(this)&&(a=a.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},i.forEach(function(e){o.forEach(function(t){t.addEventListener(e,function(){})})})}();";
 
-//            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
-//
-//            if (file_exists($filePath)) {
-//                $content = file_get_contents($filePath);
-//            }
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
+
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+            }
 
             $node_header = '<script type="text/javascript" >' . $content . '</script>';
 
@@ -122,11 +122,11 @@ class Javascript_Enqueue
             // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
             $content = "//!injected by RapidLoad \n!function(){function n(e='log',...t){window.location.search.includes('rapidload_debug_js_scripts')&&console[e](...t)}var r=[],i=0;function d(t,d=!0){var e;r=r.map(e=>e.id===t.id?{...t,loaded:!0,success:d}:e),0===t.dependencies.length?i++:0,0===t.dependencies.length&&i===r.filter(e=>0===e.dependencies.length).length&&((e=document.createEvent('Event')).initEvent('RapidLoad:DelayedScriptNoDepsLoaded',!0,!0),document.dispatchEvent(e),n('log','fired: RapidLoad:DelayedScriptNoDepsLoaded')),r.filter(e=>e.loaded).length===r.length&&((e=document.createEvent('Event')).initEvent('RapidLoad:DelayedScriptsLoaded',!0,!0),document.dispatchEvent(e),n('log','fired: RapidLoad:DelayedScriptsLoaded'))}function a(e){e.forEach(function(e){var t=e.getAttribute('id'),d=e.getAttribute('data-js-deps');r.push({id:t,scriptElement:e,dependencies:function(e,d,t){var n=[],e=e?e.split(', '):[];n=e.map(function(t){var e=d.find(function(e){return e.id===t+'-js'||t.includes('jquery')&&'jquery-core-js'===e.id||t.startsWith('jquery-ui-')&&'jquery-ui-core-js'===e.id});return e?e.id:(console.warn('Dependency not found for:',t),null)}).filter(Boolean),'jquery-core-js'!==t&&t&&t.includes('jquery-')&&n.push('jquery-core-js');return n}(d,r,t),loaded:null})}),n('log',r),r.filter(e=>0===e.dependencies.length).forEach(function(e){var t=e.scriptElement;t.addEventListener('load',()=>d(e)),t.addEventListener('error',()=>d(e,!1)),t.setAttribute('src',t.getAttribute('data-rapidload-src')),t.removeAttribute('data-rapidload-src')}),document.addEventListener('RapidLoad:DelayedScriptNoDepsLoaded',()=>{r.filter(e=>0<e.dependencies.length).forEach(function(e){var t=e.scriptElement;t.addEventListener('load',()=>d(e)),t.addEventListener('error',()=>d(e,!1)),t.setAttribute('src',t.getAttribute('data-rapidload-src')),t.removeAttribute('data-rapidload-src')})})}['mousemove','touchstart','keydown'].forEach(function(t){function d(){var e;removeEventListener(t,d),a(Array.from(document.querySelectorAll('[data-rapidload-src]'))),0===r&&((e=document.createEvent('Event')).initEvent('RapidLoad:DelayedScriptsLoaded',!0,!0),document.dispatchEvent(e))}addEventListener(t,d)})}();";
 
-//            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
-//
-//            if (file_exists($filePath)) {
-//                $content = file_get_contents($filePath);
-//            }
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
+
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+            }
 
             $node = $this->dom->createElement('script', "" . $content . "");
 
