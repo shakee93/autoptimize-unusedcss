@@ -29,6 +29,7 @@ class Javascript_Enqueue
         $this->init();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 60);
+        add_filter( 'script_loader_tag', [$this, 'modify_script_tag'], 10, 3 );
     }
 
     public function init(){
@@ -579,5 +580,29 @@ class Javascript_Enqueue
 
         $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
         return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
+    }
+
+    function modify_script_tag( $tag, $handle, $src ) {
+
+        if(is_admin()) {
+            return $tag;
+        }
+
+        global $wp_scripts;
+
+        if (isset($wp_scripts->registered[$handle])) {
+            $script = $wp_scripts->registered[$handle];
+            $dependencies = $script->deps; // Array of script dependencies
+
+            if (!empty($dependencies)) {
+                // Convert dependencies array to a comma-separated string
+                $deps_string = implode(', ', $dependencies);
+
+                // Insert the data-js-deps attribute into the script tag
+                $tag = preg_replace('/<script(.*?)>/', '<script$1 data-js-deps="' . esc_attr($deps_string) . '">', $tag);
+            }
+        }
+
+        return $tag;
     }
 }
