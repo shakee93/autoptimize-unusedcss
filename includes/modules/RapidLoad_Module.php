@@ -311,6 +311,7 @@ class RapidLoad_Module
                     'uucss_excluded_js_files' => isset($options['uucss_excluded_js_files']) ? $options['uucss_excluded_js_files'] : null,
                     'uucss_excluded_js_files_from_defer' => isset($options['uucss_excluded_js_files_from_defer']) ? $options['uucss_excluded_js_files_from_defer'] : null,
                     'uucss_load_scripts_on_user_interaction' => isset($options['uucss_load_scripts_on_user_interaction']) ? $options['uucss_load_scripts_on_user_interaction'] : null,
+                    'uucss_exclude_files_from_delay_js' => isset($options['uucss_exclude_files_from_delay_js']) ? $options['uucss_exclude_files_from_delay_js'] : null,
                 ]
             ],
             'image-delivery' => [

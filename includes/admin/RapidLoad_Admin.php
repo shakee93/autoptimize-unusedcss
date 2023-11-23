@@ -419,6 +419,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_exclude_files_from_delay_js'])){
+
+            $options['uucss_exclude_files_from_delay_js'] = $_REQUEST['uucss_exclude_files_from_delay_js'];
+
+        }
+
         // update general settings
 
         if(isset($_REQUEST['uucss_query_string'])){
