@@ -102,24 +102,24 @@
             </div>
 
             <div :class="!onData.uucss_load_js_method.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
-              <div class="flex mt-5">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" :class="onData.uucss_load_js_method.defer_inline_js? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
+<!--              <div class="flex mt-5">-->
+<!--                <div class="pr-1">-->
+<!--                  <div class="flex items-center mr-4 mt-3">-->
+<!--                    <div @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" :class="onData.uucss_load_js_method.defer_inline_js? 'bg-purple':''"-->
+<!--                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">-->
+<!--                      <svg v-if="onData.uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"-->
+<!--                           class="transform scale-125">-->
+<!--                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>-->
+<!--                      </svg>-->
+<!--                    </div>-->
 
-                  </div>
-                </div>
-                <div class="mt-2.5">
-                  <h1 @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>
-<!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
-                </div>
-              </div>
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="mt-2.5">-->
+<!--                  <h1 @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>-->
+<!--&lt;!&ndash;                  <p class="text-sm text-gray-font">Defer inline Javascript</p>&ndash;&gt;-->
+<!--                </div>-->
+<!--              </div>-->
 
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Deferring</h1>
@@ -158,11 +158,11 @@
                 </div>
               </div>
               <div class="mt-2.5">
-                <h1 @click="onData.delay_javascript = !onData.delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascripts to Load on User Interaction</h1>
-<!--                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>-->
+                <h1 @click="onData.delay_javascript = !onData.delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascript</h1>
+                <p class="text-sm pb-3 text-gray-font">Loading JS files on user interaction</p>
               </div>
             </div>
-            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-5">
               <div>
                 <div class="grid">
                 <textarea
@@ -294,7 +294,8 @@ export default {
     async saveSettings() {
       this.loading = true;
       const data = {
-        defer_inline_js: this.onData.uucss_load_js_method.defer_inline_js,
+        // defer_inline_js: this.onData.uucss_load_js_method.defer_inline_js,
+        defer_inline_js: false,
         minify_js: this.onData.minify_js,
         preload_internal_links: this.onData.preload_internal_links,
         delay_javascript: this.onData.delay_javascript,

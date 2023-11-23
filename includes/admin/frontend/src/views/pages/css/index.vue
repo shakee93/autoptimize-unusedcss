@@ -94,25 +94,25 @@
             </div>
           </div>-->
 
-          <div class="mb-5">
-            <div class="flex">
-              <div class="pr-1">
-                <div class="flex items-center mr-4 mt-3">
-                  <div @click="onData.uucss_inline_css = !onData.uucss_inline_css" :class="onData.uucss_inline_css? 'bg-purple':''"
-                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="onData.uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                         class="transform scale-125">
-                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h1 @click="onData.uucss_inline_css = !onData.uucss_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline Small CSS Files</h1>
-                <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS will be inlined.</p>
-              </div>
-            </div>
-          </div>
+<!--          <div class="mb-5">-->
+<!--            <div class="flex">-->
+<!--              <div class="pr-1">-->
+<!--                <div class="flex items-center mr-4 mt-3">-->
+<!--                  <div @click="onData.uucss_inline_css = !onData.uucss_inline_css" :class="onData.uucss_inline_css? 'bg-purple':''"-->
+<!--                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">-->
+<!--                    <svg v-if="onData.uucss_inline_css" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"-->
+<!--                         class="transform scale-125">-->
+<!--                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>-->
+<!--                    </svg>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div>-->
+<!--                <h1 @click="onData.uucss_inline_css = !onData.uucss_inline_css" class="font-normal text-base text-black-font cursor-pointer">Inline Small CSS Files</h1>-->
+<!--                <p class="text-sm text-gray-font">Inline CSS files which are smaller than 5kb after unused CSS will be inlined.</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <div class="mb-5">
             <div class="flex">
@@ -406,7 +406,8 @@ export default {
         uucss_enable_rules: this.onData.uucss_enable_rules,
         uucss_minify: this.onData.uucss_minify,
         uucss_enable_uucss: this.onData.remove_unused_css,
-        uucss_inline_css: this.onData.uucss_inline_css,
+        // uucss_inline_css: this.onData.uucss_inline_css,
+        uucss_inline_css: false,
         rapidload_aggregate_css: this.onData.rapidload_aggregate_css,
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
