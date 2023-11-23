@@ -32,8 +32,48 @@ class RapidLoad_Base
         'blocklist'
     ];
 
+    public static $modules = [];
+
     public function __construct()
     {
+        self::$modules = [
+            [
+                'name' => 'Cache',
+                'key' => 'uucss_enable_cache',
+                'option_name' => 'rapidload_module_cache'
+            ],
+            [
+                'name' => 'CDN',
+                'key' => 'uucss_enable_cdn',
+                'option_name' => 'rapidload_module_cdn'
+            ],
+            [
+                'name' => 'CSS',
+                'key' => 'uucss_enable_css',
+                'option_name' => 'rapidload_module_css'
+            ],
+            [
+                'name' => 'Font',
+                'key' => 'uucss_enable_font_optimization',
+                'option_name' => 'rapidload_module_font'
+            ],
+            [
+                'name' => 'Javascript',
+                'key' => 'uucss_enable_javascript',
+                'option_name' => 'rapidload_module_js'
+            ],
+            [
+                'name' => 'Image',
+                'key' => 'uucss_enable_image_delivery',
+                'option_name' => 'rapidload_module_image'
+            ],
+            [
+                'name' => 'Titan',
+                'key' => 'uucss_enable_page_optimizer',
+                'option_name' => 'rapidload_module_titan'
+            ],
+        ];
+
         self::fetch_options();
 
         if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
@@ -431,13 +471,30 @@ class RapidLoad_Base
             return self::$options;
         }
 
-        if(is_multisite()){
+        $is_multisite = is_multisite();
+
+        if($is_multisite){
 
             self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', self::get_default_options());
 
         }else{
 
             self::$options = get_site_option( 'autoptimize_uucss_settings', self::get_default_options() );
+        }
+
+        foreach (self::$modules as $module){
+
+            $def_value = isset(self::$options[$module['key']]) ? self::$options[$module['key']] : "";
+
+            if($is_multisite){
+
+                self::$options[$module['key']] = get_blog_option(get_current_blog_id(), $module['option_name'], $def_value);
+
+            }else{
+
+                self::$options[$module['key']] = get_site_option( $module['option_name'], $def_value );
+            }
+
         }
 
         return self::$options;

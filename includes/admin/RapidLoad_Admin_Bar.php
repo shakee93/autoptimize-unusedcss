@@ -51,6 +51,12 @@ class RapidLoad_Admin_Bar {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
         }
 
+        $debug_titan = apply_filters('rapidload/titan/debug', false);
+
+        if ($debug_titan) {
+            $package .= '-debug';
+        }
+
         //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
@@ -101,7 +107,7 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            'group_by_conditions' => [
+            /*'group_by_conditions' => [
                 [
                     'label' => 'Entire Site',
                     'value' => 'all'
@@ -142,8 +148,9 @@ class RapidLoad_Admin_Bar {
                         ],
                     ]
                 ]
-            ],
-            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1'
+            ],*/
+            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
+            'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );

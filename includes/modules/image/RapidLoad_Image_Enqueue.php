@@ -205,76 +205,75 @@ class RapidLoad_Image_Enqueue
             }
         }
 
-        $inline_styles = $this->dom->find( '[style]' );
+        $inline_styles = $this->dom->find('[style]');
 
-        foreach ( $inline_styles as $inline_style ) {
+        foreach ($inline_styles as $inline_style) {
 
-            $style_lines = explode(";",$inline_style->style);
+            $style_lines = explode(";", $inline_style->style);
             $_style_lines = [];
             $background_image_found = false;
+            $replace_url = "";
 
-            foreach ($style_lines as $style_line){
+            foreach ($style_lines as $style_line) {
 
-                if(!$this->str_contains($style_line, "background-image")){
+                if (!$this->str_contains($style_line, "background")) {
                     $_style_lines[] = $style_line;
-                }else{
-                    preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $style_line, $matches, PREG_SET_ORDER);
+                } else {
+                    preg_match_all('/background[^;]*url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $style_line, $matches, PREG_SET_ORDER);
 
-                    if(!empty($matches)){
+                    if (!empty($matches)) {
 
                         foreach ($matches as $match) {
+
+                            $style_tag = explode(":",$match[0]);
+
+                            if(isset($style_tag[0])){
+                                $style_tag = $style_tag[0];
+                            }else{
+                                continue;
+                            }
+
+                            if($style_tag == 'background'){
+                                $_style_lines[] = preg_replace('/\burl\([^)]*\)/', '', $style_line);
+                            }
+
                             $url = $this->extractUrl($match[1]);
 
-                            if($this->is_file_excluded($url)){
+                            if ($this->is_file_excluded($url)) {
                                 continue;
                             }
 
                             $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
-                            if($this->is_file_excluded($url)){
+                            if ($this->is_file_excluded($url)) {
                                 continue;
                             }
 
                             if (in_array($urlExt, $this->imgExt)) {
                                 $background_image_found = true;
-                                $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
-                                $inline_style->{'data-rapidload-lazy-bg'} = $replace_url;
-                                $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
-                                $inline_style->{'data-rapidload-lazy-attributes'} = 'bg';
+                                $replace_url = RapidLoad_Image::get_replaced_url($url, $this->cdn);
+                                if($style_tag == "background-image"){
+                                    $style_line = str_replace($match[1], $replace_url, $style_line);
+                                }
                             }
                         }
 
-                    }else{
+                    } else {
                         $_style_lines[] = $style_line;
                     }
                 }
 
             }
 
-            if($background_image_found){
-                $inline_style->style = implode(";",$_style_lines);
+            if ($background_image_found) {
+                $inline_style->style = implode(";", $_style_lines);
+                $inline_style->{'data-rapidload-lazy-bg'} = $replace_url; // Assuming you want to store the lazy-loaded URL
+                $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
+                $inline_style->{'data-rapidload-lazy-attributes'} = 'bg';
             }
 
-            /*preg_match_all('/background-image:[ ]?url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $inline_style->style, $matches, PREG_SET_ORDER);
-
-            if(!empty($matches)){
-
-                foreach ($matches as $match) {
-                    $url = $this->extractUrl($match[1]);
-                    $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-                    if (in_array($urlExt, $this->imgExt)) {
-                        $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
-                        $inline_style->style = str_replace($match[1],$replace_url,$inline_style->style);
-                    }
-                }
-
-                $inline_style->{'data-rapidload-lazy-style'} = $inline_style->style;
-                $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
-                $inline_style->{'data-rapidload-lazy-attributes'} = 'style';
-                unset($inline_style->style);
-            }*/
-
         }
+
 
         $styles = $this->dom->find( "style" );
 

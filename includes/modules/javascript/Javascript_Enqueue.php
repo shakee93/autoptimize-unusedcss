@@ -79,7 +79,9 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            $this->minify_js($link);
+            if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
+                $this->minify_js($link);
+            }
 
             $this->optimize_js_delivery($link);
 
@@ -182,10 +184,6 @@ class Javascript_Enqueue
     }
 
     public function minify_js($link){
-
-        if(!isset($this->options['minify_js'])){
-            return;
-        }
 
         if(!self::is_js($link) || self::is_file_excluded($link->src)){
             return;

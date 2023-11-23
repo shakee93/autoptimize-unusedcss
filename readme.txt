@@ -156,8 +156,20 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 2.1.11 - 13/11/2023 =
+= 2.1.14 - 22/11/2023 =
+ * feat: add debug mode to titan
+ * fix: inline background images not optimizing
+ * fix: known bugs
+
+= 2.1.13 - 14/11/2023 =
+ * fix: known bugs
+
+= 2.1.12 - 14/11/2023 =
+ * fix: known bugs
+
+= 2.1.11 - 14/11/2023 =
  * improve: CDN option not working in Titan Optimizer
+ * fix: known bugs
 
 = 2.1.10 - 06/11/2023 =
  * improve: inline style minify
