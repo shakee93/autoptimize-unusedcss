@@ -168,11 +168,7 @@ class Javascript_Enqueue
 
         }else if(self::is_inline_script($link)){
 
-            if(!self::is_file_excluded($link->innertext()) && !self::is_file_excluded($link->innertext(),'uucss_exclude_files_from_delay_js')){
-
-                $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-
-            }else if(isset($link->{"data-rapidload-delayed"})) {
+            if(isset($link->{"data-rapidload-delayed"})) {
 
                 unset($link->{"data-rapidload-delayed"});
                 $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
@@ -247,24 +243,34 @@ class Javascript_Enqueue
             return;
         }
 
-        if(isset($this->options['uucss_load_js_method']) &&
-            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1")){
+        $js_to_be_defer = isset($this->options['uucss_load_js_method']) &&
+            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1");
 
-            if(self::is_js($link) && !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+        $js_to_be_delay = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1";
 
-                if(isset($link->defer) && isset($link->async)){
-                    return;
+        if(self::is_js($link)){
+
+            if($js_to_be_defer){
+
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                    if(isset($link->defer) && isset($link->async)){
+                        return;
+                    }
+
+                    if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
+                        return;
+                    }
+
+                    $link->defer = true;
+                    unset($link->async);
                 }
 
-                if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
-                    return;
-                }
-
-                $link->defer = true;
-                unset($link->async);
             }
 
-            if(!self::is_js($link) && self::is_inline_script($link)){
+        }elseif (self::is_inline_script($link)){
+
+            if($js_to_be_delay || $js_to_be_defer){
 
                 if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
 
@@ -275,7 +281,6 @@ class Javascript_Enqueue
             }
 
         }
-
 
     }
 
