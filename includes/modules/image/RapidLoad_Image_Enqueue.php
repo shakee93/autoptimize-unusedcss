@@ -82,6 +82,10 @@ class RapidLoad_Image_Enqueue
                     continue;
                 }
 
+                if($this->is_file_excluded($img->{$attribute['attr']}, 'uucss_exclude_images_from_modern_images')){
+                    continue;
+                }
+
                 $url = $this->extractUrl($img->{$attribute['attr']});
 
                 $urlExt = pathinfo($url, PATHINFO_EXTENSION);
