@@ -79,9 +79,6 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            error_log($link->id);
-            error_log($link->{'data-js-deps'});
-
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }
@@ -563,6 +560,8 @@ class Javascript_Enqueue
         if (isset($wp_scripts->registered[$handle])) {
             $script = $wp_scripts->registered[$handle];
             $dependencies = $script->deps; // Array of script dependencies
+
+            $dependencies = apply_filters('rapidload/js/script-dependencies', $dependencies, $handle);
 
             if (!empty($dependencies)) {
                 // Convert dependencies array to a comma-separated string
