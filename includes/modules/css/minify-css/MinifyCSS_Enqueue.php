@@ -95,7 +95,7 @@ class MinifyCSS_Enqueue
         }
 
         if($this->str_contains($filename, ".min.css")){
-            $filename = str_replace(".min.css","-{$version}.min.css", $filename);
+            return;
         }else if($this->str_contains($filename, ".css")){
             $filename = str_replace(".css","-{$version}.min.css", $filename);
         }
