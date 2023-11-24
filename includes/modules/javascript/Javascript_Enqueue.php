@@ -79,6 +79,9 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
+            error_log($link->id);
+            error_log($link->{'data-js-deps'});
+
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }

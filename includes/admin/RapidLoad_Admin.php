@@ -533,6 +533,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_exclude_images_from_modern_images'])){
+
+                $options['uucss_exclude_images_from_modern_images'] = $_REQUEST['uucss_exclude_images_from_modern_images'];
+
+            }
+
             if(isset($_REQUEST['uucss_preload_lcp_image'])){
 
                 $options['uucss_preload_lcp_image'] = $_REQUEST['uucss_preload_lcp_image'];
