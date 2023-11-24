@@ -387,9 +387,9 @@ class Javascript_Enqueue
 
     public function get_default_inline_js_exclusions(){
         $list = [
-            "DOMContentLoaded",
+            //"DOMContentLoaded",
             "document.write",
-            "window.lazyLoadOptions",
+            /*"window.lazyLoadOptions",
             "N.N2_",
             "rev_slider_wrapper",
             "FB3D_CLIENT_LOCALE",
@@ -397,7 +397,7 @@ class Javascript_Enqueue
             "anr_captcha_field_div",
             "renderInvisibleReCaptcha",
             "bookingInProgress",
-            "do_not_load_original_css"
+            "do_not_load_original_css"*/
         ];
         return apply_filters('rapidload/defer/exclusions/inline_js', $list);
     }
