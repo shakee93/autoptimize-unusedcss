@@ -1,5 +1,32 @@
 //!injected by RapidLoad \n
 (function () {
+    var totalScripts = prepareScripts();
+    function rpDebug(method = 'log', ...args) {
+        if (window.location.search.includes('rapidload_debug_js_scripts')) {
+            console[method](...args);
+        }
+    }
+
+    if (window.RAPIDLOAD_EXPERIMENT__DELAY_PREFETCH) {
+        document.addEventListener('DOMContentLoaded:norapidload', () => {
+            totalScripts.forEach((script, index) => {
+                setTimeout(() => {
+                    fetch(script.scriptElement.getAttribute('data-rapidload-src')).then(() => {
+                        script.asyncLoaded = true
+                        script.success = true
+                        totalScripts[index] = script
+                    }).catch(() => {
+                        script.asyncLoaded = true
+                        script.success = falsej
+                        totalScripts[index] = script
+                    }).finally(() => {
+                        onScriptAsyncLoad(script)
+                    });
+                }, 10)
+            })
+        });
+    }
+
 
     function createBatches(scripts) {
         // Create a map for easy access to scripts by id
@@ -14,7 +41,7 @@
 
             // Detect circular dependencies
             if (stackSet.has(scriptId)) {
-                throw new Error(`Circular dependency detected at script: ${scriptId}`);
+                throw new Error('RapidLoad: Circular dependency detected at script: ' + scriptId);
             }
 
             stackSet.add(scriptId);
@@ -35,20 +62,11 @@
         // Assign batches
         return scripts.map(script => assignBatch(script.id));
     }
-    
-    function rpDebug(method = 'log', ...args) {
-        if (window.location.search.includes('rapidload_debug_js_scripts')) {
-            console[method](...args);
-        }
-    }
 
-    var totalScripts = []
-    var loadedScripts = 0;
-    var loadedScriptsWithNoDependant = 0;
 
     function onScriptLoad(script, success = true) {
 
-        totalScripts = totalScripts.map(s => s.id === script.id ? {
+        totalScripts = totalScripts.map(s => s.id === script.id && script.loaded === null ? {
             ...script,
             loaded: true,
             success: success
@@ -80,30 +98,37 @@
         }
     }
 
-
-    function loadScriptsInDependencyOrder(scripts) {
-        // Create a map to store scripts and their dependencies
+    function prepareScripts() {
+        var scripts = Array.from(document.querySelectorAll('[data-rapidload-src]'));
 
         // Parse and store script dependencies
-        totalScripts = scripts.map(function (script) {
+        mappedScripts = scripts.map(function (script) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
 
             return {
                 id: scriptId,
                 scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
-                loaded: null
+                loaded: null,
+                asyncLoaded: null,
+                success: false
             }
         });
 
-        totalScripts = createBatches(totalScripts);
+        return createBatches(mappedScripts);
+    }
+
+    function loadScript(script) {
+        var scriptElement = script.scriptElement;
+        scriptElement.addEventListener('load', () => onScriptLoad(script));
+        scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
+        scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
+        scriptElement.removeAttribute('data-rapidload-src');
+    }
+    function loadScriptsInDependencyOrder() {
 
         totalScripts.filter(s => s.batch === 1).forEach(function (script) {
-            var scriptElement = script.scriptElement;
-            scriptElement.addEventListener('load', () => onScriptLoad(script));
-            scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
-            scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
-            scriptElement.removeAttribute('data-rapidload-src');
+            loadScript(script)
         });
 
         document.addEventListener('RapidLoad:DelayedScriptBatchLoaded', (event) => {
@@ -115,11 +140,7 @@
             }
 
             totalScripts.filter(s => s.batch === batch).forEach(function (script) {
-                var scriptElement = script.scriptElement;
-                scriptElement.addEventListener('load', () => onScriptLoad(script));
-                scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
-                scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
-                scriptElement.removeAttribute('data-rapidload-src');
+                loadScript(script)
             });
         })
     }
@@ -157,13 +178,15 @@
     ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
         var listener = function () {
             removeEventListener(event, listener);
-            var scripts = Array.from(document.querySelectorAll('[data-rapidload-src]'));
-            loadScriptsInDependencyOrder(scripts);
+            loadScriptsInDependencyOrder();
 
             // Check if there are no scripts to load
             if (totalScripts === 0) {
-                var allScriptsLoadedEvent = document.createEvent('Event');
-                allScriptsLoadedEvent.initEvent('RapidLoad:DelayedScriptsLoaded', true, true);
+                var allScriptsLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptsLoaded', {
+                    bubbles: true,
+                    cancelable: true
+                });
+
                 document.dispatchEvent(allScriptsLoadedEvent);
             }
         };
