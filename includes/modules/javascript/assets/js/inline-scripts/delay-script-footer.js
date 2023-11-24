@@ -38,7 +38,6 @@
     }
 
     var totalScripts = []
-    var groupedScripts = [];
     var loadedScripts = 0;
     var loadedScriptsWithNoDependant = 0;
 
@@ -59,7 +58,8 @@
             });
 
             document.dispatchEvent(batchLoadedEvent);
-            rpDebug('log', 'fired: RapidLoad:DelayedScriptBatchLoaded', script.batch)
+            rpDebug('log', '%cfired: RapidLoad:DelayedScriptBatchLoaded : ' + script.batch, 'color: #f2f8bf; font-weight: bold' )
+            rpDebug('table', totalScripts.filter(s => s.batch === script.batch))
         }
 
         if (totalScripts.filter(s => s.loaded).length === totalScripts.length) {
@@ -70,7 +70,7 @@
             });
 
             document.dispatchEvent(allScriptsLoadedEvent);
-            rpDebug('log', 'fired: RapidLoad:DelayedScriptsLoaded')
+            rpDebug('log', '%cfired: RapidLoad:DelayedScriptsLoaded', 'color: #ebc94c; font-weight: bold' )
             rpDebug('table', totalScripts)
         }
     }
@@ -92,7 +92,6 @@
         });
 
         groupedScripts = groupScripts(totalScripts);
-        rpDebug('table', totalScripts)
 
         totalScripts.filter(s => s.batch === 1).forEach(function (script) {
             var scriptElement = script.scriptElement;
