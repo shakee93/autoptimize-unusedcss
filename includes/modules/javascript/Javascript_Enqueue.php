@@ -387,7 +387,7 @@ class Javascript_Enqueue
 
     public function get_default_inline_js_exclusions(){
         $list = [
-            "DOMContentLoaded",
+          //  "DOMContentLoaded",
             "document.write",
             "window.lazyLoadOptions",
             "N.N2_",
