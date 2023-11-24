@@ -1,35 +1,40 @@
 //!injected by RapidLoad \n
 (function () {
 
-    function groupScripts(scripts) {
+    function createBatches(scripts) {
         // Create a map for easy access to scripts by id
-        const scriptMap = new Map(scripts.map(script => [script.id, script]));
+        const scriptMap = new Map(scripts.map(script => [script.id, { ...script, batch: null }]));
 
-        // Helper function to determine the maximum batch number among dependencies
-        const maxBatchNumberOfDependencies = script => {
-            return Math.max(0, ...script.dependencies.map(dep => scriptMap.get(dep).batch || 0));
-        };
+        // Helper function to visit a script and assign a batch
+        function assignBatch(scriptId, stackSet = new Set()) {
+            let script = scriptMap.get(scriptId);
 
-        // Sort scripts to ensure zero-dependency scripts come first
-        scripts.sort((a, b) => a.dependencies.length - b.dependencies.length);
+            // If already visited, return the known batch
+            if (script.batch !== null) return script.batch;
 
-        // Assign batch numbers based on dependencies
-        scripts.forEach(script => {
-            script.batch = maxBatchNumberOfDependencies(script) + 1;
-        });
-
-        // Group scripts by their batch number
-        const batchMap = new Map();
-        scripts.forEach(script => {
-            if (!batchMap.has(script.batch)) {
-                batchMap.set(script.batch, []);
+            // Detect circular dependencies
+            if (stackSet.has(scriptId)) {
+                throw new Error(`Circular dependency detected at script: ${scriptId}`);
             }
-            batchMap.get(script.batch).push(script);
-        });
 
-        // Convert the map to a sorted array of batches
-        return Array.from(batchMap.values());
-    } 
+            stackSet.add(scriptId);
+
+            // Recursively assign batch numbers based on dependencies
+            let maxBatch = 0;
+            script.dependencies.forEach(depId => {
+                const depBatch = assignBatch(depId, stackSet);
+                maxBatch = Math.max(maxBatch, depBatch);
+            });
+
+            // Assign the current script to the next batch after the highest dependency batch
+            script.batch = maxBatch + 1;
+            stackSet.delete(scriptId);
+            return script;
+        }
+
+        // Assign batches
+        return scripts.map(script => assignBatch(script.id));
+    }
     
     function rpDebug(method = 'log', ...args) {
         if (window.location.search.includes('rapidload_debug_js_scripts')) {
@@ -58,7 +63,7 @@
             });
 
             document.dispatchEvent(batchLoadedEvent);
-            rpDebug('log', '%cfired: RapidLoad:DelayedScriptBatchLoaded : ' + script.batch, 'color: #f2f8bf; font-weight: bold' )
+            rpDebug('info', 'fired: RapidLoad:DelayedScriptBatchLoaded : ' + script.batch )
             rpDebug('table', totalScripts.filter(s => s.batch === script.batch))
         }
 
@@ -70,7 +75,7 @@
             });
 
             document.dispatchEvent(allScriptsLoadedEvent);
-            rpDebug('log', '%cfired: RapidLoad:DelayedScriptsLoaded', 'color: #ebc94c; font-weight: bold' )
+            rpDebug('info', 'fired: RapidLoad:DelayedScriptsLoaded')
             rpDebug('table', totalScripts)
         }
     }
@@ -80,18 +85,18 @@
         // Create a map to store scripts and their dependencies
 
         // Parse and store script dependencies
-        scripts.forEach(function (script) {
+        totalScripts = scripts.map(function (script) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
 
-            totalScripts.push({
+            return {
                 id: scriptId,
-                scriptElement: script, dependencies: parseDependencies(depsAttribute, totalScripts, scriptId),
+                scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
                 loaded: null
-            })
+            }
         });
 
-        groupedScripts = groupScripts(totalScripts);
+        totalScripts = createBatches(totalScripts);
 
         totalScripts.filter(s => s.batch === 1).forEach(function (script) {
             var scriptElement = script.scriptElement;
@@ -128,7 +133,7 @@
             // Check if the dependency matches a script ID without '-js' suffix
             var matchingScript = scriptMap.find(function (script) {
                 return script.id === dep + '-js'
-                    || (dep.includes('jquery') && script.id === 'jquery-core-js')
+                    || (dep === 'jquery' && script.id === 'jquery-core-js')
                     || (dep.startsWith('jquery-ui-') && script.id === 'jquery-ui-core-js');
             });
 
