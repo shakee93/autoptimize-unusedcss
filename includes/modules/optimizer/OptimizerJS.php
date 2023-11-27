@@ -8,7 +8,7 @@ class OptimizerJS
 
     public function __construct()
     {
-        add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy){
+        add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy, $options){
 
             $options = $strategy === "mobile" ? $job->get_mobile_options(true) : $job->get_desktop_options(true);
 
