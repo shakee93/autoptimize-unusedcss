@@ -51,12 +51,12 @@ const Configurations = () => {
     }, [data, settings])
 
     return <div>
-        <ul className='flex gap-2'>
+        <ul className='flex gap-4'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
                     <div className={cn(
-                        'flex gap-2 items-center py-2 px-3.5 pl-2 border rounded-2xl w-fit mb-4 bg-white hover:bg-brand-100',
-                        activeCategory === category && 'bg-zinc-100'
+                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
+                        activeCategory === category && ''
                     )}>
                         {icons[category]}
                         <span>
@@ -66,7 +66,7 @@ const Configurations = () => {
 
                             <div className={
                                 cn(
-                                    'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                    'flex text-xxs items-center justify-center rounded-full w-6 h-6 bg-brand-200',
                                 )}>
                             <span className={cn(
                                 ''

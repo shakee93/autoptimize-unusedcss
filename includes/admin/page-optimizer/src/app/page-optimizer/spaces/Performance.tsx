@@ -91,13 +91,13 @@ const Performance = () => {
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
-                        `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-3xl cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
                         " dark:hover:text-brand-300"
                     )}
                 > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
                 <Card data-tour='audit-groups'
                       className={cn(
-                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3',
+                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
@@ -110,7 +110,7 @@ const Performance = () => {
                                    className={cn(
                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
                                        isSticky && 'py-3',
-                                       activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
+                                       activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                                    )}
                                    key={tab.key}
                                >
