@@ -88,7 +88,7 @@ class OptimizerJS
                 }
             }
 
-        }, 10 , 3);
+        }, 10 , 4);
     }
 
     public function add_delay_script(){

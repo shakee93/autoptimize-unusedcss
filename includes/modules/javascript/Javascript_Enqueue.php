@@ -89,9 +89,7 @@ class Javascript_Enqueue
                 $this->load_scripts_on_user_interaction($link);
             }
 
-
-
-            do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy);
+            do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy, $this->options);
 
         }
 
@@ -157,24 +155,46 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
-            if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
+            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
+                if(!self::is_file_excluded($link->src) && self::is_load_on_user_interaction($link->src)){
 
-                $data_attr = "data-rapidload-src";
-                $link->{$data_attr} = $link->src;
-                unset($link->src);
-                unset($link->defer);
+                    $data_attr = "data-rapidload-src";
+                    $link->{$data_attr} = $link->src;
+                    unset($link->src);
 
+                }
+            }else{
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
+
+                    $data_attr = "data-rapidload-src";
+                    $link->{$data_attr} = $link->src;
+                    unset($link->src);
+                    unset($link->defer);
+
+                }
             }
+
 
         }else if(self::is_inline_script($link)){
+            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
+                if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
 
-            if(isset($link->{"data-rapidload-delayed"})) {
+                    $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
 
-                unset($link->{"data-rapidload-delayed"});
-                $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+                }else if(isset($link->{"data-rapidload-delayed"})) {
 
+                    unset($link->{"data-rapidload-delayed"});
+                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+
+                }
+            }else{
+                if(isset($link->{"data-rapidload-delayed"})) {
+
+                    unset($link->{"data-rapidload-delayed"});
+                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+
+                }
             }
-
         }
 
     }
