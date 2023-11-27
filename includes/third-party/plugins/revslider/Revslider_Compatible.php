@@ -25,7 +25,7 @@ class Revslider_Compatible extends RapidLoad_ThirdParty {
             return true;
         }
 
-        return false;
+        return $value;
 
     }
 
