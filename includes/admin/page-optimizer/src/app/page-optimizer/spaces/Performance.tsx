@@ -16,7 +16,7 @@ import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/sol
 import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
-import Configurations from "app/page-optimizer/spaces/Configurations";
+import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -162,7 +162,7 @@ const Performance = () => {
                                 {activeTab === 'configurations' ?
                                    <>
                                        {/*<SetupChecklist/>*/}
-                                       <Configurations/>
+                                       <SpeedSettings/>
                                    </>
                                     : <AuditList activeTab={activeTab}/>
                                 }

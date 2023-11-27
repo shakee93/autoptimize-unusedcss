@@ -15,7 +15,7 @@ import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {CheckCircleIcon} from "@heroicons/react/24/solid";
 
-const Configurations = () => {
+const SpeedSettings = () => {
 
     const {settings, data} = useSelector(optimizerData);
     const [activeCategory, setActiveCategory]= useState('image')
@@ -139,4 +139,4 @@ const Configurations = () => {
     </div>
 }
 
-export default Configurations
+export default SpeedSettings
