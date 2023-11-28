@@ -133,6 +133,8 @@ class ApiService {
 
            pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', strategy)
+           pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
+           pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
            const pageSpeed = await fetch(pageSpeedURL, {
                method: "POST",
