@@ -162,7 +162,7 @@
                 <p class="text-sm pb-3 text-gray-font">Loading JS files on user interaction</p>
               </div>
             </div>
-            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-5">
+            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-2">
               <div>
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Delaying</h1>
                 <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
