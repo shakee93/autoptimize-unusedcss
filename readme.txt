@@ -156,6 +156,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.0 - 29/11/2023 =
+ * feat: Improved defer javascript handling with inline-scripts
+ * new: all the javascript files are delayed with new delay JS improvement
+ * new: topologically batched delayed javascript execution
+
 = 2.1.14 - 22/11/2023 =
  * feat: add debug mode to titan
  * fix: inline background images not optimizing
