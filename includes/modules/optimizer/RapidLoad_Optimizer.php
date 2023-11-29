@@ -33,6 +33,9 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
 
+        add_action('wp_ajax_titan_reset_to_default', [$this, 'titan_reset_to_default']);
+        add_action('wp_ajax_nopriv_titan_reset_to_default', [$this, 'titan_reset_to_default']);
+
         if(!isset(self::$global_options['uucss_enable_page_optimizer']) || self::$global_options['uucss_enable_page_optimizer'] != "1"){
             return;
         }
@@ -76,6 +79,26 @@ class RapidLoad_Optimizer
 
     }
 
+    public function titan_reset_to_default(){
+
+        $this->pre_optimizer_function();
+
+        if(isset(self::$strategy)){
+            if(self::$strategy == "mobile"){
+                self::$job->set_mobile_options(null);
+            }else{
+                self::$job->set_desktop_options(null);
+            }
+        }else{
+            self::$job->set_desktop_options(null);
+            self::$job->set_mobile_options(null);
+        }
+
+        self::$job->save();
+
+        wp_send_json_success(self::$global_options);
+    }
+
     public function  pre_optimizer_function(){
         if(isset($_REQUEST['url']) && !empty($_REQUEST['url']) && filter_var($_REQUEST['url'], FILTER_VALIDATE_URL) !== false){
             self::$job = new RapidLoad_Job([
@@ -85,14 +108,13 @@ class RapidLoad_Optimizer
                 self::$job->save();
             }
         }
+        self::$global_options = RapidLoad_Base::fetch_options();
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
-            self::$global_options = RapidLoad_Base::fetch_options();
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
             foreach (self::$global_options as $key => $value){
                 self::$merged_options[$key] = $value;
             }
-
             foreach (self::$options as $key => $value){
                 self::$merged_options[$key] = $value;
             }
