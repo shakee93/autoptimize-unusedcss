@@ -189,6 +189,7 @@ class RapidLoad_Optimizer
                         }
                         break;
                     case 'defer_inline_js':
+                    case 'delay_javascript':
                     case 'minify_js':
                     case 'uucss_load_js_method':
                         self::$options['uucss_enable_javascript'] = "1";
@@ -719,7 +720,9 @@ class RapidLoad_Optimizer
             unset(self::$options['uucss_enable_css']);
         }
 
-        if(isset(self::$options['minify_js']) && self::$options['minify_js'] || isset(self::$options['uucss_load_js_method']) && (self::$options['uucss_load_js_method'] == "defer" || self::$options['uucss_load_js_method'] == "1")){
+        if(isset(self::$options['minify_js']) && self::$options['minify_js'] ||
+            isset(self::$options['delay_javascript']) && self::$options['delay_javascript'] == "1" ||
+            isset(self::$options['uucss_load_js_method']) && (self::$options['uucss_load_js_method'] == "defer" || self::$options['uucss_load_js_method'] == "1")){
             self::$options['uucss_enable_javascript'] = "1";
         }else{
             unset(self::$options['uucss_enable_javascript']);
