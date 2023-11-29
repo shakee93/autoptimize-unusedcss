@@ -367,8 +367,14 @@ class RapidLoad_Job{
 
             }
 
+            $files = array_map('serialize', $files);
+
+            $files = array_unique($files);
+
+            $files = array_map('unserialize', $files);
+
             if(!empty($files)){
-                $options['individual-file-actions'] = $files;
+                $options['individual-file-actions'] = array_values($files);
             }
         }
 

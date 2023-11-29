@@ -86,7 +86,11 @@ class Javascript_Enqueue
             $this->optimize_js_delivery($link);
 
             if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
-                $this->load_scripts_on_user_interaction($link);
+
+                if(!apply_filters('rapidload/js/delay-excluded', false, $link, $this->job, $this->strategy, $this->options)){
+                    $this->load_scripts_on_user_interaction($link);
+                }
+
             }
 
             do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy, $this->options);
