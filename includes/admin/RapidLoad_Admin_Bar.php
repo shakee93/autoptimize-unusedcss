@@ -93,7 +93,7 @@ class RapidLoad_Admin_Bar {
                     'tooltip' => 'Clear Page Cache',
                     'href' => wp_nonce_url( add_query_arg( array(
                         '_cache'  => 'rapidload-cache',
-                        '_action' => 'clear',
+                        '_action' => 'clearurl',
                         '_url' => $this->transform_url($this->get_current_url()),
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
                     'icon' => 'clear_page_cache'
