@@ -338,9 +338,8 @@ class RapidLoad_Enqueue {
 
         $front_end_enabled['job_id_set'] = isset(RapidLoad_Enqueue::$job->id);
         $front_end_enabled['enabled'] = $this->enabled_frontend();
-        $front_end_enabled['no_uucss'] = !isset( $_REQUEST['no_uucss'] );
 
-        if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled'] && $front_end_enabled['no_uucss']){
+        if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled']){
             $this->replace_css(RapidLoad_Enqueue::$job);
         }
 

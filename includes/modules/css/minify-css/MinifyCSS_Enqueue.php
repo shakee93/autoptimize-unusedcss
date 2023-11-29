@@ -86,7 +86,7 @@ class MinifyCSS_Enqueue
             return;
         }
 
-        $version = substr(hash_file('md5', $file_path), 0, 12);
+        $version = substr(hash_file('md5', $link->href), 0, 12);
 
         $filename = basename(preg_replace('/\?.*/', '', $link->href));
 
@@ -95,7 +95,7 @@ class MinifyCSS_Enqueue
         }
 
         if($this->str_contains($filename, ".min.css")){
-            $filename = str_replace(".min.css","-{$version}.min.css", $filename);
+            return;
         }else if($this->str_contains($filename, ".css")){
             $filename = str_replace(".css","-{$version}.min.css", $filename);
         }

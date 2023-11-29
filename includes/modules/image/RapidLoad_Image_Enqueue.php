@@ -86,6 +86,10 @@ class RapidLoad_Image_Enqueue
                     continue;
                 }
 
+                if(apply_filters('rapidload/image/exclude_from_modern_image_format', false, $img->{$attribute['attr']})){
+                    continue;
+                }
+
                 $url = $this->extractUrl($img->{$attribute['attr']});
 
                 $urlExt = pathinfo($url, PATHINFO_EXTENSION);
