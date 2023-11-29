@@ -59,7 +59,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         timezone: 'UTC',
         actions: [],
         load_optimizer: false,
-        rapidload_version: ''
+        rapidload_version: '2.2.0'
     } )
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
