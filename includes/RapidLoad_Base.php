@@ -146,6 +146,7 @@ class RapidLoad_Base
             $this->container['queue'] = new RapidLoad_Queue();
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
+            $this->container['rest_api'] = new RapidLoadRestApi();
 
             //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
 

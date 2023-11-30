@@ -50,7 +50,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
-        optimizer_url: 'https://rapidload.io/',
+        optimizer_url: 'https://rapidload.local/',
         ajax_url: '',
         page_optimizer_base: '',
         page_optimizer_package_base: '',
@@ -59,7 +59,8 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         timezone: 'UTC',
         actions: [],
         load_optimizer: false,
-        rapidload_version: '2.2.0'
+        rapidload_version: '2.2.0',
+        rest_url: 'https://rapidload.local/wp-json/rapidload/v1'
     } )
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)

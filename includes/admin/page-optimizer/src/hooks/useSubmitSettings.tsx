@@ -73,6 +73,13 @@ const useSubmitSettings = () => {
                     await api.post('clear_page_cache', {
                         url
                     })
+
+                    let rest = api.rest()
+
+                    let data  = await rest.request('/ping', {
+                        'url' : options.optimizer_url
+                    })
+
                     setInvalidatingCache(false)
                 }
                 catch (e: any) {

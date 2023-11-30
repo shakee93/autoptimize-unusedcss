@@ -23,6 +23,8 @@ import {auditPoints} from "app/page-optimizer/components/audit/KeyPoints";
 import {XCircleIcon} from "@heroicons/react/24/solid";
 import SupportCard from "app/page-optimizer/components/audit/SupportCard";
 import {useAppContext} from "../../../../../context/app";
+import ApiService from "../../../../../services/api";
+import {Button} from "components/ui/button";
 
 
 declare module '@tanstack/react-table' {
@@ -53,6 +55,14 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
     let points = useMemo(() => {
         return auditPoints[audit.id] || []
     }, [])
+
+    async function ping() {
+        let api = new ApiService(options).rest()
+
+        let data  = await api.request('/ping', {
+            'url' : 'https://rapidload.local/'
+        })
+    }
 
     return (
         <div className="relative border-t w-full pt-4">
