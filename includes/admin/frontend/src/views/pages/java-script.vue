@@ -175,11 +175,25 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
+                    <p class="text-sm text-dark-gray-font">JS files to be excluded from delay. Enter each file in new line.</p>
                   </div>
                 </div>
-                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='' && onData.uucss_load_scripts_on_user_interaction != null" class="grid pb-5">
-                  <h1 class="font-normal text-base text-black-font pb-3 pt-5">Delay Javascript on Load (Legacy)</h1>
+                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='0' && onData.uucss_load_scripts_on_user_interaction != false" class="grid pb-5">
+                  <h1 class="font-normal text-base text-black-font pt-5">Delaying only selected JS (Legacy)</h1>
+                  <div class="mb-5 mt-3 bg-yellow-50 border border-yellow-300 rounded-lg px-4 py-3 shadow-md" role="alert">
+                    <div class="flex">
+                      <div class="py-1 pr-2">
+                        <svg fill="#FFCC00" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30px" height="30px" viewBox="0 0 554.2 554.199" xml:space="preserve" stroke="#FFCC00">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                          <g id="SVGRepo_iconCarrier"> <g> <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6 c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8 C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416 c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8 s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/> </g> </g>
+                      </svg>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-sm text-yellow-600 leading-5">This option is deprecated from version 2.2. Refer to this <span class="italic cursor-pointer text-purple font-semibold" @click="readMore">guide</span> before making any changes</p>
+                      </div>
+                    </div>
+                  </div>
 
                   <textarea
                     v-model="onData.uucss_load_scripts_on_user_interaction"
@@ -188,7 +202,7 @@
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
+                    <p class="text-sm text-dark-gray-font">Delayed JS files will load on user interaction. Enter each file in new line.</p>
                   </div>
                 </div>
 
@@ -303,6 +317,10 @@ export default {
 
     doc(){
       window.open('https://docs.rapidload.io/features/javascript-delivery', '_blank');
+    },
+
+    readMore(){
+      window.open('https://docs.rapidload.io/guides/delay-js-ver-2.2', '_blank');
     },
 
     dataSaved(){
