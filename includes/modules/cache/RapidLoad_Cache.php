@@ -550,7 +550,7 @@ class RapidLoad_Cache
 
         if ( isset( $args['url'] ) ) {
             self::clear_page_cache_by_url( $args['url'] );
-            wp_remote_get( $args['url'] );
+//            wp_remote_get( $args['url'] );
         }
 
     }

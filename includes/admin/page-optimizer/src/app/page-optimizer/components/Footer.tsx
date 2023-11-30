@@ -86,13 +86,13 @@ const Footer = ({ } : FooterProps) => {
                         </div>
                     </TooltipText>
 
-                    <TooltipText text='Reset Settings to Default'>
-                        <div 
-                            onClick={e => resetSettings()}
-                            className='hover:dark:text-brand-100'>
-                            <CopyMinus className='w-4'/>
-                        </div>
-                    </TooltipText>
+                    {/*<TooltipText text='Reset Settings to Default'>*/}
+                    {/*    <div */}
+                    {/*        onClick={e => resetSettings()}*/}
+                    {/*        className='hover:dark:text-brand-100'>*/}
+                    {/*        <CopyMinus className='w-4'/>*/}
+                    {/*    </div>*/}
+                    {/*</TooltipText>*/}
                 </div>
 
 

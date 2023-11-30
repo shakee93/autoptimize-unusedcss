@@ -46,8 +46,9 @@ class ApiService {
             }
 
             if (Array.isArray(data?.data)) {
+
                 throw new Error(
-                    `[Code:${data.data[0].code}] ${data.data[0].detail}`
+                    `[Code:${data.data[0].code}] ${data.data[0].detail ? data.data[0].detail : 'Internal error occurred on our end :('}`
                 );
             }
 
@@ -128,7 +129,7 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
+           const api_root = this.options?.api_root || 'http://localhost:5556/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
            pageSpeedURL.searchParams.append('url', url)
@@ -199,7 +200,9 @@ class ApiService {
             }
 
             for (let key of Object.keys(queryParams)) {
-                this.baseURL.searchParams.append(key, queryParams[key])
+                if (!this.baseURL.searchParams.has(key)) {
+                    this.baseURL.searchParams.append(key, queryParams[key]);
+                }
             }
 
             const response = await fetch(this.baseURL, {
@@ -214,6 +217,41 @@ class ApiService {
             console.error(error);
             throw error;
         }
+    }
+
+    async request(endpoint: string,
+                  params:{[p: string] : string} = {},
+                  type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
+    ) {
+
+        try {
+
+            for (let key of Object.keys(params)) {
+                if (!this.baseURL.searchParams.has(key)) {
+                    this.baseURL.searchParams.append(key, params[key]);
+                }
+            }
+
+            this.baseURL.pathname += endpoint;
+
+            const response = await fetch(this.baseURL, {
+                method: type,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
+    }
+    rest() {
+
+        this.baseURL = new URL(this.options.rest_url)
+        return this
     }
 }
 
