@@ -178,8 +178,8 @@
                     <p class="text-sm text-dark-gray-font">JS files to be excluded from delay. Enter each file in new line.</p>
                   </div>
                 </div>
-                <div v-if="onData.uucss_load_scripts_on_user_interaction!=='0' && onData.uucss_load_scripts_on_user_interaction != false" class="grid pb-5">
-                  <h1 class="font-normal text-base text-black-font pt-5">Delaying only selected JS (Legacy)</h1>
+                <div v-if="isInputEmpty !== true "  class="grid pb-5">
+                  <h1 class="font-normal text-base text-black-font pt-5">Delaying only selected Javascript (Legacy)</h1>
                   <div class="mb-5 mt-3 bg-yellow-50 border border-yellow-300 rounded-lg px-4 py-3 shadow-md" role="alert">
                     <div class="flex">
                       <div class="py-1 pr-2">
@@ -190,14 +190,14 @@
                       </svg>
                       </div>
                       <div>
-                        <p class="font-semibold text-sm text-yellow-600 leading-5">This option is deprecated from version 2.2. Refer to this <span class="italic cursor-pointer text-purple font-semibold" @click="readMore">guide</span> before making any changes</p>
+                        <p class="pt-2 font-semibold text-sm text-yellow-600 leading-5">This option is deprecated from version 2.2. </p>
                       </div>
                     </div>
                   </div>
 
                   <textarea
                     v-model="onData.uucss_load_scripts_on_user_interaction"
-                    @focus="focus='delay'" @blur="focus = null"
+                    @focus="focus='delay'" @blur="handleEmptyInput"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
@@ -246,7 +246,8 @@
       <div class="pb-6">
       </div>
     </div>
-    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave('save')" @confirm="handleConfirm('save')" @cancel="handleCancel('save')"></popup>
+    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>
 
   </main>
 
@@ -258,6 +259,7 @@ import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
 import popup from "../../components/popup.vue";
+import legacyPopup from "../../components/legacyPopup.vue";
 
 export default {
   name: "java-script",
@@ -266,6 +268,7 @@ export default {
     Vue3TagsInput,
     messageBox,
     popup,
+    legacyPopup,
   },
 
   mounted() {
@@ -296,22 +299,48 @@ export default {
       this.beforeSave = this.onData;
       this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
+    if (this.onData.uucss_load_scripts_on_user_interaction === "" || this.onData.uucss_load_scripts_on_user_interaction == null) {
+      this.isInputEmpty = true;
+    }
   },
   methods: {
+    handleEmptyInput() {
+      this.focus = null;
+      if (this.onData.uucss_load_scripts_on_user_interaction === "" ) {
+       this.legacyPopup = true;
+      }
+    },
+    handleConfirm(model) {
 
-    handleConfirm() {
-      this.saveSettings();
-      this.handleDontSave();
+      if(model === 'save'){
+        this.saveSettings();
+        this.handleDontSave('save');
+      }else if(model === 'legacy'){
+        this.saveSettings();
+        this.handleDontSave('legacy');
+        this.isInputEmpty = true;
+      }
+
     },
 
-    handleDontSave(){
-      this.confirmStatus = true;
-      this.popupVisible= false;
-      const back = document.getElementById('rp-back');
-      back.click();
+    handleDontSave(model){
+      if(model === 'save'){
+        this.confirmStatus = true;
+        this.popupVisible= false;
+        const back = document.getElementById('rp-back');
+        back.click();
+      }else if(model === 'legacy'){
+        this.legacyPopup = false;
+      }
+
     },
-    handleCancel() {
-      this.popupVisible= false;
+    handleCancel(model) {
+      if(model === 'save'){
+        this.popupVisible= false;
+      }else if(model === 'legacy'){
+        this.legacyPopup = false;
+      }
+
     },
 
 
@@ -380,6 +409,8 @@ export default {
 
   data() {
     return {
+      legacyPopup: false,
+      isInputEmpty : false,
       javascript: [],
       id: 'javascript',
       saved: false,
