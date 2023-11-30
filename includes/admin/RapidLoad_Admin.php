@@ -37,7 +37,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
-                add_action('wp_ajax_noriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_clear_page_cache', [$this, 'clear_page_cache']);
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
                 add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
                 add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
