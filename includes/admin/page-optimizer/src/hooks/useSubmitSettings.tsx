@@ -68,6 +68,11 @@ const useSubmitSettings = () => {
             if (analyze) {
                 setSavingData(false)
 
+                const USER_AGENTS = {
+                    mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
+                    desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+                };
+
                 try{
                     setInvalidatingCache(true)
                     await api.post('clear_page_cache', {
@@ -76,8 +81,9 @@ const useSubmitSettings = () => {
 
                     let rest = api.rest()
 
-                    let data  = await rest.request('/ping', {
-                        'url' : options.optimizer_url
+                    await rest.request('/ping', {
+                        'url' : options.optimizer_url,
+                        'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop
                     })
 
                     setInvalidatingCache(false)

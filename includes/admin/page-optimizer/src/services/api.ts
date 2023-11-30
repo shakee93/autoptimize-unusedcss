@@ -224,17 +224,20 @@ class ApiService {
                   type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
     ) {
 
+        let base = new URL(this.options.rest_url);
+
         try {
 
+
             for (let key of Object.keys(params)) {
-                if (!this.baseURL.searchParams.has(key)) {
-                    this.baseURL.searchParams.append(key, params[key]);
+                if (!base.searchParams.has(key)) {
+                    base.searchParams.append(key, params[key]);
                 }
             }
 
-            this.baseURL.pathname += endpoint;
+            base.pathname += endpoint;
 
-            const response = await fetch(this.baseURL, {
+            const response = await fetch(base, {
                 method: type,
                 headers: {
                     "Content-Type": "application/json",
@@ -249,8 +252,6 @@ class ApiService {
 
     }
     rest() {
-
-        this.baseURL = new URL(this.options.rest_url)
         return this
     }
 }

@@ -23,16 +23,17 @@ class RapidLoadRestApi {
     function ping( WP_REST_Request $request ) {
         // Retrieve the 'url' query parameter from the request.
         $url = $request->get_param( 'url' );
+        $agent = $request->get_param( 'user_agent' );
 
         // Check if the URL is not empty and is a valid URL.
         if ( empty( $url ) || !filter_var( $url, FILTER_VALIDATE_URL ) ) {
             return new WP_Error( 'invalid_url', 'A valid URL is required.', array( 'status' => 400 ) );
         }
 
-        error_log('start request');
-
         // Use wp_remote_get to ping the URL.
-        $response = wp_remote_get( $url, array( 'timeout' => 5 ) );
+        $response = wp_remote_get( $url, array( 'timeout' => 30, 'headers' => [
+            'User-Agent' => $agent ? $agent : null
+        ] ) );
 
         // Check for error in the response.
         if ( is_wp_error( $response ) ) {
@@ -42,8 +43,6 @@ class RapidLoadRestApi {
         // If there is no error, return a success message and the response code.
         $response_code = wp_remote_retrieve_response_code( $response );
         $response_headers = wp_remote_retrieve_headers($response);
-
-        error_log(json_encode($response_headers->getAll()));
 
         $result = array(
             'success' => true,
