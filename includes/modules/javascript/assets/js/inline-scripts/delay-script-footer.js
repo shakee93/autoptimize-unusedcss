@@ -122,8 +122,13 @@
         var scriptElement = script.scriptElement;
         scriptElement.addEventListener('load', () => onScriptLoad(script));
         scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
-        scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
-        scriptElement.removeAttribute('data-rapidload-src');
+
+        let rapidLoadSrc = criptElement.getAttribute('data-rapidload-src');
+
+        if (rapidLoadSrc) {
+            scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
+            scriptElement.removeAttribute('data-rapidload-src');
+        }
     }
     function loadScriptsInDependencyOrder() {
 
