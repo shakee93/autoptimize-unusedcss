@@ -20,16 +20,9 @@
             || dispatchedEvents.find(e => e.type === type)
         ) {
 
-
-
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 // If the event has already fired, immediately invoke the listener
-
-                if (dispatchedEvents.find(e => e.type === type)) {
-                    console.log(dispatchedEvents.filter(e => e.type === type), type);
-                }
-
                 setTimeout(() => {
                     listener.call(this, new Event(type));
                 }, 100);
