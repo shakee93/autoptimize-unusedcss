@@ -6,13 +6,30 @@
     var originalAddEventListener = EventTarget.prototype.addEventListener;
     var originalRemoveEventListener = EventTarget.prototype.removeEventListener;
     var capturedEvents = [];
+    var dispatchedEvents = [];
+
+    window.RaipdLoadJSDebug = {
+        capturedEvents,
+        dispatchedEvents
+    }
 
     // Override addEventListener to capture future supported event listeners
     EventTarget.prototype.addEventListener = function(type, listener, ...options) {
-        if (!type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this)) {
+        if (
+            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this)
+            || dispatchedEvents.find(e => e.type === type)
+        ) {
+
+
+
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 // If the event has already fired, immediately invoke the listener
+
+                if (dispatchedEvents.find(e => e.type === type)) {
+                    console.log(dispatchedEvents.filter(e => e.type === type), type);
+                }
+
                 setTimeout(() => {
                     listener.call(this, new Event(type));
                 }, 100);
@@ -39,6 +56,9 @@
 
     // Override dispatchEvent to detect when supported events are fired
     EventTarget.prototype.dispatchEvent = function(event) {
+
+        dispatchedEvents.push(event)
+
         if (supportedEvents.includes(event.type) && supportedTargets.includes(this)) {
             // Remove all listeners for this event type that were added after the event fired
             capturedEvents = capturedEvents.filter(e => {
@@ -49,6 +69,9 @@
                 return true;
             });
         }
+
+
+
         return originalDispatchEvent.call(this, event);
     };
 
