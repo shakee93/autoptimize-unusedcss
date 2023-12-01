@@ -17,6 +17,7 @@ class RapidLoad_Optimizer
     ];
 
     static $options;
+    static $previous_options;
     static $global_options;
     static $merged_options = [];
     static $job;
@@ -112,6 +113,7 @@ class RapidLoad_Optimizer
         if(isset($_REQUEST['strategy']) && isset(self::$job)){
             self::$strategy = $_REQUEST['strategy'];
             self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
+            self::$previous_options = self::$options;
             foreach (self::$global_options as $key => $value){
                 self::$merged_options[$key] = $value;
             }
@@ -751,15 +753,18 @@ class RapidLoad_Optimizer
         }
 
         $cache_enabled = isset(self::$options['uucss_enable_cache']) && self::$options['uucss_enable_cache'] ? "1" : "";
+        $cache_enabled_prev_status = isset(self::$global_options['uucss_enable_cache']) && self::$global_options['uucss_enable_cache'] ? "1" : "";
 
-        RapidLoad_Base::update_option('rapidload_module_cache',$cache_enabled);
+        if($cache_enabled != $cache_enabled_prev_status){
+            RapidLoad_Base::update_option('rapidload_module_cache',$cache_enabled);
+            RapidLoad_Cache::setup_cache($cache_enabled);
+        }
 
-        RapidLoad_Cache::setup_cache($cache_enabled);
+        $cdn_enabled = isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1";
+        $cdn_enabled_prev_status = isset(self::$global_options['uucss_enable_cdn']) && self::$global_options['uucss_enable_cdn'] == "1";
 
-        if(isset(self::$options['uucss_enable_cdn']) && self::$options['uucss_enable_cdn'] == "1"){
-            do_action('rapidload/validate-cdn');
-        }else{
-            do_action('rapidload/validate-cdn', true);
+        if($cdn_enabled != $cdn_enabled_prev_status){
+            do_action('rapidload/validate-cdn', !$cdn_enabled);
         }
 
         $this->associate_domain(false);

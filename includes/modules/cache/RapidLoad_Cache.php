@@ -824,7 +824,7 @@ class RapidLoad_Cache
             'clear_site_cache_on_saved_user'     => 0,
             'clear_site_cache_on_changed_plugin' => 0,
             'convert_image_urls_to_webp'         => 0,
-            'mobile_cache'                       => 0,
+            'mobile_cache'                       => 1,
             'compress_cache'                     => 0,
             'minify_html'                        => 1,
             'minify_inline_css_js'               => 0,
