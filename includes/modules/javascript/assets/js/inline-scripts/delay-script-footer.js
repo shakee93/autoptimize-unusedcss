@@ -123,7 +123,7 @@
         scriptElement.addEventListener('load', () => onScriptLoad(script));
         scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
 
-        let rapidLoadSrc = criptElement.getAttribute('data-rapidload-src');
+        let rapidLoadSrc = scriptElement.getAttribute('data-rapidload-src');
 
         if (rapidLoadSrc) {
             scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
