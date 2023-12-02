@@ -338,7 +338,7 @@ class Javascript_Enqueue
     }
 
     public static function is_js( $el ) {
-        if (preg_match("#" . preg_quote("googletagmanager.com/gtag/js", "#") . "#", $el->src)) {
+        if (isset($el->src) && preg_match("#" . preg_quote("googletagmanager.com/gtag/js", "#") . "#", $el->src)) {
             return true;
         }
         return !empty($el->src) && strpos($el->src,".js");
