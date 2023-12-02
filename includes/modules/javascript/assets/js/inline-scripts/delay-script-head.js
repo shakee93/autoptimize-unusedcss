@@ -16,7 +16,7 @@
     // Override addEventListener to capture future supported event listeners
     EventTarget.prototype.addEventListener = function(type, listener, ...options) {
         if (
-            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this)
+            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this) && typeof listener === 'function'
             // || dispatchedEvents.find(e => e.type === type)
         ) {
 
