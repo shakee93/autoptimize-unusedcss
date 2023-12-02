@@ -102,12 +102,12 @@
         var scripts = Array.from(document.querySelectorAll('[data-rapidload-src]'));
 
         // Parse and store script dependencies
-        mappedScripts = scripts.map(function (script) {
+        mappedScripts = scripts.map(function (script, index) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
 
             return {
-                id: scriptId,
+                id: scriptId || index,
                 scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
                 loaded: null,
                 asyncLoaded: null,
