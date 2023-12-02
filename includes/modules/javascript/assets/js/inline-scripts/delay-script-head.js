@@ -16,14 +16,15 @@
     // Override addEventListener to capture future supported event listeners
     EventTarget.prototype.addEventListener = function(type, listener, ...options) {
         if (
-            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this) && typeof listener === 'function'
-            || dispatchedEvents.find(e => e.type === type)
+            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this)
+            // || dispatchedEvents.find(e => e.type === type)
         ) {
 
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 // If the event has already fired, immediately invoke the listener
                 setTimeout(() => {
+                    console.log(type);
                     listener.call(this, new Event(type));
                 }, 100);
             } else {
