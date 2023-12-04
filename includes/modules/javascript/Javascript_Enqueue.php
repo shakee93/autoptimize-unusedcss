@@ -171,6 +171,11 @@ class Javascript_Enqueue
 
                 }
             }else{
+
+                if($this->str_contains($link->src,"rapidload.frontend.min.js")){
+                    return;
+                }
+
                 if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
 
                     $data_attr = "data-rapidload-src";
