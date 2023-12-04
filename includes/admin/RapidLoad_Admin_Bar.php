@@ -230,6 +230,10 @@ class RapidLoad_Admin_Bar {
                 return;
             }
 
+            if(!isset($current_user->roles[0])){
+                return;
+            }
+
             $user_role = $current_user->roles[0];
 
             if ( $user_role !== 'customer' && $user_role !== 'subscriber' ) {
