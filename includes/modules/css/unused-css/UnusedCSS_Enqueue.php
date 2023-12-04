@@ -184,7 +184,7 @@ class UnusedCSS_Enqueue
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
 
-                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1") {
+                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1" && apply_filters('rapidload/enqueue/inline-small-css/enable', false)) {
 
                         $this->inline_sheet($sheet, $uucss_file);
                     }
