@@ -609,4 +609,36 @@ class RapidLoad_Image_Enqueue
         return $excluded;
     }
 
+    public function convertImageUrlToDataUri($imageUrl) {
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $imageUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For HTTPS urls, if necessary
+
+        // Execute cURL session
+        $imageData = curl_exec($ch);
+
+        // Check for errors
+        if(curl_errno($ch)) {
+            return $imageUrl;
+        }
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Get the MIME type of the image
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($imageData);
+
+        // Encode the image data in Base64
+        $base64 = base64_encode($imageData);
+
+        // Create the Data URI
+        return "data:$mime;base64,$base64";
+    }
+
+
 }
