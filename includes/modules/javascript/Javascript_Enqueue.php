@@ -567,6 +567,12 @@ class Javascript_Enqueue
 
         if ($type === 'VariableDeclaration' && count($node->getDeclarations()) === 1) {
             $id = $node->getDeclarations()[0]->getId()->getRawName();
+            if($node->getDeclarations()[0]->getInit()->getType() == "LogicalExpression" && $node->getDeclarations()[0]->getInit()->getLeft()->getType() == "Identifier" ){
+                $left = $node->getDeclarations()[0]->getInit()->getLeft()->getRawName();
+                if($id == $left){
+                    $node->getDeclarations()[0]->getInit()->getLeft()->setRawName('window.' . $left);
+                }
+            }
             $node->getDeclarations()[0]->getId()->setRawName('window.' . $id);
             $node->setKind('');
         }
