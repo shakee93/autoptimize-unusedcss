@@ -6,6 +6,15 @@ use Peast\Query;
 use Peast\Traverser;
 use Peast\Renderer;
 use Peast\Formatter\PrettyPrint;
+use Peast\Syntax\Node;
+use Peast\Syntax\Node\VariableDeclaration;
+use Peast\Syntax\Node\VariableDeclarator;
+use Peast\Syntax\Node\Identifier;
+use Peast\Syntax\Node\MemberExpression;
+use Peast\Syntax\Node\ExpressionStatement;
+use Peast\Syntax\Node\AssignmentExpression;
+use Peast\Syntax\Node\Program;
+
 class Javascript_Enqueue
 {
     use RapidLoad_Utils;
@@ -511,21 +520,10 @@ class Javascript_Enqueue
 
                 $type = $currentNode->getType();
 
-                if ($type !== 'EmptyStatement') {
-                    $rootStatements[] = (object) [
-                        'type' => $type
-                    ];
-                }
-
-                if ($type === 'FunctionDeclaration') {
-                    $updatedNode = $this->assignWindow($currentNode);
-                    return array($updatedNode, Traverser::DONT_TRAVERSE_CHILD_NODES);
-                }
-
-                if ($type === 'VariableDeclaration') {
-                    $updatedNode = $this->assignWindow($currentNode);
-                    return array($updatedNode, Traverser::DONT_TRAVERSE_CHILD_NODES);
-                }
+                $rootStatements[] = (object) [
+                    'type' => $type,
+                    'node' => $currentNode,
+                ];
 
                 return Traverser::DONT_TRAVERSE_CHILD_NODES;
 
@@ -537,8 +535,20 @@ class Javascript_Enqueue
                 return $updatedSnippet;
             }
 
+            $snippets = '';
+            foreach ($rootStatements as $rootStatement){
+                if($rootStatement->type == "FunctionDeclaration" || $rootStatement->type == "VariableDeclaration"){
+                    $statements = $this->assignWindow($rootStatement->node);
+                    foreach ($statements as $statement){
+                        $snippets .= $statement . "\n";
+                    }
+                }else{
+                    $snippets .= $rootStatement->node->render(new PrettyPrint()) . "\n";
+                }
+            }
+
             // Return the original JavaScript snippet
-            return $this->wrapWithJavaScriptEvent($eventToBind, $updatedSnippet);
+            return $this->wrapWithJavaScriptEvent($eventToBind, $snippets);
         } catch (Exception $exception) {
             // Log any exceptions that occur
             error_log('RapidLoad:Error in JS Optimization: ' . $exception->getMessage());
@@ -558,7 +568,7 @@ class Javascript_Enqueue
         $id = null;
         $type = $node->getType();
         $defineWindow = '';
-
+        $additionalSnippets = [];
 
         if ($type === 'FunctionDeclaration') {
             $id = $node->getId()->getRawName();
@@ -567,24 +577,18 @@ class Javascript_Enqueue
 
         if ($type === 'VariableDeclaration' && count($node->getDeclarations()) === 1) {
             $id = $node->getDeclarations()[0]->getId()->getRawName();
-            if($node->getDeclarations()[0]->getInit()->getType() == "LogicalExpression" && $node->getDeclarations()[0]->getInit()->getLeft()->getType() == "Identifier" ){
-                $left = $node->getDeclarations()[0]->getInit()->getLeft()->getRawName();
-                if($id == $left){
-                    $node->getDeclarations()[0]->getInit()->getLeft()->setRawName('window.' . $left);
-                }
-            }
-            $node->getDeclarations()[0]->getId()->setRawName('window.' . $id);
-            $node->setKind('');
+            $additionalSnippets[] = "window." . $id . " = " . $id . ";";
         }
 
         if (!$id) {
-            return $node;
+            return [$node->render(new PrettyPrint())];
         }
 
         $renderedFunction = $node->render(new PrettyPrint());
 
         $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
-        return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
+        //return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
+        return array_merge([$updatedAst->render(new PrettyPrint())], $additionalSnippets);
     }
 
     function modify_script_tag( $tag, $handle, $src ) {
