@@ -244,12 +244,12 @@ class RapidLoad_Module
 
 
 
-        wp_send_json_success($this->active_modules());
+        wp_send_json_success($this->active_modules(false));
     }
 
-    public function active_modules(){
+    public function active_modules($cache = true){
 
-        $options = RapidLoad_Base::fetch_options();
+        $options = RapidLoad_Base::fetch_options($cache);
         $cache_options = RapidLoad_Cache::get_settings();
 
         $options = [
