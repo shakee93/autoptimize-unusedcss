@@ -2,7 +2,9 @@
 (function () {
     var totalScripts = prepareScripts();
     function rpDebug(method = 'log', ...args) {
-        if (window.location.search.includes('rapidload_debug_js_scripts')) {
+        if (
+true ||
+            window.location.search.includes('rapidload_debug_js_scripts')) {
             console[method](...args);
         }
     }
@@ -59,8 +61,20 @@
             return script;
         }
 
-        // Assign batches
-        return scripts.map(script => assignBatch(script.id));
+        // Assign batches based on dependencies
+        scripts = scripts.map(script => assignBatch(script.id));
+
+        // Adjust batches based on 'after' attribute
+        scripts.forEach(script => {
+            if (script.after) {
+                const afterScript = scriptMap.get(script.after );
+                if (afterScript) {
+                    script.batch = afterScript.batch; // Assign the same batch as the after script
+                }
+            }
+        });
+
+        return scripts;
     }
 
 
@@ -102,14 +116,16 @@
         var scripts = Array.from(document.querySelectorAll('[data-rapidload-src]'));
 
         // Parse and store script dependencies
-        mappedScripts = scripts.map(function (script, index) {
+        var mappedScripts = scripts.map(function (script, index) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
+            var afterAttribute = script.getAttribute('data-js-after');
 
             return {
                 id: scriptId || index,
                 scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
                 loaded: null,
+                after: afterAttribute ? afterAttribute + '-js' : null,
                 asyncLoaded: null,
                 success: false
             }

@@ -117,11 +117,11 @@ class Javascript_Enqueue
 !(function(){var supportedEvents=['DOMContentLoaded','readystatechanges','load'];var supportedTargets=[window,document];var originalDispatchEvent=EventTarget.prototype.dispatchEvent;var originalAddEventListener=EventTarget.prototype.addEventListener;var originalRemoveEventListener=EventTarget.prototype.removeEventListener;var capturedEvents=[];var dispatchedEvents=[];window.RaipdLoadJSDebug={capturedEvents:capturedEvents,dispatchedEvents:dispatchedEvents};EventTarget.prototype.addEventListener=function(type,listener,...options){if(!type.includes(':norapidload')&&supportedEvents.includes(type)&&supportedTargets.includes(this)&&typeof listener==='function'){if(this===document&&document.readyState!=='loading'||this===window&&document.readyState!=='loading'){setTimeout(()=>{console.log(type);listener.call(this,new Event(type))},100)}else{capturedEvents.push({target:this,type:type,listener:listener,options:options})}}if(type.includes(':norapidload')){type=type.replace(':norapidload','')}originalAddEventListener.call(this,type,listener,...options)};EventTarget.prototype.removeEventListener=function(type,listener,...options){if(supportedEvents.includes(type)&&supportedTargets.includes(this)){capturedEvents=capturedEvents.filter(e=>!(e.type===type&&e.listener===listener&&e.target===this))}originalRemoveEventListener.call(this,type,listener,...options)};EventTarget.prototype.dispatchEvent=function(event){dispatchedEvents.push(event);if(supportedEvents.includes(event.type)&&supportedTargets.includes(this)){capturedEvents=capturedEvents.filter(e=>{if(e.type===event.type&&e.target===this){e.target.removeEventListener(e.type,e.listener,...e.options);return false}return true})}return originalDispatchEvent.call(this,event)};supportedEvents.forEach(function(eventType){supportedTargets.forEach(function(target){target.addEventListener(eventType,function(){})})})})();; 
             ";
 
-            /*$filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
 
             if (file_exists($filePath)) {
                 $content = file_get_contents($filePath);
-            }*/
+            }
 
             $node_header = '<script type="text/javascript" >' . $content . '</script>';
 
@@ -136,11 +136,11 @@ class Javascript_Enqueue
             // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
             $content = "//!injected by RapidLoad \n!(function(){var totalScripts=prepareScripts();function rpDebug(method='log',...args){if(window.location.search.includes('rapidload_debug_js_scripts')){console[method](...args)}}if(window.RAPIDLOAD_EXPERIMENT__DELAY_PREFETCH){document.addEventListener('DOMContentLoaded:norapidload',()=>{totalScripts.forEach((script,index)=>{setTimeout(()=>{fetch(script.scriptElement.getAttribute('data-rapidload-src')).then(()=>{script.asyncLoaded=true;script.success=true;totalScripts[index]=script}).catch(()=>{script.asyncLoaded=true;script.success=falsej;totalScripts[index]=script}).finally(()=>{onScriptAsyncLoad(script)})},10)})})}function createBatches(scripts){const scriptMap=new Map(scripts.map(script=>[script.id,{...script,batch:null}]));function assignBatch(scriptId,stackSet=new Set){let script=scriptMap.get(scriptId);if(script.batch!==null)return script.batch;if(stackSet.has(scriptId)){throw new Error('RapidLoad: Circular dependency detected at script: '+scriptId)}stackSet.add(scriptId);let maxBatch=0;script.dependencies.forEach(depId=>{const depBatch=assignBatch(depId,stackSet);maxBatch=Math.max(maxBatch,depBatch)});script.batch=maxBatch+1;stackSet.delete(scriptId);return script}return scripts.map(script=>assignBatch(script.id))}function onScriptLoad(script,success=true){totalScripts=totalScripts.map(s=>s.id===script.id&&script.loaded===null?{...script,loaded:true,success:success}:s);if(totalScripts.filter(s=>s.batch===script.batch).length===totalScripts.filter(s=>s.batch===script.batch&&s.loaded).length){var batchLoadedEvent=new CustomEvent('RapidLoad:DelayedScriptBatchLoaded',{detail:{batch:script.batch},bubbles:true,cancelable:true});document.dispatchEvent(batchLoadedEvent);rpDebug('info','fired: RapidLoad:DelayedScriptBatchLoaded : '+script.batch);rpDebug('table',totalScripts.filter(s=>s.batch===script.batch))}if(totalScripts.filter(s=>s.loaded).length===totalScripts.length){var allScriptsLoadedEvent=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:true,cancelable:true});document.dispatchEvent(allScriptsLoadedEvent);rpDebug('info','fired: RapidLoad:DelayedScriptsLoaded');rpDebug('table',totalScripts)}}function prepareScripts(){var scripts=Array.from(document.querySelectorAll('[data-rapidload-src]'));mappedScripts=scripts.map(function(script,index){var scriptId=script.getAttribute('id');var depsAttribute=script.getAttribute('data-js-deps');return{id:scriptId||index,scriptElement:script,dependencies:parseDependencies(depsAttribute,scripts,scriptId),loaded:null,asyncLoaded:null,success:false}});return createBatches(mappedScripts)}function loadScript(script){var scriptElement=script.scriptElement;scriptElement.addEventListener('load',()=>onScriptLoad(script));scriptElement.addEventListener('error',()=>onScriptLoad(script,false));let rapidLoadSrc=scriptElement.getAttribute('data-rapidload-src');if(rapidLoadSrc){scriptElement.setAttribute('src',scriptElement.getAttribute('data-rapidload-src'));scriptElement.removeAttribute('data-rapidload-src')}}function loadScriptsInDependencyOrder(){totalScripts.filter(s=>s.batch===1).forEach(function(script){loadScript(script)});document.addEventListener('RapidLoad:DelayedScriptBatchLoaded',event=>{var batch=Number(event.detail.batch)+1;if(batch>totalScripts.filter(s=>s.batch).length){return}totalScripts.filter(s=>s.batch===batch).forEach(function(script){loadScript(script)})})}function parseDependencies(depsAttribute,scriptMap,scriptId){let deps=[];let depAttributes=depsAttribute?depsAttribute.split(', '):[];deps=depAttributes.map(function(dep){var matchingScript=scriptMap.find(function(script){return script.id===dep+'-js'||dep==='jquery'&&script.id==='jquery-core-js'||dep.startsWith('jquery-ui-')&&script.id==='jquery-ui-core-js'});if(matchingScript){return matchingScript.id}else{console.warn('Dependency not found for:',dep);return null}}).filter(Boolean);if(scriptId!=='jquery-core-js'&&scriptId&&scriptId.includes('jquery-')){deps.push('jquery-core-js')}return deps}['mousemove','touchstart','keydown'].forEach(function(event){var listener=function(){removeEventListener(event,listener);loadScriptsInDependencyOrder();if(totalScripts===0){var allScriptsLoadedEvent=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:true,cancelable:true});document.dispatchEvent(allScriptsLoadedEvent)}};addEventListener(event,listener)})})();";
 
-            /*$filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
 
             if (file_exists($filePath)) {
                 $content = file_get_contents($filePath);
-            }*/
+            }
 
             $node = $this->dom->createElement('script', "" . $content . "");
 
@@ -601,16 +601,31 @@ class Javascript_Enqueue
 
         if (isset($wp_scripts->registered[$handle])) {
             $script = $wp_scripts->registered[$handle];
+            $attributes = [];
             $dependencies = $script->deps; // Array of script dependencies
 
             $dependencies = apply_filters('rapidload/js/script-dependencies', $dependencies, $handle);
+            $after = apply_filters('rapidload/js/script-after', null, $script);
 
             if (!empty($dependencies)) {
                 // Convert dependencies array to a comma-separated string
                 $deps_string = implode(', ', $dependencies);
 
+                $attributes['data-js-deps'] = esc_attr($deps_string);
+
+                if ($after) {
+                    $attributes['data-js-after'] = $after;
+                }
+
+
+                $attributeString = '';
+                foreach ($attributes as $key => $value) {
+                    $attributeString .= $key . '="' . htmlspecialchars($value, ENT_QUOTES) . '" ';
+                }
+
+
                 // Insert the data-js-deps attribute into the script tag
-                $tag = preg_replace('/<script(.*?)>/', '<script$1 data-js-deps="' . esc_attr($deps_string) . '">', $tag);
+                $tag = preg_replace('/<script(.*?)>/', '<script$1 ' . trim($attributeString) . '>', $tag);
             }
         }
 
