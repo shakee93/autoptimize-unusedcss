@@ -3,7 +3,7 @@
     var totalScripts = prepareScripts();
     function rpDebug(method = 'log', ...args) {
         if (
-            window.location.search.includes('rapidload_debug_js_scripts')) {
+            window.location.search.includes('rapidload_debug_js')) {
             console[method](...args);
         }
     }
