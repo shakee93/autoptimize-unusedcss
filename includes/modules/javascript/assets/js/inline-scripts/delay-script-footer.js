@@ -126,7 +126,6 @@
                 scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
                 loaded: null,
                 after: afterAttribute ? afterAttribute + '-js' : null,
-                asyncLoaded: null,
                 success: false,
                 src: src
             }
@@ -159,8 +158,6 @@
                 let blob = new Blob([scriptContent], { type: 'application/javascript' });
                 s.src = URL.createObjectURL(blob);
             }
-            s.response = response;
-
             return s;
         }))
 
