@@ -6,14 +6,7 @@ use Peast\Query;
 use Peast\Traverser;
 use Peast\Renderer;
 use Peast\Formatter\PrettyPrint;
-use Peast\Syntax\Node;
-use Peast\Syntax\Node\VariableDeclaration;
-use Peast\Syntax\Node\VariableDeclarator;
-use Peast\Syntax\Node\Identifier;
-use Peast\Syntax\Node\MemberExpression;
-use Peast\Syntax\Node\ExpressionStatement;
-use Peast\Syntax\Node\AssignmentExpression;
-use Peast\Syntax\Node\Program;
+use Peast\Formatter\Compact;
 
 class Javascript_Enqueue
 {
@@ -339,7 +332,7 @@ class Javascript_Enqueue
                 return;
             }
 
-            $manipulated_snippet = $this->analyzeJavaScriptCode($inner_text);
+            $manipulated_snippet = $this->analyzeJavaScriptCode($inner_text, $link);
 
             if (!$manipulated_snippet) {
                 return;
@@ -488,7 +481,7 @@ class Javascript_Enqueue
     }
 
 
-    public function analyzeJavaScriptCode($jsSnippet)
+    public function analyzeJavaScriptCode($jsSnippet, $script)
     {
         try {
             // Determine the global event based on the 'delay_javascript' option
@@ -542,8 +535,10 @@ class Javascript_Enqueue
                     foreach ($statements as $statement){
                         $snippets .= $statement . "\n";
                     }
+                }elseif($rootStatement->type == "ExpressionStatement") {
+                    $snippets .= $rootStatement->node->render(new Compact()) . ";";
                 }else{
-                    $snippets .= $rootStatement->node->render(new PrettyPrint()) . "\n";
+                    $snippets .= $rootStatement->node->render(new Compact()) . "\n";
                 }
             }
 
@@ -581,14 +576,14 @@ class Javascript_Enqueue
         }
 
         if (!$id) {
-            return [$node->render(new PrettyPrint())];
+            return [$node->render(new Compact())];
         }
 
-        $renderedFunction = $node->render(new PrettyPrint());
+        $renderedFunction = $node->render(new Compact());
 
         $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
         //return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
-        return array_merge([$updatedAst->render(new PrettyPrint())], $additionalSnippets);
+        return array_merge([$updatedAst->render(new Compact())], $additionalSnippets);
     }
 
     function modify_script_tag( $tag, $handle, $src ) {
