@@ -605,7 +605,7 @@ class Javascript_Enqueue
             $dependencies = $script->deps; // Array of script dependencies
 
             $dependencies = apply_filters('rapidload/js/script-dependencies', $dependencies, $handle);
-            $after = apply_filters('rapidload/js/script-after', null, $script);
+            $after = apply_filters('rapidload/js/script-append-after', null, $script);
 
             if (!empty($dependencies)) {
                 // Convert dependencies array to a comma-separated string

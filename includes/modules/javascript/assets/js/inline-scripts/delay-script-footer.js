@@ -3,7 +3,6 @@
     var totalScripts = prepareScripts();
     function rpDebug(method = 'log', ...args) {
         if (
-true ||
             window.location.search.includes('rapidload_debug_js_scripts')) {
             console[method](...args);
         }
@@ -119,6 +118,7 @@ true ||
         var mappedScripts = scripts.map(function (script, index) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
+            var src = script.getAttribute('data-rapidload-src');
             var afterAttribute = script.getAttribute('data-js-after');
 
             return {
@@ -127,7 +127,8 @@ true ||
                 loaded: null,
                 after: afterAttribute ? afterAttribute + '-js' : null,
                 asyncLoaded: null,
-                success: false
+                success: false,
+                src: src
             }
         });
 
@@ -139,14 +140,34 @@ true ||
         scriptElement.addEventListener('load', () => onScriptLoad(script));
         scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
 
-        let rapidLoadSrc = scriptElement.getAttribute('data-rapidload-src');
-
-        if (rapidLoadSrc) {
-            scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
+        if (script.src) {
+            scriptElement.setAttribute('type', 'text/javascript')
+            scriptElement.setAttribute('src', script.src);
             scriptElement.removeAttribute('data-rapidload-src');
         }
     }
-    function loadScriptsInDependencyOrder() {
+
+    async function fetchAllScripts() {
+        return Promise.all(totalScripts.map(async s => {
+            let response = await fetch(s.src)
+            if (response.ok && !response.headers.has('Cache-Control')) {
+                let scriptContent = await response.text();
+
+                scriptContent = scriptContent + '\n//# sourceMappingURL=' + s.src;
+
+                // Create a new blob with the script content
+                let blob = new Blob([scriptContent], { type: 'application/javascript' });
+                s.src = URL.createObjectURL(blob);
+            }
+            s.response = response;
+
+            return s;
+        }))
+
+    }
+    async function loadScriptsInDependencyOrder() {
+
+        totalScripts = await fetchAllScripts()
 
         totalScripts.filter(s => s.batch === 1).forEach(function (script) {
             loadScript(script)
@@ -197,9 +218,9 @@ true ||
 
 
     ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-        var listener = function () {
+        var listener = async function () {
             removeEventListener(event, listener);
-            loadScriptsInDependencyOrder();
+            await loadScriptsInDependencyOrder();
 
             // Check if there are no scripts to load
             if (totalScripts === 0) {
