@@ -529,6 +529,34 @@ class Javascript_Enqueue
             }
 
             $snippets = '';
+
+            // To be checked
+
+            $should_not_wrap = false;
+
+            if (count(array_filter($rootStatements, function ($statement) {
+                    return $statement->type == 'ExpressionStatement';
+                })) === count($rootStatements)) {
+
+                foreach ($rootStatements as $rootStatement){
+
+                    $inner_content = $rootStatement->node->render(new Compact()) . ";";
+
+                    $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
+
+                    if(preg_match($pattern, $inner_content)){
+                        $should_not_wrap = true;
+                        break;
+                    }
+
+                }
+
+                if($should_not_wrap){
+                    return $updatedSnippet;
+                }
+            }
+
+
             foreach ($rootStatements as $rootStatement){
                 if($rootStatement->type == "FunctionDeclaration" || $rootStatement->type == "VariableDeclaration"){
                     $statements = $this->assignWindow($rootStatement->node);
