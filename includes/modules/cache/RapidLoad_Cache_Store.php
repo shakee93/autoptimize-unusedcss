@@ -103,8 +103,8 @@ class RapidLoad_Cache_Store
         if(file_exists($advanced_cache_file)){
             @unlink($advanced_cache_file);
             RapidLoad_Cache_Store::set_wp_cache_constant(false);
+            self::clearDirectory(RAPIDLOAD_CACHE_DIR);
         }
-        self::clearDirectory(RAPIDLOAD_CACHE_DIR);
     }
 
     public static function clearDirectory($dirPath) {
