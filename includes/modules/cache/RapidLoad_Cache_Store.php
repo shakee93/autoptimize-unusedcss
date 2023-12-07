@@ -104,7 +104,31 @@ class RapidLoad_Cache_Store
             @unlink($advanced_cache_file);
             RapidLoad_Cache_Store::set_wp_cache_constant(false);
         }
+        self::clearDirectory(RAPIDLOAD_CACHE_DIR);
+    }
 
+    public static function clearDirectory($dirPath) {
+        if (!is_dir($dirPath)) {
+            return;
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+
+        $files = scandir($dirPath);
+        foreach ($files as $file) {
+            if ($file == "." || $file == "..") {
+                continue;
+            }
+
+            $filePath = $dirPath . $file;
+            if (is_dir($filePath)) {
+                self::clearDirectory($filePath);
+                @rmdir($filePath);
+            } else {
+                @unlink($filePath);
+            }
+        }
     }
 
     public static function setup() {
