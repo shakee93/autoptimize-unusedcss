@@ -15,18 +15,25 @@
 
     // Override addEventListener to capture future supported event listeners
     EventTarget.prototype.addEventListener = function(type, listener, ...options) {
+
+        var isDispatched = (!type.includes('RapidLoad:') && !!dispatchedEvents.find(e => e.type === type) && supportedTargets.includes(this))
+        var catchEvent = !type.includes('RapidLoad:') && !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this) && typeof listener === 'function'
+
+
         if (
-            !type.includes(':norapidload') && supportedEvents.includes(type) && supportedTargets.includes(this) && typeof listener === 'function'
-            // || dispatchedEvents.find(e => e.type === type)
+            catchEvent
+            // TODO: check if elementor/init like events are being already fired if fired execute those immediately
+            // || (!catchEvent && isDispatched)
         ) {
+
 
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 // If the event has already fired, immediately invoke the listener
                 setTimeout(() => {
-                    console.log(type);
                     listener.call(this, new Event(type));
-                }, 100);
+                }, 30);
+
             } else {
                 // Store the listener for later use
                 capturedEvents.push({ target: this, type, listener, options });
@@ -52,6 +59,7 @@
     EventTarget.prototype.dispatchEvent = function(event) {
 
         dispatchedEvents.push(event)
+        console.log('dispatched: ' + event.type);
 
         if (supportedEvents.includes(event.type) && supportedTargets.includes(this)) {
             // Remove all listeners for this event type that were added after the event fired
