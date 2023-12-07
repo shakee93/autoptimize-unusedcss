@@ -2,7 +2,8 @@
 (function () {
     var totalScripts = prepareScripts();
     function rpDebug(method = 'log', ...args) {
-        if (window.location.search.includes('rapidload_debug_js_scripts')) {
+        if (
+            window.location.search.includes('rapidload_debug_js')) {
             console[method](...args);
         }
     }
@@ -59,8 +60,20 @@
             return script;
         }
 
-        // Assign batches
-        return scripts.map(script => assignBatch(script.id));
+        // Assign batches based on dependencies
+        scripts = scripts.map(script => assignBatch(script.id));
+
+        // Adjust batches based on 'after' attribute
+        scripts.forEach(script => {
+            if (script.after) {
+                const afterScript = scriptMap.get(script.after );
+                if (afterScript) {
+                    script.batch = afterScript.batch; // Assign the same batch as the after script
+                }
+            }
+        });
+
+        return scripts;
     }
 
 
@@ -102,16 +115,19 @@
         var scripts = Array.from(document.querySelectorAll('[data-rapidload-src]'));
 
         // Parse and store script dependencies
-        mappedScripts = scripts.map(function (script, index) {
+        var mappedScripts = scripts.map(function (script, index) {
             var scriptId = script.getAttribute('id');
             var depsAttribute = script.getAttribute('data-js-deps');
+            var src = script.getAttribute('data-rapidload-src');
+            var afterAttribute = script.getAttribute('data-js-after');
 
             return {
                 id: scriptId || index,
                 scriptElement: script, dependencies: parseDependencies(depsAttribute, scripts, scriptId),
                 loaded: null,
-                asyncLoaded: null,
-                success: false
+                after: afterAttribute ? afterAttribute + '-js' : null,
+                success: false,
+                src: src
             }
         });
 
@@ -123,14 +139,32 @@
         scriptElement.addEventListener('load', () => onScriptLoad(script));
         scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
 
-        let rapidLoadSrc = scriptElement.getAttribute('data-rapidload-src');
-
-        if (rapidLoadSrc) {
-            scriptElement.setAttribute('src', scriptElement.getAttribute('data-rapidload-src'));
+        if (script.src) {
+            scriptElement.setAttribute('type', 'text/javascript')
+            scriptElement.setAttribute('src', script.src);
             scriptElement.removeAttribute('data-rapidload-src');
         }
     }
-    function loadScriptsInDependencyOrder() {
+
+    async function fetchAllScripts() {
+        return Promise.all(totalScripts.map(async s => {
+            let response = await fetch(s.src)
+            if (response.ok && !response.headers.has('Cache-Control')) {
+                let scriptContent = await response.text();
+
+                scriptContent = scriptContent + '\n//# sourceMappingURL=' + s.src;
+
+                // Create a new blob with the script content
+                let blob = new Blob([scriptContent], { type: 'application/javascript' });
+                s.src = URL.createObjectURL(blob);
+            }
+            return s;
+        }))
+
+    }
+    async function loadScriptsInDependencyOrder() {
+
+        totalScripts = await fetchAllScripts()
 
         totalScripts.filter(s => s.batch === 1).forEach(function (script) {
             loadScript(script)
@@ -181,9 +215,9 @@
 
 
     ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-        var listener = function () {
+        var listener = async function () {
             removeEventListener(event, listener);
-            loadScriptsInDependencyOrder();
+            await loadScriptsInDependencyOrder();
 
             // Check if there are no scripts to load
             if (totalScripts === 0) {
