@@ -304,7 +304,7 @@ class Javascript_Enqueue
 
         }elseif (self::is_inline_script($link)){
 
-            if(($js_to_be_delay && !self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js')) || ($js_to_be_defer && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
+            if(($js_to_be_delay || $js_to_be_defer) && (!self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js') && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
 
                 $this->defer_inline_js($link);
 
@@ -602,6 +602,16 @@ class Javascript_Enqueue
             $id = $node->getDeclarations()[0]->getId()->getRawName();
             $additionalSnippets[] = "window." . $id . " = " . $id . ";";
         }
+
+        if ($type === 'VariableDeclaration' && count($node->getDeclarations()) > 1) {
+
+            foreach($node->getDeclarations() as $declaration){
+                $id = $declaration->getId()->getRawName();
+                $additionalSnippets[] = "window." . $id . " = " . $id . ";";
+            }
+
+        }
+
 
         if (!$id) {
             return [$node->render(new Compact())];
