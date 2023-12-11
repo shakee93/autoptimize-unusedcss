@@ -74,15 +74,22 @@ class RapidLoad_Base
             ],
         ];
 
-        self::fetch_options();
+        add_action('plugins_loaded', function (){
 
-        if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
-            add_filter('rapidload/options', [$this, 'merge_job_options']);
-        }
+            $this->container['feedback'] = new RapidLoad_Feedback();
+            $this->container['buffer'] = new RapidLoad_Buffer();
 
-        self::get_merged_options();
+        });
 
         add_action('init', function (){
+
+            self::fetch_options();
+
+            if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
+                add_filter('rapidload/options', [$this, 'merge_job_options']);
+            }
+
+            self::get_merged_options();
 
             RapidLoad_DB::update_db_version();
 
@@ -147,20 +154,13 @@ class RapidLoad_Base
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
             $this->container['rest_api'] = new RapidLoadRestApi();
-
             //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
+            $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
-        add_action('plugins_loaded', function (){
-
-            $this->container['feedback'] = new RapidLoad_Feedback();
-            $this->container['buffer'] = new RapidLoad_Buffer();
-            $this->container['enqueue'] = new RapidLoad_Enqueue();
-
-        });
     }
 
     function merge_job_options($option){
