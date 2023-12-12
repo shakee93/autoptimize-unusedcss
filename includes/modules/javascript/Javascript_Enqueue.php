@@ -215,6 +215,10 @@ class Javascript_Enqueue
 
     public function minify_js($link){
 
+        if(defined('SCRIPT_DEBUG') && boolval(SCRIPT_DEBUG) == true){
+            return;
+        }
+
         if(!self::is_js($link) || self::is_file_excluded($link->src)){
             return;
         }
