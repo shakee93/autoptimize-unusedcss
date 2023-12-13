@@ -100,6 +100,7 @@
 
         if (totalScripts.filter(s => s.loaded).length === totalScripts.length) {
 
+            window.rapidloadScripts = totalScripts
             var allScriptsLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptsLoaded', {
                 bubbles: true,
                 cancelable: true
@@ -135,27 +136,25 @@
     }
 
     function loadScript(script) {
-        var scriptElement = script.scriptElement;
-        scriptElement.addEventListener('load', () => onScriptLoad(script));
-        scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
+        setTimeout(() => {
+            var scriptElement = script.scriptElement;
+            scriptElement.addEventListener('load', () => onScriptLoad(script));
+            scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
 
-        if (script.src) {
-            scriptElement.setAttribute('type', 'text/javascript')
-            scriptElement.setAttribute('src', script.src);
-            scriptElement.removeAttribute('data-rapidload-src');
-        }
+            if (script.src) {
+                scriptElement.setAttribute('type', 'text/javascript')
+                scriptElement.setAttribute('src', script.src);
+            }
+        }, 35)
     }
 
     async function fetchAllScripts() {
         return Promise.all(totalScripts.map(async s => {
             let response = await fetch(s.src)
-            if (response.ok && !response.headers.has('Cache-Control')) {
+            if (response.ok ) {
                 let scriptContent = await response.text();
-
-                scriptContent = scriptContent + '\n//# sourceMappingURL=' + s.src;
-
                 // Create a new blob with the script content
-                let blob = new Blob([scriptContent], { type: 'application/javascript' });
+                let blob = new Blob([scriptContent], { type: 'text/javascript' });
                 s.src = URL.createObjectURL(blob);
             }
             return s;

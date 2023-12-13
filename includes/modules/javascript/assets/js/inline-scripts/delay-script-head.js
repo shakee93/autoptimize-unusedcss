@@ -26,11 +26,15 @@
             // || (!catchEvent && isDispatched)
         ) {
 
+            if (this === document || this === window) {
+                console.log('listener added: ', type);
+            }
 
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 // If the event has already fired, immediately invoke the listener
                 setTimeout(() => {
+
                     listener.call(this, new Event(type));
                 }, 30);
 
