@@ -23,11 +23,11 @@
         if (
             catchEvent
             // TODO: check if elementor/init like events are being already fired if fired execute those immediately
-            // || (!catchEvent && isDispatched)
+            || (catchEvent !== isDispatched && isDispatched)
         ) {
 
             if (this === document || this === window) {
-                console.log('listener added: ', type);
+                //console.log('listener added: ', type);
             }
 
             if ((this === document && document.readyState !== 'loading') ||
@@ -63,7 +63,7 @@
     EventTarget.prototype.dispatchEvent = function(event) {
 
         dispatchedEvents.push(event)
-        console.log('dispatched: ' + event.type);
+       // console.log('dispatched: ' + event.type);
 
         if (supportedEvents.includes(event.type) && supportedTargets.includes(this)) {
             // Remove all listeners for this event type that were added after the event fired
