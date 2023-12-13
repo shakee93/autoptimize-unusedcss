@@ -109,6 +109,8 @@
             document.dispatchEvent(allScriptsLoadedEvent);
             rpDebug('info', 'fired: RapidLoad:DelayedScriptsLoaded')
             rpDebug('table', totalScripts)
+            console.warn('RapidLoad Warning: If you intend to debug JavaScript files, kindly disable the "RapidLoad delay js" feature.');
+
         }
     }
 
