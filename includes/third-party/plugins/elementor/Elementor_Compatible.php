@@ -22,12 +22,11 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
     public function handle_script_deps_priority($value, $handle)
     {
 
-        if ($handle === 'pro-elements-handlers' || $handle === 'elementor-pro-frontend') {
-            return 'elementor-frontend';
-        }
+        if (
+            $script->handle === 'elementor-frontend'
 
-        if ($handle === 'pro-elements-handlers-js' || $handle === 'elementor-pro-frontend-js') {
-            return 'elementor-frontend';
+        ) {
+            return 'pro-preloaded-elements-handlers';
         }
 
         return $value;
