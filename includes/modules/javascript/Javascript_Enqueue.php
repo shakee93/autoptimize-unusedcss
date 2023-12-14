@@ -81,6 +81,30 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
+            if(!isset($link->{'data-js-deps'}) && isset($link->id)){
+
+                $dependencies = apply_filters('rapidload/js/script-dependencies', [], $link->id);
+
+                if (!empty($dependencies)) {
+                    // Convert dependencies array to a comma-separated string
+                    $deps_string = implode(', ', $dependencies);
+
+                    $link->{'data-js-deps'} = esc_attr($deps_string);
+
+                }
+
+            }
+
+            if(!isset($link->{'data-js-after'}) && isset($link->id)){
+
+                $after = apply_filters('rapidload/js/script-append-after', null, $link->id);
+
+                if ($after) {
+                    $link->{'data-js-after'} = $after;
+                }
+
+            }
+
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }
@@ -642,7 +666,7 @@ class Javascript_Enqueue
             $dependencies = $script->deps; // Array of script dependencies
 
             $dependencies = apply_filters('rapidload/js/script-dependencies', $dependencies, $handle);
-            $after = apply_filters('rapidload/js/script-append-after', null, $script);
+            $after = apply_filters('rapidload/js/script-append-after', null, $handle);
 
             if (!empty($dependencies)) {
                 // Convert dependencies array to a comma-separated string

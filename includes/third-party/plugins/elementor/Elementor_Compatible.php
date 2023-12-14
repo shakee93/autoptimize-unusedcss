@@ -19,10 +19,14 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
         add_filter('rapidload/js/script-append-after', [$this, 'handle_script_deps_priority'], 10, 2);
     }
 
-    public function handle_script_deps_priority($value, $script)
+    public function handle_script_deps_priority($value, $handle)
     {
 
-        if ($script->handle === 'pro-elements-handlers' || $script->handle === 'elementor-pro-frontend') {
+        if ($handle === 'pro-elements-handlers' || $handle === 'elementor-pro-frontend') {
+            return 'elementor-frontend';
+        }
+
+        if ($handle === 'pro-elements-handlers-js' || $handle === 'elementor-pro-frontend-js') {
             return 'elementor-frontend';
         }
 
