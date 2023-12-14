@@ -1,12 +1,36 @@
 //!injected by RapidLoad \n
 (function () {
+    function mergeDuplicateObjects(array) {
+        const mergedObjects = {};
+
+        array.forEach(item => {
+            if (!mergedObjects[item.id]) {
+                mergedObjects[item.id] = { ...item };
+            } else {
+                Object.keys(item).forEach(key => {
+                    if (item[key] !== null && item[key] !== undefined) {
+                        if (mergedObjects[item.id][key] === null || mergedObjects[item.id][key] === undefined) {
+                            mergedObjects[item.id][key] = item[key];
+                        }
+                    }
+                });
+            }
+        });
+
+        return Object.values(mergedObjects);
+    }
+
     var totalScripts = prepareScripts();
+
     function rpDebug(method = 'log', ...args) {
         if (
             window.location.search.includes('rapidload_debug_js')) {
             console[method](...args);
         }
     }
+
+    rpDebug('info', 'totalScripts');
+    rpDebug('table', totalScripts);
 
     if (window.RAPIDLOAD_EXPERIMENT__DELAY_PREFETCH) {
         document.addEventListener('DOMContentLoaded:norapidload', () => {
@@ -30,15 +54,28 @@
 
 
     function createBatches(scripts) {
-        // Create a map for easy access to scripts by id
-        const scriptMap = new Map(scripts.map(script => [script.id, { ...script, batch: null }]));
 
-        // Helper function to visit a script and assign a batch
-        function assignBatch(scriptId, stackSet = new Set()) {
-            let script = scriptMap.get(scriptId);
+        // Create a map for easy access to scripts by id
+        const scriptMap = new Map(scripts.map((script) => {
+            return [script.id, { ...script, batch: null }];
+        }));
+
+        function assignBatch(firstScriptId, scriptId, stackSet = new Set()) {
+
+            if(firstScriptId === null){
+                firstScriptId = scriptId;
+            }
+
+            const script = scriptMap.get(scriptId);
+
+            if (!script) {
+                return -1; // Return an error code or handle this scenario appropriately
+            }
 
             // If already visited, return the known batch
-            if (script.batch !== null) return script.batch;
+            if (script.batch !== null) {
+                return script.batch
+            }
 
             // Detect circular dependencies
             if (stackSet.has(scriptId)) {
@@ -49,31 +86,26 @@
 
             // Recursively assign batch numbers based on dependencies
             let maxBatch = 0;
-            script.dependencies.forEach(depId => {
-                const depBatch = assignBatch(depId, stackSet);
+            for (const depId of script.dependencies) {
+                const depBatch = assignBatch(firstScriptId, depId, stackSet);
+                if (depBatch === -1) {
+                    continue; // Skip this dependency or handle error
+                }
                 maxBatch = Math.max(maxBatch, depBatch);
-            });
+            }
 
             // Assign the current script to the next batch after the highest dependency batch
             script.batch = maxBatch + 1;
+
             stackSet.delete(scriptId);
-            return script;
+            return script.batch;
         }
 
-        // Assign batches based on dependencies
-        scripts = scripts.map(script => assignBatch(script.id));
-
-        // Adjust batches based on 'after' attribute
-        scripts.forEach(script => {
-            if (script.after) {
-                const afterScript = scriptMap.get(script.after );
-                if (afterScript) {
-                    script.batch = afterScript.batch; // Assign the same batch as the after script
-                }
-            }
+        // Assign batches
+        return scripts.map(script => {
+            const batchedScript = assignBatch(null, script.id);
+            return scriptMap.get(script.id); // Return the script with updated batch number
         });
-
-        return scripts;
     }
 
 
@@ -130,6 +162,8 @@
                 src: src
             }
         });
+
+        mappedScripts = mergeDuplicateObjects(mappedScripts)
 
         return createBatches(mappedScripts);
     }
