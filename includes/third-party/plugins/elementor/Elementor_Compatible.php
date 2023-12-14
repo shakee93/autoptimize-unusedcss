@@ -23,8 +23,8 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
     {
 
         if (
-            $script->handle === 'elementor-frontend'
-
+            $handle === 'elementor-frontend' ||
+            $handle === 'elementor-frontend-js'
         ) {
             return 'pro-preloaded-elements-handlers';
         }
