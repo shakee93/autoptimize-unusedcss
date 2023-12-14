@@ -1,6 +1,8 @@
 //!injected by RapidLoad \n
 (function () {
     var totalScripts = prepareScripts();
+    const events = ['click', 'mousemove', 'touchstart', 'keydown'];
+    let listenerTriggered = false;
 
     function rpDebug(method = 'log', ...args) {
         if (
@@ -80,7 +82,7 @@
                     resolve(script);
                 };
                 link.onerror = (error) => {
-                    reject(error);
+                    resolve(script);
                 };
             });
 
@@ -102,9 +104,11 @@
         }
     }
 
-    ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-        var listener = async function () {
-            removeEventListener(event, listener);
+
+    var listener = async function () {
+        if (!listenerTriggered) {
+            listenerTriggered = true;
+            removeEventListeners(); // Remove all event listeners once triggered
             await loadScriptsInDependencyOrder();
 
             // Check if there are no scripts to load
@@ -116,7 +120,16 @@
 
                 document.dispatchEvent(allScriptsLoadedEvent);
             }
-        };
+        }
+    };
+
+    events.forEach(function (event) {
         addEventListener(event, listener);
     });
+
+    function removeEventListeners() {
+        events.forEach(function (event) {
+            removeEventListener(event, listener);
+        });
+    }
 })();
