@@ -156,6 +156,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.2 - 13/12/2023 =
+ * improved: delay js execution
+ * improved: delay js event handling
+ * fix: known bugs
+
 = 2.2.1 - 05/12/2023 =
  * fix: known bugs
 
