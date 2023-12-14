@@ -102,10 +102,21 @@
         }
 
         // Assign batches
-        return scripts.map(script => {
+        scripts = scripts.map(script => {
             const batchedScript = assignBatch(null, script.id);
             return scriptMap.get(script.id); // Return the script with updated batch number
         });
+
+        scripts.forEach(script => {
+            if (script.after) {
+                const afterScript = scriptMap.get(script.after );
+                if (afterScript) {
+                    script.batch = afterScript.batch; // Assign the same batch as the after script
+                }
+            }
+        });
+
+        return scripts
     }
 
 
