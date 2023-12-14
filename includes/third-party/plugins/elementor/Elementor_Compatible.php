@@ -16,20 +16,6 @@ class Elementor_Compatible extends RapidLoad_ThirdParty{
     public function init_hooks()
     {
         add_filter('uucss/url/exclude', [$this, 'handle']);
-        add_filter('rapidload/js/script-append-after', [$this, 'handle_script_deps_priority'], 10, 2);
-    }
-
-    public function handle_script_deps_priority($value, $handle)
-    {
-
-        if (
-            $handle === 'elementor-frontend' ||
-            $handle === 'elementor-frontend-js'
-        ) {
-            return 'pro-preloaded-elements-handlers';
-        }
-
-        return $value;
     }
 
     public function handle($args)

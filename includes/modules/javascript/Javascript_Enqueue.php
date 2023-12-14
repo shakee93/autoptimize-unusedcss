@@ -31,7 +31,6 @@ class Javascript_Enqueue
         $this->init();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 60);
-        add_filter( 'script_loader_tag', [$this, 'modify_script_tag'], 10, 3 );
     }
 
     public function init(){
@@ -80,30 +79,6 @@ class Javascript_Enqueue
         $links = $this->dom->find( 'script' );
 
         foreach ( $links as $link ) {
-
-            if(!isset($link->{'data-js-deps'}) && isset($link->id)){
-
-                $dependencies = apply_filters('rapidload/js/script-dependencies', [], $link->id);
-
-                if (!empty($dependencies)) {
-                    // Convert dependencies array to a comma-separated string
-                    $deps_string = implode(', ', $dependencies);
-
-                    $link->{'data-js-deps'} = esc_attr($deps_string);
-
-                }
-
-            }
-
-            if(!isset($link->{'data-js-after'}) && isset($link->id)){
-
-                $after = apply_filters('rapidload/js/script-append-after', null, $link->id);
-
-                if ($after) {
-                    $link->{'data-js-after'} = $after;
-                }
-
-            }
 
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
@@ -654,44 +629,5 @@ class Javascript_Enqueue
         return array_merge([$updatedAst->render(new Compact())], $additionalSnippets);
     }
 
-    function modify_script_tag( $tag, $handle, $src ) {
 
-        if(is_admin()) {
-            return $tag;
-        }
-
-        global $wp_scripts;
-
-        if (isset($wp_scripts->registered[$handle])) {
-            $script = $wp_scripts->registered[$handle];
-            $attributes = [];
-            $dependencies = $script->deps; // Array of script dependencies
-
-            $dependencies = apply_filters('rapidload/js/script-dependencies', $dependencies, $handle);
-            $after = apply_filters('rapidload/js/script-append-after', null, $handle);
-
-            if (!empty($dependencies)) {
-                // Convert dependencies array to a comma-separated string
-                $deps_string = implode(', ', $dependencies);
-
-                $attributes['data-js-deps'] = esc_attr($deps_string);
-
-                if ($after) {
-                    $attributes['data-js-after'] = $after;
-                }
-
-
-                $attributeString = '';
-                foreach ($attributes as $key => $value) {
-                    $attributeString .= $key . '="' . htmlspecialchars($value, ENT_QUOTES) . '" ';
-                }
-
-
-                // Insert the data-js-deps attribute into the script tag
-                $tag = preg_replace('/<script(.*?)>/', '<script$1 ' . trim($attributeString) . '>', $tag);
-            }
-        }
-
-        return $tag;
-    }
 }

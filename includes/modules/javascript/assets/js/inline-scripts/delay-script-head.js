@@ -36,7 +36,7 @@
                 setTimeout(() => {
 
                     listener.call(this, new Event(type));
-                }, 30);
+                }, 10);
 
             } else {
                 // Store the listener for later use
