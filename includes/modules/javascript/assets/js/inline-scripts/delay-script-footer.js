@@ -2,7 +2,7 @@
 (function () {
     var totalScripts = prepareScripts();
     const events = ['click', 'mousemove', 'touchstart', 'keydown'];
-    let listenerTriggered = false;
+    let userInteracted = false;
 
     function rpDebug(method = 'log', ...args) {
         if (
@@ -31,10 +31,8 @@
             });
 
             document.dispatchEvent(allScriptsLoadedEvent);
-            rpDebug('info', 'fired: RapidLoad:DelayedScriptsLoaded')
             rpDebug('table', totalScripts)
-            console.warn('RapidLoad Warning: If you intend to debug JavaScript files, kindly disable the [RapidLoad delay js] feature.');
-
+            rpDebug('info', 'fired: RapidLoad:DelayedScriptsLoaded')
         }
     }
 
@@ -82,6 +80,7 @@
                     resolve(script);
                 };
                 link.onerror = (error) => {
+                    link.parentNode.removeChild(link);
                     resolve(script);
                 };
             });
@@ -106,8 +105,8 @@
 
 
     var listener = async function () {
-        if (!listenerTriggered) {
-            listenerTriggered = true;
+        if (!userInteracted) {
+            userInteracted = true;
             removeEventListeners(); // Remove all event listeners once triggered
             await loadScriptsInDependencyOrder();
 
