@@ -95,6 +95,15 @@ class RapidLoad_Job{
         unset($data['id']);
         unset($data['parent']);
 
+        if(RapidLoad_DB::$current_version < 1.6){
+            if(isset($data['desktop_options'])){
+                unset($data['desktop_options']);
+            }
+            if(isset($data['mobile_options'])){
+                unset($data['mobile_options']);
+            }
+        }
+
         if(isset($this->id)){
 
             $wpdb->update(
