@@ -56,8 +56,7 @@
     function loadScript(script) {
         var scriptElement = script.scriptElement;
         scriptElement.addEventListener('load', () => onScriptLoad(script));
-        scriptElement.addEventListener('error', () => onScriptLoad(script, false)); // Handle script load errors
-
+        scriptElement.addEventListener('error', () => onScriptLoad(script, false));
         if (script.src) {
             scriptElement.setAttribute('src', script.src);
             scriptElement.removeAttribute('data-rapidload-src');
@@ -87,7 +86,6 @@
 
             preloadPromises.push(promise);
 
-            // Append the <link> element to the <head> to trigger preloading
             document.head.appendChild(link);
         });
 
@@ -107,10 +105,10 @@
     var listener = async function () {
         if (!userInteracted) {
             userInteracted = true;
-            removeEventListeners(); // Remove all event listeners once triggered
+            removeEventListeners();
             await loadScriptsInDependencyOrder();
 
-            // Check if there are no scripts to load
+
             if (totalScripts === 0) {
                 var allScriptsLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptsLoaded', {
                     bubbles: true,
