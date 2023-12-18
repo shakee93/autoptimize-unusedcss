@@ -75,3 +75,39 @@ export const Average:FC<SvgProps> = ({cls}) => (
         <rect width="9" height="9" fill="#FFAA33"></rect>
     </svg>
 );
+
+export const AuditsLine:FC<SvgProps> = ({cls}) => (
+    <svg className={`${cls}`} width="30" height="40" viewBox="0 0 8 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0.5 0.5V12.5C0.5 17.5 4.3 17.5 7.5 17.5" stroke="#B5B5B5" stroke-opacity="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+);
+
+// export const SettingsLine: FC<SvgProps & { width?: number }> = ({ cls, width = 400 }) => {
+//     // Calculate adjusted path values based on the new width
+//     const adjustedPath = `M${width - 0.5} ${15.5}C${width - 0.5} 9.5 ${width - 5.5} 8 ${width - 9.5} 8C${width - (width - 190.5)} 8 ${width - (width - 89.7)} 8 ${width - (width - 75.5)} 8C${width - (width - 72)} 8 ${width - (width - 66)} 8.5 ${width - (width - 66)} 1`;
+//
+//     return (
+//         <svg className={`${cls}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+//             <path d={adjustedPath} stroke="#0e0e0e" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
+//         </svg>
+//     );
+// };
+
+export const SettingsLine: FC<SvgProps & { width?: number }> = ({ width = 400 }) => {
+    const adjustedPath = `M${width - (width - 66)} 1C${width - (width - 66)} 8.5 ${width - (width - 72)} 8 ${width - (width - 75.5)} 8C${width - (width - 89.7)} 8 ${width - (width - 140.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
+
+    return (
+        <svg
+            className="mb-2 -mt-2 -ml-9 selectionBar"
+            width={width}
+            height="16"
+            viewBox={`0 0 ${width} 16`}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d={adjustedPath} stroke="#0e0e0e" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+};
+
+

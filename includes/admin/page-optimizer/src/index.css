@@ -118,3 +118,18 @@
   /* Rotate the gradient 90 degrees */
   background-image: linear-gradient(white, white), linear-gradient(25deg, #b3bdcb, #4b5563);
 }
+
+.selectionBar {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw infinite 2s ease-in-out alternate;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

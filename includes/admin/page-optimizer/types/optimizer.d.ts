@@ -174,7 +174,7 @@ interface AuditSettingInput {
     action: string
 }
 
-type ControlTypes = 'checkbox' | 'textarea' | string
+type ControlTypes = 'checkbox' | 'textarea' | 'tickbox' | string
 
 interface Metric {
     id: string;

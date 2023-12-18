@@ -17,6 +17,7 @@ import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
+import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -95,6 +96,7 @@ const Performance = () => {
                         " dark:hover:text-brand-300"
                     )}
                 > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+
                 <Card data-tour='audit-groups'
                       className={cn(
                           'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
@@ -154,6 +156,7 @@ const Performance = () => {
                     </div>
                 </Card>
             </div>
+
             <div className="audits pt-4 flex mb-24">
                 <div className='w-full'>
                     <AnimatePresence initial={false}>

@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 // import { X } from "lucide-react";
 
 
-import { Switch } from "components/ui/switch"
+import { Checkbox } from "components/ui/checkbox";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
 import {useDispatch} from "react-redux";
@@ -110,6 +110,8 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
 
     if (!settings) {
         return <></>
+    }else{
+        console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -170,14 +172,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
     }, [updates, open])
 
 
-    // TODO: temp fix for scroll view leakage
-    // useEffect(() => {
-    //     if (open) {
-    //         const content =  document.getElementById('rapidload-page-optimizer-content');
-    //         content?.scrollTo(0, 0)
-    //     }
-    // }, [open])
-
 
 
 
@@ -205,16 +199,16 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
     }
 
     return (
+
+        <>
         <div
             key={index}
             className={cn(
-                'relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pr-2 py-1',
+                'relative flex cursor-pointer gap-2 font-medium text-base w-fit items-center pr-2 py-1',
                 showIcons ? 'px-0.5': 'px-2'
             )}
         >
-
             {showIcons && icons[settings.category as keyof typeof icons]}
-            {settings.name}
 
             {!hideActions && (
                 <>
@@ -222,75 +216,97 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
                     {mainInput && (
                         <>
                             {mainInput.control_type === 'checkbox' && (
-                                <Switch disabled={['onboard', 'preview'].includes(mode)}
-                                        checked={mainInput.value}
-                                        onCheckedChange={(c: boolean) => updateValue(settings, c, mainInput.key)}/>
+                                <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                          checked={mainInput.value}
+                                          onCheckedChange={(c: boolean) => updateValue(settings, c, mainInput.key)}/>
 
-                            )}
-                            {mainInput.control_type === 'button' && (
-                                <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
-                                        className='flex -mr-0.5 gap-1 py-1 px-2.5 h-auto rounded-[8px]'>
-                                    <span className='text-xs py-1 px-0.5'>{mainInput.control_label}</span>
-                                </Button>
                             )}
                         </>
                     )}
-
-                    {settings.status && (
-                        <div className='px-1'>
-                            <Status status={settings.status}/>
-                        </div>
-                    )}
-
-                    <Mode>
-                        {showPopover && (
-                            <Dialog open={open} onOpenChange={setOpen}>
-                                <DialogTrigger disabled asChild>
-                                    <div >
-                                        <TooltipText text={`${settings.name} Settings`}>
-                                            <Cog6ToothIcon className='w-5 text-brand-400'/>
-                                        </TooltipText>
-                                    </div>
-                                </DialogTrigger>
-                                <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
-
-                                    <DialogHeader className='border-b px-6 py-7'>
-                                        <DialogTitle>{settings.name} Settings</DialogTitle>
-                                        <DialogDescription>
-                                            Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
-                                        </DialogDescription>
-                                    </DialogHeader>
-
-                                    <div className="grid gap-4 px-6 py-4">
-                                        {additionalInputs.map((input, index) =>
-                                            <div key={index} >
-                                                <Fields input={input} updates={updates} update={update} />
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <DialogFooter className='px-6 py-3 border-t'>
-                                        <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
-                                        <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
-                                    </DialogFooter>
-
-                                </DialogContent>
-                            </Dialog>
-
-
-                        )}
-
-
-                    </Mode>
-
-                    <Mode mode='onboard'>
-                        <TooltipText text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
-                            <Lock className='w-4 text-brand-400'/>
-                        </TooltipText>
-                    </Mode>
                 </>
             )}
+            <div className='flex flex-col'>
+                <div className='relative flex items-center gap-2 font-medium text-base w-fit items-center pr-2 py-0.5'>
+                    {settings.name}
+                    {!hideActions && (
+                        <>
+
+                            {mainInput && (
+                                <>
+                                    {mainInput.control_type === 'button' && (
+                                        <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
+                                                className='flex -mr-0.5 gap-1 py-1 px-2.5 h-auto rounded-[8px]'>
+                                            <span className='text-xs py-1 px-0.5'>{mainInput.control_label}</span>
+                                        </Button>
+                                    )}
+                                </>
+                            )}
+
+                            {settings.status && (
+                                <div className='px-1'>
+                                    <Status status={settings.status}/>
+                                </div>
+                            )}
+
+                            <Mode>
+                                {showPopover && (
+                                    <Dialog open={open} onOpenChange={setOpen}>
+                                        <DialogTrigger disabled asChild>
+                                            <div >
+                                                <TooltipText text={`${settings.name} Settings`}>
+                                                    <Cog6ToothIcon className='w-5 text-brand-400'/>
+                                                </TooltipText>
+                                            </div>
+                                        </DialogTrigger>
+                                        <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
+
+                                            <DialogHeader className='border-b px-6 py-7'>
+                                                <DialogTitle>{settings.name} Settings</DialogTitle>
+                                                <DialogDescription>
+                                                    Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
+                                                </DialogDescription>
+                                            </DialogHeader>
+
+                                            <div className="grid gap-4 px-6 py-4">
+                                                {additionalInputs.map((input, index) =>
+                                                    <div key={index} >
+                                                        <Fields input={input} updates={updates} update={update} />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <DialogFooter className='px-6 py-3 border-t'>
+                                                <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
+                                                <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
+                                            </DialogFooter>
+
+                                        </DialogContent>
+                                    </Dialog>
+
+
+                                )}
+
+
+                            </Mode>
+
+                            <Mode mode='onboard'>
+                                <TooltipText text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
+                                    <Lock className='w-4 text-brand-400'/>
+                                </TooltipText>
+                            </Mode>
+
+                        </>
+
+                    )}
+                </div>
+
+                <p className='text-sm font-normal'>Remove unnecessary spaces, lines and comments from CSS files. {settings.category}</p>
+
+            </div>
+
+
         </div>
+        </>
     );
 };
 

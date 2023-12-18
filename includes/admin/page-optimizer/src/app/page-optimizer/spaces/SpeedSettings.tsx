@@ -1,26 +1,41 @@
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
     CloudDelivery, CSSDelivery, FontDelivery,
     ImageDeliverySVG,
     JavascriptDelivery,
-    PageCache
+    PageCache,
+    AuditsLine, SettingsLine
 } from "app/page-optimizer/components/icons/icon-svg";
-import Setting from "app/page-optimizer/components/audit/Setting";
+import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {CheckCircleIcon} from "@heroicons/react/24/solid";
+import {CheckCircleIcon, ChevronRightIcon} from "@heroicons/react/24/solid";
+import {updateSettings} from "../../../store/app/appActions";
+import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 
-const SpeedSettings = () => {
+interface SettingsProps {
+    audit: Audit
+    auditSettings?: AuditSetting[]
+    max?: number
+    type?: string
+    className?: string
+    hideActions?: boolean
+    children?: ReactNode
+}
+type GroupedSettings = Record<string, AuditSetting[]>;
+
+const SpeedSettings = ({ audit }: SettingsProps) => {
 
     const {settings, data} = useSelector(optimizerData);
     const [activeCategory, setActiveCategory]= useState('image')
     const [groupedSettings, setGroupedSettings] = useState({})
     const {dispatch, openAudits, activeTab} = useCommonDispatch()
+    const categoryOrder = [ 'cache', 'image', 'javascript', 'css', 'font', 'cdn'];
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,
@@ -46,35 +61,69 @@ const SpeedSettings = () => {
         return grouped;
     };
 
+    // useEffect(() => {
+    //     setGroupedSettings(groupByCategory(settings))
+    //
+    // }, [data, settings])
     useEffect(() => {
-        setGroupedSettings(groupByCategory(settings))
-    }, [data, settings])
+        const grouped = groupByCategory(settings);
+        const sortedCategories = Object.keys(grouped).sort((a, b) => {
+            const indexA = categoryOrder.indexOf(a);
+            const indexB = categoryOrder.indexOf(b);
+            return indexA - indexB;
+        });
+
+        const sortedGroupedSettings: GroupedSettings = {};
+        sortedCategories.forEach((category) => {
+            //sortedGroupedSettings[category] = grouped[category as keyof typeof grouped];
+            sortedGroupedSettings[category] = grouped[category];
+        });
+
+        setGroupedSettings(sortedGroupedSettings);
+    }, [data, settings]);
+
+    const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
+
+        dispatch(updateSettings(
+            audit,
+            setting,
+            key,
+            value
+        ));
+    }, [settings])
+
+    const getWidthForCategory = (category) => {
+        switch (category) {
+            case 'cdn':
+                return 750;
+            case 'font':
+                return 640;
+            case 'css':
+                return 530;
+            case 'javascript':
+                return 400;
+            case 'image':
+                return 270;
+            case 'cache':
+                return 150;
+            default:
+                return 270;
+        }
+    };
 
     return <div>
-        <ul className='flex gap-4'>
+        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} />
+        <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
                     <div className={cn(
-                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
+                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50 shadow-md',
                         activeCategory === category && ''
                     )}>
                         {icons[category]}
                         <span>
                         {category}
                         </span>
-                        {groupedSettings[category].filter((s: AuditSetting) => s.inputs[0].value ).length > 0 &&
-
-                            <div className={
-                                cn(
-                                    'flex text-xxs items-center justify-center rounded-full w-6 h-6 bg-brand-200',
-                                )}>
-                            <span className={cn(
-                                ''
-                            )}>
-                                {groupedSettings[category].filter((s: AuditSetting) => s.inputs[0].value ).length}
-                            </span>
-                            </div>
-                        }
 
                     </div>
 
@@ -83,25 +132,27 @@ const SpeedSettings = () => {
 
 
         </ul>
+
         <ul>
             {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
-                    {(item.audits.length > 0
-                            &&
-                            (
-                                item.inputs[0].value
-                                && item.audits.filter((a: Audit) => a.type === 'passed_audit').length > 0
-                            )
-                        ||
-                            (
-                                item.audits.filter((a: Audit) => a.type !== 'passed_audit').length > 0
-                            )
-                        ) &&
+                    {item.audits.length > 0
+                             &&
+                        //     (
+                        //         item.inputs[0].value
+                        //         && item.audits.filter((a: Audit) => a.type === 'passed_audit').length > 0
+                        //     )
+                        // ||
+                        //     (
+                        //         item.audits.filter((a: Audit) => a.type !== 'passed_audit').length > 0
+                        //     )
+                        // ) &&
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
 
-                            <Setting showIcons={false} settings={item} updateValue={() => {}} index={itemIndex}/>
-
-                            <ul className='flex mt-2 justify-start'>
+                            <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} index={itemIndex}/>
+                            {/*<p className='px-10 text-sm'>Remove unnecessary spaces, lines and comments from CSS files.</p>*/}
+                            <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
+                                <AuditsLine cls='w-4 mr-2  -mt-1'/>
                                 {item.audits.map((audit: Audit, index) =>
                                     <li
                                         onClick={e => {
@@ -114,19 +165,32 @@ const SpeedSettings = () => {
                                                 document.getElementById(`audit-${audit.id}`)?.scrollIntoView({ behavior: 'smooth'})
                                             }, 100)
                                         }}
-                                        className='flex cursor-pointer items-center gap-1.5 text-sm px-2 py-1 rounded-xl' key={index}>
-                                        {audit.type === 'passed_audit' ?
-                                            <CheckCircleIcon className='w-5 fill-green-600'/> :
-                                            <Circle className={cn(
-                                                'w-2 stroke-0',
-                                                audit.type === 'passed_audit' && 'fill-green-600',
-                                                audit.type === 'opportunity' && 'fill-orange-600',
-                                                audit.type === 'diagnostics' && 'fill-yellow-400',
-                                            )} />
-                                        }
+                                        className='relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2' key={index}>
+                                        <div
+                                            className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
+                                            {audit.type === 'passed_audit' ?
+                                                <CheckCircleIcon className='w-5 fill-green-600'/> :
+                                                <Circle className={cn(
+                                                    'w-2 stroke-0',
+                                                    audit.type === 'passed_audit' && 'fill-green-600',
+                                                    audit.type === 'opportunity' && 'fill-orange-600',
+                                                    audit.type === 'diagnostics' && 'fill-yellow-400',
+                                                )} />
+                                            }
+                                        </div>
 
+                                        <div className="flex flex-col">
+                                            {audit.name}
+                                            <div className="flex items-center">
+                                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] -mt-1">Opportunity</div>
 
-                                        {audit.name}
+                                                <div className=" text-gray-500 text-xs -mt-1 block">{audit.displayValue ? audit.displayValue : ''}</div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <ChevronRightIcon className='h-5'/>
                                     </li>
                                 )}
                             </ul>
