@@ -31,11 +31,6 @@ class RapidLoad_Optimizer
         add_action('wp_ajax_fetch_page_speed', [$this, 'fetch_page_speed']);
         add_action('wp_ajax_nopriv_fetch_page_speed', [$this, 'fetch_page_speed']);
 
-        self::log([
-            'url' => null,
-            'log' => 'RapidLoad_Optimizer__construct'
-        ]);
-
         add_action('wp_ajax_optimizer_update_settings', [$this,'optimizer_update_settings']);
         add_action('wp_ajax_nopriv_optimizer_update_settings', [$this,'optimizer_update_settings']);
 
