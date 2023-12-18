@@ -117,8 +117,8 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
                     <div className={cn(
-                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50 shadow-md',
-                        activeCategory === category && ''
+                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
+                        activeCategory === category ? 'shadow-md' : '' && ''
                     )}>
                         {icons[category]}
                         <span>
