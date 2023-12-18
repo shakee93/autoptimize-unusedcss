@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.5 - 18/12/2023 =
+ * fix: syntax error in rapidload dashboard
+
 = 2.2.4 - 15/12/2023 =
  * improved: delay js event handling
 
