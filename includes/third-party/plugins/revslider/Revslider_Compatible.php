@@ -31,7 +31,7 @@ class Revslider_Compatible extends RapidLoad_ThirdParty {
     public function exclude_from_modern_images($value, $src){
 
         if($this->str_contains($src, '/revslider/public/assets/assets/dummy.png')){
-            return true;
+            //return true;
         }
 
         return $value;
