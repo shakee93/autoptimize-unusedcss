@@ -392,8 +392,6 @@ class RapidLoad_Optimizer
 
     public function handle_rest_api_fetch_page_speed(WP_REST_Request $request){
 
-        self::verify_nonce();
-
         $url = $request->get_param('url');
 
         if(!isset($url) || empty($url)){
