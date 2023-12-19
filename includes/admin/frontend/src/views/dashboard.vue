@@ -420,9 +420,13 @@ export default {
     window.addEventListener('rapidLoad:optimizer-mounted', () => {
       if (this.on_board_complete ==='') {
          this.welcomeModel=true;
-      }else if(window.location.href.indexOf("nonce") > -1 && localStorage.getItem('RapidLoadOptimizer') !== 'true'){
-        localStorage.setItem('RapidLoadOptimizer', 'true');
-        this.openOptimizer();
+      }else if(window.location.href.indexOf("source=rapidload_app") > -1 && localStorage.getItem('RapidLoadOptimizer') !== 'true'){
+
+        if(this.db_tobe_updated===''){
+          localStorage.setItem('RapidLoadOptimizer', 'true');
+          this.openOptimizer();
+        }
+
       }
     });
 
@@ -492,6 +496,7 @@ export default {
       }).then((response)=>{
 
         if(response.data?.success){
+
           window.location.reload();
         }else{
           this.updateError = response.data?.error;
@@ -509,7 +514,8 @@ export default {
 
     openOptimizer() {
       if (window.RapidLoadOptimizer) {
-        window.RapidLoadOptimizer.showOptimizer(true)
+        window.RapidLoadOptimizer.showOptimizer(true);
+
       }
     },
 
@@ -695,6 +701,7 @@ export default {
 
   data() {
     return {
+      update_databse: false,
       store_toggle_data: [],
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
