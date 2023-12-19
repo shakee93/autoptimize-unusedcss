@@ -547,7 +547,18 @@ class RapidLoad_Image_Enqueue
     public function extractUrl($url){
 
         if(!$this->isAbsolute($url)){
+
             $url = $this->makeURLAbsolute($url, site_url());
+        }
+
+        if (substr($url, 0, 2) === '//') {
+
+            $completeUrl = 'https:' . $url;
+
+            if (filter_var($completeUrl, FILTER_VALIDATE_URL) && preg_match('/^https?:\/\/[\w-]+\.[\w.-]+/', $completeUrl)) {
+
+                $url = $completeUrl;
+            }
         }
 
         return $url;
