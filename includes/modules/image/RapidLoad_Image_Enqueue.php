@@ -65,6 +65,10 @@ class RapidLoad_Image_Enqueue
             [
                 'tag' => 'img',
                 'attr' => 'data-src'
+            ],
+            [
+                'tag' => 'img',
+                'attr' => 'data-lazyload'
             ]
         ];
 
