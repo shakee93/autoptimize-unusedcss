@@ -17,6 +17,15 @@ class Revslider_Compatible extends RapidLoad_ThirdParty {
     public function init_hooks()
     {
         add_filter('rapidload/image/exclude_from_modern_image_format', [$this, 'exclude_from_modern_images'], 10, 2);
+        add_filter('uucss/enqueue/before/wrap-inline-js', [$this, 'handle_before_wrap_inline_js'], 10, 1);
+    }
+
+    public function handle_before_wrap_inline_js($snippet){
+
+        $pattern = '/(?<!window\.)\b(revapi\d+)\b\.revolutionInit/';
+        $replacement = 'window.$1.revolutionInit';
+
+        return preg_replace($pattern, $replacement, $snippet);
     }
 
     public function exclude_from_modern_images($value, $src){

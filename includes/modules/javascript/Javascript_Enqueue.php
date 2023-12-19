@@ -576,6 +576,7 @@ class Javascript_Enqueue
                 }
             }
 
+            $snippets = apply_filters('uucss/enqueue/before/wrap-inline-js', $snippets);
             // Return the original JavaScript snippet
             return $this->wrapWithJavaScriptEvent($eventToBind, $snippets);
         } catch (Exception $exception) {
