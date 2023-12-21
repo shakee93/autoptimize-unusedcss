@@ -224,19 +224,7 @@ class RapidLoad_Admin_Bar {
 
         if(apply_filters('rapidload/tool-bar-menu',true)){
 
-            $current_user = wp_get_current_user();
-
-            if(!$current_user){
-                return;
-            }
-
-            if(!isset($current_user->roles[0])){
-                return;
-            }
-
-            $user_role = $current_user->roles[0];
-
-            if ( $user_role !== 'customer' && $user_role !== 'subscriber' ) {
+            if ( current_user_can( 'manage_options' ) ) {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload',

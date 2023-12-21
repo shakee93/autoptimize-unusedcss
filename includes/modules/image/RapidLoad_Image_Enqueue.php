@@ -505,23 +505,55 @@ class RapidLoad_Image_Enqueue
                         continue;
                     }
 
-                    $url = $this->extractUrl($img->{$attribute['attr']});
+                    if (strpos($img->{$attribute['attr']}, 'data:image/svg+xml;base64,') === 0) {
 
-                    $file_path = self::get_file_path_from_url($url);
+                        $encoded_svg = str_replace("data:image/svg+xml;base64,","",$img->{$attribute['attr']});
 
-                    $dimension = self::get_width_height($file_path);
+                        $decoded_svg_data = base64_decode($encoded_svg);
 
-                    if ($dimension && isset($dimension['width']) && $dimension['height']) {
+                        if (preg_match('/<svg[^>]*>/i', $decoded_svg_data, $matches)) {
 
-                        if (!isset($img->width)) {
-                            $img->width = $dimension['width'];
+                            $dom = new DOMDocument();
+                            $dom->loadXML($decoded_svg_data);
+                            $svgElement = $dom->getElementsByTagName('svg')->item(0);
+
+                            if ($svgElement) {
+
+                                $width = $svgElement->getAttribute('width');
+                                $height = $svgElement->getAttribute('height');
+
+                                if (!empty($width) && !isset($img->width)) {
+                                    $img->width = str_replace("px","", $width);
+                                }
+
+                                if (!empty($height) && !isset($img->height)) {
+                                    $img->height = str_replace("px","", $height);
+                                }
+                            }
+
                         }
 
-                        if (!isset($img->height) || $img->height == "auto") {
-                            $img->height = $this->calculateSecondImageHeight($dimension['width'],  $dimension['height'], $img->width);
-                        }
+                    } else {
 
+                        $url = $this->extractUrl($img->{$attribute['attr']});
+
+                        $file_path = self::get_file_path_from_url($url);
+
+                        $dimension = self::get_width_height($file_path);
+
+                        if ($dimension && isset($dimension['width']) && isset($dimension['height'])) {
+
+                            if (!isset($img->width)) {
+                                $img->width = $dimension['width'];
+                            }
+
+                            if (!isset($img->height) || $img->height == "auto") {
+                                $img->height = $this->calculateSecondImageHeight($dimension['width'],  $dimension['height'], $img->width);
+                            }
+
+                        }
                     }
+
                 }
 
             }
