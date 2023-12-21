@@ -511,6 +511,8 @@ class RapidLoad_Image_Enqueue
 
                         $decoded_svg_data = base64_decode($encoded_svg);
 
+                        error_log($decoded_svg_data);
+
                         if (preg_match('/<svg[^>]*>/i', $decoded_svg_data, $matches)) {
 
                             $dom = new DOMDocument();
@@ -523,11 +525,11 @@ class RapidLoad_Image_Enqueue
                                 $height = $svgElement->getAttribute('height');
 
                                 if (!empty($width) && !isset($img->width)) {
-                                    $img->width = str_replace("px","", $width);
+                                    $img->width = str_replace(array("px", "pt"),"", $width);
                                 }
 
                                 if (!empty($height) && !isset($img->height)) {
-                                    $img->height = str_replace("px","", $height);
+                                    $img->height = str_replace(array("px", "pt"),"", $height);
                                 }
                             }
 
