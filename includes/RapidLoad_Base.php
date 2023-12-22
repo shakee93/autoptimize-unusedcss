@@ -76,13 +76,6 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
-            $this->container['feedback'] = new RapidLoad_Feedback();
-            $this->container['buffer'] = new RapidLoad_Buffer();
-
-        });
-
-        add_action('init', function (){
-
             self::fetch_options();
 
             if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
@@ -149,12 +142,13 @@ class RapidLoad_Base
                 //add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
             }
 
+            $this->container['feedback'] = new RapidLoad_Feedback();
+            $this->container['buffer'] = new RapidLoad_Buffer();
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
             $this->container['rest_api'] = new RapidLoadRestApi();
-            //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
             $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });

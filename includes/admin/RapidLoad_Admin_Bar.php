@@ -30,7 +30,9 @@ class RapidLoad_Admin_Bar {
             (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) ||
             (is_admin() && $page === 'rapidload')
         ) {
-            $this->load_optimizer_scripts();
+            add_action('init', function (){
+                $this->load_optimizer_scripts();
+            });
 
             add_action('wp_after_admin_bar_render', function () {
                 echo '<div id="rapidload-page-optimizer"></div>';

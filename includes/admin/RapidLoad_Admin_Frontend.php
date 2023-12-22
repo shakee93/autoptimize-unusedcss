@@ -17,46 +17,48 @@ class RapidLoad_Admin_Frontend
 
         new RapidLoad_Admin_Bar();
 
-        if($this->is_rapidload_legacy_page()){
+        add_action('init', function (){
 
-            $this->load_legacy_scripts();
+            if($this->is_rapidload_legacy_page()){
 
-        }
+                $this->load_legacy_scripts();
+
+            }
+
+            if ($this->is_rapidload_page()) {
+
+                $this->load_scripts();
+
+                // TODO: temporary should be removed so it supports all the browsers
+                add_filter('script_loader_tag', function ($tag, $handle) {
+
+                    if ( 'rapidload_admin_frontend' !== $handle )
+                        return $tag;
+
+                    return str_replace( ' src', ' type="module" src', $tag );
+
+                }, 10, 2);
+
+            }
+
+            if ($this->is_rapidload_on_board()) {
+
+                $this->load_on_board_scripts();
+
+                // TODO: temporary should be removed so it supports all the browsers
+                add_filter('script_loader_tag', function ($tag, $handle) {
+
+                    if ( 'rapidload_admin_on_board' !== $handle )
+                        return $tag;
+
+                    return str_replace( ' src', ' type="module" src', $tag );
+
+                }, 10, 2);
+
+            }
+        });
 
         $this->load_legacy_ajax();
-
-        if ($this->is_rapidload_page()) {
-
-            $this->load_scripts();
-
-            // TODO: temporary should be removed so it supports all the browsers
-            add_filter('script_loader_tag', function ($tag, $handle) {
-
-                if ( 'rapidload_admin_frontend' !== $handle )
-                    return $tag;
-
-                return str_replace( ' src', ' type="module" src', $tag );
-
-            }, 10, 2);
-
-        }
-
-
-        if ($this->is_rapidload_on_board()) {
-
-            $this->load_on_board_scripts();
-
-            // TODO: temporary should be removed so it supports all the browsers
-            add_filter('script_loader_tag', function ($tag, $handle) {
-
-                if ( 'rapidload_admin_on_board' !== $handle )
-                    return $tag;
-
-                return str_replace( ' src', ' type="module" src', $tag );
-
-            }, 10, 2);
-
-        }
 
         /*if($this->is_rapidload_page_optimizer()){
 
