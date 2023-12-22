@@ -54,13 +54,20 @@
     }
 
     function loadScript(script) {
-        var scriptElement = script.scriptElement;
-        scriptElement.addEventListener('load', () => onScriptLoad(script));
-        scriptElement.addEventListener('error', () => onScriptLoad(script, false));
-        if (script.src) {
-            scriptElement.setAttribute('src', script.src);
-            scriptElement.removeAttribute('data-rapidload-src');
-        }
+        return new Promise((resolve, reject)=>{
+            var scriptElement = script.scriptElement;
+            scriptElement.addEventListener('load', () => onScriptLoad(script));
+            scriptElement.addEventListener('error', () => onScriptLoad(script, false));
+
+            setTimeout(() => {
+                if (script.src) {
+                    scriptElement.setAttribute('src', script.src);
+                    scriptElement.removeAttribute('data-rapidload-src');
+                }
+                resolve(); // Resolve the promise after setting the src attribute
+            }, 15); // 1000 milliseconds = 1 second
+
+        })
     }
 
     async function preloadScripts(totalScripts) {
@@ -72,19 +79,26 @@
             link.as = 'script';
             link.fetchpriority = 'high';
             link.href = script.src;
+            let promise = null
 
-            const promise = new Promise((resolve, reject) => {
-                link.onload = () => {
-                    link.parentNode.removeChild(link);
-                    resolve(script);
-                };
-                link.onerror = (error) => {
-                    link.parentNode.removeChild(link);
-                    resolve(script);
-                };
-            });
+            try {
+                promise = new Promise((resolve, reject) => {
+                    link.onload = () => {
+                        link.parentNode.removeChild(link);
+                        resolve(script);
+                    };
+                    link.onerror = (error) => {
+                        link.parentNode.removeChild(link);
+                        resolve(script);
+                    };
+                });
+            }catch (e){
+                console.log(e)
+            }
 
-            preloadPromises.push(promise);
+            if(promise){
+                preloadPromises.push(promise);
+            }
 
             document.head.appendChild(link);
         });
@@ -97,7 +111,7 @@
         await preloadScripts(totalScripts)
 
         for (const script of totalScripts) {
-            loadScript(script);
+            await loadScript(script);
         }
     }
 
@@ -107,7 +121,6 @@
             userInteracted = true;
             removeEventListeners();
             await loadScriptsInDependencyOrder();
-
 
             if (totalScripts === 0) {
                 var allScriptsLoadedEvent = new CustomEvent('RapidLoad:DelayedScriptsLoaded', {
