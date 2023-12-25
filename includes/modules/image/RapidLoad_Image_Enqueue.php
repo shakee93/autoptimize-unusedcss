@@ -511,8 +511,6 @@ class RapidLoad_Image_Enqueue
 
                         $decoded_svg_data = base64_decode($encoded_svg);
 
-                        error_log($decoded_svg_data);
-
                         if (preg_match('/<svg[^>]*>/i', $decoded_svg_data, $matches)) {
 
                             $dom = new DOMDocument();
