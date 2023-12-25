@@ -32,6 +32,10 @@ class CriticalCSS_Store
 
         if(isset($this->args['immediate'])){
 
+            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
+
             $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
 
             $result = $uucss_api->post( 'purger/cpcss',

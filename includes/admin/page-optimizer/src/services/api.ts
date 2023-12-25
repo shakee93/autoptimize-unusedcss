@@ -31,7 +31,7 @@ class ApiService {
 
     }
 
-    async throwIfError(response: Response) {
+    async throwIfError(response: Response, state: any = null) {
 
         if (!response.ok) {
             throw new Error("Oops! The request failed");
@@ -46,8 +46,9 @@ class ApiService {
             }
 
             if (Array.isArray(data?.data)) {
+
                 throw new Error(
-                    `[Code:${data.data[0].code}] ${data.data[0].detail}`
+                    `[Code:${data.data[0].code}] ${data.data[0].detail ? data.data[0].detail : 'Internal error occurred on our end :('}`
                 );
             }
 
@@ -56,14 +57,17 @@ class ApiService {
             );
         }
 
-        return data
+        return {
+            ...data,
+            state
+        }
     }
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
 
 
         try {
-
+            let fresh = reload
             let data = null
 
             if (reload) {
@@ -105,11 +109,14 @@ class ApiService {
             });
 
 
-            let responseData = await this.throwIfError(response);
+            let responseData = await this.throwIfError(response, {
+                fresh: reload
+            });
 
             if (responseData?.reload) {
                 return await this.fetchPageSpeed(url, activeReport, true);
             }
+
 
             return responseData
 
@@ -122,11 +129,13 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
+           const api_root = this.options?.api_root || 'http://localhost:5556/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
            pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', strategy)
+           pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
+           pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
            const pageSpeed = await fetch(pageSpeedURL, {
                method: "POST",
@@ -191,7 +200,9 @@ class ApiService {
             }
 
             for (let key of Object.keys(queryParams)) {
-                this.baseURL.searchParams.append(key, queryParams[key])
+                if (!this.baseURL.searchParams.has(key)) {
+                    this.baseURL.searchParams.append(key, queryParams[key]);
+                }
             }
 
             const response = await fetch(this.baseURL, {
@@ -206,6 +217,42 @@ class ApiService {
             console.error(error);
             throw error;
         }
+    }
+
+    async request(endpoint: string,
+                  params:{[p: string] : string} = {},
+                  type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
+    ) {
+
+        let base = new URL(this.options.rest_url);
+
+        try {
+
+
+            for (let key of Object.keys(params)) {
+                if (!base.searchParams.has(key)) {
+                    base.searchParams.append(key, params[key]);
+                }
+            }
+
+            base.pathname += endpoint;
+
+            const response = await fetch(base, {
+                method: type,
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
+    }
+    rest() {
+        return this
     }
 }
 

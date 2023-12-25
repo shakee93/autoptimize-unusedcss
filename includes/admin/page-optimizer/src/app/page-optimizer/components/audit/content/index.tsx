@@ -9,16 +9,22 @@ interface AuditContentProps {
     setHelpOpen: Dispatch<SetStateAction<boolean>>
 }
 
+import version from 'semver-compare';
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
     RowData
 } from "@tanstack/react-table";
 import {isDev, transformFileType} from "lib/utils";
 import FileGroup from "app/page-optimizer/components/audit/content/FileGroup";
 import Treeview from "components/tree-view";
-import {Circle, XIcon} from "lucide-react";
+import {ArrowRight, ArrowRightFromLine, ArrowRightToLine, Circle, Info, Terminal, XIcon} from "lucide-react";
 import {auditPoints} from "app/page-optimizer/components/audit/KeyPoints";
 import {XCircleIcon} from "@heroicons/react/24/solid";
 import SupportCard from "app/page-optimizer/components/audit/SupportCard";
+import {useAppContext} from "../../../../../context/app";
+import ApiService from "../../../../../services/api";
+import {Button} from "components/ui/button";
 
 
 declare module '@tanstack/react-table' {
@@ -32,11 +38,11 @@ declare module '@tanstack/react-table' {
 
 const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
 
+    const {options} = useAppContext()
 
     if (isDev && audit.files?.type && !["table", "opportunity", "list", "criticalrequestchain"].includes(audit.files.type)) {
         return <JsonView data={audit} shouldInitiallyExpand={(level) => false}/>;
     }
-
 
     let remainingSettings = useMemo(() => (
         audit
@@ -50,6 +56,14 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
         return auditPoints[audit.id] || []
     }, [])
 
+    async function ping() {
+        let api = new ApiService(options).rest()
+
+        let data  = await api.request('/ping', {
+            'url' : 'https://rapidload.local/'
+        })
+    }
+
     return (
         <div className="relative border-t w-full pt-4">
             {helpOpen &&
@@ -59,6 +73,19 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
                 <div className="px-4 ml-2">
                    {/*<Help audit={audit}/>*/}
                     <Description content={audit.description}/>
+
+                    {version(options.rapidload_version, '2.1.14') === 1 && ['bootup-time', 'unused-javascript'].includes(audit.id) && audit.type === 'passed_audit' &&
+
+                        <Alert className='mt-4 flex items-center gap-2'>
+                           <div>
+                               <Info className="h-5 w-5 text-blue-500" />
+                           </div>
+                            <AlertDescription className='flex items-center gap-1'>
+                                You can exclude delayed javascript files using <span className='flex items-center text-brand-900 font-medium'>RapidLoad dashboard <ArrowRight className='w-4'/> Javascript</span>
+                            </AlertDescription>
+                        </Alert>
+                    }
+
 
                     {points.length > 0 &&
                         <ul className='px-3 mt-2 flex text-sm gap-3 text-brand-500 dark:text-brand-400'>
@@ -120,5 +147,7 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
         </div>
     );
 };
+
+AuditContent.displayName= 'AuditContent'
 
 export default AuditContent;

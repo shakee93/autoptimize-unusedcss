@@ -122,6 +122,8 @@ class UnusedCSS_Enqueue
 
             $this->inject->found_sheets = true;
 
+            $file_missing_error = "RapidLoad optimized version for the file missing.";
+
             if ( self::is_css( $sheet ) && !$this->is_file_excluded($this->options, $link)) {
 
                 array_push( $this->inject->found_css_files, $link );
@@ -135,6 +137,8 @@ class UnusedCSS_Enqueue
                     if(isset($url_parts['path'])){
 
                         $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
+
+                        $file_missing_error .= (":" . $search_link);
 
                         $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
 
@@ -184,7 +188,7 @@ class UnusedCSS_Enqueue
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
 
-                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1") {
+                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1" && apply_filters('rapidload/enqueue/inline-small-css/enable', false)) {
 
                         $this->inline_sheet($sheet, $uucss_file);
                     }
@@ -208,7 +212,7 @@ class UnusedCSS_Enqueue
 
                             $warning = [
                                 "file" => $link,
-                                "message" => "RapidLoad optimized version for the file missing."
+                                "message" => $file_missing_error
                             ];
 
                             $this->warnings[] = $warning;

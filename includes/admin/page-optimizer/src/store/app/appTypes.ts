@@ -18,6 +18,10 @@ export interface AppState {
         changes: {
             files: Array<any>
         },
+        state: {
+            fresh?: boolean
+        }
+
     },
     desktop: {
         data?: OptimizerResults | null;
@@ -30,6 +34,9 @@ export interface AppState {
         changes: {
             files: Array<any>
         },
+        state: {
+            fresh?: boolean
+        }
     }
 }
 

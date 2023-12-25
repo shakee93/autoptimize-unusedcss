@@ -50,21 +50,6 @@ const useSubmitSettings = () => {
 
         try {
 
-            if (analyze) {
-
-                try{
-                    setInvalidatingCache(true)
-                    await api.post('clear_page_cache')
-                    setInvalidatingCache(false)
-                }
-                catch (e: any) {
-                    setInvalidatingCache(false)
-                    toast({
-                        description: <div className='flex w-full gap-2 text-center'>{e.message} <XCircleIcon className='w-5 text-red-600'/></div>,
-                    })
-                }
-
-            }
 
             setSavingData(true);
 
@@ -81,6 +66,35 @@ const useSubmitSettings = () => {
             })
 
             if (analyze) {
+                setSavingData(false)
+
+                const USER_AGENTS = {
+                    mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
+                    desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+                };
+
+                try{
+                    setInvalidatingCache(true)
+                    await api.post('clear_page_cache', {
+                        url
+                    })
+
+                    let rest = api.rest()
+
+                    await rest.request('/ping', {
+                        'url' : options.optimizer_url,
+                        'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop
+                    })
+
+                    setInvalidatingCache(false)
+                }
+                catch (e: any) {
+                    setInvalidatingCache(false)
+                    toast({
+                        description: <div className='flex w-full gap-2 text-center'>{e.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                    })
+                }
+
                 dispatch(fetchData(options, url, true));
             }
 

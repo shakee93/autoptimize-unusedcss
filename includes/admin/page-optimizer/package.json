@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.0.58",
+  "version": "1.0.60",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "node build.js",
     "test": "jest",
     "prepare": "tw-patch",
     "version": "npm run build",
@@ -90,6 +90,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",
     "reselect": "^4.1.8",
+    "semver-compare": "^1.0.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
     "underscore": "^1.13.6",
@@ -107,6 +108,7 @@
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-is": "^18.2.2",
+    "@types/semver-compare": "^1.0.3",
     "@types/underscore": "^1.11.6",
     "@types/webfontloader": "^1.6.35",
     "@typescript-eslint/eslint-plugin": "5.48.1",

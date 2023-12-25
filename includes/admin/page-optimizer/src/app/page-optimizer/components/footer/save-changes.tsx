@@ -172,9 +172,9 @@ const SaveChanges = () => {
             action_text: "Save & Analyze"
         },
         {
-            text: 'Save as Global Settings',
-            title: 'Save these settings as global settings?',
-            description: "You have made changes to your settings. Click 'Save Changes' to override global settings or 'Discard' to revert to the previous state.",
+            text: 'Save this for Entire Site',
+            title: 'Save these settings as entire site?',
+            description: "You have made changes to your settings. Click 'Save Changes' to override entire site settings or 'Discard' to revert to the previous state.",
             onClick : () => {
                 submitSettings(false, true)
             }

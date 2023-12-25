@@ -1,5 +1,7 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {
+    CopyMinus,
+    Eraser,
     History,
 } from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
@@ -30,6 +32,12 @@ const Footer = ({ } : FooterProps) => {
         return  <></>
     }
 
+    const resetSettings = () => {
+
+        console.log('implement reset settings');
+
+
+    }
 
     return (
         <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
@@ -71,12 +79,22 @@ const Footer = ({ } : FooterProps) => {
 
                     </Mode>
 
+
                     <TooltipText text='Switch theme'>
                         <div className='hover:dark:text-brand-100'>
                             <ThemeSwitcher></ThemeSwitcher>
                         </div>
                     </TooltipText>
+
+                    {/*<TooltipText text='Reset Settings to Default'>*/}
+                    {/*    <div */}
+                    {/*        onClick={e => resetSettings()}*/}
+                    {/*        className='hover:dark:text-brand-100'>*/}
+                    {/*        <CopyMinus className='w-4'/>*/}
+                    {/*    </div>*/}
+                    {/*</TooltipText>*/}
                 </div>
+
 
                 <SaveChanges/>
 

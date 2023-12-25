@@ -550,7 +550,7 @@ class RapidLoad_Cache
 
         if ( isset( $args['url'] ) ) {
             self::clear_page_cache_by_url( $args['url'] );
-            wp_remote_get( $args['url'] );
+//            wp_remote_get( $args['url'] );
         }
 
     }
@@ -578,7 +578,7 @@ class RapidLoad_Cache
                     '_action' => 'clear',
                 ) ), 'rapidload_cache_clear_cache_nonce' ),
                 'parent' => 'rapidload',
-                'title'  => '<span class="ab-item">' . $title . '</span>',
+                'title'  => '<span class="ab-label">' . $title . '</span>',
                 'meta'   => array( 'title' => $title ),
             )
         );
@@ -592,7 +592,7 @@ class RapidLoad_Cache
                         '_action' => 'clearurl',
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
                     'parent' => 'rapidload',
-                    'title'  => '<span class="ab-item">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
+                    'title'  => '<span class="ab-label">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
                     'meta'   => array( 'title' => esc_html__( 'Clear Page Cache', 'rapidload-cache' ) ),
                 )
             );
@@ -824,7 +824,7 @@ class RapidLoad_Cache
             'clear_site_cache_on_saved_user'     => 0,
             'clear_site_cache_on_changed_plugin' => 0,
             'convert_image_urls_to_webp'         => 0,
-            'mobile_cache'                       => 0,
+            'mobile_cache'                       => 1,
             'compress_cache'                     => 0,
             'minify_html'                        => 1,
             'minify_inline_css_js'               => 0,

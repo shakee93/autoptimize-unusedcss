@@ -8,11 +8,35 @@ class OptimizerJS
 
     public function __construct()
     {
-        add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy){
+
+        add_filter('rapidload/js/delay-excluded', function ($value, $link, $job, $strategy, $options){
+            if(!Javascript_Enqueue::is_js($link)){
+                return $value;
+            }
+            $options = $strategy === "mobile" ? $job->get_mobile_options(true) : $job->get_desktop_options(true);
+            if(isset($options['individual-file-actions']) && !empty($options['individual-file-actions']) && is_array($options['individual-file-actions'])){
+                foreach ($options['individual-file-actions'] as $file_action){
+                    if(isset($file_action->type) && $file_action->type == "js"){
+                        if( isset($file_action->url) && !filter_var($file_action->url, FILTER_VALIDATE_URL) === false){
+                            if(isset($file_action->action) && $file_action->action == "exclude" && isset($file_action->regex) && !empty($file_action->regex)){
+                                if(preg_match($file_action->regex, $link->src)){
+                                    $value = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return $value;
+        }, 10 , 5);
+
+        add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy, $options){
 
             $options = $strategy === "mobile" ? $job->get_mobile_options(true) : $job->get_desktop_options(true);
-
+            //error_log(json_encode($options, JSON_PRETTY_PRINT));
             if(isset($options['individual-file-actions']) && !empty($options['individual-file-actions']) && is_array($options['individual-file-actions'])){
+                //error_log(json_encode($options['individual-file-actions'], JSON_PRETTY_PRINT));
                 foreach ($options['individual-file-actions'] as $file_action){
                     if(isset($file_action->type) && $file_action->type == "js"){
                         if( isset($file_action->url) && !filter_var($file_action->url, FILTER_VALIDATE_URL) === false){
@@ -53,6 +77,7 @@ class OptimizerJS
                                                 }
                                             }
                                         }
+                                        break;
                                     }
                                     case 'remove' : {
                                         if(Javascript_Enqueue::is_js($link)){
@@ -87,7 +112,7 @@ class OptimizerJS
                 }
             }
 
-        }, 10 , 3);
+        }, 10 , 4);
     }
 
     public function add_delay_script(){

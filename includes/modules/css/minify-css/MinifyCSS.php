@@ -18,6 +18,10 @@ class MinifyCSS
             return;
         }
 
+        if(defined('SCRIPT_DEBUG') && boolval(SCRIPT_DEBUG) == true){
+            return;
+        }
+
         $this->file_system = new RapidLoad_FileSystem();
 
         if( ! $this->initFileSystem() ){
