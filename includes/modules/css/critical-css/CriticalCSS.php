@@ -198,6 +198,9 @@ class CriticalCSS
                 if($count == 0){
 
                     $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+                    if(isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1"){
+                        $this->file_system->delete( self::$base_dir . '/' .  str_replace(".css","-mobile.css", $job_data->data));
+                    }
 
                 }
             }
