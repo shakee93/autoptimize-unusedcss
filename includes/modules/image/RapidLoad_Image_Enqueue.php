@@ -57,280 +57,286 @@ class RapidLoad_Image_Enqueue
 
         // replacing urls
 
-        $attributes = [
-            [
-                'tag' => 'img',
-                'attr' => 'src'
-            ],
-            [
-                'tag' => 'img',
-                'attr' => 'data-src'
-            ],
-            [
-                'tag' => 'img',
-                'attr' => 'data-lazyload'
-            ]
-        ];
+        if(isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1"){
 
-        foreach ($attributes as $attribute){
+            $attributes = [
+                [
+                    'tag' => 'img',
+                    'attr' => 'src'
+                ],
+                [
+                    'tag' => 'img',
+                    'attr' => 'data-src'
+                ],
+                [
+                    'tag' => 'img',
+                    'attr' => 'data-lazyload'
+                ]
+            ];
 
-            $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
+            foreach ($attributes as $attribute){
 
-            foreach ( $images as $img ) {
+                $images = $this->dom->find( $attribute['tag'] . '[' . $attribute['attr'] . ']' );
 
-                if($this->str_contains($img->{$attribute['attr']}, RapidLoad_Image::$image_indpoint)){
+                foreach ( $images as $img ) {
+
+                    if($this->str_contains($img->{$attribute['attr']}, RapidLoad_Image::$image_indpoint)){
+                        continue;
+                    }
+
+                    if($this->is_file_excluded($img->{$attribute['attr']})){
+                        continue;
+                    }
+
+                    if($this->is_file_excluded($img->{$attribute['attr']}, 'uucss_exclude_images_from_modern_images')){
+                        continue;
+                    }
+
+                    if(apply_filters('rapidload/image/exclude_from_modern_image_format', false, $img->{$attribute['attr']})){
+                        continue;
+                    }
+
+                    $url = $this->extractUrl($img->{$attribute['attr']});
+
+                    $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+                    if (in_array($urlExt, $this->imgExt)) {
+
+                        $data_src = 'data-rp-src';
+                        $img->{$attribute['attr']} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                            'optimize_level' => 'lqip'
+                        ]);
+                        //$this->get_placeholder($img);
+
+                        $img->$data_src = $url;
+                        //unset($img->{'srcset'});
+
+                    }
+
+                }
+            }
+
+            $srcset_attributes = [
+                [
+                    'tag' => 'img',
+                    'attr' => 'srcset'
+                ],
+                [
+                    'tag' => 'img',
+                    'attr' => 'data-srcset'
+                ]
+            ];
+
+            foreach ($srcset_attributes as $srcset_attribute){
+
+                $srcsets = $this->dom->find( $srcset_attribute['tag'] . '[' . $srcset_attribute['attr'] . ']' );
+
+                if(!empty($srcsets)){
+
+                    foreach ($srcsets as $srcset){
+
+                        if(isset($srcset->{$srcset_attribute['attr']}) && !empty($srcset->{$srcset_attribute['attr']})){
+
+                            $_sets = explode(",",$srcset->{$srcset_attribute['attr']});
+
+                            if(!empty($_sets)){
+
+                                foreach ($_sets as $set){
+
+                                    $pattern = '/(https?:\/\/[^\s]+)\s(\d+)w/';
+
+                                    if (preg_match_all($pattern, $set, $matches, PREG_SET_ORDER)) {
+                                        foreach ($matches as $match) {
+                                            if(isset($match[1]) && isset($match[2])){
+                                                $url = $match[1];
+                                                $width = intval($match[2]);
+                                                $_replaced = RapidLoad_Image::get_replaced_url($url,RapidLoad_Image::$image_indpoint, str_replace("w", "",$width), false, ['retina' => 'ret_img']);
+                                                $srcset->{$srcset_attribute['attr']} = str_replace($url . " " .  $width,$_replaced . " " . $width, $srcset->{$srcset_attribute['attr']});
+                                            }
+                                        }
+                                    }
+
+                                    /*$_set = explode($set," ");
+
+                                    if(isset($_set[0]) && isset($_set[1])){
+
+                                        $_replaced = RapidLoad_Image::get_replaced_url($_set[0],RapidLoad_Image::$image_indpoint, str_replace("w", "", $_set[1]), false, ['retina' => 'ret_img']);
+
+                                        $srcset->srcset = str_replace($_set[0] . " " .  $_set[1],$_replaced . " " . $_set[1], $srcset->srcset);
+                                    }*/
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            $videos = $this->dom->find( 'video[poster]' );
+
+            foreach ( $videos as $video ) {
+
+                if($this->str_contains($video->{'poster'}, RapidLoad_Image::$image_indpoint)){
                     continue;
                 }
 
-                if($this->is_file_excluded($img->{$attribute['attr']})){
+                if($this->is_file_excluded($video->{'poster'})){
                     continue;
                 }
 
-                if($this->is_file_excluded($img->{$attribute['attr']}, 'uucss_exclude_images_from_modern_images')){
-                    continue;
-                }
-
-                if(apply_filters('rapidload/image/exclude_from_modern_image_format', false, $img->{$attribute['attr']})){
-                    continue;
-                }
-
-                $url = $this->extractUrl($img->{$attribute['attr']});
+                $url = $this->extractUrl($video->{'poster'});
 
                 $urlExt = pathinfo($url, PATHINFO_EXTENSION);
 
                 if (in_array($urlExt, $this->imgExt)) {
 
-                    $data_src = 'data-rp-src';
-                    $img->{$attribute['attr']} = RapidLoad_Image::get_replaced_url($url, null, $img->width, $img->height, [
+                    $data_src = 'data-rp-poster';
+                    $video->{'poster'} = RapidLoad_Image::get_replaced_url($url, null, $video->width, $video->height, [
                         'optimize_level' => 'lqip'
                     ]);
                     //$this->get_placeholder($img);
 
-                    $img->$data_src = $url;
-                    //unset($img->{'srcset'});
+                    $video->$data_src = $url;
 
                 }
 
             }
-        }
 
-        $srcset_attributes = [
-            [
-                'tag' => 'img',
-                'attr' => 'srcset'
-            ],
-            [
-                'tag' => 'img',
-                'attr' => 'data-srcset'
-            ]
-        ];
+            $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
 
-        foreach ($srcset_attributes as $srcset_attribute){
+            foreach ($data_attributes as $data_attribute){
 
-            $srcsets = $this->dom->find( $srcset_attribute['tag'] . '[' . $srcset_attribute['attr'] . ']' );
+                $_data_attribute = $this->dom->find( 'div[' . $data_attribute . ']' );
 
-            if(!empty($srcsets)){
+                if(!empty($_data_attribute) && isset($_data_attribute[0])){
+                    $_data_attribute = $_data_attribute[0];
+                    $_data_attribute->{$data_attribute} = RapidLoad_Image::get_replaced_url($_data_attribute->{$data_attribute}, null, null, null, ['retina' => 'ret_img']);
+                }
+            }
 
-                foreach ($srcsets as $srcset){
+            $inline_styles = $this->dom->find('[style]');
 
-                    if(isset($srcset->{$srcset_attribute['attr']}) && !empty($srcset->{$srcset_attribute['attr']})){
+            foreach ($inline_styles as $inline_style) {
 
-                        $_sets = explode(",",$srcset->{$srcset_attribute['attr']});
+                $style_lines = explode(";", $inline_style->style);
+                $_style_lines = [];
+                $background_image_found = false;
+                $replace_url = "";
 
-                        if(!empty($_sets)){
+                foreach ($style_lines as $style_line) {
 
-                            foreach ($_sets as $set){
+                    if (!$this->str_contains($style_line, "background")) {
+                        $_style_lines[] = $style_line;
+                    } else {
+                        preg_match_all('/background[^;]*url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $style_line, $matches, PREG_SET_ORDER);
 
-                                $pattern = '/(https?:\/\/[^\s]+)\s(\d+)w/';
+                        if (!empty($matches)) {
 
-                                if (preg_match_all($pattern, $set, $matches, PREG_SET_ORDER)) {
-                                    foreach ($matches as $match) {
-                                        if(isset($match[1]) && isset($match[2])){
-                                            $url = $match[1];
-                                            $width = intval($match[2]);
-                                            $_replaced = RapidLoad_Image::get_replaced_url($url,RapidLoad_Image::$image_indpoint, str_replace("w", "",$width), false, ['retina' => 'ret_img']);
-                                            $srcset->{$srcset_attribute['attr']} = str_replace($url . " " .  $width,$_replaced . " " . $width, $srcset->{$srcset_attribute['attr']});
-                                        }
+                            foreach ($matches as $match) {
+
+                                $style_tag = explode(":",$match[0]);
+
+                                if(isset($style_tag[0])){
+                                    $style_tag = $style_tag[0];
+                                }else{
+                                    continue;
+                                }
+
+                                if($style_tag == 'background'){
+                                    $_style_lines[] = preg_replace('/\burl\([^)]*\)/', '', $style_line);
+                                }
+
+                                $url = $this->extractUrl($match[1]);
+
+                                if ($this->is_file_excluded($url)) {
+                                    continue;
+                                }
+
+                                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+                                if ($this->is_file_excluded($url)) {
+                                    continue;
+                                }
+
+                                if (in_array($urlExt, $this->imgExt)) {
+                                    $background_image_found = true;
+                                    $replace_url = RapidLoad_Image::get_replaced_url($url, $this->cdn);
+                                    if($style_tag == "background-image"){
+                                        $style_line = str_replace($match[1], $replace_url, $style_line);
                                     }
                                 }
-
-                                /*$_set = explode($set," ");
-
-                                if(isset($_set[0]) && isset($_set[1])){
-
-                                    $_replaced = RapidLoad_Image::get_replaced_url($_set[0],RapidLoad_Image::$image_indpoint, str_replace("w", "", $_set[1]), false, ['retina' => 'ret_img']);
-
-                                    $srcset->srcset = str_replace($_set[0] . " " .  $_set[1],$_replaced . " " . $_set[1], $srcset->srcset);
-                                }*/
-
                             }
 
+                        } else {
+                            $_style_lines[] = $style_line;
                         }
-
                     }
 
                 }
 
-            }
-
-        }
-
-        $videos = $this->dom->find( 'video[poster]' );
-
-        foreach ( $videos as $video ) {
-
-            if($this->str_contains($video->{'poster'}, RapidLoad_Image::$image_indpoint)){
-                continue;
-            }
-
-            if($this->is_file_excluded($video->{'poster'})){
-                continue;
-            }
-
-            $url = $this->extractUrl($video->{'poster'});
-
-            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-
-            if (in_array($urlExt, $this->imgExt)) {
-
-                $data_src = 'data-rp-poster';
-                $video->{'poster'} = RapidLoad_Image::get_replaced_url($url, null, $video->width, $video->height, [
-                    'optimize_level' => 'lqip'
-                ]);
-                //$this->get_placeholder($img);
-
-                $video->$data_src = $url;
-
-            }
-
-        }
-
-        $data_attributes = apply_filters('rapidload/image/optimize/data_attributes', []);
-
-        foreach ($data_attributes as $data_attribute){
-
-            $_data_attribute = $this->dom->find( 'div[' . $data_attribute . ']' );
-
-            if(!empty($_data_attribute) && isset($_data_attribute[0])){
-                $_data_attribute = $_data_attribute[0];
-                $_data_attribute->{$data_attribute} = RapidLoad_Image::get_replaced_url($_data_attribute->{$data_attribute}, null, null, null, ['retina' => 'ret_img']);
-            }
-        }
-
-        $inline_styles = $this->dom->find('[style]');
-
-        foreach ($inline_styles as $inline_style) {
-
-            $style_lines = explode(";", $inline_style->style);
-            $_style_lines = [];
-            $background_image_found = false;
-            $replace_url = "";
-
-            foreach ($style_lines as $style_line) {
-
-                if (!$this->str_contains($style_line, "background")) {
-                    $_style_lines[] = $style_line;
-                } else {
-                    preg_match_all('/background[^;]*url[ ]?\([\'|"]?(.*?\.(?:png|jpg|jpeg|webp))/', $style_line, $matches, PREG_SET_ORDER);
-
-                    if (!empty($matches)) {
-
-                        foreach ($matches as $match) {
-
-                            $style_tag = explode(":",$match[0]);
-
-                            if(isset($style_tag[0])){
-                                $style_tag = $style_tag[0];
-                            }else{
-                                continue;
-                            }
-
-                            if($style_tag == 'background'){
-                                $_style_lines[] = preg_replace('/\burl\([^)]*\)/', '', $style_line);
-                            }
-
-                            $url = $this->extractUrl($match[1]);
-
-                            if ($this->is_file_excluded($url)) {
-                                continue;
-                            }
-
-                            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-
-                            if ($this->is_file_excluded($url)) {
-                                continue;
-                            }
-
-                            if (in_array($urlExt, $this->imgExt)) {
-                                $background_image_found = true;
-                                $replace_url = RapidLoad_Image::get_replaced_url($url, $this->cdn);
-                                if($style_tag == "background-image"){
-                                    $style_line = str_replace($match[1], $replace_url, $style_line);
-                                }
-                            }
-                        }
-
-                    } else {
-                        $_style_lines[] = $style_line;
-                    }
+                if ($background_image_found) {
+                    $inline_style->style = implode(";", $_style_lines);
+                    $inline_style->{'data-rapidload-lazy-bg'} = $replace_url; // Assuming you want to store the lazy-loaded URL
+                    $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
+                    $inline_style->{'data-rapidload-lazy-attributes'} = 'bg';
                 }
 
             }
 
-            if ($background_image_found) {
-                $inline_style->style = implode(";", $_style_lines);
-                $inline_style->{'data-rapidload-lazy-bg'} = $replace_url; // Assuming you want to store the lazy-loaded URL
-                $inline_style->{'data-rapidload-lazy-method'} = 'viewport';
-                $inline_style->{'data-rapidload-lazy-attributes'} = 'bg';
-            }
 
-        }
+            $styles = $this->dom->find( "style" );
 
+            foreach ( $styles as $style ) {
 
-        $styles = $this->dom->find( "style" );
+                $url_replaced = false;
 
-        foreach ( $styles as $style ) {
+                $pattern = '/https?:\/\/[^\s]+\.(?:jpg|jpeg|png|webp)/i';
+                preg_match_all($pattern, $style->innertext, $matches);
 
-            $url_replaced = false;
+                if(isset($matches[0]) && is_array($matches[0]) && !empty($matches[0])){
 
-            $pattern = '/https?:\/\/[^\s]+\.(?:jpg|jpeg|png|webp)/i';
-            preg_match_all($pattern, $style->innertext, $matches);
+                    $matches[0] = array_unique($matches[0]);
 
-            if(isset($matches[0]) && is_array($matches[0]) && !empty($matches[0])){
+                    foreach ($matches[0] as $match){
 
-                $matches[0] = array_unique($matches[0]);
-
-                foreach ($matches[0] as $match){
-
-                    $urlExt = pathinfo($match, PATHINFO_EXTENSION);
-                    if (in_array($urlExt, $this->imgExt)) {
-                        $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn);
-                        $style->__set('innertext', str_replace($match,$replace_url,$style->innertext));
-                        $url_replaced = true;
-                    }
-
-                }
-
-            }
-
-            if(!$url_replaced){
-                $parser = new \Sabberworm\CSS\Parser($style->innertext);
-                $cssDocument = $parser->parse();
-                foreach ($cssDocument->getAllValues() as $value) {
-                    if( $value instanceof \Sabberworm\CSS\Value\URL){
-                        $url = $this->extractUrl($value->getURL()->getString());
-                        $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                        $urlExt = pathinfo($match, PATHINFO_EXTENSION);
                         if (in_array($urlExt, $this->imgExt)) {
-                            $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
-                            $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                            $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn);
+                            $style->__set('innertext', str_replace($match,$replace_url,$style->innertext));
+                            $url_replaced = true;
+                        }
+
+                    }
+
+                }
+
+                if(!$url_replaced){
+                    $parser = new \Sabberworm\CSS\Parser($style->innertext);
+                    $cssDocument = $parser->parse();
+                    foreach ($cssDocument->getAllValues() as $value) {
+                        if( $value instanceof \Sabberworm\CSS\Value\URL){
+                            $url = $this->extractUrl($value->getURL()->getString());
+                            $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+                            if (in_array($urlExt, $this->imgExt)) {
+                                $replace_url = RapidLoad_Image::get_replaced_url($url,$this->cdn);
+                                $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+                            }
                         }
                     }
                 }
+
+
+                //$style->__set('innertext', $cssDocument->render());
             }
 
-
-            //$style->__set('innertext', $cssDocument->render());
         }
+
+
 
         return [
             'dom' => $this->dom,
