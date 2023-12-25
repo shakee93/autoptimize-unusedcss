@@ -534,7 +534,9 @@ class UnusedCSS
 
                     if ( !isset($key) || empty($key)){
 
-                        $this->file_system->delete( self::$base_dir . '/' . $file['uucss'] );
+                        error_log($used_files[$key] . " : deleted");
+
+                        $this->file_system->delete( self::$base_dir . '/' . $used_files[$key] );
 
                     }
                 }
