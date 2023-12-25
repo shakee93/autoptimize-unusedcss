@@ -358,7 +358,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     )}
                 </div>
 
-                <p className='text-sm font-normal -mt-1'>{settings.description}</p>
+                <p className='text-sm font-normal -mt-1'>{settings.description? settings.description : settings.name}</p>
 
             </div>
 
