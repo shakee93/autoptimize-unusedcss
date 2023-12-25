@@ -56,6 +56,7 @@ interface SettingItemProps {
     index: number;
     showIcons?: boolean
     hideActions?: boolean
+    actionRequired?: boolean
 }
 
 export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
@@ -106,12 +107,12 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 })
 
 
-const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: SettingItemProps) => {
+const Setting = ({updateValue, settings, index, hideActions, showIcons = true, actionRequired}: SettingItemProps) => {
 
     if (!settings) {
         return <></>
     }else{
-        console.log(settings);
+        console.log(settings , ' : ', actionRequired);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -198,6 +199,23 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
         setLoading(false);
     }
 
+    const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
+    const [checkboxState, setCheckboxState] = useState(mainInput.value);
+    const [showRequiredPopover, setshowRequiredPopover] = useState(false);
+
+    const handleCheckboxClick = () => {
+        if (!actionRequired) {
+            setshowRequiredPopover(true)
+            setActionRequiredDialogOpen(true);
+        }
+    };
+
+    const saveDeferJsSettings = () => {
+        updateValue(settings, checkboxState, mainInput.key);
+        setshowRequiredPopover(false)
+        setActionRequiredDialogOpen(false);
+    };
+
     return (
 
         <>
@@ -217,8 +235,17 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                          className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
-                                          onCheckedChange={(c: boolean) => updateValue(settings, c, mainInput.key)}/>
+                                          onCheckedChange={(c: boolean) =>{
+                                              if(actionRequired){
+                                                  updateValue(settings, c, mainInput.key);
+                                              }else{
+                                                  setCheckboxState(c);
+                                                  handleCheckboxClick();
+                                              }
+
+                                          }}/>
 
                             )}
                         </>
@@ -295,12 +322,43 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
                                 </TooltipText>
                             </Mode>
 
+                            {/* Defer Javascript Settings Dialog */}
+
+                            <Dialog open={actionRequiredDialogOpen} onOpenChange={setActionRequiredDialogOpen}>
+                                {/*<DialogTrigger disabled asChild>*/}
+                                {/*    <div>*/}
+                                {/*        <TooltipText text="Defer Javascript Settings">*/}
+                                {/*            <Cog8ToothIcon className="w-5 text-brand-400"/>*/}
+                                {/*        </TooltipText>*/}
+                                {/*    </div>*/}
+                                {/*</DialogTrigger>*/}
+                                <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
+                                    <DialogHeader className="px-6 py-7">
+                                        <DialogTitle>Test Settings Popup Not Required</DialogTitle>
+                                        <DialogDescription>
+                                            Making Changes on this setting is not required its already in passed audits,
+                                            would you like to force proceed?
+                                        </DialogDescription>
+                                    </DialogHeader>
+
+                                    <DialogFooter className="px-6 py-3 border-t">
+                                        <AppButton onClick={saveDeferJsSettings} className="text-sm">
+                                            Yes
+                                        </AppButton>
+                                        <AppButton onClick={() => setActionRequiredDialogOpen(false)} variant="outline"
+                                                   className="text-sm">
+                                            Cancel
+                                        </AppButton>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+
                         </>
 
                     )}
                 </div>
 
-                <p className='text-sm font-normal'>Remove unnecessary spaces, lines and comments from CSS files. {settings.category}</p>
+                <p className='text-sm font-normal -mt-1'>{settings.description}</p>
 
             </div>
 

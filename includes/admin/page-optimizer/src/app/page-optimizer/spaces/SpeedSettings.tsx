@@ -17,6 +17,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {CheckCircleIcon, ChevronRightIcon} from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
+import { m } from 'framer-motion';
 
 interface SettingsProps {
     audit: Audit
@@ -111,21 +112,30 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         }
     };
 
+    const actionRequired = (item) => {
+        const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
+        const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
+        return hasPassedAudit || hasFailedAudit;
+    };
+
     return <div>
         <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
-                    <div className={cn(
-                        'flex gap-2 items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
-                        activeCategory === category ? 'shadow-md' : '' && ''
+                    <m.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }} className={cn(
+                        'flex gap-2 transition-all items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
+                        activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
                         {icons[category]}
                         <span>
                         {category}
                         </span>
 
-                    </div>
+                    </m.div>
 
                 </li>
             ))}
@@ -133,23 +143,18 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
 
         </ul>
 
+        <m.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
         <ul>
             {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
-                    {item.audits.length > 0
-                             &&
-                        //     (
-                        //         item.inputs[0].value
-                        //         && item.audits.filter((a: Audit) => a.type === 'passed_audit').length > 0
-                        //     )
-                        // ||
-                        //     (
-                        //         item.audits.filter((a: Audit) => a.type !== 'passed_audit').length > 0
-                        //     )
-                        // ) &&
+                    {item.audits.length > 0 &&
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
 
-                            <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} index={itemIndex}/>
+                            <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
                             {/*<p className='px-10 text-sm'>Remove unnecessary spaces, lines and comments from CSS files.</p>*/}
                             <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
                                 <AuditsLine cls='w-4 mr-2  -mt-1'/>
@@ -167,24 +172,37 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                                         }}
                                         className='relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2' key={index}>
                                         <div
+
                                             className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
-                                            {audit.type === 'passed_audit' ?
-                                                <CheckCircleIcon className='w-5 fill-green-600'/> :
-                                                <Circle className={cn(
-                                                    'w-2 stroke-0',
-                                                    audit.type === 'passed_audit' && 'fill-green-600',
-                                                    audit.type === 'opportunity' && 'fill-orange-600',
-                                                    audit.type === 'diagnostics' && 'fill-yellow-400',
-                                                )} />
-                                            }
+                                            {audit.type === 'passed_audit' ? (
+                                                <CheckCircleIcon className='w-5 fill-green-600' />
+                                            ) : audit.type === 'opportunity' ? (
+                                                <>
+                                                <Circle className={cn('w-2 stroke-0 fill-orange-600 animate-ping absolute inline-flex opacity-75')} />
+                                                <Circle className={cn('w-2 stroke-0 fill-orange-600 relative inline-flex')} />
+                                                </>
+                                            ) : audit.type === 'diagnostics' ? (
+                                                <>
+                                                <Circle className={cn('w-2 stroke-0 fill-yellow-400 animate-ping absolute inline-flex opacity-75')} />
+                                                <Circle className={cn('w-2 stroke-0 fill-yellow-400 relative inline-flex')} />
+                                                </>
+                                            ) : null}
+                                            {/*{audit.type === 'passed_audit' ?*/}
+                                            {/*    <CheckCircleIcon className='w-5 fill-green-600'/> :*/}
+                                            {/*    <Circle className={cn(*/}
+                                            {/*        'w-2 stroke-0',*/}
+                                            {/*        audit.type === 'opportunity' && 'fill-orange-600',*/}
+                                            {/*        audit.type === 'diagnostics' && 'fill-yellow-400',*/}
+                                            {/*    )} />*/}
+                                            {/*}*/}
                                         </div>
 
                                         <div className="flex flex-col">
                                             {audit.name}
                                             <div className="flex items-center">
-                                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] -mt-1">Opportunity</div>
+                                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">Opportunity</div>
 
-                                                <div className=" text-gray-500 text-xs -mt-1 block">{audit.displayValue ? audit.displayValue : ''}</div>
+                                                <div className=" text-gray-500 text-xs block">{audit.displayValue ? audit.displayValue : ''}</div>
 
                                             </div>
 
@@ -195,11 +213,13 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                                 )}
                             </ul>
                         </div>
-                    }
+
+                   }
 
                 </li>
             ))}
         </ul>
+        </m.div>
     </div>
 }
 
