@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.8 - 25/12/2023 =
+ * fix: known bugs
+
 = 2.2.7 - 21/12/2023 =
  * fix: set width and height not working for images
 
