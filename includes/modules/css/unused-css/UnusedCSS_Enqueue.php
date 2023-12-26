@@ -211,6 +211,7 @@ class UnusedCSS_Enqueue
                         if(!in_array($link, array_column($this->warnings, 'file'))){
 
                             $warning = [
+                                "id" => $this->job_data->job->id,
                                 "file" => $link,
                                 "message" => $file_missing_error
                             ];
