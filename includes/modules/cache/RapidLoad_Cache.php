@@ -621,7 +621,7 @@ class RapidLoad_Cache
 
             self::clear_page_cache_by_url( $url );
         } elseif ( $_GET['_action'] === 'clear' ) {
-            error_log("test");
+
             self::each_site( ( is_multisite() && is_network_admin() ), 'self::clear_site_cache', array(), true );
         }
 
@@ -1078,7 +1078,7 @@ class RapidLoad_Cache
 
             }
         }
-        error_log("blabla");
+
         return $callback_return;
     }
 
