@@ -1,4 +1,4 @@
-=== RapidLoad 2.1 - Speed Monster in One Plugin ===
+=== RapidLoad 2.2 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
@@ -155,6 +155,43 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.2.8 - 25/12/2023 =
+ * fix: known bugs
+
+= 2.2.7 - 21/12/2023 =
+ * fix: set width and height not working for images
+
+= 2.2.6 - 18/12/2023 =
+ * fix: syntax error in rapidload dashboard
+
+= 2.2.5 - 18/12/2023 =
+ * fix: syntax error in rapidload dashboard
+
+= 2.2.4 - 15/12/2023 =
+ * improved: delay js event handling
+
+= 2.2.3 - 13/12/2023 =
+ * improved: delay js execution
+ * improved: delay js event handling
+
+= 2.2.2 - 13/12/2023 =
+ * improved: delay js execution
+ * improved: delay js event handling
+ * fix: known bugs
+
+= 2.2.1 - 05/12/2023 =
+ * fix: known bugs
+
+= 2.2.0 - 30/11/2023 =
+ * feat: Improved defer javascript handling with inline-scripts
+ * new: all the javascript files are delayed with new delay JS improvement
+ * new: topologically batched delayed javascript execution
+
+= 2.1.14 - 22/11/2023 =
+ * feat: add debug mode to titan
+ * fix: inline background images not optimizing
+ * fix: known bugs
 
 = 2.1.13 - 14/11/2023 =
  * fix: known bugs

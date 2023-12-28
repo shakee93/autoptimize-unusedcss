@@ -54,7 +54,7 @@ var callback = function (mutationList, observer) {
                                     options += ",to_avif";
                                 }
                                 if(img.getBoundingClientRect().width !== 0){
-                                    options += ",w_" + img.getBoundingClientRect().width;
+                                    options += ",w_" + Math.floor(img.getBoundingClientRect().width);
                                 }
                                 img.setAttribute("src", window.rapidload_io_data.image_endpoint + options + "/" + url);
                             }

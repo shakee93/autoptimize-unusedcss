@@ -37,7 +37,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
-                add_action('wp_ajax_noriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_clear_page_cache', [$this, 'clear_page_cache']);
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
                 add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
                 add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
@@ -354,6 +355,10 @@ class RapidLoad_Admin
 
                 $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
 
+            }else{
+
+                $options['whitelist_packs'] = [];
+
             }
 
 
@@ -412,6 +417,12 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_load_scripts_on_user_interaction'])){
 
             $options['uucss_load_scripts_on_user_interaction'] = $_REQUEST['uucss_load_scripts_on_user_interaction'];
+
+        }
+
+        if(isset($_REQUEST['uucss_exclude_files_from_delay_js'])){
+
+            $options['uucss_exclude_files_from_delay_js'] = $_REQUEST['uucss_exclude_files_from_delay_js'];
 
         }
 
@@ -520,6 +531,12 @@ class RapidLoad_Admin
             if(isset($_REQUEST['uucss_exclude_images_from_lazy_load'])){
 
                 $options['uucss_exclude_images_from_lazy_load'] = $_REQUEST['uucss_exclude_images_from_lazy_load'];
+
+            }
+
+            if(isset($_REQUEST['uucss_exclude_images_from_modern_images'])){
+
+                $options['uucss_exclude_images_from_modern_images'] = $_REQUEST['uucss_exclude_images_from_modern_images'];
 
             }
 

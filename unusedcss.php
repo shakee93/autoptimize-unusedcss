@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: RapidLoad 2.1 - Speed Monster in One Plugin
+Plugin Name: RapidLoad 2.2 - Speed Monster in One Plugin
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     2.1.13
+Version:     2.2.8
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */
@@ -17,7 +17,7 @@ if(isset($_REQUEST['no_rapidload'])){
     return;
 }
 
-require __DIR__ . '/constants.php';
+require_once __DIR__ . '/constants.php';
 
 define( 'UUCSS_PLUGIN_FILE', __FILE__ );
 define('UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ));
@@ -32,7 +32,7 @@ if ( is_multisite() ) {
 }
 
 
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 if(is_admin()){
 

@@ -169,11 +169,12 @@ class RapidLoad_Cache_Engine
     }
 
     public static function deliver_cache() {
+        header( 'X-Cache-Handler: rapidload-cache-engine' );
 
         $cache_file = RapidLoad_Cache_Store::get_cache_file();
 
         if ( RapidLoad_Cache_Store::cache_exists( $cache_file ) && ! RapidLoad_Cache_Store::cache_expired( $cache_file ) && ! self::bypass_cache() ) {
-            header( 'X-Cache-Handler: rapidload-cache-engine' );
+            header( 'X-Cache-Status: HIT' );
 
             if ( strtotime( self::$request_headers['If-Modified-Since'] >= filemtime( $cache_file ) ) ) {
                 header( self::sanitize_server_input( $_SERVER['SERVER_PROTOCOL'] ) . ' 304 Not Modified', true, 304 );
@@ -208,6 +209,9 @@ class RapidLoad_Cache_Engine
 
             exit;
         }
+
+
+        header( 'X-Cache-Status: MISS' );
 
         self::$to_be_cached = true;
 

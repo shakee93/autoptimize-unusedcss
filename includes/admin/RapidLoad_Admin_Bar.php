@@ -30,7 +30,9 @@ class RapidLoad_Admin_Bar {
             (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) ||
             (is_admin() && $page === 'rapidload')
         ) {
-            $this->load_optimizer_scripts();
+            add_action('init', function (){
+                $this->load_optimizer_scripts();
+            });
 
             add_action('wp_after_admin_bar_render', function () {
                 echo '<div id="rapidload-page-optimizer"></div>';
@@ -49,6 +51,12 @@ class RapidLoad_Admin_Bar {
 
         if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
+        }
+
+        $debug_titan = apply_filters('rapidload/titan/debug', false);
+
+        if ($debug_titan) {
+            $package .= '-debug';
         }
 
         //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
@@ -87,7 +95,7 @@ class RapidLoad_Admin_Bar {
                     'tooltip' => 'Clear Page Cache',
                     'href' => wp_nonce_url( add_query_arg( array(
                         '_cache'  => 'rapidload-cache',
-                        '_action' => 'clear',
+                        '_action' => 'clearurl',
                         '_url' => $this->transform_url($this->get_current_url()),
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
                     'icon' => 'clear_page_cache'
@@ -101,7 +109,7 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            'group_by_conditions' => [
+            /*'group_by_conditions' => [
                 [
                     'label' => 'Entire Site',
                     'value' => 'all'
@@ -142,8 +150,10 @@ class RapidLoad_Admin_Bar {
                         ],
                     ]
                 ]
-            ],
-            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1'
+            ],*/
+            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
+            'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
+            'rest_url' => RapidLoadRestApi::rest_url(),
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
@@ -216,15 +226,7 @@ class RapidLoad_Admin_Bar {
 
         if(apply_filters('rapidload/tool-bar-menu',true)){
 
-            $current_user = wp_get_current_user();
-
-            if(!$current_user){
-                return;
-            }
-
-            $user_role = $current_user->roles[0];
-
-            if ( $user_role !== 'customer' && $user_role !== 'subscriber' ) {
+            if ( current_user_can( 'manage_options' ) ) {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload',

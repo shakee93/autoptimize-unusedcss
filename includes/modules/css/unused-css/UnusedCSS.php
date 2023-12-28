@@ -232,8 +232,7 @@ class UnusedCSS
                     }
                     $link['success_count'] = $job_data->hits;
                     $link['files'] = $job_data->get_files();
-                    $link['job_id'] = $job_data->queue_job_id;
-                    $link['meta']['id'] = $job_data->queue_job_id;
+                    $link['meta']['id'] = $job_data->job->id;
                     $link['meta']['warnings'] = $job_data->get_warnings();
                     $link['meta']['stats'] = isset($job_data->stats) ? unserialize($job_data->stats) : null;
                     $link['meta']['error'] = isset($job_data->error) ? unserialize($job_data->error) : null;
@@ -534,7 +533,7 @@ class UnusedCSS
 
                     if ( !isset($key) || empty($key)){
 
-                        $this->file_system->delete( self::$base_dir . '/' . $file['uucss'] );
+                        $this->file_system->delete( self::$base_dir . '/' . $used_files[$key] );
 
                     }
                 }

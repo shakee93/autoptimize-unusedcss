@@ -1,6 +1,12 @@
 <?php
 
 use MatthiasMullie\Minify;
+use Peast\Peast;
+use Peast\Query;
+use Peast\Traverser;
+use Peast\Renderer;
+use Peast\Formatter\PrettyPrint;
+use Peast\Formatter\Compact;
 
 class Javascript_Enqueue
 {
@@ -9,6 +15,7 @@ class Javascript_Enqueue
     private $job = null;
 
     private $dom;
+    private $global_scripts;
     private $inject;
     private $options;
     private $strategy;
@@ -49,6 +56,10 @@ class Javascript_Enqueue
 
     public function update_content($state){
 
+        global $wp_scripts;
+
+        $this->global_scripts = $wp_scripts;
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -69,43 +80,70 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
-            $this->minify_js($link);
+            if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
+                $this->minify_js($link);
+            }
 
             $this->optimize_js_delivery($link);
 
             if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
-                $this->load_scripts_on_user_interaction($link);
+
+                if(!apply_filters('rapidload/js/delay-excluded', false, $link, $this->job, $this->strategy, $this->options)){
+                    $this->load_scripts_on_user_interaction($link);
+                }
+
             }
 
-
-
-            do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy);
+            do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy, $this->options);
 
         }
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" || apply_filters('rapidload/delay-script/enable', false)){
+
+            // Inject header delay script
+            $title = $this->dom->find('title')[0];
+
+            // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
+            $content = "//!injected by RapidLoad \n
+!function(){var d=['DOMContentLoaded','readystatechanges','load'],a=[window,document],t=EventTarget.prototype.dispatchEvent,s=EventTarget.prototype.addEventListener,i=EventTarget.prototype.removeEventListener,r=[],c=[];window.RaipdLoadJSDebug={capturedEvents:r,dispatchedEvents:c},EventTarget.prototype.addEventListener=function(e,t,...n){var i=!e.includes('RapidLoad:')&&!!c.find(t=>t.type===e)&&a.includes(this),o=!e.includes('RapidLoad:')&&!e.includes(':norapidload')&&d.includes(e)&&a.includes(this)&&'function'==typeof t;(o||o!==i&&i)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{t.call(this,new Event(e))},10):r.push({target:this,type:e,listener:t,options:n})),e.includes(':norapidload')&&(e=e.replace(':norapidload','')),s.call(this,e,t,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){d.includes(e)&&a.includes(this)&&(r=r.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),i.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return c.push(e),d.includes(e.type)&&a.includes(this)&&(r=r.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},d.forEach(function(e){a.forEach(function(t){t.addEventListener(e,function(){})})})}();";
+
+            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
+
+                if (file_exists($filePath)) {
+                    $content = file_get_contents($filePath);
+                }
+            }
+
+            $node_header = '<script type="text/javascript" >' . $content . '</script>';
+
+            $title_content = $title->outertext;
+
+            $title->__set('outertext', $title_content . $node_header);
+
+
+            // Inject footer delay script
             $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "document.addEventListener('DOMContentLoaded',function(event){
-                ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
-                    var listener = function () {
-                        removeEventListener(event, listener);
-                        document.querySelectorAll('[data-rapidload-src]').forEach(function(el){ el.setAttribute('src', el.getAttribute('data-rapidload-src')) });
-                        Array.from(document.getElementsByTagName('noscript')).forEach(function(e){
-                            var tag = e.getAttribute('data-rapidload-delayed');
-                            if(tag !== null && tag !== undefined) {
-                                var newScript = document.createElement('script');
-                                var inlineScript = document.createTextNode(e.innerHTML);
-                                newScript.appendChild(inlineScript);
-                                e.parentNode.insertBefore(newScript, e);
-                            }}
-                        );
-                    };
-                    addEventListener(event, listener);
-                });
-            });");
+
+            // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
+            $content = "//!injected by RapidLoad \n
+!function(){var o=Array.from(document.querySelectorAll('[data-rapidload-src]')).map(function(e,t){var a=e.getAttribute('id'),o=e.getAttribute('data-rapidload-src');return{id:a||t,scriptElement:e,loaded:null,success:!1,src:o}});const t=['click','mousemove','touchstart','keydown'];let a=!1;function r(e='log',...t){window.location.search.includes('rapidload_debug_js')&&console[e](...t)}function n(t,a=!0){var e;(o=o.map(e=>e.id===t.id&&null===t.loaded?{...t,loaded:!0,success:a}:e)).filter(e=>e.loaded).length===o.length&&(window.rapidloadScripts=o,e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e),r('table',o),r('info','fired: RapidLoad:DelayedScriptsLoaded'))}async function d(){{var e;const t=[];o.forEach(a=>{const o=document.createElement('link');o.rel='preload',o.as='script',o.fetchpriority='high',o.href=a.src;let e=null;try{e=new Promise((t,e)=>{o.onload=()=>{o.parentNode.removeChild(o),t(a)},o.onerror=e=>{o.parentNode.removeChild(o),t(a)}})}catch(e){console.log(e)}e&&t.push(e),document.head.appendChild(o)}),await Promise.all(t)}await 0;for(const a of o)await function(o){return new Promise((e,t)=>{var a=o.scriptElement;a.addEventListener('load',()=>n(o)),a.addEventListener('error',()=>n(o,!1)),setTimeout(()=>{o.src&&(a.setAttribute('src',o.src),a.removeAttribute('data-rapidload-src')),e()},15)})}(a)}r('info','totalScripts'),r('table',o);var i=async function(){var e;a||(a=!0,t.forEach(function(e){removeEventListener(e,i)}),await d(),0===o&&(e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e)))};t.forEach(function(e){addEventListener(e,i)})}();";
+
+            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
+
+                if (file_exists($filePath)) {
+                    $content = file_get_contents($filePath);
+                }
+            }
+
+            $node = $this->dom->createElement('script', "" . $content . "");
 
             $node->setAttribute('type', 'text/javascript');
             $body->appendChild($node);
+
+
+
         }
 
         if(isset($this->options['preload_internal_links']) && $this->options['preload_internal_links'] == "1"){
@@ -128,34 +166,58 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
-            if(!self::is_file_excluded($link->src) && self::is_load_on_user_interaction($link->src)){
+            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
+                if(!self::is_file_excluded($link->src) && self::is_load_on_user_interaction($link->src)){
 
-                $data_attr = "data-rapidload-src";
-                $link->{$data_attr} = $link->src;
-                unset($link->src);
+                    $data_attr = "data-rapidload-src";
+                    $link->{$data_attr} = $link->src;
+                    unset($link->src);
 
+                }
+            }else{
+
+                if($this->str_contains($link->src,"rapidload.frontend.min.js")){
+                    return;
+                }
+
+                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
+
+                    $data_attr = "data-rapidload-src";
+                    $link->{$data_attr} = $link->src;
+                    unset($link->src);
+                    unset($link->defer);
+
+                }
             }
+
 
         }else if(self::is_inline_script($link)){
+            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
+                if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
 
-            if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
+                    $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
 
-                $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+                }else if(isset($link->{"data-rapidload-delayed"})) {
 
-            }else if(isset($link->{"data-rapidload-delayed"})) {
+                    unset($link->{"data-rapidload-delayed"});
+                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
 
-                unset($link->{"data-rapidload-delayed"});
-                $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+                }
+            }else{
+                if(isset($link->{"data-rapidload-delayed"})) {
 
+                    unset($link->{"data-rapidload-delayed"});
+                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+
+                }
             }
-
         }
 
     }
 
     public function minify_js($link){
 
-        if(!isset($this->options['minify_js'])){
+        if(defined('SCRIPT_DEBUG') && boolval(SCRIPT_DEBUG) == true){
             return;
         }
 
@@ -221,11 +283,20 @@ class Javascript_Enqueue
             return;
         }
 
-        if(isset($this->options['uucss_load_js_method']) && ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1")){
+        $js_to_be_defer = isset($this->options['uucss_load_js_method']) &&
+            ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1");
 
-            if(self::is_js($link)){
+        $js_to_be_delay = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1";
+
+        if(self::is_js($link)){
+
+            if($js_to_be_defer){
 
                 if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
+
+                    if(isset($link->defer) && isset($link->async)){
+                        return;
+                    }
 
                     if(preg_match( '#(' . $this->default_js_exclusion_pattern . ')#i', $link->src )){
                         return;
@@ -233,33 +304,33 @@ class Javascript_Enqueue
 
                     $link->defer = true;
                     unset($link->async);
-
-                }
-
-            }else if(isset($this->options['defer_inline_js']) && $this->options['defer_inline_js'] == "1" && self::is_inline_script($link)){
-
-                if(!self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer')){
-
-                    $this->defer_inline_js($link);
-
                 }
 
             }
 
+        }elseif (self::is_inline_script($link)){
+
+            if(($js_to_be_delay || $js_to_be_defer) && (!self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js') && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
+
+                $this->defer_inline_js($link);
+
+            }
+
         }
+
     }
 
     public function defer_inline_js($link){
-        $inner_text = $link->innertext();
-        if(!empty($inner_text)){
 
-            $jquery_patterns = apply_filters( 'rapidload/patterns/jquery', 'jQuery|\$\.\(|\$\(' );
+        $inner_text = $link->innertext();
+
+        if(!empty($inner_text)){
 
             if ( isset($link->type) && preg_match( '/(application\/ld\+json)/i', $link->type ) ) {
                 return;
             }
 
-            if ( ! empty( $jquery_patterns ) && ! preg_match( "/({$jquery_patterns})/msi", $inner_text ) ) {
+            if ($link->norapidload) {
                 return;
             }
 
@@ -267,16 +338,20 @@ class Javascript_Enqueue
                 return;
             }
 
-            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="' . ( isset($link->type) && $link->type == "text/javascript" && !isset($link->{'data-no-lazy'}) ? "rapidload/lazyscript" : 'text/javascript' ) .'" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-            //$link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript" src="data:text/javascript;base64,' . base64_encode($inner_text) . '" defer></script>');
-            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript"> window.addEventListener("DOMContentLoaded", function() { ' . $inner_text . ' }); </script>');
+            $manipulated_snippet = $this->analyzeJavaScriptCode($inner_text, $link);
+
+            if (!$manipulated_snippet) {
+                return;
+            }
+
+            $link->__set('outertext','<script ' . ( $link->id ? 'id="' . $link->id . '"' : '' ) .' type="text/javascript">' . $manipulated_snippet . '</script>');
         }
 
 
     }
 
     public static function is_js( $el ) {
-        if (preg_match("#" . preg_quote("googletagmanager.com/gtag/js", "#") . "#", $el->src)) {
+        if (isset($el->src) && preg_match("#" . preg_quote("googletagmanager.com/gtag/js", "#") . "#", $el->src)) {
             return true;
         }
         return !empty($el->src) && strpos($el->src,".js");
@@ -352,9 +427,9 @@ class Javascript_Enqueue
 
     public function get_default_inline_js_exclusions(){
         $list = [
-            "DOMContentLoaded",
+            //"DOMContentLoaded",
             "document.write",
-            "window.lazyLoadOptions",
+            /*"window.lazyLoadOptions",
             "N.N2_",
             "rev_slider_wrapper",
             "FB3D_CLIENT_LOCALE",
@@ -362,7 +437,7 @@ class Javascript_Enqueue
             "anr_captcha_field_div",
             "renderInvisibleReCaptcha",
             "bookingInProgress",
-            "do_not_load_original_css"
+            "do_not_load_original_css"*/
         ];
         return apply_filters('rapidload/defer/exclusions/inline_js', $list);
     }
@@ -410,4 +485,151 @@ class Javascript_Enqueue
 
         return apply_filters('rapidload/defer/exclusions/js', $list);
     }
+
+
+    public function analyzeJavaScriptCode($jsSnippet, $script)
+    {
+        try {
+            // Determine the global event based on the 'delay_javascript' option
+            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"
+                ? 'RapidLoad:DelayedScriptsLoaded'
+                : 'DOMContentLoaded';
+
+            // Skip processing for specific cases
+            if (preg_match('/window\._wpemojiSettings|data-rapidload-delayed/', $jsSnippet)) {
+                return false;
+            }
+
+            // Parse the JavaScript snippet into an AST (Abstract Syntax Tree)
+            $parsedAst = Peast::latest($jsSnippet)->parse();
+
+            // Configure the AST traverser
+            $astTraverser = new Traverser([
+                'passParentNode' => true,
+                'skipStartingNode' => true,
+            ]);
+
+            // Define a renderer for pretty printing the AST
+            $astRenderer = new Renderer();
+            $astRenderer->setFormatter(new PrettyPrint());
+            $rootStatements = [];
+
+            // Traverse and modify the AST
+            $updatedSnippet = $astTraverser->addFunction(function ($currentNode) use ($eventToBind, $astRenderer, &$rootStatements) {
+
+                $type = $currentNode->getType();
+
+                $rootStatements[] = (object) [
+                    'type' => $type,
+                    'node' => $currentNode,
+                ];
+
+                return Traverser::DONT_TRAVERSE_CHILD_NODES;
+
+            })->traverse($parsedAst)->render(new PrettyPrint());
+
+            if (count(array_filter($rootStatements, function ($statement) {
+                    return $statement->type == 'VariableDeclaration';
+                })) === count($rootStatements)) {
+                return $updatedSnippet;
+            }
+
+            $snippets = '';
+
+            // To be checked
+
+            $should_not_wrap = false;
+
+            if (count(array_filter($rootStatements, function ($statement) {
+                    return $statement->type == 'ExpressionStatement';
+                })) === count($rootStatements)) {
+
+                foreach ($rootStatements as $rootStatement){
+
+                    $inner_content = $rootStatement->node->render(new Compact()) . ";";
+
+                    $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
+
+                    if(preg_match($pattern, $inner_content)){
+                        $should_not_wrap = true;
+                        break;
+                    }
+
+                }
+
+                if($should_not_wrap){
+                    return $updatedSnippet;
+                }
+            }
+
+
+            foreach ($rootStatements as $rootStatement){
+                if($rootStatement->type == "FunctionDeclaration" || $rootStatement->type == "VariableDeclaration"){
+                    $statements = $this->assignWindow($rootStatement->node);
+                    foreach ($statements as $statement){
+                        $snippets .= $statement . "\n";
+                    }
+                }elseif($rootStatement->type == "ExpressionStatement") {
+                    $snippets .= $rootStatement->node->render(new Compact()) . ";";
+                }else{
+                    $snippets .= $rootStatement->node->render(new Compact()) . "\n";
+                }
+            }
+
+            $snippets = apply_filters('uucss/enqueue/before/wrap-inline-js', $snippets);
+            // Return the original JavaScript snippet
+            return $this->wrapWithJavaScriptEvent($eventToBind, $snippets);
+        } catch (Exception $exception) {
+            // Log any exceptions that occur
+            error_log('RapidLoad:Error in JS Optimization: ' . $exception->getMessage());
+            return $this->wrapWithJavaScriptEvent($eventToBind, $jsSnippet);
+
+        }
+    }
+
+    public function wrapWithJavaScriptEvent($event, $codeSnippet)
+    {
+        // Wrap the given code snippet in a JavaScript event listener
+        return "document.addEventListener('$event', function(){ " . $codeSnippet . "});";
+    }
+
+    public function assignWindow($node)
+    {
+        $id = null;
+        $type = $node->getType();
+        $defineWindow = '';
+        $additionalSnippets = [];
+
+        if ($type === 'FunctionDeclaration') {
+            $id = $node->getId()->getRawName();
+            $defineWindow = $id ? "window." . $id . "=" : "";
+        }
+
+        if ($type === 'VariableDeclaration' && count($node->getDeclarations()) === 1) {
+            $id = $node->getDeclarations()[0]->getId()->getRawName();
+            $additionalSnippets[] = "window." . $id . " = " . $id . ";";
+        }
+
+        if ($type === 'VariableDeclaration' && count($node->getDeclarations()) > 1) {
+
+            foreach($node->getDeclarations() as $declaration){
+                $id = $declaration->getId()->getRawName();
+                $additionalSnippets[] = "window." . $id . " = " . $id . ";";
+            }
+
+        }
+
+
+        if (!$id) {
+            return [$node->render(new Compact())];
+        }
+
+        $renderedFunction = $node->render(new Compact());
+
+        $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
+        //return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
+        return array_merge([$updatedAst->render(new Compact())], $additionalSnippets);
+    }
+
+
 }

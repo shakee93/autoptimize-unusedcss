@@ -550,12 +550,12 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         $data = $wpdb->get_results("select * from (select 
-        job.id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
+        job.id, job.job_id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
         (case when job.rule = 'is_url' then 0 else (select count(id) from {$wpdb->prefix}rapidload_job where rule_id = job.id and rule = 'is_url') end) as applied_successful_links,
         uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
         cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
         
-        from (select (case when rule_id is not null then rule_id else id end) as id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
+        from (select (case when rule_id is not null then rule_id else id end) as id , id as job_id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
 
@@ -575,6 +575,7 @@ abstract class RapidLoad_DB
         $data = array();
 
         $data['id'] = isset($link->id) ? $link->id : null;
+        $data['job_id'] = isset($link->job_id) ? $link->job_id : null;
         $data['url'] = isset( $link->url ) ? $link->url : null;
         $data['regex'] = isset( $link->regex ) ? $link->regex : null;
         $data['rule'] = isset( $link->rule ) ? $link->rule : null;
@@ -767,7 +768,29 @@ abstract class RapidLoad_DB
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'autoptimize_uucss_settings'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_migration'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_cache'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_cache'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_cdn'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_css'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_font'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_js'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_image'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_titan'");
 
 
+    }
+
+    static function get_optimization_count(){
+
+        global $wpdb;
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job");
+
+        $error = $wpdb->last_error;
+
+        if(!empty($error)){
+            self::show_db_error($error);
+        }
+
+        return (int)$count;
     }
 }

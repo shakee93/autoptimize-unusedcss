@@ -11,6 +11,10 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         array (
             'Sabberworm\\CSS\\' => 15,
         ),
+        'P' => 
+        array (
+            'Peast\\' => 6,
+        ),
         'M' => 
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
@@ -22,6 +26,10 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
+        ),
+        'Peast\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mck89/peast/lib/Peast',
         ),
         'MatthiasMullie\\PathConverter\\' => 
         array (
@@ -68,6 +76,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'Optimole_WP_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/optimole-wp/Optimole_WP_Compatible.php',
         'PAnD' => __DIR__ . '/..' . '/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php',
         'RankMathSEO_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/seo-by-rank-math/RankMathSEO_Compatible.php',
+        'RapidLoadRestApi' => __DIR__ . '/../..' . '/includes/rest-api/RapidLoad_Rest_Api.php',
         'RapidLoad_Admin' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin.php',
         'RapidLoad_Admin_Bar' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin_Bar.php',
         'RapidLoad_Admin_Frontend' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_Admin_Frontend.php',
@@ -102,6 +111,7 @@ class ComposerStaticInit0846b02cb01ca9de966b580779093b89
         'RapidLoad_ThirdParty' => __DIR__ . '/../..' . '/includes/third-party/RapidLoad_ThirdParty.php',
         'RapidLoad_Utils' => __DIR__ . '/../..' . '/includes/RapidLoad_Utils.php',
         'RapidLoad_htaccess' => __DIR__ . '/../..' . '/includes/admin/RapidLoad_htaccess.php',
+        'Revslider_Compatible' => __DIR__ . '/../..' . '/includes/third-party/plugins/revslider/Revslider_Compatible.php',
         'UnusedCSS' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS.php',
         'UnusedCSS_DB' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS_DB.php',
         'UnusedCSS_Enqueue' => __DIR__ . '/../..' . '/includes/modules/css/unused-css/UnusedCSS_Enqueue.php',
