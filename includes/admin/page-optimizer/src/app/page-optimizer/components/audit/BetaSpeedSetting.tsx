@@ -112,7 +112,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     if (!settings) {
         return <></>
     }else{
-        console.log(settings , ' : ', actionRequired);
+        console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -203,12 +203,12 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     const [checkboxState, setCheckboxState] = useState(mainInput.value);
     const [showRequiredPopover, setshowRequiredPopover] = useState(false);
 
-    const handleCheckboxClick = () => {
-        if (!actionRequired) {
-            setshowRequiredPopover(true)
-            setActionRequiredDialogOpen(true);
-        }
-    };
+    // const handleCheckboxClick = () => {
+    //     if (!actionRequired) {
+    //         setshowRequiredPopover(true)
+    //         setActionRequiredDialogOpen(true);
+    //     }
+    // };
 
     const saveDeferJsSettings = () => {
         updateValue(settings, checkboxState, mainInput.key);
@@ -234,7 +234,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     {mainInput && (
                         <>
                             {mainInput.control_type === 'checkbox' && (
-                                <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
                                           onCheckedChange={(c: boolean) =>{
@@ -242,7 +242,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                   updateValue(settings, c, mainInput.key);
                                               }else{
                                                   setCheckboxState(c);
-                                                  handleCheckboxClick();
+                                                  // handleCheckboxClick();
                                               }
 
                                           }}/>

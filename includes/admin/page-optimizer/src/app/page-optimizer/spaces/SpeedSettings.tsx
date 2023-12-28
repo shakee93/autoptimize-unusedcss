@@ -1,4 +1,5 @@
 import {useSelector} from "react-redux";
+import { debounce } from 'lodash';
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
@@ -118,11 +119,32 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         return hasPassedAudit || hasFailedAudit;
     };
 
+    const [sortedSettings, setSortedSettings] = useState([]);
+    const [sortedStatus, setSortedStatus] = useState(true)
+
+    useEffect(() => {
+        if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
+            const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
+                const aValue = a.inputs[0].value;
+                const bValue = b.inputs[0].value;
+                return aValue ? -1 : bValue ? 1 : 0;
+            });
+
+            setSortedSettings(sorted);
+            setSortedStatus(false)
+        }
+    }, [groupedSettings, activeCategory]);
+
+
+
     return <div>
         <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
-                <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
+                <li className='cursor-pointer' key={index} onClick={e => {
+                    setSortedStatus(true);
+                    setActiveCategory(category);
+                }}>
                     <m.div
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -149,11 +171,10 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
             transition={{ duration: 0.5 }}
         >
         <ul>
-            {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
+            {sortedSettings.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
                     {item.audits.length > 0 &&
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
-
                             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
                             {/*<p className='px-10 text-sm'>Remove unnecessary spaces, lines and comments from CSS files.</p>*/}
                             <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
@@ -214,7 +235,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                             </ul>
                         </div>
 
-                   }
+                    }
 
                 </li>
             ))}
