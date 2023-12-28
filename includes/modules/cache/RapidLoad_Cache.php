@@ -69,7 +69,9 @@ class RapidLoad_Cache
         add_action( 'rapidload_cache_site_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
         add_action( 'rapidload_cache_page_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
 
-        self::process_clear_cache_request();
+        add_action('init', function (){
+            self::process_clear_cache_request();
+        });
     }
 
     public function add_notification($notifications)
@@ -619,6 +621,7 @@ class RapidLoad_Cache
 
             self::clear_page_cache_by_url( $url );
         } elseif ( $_GET['_action'] === 'clear' ) {
+
             self::each_site( ( is_multisite() && is_network_admin() ), 'self::clear_site_cache', array(), true );
         }
 
@@ -1061,15 +1064,19 @@ class RapidLoad_Cache
         $callback_return   = array();
 
         foreach ( $blog_ids as $blog_id ) {
-            self::switch_to_blog( $blog_id, $restart_engine, $skip_active_check );
+            try {
+                self::switch_to_blog( $blog_id, $restart_engine, $skip_active_check );
 
-            if ( ($skip_active_check || self::is_rapidload_active()) && is_callable($callback)) {
-                $callback_return[ $blog_id ] = call_user_func_array( $callback, $callback_params );
+                if ( ($skip_active_check || self::is_rapidload_active()) && is_callable($callback)) {
+                    $callback_return[ $blog_id ] = call_user_func_array( $callback, $callback_params );
+                }
+
+                $_restart_engine = ( $restart_engine && $blog_id === $last_blog_id ) ? true : false;
+
+                self::restore_current_blog( $_restart_engine, $skip_active_check );
+            }catch (Exception $exception){
+
             }
-
-            $_restart_engine = ( $restart_engine && $blog_id === $last_blog_id ) ? true : false;
-
-            self::restore_current_blog( $_restart_engine, $skip_active_check );
         }
 
         return $callback_return;

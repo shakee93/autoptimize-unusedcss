@@ -80,6 +80,8 @@ class Javascript_Enqueue
 
         foreach ( $links as $link ) {
 
+            $original_src = self::is_js($link) ? $link->src : null;
+
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }
@@ -89,7 +91,7 @@ class Javascript_Enqueue
             if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
 
                 if(!apply_filters('rapidload/js/delay-excluded', false, $link, $this->job, $this->strategy, $this->options)){
-                    $this->load_scripts_on_user_interaction($link);
+                    $this->load_scripts_on_user_interaction($link, $original_src);
                 }
 
             }
@@ -162,7 +164,7 @@ class Javascript_Enqueue
         ];
     }
 
-    public function load_scripts_on_user_interaction($link){
+    public function load_scripts_on_user_interaction($link, $original_src = null){
 
         if(self::is_js($link)){
 
@@ -174,13 +176,22 @@ class Javascript_Enqueue
                     unset($link->src);
 
                 }
+                if(!self::is_file_excluded($original_src) && self::is_load_on_user_interaction($original_src)){
+
+                    $data_attr = "data-rapidload-src";
+                    $link->{$data_attr} = $link->src;
+                    unset($link->src);
+
+                }
             }else{
 
-                if($this->str_contains($link->src,"rapidload.frontend.min.js")){
+                if($this->str_contains($link->src,"rapidload.frontend.min.js") || ($original_src && $this->str_contains($original_src,"rapidload.frontend.min.js"))){
                     return;
                 }
 
-                if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
+                if( !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js') ||
+                    $original_src && !self::is_file_excluded($original_src) && !self::is_file_excluded($original_src,'uucss_exclude_files_from_delay_js')
+                ){
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;

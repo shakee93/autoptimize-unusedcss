@@ -156,6 +156,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.9 - 26/12/2023 =
+ * fix: Fatal error when clearing product page cache
+
 = 2.2.8 - 25/12/2023 =
  * fix: known bugs
 
