@@ -685,7 +685,7 @@
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
-                        var attemptsString = '';
+                        var attemptsString = "";
 
                         if((rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
                             attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts
