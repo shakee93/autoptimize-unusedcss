@@ -18,7 +18,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {CheckCircleIcon, ChevronRightIcon} from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
-import { m } from 'framer-motion';
+import { m, AnimatePresence  } from 'framer-motion';
 
 interface SettingsProps {
     audit: Audit
