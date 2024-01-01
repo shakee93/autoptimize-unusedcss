@@ -114,12 +114,12 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     };
 
     const neonColors = {
-        css: '#7F54B3',
+        css: '#7F54B3',      
         javascript: '#FDC20A',
-        image: '#0EBFE6',
-        font: '#295ECF',
-        cdn: '#09B42F',
-        cache: '#FF7D00',
+        image: '#0EBFE6',    
+        font: '#295ECF',      
+        cdn: '#09B42F',        
+        cache: '#FF7D00',      
     };
 
 
