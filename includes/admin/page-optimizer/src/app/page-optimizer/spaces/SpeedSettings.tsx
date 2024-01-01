@@ -37,7 +37,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     const [activeCategory, setActiveCategory]= useState('image')
     const [groupedSettings, setGroupedSettings] = useState({})
     const {dispatch, openAudits, activeTab} = useCommonDispatch()
-    const categoryOrder = [ 'cache', 'image', 'javascript', 'css', 'font', 'cdn'];
+    const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,
@@ -97,21 +97,31 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     const getWidthForCategory = (category) => {
         switch (category) {
             case 'cdn':
-                return 750;
+                return 625;
             case 'font':
-                return 640;
+                return 515;
             case 'css':
-                return 530;
+                return 130;
             case 'javascript':
-                return 400;
+                return 255;
             case 'image':
-                return 270;
+                return 395;
             case 'cache':
-                return 150;
+                return 740;
             default:
-                return 270;
+                return 395;
         }
     };
+
+    const neonColors = {
+        css: '#7F54B3',
+        javascript: '#FDC20A',
+        image: '#0EBFE6',
+        font: '#295ECF',
+        cdn: '#09B42F',
+        cache: '#FF7D00',
+    };
+
 
     const actionRequired = (item) => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -138,7 +148,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
 
 
     return <div>
-        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} />
+        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} neonColor={neonColors[activeCategory] || '#0EBFE6'} />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
