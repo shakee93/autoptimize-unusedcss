@@ -129,16 +129,41 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     const [sortedSettings, setSortedSettings] = useState([]);
     const [sortedStatus, setSortedStatus] = useState(true)
 
+    // useEffect(() => {
+    //     if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
+    //         const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
+    //             const aValue = a.inputs[0].value;
+    //             const bValue = b.inputs[0].value;
+    //             return aValue ? -1 : bValue ? 1 : 0;
+    //         });
+    //
+    //         setSortedSettings(sorted);
+    //         setSortedStatus(false)
+    //     }
+    // }, [groupedSettings, activeCategory]);
+
     useEffect(() => {
         if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
             const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
                 const aValue = a.inputs[0].value;
                 const bValue = b.inputs[0].value;
-                return aValue ? -1 : bValue ? 1 : 0;
+
+                // Sort by checked value first
+                if (aValue && !bValue) return -1;
+                if (!aValue && bValue) return 1;
+
+                // Then sort by not passed audits
+                const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+                if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                if (!aHasFailedAudit && bHasFailedAudit) return 1;
+
+                // Finally, sort by passed audits
+                return 0;
             });
 
             setSortedSettings(sorted);
-            setSortedStatus(false)
+            setSortedStatus(false);
         }
     }, [groupedSettings, activeCategory]);
 
