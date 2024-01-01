@@ -63,10 +63,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         return grouped;
     };
 
-    // useEffect(() => {
-    //     setGroupedSettings(groupByCategory(settings))
-    //
-    // }, [data, settings])
+
     useEffect(() => {
         const grouped = groupByCategory(settings);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
