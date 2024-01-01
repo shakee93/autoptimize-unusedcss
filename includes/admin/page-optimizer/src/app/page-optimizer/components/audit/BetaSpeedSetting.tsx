@@ -112,7 +112,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     if (!settings) {
         return <></>
     }else{
-        console.log(settings , ' : ', actionRequired);
+        // console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -162,6 +162,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
     // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
+    // console.log(additionalInputs);
 
     const saveAdditionalSettings = useCallback( () => {
 
@@ -199,21 +200,21 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         setLoading(false);
     }
 
-    const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
+    // const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
     const [checkboxState, setCheckboxState] = useState(mainInput.value);
-    const [showRequiredPopover, setshowRequiredPopover] = useState(false);
+    // const [showRequiredPopover, setshowRequiredPopover] = useState(false);
 
-    const handleCheckboxClick = () => {
-        if (!actionRequired) {
-            setshowRequiredPopover(true)
-            setActionRequiredDialogOpen(true);
-        }
-    };
+    // const handleCheckboxClick = () => {
+    //     if (!actionRequired) {
+    //         setshowRequiredPopover(true)
+    //         setActionRequiredDialogOpen(true);
+    //     }
+    // };
 
     const saveDeferJsSettings = () => {
         updateValue(settings, checkboxState, mainInput.key);
-        setshowRequiredPopover(false)
-        setActionRequiredDialogOpen(false);
+        // setshowRequiredPopover(false)
+        // setActionRequiredDialogOpen(false);
     };
 
     return (
@@ -234,7 +235,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     {mainInput && (
                         <>
                             {mainInput.control_type === 'checkbox' && (
-                                <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
                                           onCheckedChange={(c: boolean) =>{
@@ -242,7 +243,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                   updateValue(settings, c, mainInput.key);
                                               }else{
                                                   setCheckboxState(c);
-                                                  handleCheckboxClick();
+                                                  // handleCheckboxClick();
                                               }
 
                                           }}/>
@@ -298,6 +299,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                 {additionalInputs.map((input, index) =>
                                                     <div key={index} >
                                                         <Fields input={input} updates={updates} update={update} />
+
                                                     </div>
                                                 )}
                                             </div>
@@ -322,36 +324,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 </TooltipText>
                             </Mode>
 
-                            {/* Defer Javascript Settings Dialog */}
 
-                            <Dialog open={actionRequiredDialogOpen} onOpenChange={setActionRequiredDialogOpen}>
-                                {/*<DialogTrigger disabled asChild>*/}
-                                {/*    <div>*/}
-                                {/*        <TooltipText text="Defer Javascript Settings">*/}
-                                {/*            <Cog8ToothIcon className="w-5 text-brand-400"/>*/}
-                                {/*        </TooltipText>*/}
-                                {/*    </div>*/}
-                                {/*</DialogTrigger>*/}
-                                <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
-                                    <DialogHeader className="px-6 py-7">
-                                        <DialogTitle>Test Settings Popup Not Required</DialogTitle>
-                                        <DialogDescription>
-                                            Making Changes on this setting is not required its already in passed audits,
-                                            would you like to force proceed?
-                                        </DialogDescription>
-                                    </DialogHeader>
-
-                                    <DialogFooter className="px-6 py-3 border-t">
-                                        <AppButton onClick={saveDeferJsSettings} className="text-sm">
-                                            Yes
-                                        </AppButton>
-                                        <AppButton onClick={() => setActionRequiredDialogOpen(false)} variant="outline"
-                                                   className="text-sm">
-                                            Cancel
-                                        </AppButton>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
 
                         </>
 

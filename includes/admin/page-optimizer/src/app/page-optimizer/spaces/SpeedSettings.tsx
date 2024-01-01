@@ -1,4 +1,5 @@
 import {useSelector} from "react-redux";
+import { debounce } from 'lodash';
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
@@ -17,7 +18,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {CheckCircleIcon, ChevronRightIcon} from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
-import { m } from 'framer-motion';
+import { m, AnimatePresence  } from 'framer-motion';
 
 interface SettingsProps {
     audit: Audit
@@ -36,7 +37,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     const [activeCategory, setActiveCategory]= useState('image')
     const [groupedSettings, setGroupedSettings] = useState({})
     const {dispatch, openAudits, activeTab} = useCommonDispatch()
-    const categoryOrder = [ 'cache', 'image', 'javascript', 'css', 'font', 'cdn'];
+    const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,
@@ -62,10 +63,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         return grouped;
     };
 
-    // useEffect(() => {
-    //     setGroupedSettings(groupByCategory(settings))
-    //
-    // }, [data, settings])
+
     useEffect(() => {
         const grouped = groupByCategory(settings);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -96,21 +94,31 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     const getWidthForCategory = (category) => {
         switch (category) {
             case 'cdn':
-                return 750;
+                return 625;
             case 'font':
-                return 640;
+                return 515;
             case 'css':
-                return 530;
+                return 130;
             case 'javascript':
-                return 400;
+                return 255;
             case 'image':
-                return 270;
+                return 395;
             case 'cache':
-                return 150;
+                return 740;
             default:
-                return 270;
+                return 395;
         }
     };
+
+    const neonColors = {
+        css: '#7F54B3',      
+        javascript: '#FDC20A',
+        image: '#0EBFE6',    
+        font: '#295ECF',      
+        cdn: '#09B42F',        
+        cache: '#FF7D00',      
+    };
+
 
     const actionRequired = (item) => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -118,11 +126,57 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         return hasPassedAudit || hasFailedAudit;
     };
 
+    const [sortedSettings, setSortedSettings] = useState([]);
+    const [sortedStatus, setSortedStatus] = useState(true)
+
+    // useEffect(() => {
+    //     if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
+    //         const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
+    //             const aValue = a.inputs[0].value;
+    //             const bValue = b.inputs[0].value;
+    //             return aValue ? -1 : bValue ? 1 : 0;
+    //         });
+    //
+    //         setSortedSettings(sorted);
+    //         setSortedStatus(false)
+    //     }
+    // }, [groupedSettings, activeCategory]);
+
+    useEffect(() => {
+        if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
+            const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
+                const aValue = a.inputs[0].value;
+                const bValue = b.inputs[0].value;
+
+                // Sort by checked value first
+                if (aValue && !bValue) return -1;
+                if (!aValue && bValue) return 1;
+
+                // Then sort by not passed audits
+                const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+                if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                if (!aHasFailedAudit && bHasFailedAudit) return 1;
+
+                // Finally, sort by passed audits
+                return 0;
+            });
+
+            setSortedSettings(sorted);
+            setSortedStatus(false);
+        }
+    }, [groupedSettings, activeCategory]);
+
+
+
     return <div>
-        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} />
+        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} neonColor={neonColors[activeCategory] || '#0EBFE6'} />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
-                <li className='cursor-pointer' key={index} onClick={e => setActiveCategory(category)}>
+                <li className='cursor-pointer' key={index} onClick={e => {
+                    setSortedStatus(true);
+                    setActiveCategory(category);
+                }}>
                     <m.div
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -149,11 +203,10 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
             transition={{ duration: 0.5 }}
         >
         <ul>
-            {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
+            {sortedSettings.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
                     {item.audits.length > 0 &&
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
-
                             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
                             {/*<p className='px-10 text-sm'>Remove unnecessary spaces, lines and comments from CSS files.</p>*/}
                             <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
@@ -214,7 +267,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                             </ul>
                         </div>
 
-                   }
+                    }
 
                 </li>
             ))}
