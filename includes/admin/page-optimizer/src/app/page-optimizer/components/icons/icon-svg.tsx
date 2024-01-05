@@ -125,10 +125,31 @@ export const AuditsLine:FC<SvgProps> = ({cls}) => (
 //         >
 //             <path d={adjustedPath} stroke="#0e0e0e" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
 //         </svg>
-//     );
+//
+//
+// );
 // };
 
-// export const SettingsLine: FC<SvgProps & { width?: number }> = ({ width = 400 }) => {
+export const SettingsLine: FC<SvgProps & { width?: number }> = ({ width = 400 }) => {
+    // Adjusting path values based on the new width
+    const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
+    const strokeWidth = 2;
+    return (
+        <>
+            <svg className="mb-2 -mt-2 -ml-9 absolute selectionBar"  width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d={adjustedPath} stroke="#7E53B2" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}/>
+            </svg>
+            <svg className="mb-2 -mt-2 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d={adjustedPath} stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}/>
+            </svg>
+        </>
+
+
+);
+};
+
+
+// export const SettingsLine: FC<SvgProps & { width?: number; neonColor?: string }> = ({ width = 400, neonColor = "#0e0e0e" }) => {
 //     // Adjusting path values based on the new width
 //     const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
 //
@@ -152,42 +173,11 @@ export const AuditsLine:FC<SvgProps> = ({cls}) => (
 //                 </filter>
 //             </defs>
 //
-//             {/* Apply filter to the path */}
-//             <path d={adjustedPath} stroke="#0e0e0e" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" filter="url(#neon)" />
+//             {/* Apply filter to the path with the specified neonColor */}
+//             <path d={adjustedPath} stroke={neonColor} strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" filter="url(#neon)" />
 //         </svg>
 //     );
 // };
-
-
-export const SettingsLine: FC<SvgProps & { width?: number; neonColor?: string }> = ({ width = 400, neonColor = "#0e0e0e" }) => {
-    // Adjusting path values based on the new width
-    const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
-
-    return (
-        <svg
-            className="mb-2 -mt-2 -ml-9 selectionBar"
-            width={width}
-            height="16"
-            viewBox={`0 0 ${width} 16`}
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            {/* Add filter for neon effect */}
-            <defs>
-                <filter id="neon" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-                    <feComponentTransfer in="blur" result="brightness">
-                        <feFuncA type="linear" slope="2" />
-                    </feComponentTransfer>
-                    <feBlend in="SourceGraphic" in2="brightness" mode="screen" />
-                </filter>
-            </defs>
-
-            {/* Apply filter to the path with the specified neonColor */}
-            <path d={adjustedPath} stroke={neonColor} strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" filter="url(#neon)" />
-        </svg>
-    );
-};
 
 
 
