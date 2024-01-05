@@ -92,8 +92,8 @@ const Performance = () => {
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
-                        `bg-zinc-50/95  gradient-border border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-                        " dark:hover:text-brand-300"
+                        `dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                     )}
                 > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
 

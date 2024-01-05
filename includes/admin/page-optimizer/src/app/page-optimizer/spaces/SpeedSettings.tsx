@@ -34,7 +34,7 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 const SpeedSettings = ({ audit }: SettingsProps) => {
 
     const {settings, data} = useSelector(optimizerData);
-    const [activeCategory, setActiveCategory]= useState('image')
+    const [activeCategory, setActiveCategory]= useState('css')
     const [groupedSettings, setGroupedSettings] = useState({})
     const {dispatch, openAudits, activeTab} = useCommonDispatch()
     const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
@@ -110,14 +110,6 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         }
     };
 
-    const neonColors = {
-        css: '#7F54B3',      
-        javascript: '#FDC20A',
-        image: '#0EBFE6',    
-        font: '#295ECF',      
-        cdn: '#09B42F',        
-        cache: '#FF7D00',      
-    };
 
 
     const actionRequired = (item) => {
@@ -167,10 +159,15 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         }
     }, [groupedSettings, activeCategory]);
 
+    const [firstItemRendered, setFirstItemRendered] = useState("Test");
+
+    useEffect(() => {
+        setFirstItemRendered(false);
+    }, [activeCategory]);
 
 
     return <div>
-        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} neonColor={neonColors[activeCategory] || '#0EBFE6'} />
+        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220}  />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
@@ -205,10 +202,26 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         <ul>
             {sortedSettings.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
-                    {item.audits.length > 0 &&
+                    {item.audits.length > 0 && (
+                    <div>
+
+                        {firstItemRendered === "Test" && !actionRequired(item) && (
+                            <>
+
+                                <div className="text-lg font-bold mb-2">
+                                    {console.log("printed ")}
+                                    Passed Opportunities and Diagnostics
+                                </div>
+                                {setFirstItemRendered("Hello")}
+
+                            </>
+                        )}
+
+
+
                         <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
                             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
-                            {/*<p className='px-10 text-sm'>Remove unnecessary spaces, lines and comments from CSS files.</p>*/}
+
                             <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
                                 <AuditsLine cls='w-4 mr-2  -mt-1'/>
                                 {item.audits.map((audit: Audit, index) =>
@@ -266,10 +279,11 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                                 )}
                             </ul>
                         </div>
-
-                    }
+                    </div>
+                    )}
 
                 </li>
+
             ))}
         </ul>
         </m.div>
