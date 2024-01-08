@@ -235,6 +235,12 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     {mainInput && (
                         <>
                             {mainInput.control_type === 'checkbox' && (
+                                <>
+                                    {/*{!actionRequired &&*/}
+                                    {/*<TooltipText text="Test">*/}
+                                    {/*    <Cog6ToothIcon className='w-5 text-brand-400'/>*/}
+                                    {/*</TooltipText>*/}
+                                    {/*}*/}
                                 <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
@@ -247,6 +253,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               }
 
                                           }}/>
+                                </>
 
                             )}
                         </>

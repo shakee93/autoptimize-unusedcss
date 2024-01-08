@@ -8,12 +8,14 @@ export type CommonState = {
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
+        openCategory: string[];
     }
     desktop : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
+        openCategory: string[];
     }
 };
 

@@ -33,11 +33,12 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({ audit }: SettingsProps) => {
 
-    const {settings, data} = useSelector(optimizerData);
+    const {settings, data } = useSelector(optimizerData);
     const [activeCategory, setActiveCategory]= useState('css')
     const [groupedSettings, setGroupedSettings] = useState({})
-    const {dispatch, openAudits, activeTab} = useCommonDispatch()
+    const {dispatch, openAudits, activeTab, openCategory} = useCommonDispatch()
     const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
+
 
     let icons = useMemo(() => ( {
         cache : <PageCache/>,
@@ -79,7 +80,13 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
         });
 
         setGroupedSettings(sortedGroupedSettings);
-    }, [data, settings]);
+
+       // console.log(openCategory);
+        if (openCategory && openCategory !== '') {
+            setActiveCategory(openCategory);
+        }
+
+    }, [data, settings, openCategory]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
 
@@ -120,19 +127,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
 
     const [sortedSettings, setSortedSettings] = useState([]);
     const [sortedStatus, setSortedStatus] = useState(true)
-
-    // useEffect(() => {
-    //     if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
-    //         const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
-    //             const aValue = a.inputs[0].value;
-    //             const bValue = b.inputs[0].value;
-    //             return aValue ? -1 : bValue ? 1 : 0;
-    //         });
-    //
-    //         setSortedSettings(sorted);
-    //         setSortedStatus(false)
-    //     }
-    // }, [groupedSettings, activeCategory]);
+    const [firstItem, setFirstItem] = useState(null);
 
     useEffect(() => {
         if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
@@ -140,30 +135,33 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                 const aValue = a.inputs[0].value;
                 const bValue = b.inputs[0].value;
 
-                // Sort by checked value first
                 if (aValue && !bValue) return -1;
                 if (!aValue && bValue) return 1;
 
-                // Then sort by not passed audits
                 const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
                 const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
                 if (aHasFailedAudit && !bHasFailedAudit) return -1;
                 if (!aHasFailedAudit && bHasFailedAudit) return 1;
 
-                // Finally, sort by passed audits
                 return 0;
+
             });
 
             setSortedSettings(sorted);
             setSortedStatus(false);
+
+            const lowestItemIndex = sorted.findIndex(item => !actionRequired(item));
+            setFirstItem(lowestItemIndex);
+            console.log("Lowest Item Index: ", firstItem);
+
         }
     }, [groupedSettings, activeCategory]);
 
-    const [firstItemRendered, setFirstItemRendered] = useState("Test");
 
-    useEffect(() => {
-        setFirstItemRendered(false);
-    }, [activeCategory]);
+
+    // useEffect(() => {
+    //     setFirstItemRendered("Hello");
+    // }, [activeCategory]);
 
 
     return <div>
@@ -175,10 +173,11 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                     setActiveCategory(category);
                 }}>
                     <m.div
+                        id={category} // Add id attribute
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
-                        'flex gap-2 transition-all items-center border border-transparent py-2 px-3.5 pl-2 bg-white rounded-2xl w-fit mb-4 hover:bg-brand-50',
+                        'flex gap-2 transition-all items-center border border-transparent py-2 px-3.5 pl-2 rounded-2xl w-fit mb-4 hover:bg-brand-50 dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
                         {icons[category]}
@@ -203,30 +202,23 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
             {sortedSettings.map((item: AuditSetting, itemIndex) => (
                 <li key={itemIndex} >
                     {item.audits.length > 0 && (
+
                     <div>
 
-                        {firstItemRendered === "Test" && !actionRequired(item) && (
-                            <>
-
-                                <div className="text-lg font-bold mb-2">
-                                    {console.log("printed ")}
-                                    Passed Opportunities and Diagnostics
-                                </div>
-                                {setFirstItemRendered("Hello")}
-
-                            </>
+                        {firstItem === itemIndex  && (
+                            <div className="text-lg font-bold mb-2 mt-4">Passed Opportunities and Diagnostics</div>
                         )}
 
 
-
-                        <div className='bg-white border mb-2 px-2.5 py-3 rounded-2xl'>
+                        <div className='border mb-2 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60'>
                             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
 
-                            <ul className='flex mt-2 justify-start ml-14 items-baseline	'>
-                                <AuditsLine cls='w-4 mr-2  -mt-1'/>
+                            <ul className='flex mt-2 justify-start ml-14'>
+                                <AuditsLine cls='w-4 mr-2  -mt-2'/>
                                 {item.audits.map((audit: Audit, index) =>
                                     <li
                                         onClick={e => {
+
                                             dispatch(setCommonState('openAudits', [audit.id]));
                                             dispatch(setCommonState('activeTab',
                                                 audit.type === 'passed_audit' ? 'passed_audits': audit.type === 'opportunity' ? 'opportunities' : audit.type
@@ -235,6 +227,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                                             setTimeout(() => {
                                                 document.getElementById(`audit-${audit.id}`)?.scrollIntoView({ behavior: 'smooth'})
                                             }, 100)
+
                                         }}
                                         className='relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2' key={index}>
                                         <div
@@ -266,7 +259,7 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
                                         <div className="flex flex-col">
                                             {audit.name}
                                             <div className="flex items-center">
-                                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">Opportunity</div>
+                                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">{audit.type? audit.type: 'Opportunity'}</div>
 
                                                 <div className=" text-gray-500 text-xs block">{audit.displayValue ? audit.displayValue : ''}</div>
 
