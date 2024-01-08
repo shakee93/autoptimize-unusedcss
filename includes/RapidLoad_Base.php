@@ -507,6 +507,15 @@ class RapidLoad_Base
 
         self::$paged_options = apply_filters('rapidload/options', self::$options);
 
+        if(isset($_REQUEST['rapidload_delay_js']) && $_REQUEST['rapidload_delay_js'] == "1"){
+            self::$paged_options['delay_javascript'] = "1";
+            self::$paged_options['uucss_enable_javascript'] = "1";
+        }
+        if(isset($_REQUEST['rapidload_defer_js']) && $_REQUEST['rapidload_defer_js'] == "1"){
+            self::$paged_options['uucss_load_js_method'] = "defer";
+            self::$paged_options['uucss_enable_javascript'] = "1";
+        }
+
         return self::$paged_options;
     }
 
