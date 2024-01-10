@@ -109,7 +109,7 @@
     async function loadScriptsInDependencyOrder() {
 
         for (const script of totalScripts) {
-            await loadScript(script);
+            loadScript(script);
         }
     }
 
