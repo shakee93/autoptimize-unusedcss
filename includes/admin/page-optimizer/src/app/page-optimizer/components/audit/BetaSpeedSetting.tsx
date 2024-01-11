@@ -33,7 +33,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import {Circle, GanttChart, Loader, Lock, RefreshCcw, Settings, SettingsIcon} from "lucide-react";
+import {Circle, GanttChart, Loader, Lock, RefreshCcw, Settings, SettingsIcon, Ban} from "lucide-react";
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -56,7 +56,7 @@ interface SettingItemProps {
     index: number;
     showIcons?: boolean
     hideActions?: boolean
-    actionRequired?: boolean
+    actionRequired: boolean
 }
 
 export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
@@ -112,7 +112,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     if (!settings) {
         return <></>
     }else{
-        // console.log(settings);
+       //  console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -201,21 +201,9 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     }
 
     // const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
-    const [checkboxState, setCheckboxState] = useState(mainInput.value);
-    // const [showRequiredPopover, setshowRequiredPopover] = useState(false);
+  //  const [checkboxState, setCheckboxState] = useState(mainInput.value);
 
-    // const handleCheckboxClick = () => {
-    //     if (!actionRequired) {
-    //         setshowRequiredPopover(true)
-    //         setActionRequiredDialogOpen(true);
-    //     }
-    // };
 
-    const saveDeferJsSettings = () => {
-        updateValue(settings, checkboxState, mainInput.key);
-        // setshowRequiredPopover(false)
-        // setActionRequiredDialogOpen(false);
-    };
 
     return (
 
@@ -236,24 +224,26 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <>
-                                    {/*{!actionRequired &&*/}
-                                    {/*<TooltipText text="Test">*/}
-                                    {/*    <Cog6ToothIcon className='w-5 text-brand-400'/>*/}
-                                    {/*</TooltipText>*/}
-                                    {/*}*/}
+                                {!actionRequired &&
+                                    <div className="absolute">
+                                        <TooltipText text={<><span className='text-purple-750 font-medium'>Test</span> Setting</>}>
+                                            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>
+                                        </TooltipText>
+                                    </div>
+
+                                }
+
+                                    {JSON.stringify(actionRequired)}
+
                                 <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
                                           onCheckedChange={(c: boolean) =>{
-                                              if(actionRequired){
-                                                  updateValue(settings, c, mainInput.key);
-                                              }else{
-                                                  setCheckboxState(c);
-                                                  // handleCheckboxClick();
-                                              }
+                                              updateValue(settings, c, mainInput.key);
 
                                           }}/>
                                 </>
+
 
                             )}
                         </>
@@ -330,6 +320,8 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                     <Lock className='w-4 text-brand-400'/>
                                 </TooltipText>
                             </Mode>
+
+
 
 
 

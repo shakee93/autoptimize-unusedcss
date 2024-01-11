@@ -118,17 +118,12 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
     };
 
 
-
-    const actionRequired = (item) => {
-        const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
-        const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
-        return hasPassedAudit || hasFailedAudit;
-    };
-
     const [sortedSettings, setSortedSettings] = useState([]);
     const [sortedStatus, setSortedStatus] = useState(true)
     const [firstItem, setFirstItem] = useState(null);
 
+    
+    
     useEffect(() => {
         if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
             const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
@@ -152,16 +147,26 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
 
             const lowestItemIndex = sorted.findIndex(item => !actionRequired(item));
             setFirstItem(lowestItemIndex);
-            console.log("Lowest Item Index: ", firstItem);
+
 
         }
     }, [groupedSettings, activeCategory]);
 
 
 
-    // useEffect(() => {
-    //     setFirstItemRendered("Hello");
-    // }, [activeCategory]);
+
+    const actionRequired = (item) => {
+
+        const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
+        const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
+        return hasPassedAudit || hasFailedAudit;
+
+    };
+
+
+
+
+
 
 
     return <div>
@@ -211,7 +216,9 @@ const SpeedSettings = ({ audit }: SettingsProps) => {
 
 
                         <div className='border mb-2 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60'>
+                            
                             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired(item)} index={itemIndex}/>
+                            
 
                             <ul className='flex mt-2 justify-start ml-14'>
                                 <AuditsLine cls='w-4 mr-2  -mt-2'/>
