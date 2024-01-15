@@ -189,8 +189,8 @@ const SpeedSettings = ({audit}: SettingsProps) => {
                 }}>
                     <m.div
                         id={category}
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        // initial={{ opacity: 0, y: -5 }}
+                        // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'flex gap-2 transition-all items-center border border-transparent py-2 px-3.5 pl-2 rounded-2xl w-fit mb-4 hover:bg-brand-50 dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
@@ -209,38 +209,36 @@ const SpeedSettings = ({audit}: SettingsProps) => {
         </ul>
 
         <m.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            // initial={{ opacity: 0, y: -5 }}
+            // animate={{ opacity: 1, y: 0 }}
+            // transition={{ duration: 0.5 }}
         >
         <ul>
             {sortedSettings.map((item: AuditSetting, itemIndex) => (
-                <li key={itemIndex} >
+                <li key={itemIndex} className='flex' >
                     {item.audits.length > 0 && (
-
-                    <div>
-
+                    <>
                         {firstItem === itemIndex  && (
                             <div
                             onClick={() => setShowHideState(activeCategory)}
                             className={cn(
-                            `hover:bg-slate-100 transition-all dark:bg-brand-930/90 bg-slate-50 border-2 border-transparent rounded-[20px] cursor-pointer w-[217px]  flex items-center gap-2 px-5 py-3 text-sm font-medium mb-4 mt-4`,
-                                categoryStates[activeCategory] ? "bg-slate-100" : ""
+                            `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+                            flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                                categoryStates[activeCategory] ? "" : ""
                             )}
-                            >Show Disabled Settings <ChevronDownIcon className='w-4 rounded-[15px]'/></div>
+                            >Show Additional Settings <ChevronDownIcon className='w-4 rounded-[15px]'/></div>
                         )}
 
                         {(actionRequired(item) || (categoryStates[activeCategory] && !actionRequired(item))) && (
                             <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={actionRequired(item)} />
                         )}
-
-
-                    </div>
+                    </>
                     )}
 
                 </li>
 
             ))}
+
         </ul>
         </m.div>
     </div>

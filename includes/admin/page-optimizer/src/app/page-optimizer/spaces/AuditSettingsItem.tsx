@@ -37,7 +37,7 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
     };
 
     return (
-        <div className="border mb-2 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60">
+        <div className="w-full border mb-2 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60">
             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired} index={itemIndex} />
 
             <ul className="flex mt-2 justify-start ml-14">
