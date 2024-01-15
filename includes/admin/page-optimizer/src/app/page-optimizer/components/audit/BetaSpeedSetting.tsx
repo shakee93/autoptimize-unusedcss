@@ -112,7 +112,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     if (!settings) {
         return <></>
     }else{
-       //  console.log(settings);
+        // console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -203,7 +203,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     // const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
   //  const [checkboxState, setCheckboxState] = useState(mainInput.value);
 
-
+ // console.log("Settings : ", settings.name, ": ", actionRequired)
 
     return (
 
@@ -233,7 +233,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
                                 }
 
-                                    {JSON.stringify(actionRequired)}
 
                                 <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}

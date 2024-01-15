@@ -157,6 +157,7 @@ interface AuditSetting {
     category: string;
     description: string;
     inputs: AuditSettingInput[];
+    audits: Audit[];
     status?: {
         status: 'failed' | 'queued' | 'processing' | 'success'
         stats: []

@@ -8,15 +8,18 @@ export type CommonState = {
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
-        openCategory: string[];
+        openCategory: string;
+        storePassedAudits:string[];
     }
     desktop : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
-        openCategory: string[];
+        openCategory: string;
+        storePassedAudits:string[];
     }
+
 };
 
 export const SET_STATE = 'SET_STATE';
