@@ -515,6 +515,11 @@ class RapidLoad_Base
             self::$paged_options['uucss_load_js_method'] = "defer";
             self::$paged_options['uucss_enable_javascript'] = "1";
         }
+        if(isset($_REQUEST['rapidload_enable_cpcss']) && $_REQUEST['rapidload_enable_cpcss'] == "1"){
+            self::$paged_options['uucss_enable_cpcss'] = "1";
+            self::$paged_options['uucss_enable_cpcss_mobile'] = "1";
+            self::$paged_options['uucss_enable_css'] = "1";
+        }
 
         return self::$paged_options;
     }
