@@ -108,8 +108,10 @@
 
     async function loadScriptsInDependencyOrder() {
 
+        await preloadScripts(totalScripts)
+
         for (const script of totalScripts) {
-            await loadScript(script);
+            loadScript(script);
         }
     }
 
