@@ -226,13 +226,12 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 <>
                                 {!actionRequired &&
                                     <div className="absolute">
-                                        <TooltipText text={<><span className='text-purple-750 font-medium'>Test</span> Setting</>}>
+                                        <TooltipText text={<>No Action Required</>}>
                                             <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>
                                         </TooltipText>
                                     </div>
 
                                 }
-
 
                                 <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
                                           className={actionRequired ? '' : 'border-dashed'}

@@ -122,14 +122,17 @@
 .selectionBar {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: draw 2s ease-in-out alternate;
+  animation: draw infinite 2s ease-in-out alternate;
 }
 
 @keyframes draw {
-  from {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  50% {
     stroke-dashoffset: 1000;
   }
-  to {
+  100% {
     stroke-dashoffset: 0;
   }
 }

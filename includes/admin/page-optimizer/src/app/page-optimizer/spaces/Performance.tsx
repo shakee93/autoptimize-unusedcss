@@ -60,32 +60,29 @@ const Performance = () => {
     ];
 
 
-    useEffect(() => {
-
-       //  const observer = new IntersectionObserver(
-       //      ([entry]) => {
-       //          // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
-       //          setIsSticky(!entry.isIntersecting);
-       //
-       //      },
-       //      { threshold: [1] }
-       //  );
-       //
-       //  if (navbarRef.current) {
-       //      observer.observe(navbarRef.current);
-       //  }
-       // // console.log(activeTab);
-       //  return () => {
-       //      if (navbarRef.current) {
-       //          observer.unobserve(navbarRef.current);
-       //      }
-       //  };
-       //  if(activeTab =='configurations'){
-       //      dispatch(setCommonState('storePassedAudits', 'done'));
-       //
-       //  }
-
-    }, [activeTab]);
+    // useEffect(() => {
+    //
+    //     const observer = new IntersectionObserver(
+    //         ([entry]) => {
+    //             // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
+    //             setIsSticky(!entry.isIntersecting);
+    //
+    //         },
+    //         { threshold: [1] }
+    //     );
+    //
+    //     if (navbarRef.current) {
+    //         observer.observe(navbarRef.current);
+    //     }
+    //
+    //     return () => {
+    //         if (navbarRef.current) {
+    //             observer.unobserve(navbarRef.current);
+    //         }
+    //     };
+    //
+    //
+    // }, [activeTab]);
 
     return (
 

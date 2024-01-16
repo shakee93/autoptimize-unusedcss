@@ -15,29 +15,33 @@ import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetti
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon  } from "@heroicons/react/24/solid";
+import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon } from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem'; // Import the new component
 
+const capitalizeCategory = (category: string) => {
+    if (category === 'css' || category === 'cdn') {
+        return category.toUpperCase();
+    } else {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+    }
+};
 
-interface SettingsProps {
-    audit: Audit
-}
 type GroupedSettings = Record<string, AuditSetting[]>;
 
-const SpeedSettings = ({audit}: SettingsProps) => {
+const SpeedSettings = ({}) => {
 
     const {settings, data } = useSelector(optimizerData);
     const [activeCategory, setActiveCategory]= useState('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory} = useCommonDispatch()
     const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
-
-    const [sortedSettings, setSortedSettings] = useState<AuditSetting[]>([]);
     const [sortedStatus, setSortedStatus] = useState(true)
-    const [firstItem, setFirstItem] = useState<number | null>(null);
+
+    // const [sortedSettings, setSortedSettings] = useState<AuditSetting[]>([]);
+    // const [firstItem, setFirstItem] = useState<number | null>(null);
 
 
     const icons = useMemo(() => ( {
@@ -68,6 +72,8 @@ const SpeedSettings = ({audit}: SettingsProps) => {
 
 
     useEffect(() => {
+        console.log("trailer")
+
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
             const indexA = categoryOrder.indexOf(a);
@@ -95,12 +101,12 @@ const SpeedSettings = ({audit}: SettingsProps) => {
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
-            audit,
+            setting.audits[0],
             setting,
             key,
             value
         ));
-    }, [settings]);
+    }, [dispatch]);
 
     const getWidthForCategory = (category) => {
         switch (category) {
@@ -121,9 +127,12 @@ const SpeedSettings = ({audit}: SettingsProps) => {
         }
     };
 
+    const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
+    const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
+
 
     useEffect(() => {
-       // console.log("trailer")
+
 
         if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
             const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
@@ -142,16 +151,21 @@ const SpeedSettings = ({audit}: SettingsProps) => {
 
             });
 
-            setSortedSettings(sorted);
+            // setSortedSettings(sorted);
             setSortedStatus(false);
 
-            const lowestItemIndex = sorted.findIndex(item => !actionRequired(item));
-            setFirstItem(lowestItemIndex);
+            // const lowestItemIndex = sorted.findIndex(item => !actionRequired(item));
+            // setFirstItem(lowestItemIndex);
 
 
+            const passed = sorted.filter((item) => !actionRequired(item));
+            const notPassed = sorted.filter((item) => actionRequired(item));
+
+            setPassedAudits(passed);
+            setNotPassedAudits(notPassed);
 
         }
-    }, [groupedSettings, activeCategory]);
+    }, [groupedSettings, activeCategory, sortedStatus]);
 
 
 
@@ -180,7 +194,7 @@ const SpeedSettings = ({audit}: SettingsProps) => {
 
 
     return <div>
-        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220}  />
+        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-4 ml-12'>
             {Object.keys(groupedSettings).map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
@@ -197,7 +211,7 @@ const SpeedSettings = ({audit}: SettingsProps) => {
                     )}>
                         {icons[category]}
                         <span>
-                        {category}
+                        {capitalizeCategory(category)}
                         </span>
 
                     </m.div>
@@ -213,33 +227,41 @@ const SpeedSettings = ({audit}: SettingsProps) => {
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.5 }}
         >
-        <ul>
-            {sortedSettings.map((item: AuditSetting, itemIndex) => (
-                <li key={itemIndex} className='flex' >
-                    {item.audits.length > 0 && (
-                    <>
-                        {firstItem === itemIndex  && (
-                            <div
-                            onClick={() => setShowHideState(activeCategory)}
-                            className={cn(
-                            `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-                            flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-                                categoryStates[activeCategory] ? "" : ""
-                            )}
-                            >Show Additional Settings <ChevronDownIcon className='w-4 rounded-[15px]'/></div>
-                        )}
+            <ul>
+                {notPassedAudits.map((item: AuditSetting, itemIndex) => (
+                    <li key={itemIndex}>{
+                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
+                    }</li>
+                ))}
+            </ul>
 
-                        {(actionRequired(item) || (categoryStates[activeCategory] && !actionRequired(item))) && (
-                            <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={actionRequired(item)} />
-                        )}
-                    </>
+            <ul>
+                {passedAudits.length > 0 &&
+                <div
+                    onClick={() => setShowHideState(activeCategory)}
+                    className={cn(
+                    `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+                      flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                    categoryStates[activeCategory] ? "" : ""
                     )}
+                    >
+                    Show Additional Settings {categoryStates[activeCategory]? <ChevronUpIcon className='w-4 rounded-[15px]' /> : <ChevronDownIcon className='w-4 rounded-[15px]' />}
+                    </div>
+                }
 
-                </li>
+                { (categoryStates[activeCategory]) && (
+                    <>
+                    <div className="font-medium text-sm mb-2">The audit associated with these settings is already optimized</div>
+                    {passedAudits.map((item: AuditSetting, itemIndex) => (
+                    <li key={itemIndex}>
+                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
+                    </li>
 
-            ))}
+                    ))}
+                    </>
+                )}
 
-        </ul>
+            </ul>
         </m.div>
     </div>
 }
