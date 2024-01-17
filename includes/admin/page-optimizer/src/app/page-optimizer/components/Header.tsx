@@ -39,11 +39,6 @@ const Header = ({ url }: { url: string}) => {
     } = useAppContext()
 
     const { activeReport,
-        touched,
-        data,
-        settings,
-        originalSettings,
-        original,
         loading
     } = useSelector(optimizerData);
 
@@ -72,20 +67,24 @@ const Header = ({ url }: { url: string}) => {
                 <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
-                            'absolute shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                            activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
+                            'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                            activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'
                         )}>
                         </div>
 
-                        <div onClick={() => dispatch(changeReport('mobile'))}
-                             className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
-                            <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" /> Mobile
-                        </div>
+                        <TooltipText text="Mobile">
+                            <div onClick={() => dispatch(changeReport('mobile'))}
+                                 className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
+                                <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" />
+                            </div>
+                        </TooltipText>
 
-                        <div onClick={() => dispatch(changeReport('desktop'))}
-                             className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
-                            <Monitor className="h-5 w-5 font-medium dark:text-brand-500 " /> Desktop
-                        </div>
+                        <TooltipText text='Desktop'>
+                            <div onClick={() => dispatch(changeReport('desktop'))}
+                                 className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
+                                <Monitor className="h-5 w-5 font-medium dark:text-brand-500 " />
+                            </div>
+                        </TooltipText>
                     </div>
                     <div className='flex overflow-hidden border rounded-2xl'>
                         <UrlPreview/>
@@ -99,9 +98,9 @@ const Header = ({ url }: { url: string}) => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                            dispatch(fetchData(options, url, true))
-                            commonDispatch(setCommonState('openAudits', []))
-                        }} >
+                                dispatch(fetchData(options, url, true))
+                                commonDispatch(setCommonState('openAudits', []))
+                            }} >
                             <TooltipText
                                 text='Analyze the page'>
                                 <AppButton data-tour='analyze'
