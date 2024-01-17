@@ -129,7 +129,7 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
-           const api_root = this.options?.api_root || 'http://localhost:5556/api/v1';
+           const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
            pageSpeedURL.searchParams.append('url', url)

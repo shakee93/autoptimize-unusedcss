@@ -1,7 +1,7 @@
 import {useSelector} from "react-redux";
 import { debounce } from 'lodash';
 import {optimizerData} from "../../../store/app/appSelector";
-import React, {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
+import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
@@ -40,6 +40,7 @@ const SpeedSettings = ({}) => {
     const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
 
+
     // const [sortedSettings, setSortedSettings] = useState<AuditSetting[]>([]);
     // const [firstItem, setFirstItem] = useState<number | null>(null);
 
@@ -72,7 +73,7 @@ const SpeedSettings = ({}) => {
 
 
     useEffect(() => {
-        console.log("trailer")
+
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -91,7 +92,7 @@ const SpeedSettings = ({}) => {
 
        // console.log(openCategory);
         if (openCategory && openCategory!=='') {
-        //    setSortedStatus(true);
+            setSortedStatus(true);
             setActiveCategory(openCategory);
             console.log(activeCategory);
         }
@@ -129,44 +130,79 @@ const SpeedSettings = ({}) => {
 
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
+    const isInitialRender = useRef(true);
 
+
+    // useEffect(() => {
+    //     if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
+    //         const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
+    //             const aValue = a.inputs[0].value;
+    //             const bValue = b.inputs[0].value;
+    //
+    //             if (aValue && !bValue) return -1;
+    //             if (!aValue && bValue) return 1;
+    //
+    //             const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+    //             const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+    //             if (aHasFailedAudit && !bHasFailedAudit) return -1;
+    //             if (!aHasFailedAudit && bHasFailedAudit) return 1;
+    //             return 0;
+    //         });
+    //
+    //         setSortedStatus(false);
+    //
+    //         const passed = sorted.filter((item) => !actionRequired(item));
+    //         const notPassed = sorted.filter((item) => actionRequired(item));
+    //
+    //         setPassedAudits(passed);
+    //         setNotPassedAudits(notPassed);
+    //     }
+    // }, [groupedSettings, activeCategory, sortedStatus]);
 
     useEffect(() => {
+        if (isInitialRender.current) {
+            isInitialRender.current = false;
+            return;
+        }
 
+        if (groupedSettings && sortedStatus) {
+            const allPassedAudits: any[] = [];
+            const allNotPassedAudits: any[] = [];
 
-        if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
-            const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
-                const aValue = a.inputs[0].value;
-                const bValue = b.inputs[0].value;
+            categoryOrder.forEach((category) => {
+                if (groupedSettings[category]) {
+                    const sorted = groupedSettings[category].slice().sort((a, b) => {
+                        const aValue = a.inputs[0].value;
+                        const bValue = b.inputs[0].value;
 
-                if (aValue && !bValue) return -1;
-                if (!aValue && bValue) return 1;
+                        if (aValue && !bValue) return -1;
+                        if (!aValue && bValue) return 1;
 
-                const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-                const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-                if (aHasFailedAudit && !bHasFailedAudit) return -1;
-                if (!aHasFailedAudit && bHasFailedAudit) return 1;
+                        const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                        const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+                        if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                        if (!aHasFailedAudit && bHasFailedAudit) return 1;
 
-                return 0;
+                        return 0;
+                    });
 
+                    const passed = sorted.filter((item) => !actionRequired(item));
+                    const notPassed = sorted.filter((item) => actionRequired(item));
+
+                    allPassedAudits.push(...passed);
+                    allNotPassedAudits.push(...notPassed);
+                }
             });
 
-            // setSortedSettings(sorted);
+            setPassedAudits(allPassedAudits);
+            setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
 
-            // const lowestItemIndex = sorted.findIndex(item => !actionRequired(item));
-            // setFirstItem(lowestItemIndex);
-
-
-            const passed = sorted.filter((item) => !actionRequired(item));
-            const notPassed = sorted.filter((item) => actionRequired(item));
-
-            setPassedAudits(passed);
-            setNotPassedAudits(notPassed);
-
         }
-    }, [groupedSettings, activeCategory, sortedStatus]);
 
+
+
+    }, [groupedSettings]);
 
 
     const actionRequired = (item) => {
@@ -191,14 +227,16 @@ const SpeedSettings = ({}) => {
             [category]: !prevStates[category],
         }));
     };
-
+    const filteredAudits = passedAudits.filter(
+        (item) => item.category === activeCategory
+    );
 
     return <div>
         <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-4 ml-12'>
-            {Object.keys(groupedSettings).map((category, index) => (
+            {categoryOrder.map((category, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
-                    setSortedStatus(true);
+                   // setSortedStatus(true);
                     setActiveCategory(category);
                 }}>
                     <m.div
@@ -228,33 +266,41 @@ const SpeedSettings = ({}) => {
             // transition={{ duration: 0.5 }}
         >
             <ul>
+
                 {notPassedAudits.map((item: AuditSetting, itemIndex) => (
-                    <li key={itemIndex}>{
+                    <li key={itemIndex}>{ item.category === activeCategory &&
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
                     }</li>
                 ))}
             </ul>
 
             <ul>
-                {passedAudits.length > 0 &&
-                <div
-                    onClick={() => setShowHideState(activeCategory)}
-                    className={cn(
-                    `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-                      flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-                    categoryStates[activeCategory] ? "" : ""
-                    )}
+                {filteredAudits.length > 0 && (
+                    <div
+                        onClick={() => setShowHideState(activeCategory)}
+                        className={cn(
+                            `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+          flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                            categoryStates[activeCategory] ? "" : ""
+                        )}
                     >
-                    Show Additional Settings {categoryStates[activeCategory]? <ChevronUpIcon className='w-4 rounded-[15px]' /> : <ChevronDownIcon className='w-4 rounded-[15px]' />}
+                        Show Additional Settings{" "}
+                        {categoryStates[activeCategory] ? (
+                            <ChevronUpIcon className='w-4 rounded-[15px]' />
+                        ) : (
+                            <ChevronDownIcon className='w-4 rounded-[15px]' />
+                        )}
                     </div>
-                }
+                )}
 
                 { (categoryStates[activeCategory]) && (
                     <>
                     <div className="font-medium text-sm mb-2">The audit associated with these settings is already optimized</div>
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
-                    <li key={itemIndex}>
+
+                    <li key={itemIndex}>{ item.category === activeCategory &&
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
+                    }
                     </li>
 
                     ))}
