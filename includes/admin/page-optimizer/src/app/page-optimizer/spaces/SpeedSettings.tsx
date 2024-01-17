@@ -209,7 +209,11 @@ const SpeedSettings = ({}) => {
                         'flex gap-2 transition-all items-center border border-transparent py-2 px-3.5 pl-2 rounded-2xl w-fit mb-4 hover:bg-brand-50 dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
-                        {icons[category]}
+                        <div className={cn(
+                            // activeCategory !== category && 'grayscale contrast-75'
+                        )}>
+                            {icons[category]}
+                        </div>
                         <span>
                         {capitalizeCategory(category)}
                         </span>

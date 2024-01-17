@@ -60,17 +60,17 @@ const Footer = ({ } : FooterProps) => {
     }
 
     return (
-        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
-           <div className='flex gap-4 items-center'>
+        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 pl-3 pr-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
+           <div className='flex items-center'>
                {(data?.loadingExperience && !activeMetric) &&
                    <>
                        <AnimatePresence>
                            {tourPrompt &&
-                               <ScaleUp className='flex cursor-pointer items-center'>
+                               <ScaleUp className='flex cursor-pointer items-center w-fit '>
                                    <div
                                        onClick={e => setTourPrompt(false)}
-                                       className='absolute animate-bounce-horizontal text-sm -left-[270px] text-brand-400 font-normal'>
-                                       Ready to get Started? Take a quick tour 👉🏻
+                                       className='absolute animate-bounce-horizontal text-sm left-[110px] text-brand-400 font-normal'>
+                                       👈 Ready to get Started? Take a quick tour
                                    </div>
                                </ScaleUp>
                            }
@@ -81,7 +81,7 @@ const Footer = ({ } : FooterProps) => {
                                       commonDispatch(setCommonRootState('isTourOpen', true))
                                       setTourPrompt(false)
                                   }}
-                                  className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
+                                  className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
                            <div className='flex flex-col gap-1 items-center'>
                                <GraduationCapIcon className={cn(
                                    'w-5',
