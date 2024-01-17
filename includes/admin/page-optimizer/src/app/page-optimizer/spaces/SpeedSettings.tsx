@@ -1,5 +1,4 @@
 import {useSelector} from "react-redux";
-import { debounce } from 'lodash';
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
@@ -42,10 +41,10 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 const SpeedSettings = ({}) => {
 
     const {settings, data } = useSelector(optimizerData);
-    const [activeCategory, setActiveCategory]= useState('css')
+    const [activeCategory, setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory} = useCommonDispatch()
-    const categoryOrder = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
+    const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
 
 
@@ -53,7 +52,9 @@ const SpeedSettings = ({}) => {
     // const [firstItem, setFirstItem] = useState<number | null>(null);
 
 
-    const icons = useMemo(() => ( {
+    const icons :  {
+        [key in SettingsCategory]: React.ReactElement;
+    } = useMemo(() => ( {
         cache : <PageCache/>,
         cdn : <CloudDelivery/>,
         image : <ImageDeliverySVG/>,
@@ -63,7 +64,9 @@ const SpeedSettings = ({}) => {
         css : <CSSDelivery/>,
     }), [])
 
-    const iconsDuotone = useMemo(() => ( {
+    const iconsDuotone:  {
+        [key in SettingsCategory]: React.ReactElement;
+    } = useMemo(() => ( {
         cache : <PageCacheDuotone/>,
         cdn : <CloudDeliveryDuotone/>,
         image : <ImageDeliverySVGDuotone/>,
@@ -95,8 +98,8 @@ const SpeedSettings = ({}) => {
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
-            const indexA = categoryOrder.indexOf(a);
-            const indexB = categoryOrder.indexOf(b);
+            const indexA = categoryOrder.indexOf(a as SettingsCategory);
+            const indexB = categoryOrder.indexOf(b as SettingsCategory);
             return indexA - indexB;
         });
 
@@ -109,7 +112,7 @@ const SpeedSettings = ({}) => {
         setGroupedSettings(sortedGroupedSettings);
 
        // console.log(openCategory);
-        if (openCategory && openCategory!=='') {
+        if (openCategory) {
             setSortedStatus(true);
             setActiveCategory(openCategory);
             console.log(activeCategory);
@@ -127,7 +130,7 @@ const SpeedSettings = ({}) => {
         ));
     }, [dispatch]);
 
-    const getWidthForCategory = (category) => {
+    const getWidthForCategory = (category: SettingsCategory) => {
         switch (category) {
             case 'cdn':
                 return 625;
@@ -223,9 +226,9 @@ const SpeedSettings = ({}) => {
     }, [groupedSettings]);
 
 
-    const actionRequired = (item) => {
-        const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
-        const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
+    const actionRequired = (item: any) => {
+        const hasPassedAudit = item.inputs[0].value && item.audits.some((a: Audit) => a.type === 'passed_audit');
+        const hasFailedAudit = item.audits.some((a: Audit) => a.type !== 'passed_audit');
         return hasPassedAudit || hasFailedAudit ;
     };
 
@@ -252,7 +255,7 @@ const SpeedSettings = ({}) => {
     return <div>
         <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-3 ml-12'>
-            {categoryOrder.map((category, index) => (
+            {categoryOrder.map((category: SettingsCategory, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);

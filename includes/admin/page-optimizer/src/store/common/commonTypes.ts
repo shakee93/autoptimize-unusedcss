@@ -8,16 +8,16 @@ export type CommonState = {
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
-        openCategory: string;
-        storePassedAudits:string[];
+        openCategory?: SettingsCategory | '';
+        storePassedAudits?:string[];
     }
     desktop : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
-        openCategory: string;
-        storePassedAudits:string[];
+        openCategory?: SettingsCategory | '';
+        storePassedAudits?:string[];
     }
 
 };
