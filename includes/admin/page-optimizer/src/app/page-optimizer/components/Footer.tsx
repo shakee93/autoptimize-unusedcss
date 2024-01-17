@@ -1,11 +1,11 @@
 import ThemeSwitcher from "components/ui/theme-switcher";
 import {
     CopyMinus,
-    Eraser,
+    Eraser, GraduationCapIcon,
     History,
 } from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {cn, timeAgo} from "lib/utils";
 import { useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -19,14 +19,34 @@ import Mode from "app/page-optimizer/components/Mode";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import {AnimatePresence} from "framer-motion";
+import ScaleUp from "components/animation/ScaleUp";
+import AppButton from "components/ui/app-button";
+import {setCommonRootState} from "../../../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 interface FooterProps {
 }
 
+const tourPromptKey = 'titan-tour-prompt'
+
 const Footer = ({ } : FooterProps) => {
 
-    const {  loading, revisions , fresh, settings } =
+    const {  loading, revisions , data   } =
         useSelector(optimizerData)
+    const {
+        activeMetric,
+        dispatch: commonDispatch
+    } = useCommonDispatch()
+
+    const [tourPrompt, setTourPrompt] = useState(() => {
+        const storedData = localStorage.getItem(tourPromptKey);
+        return storedData ? JSON.parse(storedData) : true;
+    })
+
+    useEffect(() => {
+        localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
+    }, [tourPrompt])
 
     if (loading) {
         return  <></>
@@ -40,9 +60,39 @@ const Footer = ({ } : FooterProps) => {
     }
 
     return (
-        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 px-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
-           <div className='flex gap-4 items-center'>
-              <UrlPreview/>
+        <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 pl-3 pr-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
+           <div className='flex items-center'>
+               {(data?.loadingExperience && !activeMetric) &&
+                   <>
+                       <AnimatePresence>
+                           {tourPrompt &&
+                               <ScaleUp className='flex cursor-pointer items-center w-fit '>
+                                   <div
+                                       onClick={e => setTourPrompt(false)}
+                                       className='absolute animate-bounce-horizontal text-sm left-[110px] text-brand-400 font-normal'>
+                                       👈 Ready to get Started? Take a quick tour
+                                   </div>
+                               </ScaleUp>
+                           }
+                       </AnimatePresence>
+
+                       <AppButton data-tour='analyze'
+                                  onClick={() => {
+                                      commonDispatch(setCommonRootState('isTourOpen', true))
+                                      setTourPrompt(false)
+                                  }}
+                                  className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
+                           <div className='flex flex-col gap-1 items-center'>
+                               <GraduationCapIcon className={cn(
+                                   'w-5',
+                               )}/>
+                               <span className='text-xxs font-normal text-brand-500'>Get Started</span>
+                           </div>
+
+
+                       </AppButton>
+                   </>
+               }
            </div>
 
             <div className='flex items-center gap-2'>

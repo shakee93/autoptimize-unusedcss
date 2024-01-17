@@ -87,7 +87,7 @@ export default function PageOptimizer() {
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px]',
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px] mt-4',
                     )}>
 
                         {(savingData || invalidatingCache) && (
