@@ -11,7 +11,7 @@ import {optimizerData} from "../../../../store/app/appSelector";
 const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const {data} = useSelector(optimizerData);
+    const {data, loading} = useSelector(optimizerData);
 
     const {
         togglePerformance,
@@ -49,10 +49,20 @@ const UrlPreview = () => {
                           {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url}
                           {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
                       </div>
-            {data?.loadingExperience?.timestamp &&
-                <div data-timestamp={data.loadingExperience.timestamp}
-                     className='text-xxs leading-relaxed text-brand-500 cursor-default'>Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/></div>
-            }
+
+            <div
+                 className='text-xxs leading-relaxed text-brand-500 cursor-default'>
+                {loading ?
+                    <div className='w-24 bg-brand-300 animate-pulse h-2.5 rounded-sm mt-1'></div> :
+                    <>
+                        {data?.loadingExperience?.timestamp &&
+                            <>
+                                Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
+                            </>
+                        }
+                    </>}
+
+            </div>
         </div>
     </div>
 }
