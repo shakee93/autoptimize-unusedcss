@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
 import {CheckCircle2, Circle} from "lucide-react";
@@ -53,7 +53,7 @@ const SpeedSettings = ({}) => {
         js : <JavascriptDelivery/>,
         font : <FontDelivery/>,
         css : <CSSDelivery/>,
-    }), [])
+    })as Record<string, ReactNode>, []);
 
     const groupByCategory = (settings: AuditSetting[]) => {
         const grouped = {} as GroupedSettings;
@@ -109,7 +109,7 @@ const SpeedSettings = ({}) => {
         ));
     }, [dispatch]);
 
-    const getWidthForCategory = (category) => {
+    const getWidthForCategory = (category: string): number => {
         switch (category) {
             case 'cdn':
                 return 625;
@@ -205,31 +205,47 @@ const SpeedSettings = ({}) => {
     }, [groupedSettings]);
 
 
-    const actionRequired = (item) => {
+    const actionRequired = (item: AuditSetting): boolean => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
         const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
         return hasPassedAudit || hasFailedAudit ;
     };
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
+    const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
+    const [showButtonFadeIn, setShowButtonFadeIn] = useState(false);
 
     useEffect(() => {
-        const initialCategoryStates: Record<string, boolean> = {};
-        Object.keys(groupedSettings).forEach((category) => {
-            initialCategoryStates[category] = false;
-        });
-        setCategoryStates(initialCategoryStates);
+
+        if (passedAuditsCollapsStatus){
+            const initialCategoryStates: Record<string, boolean> = {};
+            Object.keys(groupedSettings).forEach((category) => {
+                initialCategoryStates[category] = false;
+            });
+            setCategoryStates(initialCategoryStates);
+            setPassedAuditsCollapsStatus(false);
+        }
+
+
+
     }, [groupedSettings]);
 
     const setShowHideState = (category: string) => {
+        //setPassedAuditsStatus(true);
         setCategoryStates((prevStates) => ({
             ...prevStates,
             [category]: !prevStates[category],
         }));
     };
+
     const filteredAudits = passedAudits.filter(
         (item) => item.category === activeCategory
     );
+
+    useEffect(() => {
+        setShowButtonFadeIn(true);
+        setTimeout(() => setShowButtonFadeIn(false), 800);
+    }, [activeCategory]);
 
     return <div>
         <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
@@ -281,12 +297,16 @@ const SpeedSettings = ({}) => {
 
             <ul>
                 {filteredAudits.length > 0 && (
-                    <div
+                    <m.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
                             `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-                            categoryStates[activeCategory] ? "" : ""
+          flex items-center gap-2 px-5 py-1.5 text-sm font-medium `,
+                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
                         )}
                     >
                         Show Additional Settings{" "}
@@ -295,12 +315,15 @@ const SpeedSettings = ({}) => {
                         ) : (
                             <ChevronDownIcon className='w-4 rounded-[15px]' />
                         )}
-                    </div>
+                    </m.div>
                 )}
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className="font-medium text-sm mb-2">The audit associated with these settings is already optimized</div>
+                    <div className={cn('font-normal text-sm mb-3 px-5',
+                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
+                    )}>The audit associated with these settings is already optimized</div>
+
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
                     <li key={itemIndex}>{ item.category === activeCategory &&

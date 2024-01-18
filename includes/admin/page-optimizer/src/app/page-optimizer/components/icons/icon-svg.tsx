@@ -111,7 +111,7 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
         const timeoutId = setTimeout(() => {
             setAnimate(false);
-        }, 2000);
+        }, 1500);
 
         return () => clearTimeout(timeoutId);
 
