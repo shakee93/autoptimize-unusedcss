@@ -16,7 +16,7 @@ const Checkbox = React.forwardRef<
         ref={ref}
     >
         <CheckboxPrimitives.Indicator className="absolute -left-0.5 transition ease-in-out delay-150">
-            <CheckIcon className="h-[20px] w-[20px] text-white bg-black rounded-md " />
+            <CheckIcon className="h-[20px] w-[20px] text-white bg-black rounded-md dark:bg-zinc-400 dark:text-black" />
         </CheckboxPrimitives.Indicator>
     </CheckboxPrimitives.Root>
 ));

@@ -16,7 +16,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
-import {GraduationCap, GraduationCapIcon, Monitor} from "lucide-react";
+import {ArrowDownUp, GraduationCap, GraduationCapIcon, Monitor, RefreshCcw} from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
@@ -25,6 +25,7 @@ import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
+import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -38,11 +39,6 @@ const Header = ({ url }: { url: string}) => {
     } = useAppContext()
 
     const { activeReport,
-        touched,
-        data,
-        settings,
-        originalSettings,
-        original,
         loading
     } = useSelector(optimizerData);
 
@@ -52,16 +48,11 @@ const Header = ({ url }: { url: string}) => {
         dispatch: commonDispatch
     } = useCommonDispatch()
 
-    const [tourPrompt, setTourPrompt] = useState(() => {
-        const storedData = localStorage.getItem(tourPromptKey);
-        return storedData ? JSON.parse(storedData) : true;
-    })
+
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
-    useEffect(() => {
-        localStorage.setItem(tourPromptKey, JSON.stringify(tourPrompt));
-    }, [tourPrompt])
+
 
     return (
 
@@ -73,25 +64,30 @@ const Header = ({ url }: { url: string}) => {
                         <span className='absolute text-xxs left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
                     )}
                 </div>
-                <div className='flex flex-column items-center gap-4'>
+                <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
-                            'absolute shadow-md translate-x-0 left-0.5 w-[110px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                            activeReport === 'desktop' && 'w-[115px] -translate-x-1.5 left-1/2'
+                            'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                            activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'
                         )}>
                         </div>
 
-                        <div onClick={() => dispatch(changeReport('mobile'))}
-                             className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
-                            <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" /> Mobile
-                        </div>
+                        <TooltipText text="Mobile">
+                            <div onClick={() => dispatch(changeReport('mobile'))}
+                                 className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
+                                <DevicePhoneMobileIcon  className="h-5 w-5 font-medium dark:text-brand-500" />
+                            </div>
+                        </TooltipText>
 
-                        <div onClick={() => dispatch(changeReport('desktop'))}
-                             className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
-                            <Monitor className="h-5 w-5 font-medium dark:text-brand-500 " /> Desktop
-                        </div>
+                        <TooltipText text='Desktop'>
+                            <div onClick={() => dispatch(changeReport('desktop'))}
+                                 className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
+                                <Monitor className="h-5 w-5 font-medium dark:text-brand-500 " />
+                            </div>
+                        </TooltipText>
                     </div>
-                    <div>
+                    <div className='flex overflow-hidden border rounded-2xl'>
+                        <UrlPreview/>
                         <UnsavedChanges
                             title='Analyze without Saving?'
                             description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
@@ -102,20 +98,20 @@ const Header = ({ url }: { url: string}) => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                            dispatch(fetchData(options, url, true))
-                            commonDispatch(setCommonState('openAudits', []))
-                        }} >
+                                dispatch(fetchData(options, url, true))
+                                commonDispatch(setCommonState('openAudits', []))
+                            }} >
                             <TooltipText
                                 text='Analyze the page'>
                                 <AppButton data-tour='analyze'
 
                                            className={cn(
-                                               'transition-none h-12 rounded-2xl border-none bg-transparent hover:opacity-100',
+                                               'transition-none rounded-none h-12 px-3 pr-3.5 border-r-0 border-l border-t-0 border-b-0 bg-transparent dark:bg-brand-800 hover:opacity-100',
                                            )}
                                            variant='outline'>
-                                    <div className='flex flex-col gap-1 items-center'>
-                                        <ArrowPathIcon className={cn(
-                                            'w-5',
+                                    <div className='flex flex-col gap-[1px] items-center'>
+                                        <RefreshCcw className={cn(
+                                            'w-4 -mt-0.5',
                                             loading && 'animate-spin'
                                         )}/>
                                         <span className='text-xxs font-normal text-brand-500'>Analyze </span>
@@ -123,6 +119,22 @@ const Header = ({ url }: { url: string}) => {
                                 </AppButton>
                             </TooltipText>
                         </UnsavedChanges>
+                        {/*<TooltipText*/}
+                        {/*    text='Switch URL to optimize'>*/}
+                        {/*    <AppButton data-tour='analyze'*/}
+
+                        {/*               className={cn(*/}
+                        {/*                   'transition-none rounded-none h-12 pl-3 pr-3.5 border-none bg-transparent hover:opacity-100',*/}
+                        {/*               )}*/}
+                        {/*               variant='outline'>*/}
+                        {/*        <div className='flex flex-col gap-[1px] items-center'>*/}
+                        {/*            <ArrowDownUp className={cn(*/}
+                        {/*                'w-4 -mt-0.5'*/}
+                        {/*            )}/>*/}
+                        {/*            <span className='text-xxs font-normal text-brand-500'>Switch</span>*/}
+                        {/*        </div>*/}
+                        {/*    </AppButton>*/}
+                        {/*</TooltipText>*/}
                     </div>
                 </div>
             </div>
@@ -130,42 +142,6 @@ const Header = ({ url }: { url: string}) => {
 
 
             <div className='flex relative gap-4 items-center'>
-
-
-
-                {(data?.loadingExperience && !activeMetric) &&
-                    <>
-                        <AnimatePresence>
-                            {tourPrompt &&
-                                <ScaleUp className='flex cursor-pointer items-center'>
-                                    <div
-                                        onClick={e => setTourPrompt(false)}
-                                        className='absolute animate-bounce-horizontal text-sm -left-[270px] text-brand-400 font-normal'>
-                                        Ready to get Started? Take a quick tour 👉🏻
-                                    </div>
-                                </ScaleUp>
-                            }
-                        </AnimatePresence>
-
-                        <AppButton data-tour='analyze'
-                                   onClick={() => {
-                                       commonDispatch(setCommonRootState('isTourOpen', true))
-                                       setTourPrompt(false)
-                                   }}
-                                   className='transition-none h-12 rounded-2xl border-none bg-transparent' variant='outline'>
-                            <div className='flex flex-col gap-1 items-center'>
-                                <GraduationCapIcon className={cn(
-                                    'w-5',
-                                )}/>
-                                <span className='text-xxs font-normal text-brand-500'>Get Started</span>
-                            </div>
-
-
-                        </AppButton>
-                    </>
-                }
-
-
 
                 <UnsavedChanges
                     onCancel={() => { setShowOptimizer(false) }}

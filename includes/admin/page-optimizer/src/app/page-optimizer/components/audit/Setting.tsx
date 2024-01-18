@@ -159,7 +159,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
 
     // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
-    console.log(additionalInputs);
 
     const saveAdditionalSettings = useCallback( () => {
 

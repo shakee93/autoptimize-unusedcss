@@ -1,7 +1,7 @@
 import Card from "components/ui/card";
 import {AnimatePresence, m} from "framer-motion";
 import Audit from "app/page-optimizer/components/audit/Audit";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useMemo} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {useAppContext} from "../../../context/app";
@@ -22,7 +22,7 @@ import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits} = useCommonDispatch()
+    const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
 
@@ -60,26 +60,33 @@ const Performance = () => {
     ];
 
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
-                setIsSticky(!entry.isIntersecting);
-            },
-            { threshold: [1] }
-        );
+    // useEffect(() => {
+    //
+    //     const observer = new IntersectionObserver(
+    //         ([entry]) => {
+    //             // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
+    //             setIsSticky(!entry.isIntersecting);
+    //
+    //         },
+    //         { threshold: [1] }
+    //     );
+    //
+    //     if (navbarRef.current) {
+    //         observer.observe(navbarRef.current);
+    //     }
+    //
+    //     return () => {
+    //         if (navbarRef.current) {
+    //             observer.unobserve(navbarRef.current);
+    //         }
+    //     };
+    //
+    //
+    // }, [activeTab]);
 
-        if (navbarRef.current) {
-            observer.observe(navbarRef.current);
-        }
-
-        return () => {
-            if (navbarRef.current) {
-                observer.unobserve(navbarRef.current);
-            }
-        };
-    }, []);
     return (
+
+
         <div data-tour='audits'>
             <h2 className="text-lg mt-0.5 ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
@@ -159,6 +166,7 @@ const Performance = () => {
 
             <div className="audits pt-4 flex mb-24">
                 <div className='w-full'>
+
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
@@ -167,7 +175,9 @@ const Performance = () => {
                                        {/*<SetupChecklist/>*/}
                                        <SpeedSettings/>
                                    </>
-                                    : <AuditList activeTab={activeTab}/>
+                                    :
+                                    <AuditList activeTab={activeTab}/>
+
                                 }
 
                             </div>
@@ -196,7 +206,9 @@ const Performance = () => {
                 </div>
             </div>
         </div>
+
     )
+
 }
 
 export default Performance
