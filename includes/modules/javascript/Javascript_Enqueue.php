@@ -559,7 +559,7 @@ class Javascript_Enqueue
 
             $should_not_wrap = false;
 
-            if (count(array_filter($rootStatements, function ($statement) {
+            /*if (count(array_filter($rootStatements, function ($statement) {
                     return $statement->type == 'ExpressionStatement';
                 })) === count($rootStatements)) {
 
@@ -579,6 +579,31 @@ class Javascript_Enqueue
                 if($should_not_wrap){
                     return $updatedSnippet;
                 }
+            }*/
+
+            if (count(array_filter($rootStatements, function ($statement) {
+                    return $statement->type == 'ExpressionStatement';
+                })) === count($rootStatements)) {
+
+                foreach ($rootStatements as $rootStatement){
+
+                    $inner_content = $rootStatement->node->render(new Compact()) . ";";
+
+                    $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
+
+                    if(preg_match($pattern, $inner_content)){
+
+                        $snippets .= $inner_content . "\n";
+
+                    }else{
+
+                        $snippets .= $this->wrapWithJavaScriptEvent($eventToBind, $inner_content) . "\n";
+
+                    }
+
+                }
+
+                return $snippets;
             }
 
 
