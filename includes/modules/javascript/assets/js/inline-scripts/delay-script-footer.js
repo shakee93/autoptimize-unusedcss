@@ -58,13 +58,14 @@
             var scriptElement = script.scriptElement;
             scriptElement.addEventListener('load', () => onScriptLoad(script));
             scriptElement.addEventListener('error', () => onScriptLoad(script, false));
-            if (script.src) {
-                scriptElement.setAttribute('src', script.src);
-                scriptElement.removeAttribute('data-rapidload-src');
-            }
+
             setTimeout(() => {
-                resolve();
-            }, 5);
+                if (script.src) {
+                    scriptElement.setAttribute('src', script.src);
+                    scriptElement.removeAttribute('data-rapidload-src');
+                }
+                resolve(); // Resolve the promise after setting the src attribute
+            }, 0); // 1000 milliseconds = 1 second
 
         })
     }
@@ -110,7 +111,7 @@
         await preloadScripts(totalScripts)
 
         for (const script of totalScripts) {
-            await loadScript(script);
+            loadScript(script);
         }
     }
 
