@@ -496,7 +496,9 @@ class RapidLoad_Optimizer
                                                 'type' => "plugins",
                                                 'name' => $plugin_name,
                                                 'exclusions' => [
-                                                    "/plugins/" . $path
+                                                    "/plugins/" . $path,
+                                                    "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
+                                                    "\/jquery-migrate(.min)?.js",
                                                 ],
                                             ];
                                         }
@@ -504,7 +506,9 @@ class RapidLoad_Optimizer
                                             'type' => "theme",
                                             'name' => $this->get_active_theme(),
                                             'exclusions' => [
-                                                get_template_directory_uri()
+                                                get_template_directory_uri(),
+                                                "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
+                                                "\/jquery-migrate(.min)?.js",
                                             ],
                                         ];
                                         $third_party_scripts = $this->get_third_party_scripts();
