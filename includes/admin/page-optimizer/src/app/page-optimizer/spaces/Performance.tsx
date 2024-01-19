@@ -1,7 +1,7 @@
 import Card from "components/ui/card";
 import {AnimatePresence, m} from "framer-motion";
 import Audit from "app/page-optimizer/components/audit/Audit";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useMemo} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {useAppContext} from "../../../context/app";
@@ -12,15 +12,17 @@ import {setCommonState} from "../../../store/common/commonActions";
 import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
-import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
+import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
+import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits} = useCommonDispatch()
+    const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
 
@@ -35,12 +37,7 @@ const Performance = () => {
     } = useAppContext()
 
     const tabs: Tab[] = [
-        // {
-        //     key: "attention_required",
-        //     name: "Attention Required",
-        //     color: 'border-red-400',
-        //     activeColor: 'bg-red-400'
-        // },
+
         {
             key: "opportunities",
             name: "Opportunities",
@@ -59,40 +56,57 @@ const Performance = () => {
             color: 'border-green-600',
             activeColor: 'bg-green-600'
         },
+
     ];
 
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
-                setIsSticky(!entry.isIntersecting);
-            },
-            { threshold: [1] }
-        );
+    // useEffect(() => {
+    //
+    //     const observer = new IntersectionObserver(
+    //         ([entry]) => {
+    //             // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
+    //             setIsSticky(!entry.isIntersecting);
+    //
+    //         },
+    //         { threshold: [1] }
+    //     );
+    //
+    //     if (navbarRef.current) {
+    //         observer.observe(navbarRef.current);
+    //     }
+    //
+    //     return () => {
+    //         if (navbarRef.current) {
+    //             observer.unobserve(navbarRef.current);
+    //         }
+    //     };
+    //
+    //
+    // }, [activeTab]);
 
-        if (navbarRef.current) {
-            observer.observe(navbarRef.current);
-        }
-
-        return () => {
-            if (navbarRef.current) {
-                observer.unobserve(navbarRef.current);
-            }
-        };
-    }, []);
     return (
+
+
         <div data-tour='audits'>
             <h2 className="text-lg mt-0.5 ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 z-10',
+                'tabs flex sticky gap-2 -top-1 z-10',
             )}>
+                <div
+
+                    onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
+                    className={cn(
+                        `dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                    )}
+                > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+
                 <Card data-tour='audit-groups'
                       className={cn(
-                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3',
+                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
@@ -105,12 +119,12 @@ const Performance = () => {
                                    className={cn(
                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
                                        isSticky && 'py-3',
-                                       activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
+                                       activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                                    )}
                                    key={tab.key}
                                >
                                    {tab.name}
-                                   {(data && data?.audits.length > 0) && (
+                                   {(tab.key !== 'configurations' && data && data?.audits.length > 0) && (
                                        <div className={
                                            cn(
                                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
@@ -149,17 +163,27 @@ const Performance = () => {
                     </div>
                 </Card>
             </div>
+
             <div className="audits pt-4 flex mb-24">
                 <div className='w-full'>
+
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
-                                <SetupChecklist/>
-                                <AuditList activeTab={activeTab}/>
+                                {activeTab === 'configurations' ?
+                                   <>
+                                       {/*<SetupChecklist/>*/}
+                                       <SpeedSettings/>
+                                   </>
+                                    :
+                                    <AuditList activeTab={activeTab}/>
+
+                                }
+
                             </div>
                         </div>
                         <div key='audit-blank'>
-                            {(!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0) && (
+                            {(activeTab !== 'configurations' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
                                 <m.div
                                     initial={{opacity: 0, y: 10}}
                                     animate={{opacity: 1, y: 0}}
@@ -182,7 +206,9 @@ const Performance = () => {
                 </div>
             </div>
         </div>
+
     )
+
 }
 
 export default Performance

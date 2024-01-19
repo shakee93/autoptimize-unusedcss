@@ -651,11 +651,27 @@
                             }
                         }
 
-                            if(rowData.meta && rowData.meta.warnings && rowData.meta.warnings.length){
-                            var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
-                            $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
+                        var warnings = []
+
+                        if(rowData.meta && rowData.meta.warnings && rowData.meta.warnings.length){
+
+                            if(rowData.status === 'rule-based'){
+
+                                warnings = rowData.meta.warnings.filter((war)=>{
+                                    return war.id == rowData.job_id;
+                                })
+
+                            }else{
+                                warnings = rowData.meta.warnings
+                            }
+
+                        }
+
+                        if(warnings.length){
+                            var scrollable = warnings.length > 2 ? 'scrollable' : '';
+                            $warnings_html.append('<h5 class="warnings-title ">Warnings (' + warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
-                            $.each(rowData.meta.warnings, function(index, value){
+                            $.each(warnings, function(index, value){
                                 var $warning_html = $('<li class="warning"></li>')
                                 $warning_html.append('<div class="warning-info"></div>');
                                 $warning_html.find('.warning-info').append('<p class="warning-header">' +  value.message + '</p>');
@@ -664,11 +680,12 @@
                                 }
                                 $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
                             })
-                        }else{
+                        }
+                        else{
                             $warnings_html.removeClass('uucss-warnings');
                         }
 
-                        var attemptsString = '';
+                        var attemptsString = "";
 
                         if((rowData.status === 'success' && rowData.success_count > 0 || rowData.rule_status === 'success' && rowData.success_count > 0 && rowData.rule_hits > 0)){
                             attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts
@@ -774,11 +791,11 @@
                             return
                         }
 
-                        if ((rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
+                        if ((rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) && (!warnings || !warnings.length)) {
                             var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || (rowData.status === 'success' && rowData.success_count > 0 || rowData.status === 'rule-based' && rowData.success_count > 0 && rowData.success_count > 0) ? 'hits-success' : '';
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
-                        } else if ((rowData.status === 'success' || rowData.rule_status === 'success') && rowData.meta.warnings.length) {
+                        } else if ((rowData.status === 'success' || rowData.rule_status === 'success') && warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
                         }
@@ -1296,7 +1313,7 @@
                             })
                         }
 
-                        if(rowData.meta.warnings && rowData.meta.warnings.length){
+                        /*if(rowData.meta.warnings && rowData.meta.warnings.length){
                             var scrollable = rowData.meta.warnings.length > 2 ? 'scrollable' : '';
                             $warnings_html.append('<h5 class="warnings-title ">Warnings (' + rowData.meta.warnings.length  + ')</h5>');
                             $warnings_html.append('<ul class="warning-list ' + scrollable  + '"></ul>');
@@ -1310,8 +1327,10 @@
                                 $warnings_html.find('.warning-list').append($warning_html.wrap('<div></div>').parent().html())
                             })
                         }else{
-                            $warnings_html.removeClass('uucss-warnings');
-                        }
+                            
+                        }*/
+
+                        $warnings_html.removeClass('uucss-warnings');
 
                         var attemptsString = '';
 

@@ -68,7 +68,7 @@ export default function PageOptimizer() {
         }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
-                "font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
+                "bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800"
             )}>
 
@@ -78,7 +78,7 @@ export default function PageOptimizer() {
                 id='rapidload-page-optimizer-content'
                 className={cn(
                 'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
-                'dark:bg-brand-900 bg-brand-50 min-h-screen',
+                'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                 savingData && 'relative overflow-hidden'
             )}>
@@ -87,7 +87,7 @@ export default function PageOptimizer() {
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px]',
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px] mt-4',
                     )}>
 
                         {(savingData || invalidatingCache) && (
