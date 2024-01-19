@@ -20,7 +20,13 @@ interface SettingsProps {
     hideActions?: boolean
     children?: ReactNode
 }
-
+const capitalizeCategory = (category: string) => {
+    if (category === 'css' || category === 'cdn') {
+        return category.toUpperCase();
+    } else {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+    }
+};
 const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions, children }: SettingsProps ) => {
     const {settings} = useSelector(optimizerData);
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -73,7 +79,7 @@ const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions,
                             }}
 
                         >
-                            <ArrowLeftCircleIcon  className={cn('h-6 w-6 text-gray-500')} />Go Back to {s.category} Settings</div>
+                            <ArrowLeftCircleIcon  className={cn('h-6 w-6 text-gray-500')} />Go Back to {capitalizeCategory(s.category)} Settings</div>
 
                          //<Setting hideActions={hideActions} updateValue={updateValue} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                     ))}

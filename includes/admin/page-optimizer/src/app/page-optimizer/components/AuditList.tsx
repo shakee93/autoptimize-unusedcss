@@ -14,7 +14,8 @@ const AuditList =({ activeTab }: Props) => {
 
 
     const activeData = useMemo(() => {
-        return data?.grouped[activeTab] || []
+        // return data?.grouped[activeTab] || []
+        return (data?.grouped as Record<AuditTypes, Audit[] | undefined>)[activeTab] || [];
     }, [activeTab, data])
 
 

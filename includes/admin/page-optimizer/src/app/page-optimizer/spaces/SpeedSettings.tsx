@@ -226,20 +226,29 @@ const SpeedSettings = ({}) => {
     }, [groupedSettings]);
 
 
-    const actionRequired = (item: any) => {
-        const hasPassedAudit = item.inputs[0].value && item.audits.some((a: Audit) => a.type === 'passed_audit');
-        const hasFailedAudit = item.audits.some((a: Audit) => a.type !== 'passed_audit');
+    const actionRequired = (item: AuditSetting): boolean => {
+        const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
+        const hasFailedAudit = item.audits.some((a) => a.type !== 'passed_audit');
         return hasPassedAudit || hasFailedAudit ;
     };
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
+    const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
+    const [showButtonFadeIn, setShowButtonFadeIn] = useState(false);
 
     useEffect(() => {
-        const initialCategoryStates: Record<string, boolean> = {};
-        Object.keys(groupedSettings).forEach((category) => {
-            initialCategoryStates[category] = false;
-        });
-        setCategoryStates(initialCategoryStates);
+
+        if (passedAuditsCollapsStatus){
+            const initialCategoryStates: Record<string, boolean> = {};
+            Object.keys(groupedSettings).forEach((category) => {
+                initialCategoryStates[category] = false;
+            });
+            setCategoryStates(initialCategoryStates);
+            setPassedAuditsCollapsStatus(false);
+        }
+
+
+
     }, [groupedSettings]);
 
     const setShowHideState = (category: string) => {
@@ -300,12 +309,16 @@ const SpeedSettings = ({}) => {
 
             <ul>
                 {filteredAudits.length > 0 && (
-                    <div
+                    <m.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
                             `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-                            categoryStates[activeCategory] ? "" : ""
+          flex items-center gap-2 px-5 py-1.5 text-sm font-medium `,
+                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
                         )}
                     >
                         Show Additional Settings{" "}
@@ -314,12 +327,15 @@ const SpeedSettings = ({}) => {
                         ) : (
                             <ChevronDownIcon className='w-4 rounded-[15px]' />
                         )}
-                    </div>
+                    </m.div>
                 )}
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className="font-medium text-sm mb-2">The audit associated with these settings is already optimized</div>
+                    <div className={cn('font-normal text-sm mb-3 px-5',
+                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
+                    )}>The audit associated with these settings is already optimized</div>
+
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
                     <li key={itemIndex}>{ item.category === activeCategory &&
