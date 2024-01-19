@@ -146,7 +146,7 @@ class RapidLoad_Job_Data{
     }
 
     public function get_warnings(){
-        if(isset($this->warnings)){
+        if(isset($this->warnings) && !empty($this->warnings)){
             return unserialize($this->warnings);
         }
         return [];
