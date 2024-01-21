@@ -239,6 +239,7 @@ const SpeedSettings = ({}) => {
                 <li className='cursor-pointer' key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);
+                    //dispatch(setCommonState('openCategory', category));
                 }}>
                     <m.div
                         id={category}
