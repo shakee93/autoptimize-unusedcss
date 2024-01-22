@@ -1,28 +1,19 @@
 import { useEffect, useState } from 'react';
-import { SunIcon, MoonIcon, ComputerDesktopIcon } from "@heroicons/react/24/outline";
 import {useRootContext} from "../../context/root";
-import {Monitor} from "lucide-react";
+import {Monitor, Moon, Sun} from "lucide-react";
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({action = true}: {action?: boolean}) => {
 
-    const { theme, setTheme } = useRootContext()
-
-    const changeTheme = () => {
-        if(theme === 'dark') {
-            setTheme('light');
-        }  else {
-            setTheme('dark');
-        }
-    }
+    const { theme, setTheme, changeTheme } = useRootContext()
 
     return (
-        <div className="cursor-pointer select-none" onClick={changeTheme}>
+        <div className="cursor-pointer select-none" onClick={e => action && changeTheme() }>
             { theme === 'dark' ? (
-                <MoonIcon className="w-5" />
+                <Moon className="w-5" />
             ) : theme === 'light' ? (
-                <SunIcon className="w-5" />
+                <Sun className="w-5" />
             ) : (
-                <Monitor className="w-5" />
+                <Moon className="w-5" />
             )}
         </div>
     );
