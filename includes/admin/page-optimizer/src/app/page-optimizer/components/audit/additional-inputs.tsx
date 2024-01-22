@@ -83,9 +83,9 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [activeCategory, setActiveCategory]= useState('third_party')
 
-    useEffect(() => {
-        console.log(activeCategory)
-    },[activeCategory])
+    // useEffect(() => {
+    //     console.log(activeCategory)
+    // },[activeCategory])
 
 
     const filteredValues = input?.control_values?.filter(
