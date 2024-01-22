@@ -26,7 +26,8 @@ import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUp
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
-import AuditSettingsItem from './AuditSettingsItem'; // Import the new component
+import AuditSettingsItem from './AuditSettingsItem';
+import {useAppContext} from "../../../context/app"; // Import the new component
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -206,6 +207,9 @@ const SpeedSettings = ({}) => {
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
     const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
     const [showButtonFadeIn, setShowButtonFadeIn] = useState(false);
+    const {
+        options
+    } = useAppContext()
 
     useEffect(() => {
 
@@ -280,6 +284,18 @@ const SpeedSettings = ({}) => {
             </ul>
 
             <ul>
+                {filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory) &&
+                <m.div
+                    initial={{opacity: 0, y: 10}}
+                    animate={{opacity: 1, y: 0}}
+                    exit={{opacity: 0, y: -20}}
+                    className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
+                    <div>
+                        <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                    </div>
+                    <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
+                </m.div>
+                }
                 {filteredAudits.length > 0 && (
                     <m.div
                         initial={{ opacity: 0 }}

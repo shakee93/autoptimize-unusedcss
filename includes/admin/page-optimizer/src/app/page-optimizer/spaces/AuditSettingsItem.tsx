@@ -22,6 +22,8 @@ interface AuditSettingsItemProps {
 const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, updateValue, actionRequired }) => {
     const { dispatch } = useCommonDispatch();
 
+    console.log(item)
+
     const handleAuditClick = (audit: Audit) => {
         dispatch(setCommonState('openAudits', [audit.id]));
         dispatch(

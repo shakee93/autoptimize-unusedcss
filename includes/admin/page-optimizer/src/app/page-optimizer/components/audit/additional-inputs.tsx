@@ -16,13 +16,14 @@ import {
     SelectValue,
 } from "components/ui/select";
 import {Button} from "components/ui/button";
-import {isDev} from "lib/utils";
+import {cn, isDev} from "lib/utils";
 import api from "../../../../services/api";
 import ApiService from "../../../../services/api";
 import {useAppContext} from "../../../../context/app";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {toast} from "components/ui/use-toast";
 import {Loader} from "lucide-react";
+import {m} from "framer-motion";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -38,6 +39,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [loading, setLoading] = useState(false)
     const { options } = useAppContext()
+    const excludeCategory = ['third_party', 'plugins', 'theme'];
+
 
     const value = useMemo(() => {
 
@@ -78,6 +81,18 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }
     }
 
+    const [activeCategory, setActiveCategory]= useState('third_party')
+
+    useEffect(() => {
+        console.log(activeCategory)
+    },[activeCategory])
+
+
+    const filteredValues = input?.control_values?.filter(
+        (value) => value.type === activeCategory
+
+    );
+
    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
         {input?.control_type === 'checkbox' &&
@@ -110,7 +125,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
        }
 
-       {input.control_type === 'button' &&
+       {input.control_type === 'button' && input.control_label != 'Exclude Files' &&
            <Label htmlFor="name" className="flex ml-4 text-left w-full">
                <Button disabled={loading} className='flex gap-2' onClick={e => buttonSubmit()}
                        variant='outline'>
@@ -146,6 +161,34 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                </Select>
            </Label>
 
+       }
+
+
+       {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
+       <Label htmlFor="name" className="flex ml-4 text-left w-full">
+           <div className="bg-white">
+               <div className='flex gap-3'>
+                   {excludeCategory.map((name, index) => (
+                       <button key={index} onClick={e => setActiveCategory(name)}
+                               className='flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50 dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md'>
+                           {name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+                       </button>
+                   ))}
+
+               </div>
+               <div className='overflow-auto max-h-[200px]'>
+                   {filteredValues.map((value: string, index: number) => (
+                       <button key={index} className=' flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2'>
+                           {value?.name}
+                       </button>
+                   ))}
+               </div>
+                   
+
+           </div>
+
+           {/*{isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}*/}
+       </Label>
        }
     </div>
 }
