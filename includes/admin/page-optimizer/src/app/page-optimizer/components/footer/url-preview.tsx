@@ -22,7 +22,7 @@ const UrlPreview = () => {
 
     const url = options.optimizer_url
 
-    return <div  className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-700'>
+    return <div  className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
         {/*{togglePerformance ? (*/}
         {/*    <div className={cn(*/}
         {/*        'h-fit w-fit  flex items-center justify-center rounded-md',*/}
@@ -55,21 +55,33 @@ const UrlPreview = () => {
             <div
                  className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
                 {loading ?
-                    <div className='w-64 bg-brand-300 animate-pulse h-2.5 rounded-sm mt-1'></div> :
+                    <div className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                     <>
                         {data?.loadingExperience?.timestamp &&
                             <>
                                 Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
                             </>
                         }
-                        <Dot className='w-6 text-brand-400'/>
-                        <div className='flex gap-1 items-center'>
-                            <span className='text-green-600 flex items-center'>{mobile?.data?.performance} <ArrowUp className='w-3'/> </span> Desktop
-                        </div>
-                        <Dot className='w-6 text-brand-400'/>
-                        <div className='flex gap-1 items-center'>
-                            <span className='text-green-600 flex items-center'>{desktop?.data?.performance} <ArrowUp className='w-3'/> </span> Mobile
-                        </div>
+
+                        {desktop?.data?.performance &&
+                            <>
+                                <Dot className='w-6 text-brand-400'/>
+                                <div className='flex gap-1 items-center'>
+                                    <span className='text-green-600 flex items-center'>{desktop?.data?.performance}
+                                        <ArrowUp className='w-3'/> </span> Desktop
+                                </div>
+                            </>
+                        }
+
+                        {mobile?.data?.performance &&
+                            <>
+                                <Dot className='w-6 text-brand-400'/>
+                                <div className='flex gap-1 items-center'>
+                                    <span className='text-green-600 flex items-center'>{mobile?.data?.performance}
+                                        <ArrowUp className='w-3'/> </span> Mobile
+                                </div>
+                            </>
+                        }
                     </>}
 
             </div>

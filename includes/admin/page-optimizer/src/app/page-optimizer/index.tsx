@@ -138,9 +138,9 @@ export default function PageOptimizer() {
                     <Loading url={url}/>
                 )}
             </div>
-            {!error && (
-                <Footer />
-            )}
+            {/*{!error && (*/}
+            {/*    <Footer />*/}
+            {/*)}*/}
             <Toaster/>
         </m.div>
     );

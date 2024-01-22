@@ -62,79 +62,18 @@ const Footer = ({ } : FooterProps) => {
     return (
         <footer className='fixed z-[110000] flex items-center justify-between left-0 bottom-0 pl-3 pr-6 py-2 dark:bg-brand-950 bg-brand-50 border-t w-full'>
            <div className='flex items-center'>
-               {(data?.loadingExperience && !activeMetric) &&
-                   <>
-                       <AnimatePresence>
-                           {tourPrompt &&
-                               <ScaleUp className='flex cursor-pointer items-center w-fit '>
-                                   <div
-                                       onClick={e => setTourPrompt(false)}
-                                       className='absolute animate-bounce-horizontal text-sm left-[110px] text-brand-400 font-normal'>
-                                       👈 Ready to get Started? Take a quick tour
-                                   </div>
-                               </ScaleUp>
-                           }
-                       </AnimatePresence>
 
-                       <AppButton data-tour='analyze'
-                                  onClick={() => {
-                                      commonDispatch(setCommonRootState('isTourOpen', true))
-                                      setTourPrompt(false)
-                                  }}
-                                  className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
-                           <div className='flex flex-col gap-1 items-center'>
-                               <GraduationCapIcon className={cn(
-                                   'w-5',
-                               )}/>
-                               <span className='text-xxs font-normal text-brand-500'>Get Started</span>
-                           </div>
-
-
-                       </AppButton>
-                   </>
-               }
            </div>
 
             <div className='flex items-center gap-2'>
                 <div className='flex gap-4 px-8 text-brand-600 dark:text-brand-400 '>
-                    <Mode>
-                        {revisions.length > 0 &&
-                            <Popover>
-                                <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
-                                    <TooltipText asChild text='Show Revisions'>
-                                        <History className='w-5 ' />
-                                    </TooltipText>
-                                </PopoverTrigger>
-                                <PopoverContent className='pt-0 dark:bg-brand-800 dark:text-white'>
-                                    <div className='my-2 ml-4 font-medium '>Revisions</div>
-                                    <ul className='border rounded-lg'>
-                                        {revisions?.map((rev: Revision, index: number) => {
-                                            return <li className={cn(
-                                                'flex items-center justify-between cursor-pointer px-4 py-1.5 text-sm hover:bg-brand-100 dark:hover:bg-brand-900',
-                                                index === 0 ? 'border-none' : 'border-t'
-                                            )} key={rev.id}>
-                                                <span className='text-xs text-brand-600 dark:text-brand-300'>{timeAgo(rev.timestamp * 1000)}</span>
-                                                <PerformanceProgressBar background={false}
-                                                                        animate={false}
-                                                                        stroke={10}
-                                                                        scoreClassName='text-xxs'
-                                                                        className='h-7'
-                                                                        performance={rev.data.performance}></PerformanceProgressBar>
-                                            </li>
-                                        })}
-                                    </ul>
-                                </PopoverContent>
-                            </Popover>
-                        }
-
-                    </Mode>
 
 
-                    <TooltipText text='Switch theme'>
-                        <div className='hover:dark:text-brand-100'>
-                            <ThemeSwitcher></ThemeSwitcher>
-                        </div>
-                    </TooltipText>
+                    {/*<TooltipText text='Switch theme'>*/}
+                    {/*    <div className='hover:dark:text-brand-100'>*/}
+                    {/*        <ThemeSwitcher></ThemeSwitcher>*/}
+                    {/*    </div>*/}
+                    {/*</TooltipText>*/}
 
                     {/*<TooltipText text='Reset Settings to Default'>*/}
                     {/*    <div */}

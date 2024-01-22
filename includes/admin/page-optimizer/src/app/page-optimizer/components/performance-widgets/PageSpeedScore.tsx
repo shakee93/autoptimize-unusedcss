@@ -4,16 +4,18 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {useAppContext} from "../../../../context/app";
 import {Skeleton} from "components/ui/skeleton"
-import {cn} from "lib/utils";
+import {cn, timeAgo} from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {setCommonState} from "../../../../store/common/commonActions";
+import {setCommonRootState, setCommonState} from "../../../../store/common/commonActions";
 import {
-    Circle,
-    Hash,
+    Circle, GraduationCapIcon,
+    Hash, History,
 } from "lucide-react";
+import SideBarActions from "app/page-optimizer/components/performance-widgets/SideBarActions";
+
 
 
 const Feedback = React.lazy(() =>
@@ -28,7 +30,9 @@ interface PageSpeedScoreProps {
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
 
-    const {data, error, loading} = useSelector(optimizerData);
+
+
+    const {data, error, loading, revisions} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
@@ -157,6 +161,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 )}
             </Card>
 
+            <SideBarActions/>
 
             <Suspense>
                 <Feedback key={key}/>

@@ -116,7 +116,8 @@ const Header = ({ url }: { url: string}) => {
                                 <AppButton data-tour='analyze'
 
                                            className={cn(
-                                               'transition-none rounded-none h-12 px-3 pr-3.5 border-r-0 border-l border-t-0 border-b-0 bg-transparent dark:bg-brand-800 hover:opacity-100',
+                                               'transition-none rounded-none h-12 px-3 pr-3.5 ' +
+                                               'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
                                            )}
                                            variant='outline'>
                                     <div className='flex flex-col gap-[1px] items-center'>
