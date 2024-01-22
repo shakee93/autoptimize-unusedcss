@@ -52,7 +52,8 @@ export default defineConfig((configEnv) => {
                             'framer-motion',
                         ],
                     },
-                    entryFileNames: `assets/[name].js`,
+                    // entryFileNames: `assets/[name].js`,
+                    entryFileNames: `assets/index.min.[hash].js`,
                     chunkFileNames: `assets/[name].js`,
                     assetFileNames: `assets/[name].[ext]`
                 }
