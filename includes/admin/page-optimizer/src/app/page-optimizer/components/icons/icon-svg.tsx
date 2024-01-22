@@ -157,7 +157,7 @@ export const Average:FC<SvgProps> = ({cls}) => (
 export const AuditsLine:FC<SvgProps> = ({cls}) => (
     <svg className={`${cls}`} width={width} height="40" viewBox="0 0 8 19" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className='dark:stroke-brand-600 stroke-brand-300' d="M0.5 0.5V12.5C0.5 17.5 4.3 17.5 7.5 17.5"
-             strokeLinecap="round" stroke-linejoin="round"/>
+             strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 );
 

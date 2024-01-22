@@ -48,10 +48,6 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
 
 
-    // const [sortedSettings, setSortedSettings] = useState<AuditSetting[]>([]);
-    // const [firstItem, setFirstItem] = useState<number | null>(null);
-
-
     const icons :  {
         [key in SettingsCategory]: React.ReactElement;
     } = useMemo(() => ( {
@@ -154,31 +150,6 @@ const SpeedSettings = ({}) => {
     const isInitialRender = useRef(true);
 
 
-    // useEffect(() => {
-    //     if (groupedSettings && groupedSettings[activeCategory] && sortedStatus) {
-    //         const sorted = groupedSettings[activeCategory].slice().sort((a, b) => {
-    //             const aValue = a.inputs[0].value;
-    //             const bValue = b.inputs[0].value;
-    //
-    //             if (aValue && !bValue) return -1;
-    //             if (!aValue && bValue) return 1;
-    //
-    //             const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-    //             const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-    //             if (aHasFailedAudit && !bHasFailedAudit) return -1;
-    //             if (!aHasFailedAudit && bHasFailedAudit) return 1;
-    //             return 0;
-    //         });
-    //
-    //         setSortedStatus(false);
-    //
-    //         const passed = sorted.filter((item) => !actionRequired(item));
-    //         const notPassed = sorted.filter((item) => actionRequired(item));
-    //
-    //         setPassedAudits(passed);
-    //         setNotPassedAudits(notPassed);
-    //     }
-    // }, [groupedSettings, activeCategory, sortedStatus]);
 
     useEffect(() => {
         if (isInitialRender.current) {
@@ -268,6 +239,7 @@ const SpeedSettings = ({}) => {
                 <li className='cursor-pointer' key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);
+                    //dispatch(setCommonState('openCategory', category));
                 }}>
                     <m.div
                         id={category}
@@ -278,7 +250,7 @@ const SpeedSettings = ({}) => {
                         ' dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
-                        <div >
+                        <div>
                             {activeCategory === category ?  <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
                         </div>
                         <span className='font-medium tracking-wide'>
