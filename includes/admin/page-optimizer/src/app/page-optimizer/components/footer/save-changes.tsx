@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger
 } from "components/ui/dropdown-menu";
 import {Button} from "components/ui/button";
-import {ChevronDown, ChevronUp, Loader, SaveIcon, UserCircle} from "lucide-react";
+import {ChevronDown, ChevronUp, Loader, MoreVertical, SaveIcon, UserCircle} from "lucide-react";
 import AppButton from "components/ui/app-button";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "components/ui/dialog";
 import {ArrowPathIcon, CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
@@ -35,6 +35,7 @@ import {Status} from "app/page-optimizer/components/audit/Setting";
 import Accordion from "components/accordion";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
+import TooltipText from "components/ui/tooltip-text";
 
 const SaveChanges = () => {
 
@@ -214,8 +215,8 @@ const SaveChanges = () => {
                         <Button
                             data-tour='save-changes' ref={refSaveButton} asChild
                                 className={cn(
-                                    'min-w-[190px] flex overflow-hidden justify-between select-none relative text-sm gap-2 p-0',
-                                    !savable && 'opacity-[90%]'
+                                    'flex overflow-hidden justify-between select-none relative text-sm gap-2 pl-1 pr-2 h-12 rounded-[14px]',
+                                    !savable && 'bg-brand-700'
                                 )}>
                             <AlertDialogTrigger
                                 onClick={e => setModalAction(activeAction)}
@@ -228,14 +229,22 @@ const SaveChanges = () => {
                                 {saveActions[activeAction].text}
                             </AlertDialogTrigger>
 
-                            <DropdownMenuTrigger
-                                className={cn(
-                                    ' dark:bg-zinc-200 bg-slate-800 h-full px-2 pr-2.5',
-                                    savable && 'dark:hover:bg-zinc-300 hover:bg-slate-700'
-                                )}>
-                                <ChevronDown className='w-5'/>
-                            </DropdownMenuTrigger>
+
                         </Button>
+
+                        <DropdownMenuTrigger
+                        >
+                            <UnsavedChanges
+                                onCancel={() => { setShowOptimizer(false) }}
+                                cancel='Discard & Leave'
+                                onClick={() => { setShowOptimizer(false) }} >
+                                <TooltipText text='Close Optimizer'>
+                                    <MoreVertical className={cn(
+                                        'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
+                                    )} />
+                                </TooltipText>
+                            </UnsavedChanges>
+                        </DropdownMenuTrigger>
 
                         <DropdownMenuContent style={{
                             width: refSaveButton.current?.clientWidth || 200
@@ -275,12 +284,12 @@ const SaveChanges = () => {
                         </div>
                     </AlertDialogContent>
                 </AlertDialog>
-                <UnsavedChanges
-                    onCancel={() => { setShowOptimizer(false) }}
-                    cancel='Discard & Leave'
-                    onClick={() => setShowOptimizer(false)}>
-                    <AppButton className='text-sm'  variant='outline'>Close</AppButton>
-                </UnsavedChanges>
+                {/*<UnsavedChanges*/}
+                {/*    onCancel={() => { setShowOptimizer(false) }}*/}
+                {/*    cancel='Discard & Leave'*/}
+                {/*    onClick={() => setShowOptimizer(false)}>*/}
+                {/*    <AppButton className='text-sm'  variant='outline'>Close</AppButton>*/}
+                {/*</UnsavedChanges>*/}
             </div>
         </Mode>
 

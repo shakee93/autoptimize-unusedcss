@@ -1,17 +1,19 @@
 import {cn} from "lib/utils";
-import {buildStyles, CircularProgressbarWithChildren} from "react-circular-progressbar";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import TimeAgo from "components/TimeAgo";
 import React, {useState} from "react";
 import {useAppContext} from "../../../../context/app";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
+import {ArrowUp, Dot} from "lucide-react";
+import {AppState, RootState} from "../../../../store/app/appTypes";
 
 
 const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const {data, loading} = useSelector(optimizerData);
+    const { mobile, desktop  } = useSelector((state: RootState) => state.app);
 
     const {
         togglePerformance,
@@ -20,7 +22,7 @@ const UrlPreview = () => {
 
     const url = options.optimizer_url
 
-    return <div  className='flex flex-row gap-3 px-5  items-center bg-white dark:bg-brand-700'>
+    return <div  className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-700'>
         {/*{togglePerformance ? (*/}
         {/*    <div className={cn(*/}
         {/*        'h-fit w-fit  flex items-center justify-center rounded-md',*/}
@@ -51,15 +53,23 @@ const UrlPreview = () => {
                       </div>
 
             <div
-                 className='text-xxs leading-relaxed text-brand-500 cursor-default'>
+                 className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
                 {loading ?
-                    <div className='w-24 bg-brand-300 animate-pulse h-2.5 rounded-sm mt-1'></div> :
+                    <div className='w-64 bg-brand-300 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                     <>
                         {data?.loadingExperience?.timestamp &&
                             <>
                                 Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
                             </>
                         }
+                        <Dot className='w-6 text-brand-400'/>
+                        <div className='flex gap-1 items-center'>
+                            <span className='text-green-600 flex items-center'>{mobile?.data?.performance} <ArrowUp className='w-3'/> </span> Desktop
+                        </div>
+                        <Dot className='w-6 text-brand-400'/>
+                        <div className='flex gap-1 items-center'>
+                            <span className='text-green-600 flex items-center'>{desktop?.data?.performance} <ArrowUp className='w-3'/> </span> Mobile
+                        </div>
                     </>}
 
             </div>

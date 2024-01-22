@@ -146,7 +146,6 @@ const Footer = ({ } : FooterProps) => {
                 </div>
 
 
-                <SaveChanges/>
 
             </div>
         </footer>
