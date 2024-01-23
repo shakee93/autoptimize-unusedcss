@@ -98,7 +98,9 @@ export class RapidLoadOptimizer {
                <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
                    <Provider store={store}>
                        <RootProvider>
-                               <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode}
+                               <AppProvider global={global}
+                                            initShowOptimizerValue={showOptimizer}
+                                            mode={mode}
                                             modeData={modeData}>
                                    <TooltipProvider>
                                        <LazyMotion features={domAnimation}>
