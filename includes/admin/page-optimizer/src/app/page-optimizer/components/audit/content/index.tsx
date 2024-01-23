@@ -61,7 +61,7 @@ const AuditContent = ({audit, helpOpen, setHelpOpen}: AuditContentProps) => {
 
         let data  = await api.request('/ping', {
             'url' : 'https://rapidload.local/',
-            'nonce': window.rapidload_optimizer?.nonce || ''
+            // 'nonce': window.rapidload_optimizer?.nonce || ''
         })
     }
 
