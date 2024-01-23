@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/__dynamic_base__/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RapidLoad Page Optimizer</title>
+
+    <script>
+
+//      window.rapidload_optimizer = {
+//        "load_optimizer": "1",
+//              "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+//              "page_optimizer_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+//              "plugin_url": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/",
+//              "ajax_url": "http://rapidload.local/wp-admin/admin-ajax.php",
+//              "dashboard_url": "http://rapidload.local/wp-admin/admin.php?page=rapidload",
+//              "optimizer_url": "http://rapidload.local/",
+//              "nonce": "ba619ab406",
+//              "timezone": "",
+//              "actions": [
+//        {
+//          "tooltip": "Clear Site Cache",
+//          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=12379ab23b",
+//          "icon": "clear_cache"
+//        },
+//        {
+//          "tooltip": "Clear Page Cache",
+//          "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_url=http%3A%2F%2Frapidload.local%2F&amp;_wpnonce=12379ab23b",
+//          "icon": "clear_page_cache"
+//        },
+//        {
+//          "tooltip": "Clear CSS/JS/Font Optimizations",
+//          "href": "/?_action=rapidload_purge_all&amp;nonce=ba619ab406",
+//          "icon": "clear_optimization"
+//        }
+//      ]
+//      }
+    </script>
+
+    <style>
+      :root {
+        --wp--preset--color--black: #000000;
+        --wp--preset--color--cyan-bluish-gray: #abb8c3;
+        --wp--preset--color--white: #ffffff;
+        --wp--preset--color--pale-pink: #f78da7;
+        --wp--preset--color--vivid-red: #cf2e2e;
+        --wp--preset--color--luminous-vivid-orange: #ff6900;
+        --wp--preset--color--luminous-vivid-amber: #fcb900;
+        --wp--preset--color--light-green-cyan: #7bdcb5;
+        --wp--preset--color--vivid-green-cyan: #00d084;
+        --wp--preset--color--pale-cyan-blue: #8ed1fc;
+        --wp--preset--color--vivid-cyan-blue: #0693e3;
+        --wp--preset--color--vivid-purple: #9b51e0;
+        --wp--preset--color--base: #FFFFFF;
+        --wp--preset--color--contrast: #000000;
+        --wp--preset--color--primary: #FFCCFF;
+        --wp--preset--color--secondary: #FFFFCC;
+        --wp--preset--color--tertiary: #CCFFFF;
+        --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);
+        --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);
+        --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);
+        --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);
+        --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);
+        --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);
+        --wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);
+        --wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);
+        --wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);
+        --wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);
+        --wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);
+        --wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);
+        --wp--preset--gradient--primary-secondary-tertiary: linear-gradient(135deg, var(--wp--preset--color--primary) 0%, var(--wp--preset--color--secondary) 50%, var(--wp--preset--color--tertiary) 100%);
+        --wp--preset--gradient--primary-secondary-tertiary-fixed: linear-gradient(135deg, var(--wp--preset--color--primary) 0%, var(--wp--preset--color--secondary) 50%, var(--wp--preset--color--tertiary) 100%) fixed;
+        --wp--preset--gradient--tertiary-secondary-primary-fixed: linear-gradient(135deg, var(--wp--preset--color--tertiary) 0%, var(--wp--preset--color--secondary) 50%, var(--wp--preset--color--primary) 100%) fixed;
+        --wp--preset--font-size--small: clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.227), 1rem);
+        --wp--preset--font-size--medium: clamp(1rem, 1rem + ((1vw - 0.2rem) * 0.227), 1.125rem);
+        --wp--preset--font-size--large: clamp(1.5rem, 1.5rem + ((1vw - 0.2rem) * 0.455), 1.75rem);
+        --wp--preset--font-size--x-large: clamp(2rem, 2rem + ((1vw - 0.2rem) * 0.455), 2.25rem);
+        --wp--preset--font-size--x-small: 0.75rem;
+        --wp--preset--font-size--xx-large: clamp(2.5rem, 2.5rem + ((1vw - 0.2rem) * 0.455), 2.75rem);
+        --wp--preset--font-family--dm-sans: "DM Sans", sans-serif;
+        --wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;
+        --wp--preset--font-family--inter: "Inter", sans-serif;
+        --wp--preset--font-family--system-font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+        --wp--preset--font-family--source-serif-pro: "Source Serif Pro", serif;
+        --wp--preset--spacing--30: clamp(1.5rem, 5vw, 2rem);
+        --wp--preset--spacing--40: clamp(1.8rem, 1.8rem + ((1vw - 0.48rem) * 2.885), 3rem);
+        --wp--preset--spacing--50: clamp(2.5rem, 8vw, 4.5rem);
+        --wp--preset--spacing--60: clamp(3.75rem, 10vw, 7rem);
+        --wp--preset--spacing--70: clamp(5rem, 5.25rem + ((1vw - 0.48rem) * 9.096), 8rem);
+        --wp--preset--spacing--80: clamp(7rem, 14vw, 11rem);
+        --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
+        --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
+        --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
+        --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);
+        --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
+      }
+
+      body {
+        /*background: var(--wp--preset--gradient--primary-secondary-tertiary);*/
+        /*background: #002836;*/
+      }
+
+    </style>
+    <script type="module" crossorigin src="/__dynamic_base__/assets/index.min.js"></script>
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/core-vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/animations.js">
+    <link rel="stylesheet" href="/__dynamic_base__/assets/index.css">
+  </head>
+  <body>
+
+    <div id="rapidload-page-optimizer"></div>
+    <div id='popup'>
+      hover me to show popup
+    </div>
+    
+    <script>
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let container = document.getElementById('rapidload-page-optimizer')
+        let popup = document.getElementById('popup')
+        new window.RapidLoadOptimizer({
+          container,
+          popup,
+          showOptimizer: false,
+          // global: true,
+          // mode: 'onboard',
+          modeData: {
+            connect_url: 'http://localhost:5173/',
+            target: '_blank'
+          },
+        });
+      })
+    </script>
+  </body>
+</html>
