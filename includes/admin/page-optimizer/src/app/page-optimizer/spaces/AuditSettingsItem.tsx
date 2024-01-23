@@ -33,7 +33,7 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
 
         setTimeout(() => {
             document.getElementById(`audit-${audit.id}`)?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        }, 10);
     };
 
     return (

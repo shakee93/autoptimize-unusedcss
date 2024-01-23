@@ -209,7 +209,7 @@ const SaveChanges = () => {
 
     return <>
         <Mode>
-            <div className='flex gap-4'>
+            <div className='flex gap-2 items-center'>
                 <AlertDialog open={open} onOpenChange={setOpen}>
                     <DropdownMenu>
                         <Button
@@ -232,19 +232,19 @@ const SaveChanges = () => {
 
                         </Button>
 
-                        <DropdownMenuTrigger
-                        >
-                            <UnsavedChanges
-                                onCancel={() => { setShowOptimizer(false) }}
-                                cancel='Discard & Leave'
-                                onClick={() => { setShowOptimizer(false) }} >
-                                <TooltipText text='Close Optimizer'>
+                        <UnsavedChanges
+                            onCancel={() => { setShowOptimizer(false) }}
+                            cancel='Discard & Leave'
+                            onClick={() => { setShowOptimizer(false) }} >
+
+                            <DropdownMenuTrigger className='w-8 h-12 flex items-center justify-center'>
+                                <TooltipText className='flex items-center justify-center' asChild={true} text='Close Optimizer'>
                                     <MoreVertical className={cn(
                                         'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
                                     )} />
                                 </TooltipText>
-                            </UnsavedChanges>
-                        </DropdownMenuTrigger>
+                            </DropdownMenuTrigger>
+                        </UnsavedChanges>
 
                         <DropdownMenuContent style={{
                             width: refSaveButton.current?.clientWidth || 200

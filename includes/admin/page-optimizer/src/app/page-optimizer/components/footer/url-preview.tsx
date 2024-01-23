@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import {useAppContext} from "../../../../context/app";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
-import {ArrowUp, Dot} from "lucide-react";
+import {ArrowDown, ArrowUp, Dot} from "lucide-react";
 import {AppState, RootState} from "../../../../store/app/appTypes";
 
 
@@ -67,18 +67,35 @@ const UrlPreview = () => {
                             <>
                                 <Dot className='w-6 text-brand-400'/>
                                 <div className='flex gap-1 items-center'>
-                                    <span className='text-green-600 flex items-center'>{desktop?.data?.performance}
-                                        <ArrowUp className='w-3'/> </span> Desktop
+
+                                    {(desktop.revisions.length > 0
+                                        && desktop.revisions[0].data.performance <= desktop?.data?.performance) ?
+                                        <span className={cn(
+                                            ' flex items-center',
+                                            desktop.data.performance !== desktop.revisions[0].data.performance && 'text-green-600'
+                                        )}>{desktop?.data?.performance} {desktop.data.performance !== desktop.revisions[0].data.performance && <ArrowUp className='w-3'/>} </span>
+                                        :
+                                        <span className='text-red-600 flex items-center'>{desktop?.data?.performance} <ArrowDown className='w-3'/></span>
+                                    } Desktop
                                 </div>
                             </>
                         }
+
 
                         {mobile?.data?.performance &&
                             <>
                                 <Dot className='w-6 text-brand-400'/>
                                 <div className='flex gap-1 items-center'>
-                                    <span className='text-green-600 flex items-center'>{mobile?.data?.performance}
-                                        <ArrowUp className='w-3'/> </span> Mobile
+
+                                    {(mobile.revisions.length > 0
+                                        && mobile.revisions[0].data.performance <= mobile?.data?.performance) ?
+                                        <span className={cn(
+                                            ' flex items-center',
+                                            mobile.data.performance !== mobile.revisions[0].data.performance && 'text-green-600'
+                                        )}>{mobile?.data?.performance} {mobile.data.performance !== mobile.revisions[0].data.performance && <ArrowUp className='w-3'/>} </span>
+                                        :
+                                        <span className='flex items-center'>{mobile?.data?.performance} <ArrowDown className='w-3'/></span>
+                                    } Mobile
                                 </div>
                             </>
                         }

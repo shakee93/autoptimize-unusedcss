@@ -42,7 +42,7 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 const SpeedSettings = ({}) => {
 
     const {settings, data } = useSelector(optimizerData);
-    const [activeCategory, setActiveCategory]= useState<SettingsCategory>('css')
+    const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
@@ -296,32 +296,31 @@ const SpeedSettings = ({}) => {
                 }
 
                 {filteredAudits.length > 0 && (
-                    <m.div
+                    <m.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
-                            `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 text-sm font-medium `,
+                            `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+          flex items-center gap-2 px-5 py-1.5 pb-0 text-sm font-medium `,
                             notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
                         )}
                     >
-                        Show Additional Settings{" "}
-                        {categoryStates[activeCategory] ? (
-                            <ChevronUpIcon className='w-4 rounded-[15px]' />
-                        ) : (
-                            <ChevronDownIcon className='w-4 rounded-[15px]' />
-                        )}
-                    </m.div>
+                        Show Additional Settings{" "} <ChevronDownIcon className={cn(
+                            'w-4 rounded-[15px] transition-transform',
+                        categoryStates[activeCategory] && '-rotate-180'
+                    )} />
+
+                    </m.button>
                 )}
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className={cn('font-normal text-sm mb-3 px-5',
+                    <div className={cn('font-normal text-sm ml-0.5 mb-3 px-5',
                         notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
-                    )}>The audit associated with these settings is already optimized</div>
+                    )}>The audits associated with these settings are already optimized</div>
 
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
