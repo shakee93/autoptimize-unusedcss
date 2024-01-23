@@ -28,6 +28,18 @@ interface PageSpeedScoreProps {
     priority?: boolean;
 }
 
+const MetricValue = ({ metric }: {metric: Metric}) => {
+    const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
+
+    return <div
+        style={{
+            color: y || '#515151'
+        }}
+        className='text-md font-medium text-brand-500'>
+        {metric.displayValue}
+    </div>
+}
+
 
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
@@ -88,17 +100,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
-    const MetricValue = ({ metric }: {metric: Metric}) => {
-        const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
 
-        return <div
-            style={{
-                color: y || '#515151'
-            }}
-            className='text-md font-medium text-brand-500'>
-            {metric.displayValue}
-        </div>
-    }
 
     return <>
 
