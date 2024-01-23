@@ -187,7 +187,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
            </div>
 
-           {/*{isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}*/}
+
        </Label>
        }
     </div>
