@@ -200,10 +200,17 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         setLoading(false);
     }
 
-    // const [actionRequiredDialogOpen, setActionRequiredDialogOpen] = useState(false);
-  //  const [checkboxState, setCheckboxState] = useState(mainInput.value);
+    const [checkboxState, setCheckboxState] = useState(mainInput.value);
 
- // console.log("Settings : ", settings.name, ": ", actionRequired)
+    const handleCheckboxClick = () => {
+        if (!actionRequired || ['onboard', 'preview'].includes(mode)) {
+            return;
+        }
+        const newCheckboxState = !checkboxState;
+        setCheckboxState(newCheckboxState);
+
+        updateValue(settings, newCheckboxState, mainInput.key);
+    };
 
     return (
 
@@ -237,6 +244,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                           className={actionRequired ? '' : 'border-dashed'}
                                           checked={mainInput.value}
                                           onCheckedChange={(c: boolean) =>{
+                                              setCheckboxState(c);
                                               updateValue(settings, c, mainInput.key);
 
                                           }}/>
@@ -250,7 +258,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
             )}
             <div className='flex flex-col'>
                 <div className='relative flex gap-2 font-medium text-base w-fit items-center pr-2 py-0.5'>
-                    {settings.name}
+                    <div  onClick={handleCheckboxClick}>{settings.name}</div>
                     {!hideActions && (
                         <>
 
@@ -272,7 +280,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             )}
 
                             <Mode>
-                                {showPopover && (
+                                {showPopover && settings.name != 'Delay Javascript' && (
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         <DialogTrigger disabled asChild>
                                             <div >
