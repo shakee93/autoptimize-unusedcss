@@ -234,7 +234,7 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-2 pb-4 mt-2 rounded-3xl'>
+    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-2 pb-2 mt-2 rounded-3xl'>
         <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-3 ml-12'>
             {categoryOrder.map((category: SettingsCategory, index) => (
@@ -293,7 +293,7 @@ const SpeedSettings = ({}) => {
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
                             `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 pb-0 text-sm font-medium `,
+          flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
                             notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
                     >
@@ -307,7 +307,7 @@ const SpeedSettings = ({}) => {
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className={cn('font-normal text-sm ml-0.5 mb-3 px-5',
+                    <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
                         notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
                     )}>The audits associated with these settings are already optimized</div>
 
