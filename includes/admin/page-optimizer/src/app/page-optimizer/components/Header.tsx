@@ -66,7 +66,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='z-[110000] w-full px-6 py-3 mt-[3px] flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
+        <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
@@ -113,7 +113,7 @@ const Header = ({ url }: { url: string}) => {
                             }} >
                             <TooltipText
                                 text='Analyze the page'>
-                                <AppButton data-tour='analyze'
+                                <AppButton asChild={true} data-tour='analyze'
 
                                            className={cn(
                                                'transition-none rounded-none h-12 px-3 pr-3.5 ' +
@@ -130,23 +130,23 @@ const Header = ({ url }: { url: string}) => {
                                 </AppButton>
                             </TooltipText>
                         </UnsavedChanges>
-                        <TooltipText
-                            text='Switch URL to optimize'>
-                            <AppButton data-tour='analyze'
+                        {/*<TooltipText*/}
+                        {/*    text='Switch URL to optimize'>*/}
+                        {/*    <AppButton asChild={true} data-tour='analyze'*/}
 
-                                       className={cn(
-                                           'transition-none rounded-none h-12 pl-3 pr-3.5' +
-                                           ' border-l border-r-0 border-t-0 border-b-0 bg-transparent hover:opacity-100',
-                                       )}
-                                       variant='outline'>
-                                <div className='flex flex-col gap-[1px] items-center'>
-                                    <ArrowDownUp className={cn(
-                                        'w-4 -mt-0.5'
-                                    )}/>
-                                    <span className='text-xxs font-normal text-brand-500'>Switch</span>
-                                </div>
-                            </AppButton>
-                        </TooltipText>
+                        {/*               className={cn(*/}
+                        {/*                   'transition-none rounded-none h-12 pl-3 pr-3.5' +*/}
+                        {/*                   ' border-l border-r-0 border-t-0 border-b-0 bg-transparent hover:opacity-100',*/}
+                        {/*               )}*/}
+                        {/*               variant='outline'>*/}
+                        {/*        <div className='flex flex-col gap-[1px] items-center'>*/}
+                        {/*            <ArrowDownUp className={cn(*/}
+                        {/*                'w-4 -mt-0.5'*/}
+                        {/*            )}/>*/}
+                        {/*            <span className='text-xxs font-normal text-brand-500'>Switch</span>*/}
+                        {/*        </div>*/}
+                        {/*    </AppButton>*/}
+                        {/*</TooltipText>*/}
                     </div>
                 </div>
             </div>

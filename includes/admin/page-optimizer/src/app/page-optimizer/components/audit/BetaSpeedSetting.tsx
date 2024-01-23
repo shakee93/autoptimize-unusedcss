@@ -258,7 +258,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
             )}
             <div className='flex flex-col'>
                 <div className='relative flex gap-2 font-medium text-base w-fit items-center pr-2 py-0.5'>
-                    <div  onClick={handleCheckboxClick}>{settings.name}</div>
+                    <div className='select-none' onClick={handleCheckboxClick}>{settings.name}</div>
                     {!hideActions && (
                         <>
 

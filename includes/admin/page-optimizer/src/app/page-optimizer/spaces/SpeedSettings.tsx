@@ -42,7 +42,7 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 const SpeedSettings = ({}) => {
 
     const {settings, data } = useSelector(optimizerData);
-    const [activeCategory, setActiveCategory]= useState<SettingsCategory>('css')
+    const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
@@ -248,7 +248,7 @@ const SpeedSettings = ({}) => {
                         // initial={{ opacity: 0, y: -5 }}
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
-                        'flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
+                        'select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
@@ -282,46 +282,34 @@ const SpeedSettings = ({}) => {
             </ul>
 
             <ul>
-                {filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory) &&
-                <m.div
-                    initial={{opacity: 0, y: 10}}
-                    animate={{opacity: 1, y: 0}}
-                    exit={{opacity: 0, y: -20}}
-                    className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
-                    <div>
-                        <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                    </div>
-                    <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
-                </m.div>
-                }
+
 
                 {filteredAudits.length > 0 && (
-                    <m.div
+                    <m.button
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
-                            `w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 text-sm font-medium `,
-                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
+                            `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+          flex items-center gap-2 px-5 py-1.5 pb-0 text-sm font-medium `,
+                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
                     >
-                        Show Additional Settings{" "}
-                        {categoryStates[activeCategory] ? (
-                            <ChevronUpIcon className='w-4 rounded-[15px]' />
-                        ) : (
-                            <ChevronDownIcon className='w-4 rounded-[15px]' />
-                        )}
-                    </m.div>
+                        Show Additional Settings{" "} <ChevronDownIcon className={cn(
+                            'w-4 rounded-[15px] transition-transform',
+                        categoryStates[activeCategory] && '-rotate-180'
+                    )} />
+
+                    </m.button>
                 )}
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className={cn('font-normal text-sm mb-3 px-5',
-                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
-                    )}>The audit associated with these settings is already optimized</div>
+                    <div className={cn('font-normal text-sm ml-0.5 mb-3 px-5',
+                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
+                    )}>The audits associated with these settings are already optimized</div>
 
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
@@ -334,6 +322,18 @@ const SpeedSettings = ({}) => {
                     </>
                 )}
 
+                {(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&
+                    <m.div
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
+                        <div>
+                            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                        </div>
+                        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
+                    </m.div>
+                }
             </ul>
         </m.div>
     </div>

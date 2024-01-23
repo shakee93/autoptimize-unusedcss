@@ -28,6 +28,18 @@ interface PageSpeedScoreProps {
     priority?: boolean;
 }
 
+const MetricValue = ({ metric }: {metric: Metric}) => {
+    const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
+
+    return <div
+        style={{
+            color: y || '#515151'
+        }}
+        className='text-md font-medium text-brand-500'>
+        {metric.displayValue}
+    </div>
+}
+
 
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
@@ -88,17 +100,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
-    const MetricValue = ({ metric }: {metric: Metric}) => {
-        const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
 
-        return <div
-            style={{
-                color: y
-            }}
-            className='text-md font-medium text-brand-500'>
-            {metric.displayValue}
-        </div>
-    }
 
     return <>
 
@@ -166,11 +168,16 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 {(data?.metrics && !expanded) && (
                     <>
-                        <div className='flex justify-around mb-3 px-2'>
+                        <div className='flex justify-around mb-3 px-2'
+                             onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
+                        >
                             {data.metrics.map(metric => (
-                                <div key={metric.id} className='text-xs border text-center flex flex-col
+                                <div key={metric.id}
+                                     onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
+
+                                     className='text-xs border text-center flex flex-col
                              gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
-                                    <div className='font-medium '>{metric.refs.acronym}</div>
+                                    <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
                                     <MetricValue metric={metric}/>
                                 </div>
                             ))}
@@ -261,4 +268,4 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     </>
 }
 
-export default PageSpeedScore
+export default React.memo(PageSpeedScore)
