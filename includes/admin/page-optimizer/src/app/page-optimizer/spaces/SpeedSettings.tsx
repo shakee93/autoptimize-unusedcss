@@ -234,8 +234,8 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
-    return <div>
-        <SettingsLine cls='mb-2 -mt-2 -ml-9' width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
+    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-2 pb-2 mt-2 rounded-3xl'>
+        <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-3 ml-12'>
             {categoryOrder.map((category: SettingsCategory, index) => (
                 <li className='cursor-pointer' key={index} onClick={e => {
@@ -249,8 +249,8 @@ const SpeedSettings = ({}) => {
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
-                        ' dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md',
-                        activeCategory === category ? 'shadow-md transition-all' : '' && ''
+                        ' dark:bg-brand-950 dark:hover:bg-brand-900 bg-brand-0 hover:shadow-md',
+                        activeCategory === category ? 'dark:bg-brand-900 shadow-md transition-all' : '' && ''
                     )}>
                         <div>
                             {activeCategory === category ?  <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
@@ -293,7 +293,7 @@ const SpeedSettings = ({}) => {
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
                             `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 pb-0 text-sm font-medium `,
+          flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
                             notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
                     >
@@ -307,7 +307,7 @@ const SpeedSettings = ({}) => {
 
                 { (categoryStates[activeCategory]) && (
                     <>
-                    <div className={cn('font-normal text-sm ml-0.5 mb-3 px-5',
+                    <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
                         notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
                     )}>The audits associated with these settings are already optimized</div>
 

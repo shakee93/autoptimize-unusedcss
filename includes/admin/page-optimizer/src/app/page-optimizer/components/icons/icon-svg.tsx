@@ -201,10 +201,14 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
     return (
         <>
+<<<<<<< HEAD
             <svg className={`mb-2 -mt-2 -ml-9 absolute ${animate ? '' : 'selectionBar'}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+=======
+            <svg className={`mb-5 -mt-7 -ml-9 absolute ${animate ? 'selectionBar' : ''}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+>>>>>>> origin/speed-settings
                 <path className='dark:stroke-brand-600 stroke-brand-300' d={adjustedPath}  strokeWidth={strokeWidth} />
             </svg>
-            <svg className="mb-2 -mt-2 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="mb-5 -mt-7 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className='dark:stroke-brand-500 stroke-brand-200' d={adjustedPath} strokeWidth={strokeWidth} />
             </svg>
         </>
