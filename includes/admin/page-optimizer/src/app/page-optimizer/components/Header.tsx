@@ -66,7 +66,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
 
-        <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
+        <header className='z-[110000] w-full px-6 py-3 mt-[3px] flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>

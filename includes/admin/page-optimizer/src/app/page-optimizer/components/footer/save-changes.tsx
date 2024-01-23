@@ -103,7 +103,7 @@ const SaveChanges = () => {
 
     const saveActions =[
         {
-            text: 'Save Changes',
+            text: 'Save',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
             onClick : submitSettings

@@ -15,6 +15,8 @@ import {
     Hash, History,
 } from "lucide-react";
 import SideBarActions from "app/page-optimizer/components/performance-widgets/SideBarActions";
+import xusePerformanceColors from "hooks/usePerformanceColors";
+import AppButton from "components/ui/app-button";
 
 
 
@@ -29,6 +31,7 @@ interface PageSpeedScoreProps {
 
 const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
+    const [expanded, setExpanded] = useState(false)
 
 
 
@@ -85,14 +88,28 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
+    const MetricValue = ({ metric }: {metric: Metric}) => {
+        const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
+
+        return <div
+            style={{
+                color: y
+            }}
+            className='text-md font-medium text-brand-500'>
+            {metric.displayValue}
+        </div>
+    }
 
     return <>
 
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='speed-insights'
-                className='overflow-hidden border flex flex-col sm:flex-row lg:flex-col justify-around'>
+                className={cn(
+                    'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                    expanded && 'border-brand-200'
+                )}>
                 <div
-                    className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 xl:px-8 py-2.5">
+                    className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
@@ -139,10 +156,32 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             89-100
                         </div>
                     </div>
-
                 </div>
 
-                {data?.metrics && (
+                <AppButton
+                    onClick={e => setExpanded(p => !p)}
+                    variant='outline' className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2'>
+                    {expanded ? 'Collapse' : 'Expand' } Metrics
+                </AppButton>
+
+                {(data?.metrics && !expanded) && (
+                    <>
+                        <div className='flex justify-around mb-3 px-2'>
+                            {data.metrics.map(metric => (
+                                <div key={metric.id} className='text-xs border text-center flex flex-col
+                             gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
+                                    <div className='font-medium '>{metric.refs.acronym}</div>
+                                    <MetricValue metric={metric}/>
+                                </div>
+                            ))}
+                        </div>
+
+                    </>
+                )}
+
+
+
+                {(data?.metrics && expanded ) && (
                     <div className={cn(
                         'sticky top-0 w-full sm:w-1/2 lg:w-full border-l lg:border-l-0'
                     )

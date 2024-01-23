@@ -76,16 +76,7 @@ const SideBarActions = () => {
         </Mode>
 
 
-        <AppButton
-            onClick={e => changeTheme()}
-            className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
-            <div className='flex flex-col gap-1 items-center'>
-                <ThemeSwitcher></ThemeSwitcher>
-                <span className='text-xxs font-normal text-brand-500'>Theme</span>
-            </div>
 
-
-        </AppButton>
 
         {(data?.loadingExperience && !activeMetric) &&
             <>
@@ -118,7 +109,21 @@ const SideBarActions = () => {
                 </AppButton>
             </>
         }
+
+        <AppButton
+            onClick={e => changeTheme()}
+            className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
+            <div className='flex flex-col gap-1 items-center'>
+                <ThemeSwitcher></ThemeSwitcher>
+                <span className='text-xxs font-normal text-brand-500'>Theme</span>
+            </div>
+
+
+        </AppButton>
+
     </Card>
+
+
 }
 
 export default SideBarActions
