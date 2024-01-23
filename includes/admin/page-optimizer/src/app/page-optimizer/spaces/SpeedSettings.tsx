@@ -248,7 +248,7 @@ const SpeedSettings = ({}) => {
                         // initial={{ opacity: 0, y: -5 }}
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
-                        'flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
+                        'select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md',
                         activeCategory === category ? 'shadow-md transition-all' : '' && ''
                     )}>
