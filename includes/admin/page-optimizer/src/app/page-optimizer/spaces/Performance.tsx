@@ -88,7 +88,7 @@ const Performance = () => {
 
 
         <div data-tour='audits'>
-            <h2 className="text-lg mt-0.5 ml-5 mb-4 flex gap-2 font-normal items-center">
+            <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>

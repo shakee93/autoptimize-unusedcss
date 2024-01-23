@@ -282,18 +282,7 @@ const SpeedSettings = ({}) => {
             </ul>
 
             <ul>
-                {filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory) &&
-                <m.div
-                    initial={{opacity: 0, y: 10}}
-                    animate={{opacity: 1, y: 0}}
-                    exit={{opacity: 0, y: -20}}
-                    className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
-                    <div>
-                        <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                    </div>
-                    <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
-                </m.div>
-                }
+
 
                 {filteredAudits.length > 0 && (
                     <m.button
@@ -305,7 +294,7 @@ const SpeedSettings = ({}) => {
                         className={cn(
                             `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
           flex items-center gap-2 px-5 py-1.5 pb-0 text-sm font-medium `,
-                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
+                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
                     >
                         Show Additional Settings{" "} <ChevronDownIcon className={cn(
@@ -319,7 +308,7 @@ const SpeedSettings = ({}) => {
                 { (categoryStates[activeCategory]) && (
                     <>
                     <div className={cn('font-normal text-sm ml-0.5 mb-3 px-5',
-                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-6"
+                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
                     )}>The audits associated with these settings are already optimized</div>
 
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
@@ -333,6 +322,18 @@ const SpeedSettings = ({}) => {
                     </>
                 )}
 
+                {(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&
+                    <m.div
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
+                        <div>
+                            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                        </div>
+                        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
+                    </m.div>
+                }
             </ul>
         </m.div>
     </div>

@@ -93,7 +93,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
         return <div
             style={{
-                color: y
+                color: y || '#515151'
             }}
             className='text-md font-medium text-brand-500'>
             {metric.displayValue}
@@ -166,11 +166,16 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 {(data?.metrics && !expanded) && (
                     <>
-                        <div className='flex justify-around mb-3 px-2'>
+                        <div className='flex justify-around mb-3 px-2'
+                             onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
+                        >
                             {data.metrics.map(metric => (
-                                <div key={metric.id} className='text-xs border text-center flex flex-col
+                                <div key={metric.id}
+                                     onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
+
+                                     className='text-xs border text-center flex flex-col
                              gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
-                                    <div className='font-medium '>{metric.refs.acronym}</div>
+                                    <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
                                     <MetricValue metric={metric}/>
                                 </div>
                             ))}
@@ -261,4 +266,4 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     </>
 }
 
-export default PageSpeedScore
+export default React.memo(PageSpeedScore)
