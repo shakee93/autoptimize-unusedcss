@@ -79,7 +79,7 @@ const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions,
                             }}
 
                         >
-                            <ArrowLeftCircleIcon  className={cn('h-6 w-6 text-gray-500')} />Go Back to {capitalizeCategory(s.category)} Settings</div>
+                            <ArrowLeftCircleIcon  className={cn('h-6 w-6 text-gray-500')} /><span className="normal-case">Go Back to {capitalizeCategory(s.category)} Settings</span></div>
 
                          //<Setting hideActions={hideActions} updateValue={updateValue} key={index} settings={settings?.find((_s : AuditSetting) => _s.name === s.name)} index={index} />
                     ))}
