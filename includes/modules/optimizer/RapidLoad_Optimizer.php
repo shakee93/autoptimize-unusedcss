@@ -641,6 +641,8 @@ class RapidLoad_Optimizer
 
         self::post_optimizer_function($result);
 
+        $result->job_id = isset(self::$job) ? self::$job->id : null;
+
         return[
             'success' => true,
             'job_id' => isset(self::$job) ? self::$job->id : null,
