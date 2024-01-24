@@ -80,17 +80,17 @@ const SideBarActions = () => {
 
         {(data?.loadingExperience && !activeMetric) &&
             <>
-                <AnimatePresence>
-                    {tourPrompt &&
-                        <ScaleUp className='flex cursor-pointer items-center w-fit '>
-                            <div
-                                onClick={e => setTourPrompt(false)}
-                                className='absolute animate-bounce-horizontal text-sm left-[110px] text-brand-400 font-normal'>
-                                👈 Ready to get Started? Take a quick tour
-                            </div>
-                        </ScaleUp>
-                    }
-                </AnimatePresence>
+                {/*<AnimatePresence>*/}
+                {/*    {tourPrompt &&*/}
+                {/*        <ScaleUp className='flex cursor-pointer items-center w-fit '>*/}
+                {/*            <div*/}
+                {/*                onClick={e => setTourPrompt(false)}*/}
+                {/*                className='absolute animate-bounce-horizontal text-sm left-[110px] text-brand-400 font-normal'>*/}
+                {/*                👈 Ready to get Started? Take a quick tour*/}
+                {/*            </div>*/}
+                {/*        </ScaleUp>*/}
+                {/*    }*/}
+                {/*</AnimatePresence>*/}
 
                 <AppButton data-tour='analyze'
                            onClick={() => {

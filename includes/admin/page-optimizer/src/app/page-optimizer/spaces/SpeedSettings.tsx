@@ -251,8 +251,8 @@ const SpeedSettings = ({}) => {
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
-                        ' dark:bg-brand-950 dark:hover:bg-brand-900 bg-brand-0 hover:shadow-md',
-                        activeCategory === category ? 'dark:bg-brand-900 shadow-md transition-all' : '' && ''
+                        ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
+                        activeCategory === category ? 'dark:bg-brand-950 shadow-md transition-all' : '' && ''
                     )}>
                         <div>
                             {activeCategory === category ?  <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
