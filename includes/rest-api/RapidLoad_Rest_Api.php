@@ -21,6 +21,13 @@ class RapidLoadRestApi {
 
 
     function ping( WP_REST_Request $request ) {
+
+        $nonce = $request->get_param('nonce');
+
+        if ( ! isset( $nonce ) || ! wp_verify_nonce( $nonce, 'uucss_nonce' ) ) {
+            return new WP_Error( 'invalid_authentication', 'Forbidden', array( 'status' => 403 ) );
+        }
+
         // Retrieve the 'url' query parameter from the request.
         $url = $request->get_param( 'url' );
         $agent = $request->get_param( 'user_agent' );
