@@ -83,7 +83,8 @@ const useSubmitSettings = () => {
 
                     await rest.request('/ping', {
                         'url' : options.optimizer_url,
-                        'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop
+                        'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                        'nonce': window.rapidload_optimizer?.nonce || ''
                     })
 
                     setInvalidatingCache(false)
