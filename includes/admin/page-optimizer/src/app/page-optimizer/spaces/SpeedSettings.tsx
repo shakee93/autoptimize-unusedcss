@@ -234,11 +234,11 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-2 pb-2 mt-2 rounded-3xl'>
+    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-4 pb-2 mt-2 rounded-3xl'>
         <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
         <ul className='flex gap-3 ml-12'>
             {categoryOrder.map((category: SettingsCategory, index) => (
-                <li className='cursor-pointer' key={index} onClick={e => {
+                <li key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);
                     //dispatch(setCommonState('openCategory', category));
@@ -248,7 +248,7 @@ const SpeedSettings = ({}) => {
                         // initial={{ opacity: 0, y: -5 }}
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
-                        'select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
+                        'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950 dark:hover:bg-brand-900 bg-brand-0 hover:shadow-md',
                         activeCategory === category ? 'dark:bg-brand-900 shadow-md transition-all' : '' && ''
                     )}>
