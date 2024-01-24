@@ -36,7 +36,6 @@ class RapidLoadRestApi {
 
     function ping( WP_REST_Request $request ) {
 
-        $url = $request->get_param( 'url' );
         $agent = $request->get_param( 'user_agent' );
         $job_id = $request->get_param( 'job_id' );
 
@@ -45,6 +44,8 @@ class RapidLoadRestApi {
         if(!$job){
             return new WP_Error( 'invalid_job', 'A valid job is required.', array( 'status' => 400 ) );
         }
+
+        $url = $job->url;
 
         // Check if the URL is not empty and is a valid URL.
         if ( empty( $url ) || !filter_var( $url, FILTER_VALIDATE_URL ) ) {
