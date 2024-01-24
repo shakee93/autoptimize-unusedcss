@@ -189,11 +189,11 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
         const timeoutId = setTimeout(() => {
             setAnimate(false);
-        }, 1500);
+        }, 30);
 
         return () => clearTimeout(timeoutId);
 
-    }, [category]);
+    }, [category, width]);
 
     // Adjusting path values based on the new width
     const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
@@ -201,10 +201,10 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
     return (
         <>
-            <svg className={`mb-5 -mt-7 -ml-9 absolute ${animate ? 'selectionBar' : ''}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className={`mb-2 -mt-2 -ml-9 absolute ${animate ? '' : 'selectionBar'}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className='dark:stroke-brand-600 stroke-brand-300' d={adjustedPath}  strokeWidth={strokeWidth} />
             </svg>
-            <svg className="mb-5 -mt-7 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="mb-2 -mt-2 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className='dark:stroke-brand-500 stroke-brand-200' d={adjustedPath} strokeWidth={strokeWidth} />
             </svg>
         </>
