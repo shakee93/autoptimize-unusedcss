@@ -12,7 +12,21 @@ class RapidLoadRestApi {
             register_rest_route( $this::$namespace, '/ping', array(
                 'methods' => 'GET',
                 'callback' => [$this, 'ping'],
-                'permission_callback' => '__return_true'
+                'permission_callback' => function(WP_REST_Request $request){
+
+                    $headers = $request->get_headers();
+
+                    $pattern = '/wordpress_logged_in_[a-f0-9]+=([^;]+)/';
+
+                    if (isset($headers['cookie']) && isset($headers['cookie'][0]) && preg_match($pattern, $headers['cookie'][0], $matches)) {
+                        $wordpress_logged_in_value = $matches[1];
+                        if(!empty($wordpress_logged_in_value)){
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             ));
 
         });
@@ -22,15 +36,15 @@ class RapidLoadRestApi {
 
     function ping( WP_REST_Request $request ) {
 
-        $nonce = $request->get_param('nonce');
-
-        if ( ! isset( $nonce ) || ! wp_verify_nonce( $nonce, 'uucss_nonce' ) ) {
-            return new WP_Error( 'invalid_authentication', 'Forbidden', array( 'status' => 403 ) );
-        }
-
-        // Retrieve the 'url' query parameter from the request.
         $url = $request->get_param( 'url' );
         $agent = $request->get_param( 'user_agent' );
+        $job_id = $request->get_param( 'job_id' );
+
+        $job = RapidLoad_Job::find_or_fail($job_id);
+
+        if(!$job){
+            return new WP_Error( 'invalid_job', 'A valid job is required.', array( 'status' => 400 ) );
+        }
 
         // Check if the URL is not empty and is a valid URL.
         if ( empty( $url ) || !filter_var( $url, FILTER_VALIDATE_URL ) ) {
