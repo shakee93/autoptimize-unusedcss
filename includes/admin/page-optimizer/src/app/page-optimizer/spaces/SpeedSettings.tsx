@@ -110,12 +110,14 @@ const SpeedSettings = ({}) => {
 
        // console.log(openCategory);
         if (openCategory) {
-            setSortedStatus(true);
+            //  setSortedStatus(true);
             setActiveCategory(openCategory);
             console.log(activeCategory);
+            dispatch(setCommonState('openCategory', ''));
+
         }
 
-    }, [data, settings, openCategory]);
+    }, [data, settings]);
 
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {

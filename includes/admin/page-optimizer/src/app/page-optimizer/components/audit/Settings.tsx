@@ -73,8 +73,7 @@ const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions,
                             onClick={e => {
 
                                 dispatch(setCommonState('openCategory', s.category));
-                                dispatch(setCommonState('activeTab', 'configurations'
-                                ));
+                                dispatch(setCommonState('activeTab', 'configurations'));
 
                             }}
 
