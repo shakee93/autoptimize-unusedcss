@@ -49,5 +49,4 @@ interface Help{
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
 
-
 declare const __OPTIMIZER_VERSION__ : string

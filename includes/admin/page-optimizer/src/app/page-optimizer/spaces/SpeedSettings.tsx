@@ -41,12 +41,13 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data } = useSelector(optimizerData);
+    const {settings, data, activeReport} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
+
 
 
     const icons :  {
@@ -74,6 +75,7 @@ const SpeedSettings = ({}) => {
     }), [])
 
     const groupByCategory = (settings: AuditSetting[]) => {
+
         const grouped = {} as GroupedSettings;
         settings.forEach((setting) => {
             if (!grouped[setting.category]) {
@@ -91,7 +93,7 @@ const SpeedSettings = ({}) => {
 
 
     useEffect(() => {
-
+     //   console.log(settings)
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -107,18 +109,20 @@ const SpeedSettings = ({}) => {
         });
 
         setGroupedSettings(sortedGroupedSettings);
+       // setGroupedSettings(prevState => ({ ...prevState, ...sortedGroupedSettings }));
 
-       // console.log(openCategory);
         if (openCategory) {
-            //  setSortedStatus(true);
             setActiveCategory(openCategory);
-            console.log(activeCategory);
             dispatch(setCommonState('openCategory', ''));
-
         }
+
 
     }, [data, settings]);
 
+
+    useEffect(() => {
+        setSortedStatus(true);
+    }, [activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
@@ -152,15 +156,26 @@ const SpeedSettings = ({}) => {
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
 
+    useEffect(() => {
+       // console.log("Test")
+    },[]);
+
+    useEffect(() => {
+    //    console.log("Group Settings");
+        // Rest of your code
+    }, [groupedSettings]);
+
 
 
     useEffect(() => {
+
         if (isInitialRender.current) {
             isInitialRender.current = false;
             return;
         }
 
-        if (groupedSettings && sortedStatus) {
+        if (groupedSettings && sortedStatus ) {
+
             const allPassedAudits: any[] = [];
             const allNotPassedAudits: any[] = [];
 
@@ -193,11 +208,11 @@ const SpeedSettings = ({}) => {
             setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
 
+
         }
 
 
-
-    }, [groupedSettings]);
+    }, [ groupedSettings]);
 
 
     const actionRequired = (item: AuditSetting): boolean => {
