@@ -301,16 +301,21 @@ const SpeedSettings = ({}) => {
         </ul>
 
         <m.div
-            // initial={{ opacity: 0, y: -5 }}
-            // animate={{ opacity: 1, y: 0 }}
+            // initial={{ opacity: 0}}
+            // animate={{ opacity: 1}}
             // transition={{ duration: 0.5 }}
         >
             <ul>
 
                 {notPassedAudits.map((item: AuditSetting, itemIndex) => (
-                    <li key={itemIndex}>{ item.category === activeCategory &&
+                    <li key={itemIndex}>{ item.category === activeCategory && (
+                        <m.div initial={{ opacity: 0}}
+                               animate={{ opacity: 1}}
+                               transition={{ duration: 0.3 }}
+                        >
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
-                    }</li>
+                        </m.div>
+                        )}</li>
                 ))}
             </ul>
 
@@ -346,9 +351,15 @@ const SpeedSettings = ({}) => {
 
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
-                    <li key={itemIndex}>{ item.category === activeCategory &&
+                    <li key={itemIndex}>{ item.category === activeCategory && (
+                        <m.div initial={{ opacity: 0}}
+                               animate={{ opacity: 1}}
+                               transition={{ duration: 0.3 }}
+                        >
+
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
-                    }
+                        </m.div>
+                        )}
                     </li>
 
                     ))}
