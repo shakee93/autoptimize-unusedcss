@@ -181,17 +181,33 @@ const SpeedSettings = ({}) => {
 
             categoryOrder.forEach((category) => {
                 if (groupedSettings[category]) {
+                    // const sorted = groupedSettings[category].slice().sort((a, b) => {
+                    //     const aValue = a.inputs[0].value;
+                    //     const bValue = b.inputs[0].value;
+                    //
+                    //     if (aValue && !bValue) return -1;
+                    //     if (!aValue && bValue) return 1;
+                    //
+                    //     const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                    //     const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+                    //     if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                    //     if (!aHasFailedAudit && bHasFailedAudit) return 1;
+                    //
+                    //     return 0;
+                    // });
                     const sorted = groupedSettings[category].slice().sort((a, b) => {
+                        const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                        const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+
+                        if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                        if (!aHasFailedAudit && bHasFailedAudit) return 1;
+
+                        // If both have failed audits or both don't have failed audits, prioritize by input values.
                         const aValue = a.inputs[0].value;
                         const bValue = b.inputs[0].value;
 
                         if (aValue && !bValue) return -1;
                         if (!aValue && bValue) return 1;
-
-                        const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-                        const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-                        if (aHasFailedAudit && !bHasFailedAudit) return -1;
-                        if (!aHasFailedAudit && bHasFailedAudit) return 1;
 
                         return 0;
                     });
@@ -207,7 +223,7 @@ const SpeedSettings = ({}) => {
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
-
+          //  console.log(passedAudits, notPassedAudits)
 
         }
 
