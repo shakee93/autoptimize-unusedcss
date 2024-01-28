@@ -47,7 +47,9 @@ class RapidLoad_Admin_Bar {
     {
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
-        $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
+        $tag = apply_filters('rapidload/titan/tag', 'latest');
+
+        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
 
         if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
