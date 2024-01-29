@@ -165,22 +165,25 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
        {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
-       <Label htmlFor="name" className="flex ml-4 text-left w-full">
-           <div className="bg-white">
-               <div className='flex gap-3'>
+       <Label htmlFor="name" className="flex text-left w-full">
+           <div className="">
+               <div className='flex '>
                    {excludeCategory.map((name, index) => (
                        <button key={index} onClick={e => setActiveCategory(name)}
-                               className='flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50 dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:shadow-md'>
+                               className={`flex items-center border-b-white py-2 px-4 rounded-t-lg w-fit dark:text-brand-300 ${activeCategory === name ? 'bg-white dark:bg-brand-900' : 'dark:bg-brand-950 bg-brand-200/60 text-slate-500'} dark:hover:border-brand-700/70 `}>
                            {name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                        </button>
                    ))}
 
                </div>
-               <div className='overflow-auto max-h-[200px]'>
+               <div className='flex flex-wrap gap-2 overflow-auto max-h-[200px] border-slate-100 border-2 dark:border-brand-900 rounded-md px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((value: string, index: number) => (
-                       <button key={index} className=' flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2'>
+                       <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {value?.name}
-                       </button>
+
+                           <Switch checked={true}
+                                   />
+                       </div>
                    ))}
                </div>
                    
