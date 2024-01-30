@@ -168,12 +168,18 @@ interface AuditSetting {
 
 interface AuditSettingInput {
     control_type: ControlTypes;
-    control_values: string[];
+    control_values:  string[] ;
     control_payload: string;
     control_label: string;
     value: any;
     key: any;
     action: string
+}
+
+interface ControlValue {
+    type: string;
+    name: string;
+    exclusions: string[];
 }
 
 type ControlTypes = 'checkbox' | 'textarea' | 'tickbox' | string
