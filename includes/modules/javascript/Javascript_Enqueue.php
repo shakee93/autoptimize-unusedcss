@@ -593,7 +593,7 @@ class Javascript_Enqueue
 
                     if(preg_match($pattern, $inner_content)){
 
-                        $snippets .= $inner_content . "\n";
+                        $snippets .= str_replace("DOMContentLoaded",$eventToBind,$inner_content) . "\n";
 
                     }else{
 
