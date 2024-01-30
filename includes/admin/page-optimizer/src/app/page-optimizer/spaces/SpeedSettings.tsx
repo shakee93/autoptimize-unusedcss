@@ -113,7 +113,9 @@ const SpeedSettings = ({}) => {
 
         if (openCategory) {
             setActiveCategory(openCategory);
-          //  dispatch(setCommonState('openCategory', ''));
+          // dispatch(setCommonState('openCategory', ''));
+        }else{
+            dispatch(setCommonState('openCategory', 'css'));
         }
 
 
