@@ -113,7 +113,7 @@ const SpeedSettings = ({}) => {
 
         if (openCategory) {
             setActiveCategory(openCategory);
-            dispatch(setCommonState('openCategory', ''));
+          //  dispatch(setCommonState('openCategory', ''));
         }
 
 
@@ -274,7 +274,7 @@ const SpeedSettings = ({}) => {
                 <li key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);
-                    //dispatch(setCommonState('openCategory', category));
+                    dispatch(setCommonState('openCategory', category));
                 }}>
                     <m.div
                         id={category}
