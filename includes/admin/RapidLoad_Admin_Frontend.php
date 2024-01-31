@@ -1117,7 +1117,7 @@ class RapidLoad_Admin_Frontend
                 display: none !important;
             }
         </style>
-        <div id="rapidload-page-optimizer"> RapidLoad loading... </div><?php
+        <div id="rapidload-page-optimizer">  </div><?php
 
     }
 }

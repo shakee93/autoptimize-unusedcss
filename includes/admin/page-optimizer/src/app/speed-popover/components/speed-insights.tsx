@@ -248,11 +248,13 @@ const Content = () => {
 
 
                     <div className='flex gap-3 text-sm'>
-                        <AppButton onClick={(e) => {
-                            setShowOptimizer(true)
-                        }}>
-                            <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
-                        </AppButton>
+
+                        <a href={`${options.dashboard_url}#/optimize`}>
+                            <AppButton>
+                                <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
+                            </AppButton>
+                        </a>
+
                         <PopupActions/>
                     </div>
                 </div>

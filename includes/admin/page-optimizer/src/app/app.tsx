@@ -57,20 +57,35 @@ const App = ({popup, _showOptimizer = false}: {
         dispatch(fetchData(options, options.optimizer_url, false))
     }, [dispatch, activeReport]);
 
-    const [activeRoute, setActiveRoute] = useState('dashboard');
+    const hash = window.location.hash.replace("#", "");
+    const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
     const [routes, setRoutes] = useState( [
         {
             title: "Dashboard",
-            id: "dashboard",
+            id: "/",
             component: <>dashboard</>
         },
         {
             title: "Optimize",
-            id: "optimize",
+            id: "/optimize",
             component: <PageOptimizer/>
         }
     ])
 
+
+    useEffect(() => {
+        window.location.hash = '#' + activeRoute
+    }, [activeRoute])
+    
+    useEffect(() => {
+        const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
+
+
+        if (!validRoute) {
+            setActiveRoute('/')
+        }
+
+    }, [])
 
     return (
         <AnimatePresence>
@@ -95,7 +110,7 @@ const App = ({popup, _showOptimizer = false}: {
                             <div className='flex'>
 
                                 {routes.map((route, i) => (
-                                    <button
+                                    <button key={i}
                                         onClick={e => setActiveRoute(route.id)}
                                         className={cn(
                                         'px-6 flex-1 h-16 border-l text-sm tracking-wider border-b-2 border-b-transparent',
@@ -104,13 +119,14 @@ const App = ({popup, _showOptimizer = false}: {
                                         {route.title}
                                     </button>
                                 ))}
+
                             </div>
 
                         </header>
 
                     </div>
 
-                    {routes.find(route => route.id === activeRoute)?.component}
+                    {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
 
                 </div>
             }
