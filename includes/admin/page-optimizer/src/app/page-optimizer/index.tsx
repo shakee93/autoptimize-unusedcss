@@ -112,7 +112,7 @@ export default function PageOptimizer() {
                                         <Circle style={{
                                             fill: progressbarColor
                                         }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
-                                        Speed Insights {togglePerformance && <TogglePerformance/>} </div>
+                                        Page Insights {togglePerformance && <TogglePerformance/>} </div>
                                     <div   className="widgets pt-4 flex">
                                         <PageSpeedScore/>
                                     </div>
@@ -138,9 +138,9 @@ export default function PageOptimizer() {
                     <Loading url={url}/>
                 )}
             </div>
-            {!error && (
-                <Footer />
-            )}
+            {/*{!error && (*/}
+            {/*    <Footer />*/}
+            {/*)}*/}
             <Toaster/>
         </m.div>
     );

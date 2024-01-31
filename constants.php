@@ -9,5 +9,5 @@ define( 'RAPIDLOAD_SETTINGS_DIR', WP_CONTENT_DIR . '/settings/rapidload' );
 define( 'RAPIDLOAD_CACHE_DIR', WP_CONTENT_DIR . '/cache/rapidload-cache' );
 define( 'RAPIDLOAD_CONSTANT_FILE', __DIR__ . '/constants.php' );
 define( 'RAPIDLOAD_INDEX_FILE', ABSPATH . 'index.php' );
-define( 'UUCSS_VERSION', '2.2.9' );
+define( 'UUCSS_VERSION', '2.2.12' );
 define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );

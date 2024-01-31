@@ -20,11 +20,12 @@ interface AuditSettingsItemProps {
 
 
 const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, updateValue, actionRequired }) => {
-    const { dispatch } = useCommonDispatch();
+    const { dispatch, openCategory } = useCommonDispatch();
 
     console.log(item)
 
     const handleAuditClick = (audit: Audit) => {
+
         dispatch(setCommonState('openAudits', [audit.id]));
         dispatch(
             setCommonState(
@@ -35,11 +36,11 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
 
         setTimeout(() => {
             document.getElementById(`audit-${audit.id}`)?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        }, 10);
     };
 
     return (
-        <div className="w-full border mb-2 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60">
+        <div className="w-full mb-3.5 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60">
             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired} index={itemIndex} />
 
             <ul className="flex mt-2 justify-start ml-14">
@@ -66,8 +67,8 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
                             ) : null}
                         </div>
 
-                        <div className="flex flex-col">
-                            {audit.name}
+                        <div className="flex flex-col ">
+                            <span className='select-none'>{audit.name}</span>
                             <div className="flex items-center">
                                 <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">
                                     {audit.type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}

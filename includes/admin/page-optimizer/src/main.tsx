@@ -19,6 +19,7 @@ import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
 import {ErrorBoundary} from "react-error-boundary";
 import {isDev} from "lib/utils";
+import Providers from "./Providers";
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -96,26 +97,24 @@ export class RapidLoadOptimizer {
         const optimizer = createRoot(container);
         optimizer.render(
                <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
-                   <Provider store={store}>
-                       <RootProvider>
-                               <AppProvider global={global} initShowOptimizerValue={showOptimizer} mode={mode}
-                                            modeData={modeData}>
-                                   <TooltipProvider>
-                                       <LazyMotion features={domAnimation}>
-                                           {popup && (
-                                               <ShadowRoot node={popup} styles={stylesUrl}>
-                                                   <SpeedPopover/>
-                                               </ShadowRoot>
-                                           )}
 
-                                           <ShadowRoot styles={stylesUrl}>
-                                               <App _showOptimizer={showOptimizer} popup={popup}/>
-                                           </ShadowRoot>
-                                       </LazyMotion>
-                                   </TooltipProvider>
-                               </AppProvider>
-                       </RootProvider>
-                   </Provider>
+                   <Providers
+                       mode={mode}
+                       modeData={modeData}
+                       popup={popup}
+                       global={global}
+                       showOptimizer={showOptimizer} >
+                       {popup && (
+                           <ShadowRoot node={popup} styles={stylesUrl}>
+                               <SpeedPopover/>
+                           </ShadowRoot>
+                       )}
+
+                       <ShadowRoot styles={stylesUrl}>
+                           <App _showOptimizer={showOptimizer} popup={popup}/>
+                       </ShadowRoot>
+                   </Providers>
+
                </ApplicationErrorBoundary>
         );
     }

@@ -191,6 +191,7 @@ interface Metric {
     displayValue: string;
     icon: string;
     score: number;
+    color?: string,
     refs: {
         relevantAudits: string[]
         acronym: string

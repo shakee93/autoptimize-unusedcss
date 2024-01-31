@@ -55,6 +55,9 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
 
     return (
         <div className="w-full lg:flex flex-col lg:grid-cols-none grid grid-cols-2 grid-rows-3">
+
+
+
             {sortedMetricsData
                 .sort((a,b) => b.potentialGain - a.potentialGain)
                 .map((metric, index) => (
