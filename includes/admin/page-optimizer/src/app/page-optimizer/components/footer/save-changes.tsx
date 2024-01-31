@@ -238,7 +238,7 @@ const SaveChanges = () => {
                             onClick={() => { setShowOptimizer(false) }} >
 
                             <DropdownMenuTrigger className='w-8 h-12 flex items-center justify-center'>
-                                <TooltipText className='flex items-center justify-center' asChild={true} text='Close Optimizer'>
+                                <TooltipText className='flex items-center justify-center' asChild={true} text='Additional Settings'>
                                     <MoreVertical className={cn(
                                         'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
                                     )} />

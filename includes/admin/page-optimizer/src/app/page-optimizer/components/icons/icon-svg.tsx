@@ -189,7 +189,7 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
         const timeoutId = setTimeout(() => {
             setAnimate(false);
-        }, 30);
+        }, 80);
 
         return () => clearTimeout(timeoutId);
 
@@ -201,9 +201,12 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
 
     return (
         <div className='absolute -top-3 -left-4'>
-            <svg className={` ${animate ? '' : 'selectionBar'}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+            {!animate &&
+            <svg className={`absolute selectionBar`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className='dark:stroke-brand-600 stroke-brand-300' d={adjustedPath}  strokeWidth={strokeWidth} />
             </svg>
+            }
+
             <svg width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className='dark:stroke-brand-500 stroke-brand-200' d={adjustedPath} strokeWidth={strokeWidth} />
             </svg>

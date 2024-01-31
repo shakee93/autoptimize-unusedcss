@@ -41,12 +41,13 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data } = useSelector(optimizerData);
+    const {settings, data, activeReport} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
+
 
 
     const icons :  {
@@ -74,6 +75,7 @@ const SpeedSettings = ({}) => {
     }), [])
 
     const groupByCategory = (settings: AuditSetting[]) => {
+
         const grouped = {} as GroupedSettings;
         settings.forEach((setting) => {
             if (!grouped[setting.category]) {
@@ -91,7 +93,7 @@ const SpeedSettings = ({}) => {
 
 
     useEffect(() => {
-
+     //   console.log(settings)
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -107,16 +109,22 @@ const SpeedSettings = ({}) => {
         });
 
         setGroupedSettings(sortedGroupedSettings);
+       // setGroupedSettings(prevState => ({ ...prevState, ...sortedGroupedSettings }));
 
-       // console.log(openCategory);
         if (openCategory) {
-            setSortedStatus(true);
             setActiveCategory(openCategory);
-            console.log(activeCategory);
+          // dispatch(setCommonState('openCategory', ''));
+        }else{
+            dispatch(setCommonState('openCategory', 'css'));
         }
 
-    }, [data, settings, openCategory]);
 
+    }, [data, settings]);
+
+
+    useEffect(() => {
+        setSortedStatus(true);
+    }, [activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
@@ -150,31 +158,58 @@ const SpeedSettings = ({}) => {
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
 
+    useEffect(() => {
+       // console.log("Test")
+    },[]);
+
+    useEffect(() => {
+    //    console.log("Group Settings");
+        // Rest of your code
+    }, [groupedSettings]);
+
 
 
     useEffect(() => {
+
         if (isInitialRender.current) {
             isInitialRender.current = false;
             return;
         }
 
-        if (groupedSettings && sortedStatus) {
+        if (groupedSettings && sortedStatus ) {
+
             const allPassedAudits: any[] = [];
             const allNotPassedAudits: any[] = [];
 
             categoryOrder.forEach((category) => {
                 if (groupedSettings[category]) {
+                    // const sorted = groupedSettings[category].slice().sort((a, b) => {
+                    //     const aValue = a.inputs[0].value;
+                    //     const bValue = b.inputs[0].value;
+                    //
+                    //     if (aValue && !bValue) return -1;
+                    //     if (!aValue && bValue) return 1;
+                    //
+                    //     const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                    //     const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+                    //     if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                    //     if (!aHasFailedAudit && bHasFailedAudit) return 1;
+                    //
+                    //     return 0;
+                    // });
                     const sorted = groupedSettings[category].slice().sort((a, b) => {
+                        const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
+                        const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
+
+                        if (aHasFailedAudit && !bHasFailedAudit) return -1;
+                        if (!aHasFailedAudit && bHasFailedAudit) return 1;
+
+                        // If both have failed audits or both don't have failed audits, prioritize by input values.
                         const aValue = a.inputs[0].value;
                         const bValue = b.inputs[0].value;
 
                         if (aValue && !bValue) return -1;
                         if (!aValue && bValue) return 1;
-
-                        const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-                        const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-                        if (aHasFailedAudit && !bHasFailedAudit) return -1;
-                        if (!aHasFailedAudit && bHasFailedAudit) return 1;
 
                         return 0;
                     });
@@ -190,12 +225,12 @@ const SpeedSettings = ({}) => {
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
+          //  console.log(passedAudits, notPassedAudits)
 
         }
 
 
-
-    }, [groupedSettings]);
+    }, [ groupedSettings]);
 
 
     const actionRequired = (item: AuditSetting): boolean => {
@@ -241,7 +276,7 @@ const SpeedSettings = ({}) => {
                 <li key={index} onClick={e => {
                    // setSortedStatus(true);
                     setActiveCategory(category);
-                    //dispatch(setCommonState('openCategory', category));
+                    dispatch(setCommonState('openCategory', category));
                 }}>
                     <m.div
                         id={category}
@@ -249,8 +284,8 @@ const SpeedSettings = ({}) => {
                         // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
-                        ' dark:bg-brand-950 dark:hover:bg-brand-900 bg-brand-0 hover:shadow-md',
-                        activeCategory === category ? 'dark:bg-brand-900 shadow-md transition-all' : '' && ''
+                        ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
+                        activeCategory === category ? 'dark:bg-brand-950 shadow-md transition-all' : '' && ''
                     )}>
                         <div>
                             {activeCategory === category ?  <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
@@ -268,16 +303,21 @@ const SpeedSettings = ({}) => {
         </ul>
 
         <m.div
-            // initial={{ opacity: 0, y: -5 }}
-            // animate={{ opacity: 1, y: 0 }}
+            // initial={{ opacity: 0}}
+            // animate={{ opacity: 1}}
             // transition={{ duration: 0.5 }}
         >
             <ul>
 
                 {notPassedAudits.map((item: AuditSetting, itemIndex) => (
-                    <li key={itemIndex}>{ item.category === activeCategory &&
+                    <li key={itemIndex}>{ item.category === activeCategory && (
+                        <m.div initial={{ opacity: 0}}
+                               animate={{ opacity: 1}}
+                               transition={{ duration: 0.3 }}
+                        >
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
-                    }</li>
+                        </m.div>
+                        )}</li>
                 ))}
             </ul>
 
@@ -313,9 +353,15 @@ const SpeedSettings = ({}) => {
 
                     {passedAudits.map((item: AuditSetting, itemIndex) => (
 
-                    <li key={itemIndex}>{ item.category === activeCategory &&
+                    <li key={itemIndex}>{ item.category === activeCategory && (
+                        <m.div initial={{ opacity: 0}}
+                               animate={{ opacity: 1}}
+                               transition={{ duration: 0.3 }}
+                        >
+
                         <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
-                    }
+                        </m.div>
+                        )}
                     </li>
 
                     ))}

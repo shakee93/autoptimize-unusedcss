@@ -108,7 +108,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             <Card data-tour='speed-insights'
                 className={cn(
                     'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
-                    expanded && 'border-brand-200'
+                    expanded && 'border-brand-200 dark:border-brand-800'
                 )}>
                 <div
                     className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
