@@ -35,6 +35,8 @@ import {
     TitanLogo
 } from "app/page-optimizer/components/icons/icon-svg";
 
+
+const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
 
@@ -42,7 +44,7 @@ const Performance = () => {
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
     const [open, setOpen] = React.useState(false);
-    const [showNewTitanModelPopup, setShowNewTitanModelPopup]= useState(false);
+    const [showNewTitanModelPopup, setShowNewTitanModelPopup]= useState( !!localStorage.getItem(welcomePopupKey));
     const {
         options,
         setOpenAudits,
@@ -78,13 +80,15 @@ const Performance = () => {
     ];
 
     const isOnboardMode = !['onboard', 'preview'].includes(mode);
-    const popupModel = localStorage.getItem('newTitanPopup');
 
     useEffect(() =>{
-        if(isOnboardMode && !popupModel){
-            setShowNewTitanModelPopup(true);
-            setOpen(true);
-        }
+
+        setTimeout(() => {
+            if(isOnboardMode && !showNewTitanModelPopup){
+                setShowNewTitanModelPopup(true);
+                setOpen(true);
+            }
+        }, 1000)
 
     },[]);
 
@@ -92,7 +96,7 @@ const Performance = () => {
     const saveNewTitanModelPopup = () => {
 
         if (isCheckedPopup) {
-            localStorage.setItem('newTitanPopup', 'true');
+            localStorage.setItem(welcomePopupKey, 'true');
         }
         setOpen(false);
     };
@@ -263,9 +267,8 @@ const Performance = () => {
                                 <DialogDescription >
                                     {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
                                     <ul className="list-disc px-6">
-                                        <li>Newly introduced <span
-                                            className="font-semibold">Speed Settings tab</span> with one-click Audits
-                                            and Solutions filtering based on resources.
+                                        <li>
+                                            Newly introduced <span className='font-semibold'>Speed Settings tab</span> which helps you find recommended settings quickly.
                                         </li>
                                         <li><span className="font-semibold">Simplified view</span> of metrics for easier
                                             comprehension.
@@ -280,12 +283,12 @@ const Performance = () => {
                             </DialogHeader>
 
                             <DialogFooter className='px-6 py-3 border-t'>
-                                <div className="flex py-2 absolute items-center left-6">
+                                <label className="flex py-2 absolute items-center left-6">
                                     <Checkbox  onCheckedChange={(c: boolean) =>{
                                         setIsCheckedPopup(c)
                                     }}/>
-                                    <span className="text-muted-foreground">Don't show this again</span>
-                                </div>
+                                    <span className="text-muted-foreground select-none">Don't show this again</span>
+                                </label>
                                 <AppButton onClick={e => saveNewTitanModelPopup()} className='text-sm'>Explore Now</AppButton>
                                 <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
                             </DialogFooter>
