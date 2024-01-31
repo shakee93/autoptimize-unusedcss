@@ -27,7 +27,7 @@ class RapidLoad_Admin_Frontend
 
             if ($this->is_rapidload_page()) {
 
-                $this->load_scripts();
+//                $this->load_scripts();
 
                 // TODO: temporary should be removed so it supports all the browsers
                 add_filter('script_loader_tag', function ($tag, $handle) {
@@ -1107,7 +1107,17 @@ class RapidLoad_Admin_Frontend
     public function page()
     {
 
-        ?><div id="rapidload-app"> RapidLoad loading... </div><?php
+        ?>
+        <style>
+            #wpcontent {
+                padding-left: 0 !important;
+            }
+
+            .notice {
+                display: none !important;
+            }
+        </style>
+        <div id="rapidload-page-optimizer"> RapidLoad loading... </div><?php
 
     }
 }

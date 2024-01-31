@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         new RapidLoadOptimizer({
             container,
             popup,
+            showOptimizer: true,
             mode: 'normal'
         });
     }
