@@ -82,7 +82,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         {input?.control_type === 'checkbox' &&
 
-            <Label htmlFor="name" className="flex gap-2 items-center ml-4 text-left w-full">
+            <Label htmlFor="name" className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
                 <span>{input.control_label}</span>
                 <Switch
                     checked={value}
@@ -96,11 +96,11 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
            <>
-               <Label htmlFor="name" className="flex ml-4 text-left w-full">
+               <Label htmlFor="name" className="flex ml-4 text-left w-full dark:text-brand-300">
                    <span>{input.control_label}</span>
                </Label>
                <FocusLock>
-               <Textarea className="focus:outline-none focus-visible:ring-0" value={value} onChange={e =>  {
+               <Textarea className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {
                    e.preventDefault()
                    update(e.target.value, input.key)
                    e.target.focus()

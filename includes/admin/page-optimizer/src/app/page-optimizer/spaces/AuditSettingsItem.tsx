@@ -68,7 +68,7 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
                         <div className="flex flex-col ">
                             <span className='select-none'>{audit.name}</span>
                             <div className="flex items-center">
-                                <div className="dark:bg-brand-900 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">
+                                <div className="dark:bg-brand-950 bg-white border w-fit rounded-lg items-center py-py px-1 mr-2 text-gray-400 block font-medium text-[10px] ">
                                     {audit.type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
 
                                 </div>
