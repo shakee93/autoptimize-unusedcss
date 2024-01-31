@@ -46,7 +46,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 [state.activeReport] : {
                     ...state[state.activeReport],
-                    loading: true
+                    loading: true,
+                    error: null
                 }
             };
         case FETCH_DATA_SUCCESS:
@@ -67,7 +68,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 [state.activeReport] : {
-                    error: action.error
+                    error: action.error,
+                    loading: false
                 }
             };
         case UPDATE_SETTINGS:

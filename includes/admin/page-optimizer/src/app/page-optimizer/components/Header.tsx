@@ -49,7 +49,7 @@ const Header = ({ url }: { url: string}) => {
     } = useAppContext()
 
     const { activeReport,
-        loading
+        loading, error
     } = useSelector(optimizerData);
 
     const {
@@ -154,7 +154,11 @@ const Header = ({ url }: { url: string}) => {
 
 
             <div className='flex relative gap-4 items-center'>
-                <SaveChanges/>
+                {!loading && (
+                    <>
+                    {!error && <SaveChanges/>}
+                    </>
+                )}
 
                 <UnsavedChanges
                     onCancel={() => { setShowOptimizer(false) }}
