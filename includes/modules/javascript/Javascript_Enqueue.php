@@ -196,12 +196,12 @@ class Javascript_Enqueue
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
 
-                    $head = $this->dom->find('head', 0);
+                    /*$head = $this->dom->find('head', 0);
                     $node = $this->dom->createElement('link');
                     $node->setAttribute('rel', 'preload');
                     $node->setAttribute('href', $link->src);
                     $node->setAttribute('as', 'script');
-                    $head->appendChild($node);
+                    $head->appendChild($node);*/
 
                     unset($link->src);
                     unset($link->defer);
@@ -593,7 +593,7 @@ class Javascript_Enqueue
 
                     if(preg_match($pattern, $inner_content)){
 
-                        $snippets .= $inner_content . "\n";
+                        $snippets .= str_replace("DOMContentLoaded",$eventToBind,$inner_content) . "\n";
 
                     }else{
 

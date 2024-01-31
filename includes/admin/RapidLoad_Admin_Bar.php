@@ -63,7 +63,7 @@ class RapidLoad_Admin_Bar {
 
         //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
+        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.min.js',[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
 
