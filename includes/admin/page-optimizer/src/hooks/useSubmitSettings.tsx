@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../store/app/appTypes";
-
+import { compareVersions } from 'compare-versions';
 
 const useSubmitSettings = () => {
 
@@ -81,11 +81,21 @@ const useSubmitSettings = () => {
 
                     let rest = api.rest()
 
-                    await rest.request('/ping', {
-                        'url' : options.optimizer_url,
-                        'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                        'nonce': window.rapidload_optimizer?.nonce || ''
-                    })
+                    if(compareVersions(options?.rapidload_version, '2.2.11') > 0){
+                        await api.post(`preload_page`, {
+                            url: options.optimizer_url,
+                            user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                            nonce: options.nonce,
+                            job_id: data.job_id,
+                        });
+                    }else{
+                        await rest.request('/ping', {
+                            'url' : options.optimizer_url,
+                            'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                            'nonce': options.nonce,
+                            'job_id': data.job_id
+                        })
+                    }
 
                     setInvalidatingCache(false)
                 }

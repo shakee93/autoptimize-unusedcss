@@ -83,7 +83,8 @@ class RapidLoad_Optimizer
             'fetch_page_speed' => 'handle_ajax_fetch_page_speed',
             'optimizer_update_settings' => 'handle_ajax_optimizer_update_settings',
             'titan_reset_to_default' => 'titan_reset_to_default',
-            'latest_page_speed' => 'latest_page_speed'
+            'latest_page_speed' => 'latest_page_speed',
+            'preload_page' => 'preload_page'
         ];
 
         foreach ($actions as $action => $method) {
@@ -640,8 +641,11 @@ class RapidLoad_Optimizer
 
         self::post_optimizer_function($result);
 
+        $result->job_id = isset(self::$job) ? self::$job->id : null;
+
         return[
             'success' => true,
+            'job_id' => isset(self::$job) ? self::$job->id : null,
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
@@ -917,5 +921,35 @@ class RapidLoad_Optimizer
 
     }
 
+    public function preload_page(){
 
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+        $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
+
+        $response = wp_remote_get( $url, array( 'timeout' => 30, 'headers' => [
+            'User-Agent' => $agent
+        ] ) );
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error($response->get_error_message());
+        }
+
+        $response_code = wp_remote_retrieve_response_code( $response );
+        $response_headers = wp_remote_retrieve_headers($response);
+
+        $result = array(
+            'success' => true,
+            'data' => "Ping to {$url} successful.",
+            'response_code' => $response_code,
+            'headers' => $response_headers->getAll()
+        );
+
+        wp_send_json_success($result);
+    }
 }
