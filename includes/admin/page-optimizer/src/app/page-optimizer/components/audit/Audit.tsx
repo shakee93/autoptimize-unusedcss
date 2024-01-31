@@ -104,7 +104,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
 
     return  (
-        <div ref={viewRef} >
+        <div id={`audit-${audit.id}`} className='w-full scroll-m-28' ref={viewRef} >
             <AnimatePresence>
                 {inView &&
                     <m.div
@@ -112,10 +112,11 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: (index || 1) * 0.005 }}
-                        className='relative'
+                        className='relative w-full'
                     >
                         <Card
                             data-tour={`audit-${audit.id}`}
+
                             spreader={(!!audit?.files?.items?.length) && !toggleFiles}
                             className={cn(
                                 `overflow-hidden w-full flex justify-center flex-col items-center p-0`,

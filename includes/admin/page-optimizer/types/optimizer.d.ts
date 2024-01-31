@@ -40,7 +40,7 @@ interface LoadingExperience {
     }
 }
 
-type AuditTypes = keyof OptimizerResults['grouped']
+type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations'
 
 interface AuditFileBase  {
     overallSavingsBytes: number;
@@ -155,7 +155,9 @@ interface AuditSetting {
     name: string;
     key: string,
     category: string;
+    description: string;
     inputs: AuditSettingInput[];
+    audits: Audit[];
     status?: {
         status: 'failed' | 'queued' | 'processing' | 'success'
         stats: []
@@ -174,7 +176,7 @@ interface AuditSettingInput {
     action: string
 }
 
-type ControlTypes = 'checkbox' | 'textarea' | string
+type ControlTypes = 'checkbox' | 'textarea' | 'tickbox' | string
 
 interface Metric {
     id: string;
@@ -183,6 +185,7 @@ interface Metric {
     displayValue: string;
     icon: string;
     score: number;
+    color?: string,
     refs: {
         relevantAudits: string[]
         acronym: string

@@ -6,6 +6,7 @@ interface RootContextProps {
     setTheme: Dispatch<SetStateAction<string>>
     isDark: boolean
     setIsDark: Dispatch<SetStateAction<boolean>>
+    changeTheme: () => void
 }
 
 export const RootContext = createContext<RootContextProps | null>(null)
@@ -31,12 +32,21 @@ const RootProvider = ({ children }: RootProviderProps) => {
         typeof window !== 'undefined' && window.localStorage.setItem('rapidload-theme', theme)
     }, [theme])
 
+    const changeTheme = () => {
+        if(theme === 'dark') {
+            setTheme('light');
+        }  else {
+            setTheme('dark');
+        }
+    }
+
     return (
         <RootContext.Provider value={{
             theme,
             setTheme,
             isDark,
-            setIsDark
+            setIsDark,
+            changeTheme
         }}>
             {children}
         </RootContext.Provider>

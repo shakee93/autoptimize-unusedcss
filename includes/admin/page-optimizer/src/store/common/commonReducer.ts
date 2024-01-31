@@ -5,13 +5,13 @@ const initialState: CommonState = {
     mode: "normal",
     isTourOpen: false,
     mobile: {
-        activeTab: 'opportunities',
+        activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
         activeMetric: null
     },
     desktop: {
-        activeTab: 'opportunities',
+        activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
         activeMetric: null

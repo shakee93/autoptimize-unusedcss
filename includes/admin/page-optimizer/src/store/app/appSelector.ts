@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import {RootState} from "./appTypes";
 import equal from "fast-deep-equal/es6/react";
 
-const state = (state: RootState) => state.app;
+export const state = (state: RootState) => state.app;
 
 function optimizeChangesFiles(changes : any ) {
     const result = [];
@@ -36,6 +36,7 @@ function optimizeChangesFiles(changes : any ) {
 
     return result;
 }
+
 
 export const optimizerData = createSelector(
     state, // Input selector

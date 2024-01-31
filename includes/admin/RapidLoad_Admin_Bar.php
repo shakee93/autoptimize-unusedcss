@@ -47,7 +47,9 @@ class RapidLoad_Admin_Bar {
     {
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
-        $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
+        $tag = apply_filters('rapidload/titan/tag', 'latest');
+
+        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
 
         if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
@@ -61,7 +63,7 @@ class RapidLoad_Admin_Bar {
 
         //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
+        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.min.js',[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
 
