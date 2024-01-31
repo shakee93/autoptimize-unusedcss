@@ -53,8 +53,6 @@ const Header = () => {
     } = useSelector(optimizerData);
 
     const {
-        activeTab,
-        activeMetric,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
@@ -67,7 +65,7 @@ const Header = () => {
 
     return (
 
-        <header className='sticky top-0 z-[10000] w-full px-6 py-3 flex gap-3 justify-between border-b dark:bg-brand-930 bg-brand-50'>
+        <header className='sticky top-[32px] z-[10000] w-full px-6 py-3 flex gap-3 justify-between border-b dark:bg-brand-930 bg-brand-50'>
             <div className='flex gap-12 items-center'>
                 <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>

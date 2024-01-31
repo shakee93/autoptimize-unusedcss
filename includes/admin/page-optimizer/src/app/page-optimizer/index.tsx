@@ -56,7 +56,8 @@ export default function PageOptimizer() {
 
     }, [savingData])
 
-    return (
+    return <>
+        <Header />
 
         <m.div
             initial={{ opacity: 0 }}
@@ -71,7 +72,6 @@ export default function PageOptimizer() {
                 "bg-white h-fit font-sans overflow-hidden flex flex-col text-base items-center "
             )}>
 
-            <Header />
 
             <div
                 id='rapidload-page-optimizer-content'
@@ -142,5 +142,5 @@ export default function PageOptimizer() {
             {/*)}*/}
             <Toaster/>
         </m.div>
-    );
+    </>;
 }
