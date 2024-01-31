@@ -18,6 +18,19 @@ import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
 import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
+import AppButton from "components/ui/app-button";
+import Mode from "app/page-optimizer/components/Mode";
+import { Checkbox } from "components/ui/checkbox";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -25,7 +38,8 @@ const Performance = () => {
     const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
-
+    const [open, setOpen] = React.useState(false);
+    const [showNewTitanModelPopup, setShowNewTitanModelPopup]= useState(false);
     const {
         options,
         setOpenAudits,
@@ -34,6 +48,7 @@ const Performance = () => {
         savingData,
         togglePerformance,
         setTogglePerformance,
+        version
     } = useAppContext()
 
     const tabs: Tab[] = [
@@ -59,7 +74,25 @@ const Performance = () => {
 
     ];
 
+    const isOnboardMode = !['onboard', 'preview'].includes(mode);
+    const popupModel = localStorage.getItem('newTitanPopup');
 
+    useEffect(() =>{
+        if(isOnboardMode && !popupModel){
+            setShowNewTitanModelPopup(true);
+            setOpen(true);
+        }
+
+    },[]);
+
+    const [isCheckedPopup, setIsCheckedPopup] = useState(false);
+    const saveNewTitanModelPopup = () => {
+
+        if (isCheckedPopup) {
+            localStorage.setItem('newTitanPopup', 'true');
+        }
+        setOpen(false);
+    };
     // useEffect(() => {
     //
     //     const observer = new IntersectionObserver(
@@ -205,6 +238,62 @@ const Performance = () => {
                     </AnimatePresence>
                 </div>
             </div>
+
+            <Mode>
+                {showNewTitanModelPopup  && (
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogContent asChild className="sm:max-w-[530px] cursor-auto">
+
+                            <DialogHeader className='px-6 pt-6 pb-1'>
+                                <div className='flex gap-2 items-center'>
+                                    {/*<div className='relative'>*/}
+                                    {/*    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
+                                    {/*</div>*/}
+                                    <BoltIcon className='w-4 rounded-[15px]'/>
+                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0) </DialogTitle>
+                                </div>
+
+                                <div className='relative py-4'>
+                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/screenflow.gif`) : '/screenflow.gif'} alt='Welcome to Titan'/>
+                                </div>
+                                <DialogDescription >
+                                    {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
+                                    <ul className="list-disc px-6">
+                                        <li>Newly introduced <span
+                                            className="font-semibold">Speed Settings tab</span> with one-click Audits
+                                            and Solutions filtering based on resources.
+                                        </li>
+                                        <li><span className="font-semibold">Simplified view</span> of metrics for easier
+                                            comprehension.
+                                        </li>
+                                        <li>Recommend settings for Audits that impact your site.</li>
+                                        <li>Resolved Audits are kept under <span className="font-semibold">additional settings</span>.
+                                        </li>
+                                    </ul>
+                                </DialogDescription>
+
+
+                            </DialogHeader>
+
+                            <DialogFooter className='px-6 py-3 border-t'>
+                                <div className="flex py-2 absolute items-center left-6">
+                                    <Checkbox  onCheckedChange={(c: boolean) =>{
+                                        setIsCheckedPopup(c)
+                                    }}/>
+                                    <span className="text-muted-foreground">Don't show this again</span>
+                                </div>
+                                <AppButton onClick={e => saveNewTitanModelPopup()} className='text-sm'>Explore Now</AppButton>
+                                <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
+                            </DialogFooter>
+
+                        </DialogContent>
+                    </Dialog>
+
+
+                )}
+
+
+            </Mode>
         </div>
 
     )
