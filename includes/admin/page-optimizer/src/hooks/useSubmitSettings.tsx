@@ -86,7 +86,7 @@ const useSubmitSettings = () => {
                             url: options.optimizer_url,
                             user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
                             nonce: options.nonce,
-                            job_id: data.job_id,
+                            job_id: data?.job_id,
                         });
                     }else{
                         await rest.request('/ping', {

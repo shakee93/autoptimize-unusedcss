@@ -83,11 +83,24 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [activeCategory, setActiveCategory]= useState('third_party')
 
-    //console.log(input?.control_values)
-    const filteredValues = input?.control_values?.filter(
+    const filteredValues = (input?.control_values as ControlValue[])?.filter(
         (value) => value.type === activeCategory
-
     );
+
+
+    const handleSwitchChange = (isChecked: boolean, itemId: string) => {
+        const updatedValue = isChecked
+            ? [...(value || []), itemId]
+            : (value || []).filter((id: string) => id !== itemId);
+
+        update(updatedValue, input.key);
+
+      //  console.log(updatedValue)
+    };
+    // const filteredValues = input?.control_values?.filter(
+    //     (value) => value.type === activeCategory
+    //
+    // );
 
    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
@@ -143,7 +156,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                    <SelectContent className="z-[100001]">
                        <SelectGroup>
                            <SelectLabel>Actions</SelectLabel>
-                           {input?.control_values?.map((value: string, index: number) => (
+                           {(input?.control_values as string[])?.map((value: string, index: number) => (
                                <SelectItem
                                    className="capitalize cursor-pointer"
                                    key={index}
@@ -173,11 +186,15 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
                </div>
                <div className='flex flex-wrap gap-2 overflow-auto max-h-[200px] border-slate-100 border-2 dark:border-brand-900 rounded-md px-4 py-4 dark:bg-brand-900 '>
-                   {filteredValues.map((value: string, index: number) => (
+                   {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
-                           {value?.name}
+                           {item?.name}
 
-                           <Switch checked={true}/>
+                           <Switch
+                               checked={value?.includes(item.id) || false}
+                               onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                           />
+
                        </div>
                    ))}
                </div>

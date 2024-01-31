@@ -168,7 +168,7 @@ interface AuditSetting {
 
 interface AuditSettingInput {
     control_type: ControlTypes;
-    control_values:  string[] ;
+    control_values:  ControlValue[] | string [] ;
     control_payload: string;
     control_label: string;
     value: any;
@@ -179,6 +179,7 @@ interface AuditSettingInput {
 interface ControlValue {
     type: string;
     name: string;
+    id: string;
     exclusions: string[];
 }
 
