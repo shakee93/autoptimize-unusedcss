@@ -31,6 +31,9 @@ import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import AppButton from "components/ui/app-button";
 import Mode from "app/page-optimizer/components/Mode";
 import { Checkbox } from "components/ui/checkbox";
+import {
+    TitanLogo
+} from "app/page-optimizer/components/icons/icon-svg";
 
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
@@ -246,11 +249,12 @@ const Performance = () => {
 
                             <DialogHeader className='px-6 pt-6 pb-1'>
                                 <div className='flex gap-2 items-center'>
-                                    {/*<div className='relative'>*/}
-                                    {/*    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
-                                    {/*</div>*/}
-                                    <BoltIcon className='w-4 rounded-[15px]'/>
-                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0) </DialogTitle>
+                                    <div className='relative'>
+                                        {/*<img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
+                                        <TitanLogo/>
+                                    </div>
+
+                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0)</DialogTitle>
                                 </div>
 
                                 <div className='relative py-4'>
