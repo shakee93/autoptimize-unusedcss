@@ -177,8 +177,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {value?.name}
 
-                           <Switch checked={true}
-                                   />
+                           <Switch checked={true}/>
                        </div>
                    ))}
                </div>
