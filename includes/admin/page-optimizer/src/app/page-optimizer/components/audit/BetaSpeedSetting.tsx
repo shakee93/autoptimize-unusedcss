@@ -280,7 +280,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             )}
 
                             <Mode>
-                                {showPopover && settings.name != 'Delay Javascript' && (
+                                {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         <DialogTrigger disabled asChild>
                                             <div >
