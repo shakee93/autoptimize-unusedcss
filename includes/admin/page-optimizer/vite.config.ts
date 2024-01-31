@@ -53,7 +53,7 @@ export default defineConfig((configEnv) => {
                         ],
                     },
                     // entryFileNames: `assets/[name].js`,
-                    entryFileNames: `assets/[name].min.js`,
+                    entryFileNames: `assets/[name].js`,
                     chunkFileNames: `assets/[name].js`,
                     assetFileNames: `assets/[name].[ext]`
                 }
