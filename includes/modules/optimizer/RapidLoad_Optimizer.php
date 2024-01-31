@@ -486,35 +486,8 @@ class RapidLoad_Optimizer
                                         break;
                                     }
                                     case 'uucss_exclude_files_from_delay_js':{
-                                        $plugins = $this->get_active_plugins();
-                                        $exclusion_list = [];
-                                        foreach ($plugins as $plugin){
-                                            $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
-                                            $plugin_name = $plugin_data['Name'];
-                                            $path = str_replace(basename($plugin), "", $plugin);
-                                            $exclusion_list[] = [
-                                                'type' => "plugins",
-                                                'name' => $plugin_name,
-                                                'exclusions' => [
-                                                    "/plugins/" . $path,
-                                                    "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
-                                                    "\/jquery-migrate(.min)?.js",
-                                                ],
-                                            ];
-                                        }
-                                        $exclusion_list[] = [
-                                            'type' => "theme",
-                                            'name' => $this->get_active_theme(),
-                                            'exclusions' => [
-                                                get_template_directory_uri(),
-                                                "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
-                                                "\/jquery-migrate(.min)?.js",
-                                            ],
-                                        ];
-                                        $third_party_scripts = $this->get_third_party_scripts();
-                                        $exclusion_list = array_merge($third_party_scripts, $exclusion_list);
-                                        $input->value = self::$merged_options[$input->key];
-                                        $input->control_values = $exclusion_list;
+                                        $input->control_values = JavaScript::get_dynamic_exclusion_list();
+                                        $input->value = explode("\n", self::$merged_options['uucss_dynamic_js_exclusion_list']);
                                         break;
                                     }
                                 }
@@ -822,6 +795,12 @@ class RapidLoad_Optimizer
                                     }
                                     break;
                                 }
+                                case 'button' : {
+                                    if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
+                                        self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                    }
+                                    break;
+                                }
                             }
 
                             if(isset($input->key) && ($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss")){
@@ -951,97 +930,6 @@ class RapidLoad_Optimizer
             ]);
         }
 
-    }
-
-    public function get_active_plugins() {
-        $plugins = (array) get_option( 'active_plugins', [] );
-
-        if ( ! is_multisite() ) {
-            return $plugins;
-        }
-
-        return array_merge(
-            $plugins,
-            array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) )
-        );
-    }
-
-    public function get_active_theme() {
-        $theme = wp_get_theme();
-        $parent = $theme->get_template();
-        if ( ! empty( $parent ) ) {
-            return $parent;
-        }
-        return $theme->get( 'Name' );
-    }
-
-    public function get_third_party_scripts(){
-        return[
-            [
-                'type' => "third_party",
-                'name' => "Amazon Ads",
-                'exclusions' => [
-                    "amazon-adsystem.com"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google AdSense",
-                'exclusions' => [
-                    "adsbygoogle"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google Analytics",
-                'exclusions' => [
-                    "google-analytics.com\/analytics.js",
-                    "ga\\( '",
-                    "ga\\('"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google Maps",
-                'exclusions' => [
-                    "maps.googleapis.com",
-                    "maps.google.com"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google Optimize",
-                'exclusions' => [
-                    "a,s,y,n,c,h,i,d,e",
-                    "googleoptimize.com\/optimize.js",
-                    "async-hide"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google Recaptcha",
-                'exclusions' => [
-                    "recaptcha"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Google Tag Manager",
-                'exclusions' => [
-                    "\/gtag\/js",
-                    "gtag\\(",
-                    "\/gtm.js",
-                    "async-hide"
-                ],
-            ],
-            [
-                'type' => "third_party",
-                'name' => "Facebook",
-                'exclusions' => [
-                    "connect.facebook.net/en_US/fbevents.js"
-                ],
-            ],
-        ];
     }
 
     public function preload_page(){
