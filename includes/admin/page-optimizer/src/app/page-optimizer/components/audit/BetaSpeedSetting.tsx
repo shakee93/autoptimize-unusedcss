@@ -218,7 +218,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         <div
             key={index}
             className={cn(
-                'relative flex cursor-pointer gap-2 font-medium text-base w-fit items-center pr-2 py-1',
+                'relative flex  gap-2 font-medium text-base w-fit items-center pr-2 py-1',
                 showIcons ? 'px-0.5': 'px-2'
             )}
         >
@@ -258,7 +258,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
             )}
             <div className='flex flex-col'>
                 <div className='relative flex gap-2 font-medium text-base w-fit items-center pr-2 py-0.5'>
-                    <div className='select-none' onClick={handleCheckboxClick}>{settings.name}</div>
+                    <div className='select-none cursor-pointer' onClick={handleCheckboxClick}>{settings.name}</div>
                     {!hideActions && (
                         <>
 
@@ -336,7 +336,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     )}
                 </div>
 
-                <p className='text-sm font-normal -mt-1'>{settings.description? settings.description : settings.name}</p>
+                <p className='text-sm font-normal select-none -mt-1'>{settings.description? settings.description : settings.name}</p>
 
             </div>
 
