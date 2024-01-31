@@ -974,16 +974,6 @@ class RapidLoad_Optimizer
         }
         return $theme->get( 'Name' );
     }
-    public function preload_page(){
-
-        self::verify_nonce();
-
-        if(!isset($_REQUEST['url'])){
-            wp_send_json_error('url required');
-        }
-
-        $url = $_REQUEST['url'];
-        $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
 
     public function get_third_party_scripts(){
         return[
@@ -1051,9 +1041,20 @@ class RapidLoad_Optimizer
                     "connect.facebook.net/en_US/fbevents.js"
                 ],
             ],
-
         ];
     }
+
+    public function preload_page(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+        $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
+
         $response = wp_remote_get( $url, array( 'timeout' => 30, 'headers' => [
             'User-Agent' => $agent
         ] ) );
