@@ -37,7 +37,7 @@ import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 
-const Header = ({ url }: { url: string}) => {
+const Header = () => {
 
     const tourPromptKey = 'titan-tour-prompt'
 
@@ -62,18 +62,13 @@ const Header = ({ url }: { url: string}) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
+    const url = options.optimizer_url
 
 
     return (
 
-        <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
+        <header className='sticky top-0 z-[10000] w-full px-6 py-3 flex gap-3 justify-between border-b dark:bg-brand-930 bg-brand-50'>
             <div className='flex gap-12 items-center'>
-                <div className='relative'>
-                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
-                    {version && (
-                        <span className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
-                    )}
-                </div>
                 <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
@@ -155,17 +150,6 @@ const Header = ({ url }: { url: string}) => {
 
             <div className='flex relative gap-4 items-center'>
                 <SaveChanges/>
-
-                <UnsavedChanges
-                    onCancel={() => { setShowOptimizer(false) }}
-                    cancel='Discard & Leave'
-                    onClick={() => { setShowOptimizer(false) }} >
-                    <TooltipText text='Close Optimizer'>
-                        <LogOut className={cn(
-                            'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                        )} />
-                    </TooltipText>
-                </UnsavedChanges>
             </div>
         </header>
 

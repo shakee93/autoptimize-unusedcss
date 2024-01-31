@@ -37,7 +37,7 @@ const Loading = ({ url } : { url: string} ) => {
     }, [])
 
     return (
-        <div className='absolute top-1/2 flex w-full items-center gap-4 text-center'>
+        <div className='w-full items-center gap-4 text-center '>
             <div className='w-full flex flex-col gap-6'>
                 <div>{messages[message]}...</div>
 

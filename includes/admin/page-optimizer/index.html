@@ -108,9 +108,10 @@
 
     <div id="rapidload-page-optimizer"></div>
     <div id='popup'>
-      hover me to show popup
+
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+
+    <script type="module" src="./src/main.tsx"></script>
     <script>
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -118,8 +119,8 @@
         let popup = document.getElementById('popup')
         new window.RapidLoadOptimizer({
           container,
-          popup,
-          showOptimizer: false,
+          // popup,
+          showOptimizer: true,
           // global: true,
           // mode: 'onboard',
           modeData: {

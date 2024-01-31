@@ -68,17 +68,16 @@ export default function PageOptimizer() {
         }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
-                "bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
-                "dark:text-brand-300 text-brand-800"
+                "bg-white h-fit font-sans overflow-hidden flex flex-col text-base items-center "
             )}>
 
-            <Header url={url}/>
+            <Header />
 
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
-                'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
+                'overflow-y-auto scrollbar-stable w-full pb-20 -mt-[70px] min-h-[780px] flex items-center',
+                'dark:bg-brand-900 bg-brand-200/60 ',
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                 savingData && 'relative overflow-hidden'
             )}>
@@ -91,7 +90,7 @@ export default function PageOptimizer() {
                     )}>
 
                         {(savingData || invalidatingCache) && (
-                            <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                            <div className='fixed inset-0 flex justify-center items-center bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
                                 <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
                                     <Loader className='w-5 animate-spin'/>
                                     {savingData && 'Saving Changes...'}

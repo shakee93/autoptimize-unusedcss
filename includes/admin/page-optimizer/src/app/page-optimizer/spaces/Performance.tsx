@@ -93,7 +93,7 @@ const Performance = () => {
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky gap-2 -top-1 z-10',
+                'tabs flex sticky gap-2 -top-1',
             )}>
                 <div
 

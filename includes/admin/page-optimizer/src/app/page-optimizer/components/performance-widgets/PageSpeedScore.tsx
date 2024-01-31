@@ -162,7 +162,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 <AppButton
                     onClick={e => setExpanded(p => !p)}
-                    variant='outline' className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2'>
+                    variant='outline' className='select-none border-none bg-transparent dark:bg-brand-950 hover:bg-transparent text-center text-xs text-brand-600 py-2'>
                     {expanded ? 'Collapse' : 'Expand' } Metrics
                 </AppButton>
 
@@ -176,7 +176,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                      onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
 
                                      className='text-xs border text-center flex flex-col
-                             gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
+                             gap-0.5 px-3 py-2 bg-brand-100/20 dark:hover:bg-brand-600 hover:bg-brand-100 cursor-default rounded-[14px]'>
                                     <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
                                     <MetricValue metric={metric}/>
                                 </div>
