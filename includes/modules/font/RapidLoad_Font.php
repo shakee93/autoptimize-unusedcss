@@ -134,7 +134,7 @@ class RapidLoad_Font
             return false;
         }
 
-        new RapidLoad_Font_Enqueue($job);
+        new RapidLoad_Font_Enqueue($job, $this);
 
     }
 

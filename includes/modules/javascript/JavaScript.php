@@ -41,8 +41,12 @@ class JavaScript
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+
         add_filter('rapidload/js/excluded-files', function ($list){
-            return $this->get_dynamic_exclusions($list);
+            if(defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED') && RAPIDLOAD_PAGE_OPTIMIZER_ENABLED){
+                $list = $this->get_dynamic_exclusions($list);
+            }
+            return $list;
         }, 10);
     }
 
@@ -210,9 +214,9 @@ class JavaScript
                 'name' => "Google Analytics",
                 'id' => "google_analytics",
                 'exclusions' => [
-                    "google-analytics.com\/analytics.js",
-                    "ga\\( '",
-                    "ga\\('"
+                    "/google-analytics\.com\/analytics\.js/",
+                    "/ga\( '/",
+                    "/ga\('/"
                 ],
             ],
             [
@@ -230,7 +234,7 @@ class JavaScript
                 'id' => "google_optimize",
                 'exclusions' => [
                     "a,s,y,n,c,h,i,d,e",
-                    "googleoptimize.com\/optimize.js",
+                    "/googleoptimize.com\/optimize.js/",
                     "async-hide"
                 ],
             ],
@@ -247,9 +251,9 @@ class JavaScript
                 'name' => "Google Tag Manager",
                 'id' => "google_tag_manager",
                 'exclusions' => [
-                    "\/gtag\/js",
-                    "gtag\\(",
-                    "\/gtm.js",
+                    "/gtag\/js/",
+                    "/gtag\(/",
+                    "/gtm.js/",
                     "async-hide"
                 ],
             ],

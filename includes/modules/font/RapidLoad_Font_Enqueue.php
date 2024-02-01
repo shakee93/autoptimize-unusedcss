@@ -11,11 +11,13 @@ class RapidLoad_Font_Enqueue
     private $options;
     private $strategy;
     private $file_system;
+    private $font_handler;
 
-    public function __construct($job)
+    public function __construct($job, $font_handler = null)
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
+        $this->font_handler = $font_handler;
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 80);
     }
@@ -158,6 +160,9 @@ class RapidLoad_Font_Enqueue
 
                 if(apply_filters('uucss/enqueue/inline/google-font', true)){
                     $content = @file_get_contents($file_path);
+                    if($this->font_handler){
+                        $content = $this->font_handler->add_display_swap_to_inline_styles($content);
+                    }
                     $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
                     $title_content = $this->dom->find( 'title' )[0]->outertext;
                     $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
