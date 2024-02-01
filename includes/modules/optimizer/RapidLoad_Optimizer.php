@@ -487,7 +487,12 @@ class RapidLoad_Optimizer
                                     }
                                     case 'uucss_exclude_files_from_delay_js':{
                                         $input->control_values = JavaScript::get_dynamic_exclusion_list();
-                                        $input->value = explode("\n", self::$merged_options['uucss_dynamic_js_exclusion_list']);
+                                        if(isset(self::$merged_options['uucss_dynamic_js_exclusion_list']) && !empty(self::$merged_options['uucss_dynamic_js_exclusion_list'])){
+                                            $input->value = explode("\n", self::$merged_options['uucss_dynamic_js_exclusion_list']);
+                                        }else{
+                                            $input->value = [];
+                                        }
+
                                         break;
                                     }
                                 }
@@ -805,7 +810,7 @@ class RapidLoad_Optimizer
 
                             if(isset($input->key) && ($input->key == "uucss_enable_uucss" || $input->key == "uucss_enable_cpcss")){
                                 if(isset($input->{'value_data'})){
-                                    unset($input->{'value_data'});
+                                    unset($input->{'value_data'});k
                                 }
                             }
 

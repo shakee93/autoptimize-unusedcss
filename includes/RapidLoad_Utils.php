@@ -614,7 +614,12 @@ trait RapidLoad_Utils {
     }
 
     function is_regex_expression($string) {
-        return @preg_match($string, '') !== FALSE;
+        try {
+            @preg_match($string, '');
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public static function get_file_path_from_url($url)

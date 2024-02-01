@@ -384,6 +384,8 @@ class Javascript_Enqueue
 
         $exclude_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
 
+        $exclude_files = apply_filters('rapidload/js/excluded-files', $exclude_files, 'uucss_excluded_js_files');
+
         $excluded = false;
 
         foreach ($exclude_files as $exclude_file){
@@ -392,7 +394,7 @@ class Javascript_Enqueue
 
             if(self::is_regex_expression($exclude_file)){
 
-                $excluded = preg_match($exclude_file, $file);
+                $excluded = @preg_match($exclude_file, $file);
 
             }
 

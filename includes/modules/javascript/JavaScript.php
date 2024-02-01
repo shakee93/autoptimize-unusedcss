@@ -40,6 +40,13 @@ class JavaScript
         $this->enqueue_admin_scripts();
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
+
+        add_filter('rapidload/js/excluded-files', function ($list, $option){
+            if($option == 'uucss_excluded_js_files'){
+                return $this->get_dynamic_exclusions($list);
+            }
+            return $list;
+        }, 10, 2);
     }
 
     public function vanish() {
@@ -312,5 +319,26 @@ class JavaScript
             $plugins,
             array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) )
         );
+    }
+
+    public function get_dynamic_exclusions($exclude = []){
+
+        $exclusions = self::get_dynamic_exclusion_list();
+
+        $dynamic_js_exclusion = isset($this->options['uucss_dynamic_js_exclusion_list']) && !empty($this->options['uucss_dynamic_js_exclusion_list']) ? explode("\n", $this->options['uucss_dynamic_js_exclusion_list']) : [];
+
+        foreach ($dynamic_js_exclusion as $id){
+
+            $key = array_search($id, array_column($exclusions, 'id'), true);
+
+            if(isset($key) && is_numeric($key)){
+
+                $exclude = array_merge($exclude, $exclusions[$key]['exclusions']);
+
+            }
+        }
+
+        return array_unique($exclude);
+
     }
 }
