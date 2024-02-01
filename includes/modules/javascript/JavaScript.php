@@ -210,9 +210,9 @@ class JavaScript
                 'name' => "Google Analytics",
                 'id' => "google_analytics",
                 'exclusions' => [
-                    "google-analytics.com\/analytics.js",
-                    "ga\\( '",
-                    "ga\\('"
+                    "/google-analytics\.com\/analytics\.js/",
+                    "/ga\( '/",
+                    "/ga\('/"
                 ],
             ],
             [
@@ -230,7 +230,7 @@ class JavaScript
                 'id' => "google_optimize",
                 'exclusions' => [
                     "a,s,y,n,c,h,i,d,e",
-                    "googleoptimize.com\/optimize.js",
+                    "/googleoptimize.com\/optimize.js/",
                     "async-hide"
                 ],
             ],
@@ -247,9 +247,9 @@ class JavaScript
                 'name' => "Google Tag Manager",
                 'id' => "google_tag_manager",
                 'exclusions' => [
-                    "\/gtag\/js",
-                    "gtag\\(",
-                    "\/gtm.js",
+                    "/gtag\/js/",
+                    "/gtag\(/",
+                    "/gtm.js/",
                     "async-hide"
                 ],
             ],
