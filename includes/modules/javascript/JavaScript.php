@@ -41,12 +41,9 @@ class JavaScript
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
-        add_filter('rapidload/js/excluded-files', function ($list, $option){
-            if($option == 'uucss_excluded_js_files'){
-                return $this->get_dynamic_exclusions($list);
-            }
-            return $list;
-        }, 10, 2);
+        add_filter('rapidload/js/excluded-files', function ($list){
+            return $this->get_dynamic_exclusions($list);
+        }, 10);
     }
 
     public function vanish() {
@@ -280,8 +277,8 @@ class JavaScript
                 'id' => str_replace(" ","_", strtolower($plugin_name)),
                 'exclusions' => [
                     "/plugins/" . $path,
-                    "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
-                    "\/jquery-migrate(.min)?.js",
+                    "/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js/",
+                    "/jquery-migrate(.min)?.js/",
                 ],
             ];
         }
@@ -291,8 +288,8 @@ class JavaScript
             'id' => str_replace(" ","_", strtolower(self::get_active_theme())),
             'exclusions' => [
                 get_template_directory_uri(),
-                "\/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js",
-                "\/jquery-migrate(.min)?.js",
+                "/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js/",
+                "/jquery-migrate(.min)?.js/",
             ],
         ];
         $third_party_scripts = self::get_third_party_scripts();

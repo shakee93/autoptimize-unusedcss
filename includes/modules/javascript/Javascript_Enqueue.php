@@ -23,6 +23,7 @@ class Javascript_Enqueue
     private $settings;
     private $default_inline_js_exclusion_pattern;
     private $default_js_exclusion_pattern;
+    private $dynamic_exclusions;
 
     public function __construct($job)
     {
@@ -51,6 +52,8 @@ class Javascript_Enqueue
         }
 
         $this->default_js_exclusion_pattern = rtrim( $this->default_js_exclusion_pattern, '|' );
+
+        $this->dynamic_exclusions = apply_filters('rapidload/js/excluded-files', [], 'uucss_excluded_js_files');
 
     }
 
@@ -384,7 +387,9 @@ class Javascript_Enqueue
 
         $exclude_files = isset($this->options[$option_name]) && !empty($this->options[$option_name]) ? explode("\n", $this->options[$option_name]) : [];
 
-        $exclude_files = apply_filters('rapidload/js/excluded-files', $exclude_files, 'uucss_excluded_js_files');
+        if($option_name == 'uucss_excluded_js_files'){
+            $exclude_files = array_merge($exclude_files, $this->dynamic_exclusions);
+        }
 
         $excluded = false;
 
@@ -395,6 +400,10 @@ class Javascript_Enqueue
             if(self::is_regex_expression($exclude_file)){
 
                 $excluded = @preg_match($exclude_file, $file);
+
+                if(!$excluded){
+                    error_log('failed : ' . $file . " for " . $exclude_file);
+                }
 
             }
 
