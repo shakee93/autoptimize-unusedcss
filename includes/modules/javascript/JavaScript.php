@@ -41,8 +41,12 @@ class JavaScript
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+
         add_filter('rapidload/js/excluded-files', function ($list){
-            return $this->get_dynamic_exclusions($list);
+            if(defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED') && RAPIDLOAD_PAGE_OPTIMIZER_ENABLED){
+                $list = $this->get_dynamic_exclusions($list);
+            }
+            return $list;
         }, 10);
     }
 
