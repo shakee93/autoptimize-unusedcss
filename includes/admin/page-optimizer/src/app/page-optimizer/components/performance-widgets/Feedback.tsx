@@ -1,14 +1,17 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Annoyed, Frown, MehIcon, Smile, SmilePlus} from "lucide-react";
+import {Annoyed, Frown, Loader, MehIcon, Smile, SmilePlus, ThumbsDownIcon, ThumbsUpIcon} from "lucide-react";
 import {cn} from "lib/utils";
 import {Textarea} from "components/ui/textarea";
 import Accordion from "components/accordion";
 import Card from "components/ui/card";
 import {Button} from "components/ui/button";
 import ApiService from "../../../../services/api";
-import {toast} from "components/ui/use-toast";
+import {useToast} from "components/ui/use-toast";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import { LazyMotion, domAnimation, m } from "framer-motion"
+import AppButton from "components/ui/app-button";
+import ThumbUp
+    from "../../../../../../../../../woocommerce/packages/woocommerce-blocks/assets/js/icons/library/thumb-up";
 
 const Feedback = () => {
 
@@ -16,6 +19,7 @@ const Feedback = () => {
     const [notes, setNotes] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [showFeedback, setShowFeedback] = useState(false)
+    const { toast } = useToast()
 
     const FeedbackComponents = useMemo(() => [
         {Component: Annoyed, value: 'annoyed'},
@@ -26,6 +30,8 @@ const Feedback = () => {
     ], []);
 
     const handleFeedback = async () => {
+
+        console.log(activeFeedback);
 
         if (!activeFeedback) {
             return;
@@ -51,6 +57,7 @@ const Feedback = () => {
             setLoading(false)
             setActiveFeedback('')
             setNotes('')
+            setShowFeedback(false);
 
         } catch (error: any) {
 
@@ -63,12 +70,22 @@ const Feedback = () => {
         }
     }
 
+    useEffect(() => {
+
+        if (!activeFeedback) {
+            return;
+        }
+
+        handleFeedback();
+
+    }, [activeFeedback])
+
 
     useEffect(() => {
 
         setTimeout(() => {
             setShowFeedback(true)
-        }, 30 * 1000)
+        }, 30 * 1)
     }, [])
 
     if (!showFeedback) {
@@ -77,41 +94,45 @@ const Feedback = () => {
 
     return (
         <Card className={cn(
-            'flex flex-col gap-4 px-6 py-5 xl:mb-12 bg-brand-0/70',
-            !activeFeedback && 'pb-1'
+            'flex flex-col gap-4 px-6 py-5 xl:mb-12 bg-brand-0/70'
         )}>
             <div className='flex flex-col gap-0.5'>
-                <div className='text-sm font-medium'>Your Voice Matters</div>
-                <div className='text-xs text-brand-500'>Feedback helps us enhance and tailor the product just for you.
+                <div className='text-sm font-medium'>How was the experience?</div>
+                <div className='text-xs text-brand-500'>Feedback helps us improve the product work better for you.
                 </div>
             </div>
 
-            <div className='flex justify-start gap-4 select-none'>
-                {FeedbackComponents.map((icon, index) => (
-                    <icon.Component key={index}
-                                    onClick={e =>
-                                        setActiveFeedback(p => (icon.value !== p) ? icon.value : null)}
-                                    className={cn(
-                                        'w-8 h-8 cursor-pointer text-brand-400 hover:text-brand-500',
-                                        activeFeedback === icon.value && 'text-brand-600 dark:text-brand-200'
-                                    )}/>
-                ))}
-            </div>
-            <div>
-                <LazyMotion features={domAnimation}>
-                    <Accordion isOpen={!!activeFeedback}>
-                        <div className='flex flex-col gap-2'>
-                            <Textarea value={notes} onChange={e => setNotes(e.target.value)}
-                                      placeholder='Optional: Tell us more about your experience...'/>
-                            <div className='flex justify-end'>
-                                <Button disabled={loading} className={cn(
-                                    'flex gap-1.5 pl-4',
-                                    loading && 'pl-2.5'
-                                )} loading={loading} onClick={e => handleFeedback()}>Submit</Button>
-                            </div>
-                        </div>
-                    </Accordion>
-                </LazyMotion>
+            <div className='flex gap-2'>
+                <AppButton onClick={e => {
+
+                    setActiveFeedback('good');
+                }}
+                           className={cn(
+                               activeFeedback === 'good' && 'bg-brand-300'
+                           )}
+                           variant='outline'>
+
+                    {loading && activeFeedback === 'good' ?
+                        <Loader className='w-4 animate-spin'/>
+                        :
+                        <ThumbsUpIcon className='w-4'/>
+                    }
+
+
+                    Good</AppButton>
+                <AppButton onClick={e => {
+                    setActiveFeedback('bad');
+                }}
+                           className={cn(
+                               activeFeedback === 'bad' && 'bg-brand-300'
+                           )}
+                           variant='outline'>
+                    {loading && activeFeedback === 'bad' ?
+                        <Loader className='w-4 animate-spin'/>
+                        :
+                        <ThumbsDownIcon className='w-4'/>
+                    }
+                    Bad</AppButton>
             </div>
         </Card>
     );

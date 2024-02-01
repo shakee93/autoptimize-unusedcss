@@ -23,7 +23,7 @@ class ApiService {
             queryParams.append("action", action);
         }
 
-        if (options.nonce && !queryParams.has('nonce')) {
+        if (options?.nonce && !queryParams.has('nonce')) {
             queryParams.append("nonce", options.nonce);
         }
 

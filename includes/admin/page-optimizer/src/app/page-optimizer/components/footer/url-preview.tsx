@@ -12,7 +12,7 @@ import {AppState, RootState} from "../../../../store/app/appTypes";
 const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, error, activeReport} = useSelector(optimizerData);
     const {mobile, desktop} = useSelector((state: RootState) => state.app);
 
     const {
@@ -45,44 +45,21 @@ const UrlPreview = () => {
                                 </>
                             }
 
-                            {desktop?.data?.performance &&
+                            {activeReport === 'mobile' && desktop?.data?.performance &&
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-
-                                        {(desktop.revisions.length > 0
-                                            && desktop.revisions[0].data.performance <= desktop?.data?.performance) ?
-                                            <span className={cn(
-                                                ' flex items-center',
-                                                desktop.data.performance !== desktop.revisions[0].data.performance && 'text-green-600'
-                                            )}>{desktop?.data?.performance} {desktop.data.performance !== desktop.revisions[0].data.performance &&
-                                                <ArrowUp className='w-3'/>} </span>
-                                            :
-                                            <span
-                                                className='text-red-600 flex items-center'>{desktop?.data?.performance}
-                                                <ArrowDown className='w-3'/></span>
-                                        } Desktop
+                                        {desktop?.data?.performance} Desktop
                                     </div>
                                 </>
                             }
 
 
-                            {mobile?.data?.performance &&
+                            {activeReport === 'desktop' && mobile?.data?.performance &&
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-
-                                        {(mobile.revisions.length > 0
-                                            && mobile.revisions[0].data.performance <= mobile?.data?.performance) ?
-                                            <span className={cn(
-                                                ' flex items-center',
-                                                mobile.data.performance !== mobile.revisions[0].data.performance && 'text-green-600'
-                                            )}>{mobile?.data?.performance} {mobile.data.performance !== mobile.revisions[0].data.performance &&
-                                                <ArrowUp className='w-3'/>} </span>
-                                            :
-                                            <span className='flex items-center'>{mobile?.data?.performance} <ArrowDown
-                                                className='w-3'/></span>
-                                        } Mobile
+                                        {mobile?.data?.performance}  Mobile
                                     </div>
                                 </>
                             }
