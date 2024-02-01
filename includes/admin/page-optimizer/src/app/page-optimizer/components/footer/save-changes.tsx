@@ -216,7 +216,7 @@ const SaveChanges = () => {
                             data-tour='save-changes' ref={refSaveButton} asChild
                                 className={cn(
                                     'flex overflow-hidden justify-between select-none relative text-sm gap-2 pl-1 pr-2 h-12 rounded-[14px]',
-                                    !savable && 'bg-brand-700'
+                                    !savable && 'bg-brand-700 dark:bg-primary dark:hover:bg-primary/90'
                                 )}>
                             <AlertDialogTrigger
                                 onClick={e => setModalAction(activeAction)}
