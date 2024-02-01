@@ -74,8 +74,6 @@ const addToRemoveQueue = (toastId: string) => {
 
 export const reducer = (state: State, action: Action): State => {
 
-  console.log(action);
-
   switch (action.type) {
     case "ADD_TOAST":
       return {
@@ -137,7 +135,6 @@ let memoryState: State = { toasts: [] }
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
   listeners.forEach((listener) => {
-    console.log(listener);
     listener(memoryState)
   })
 }
@@ -146,7 +143,6 @@ type Toast = Omit<ToasterToast, "id">
 
 function toast({ ...props }: Toast) {
   const id = genId()
-
 
   const update = (props: ToasterToast) =>
     dispatch({
@@ -178,8 +174,6 @@ function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
-
-    console.log(state);
 
     listeners.push(setState)
     return () => {
