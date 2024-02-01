@@ -185,7 +185,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                    ))}
 
                </div>
-               <div className='flex flex-wrap gap-2 overflow-y-scroll max-h-[200px] border-slate-100 border-2 dark:border-brand-900 rounded-md px-4 py-4 dark:bg-brand-900 '>
+               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] border-slate-100 border-2 dark:border-brand-900 rounded-md px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {item?.name}
