@@ -265,6 +265,14 @@ class JavaScript
                     "connect.facebook.net/en_US/fbevents.js"
                 ],
             ],
+            [
+                'type' => "third_party",
+                'name' => "Hotjar",
+                'id' => "hotjar",
+                'exclusions' => [
+                    "/static.hotjar.com/c/hotjar/"
+                ],
+            ],
         ];
     }
 
