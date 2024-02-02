@@ -67,39 +67,70 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 
     if (status.status === 'failed') {
         return (
-            <Indicator className='fill-rose-600'>
-                <div className='flex flex-col gap-0.5'>
+
+        <>
+            <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg px-2'>
+                <Indicator className='fill-rose-600'>
+                    <div className='flex flex-col gap-0.5'>
                         <span className='flex gap-2 items-center'>
                             <Circle className='w-2 fill-rose-500 stroke-0'/>
                             Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
                         </span>
-                    <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
-                </div>
-            </Indicator>
+                        <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
+                    </div>
+                </Indicator>
+                Failed
+            </div>
+        </>
         );
     }
 
     if(status.status === 'queued') {
         return (
-            <Indicator className='animate-pulse fill-amber-500'>
-                <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
-                    Waiting in the queue
-                </div>
-            </Indicator>
+            // <Indicator className='animate-pulse fill-amber-500'>
+            //     <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
+            //         Waiting in the queue
+            //     </div>
+            // </Indicator>
+
+        <>
+            <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg px-2'>
+                <Circle className={cn(
+                    'animate-pulse w-2.5 fill-amber-500 stroke-0'
+                )}/>
+                Waiting in the queue
+            </div>
+        </>
         )
     }
 
     if(status.status === 'processing') {
-        return <InProgress/>
+        return (
+        // <InProgress/>
+        <>
+            <div className=' flex gap-2 items-center text-xs border w-fit rounded-lg px-2'>
+                <Loader className='w-4 animate-spin text-brand-800'/>
+                Optimization in progress
+            </div>
+        </>
+        )
     }
 
     if(status.status === 'success') {
         return (
-            <Indicator className='fill-green-600'>
-                <div className='flex gap-2 items-center'>
-                    <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
+            // <Indicator className='fill-green-600'>
+            //     <div className='flex gap-2 items-center'>
+            //         <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
+            //     </div>
+            // </Indicator>
+
+            <>
+                <div className=' flex gap-2 items-center text-xs border border-green-600 w-fit rounded-lg px-2'>
+                    <Circle className={cn(
+                        'animate-pulse w-2.5 fill-green-600 stroke-0'
+                    )}/>Successfully Optimized
                 </div>
-            </Indicator>
+            </>
         )
     }
 
@@ -273,11 +304,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 </>
                             )}
 
-                            {settings.status && (
-                                <div className='px-1'>
-                                    <Status status={settings.status}/>
-                                </div>
-                            )}
+
 
                             <Mode>
                                 {showPopover && settings.name != 'Delay Javascript' && (
@@ -321,6 +348,12 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
                             </Mode>
 
+                            {settings.status && (
+                                <div className='px-1'>
+                                    <Status status={settings.status}/>
+                                </div>
+                            )}
+
                             <Mode mode='onboard'>
                                 <TooltipText text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
                                     <Lock className='w-4 text-brand-400'/>
@@ -336,7 +369,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     )}
                 </div>
 
-                <p className='text-sm font-normal select-none -mt-1'>{settings.description? settings.description : settings.name}</p>
+                <p className={`text-sm font-normal select-none ${settings.status? '': '-mt-1'}`} >{settings.description? settings.description : settings.name}</p>
 
             </div>
 
