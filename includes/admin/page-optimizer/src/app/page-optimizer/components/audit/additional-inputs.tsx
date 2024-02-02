@@ -176,16 +176,16 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
        {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
        <Label htmlFor="name" className="flex text-left w-full">
            <div className="">
-               <div className='flex '>
+               <div className='flex bg-brand-200/60 w-fit rounded-t-lg'>
                    {excludeCategory.map((name, index) => (
                        <button key={index} onClick={e => setActiveCategory(name)}
-                               className={`flex items-center border-b-white py-2 px-4 rounded-t-lg w-fit dark:text-brand-300 ${activeCategory === name ? 'bg-white dark:bg-brand-900' : 'dark:bg-brand-950 bg-brand-200/60 text-slate-500'} dark:hover:border-brand-700/70 `}>
+                               className={`flex items-center border-b-white py-2 px-4 w-fit dark:text-brand-300 ${name === "third_party" ? 'rounded-tl-lg':'' || name === "theme" ? 'rounded-tr-lg ':''} ${activeCategory === name ? 'bg-white dark:bg-brand-900 rounded-t-lg' : 'dark:bg-brand-950 bg-brand-200/60 text-slate-500'} dark:hover:border-brand-700/70 `}>
                            {name.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
                        </button>
                    ))}
 
                </div>
-               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] border-slate-100 border-2 dark:border-brand-900 rounded-md px-4 py-4 dark:bg-brand-900 '>
+               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {item?.name}
