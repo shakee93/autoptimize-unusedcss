@@ -417,7 +417,7 @@ class RapidLoad_Base
         }
 
         ?>
-        <hr class="rapidload-major-update-separator"/>
+        <!--<hr class="rapidload-major-update-separator"/>
         <div class="rapidload-major-update-message">
             <div class="rapidload-major-update-message-icon">
                 <span class="dashicons dashicons-info-outline"></span>
@@ -431,7 +431,7 @@ class RapidLoad_Base
                 </div>
             </div>
         </div>
-        <p style="display: none" class="empty">
+        <p style="display: none" class="empty">-->
         <?php
 
     }
