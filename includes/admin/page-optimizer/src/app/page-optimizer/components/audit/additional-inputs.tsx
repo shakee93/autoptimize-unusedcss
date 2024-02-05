@@ -101,8 +101,26 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     //     (value) => value.type === activeCategory
     //
     // );
+    const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<SomeType[]>([]);
 
-   return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+
+    useEffect(() => {
+        const availalbePlugin = (input?.control_values as ControlValue[]).map(item => item.id)
+
+        // Create a new array with values indicating if each plugin is enabled
+        const updatedFilteredEnabledPlugins  = availalbePlugin.map(plugin => ({
+            id: plugin,
+            value: value.some(enabledPlugin => enabledPlugin === plugin),
+        }));
+
+        console.log("availalbe Plugins", availalbePlugin);
+        console.log("enabled plugins", value);
+        console.log("Resulting array", updatedFilteredEnabledPlugins );
+        setFilteredEnabledPlugins(updatedFilteredEnabledPlugins)
+    }, []);
+
+
+    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
         {input?.control_type === 'checkbox' &&
 
@@ -185,13 +203,26 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                    ))}
 
                </div>
-               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
+               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] min-w-[600px] bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {item?.name}
 
                            <Switch
-                               checked={value?.includes(item.id) || false}
+                                checked={value ? value.includes(item.id) : false}
+                               // checked={filteredEnabledPlugins.find(plugin => plugin.id === item.id)? plugin.value: false}
+                               onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                           />
+
+                       </div>
+                   ))}
+                   {filteredValues.map((item, index: number) => (
+                       <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
+                           {item?.name}
+
+                           <Switch
+                               checked={value ? value.includes(item.id) : false}
+                               // checked={filteredEnabledPlugins.find(plugin => plugin.id === item.id)? plugin.value: false}
                                onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
                            />
 
