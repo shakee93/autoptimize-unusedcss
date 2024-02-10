@@ -31,8 +31,6 @@ const Feedback = () => {
 
     const handleFeedback = async () => {
 
-        console.log(activeFeedback);
-
         if (!activeFeedback) {
             return;
         }

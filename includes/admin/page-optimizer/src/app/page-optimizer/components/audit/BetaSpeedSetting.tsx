@@ -65,11 +65,13 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
         return  <></>
     }
 
+    // status.status = 'processing';
+
     if (status.status === 'failed') {
         return (
 
         <>
-            <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg px-2'>
+            <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg '>
                 <Indicator className='fill-rose-600'>
                     <div className='flex flex-col gap-0.5'>
                         <span className='flex gap-2 items-center'>
@@ -94,7 +96,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
             // </Indicator>
 
         <>
-            <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg px-2'>
+            <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg '>
                 <Circle className={cn(
                     'animate-pulse w-2.5 fill-amber-500 stroke-0'
                 )}/>
@@ -108,7 +110,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
         return (
         // <InProgress/>
         <>
-            <div className=' flex gap-2 items-center text-xs border w-fit rounded-lg px-2'>
+            <div className=' flex gap-2 items-center text-xs w-fit rounded-lg'>
                 <Loader className='w-4 animate-spin text-brand-800'/>
                 Optimization in progress
             </div>
@@ -125,10 +127,10 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
             // </Indicator>
 
             <>
-                <div className=' flex gap-2 items-center text-xs border border-green-600 w-fit rounded-lg px-2'>
+                <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>
                     <Circle className={cn(
-                        'animate-pulse w-2.5 fill-green-600 stroke-0'
-                    )}/>Successfully Optimized
+                        'animate-pulse w-2.5 fill-green-600 stroke-0 -mt-[1px]'
+                    )}/>Optimized
                 </div>
             </>
         )
