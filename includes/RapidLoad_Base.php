@@ -157,6 +157,16 @@ class RapidLoad_Base
 
     }
 
+    public static function get_license_key(){
+
+        $options = self::fetch_options();
+
+        if(isset($options['uucss_api_key'])){
+            return $options['uucss_api_key'];
+        }
+        return null;
+    }
+
     function merge_job_options($option){
 
         $this->url = $this->get_current_url();

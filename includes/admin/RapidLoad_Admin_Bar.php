@@ -111,51 +111,10 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            /*'group_by_conditions' => [
-                [
-                    'label' => 'Entire Site',
-                    'value' => 'all'
-                ],
-                [
-                    'label' => 'Archives',
-                    'value' => 'archive',
-                    'options' => [
-                        [
-                            'label' => 'All Archives',
-                            'value' => 'all',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Author Archive',
-                            'value' => 'author',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Date Archive',
-                            'value' => 'date',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Posts Archive',
-                            'value' => 'author',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Categories',
-                            'value' => 'category',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Tags',
-                            'value' => 'tag',
-                            'group' => 'Posts Archive'
-                        ],
-                    ]
-                ]
-            ],*/
             'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
             'rest_url' => RapidLoadRestApi::rest_url(),
+            'licence_key' => RapidLoad_Base::get_license_key()
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
