@@ -1,4 +1,5 @@
 import {isDev} from "lib/utils";
+import store from "../store";
 
 class ApiService {
     public baseURL: URL;
@@ -129,11 +130,14 @@ class ApiService {
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
+           const state = store.getState()
+           const data = state.app[state.app.activeReport]
+
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
            pageSpeedURL.searchParams.append('url', url)
-           pageSpeedURL.searchParams.append('strategy', strategy)
+           pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
@@ -141,7 +145,15 @@ class ApiService {
                method: "POST",
                headers: {
                    "Content-Type": "application/json",
-               }
+               },
+               body: JSON.stringify({
+                   settings: data.settings?.
+                   flatMap(t =>
+                       t.inputs
+                           .filter(({ value }) => value != null)
+                           .map(({ key, value }) => ({ key, value })))
+                       || []
+               })
            });
 
            return await pageSpeed.json()
