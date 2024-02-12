@@ -101,8 +101,29 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     //     (value) => value.type === activeCategory
     //
     // );
+    const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<{
+        id: string,
+        value: string[]
+    }[]>([]);
 
-   return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+
+    useEffect(() => {
+        const availalbePlugin = (input?.control_values as ControlValue[]).map(item => item.id)
+
+        // Create a new array with values indicating if each plugin is enabled
+        const updatedFilteredEnabledPlugins  = availalbePlugin.map(plugin => ({
+            id: plugin,
+            value: value.some((enabledPlugin: string) => enabledPlugin === plugin),
+        }));
+
+        // console.log("availalbe Plugins", availalbePlugin);
+        // console.log("enabled plugins", value);
+        // console.log("Resulting array", updatedFilteredEnabledPlugins );
+        setFilteredEnabledPlugins(updatedFilteredEnabledPlugins)
+    }, []);
+
+
+    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
         {input?.control_type === 'checkbox' &&
 
@@ -174,9 +195,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
        {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
-       <Label htmlFor="name" className="flex text-left w-full">
-           <div className="">
-               <div className='flex bg-brand-200/60 w-fit rounded-t-lg'>
+           <div className="w-full">
+               <div className='flex bg-brand-100/60 w-fit rounded-t-lg'>
                    {excludeCategory.map((name, index) => (
                        <button key={index} onClick={e => setActiveCategory(name)}
                                className={`flex items-center border-b-white py-2 px-4 w-fit dark:text-brand-300 ${name === "third_party" ? 'rounded-tl-lg':'' || name === "theme" ? 'rounded-tr-lg ':''} ${activeCategory === name ? 'bg-white dark:bg-brand-900 rounded-t-lg' : 'dark:bg-brand-950 bg-brand-200/60 text-slate-500'} dark:hover:border-brand-700/70 `}>
@@ -185,25 +205,21 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                    ))}
 
                </div>
-               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
+               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[400px] w-full bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {item?.name}
 
                            <Switch
-                               checked={value?.includes(item.id) || false}
+                               checked={value ? value.includes(item.id) : false}
+                               // checked={filteredEnabledPlugins.find(plugin => plugin.id === item.id)? plugin.value: false}
                                onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
                            />
 
                        </div>
                    ))}
                </div>
-                   
-
            </div>
-
-
-       </Label>
        }
     </div>
 }
