@@ -141,6 +141,10 @@ class ApiService {
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
+           if (this.options.license_key) {
+               pageSpeedURL.searchParams.append('api_key', this.options.license_key);
+           }
+
            const pageSpeed = await fetch(pageSpeedURL, {
                method: "POST",
                headers: {
