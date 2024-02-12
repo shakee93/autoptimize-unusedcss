@@ -101,7 +101,10 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     //     (value) => value.type === activeCategory
     //
     // );
-    const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<SomeType[]>([]);
+    const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<{
+        id: string,
+        value: string[]
+    }[]>([]);
 
 
     useEffect(() => {
@@ -110,12 +113,12 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         // Create a new array with values indicating if each plugin is enabled
         const updatedFilteredEnabledPlugins  = availalbePlugin.map(plugin => ({
             id: plugin,
-            value: value.some(enabledPlugin => enabledPlugin === plugin),
+            value: value.some((enabledPlugin: string) => enabledPlugin === plugin),
         }));
 
-        console.log("availalbe Plugins", availalbePlugin);
-        console.log("enabled plugins", value);
-        console.log("Resulting array", updatedFilteredEnabledPlugins );
+        // console.log("availalbe Plugins", availalbePlugin);
+        // console.log("enabled plugins", value);
+        // console.log("Resulting array", updatedFilteredEnabledPlugins );
         setFilteredEnabledPlugins(updatedFilteredEnabledPlugins)
     }, []);
 
@@ -192,9 +195,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
        {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
-       <Label htmlFor="name" className="flex text-left w-full">
-           <div className="">
-               <div className='flex bg-brand-200/60 w-fit rounded-t-lg'>
+           <div className="w-full">
+               <div className='flex bg-brand-100/60 w-fit rounded-t-lg'>
                    {excludeCategory.map((name, index) => (
                        <button key={index} onClick={e => setActiveCategory(name)}
                                className={`flex items-center border-b-white py-2 px-4 w-fit dark:text-brand-300 ${name === "third_party" ? 'rounded-tl-lg':'' || name === "theme" ? 'rounded-tr-lg ':''} ${activeCategory === name ? 'bg-white dark:bg-brand-900 rounded-t-lg' : 'dark:bg-brand-950 bg-brand-200/60 text-slate-500'} dark:hover:border-brand-700/70 `}>
@@ -203,19 +205,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                    ))}
 
                </div>
-               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[200px] min-w-[600px] bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
-                   {filteredValues.map((item, index: number) => (
-                       <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
-                           {item?.name}
-
-                           <Switch
-                                checked={value ? value.includes(item.id) : false}
-                               // checked={filteredEnabledPlugins.find(plugin => plugin.id === item.id)? plugin.value: false}
-                               onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                           />
-
-                       </div>
-                   ))}
+               <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[400px] w-full bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
                    {filteredValues.map((item, index: number) => (
                        <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                            {item?.name}
@@ -229,12 +219,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                        </div>
                    ))}
                </div>
-                   
-
            </div>
-
-
-       </Label>
        }
     </div>
 }
