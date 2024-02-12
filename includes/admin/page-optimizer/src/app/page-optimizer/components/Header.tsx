@@ -17,14 +17,9 @@ import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
-    ArrowDownUp,
-    GraduationCap,
-    GraduationCapIcon,
     LogOut,
     Monitor,
-    MoreHorizontal,
-    MoreVertical,
-    RefreshCcw, RefreshCw
+    RefreshCw
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
@@ -58,16 +53,6 @@ const Header = ({ url }: { url: string}) => {
         activeMetric,
         dispatch: commonDispatch
     } = useCommonDispatch()
-
-    useEffect(() => {
-        console.log(settings?.flatMap(t =>
-                t.inputs
-                    .filter(({ value }) => value != null)
-                    .map(({ key, value }) => ({ key, value, status: t.status })))
-            || []);
-    }, [activeTab])
-
-
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
