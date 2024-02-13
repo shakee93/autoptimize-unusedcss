@@ -211,7 +211,7 @@
               </div>
               <div class="pt-3">
                 <h1 class="font-normal text-base text-black-font">Callback Script</h1>
-                <p class="text-sm pb-3 text-gray-font">This script will execute on delayed files loaded.</p>
+                <p class="text-sm pb-3 text-gray-font">These scripts will be executed after delayed JS files are loaded.</p>
 
                 <div class="grid">
                 <textarea
