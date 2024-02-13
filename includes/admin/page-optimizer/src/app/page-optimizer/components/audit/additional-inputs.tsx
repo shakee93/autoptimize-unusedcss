@@ -101,26 +101,26 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     //     (value) => value.type === activeCategory
     //
     // );
-    const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<{
-        id: string,
-        value: string[]
-    }[]>([]);
-
-
-    useEffect(() => {
-        const availalbePlugin = (input?.control_values as ControlValue[]).map(item => item.id)
-
-        // Create a new array with values indicating if each plugin is enabled
-        const updatedFilteredEnabledPlugins  = availalbePlugin.map(plugin => ({
-            id: plugin,
-            value: value.some((enabledPlugin: string) => enabledPlugin === plugin),
-        }));
-
-        // console.log("availalbe Plugins", availalbePlugin);
-        // console.log("enabled plugins", value);
-        // console.log("Resulting array", updatedFilteredEnabledPlugins );
-        setFilteredEnabledPlugins(updatedFilteredEnabledPlugins)
-    }, []);
+    // const [filteredEnabledPlugins, setFilteredEnabledPlugins] = useState<{
+    //     id: string,
+    //     value: string[]
+    // }[]>([]);
+    //
+    //
+    // useEffect(() => {
+    //     const availalbePlugin = (input?.control_values as ControlValue[]).map(item => item.id)
+    //
+    //     // Create a new array with values indicating if each plugin is enabled
+    //     const updatedFilteredEnabledPlugins  = availalbePlugin.map(plugin => ({
+    //         id: plugin,
+    //         value: value.some((enabledPlugin: string) => enabledPlugin === plugin),
+    //     }));
+    //
+    //     // console.log("availalbe Plugins", availalbePlugin);
+    //     // console.log("enabled plugins", value);
+    //     // console.log("Resulting array", updatedFilteredEnabledPlugins );
+    //     setFilteredEnabledPlugins(updatedFilteredEnabledPlugins)
+    // }, []);
 
 
     return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
