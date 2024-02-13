@@ -311,7 +311,7 @@ export default {
           this.onData.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
           this.onData.uucss_exclude_files_from_delay_js = options.uucss_exclude_files_from_delay_js
           this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
-          this.onData.delay_javascript_callback = options.delay_javascript_callback
+          this.onData.delay_javascript_callback = options.delay_javascript_callback.replace(/\\/g, '')
         }
 
       });
