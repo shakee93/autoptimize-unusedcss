@@ -1,6 +1,7 @@
 import React, {Suspense, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
+import Dashbaord from "app/dashbaord";
 import SpeedPopover from "app/speed-popover";
 import {useAppContext} from "../context/app";
 import {ThunkDispatch} from "redux-thunk";
@@ -63,7 +64,7 @@ const App = ({popup, _showOptimizer = false}: {
         {
             title: "Dashboard",
             id: "/",
-            component: <>dashboard</>
+            component: <Dashbaord/>
         },
         {
             title: "Optimize",
