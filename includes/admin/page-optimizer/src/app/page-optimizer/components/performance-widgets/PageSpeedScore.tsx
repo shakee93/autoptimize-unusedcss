@@ -17,11 +17,12 @@ import {
 import SideBarActions from "app/page-optimizer/components/performance-widgets/SideBarActions";
 import xusePerformanceColors from "hooks/usePerformanceColors";
 import AppButton from "components/ui/app-button";
+import Feedback from "app/page-optimizer/components/performance-widgets/Feedback";
+
+// const Feedback = React.lazy(() =>
+//     import('app/page-optimizer/components/performance-widgets/Feedback'))
 
 
-
-const Feedback = React.lazy(() =>
-    import('app/page-optimizer/components/performance-widgets/Feedback'))
 
 interface PageSpeedScoreProps {
     pagespeed?: any;
