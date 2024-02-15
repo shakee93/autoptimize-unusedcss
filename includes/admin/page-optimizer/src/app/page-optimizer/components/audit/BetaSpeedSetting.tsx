@@ -216,6 +216,14 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         updateValue(settings, newCheckboxState, mainInput.key);
     };
 
+    const [showStatus, setShowStatus] = useState(false);
+    useEffect(() => {
+        if(settings.status && mainInput.value){
+            setShowStatus(true)
+        }
+      //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
+    },[]);
+
     return (
         <>
         <div
@@ -308,7 +316,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 )}
                             </Mode>
 
-                            {settings.status && (
+                            {showStatus && (
                                 <div className='px-1'>
                                     <Status status={settings.status}/>
                                 </div>
