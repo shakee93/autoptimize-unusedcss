@@ -87,6 +87,15 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         (value) => value.type === activeCategory
     );
 
+    const groupedData = (input?.control_values as ControlValue[])?.reduce((acc: {[key: string]: ControlValue[]}, item: ControlValue) => {
+        if (!acc[item.type]) {
+            acc[item.type] = [];
+        }
+        const isValueIncluded = value.includes(item.id);
+        acc[item.type].push({ ...item, isSelected: isValueIncluded });
+        return acc;
+    }, {});
+
 
     const handleSwitchChange = (isChecked: boolean, itemId: string) => {
         const updatedValue = isChecked
@@ -97,6 +106,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
       //  console.log(updatedValue)
     };
+
 
 
 
@@ -182,18 +192,75 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
                </div>
                <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[300px] w-full bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
-                   {filteredValues.map((item, index: number) => (
-                       <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
-                           {item?.name}
 
-                           <Switch
-                               checked={value ? value.includes(item.id) : false}
-                               // checked={filteredEnabledPlugins.find(plugin => plugin.id === item.id)? plugin.value: false}
-                               onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                           />
+                   {activeCategory == 'third_party' && (
+                       <>
+                           {groupedData[activeCategory].map((item, index: number) => (
+                               <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
+                                   {item?.name}
+                                   <Switch
+                                       checked={item?.isSelected}
+                                       //checked={checkedStates[index]}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                   />
 
-                       </div>
-                   ))}
+                               </div>
+                           ))}
+                       </>
+                   )}
+                   {activeCategory == 'plugins' && (
+                       <>
+                           {groupedData[activeCategory].map((item, index: number) => (
+                               <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
+                                   {item?.name}
+                                   <Switch
+                                       checked={item?.isSelected}
+                                       //checked={checkedStates[index]}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                   />
+
+                               </div>
+                           ))}
+                       </>
+                   )}
+                   {activeCategory == 'theme' && (
+                       <>
+                           {groupedData[activeCategory].map((item, index: number) => (
+                               <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
+                                   {item?.name}
+                                   <Switch
+                                       checked={item?.isSelected}
+                                       //checked={checkedStates[index]}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                   />
+
+                               </div>
+                           ))}
+                       </>
+                   )}
+                   {/*{groupedData[activeCategory].map((item, index: number) => (*/}
+                   {/*    <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>*/}
+                   {/*        {item?.name}*/}
+                   {/*        <Switch*/}
+                   {/*            checked={item?.isSelected}*/}
+                   {/*            //checked={checkedStates[index]}*/}
+                   {/*            onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}*/}
+                   {/*        />*/}
+
+                   {/*    </div>*/}
+                   {/*))}*/}
+                   {/*{filteredValues.map((item, index: number) => (*/}
+                   {/*    <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>*/}
+                   {/*        {item?.name}*/}
+
+                   {/*        <Switch*/}
+                   {/*            checked={value ? value.includes(item.id) : false}*/}
+                   {/*            //checked={checkedStates[index]}*/}
+                   {/*            onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}*/}
+                   {/*        />*/}
+
+                   {/*    </div>*/}
+                   {/*))}*/}
                </div>
            </div>
        }
