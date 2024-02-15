@@ -102,6 +102,8 @@ class Javascript_Enqueue
 
         if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" || apply_filters('rapidload/delay-script/enable', false)){
 
+            $this->add_call_back_script();
+
             // Inject header delay script
             $title = $this->dom->find('title')[0];
 
@@ -162,6 +164,23 @@ class Javascript_Enqueue
             'options' => $this->options,
             'strategy' => $this->strategy
         ];
+    }
+
+    public function add_call_back_script(){
+
+        $body = $this->dom->find('body', 0);
+
+        $content = isset($this->options['delay_javascript_callback']) && !empty($this->options['delay_javascript_callback']) ? $this->options['delay_javascript_callback'] : "";
+
+        if(!empty($content)){
+
+            $node = $this->dom->createElement('script', "" . $this->wrapWithJavaScriptEvent("RapidLoad:DelayedScriptsLoaded", stripslashes($content)) . "");
+
+            $node->setAttribute('type', 'text/javascript');
+            $node->setAttribute('id', 'rapidload-delay-script-callback');
+            $body->appendChild($node);
+        }
+
     }
 
     public function load_scripts_on_user_interaction($link, $original_src = null){

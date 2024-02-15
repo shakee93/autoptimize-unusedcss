@@ -155,7 +155,7 @@ class ApiService {
                    flatMap(t =>
                        t.inputs
                            .filter(({ value }) => value != null)
-                           .map(({ key, value }) => ({ key, value })))
+                           .map(({ key, value }) => ({ key, value, status: t.status  })))
                        || []
                })
            });

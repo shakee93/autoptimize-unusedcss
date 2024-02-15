@@ -408,6 +408,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['delay_javascript_callback'])){
+
+            $options['delay_javascript_callback'] = $_REQUEST['delay_javascript_callback'];
+
+        }
+
         if(isset($_REQUEST['uucss_excluded_js_files_from_defer'])){
 
             $options['uucss_excluded_js_files_from_defer'] = $_REQUEST['uucss_excluded_js_files_from_defer'];

@@ -18,7 +18,8 @@ import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
     LogOut,
-    Monitor, RefreshCw
+    Monitor,
+    RefreshCw
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
@@ -43,7 +44,8 @@ const Header = ({ url }: { url: string}) => {
     } = useAppContext()
 
     const { activeReport,
-        loading, error
+        loading, error,
+        settings
     } = useSelector(optimizerData);
 
     const {
@@ -51,8 +53,6 @@ const Header = ({ url }: { url: string}) => {
         activeMetric,
         dispatch: commonDispatch
     } = useCommonDispatch()
-
-
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
