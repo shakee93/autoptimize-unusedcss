@@ -71,8 +71,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 toast({
                     description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
                 })
-
-
             }
             setLoading(false)
         }
@@ -93,8 +91,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }
 
        {input.control_type === 'textarea' &&
-
-
            <>
                <Label htmlFor="name" className="flex ml-4 text-left w-full dark:text-brand-300">
                    <span>{input.control_label}</span>

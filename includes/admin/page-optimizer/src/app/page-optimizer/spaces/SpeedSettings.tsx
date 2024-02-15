@@ -158,13 +158,9 @@ const SpeedSettings = ({}) => {
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
 
-    useEffect(() => {
-       // console.log("Test")
-    },[]);
 
     useEffect(() => {
     //    console.log("Group Settings");
-        // Rest of your code
     }, [groupedSettings]);
 
 
@@ -183,20 +179,7 @@ const SpeedSettings = ({}) => {
 
             categoryOrder.forEach((category) => {
                 if (groupedSettings[category]) {
-                    // const sorted = groupedSettings[category].slice().sort((a, b) => {
-                    //     const aValue = a.inputs[0].value;
-                    //     const bValue = b.inputs[0].value;
-                    //
-                    //     if (aValue && !bValue) return -1;
-                    //     if (!aValue && bValue) return 1;
-                    //
-                    //     const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-                    //     const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-                    //     if (aHasFailedAudit && !bHasFailedAudit) return -1;
-                    //     if (!aHasFailedAudit && bHasFailedAudit) return 1;
-                    //
-                    //     return 0;
-                    // });
+
                     const sorted = groupedSettings[category].slice().sort((a, b) => {
                         const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
                         const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
@@ -225,7 +208,6 @@ const SpeedSettings = ({}) => {
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
-          //  console.log(passedAudits, notPassedAudits)
 
         }
 
@@ -241,7 +223,6 @@ const SpeedSettings = ({}) => {
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
     const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
-    const [showButtonFadeIn, setShowButtonFadeIn] = useState(false);
     const {options} = useAppContext()
 
     useEffect(() => {
@@ -280,8 +261,6 @@ const SpeedSettings = ({}) => {
                 }}>
                     <m.div
                         id={category}
-                        // initial={{ opacity: 0, y: -5 }}
-                        // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
@@ -302,11 +281,7 @@ const SpeedSettings = ({}) => {
 
         </ul>
 
-        <m.div
-            // initial={{ opacity: 0}}
-            // animate={{ opacity: 1}}
-            // transition={{ duration: 0.5 }}
-        >
+        <div>
             <ul>
 
                 {notPassedAudits.map((item: AuditSetting, itemIndex) => (
@@ -381,7 +356,7 @@ const SpeedSettings = ({}) => {
                     </m.div>
                 }
             </ul>
-        </m.div>
+        </div>
     </div>
 }
 
