@@ -18,6 +18,7 @@ interface WordPressOptions {
     titan_stylesheet_url?: string
     api_root?: string
     rest_url: string
+    license_key?: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'

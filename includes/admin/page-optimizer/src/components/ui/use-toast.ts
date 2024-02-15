@@ -73,6 +73,7 @@ const addToRemoveQueue = (toastId: string) => {
 }
 
 export const reducer = (state: State, action: Action): State => {
+
   switch (action.type) {
     case "ADD_TOAST":
       return {
@@ -173,6 +174,7 @@ function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
+
     listeners.push(setState)
     return () => {
       const index = listeners.indexOf(setState)

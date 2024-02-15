@@ -157,6 +157,16 @@ class RapidLoad_Base
 
     }
 
+    public static function get_license_key(){
+
+        $options = self::fetch_options();
+
+        if(isset($options['uucss_api_key'])){
+            return $options['uucss_api_key'];
+        }
+        return null;
+    }
+
     function merge_job_options($option){
 
         $this->url = $this->get_current_url();
@@ -417,7 +427,7 @@ class RapidLoad_Base
         }
 
         ?>
-        <hr class="rapidload-major-update-separator"/>
+        <!--<hr class="rapidload-major-update-separator"/>
         <div class="rapidload-major-update-message">
             <div class="rapidload-major-update-message-icon">
                 <span class="dashicons dashicons-info-outline"></span>
@@ -431,7 +441,7 @@ class RapidLoad_Base
                 </div>
             </div>
         </div>
-        <p style="display: none" class="empty">
+        <p style="display: none" class="empty">-->
         <?php
 
     }

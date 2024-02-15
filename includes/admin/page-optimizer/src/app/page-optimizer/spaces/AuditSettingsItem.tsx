@@ -42,6 +42,7 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
             <BetaSpeedSetting showIcons={false} settings={item} updateValue={updateValue} actionRequired={actionRequired} index={itemIndex} />
 
             <ul className="flex mt-2 justify-start ml-14">
+
                 <AuditsLine cls="w-4 mr-2  -mt-2" />
                 {item.audits.map((audit, index) => (
                     <li
@@ -50,7 +51,11 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
                         className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border w-fit rounded-xl items-center py-1.5 px-1.5 mr-2"
                     >
                         <div className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
-                            {audit.type === 'passed_audit' ? (
+                            {audit.scoreDisplayMode === 'informative' ?
+                                <>
+                                    <span className='w-2 h-2 border-2 border-brand-400/60 rounded-full'></span>
+                                </>
+                                : audit.type === 'passed_audit' ? (
                                 <CheckCircleIcon className="w-5 fill-green-600" />
                             ) : audit.type === 'opportunity' ? (
                                 <>

@@ -17,14 +17,9 @@ import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
-    ArrowDownUp,
-    GraduationCap,
-    GraduationCapIcon,
     LogOut,
     Monitor,
-    MoreHorizontal,
-    MoreVertical,
-    RefreshCcw
+    RefreshCw
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
@@ -49,7 +44,8 @@ const Header = ({ url }: { url: string}) => {
     } = useAppContext()
 
     const { activeReport,
-        loading, error
+        loading, error,
+        settings
     } = useSelector(optimizerData);
 
     const {
@@ -57,8 +53,6 @@ const Header = ({ url }: { url: string}) => {
         activeMetric,
         dispatch: commonDispatch
     } = useCommonDispatch()
-
-
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
@@ -121,7 +115,7 @@ const Header = ({ url }: { url: string}) => {
                                            )}
                                            variant='outline'>
                                     <div className='flex flex-col gap-[1px] items-center'>
-                                        <RefreshCcw className={cn(
+                                        <RefreshCw className={cn(
                                             'w-4 -mt-0.5',
                                             loading && 'animate-spin'
                                         )}/>

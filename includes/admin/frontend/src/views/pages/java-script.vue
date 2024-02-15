@@ -209,6 +209,25 @@
 
 
               </div>
+              <div class="pt-3">
+                <h1 class="font-normal text-base text-black-font">Callback Script</h1>
+                <p class="text-sm pb-3 text-gray-font">These scripts will be executed after delayed JS files are loaded.</p>
+
+                <div class="grid">
+                <textarea
+                    v-model="onData.delay_javascript_callback"
+                    @focus="focus='delay'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Inline scripts to be executed.</p>
+                  </div>
+                </div>
+
+
+
+              </div>
             </div>
 
           </div>
@@ -292,6 +311,7 @@ export default {
           this.onData.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
           this.onData.uucss_exclude_files_from_delay_js = options.uucss_exclude_files_from_delay_js
           this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
+          this.onData.delay_javascript_callback = options.delay_javascript_callback.replace(/\\/g, '')
         }
 
       });
@@ -370,6 +390,7 @@ export default {
         uucss_load_scripts_on_user_interaction: this.onData.uucss_load_scripts_on_user_interaction,
         uucss_exclude_files_from_delay_js: this.onData.uucss_exclude_files_from_delay_js,
         uucss_excluded_js_files_from_defer: this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer,
+        delay_javascript_callback: this.onData.delay_javascript_callback,
 
       }
 
@@ -430,6 +451,7 @@ export default {
           uucss_excluded_js_files_from_defer: [],
         },
         uucss_excluded_js_files: [],
+        delay_javascript_callback: '',
         uucss_load_scripts_on_user_interaction: [],
         uucss_exclude_files_from_delay_js: [],
       },
