@@ -1,7 +1,9 @@
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
 import LicenseWidget from "app/dashbaord/components/LicenseWidget";
-
+import UnusedCSSSummary from "app/dashbaord/components/UnusedCSSSummary";
+import CacheSummary from "app/dashbaord/components/CacheSummary";
+import CDNSummary from "app/dashbaord/components/CDNSummary";
 import Header from "app/page-optimizer/components/Header";
 
 import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
@@ -116,19 +118,43 @@ export default function Dashbaord() {
                                 <div className="col-span-12 lg:col-span-3">
 
                                     <div   className="widgets pt-4 flex">
-                                        <PageSpeedScore/>
+                                        <CacheSummary/>
                                     </div>
                                 </div>
                                 <div className="col-span-12 lg:col-span-3">
 
-                                    <div   className="widgets pt-4 flex">
-                                        <PageSpeedScore/>
+                                    <div   className="widgets pt-4 gap-4 grid">
+                                        <UnusedCSSSummary
+                                            settings={{
+                                                title: "Unused CSS summary",
+                                                total_jobs: 1000,
+                                                items: [
+                                                    { label: "Success jobs", value: "153 jobs", performance: 95 },
+                                                    { label: "Failed jobs", value: "153 jobs", performance: 95 },
+                                                    { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                ]
+                                            }}
+                                        />
+
+                                        <UnusedCSSSummary
+                                            settings={{
+                                                title: "Critical CSS summary",
+                                                total_jobs: 1000,
+                                                items: [
+                                                    { label: "Success jobs", value: "153 jobs", performance: 95 },
+                                                    { label: "Failed jobs", value: "153 jobs", performance: 95 },
+                                                    { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                ]
+                                            }}
+                                        />
+
                                     </div>
                                 </div>
                                 <div className="col-span-12 lg:col-span-3">
 
-                                    <div   className="widgets pt-4 flex">
+                                    <div   className="widgets pt-4 gap-4 grid">
                                         <LicenseWidget/>
+                                        <CDNSummary/>
                                     </div>
                                 </div>
                                 <article className={cn(
