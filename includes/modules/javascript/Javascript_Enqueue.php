@@ -192,7 +192,9 @@ class Javascript_Enqueue
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
+                    error_log($link->{$data_attr});
                     unset($link->src);
+                    return;
 
                 }
                 if(!self::is_file_excluded($original_src) && self::is_load_on_user_interaction($original_src)){
@@ -214,13 +216,6 @@ class Javascript_Enqueue
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
-
-                    /*$head = $this->dom->find('head', 0);
-                    $node = $this->dom->createElement('link');
-                    $node->setAttribute('rel', 'preload');
-                    $node->setAttribute('href', $link->src);
-                    $node->setAttribute('as', 'script');
-                    $head->appendChild($node);*/
 
                     unset($link->src);
                     unset($link->defer);
@@ -529,7 +524,7 @@ class Javascript_Enqueue
     {
         try {
             // Determine the global event based on the 'delay_javascript' option
-            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"
+            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" && (!isset($this->options['uucss_load_scripts_on_user_interaction']) || empty($this->options['uucss_load_scripts_on_user_interaction']))
                 ? 'RapidLoad:DelayedScriptsLoaded'
                 : 'DOMContentLoaded';
 
