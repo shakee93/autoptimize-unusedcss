@@ -91,7 +91,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         if (!acc[item.type]) {
             acc[item.type] = [];
         }
-        const isValueIncluded = value.includes(item.id);
+        // const isValueIncluded = value.includes(item.id);
+        const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
         acc[item.type].push({ ...item, isSelected: isValueIncluded });
         return acc;
     }, {});
