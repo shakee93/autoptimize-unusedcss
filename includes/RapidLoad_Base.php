@@ -582,6 +582,9 @@ class RapidLoad_Base
     public static function get_default_options(){
         return [
             'uucss_enable_css' => "1",
+            'uucss_fontface' => "1",
+            'uucss_keyframes' => "1",
+            'uucss_variables' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
             'uucss_support_next_gen_formats' => "1",
