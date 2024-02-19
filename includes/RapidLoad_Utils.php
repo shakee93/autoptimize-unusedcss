@@ -395,7 +395,7 @@ trait RapidLoad_Utils {
 
         $files = isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ? explode( ',', $options['uucss_excluded_files'] ) : [];
 
-        $file[] = "fonts.googleapis.com";
+        $files[] = "fonts.googleapis.com";
 
         $files = apply_filters('uucss/excluded-files', $files);
 
