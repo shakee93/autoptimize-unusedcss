@@ -180,6 +180,7 @@ interface ControlValue {
     type: string;
     name: string;
     id: string;
+    isSelected: boolean;
     exclusions: string[];
 }
 
