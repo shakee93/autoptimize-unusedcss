@@ -134,7 +134,7 @@ class Javascript_Enqueue
 
             // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
             $content = "//!injected by RapidLoad \n
-!function(){var o=Array.from(document.querySelectorAll('[data-rapidload-src]')).map(function(e,t){var a=e.getAttribute('id'),o=e.getAttribute('data-rapidload-src');return{id:a||t,scriptElement:e,loaded:null,success:!1,src:o}});const t=['click','mousemove','touchstart','keydown'];let a=!1;function r(e='log',...t){window.location.search.includes('rapidload_debug_js')&&console[e](...t)}function n(t,a=!0){var e;(o=o.map(e=>e.id===t.id&&null===t.loaded?{...t,loaded:!0,success:a}:e)).filter(e=>e.loaded).length===o.length&&(window.rapidloadScripts=o,e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e),r('table',o),r('info','fired: RapidLoad:DelayedScriptsLoaded'))}async function d(){{var e;const t=[];o.forEach(a=>{const o=document.createElement('link');o.rel='preload',o.as='script',o.fetchpriority='high',o.href=a.src;let e=null;try{e=new Promise((t,e)=>{o.onload=()=>{o.parentNode.removeChild(o),t(a)},o.onerror=e=>{o.parentNode.removeChild(o),t(a)}})}catch(e){console.log(e)}e&&t.push(e),document.head.appendChild(o)}),await Promise.all(t)}await 0;for(const a of o)!function(o){new Promise((e,t)=>{var a=o.scriptElement;a.addEventListener('load',()=>n(o)),a.addEventListener('error',()=>n(o,!1)),setTimeout(()=>{o.src&&(a.setAttribute('src',o.src),a.removeAttribute('data-rapidload-src')),e()},0)})}(a)}r('info','totalScripts'),r('table',o);var c=async function(){var e;a||(a=!0,t.forEach(function(e){removeEventListener(e,c)}),await d(),0===o&&(e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e)))};t.forEach(function(e){addEventListener(e,c)})}();";
+            !function(){var o=Array.from(document.querySelectorAll('[data-rapidload-src]')).map(function(e,t){var a=e.getAttribute('id'),o=e.getAttribute('data-rapidload-src');return{id:a||t,scriptElement:e,loaded:null,success:!1,src:o}});const t=['click','mousemove','touchstart','keydown'];let a=!1;function r(e='log',...t){window.location.search.includes('rapidload_debug_js')&&console[e](...t)}function n(t,a=!0){var e;(o=o.map(e=>e.id===t.id&&null===t.loaded?{...t,loaded:!0,success:a}:e)).filter(e=>e.loaded).length===o.length&&(window.rapidloadScripts=o,e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e),r('table',o),r('info','fired: RapidLoad:DelayedScriptsLoaded'))}async function d(){{var e;const t=[];o.forEach(a=>{const o=document.createElement('link');o.rel='preload',o.as='script',o.fetchpriority='high',o.href=a.src;let e=null;try{e=new Promise((t,e)=>{o.onload=()=>{o.parentNode.removeChild(o),t(a)},o.onerror=e=>{o.parentNode.removeChild(o),t(a)}})}catch(e){console.log(e)}e&&t.push(e),document.head.appendChild(o)}),await Promise.all(t)}await 0,Array.from(document.getElementsByTagName('noscript')).forEach(function(e){var t,a=e.getAttribute('data-rapidload-delayed');null!=a&&(a=document.createElement('script'),t=document.createTextNode(e.innerHTML),a.appendChild(t),e.parentNode.insertBefore(a,e))});for(const a of o)!function(o){new Promise((e,t)=>{var a=o.scriptElement;a.addEventListener('load',()=>n(o)),a.addEventListener('error',()=>n(o,!1)),setTimeout(()=>{o.src&&(a.setAttribute('src',o.src),a.removeAttribute('data-rapidload-src')),e()},0)})}(a)}r('info','totalScripts'),r('table',o);var c=async function(){var e;a||(a=!0,t.forEach(function(e){removeEventListener(e,c)}),await d(),0===o&&(e=new CustomEvent('RapidLoad:DelayedScriptsLoaded',{bubbles:!0,cancelable:!0}),document.dispatchEvent(e)))};t.forEach(function(e){addEventListener(e,c)})}();";
 
             if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
                 $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-footer.js';
@@ -195,7 +195,9 @@ class Javascript_Enqueue
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
+                    error_log($link->{$data_attr});
                     unset($link->src);
+                    return;
 
                 }
                 if(!self::is_file_excluded($original_src) && self::is_load_on_user_interaction($original_src)){
@@ -217,13 +219,6 @@ class Javascript_Enqueue
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
-
-                    /*$head = $this->dom->find('head', 0);
-                    $node = $this->dom->createElement('link');
-                    $node->setAttribute('rel', 'preload');
-                    $node->setAttribute('href', $link->src);
-                    $node->setAttribute('as', 'script');
-                    $head->appendChild($node);*/
 
                     unset($link->src);
                     unset($link->defer);
@@ -540,7 +535,7 @@ class Javascript_Enqueue
     {
         try {
             // Determine the global event based on the 'delay_javascript' option
-            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"
+            $eventToBind = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" && (!isset($this->options['uucss_load_scripts_on_user_interaction']) || empty($this->options['uucss_load_scripts_on_user_interaction']))
                 ? 'RapidLoad:DelayedScriptsLoaded'
                 : 'DOMContentLoaded';
 
