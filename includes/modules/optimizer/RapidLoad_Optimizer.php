@@ -802,7 +802,9 @@ class RapidLoad_Optimizer
                                 }
                                 case 'button' : {
                                     if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
-                                        self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                        if(is_array($input->value)){
+                                            self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                        }
                                     }
                                     break;
                                 }
