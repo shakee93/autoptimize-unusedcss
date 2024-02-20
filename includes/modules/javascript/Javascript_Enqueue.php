@@ -415,10 +415,6 @@ class Javascript_Enqueue
 
                 $excluded = @preg_match($exclude_file, $file);
 
-                if(!$excluded){
-                    error_log('failed : ' . $file . " for " . $exclude_file);
-                }
-
             }
 
             if(!$excluded){
