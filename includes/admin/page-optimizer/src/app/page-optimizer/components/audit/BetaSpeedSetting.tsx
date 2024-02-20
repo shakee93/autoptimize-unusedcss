@@ -282,7 +282,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        <DialogTrigger disabled asChild>
+                                        <DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>
                                                     <Cog6ToothIcon className='w-5 text-brand-400'/>
