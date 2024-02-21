@@ -181,7 +181,7 @@ class Javascript_Enqueue
 
         if(!empty($content)){
 
-            $node = $this->dom->createElement('script', "" . $this->wrapWithJavaScriptEvent("RapidLoad:DelayedScriptsLoaded", stripslashes($content)) . "");
+            $node = $this->dom->createElement('script', "" . $this->wrapWithJavaScriptEvent("DOMContentLoaded", stripslashes($content)) . "");
 
             $node->setAttribute('type', 'text/javascript');
             $node->setAttribute('id', 'rapidload-delay-script-callback');
