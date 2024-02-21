@@ -85,6 +85,10 @@ class Javascript_Enqueue
 
             $original_src = self::is_js($link) ? $link->src : null;
 
+            if(isset($link->src) && self::is_file_excluded($link->src)){
+                continue;
+            }
+
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }

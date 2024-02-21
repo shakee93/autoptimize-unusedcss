@@ -710,7 +710,7 @@ class RapidLoad_Image_Enqueue
 
             if(self::is_regex_expression($exclude_file)){
 
-                $excluded = preg_match($exclude_file, $file);
+                $excluded = @preg_match($exclude_file, $file);
 
             }
 
