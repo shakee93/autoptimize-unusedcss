@@ -1,21 +1,44 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useState, useEffect, useRef} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
-import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
-import { CheckBadgeIcon, EyeIcon, EyeSlashIcon,InformationCircleIcon  } from "@heroicons/react/24/outline";
-import {Switch} from "components/ui/switch";
-import {Label} from "components/ui/label";
-import {Skeleton} from "components/ui/skeleton"
-import PerformanceProgressBar from "components/performance-progress-bar";
+import { InformationCircleIcon  } from "@heroicons/react/24/outline";
+import DoughnutChart from "app/dashbaord/components/charts/doughnut";
 
 const CacheSummary = () => {
-    const [isVisible, setIsVisible] = useState(true);
-    const email = "azeez@freshpixl.com";
-    const expdate = "Oct 24";
-    const license = "Professional";
 
-    const toggleVisibility = () => {
-        setIsVisible(!isVisible);
+    const chartOptions = {
+        plugins: {
+            legend: {
+                display: false
+            },
+            doughnutCenterText: {
+                text: '4.63 MB',
+                color: '#000000',
+                font: {
+                    size: 16,
+                    weight: 'bold',
+                },
+            },
+        },
+        aspectRatio: 1,
+        responsive: true,
+        cutout: '70%',
+    };
+    const chartData = {
+        labels: ['HTML cache', 'CSS cache', 'Javascript cache'],
+        datasets: [
+            {
+                label: [' Size '],
+                data: [80, 200, 100],
+                backgroundColor: [
+                    'rgb(116, 17, 251)',
+                    'rgb(171, 70, 251)',
+                    'rgb(68, 186, 251)'
+                ],
+                hoverOffset: 4,
+                borderWidth: 0
+            }
+        ]
     };
 
     return ( <>
@@ -37,15 +60,18 @@ const CacheSummary = () => {
                     </div>
 
                     <div className="flex items-center justify-center py-2 px-1">
-                        <PerformanceProgressBar stroke={5} className={"max-h-[80px] text-sm"} scoreClassName={"text-[20px]"}
-                                                performance={80}>
-                            <div className='flex gap-1 flex-col text-sm font-normal'>
-                                                <span>
-                                                    4.63 MB
-                                                </span>
+                        {/*<PerformanceProgressBar stroke={5} className={"max-h-[80px] text-sm"} scoreClassName={"text-[20px]"}*/}
+                        {/*                        performance={80}>*/}
+                        {/*    <div className='flex gap-1 flex-col text-sm font-normal'>*/}
+                        {/*                        <span>*/}
+                        {/*                            4.63 MB*/}
+                        {/*                        </span>*/}
 
-                            </div>
-                        </PerformanceProgressBar>
+                        {/*    </div>*/}
+                        {/*</PerformanceProgressBar>*/}
+                        <div style={{ width: '150px', height: '150px' }}>
+                        <DoughnutChart data={chartData} options={chartOptions}/>
+                        </div>
                     </div>
 
                     <div className='flex justify-between items-center py-1.5'>
