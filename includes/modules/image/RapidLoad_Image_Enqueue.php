@@ -47,7 +47,7 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
-        $this->preload_images();
+        //$this->preload_images();
 
         $this->set_width_and_height();
 
@@ -186,6 +186,10 @@ class RapidLoad_Image_Enqueue
                 }
 
                 if($this->is_file_excluded($video->{'poster'})){
+                    continue;
+                }
+
+                if($this->is_file_excluded($video->{'poster'},'uucss_exclude_images_from_modern_images')){
                     continue;
                 }
 
@@ -330,13 +334,9 @@ class RapidLoad_Image_Enqueue
                     }
                 }
 
-
-                //$style->__set('innertext', $cssDocument->render());
             }
 
         }
-
-
 
         return [
             'dom' => $this->dom,
@@ -393,15 +393,11 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $iframes as $index => $iframe ) {
 
-                if($this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
-                    continue;
-                }
-
-                if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
-                    continue;
-                }
-
                 if ($iframe->srcdoc) {
+
+                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
+                        continue;
+                    }
 
                     if($this->is_youtube_iframe($iframe->srcdoc)){
                         $this->handle_youtube_iframe($iframe, $iframe->srcdoc);
@@ -418,6 +414,11 @@ class RapidLoad_Image_Enqueue
 
 
                 }else{
+
+                    if($this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
+                        continue;
+                    }
+
                     if($this->is_youtube_iframe($iframe->src)){
                         $this->handle_youtube_iframe($iframe, $iframe->src);
                     }else{
@@ -497,7 +498,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
+                if($this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -575,7 +576,7 @@ class RapidLoad_Image_Enqueue
 
                 foreach ( $images as $img ) {
 
-                    if($this->is_file_excluded($img->{$attribute['attr']})){
+                    if($this->is_file_excluded($img->{$attribute['attr']},'uucss_exclude_images_from_set_width_and_height')){
                         continue;
                     }
 
