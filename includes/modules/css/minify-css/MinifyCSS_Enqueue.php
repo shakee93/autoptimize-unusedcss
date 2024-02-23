@@ -68,7 +68,7 @@ class MinifyCSS_Enqueue
 
     public function minify_css($link){
 
-        if(!self::is_css($link) || $this->is_file_excluded($this->options, $link->href)){
+        if(!self::is_css($link) || $this->is_file_excluded($link->href)){
             return;
         }
 
@@ -142,5 +142,22 @@ class MinifyCSS_Enqueue
 
     private static function is_css( $el ) {
         return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
+    }
+
+    private function is_file_excluded( $file) {
+
+        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($options['uucss_minify_excluded_files']) ? explode( ',', $options['uucss_minify_excluded_files'] ) : [];
+
+        foreach ( $files as $excluded_file ) {
+
+            if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
+                return true;
+            }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 }

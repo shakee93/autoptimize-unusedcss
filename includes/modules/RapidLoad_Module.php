@@ -269,7 +269,12 @@ class RapidLoad_Module
             'css' => [
                 'id' => 'css',
                 'options' => [
-                    'uucss_minify' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ? true : false,
+                    'uucss_minify' => [
+                        'status' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ? true : false,
+                        'options' => [
+                            'uucss_minify_excluded_files' => isset($options['uucss_minify_excluded_files']) ? $options['uucss_minify_excluded_files'] : null,
+                        ]
+                    ],
                     'rapidload_aggregate_css' => isset($options['rapidload_aggregate_css']) && $options['rapidload_aggregate_css'] == "1" ? true : false,
                     'critical_css' => [
                         'status' => isset($options['uucss_enable_cpcss']) && $options['uucss_enable_cpcss'] == "1" ? "on" : "off",
