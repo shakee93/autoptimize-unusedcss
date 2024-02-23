@@ -1,13 +1,11 @@
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
-import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
+import PageSpeedWidget from "app/dashbaord/components/performance-widgets/PageSpeedWidget";
 import LicenseWidget from "app/dashbaord/components/LicenseWidget";
 import UnusedCSSSummary from "app/dashbaord/components/UnusedCSSSummary";
 import CacheSummary from "app/dashbaord/components/CacheSummary";
 import CDNSummary from "app/dashbaord/components/CDNSummary";
 import Header from "app/page-optimizer/components/Header";
 
-import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
-import Card from "components/ui/card";
 import {useSelector} from "react-redux";
 import {useAppContext} from "../../context/app";
 import {cn} from "lib/utils";
@@ -112,7 +110,7 @@ export default function Dashbaord() {
                                 <div className="col-span-12 lg:col-span-3">
 
                                     <div   className="widgets pt-4 flex">
-                                        <PageSpeedScore/>
+                                        <PageSpeedWidget/>
                                     </div>
                                 </div>
                                 <div className="col-span-12 lg:col-span-3">
