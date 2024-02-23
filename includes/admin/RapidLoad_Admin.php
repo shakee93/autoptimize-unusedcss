@@ -236,6 +236,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_minify_excluded_files'])){
+
+            $options['uucss_minify_excluded_files'] = $_REQUEST['uucss_minify_excluded_files'];
+
+        }
+
         if(isset($_REQUEST['rapidload_aggregate_css'])){
 
             $options['rapidload_aggregate_css'] = ($_REQUEST['rapidload_aggregate_css'] == 'true' ? "1" : null);
