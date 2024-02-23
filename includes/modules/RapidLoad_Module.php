@@ -271,7 +271,7 @@ class RapidLoad_Module
                 'id' => 'css',
                 'options' => [
                     'uucss_minify' => [
-                        'status' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ? true : false,
+                        'status' => isset($options['uucss_minify']) && $options['uucss_minify'] == "1" ?  "on" : "off",
                         'options' => [
                             'uucss_minify_excluded_files' => isset($options['uucss_minify_excluded_files']) ? $options['uucss_minify_excluded_files'] : null,
                         ]
