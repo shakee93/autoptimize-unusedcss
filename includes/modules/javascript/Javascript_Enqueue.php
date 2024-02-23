@@ -95,6 +95,8 @@ class Javascript_Enqueue
 
             $this->optimize_js_delivery($link);
 
+            // legacy delay starts here
+
             if(isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1"){
 
                 if(!apply_filters('rapidload/js/delay-excluded', false, $link, $this->job, $this->strategy, $this->options)){
@@ -102,6 +104,8 @@ class Javascript_Enqueue
                 }
 
             }
+
+            // legacy delay ended
 
             do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy, $this->options);
 
@@ -194,17 +198,16 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
+            if(self::is_file_excluded($link->src) || self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
+                return;
+            }
+
+            if(self::is_file_excluded($original_src) || self::is_file_excluded($original_src,'uucss_exclude_files_from_delay_js')){
+                return;
+            }
+
             if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
-                if(!self::is_file_excluded($link->src) && self::is_load_on_user_interaction($link->src)){
-
-                    $data_attr = "data-rapidload-src";
-                    $link->{$data_attr} = $link->src;
-                    error_log($link->{$data_attr});
-                    unset($link->src);
-                    return;
-
-                }
-                if(!self::is_file_excluded($original_src) && self::is_load_on_user_interaction($original_src)){
+                if(self::is_load_on_user_interaction($link->src) || self::is_load_on_user_interaction($original_src)){
 
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
@@ -217,39 +220,25 @@ class Javascript_Enqueue
                     return;
                 }
 
-                if( !self::is_file_excluded($link->src) && !self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js') ||
-                    $original_src && !self::is_file_excluded($original_src) && !self::is_file_excluded($original_src,'uucss_exclude_files_from_delay_js')
-                ){
+                $data_attr = "data-rapidload-src";
+                $link->{$data_attr} = $link->src;
 
-                    $data_attr = "data-rapidload-src";
-                    $link->{$data_attr} = $link->src;
+                unset($link->src);
+                unset($link->defer);
 
-                    unset($link->src);
-                    unset($link->defer);
-
-                }
             }
 
 
         }else if(self::is_inline_script($link)){
-            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
-                if(!self::is_file_excluded($link->innertext()) && self::is_load_on_user_interaction($link->innertext())){
 
-                    $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
+            if(self::is_file_excluded($link->innertext()) || self::is_file_excluded($link->innertext(),'uucss_exclude_files_from_delay_js')){
+                return;
+            }
 
-                }else if(isset($link->{"data-rapidload-delayed"})) {
+            if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction']) && self::is_load_on_user_interaction($link->innertext())
+                || isset($link->{"data-rapidload-delayed"})){
 
-                    unset($link->{"data-rapidload-delayed"});
-                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-
-                }
-            }else{
-                if(isset($link->{"data-rapidload-delayed"})) {
-
-                    unset($link->{"data-rapidload-delayed"});
-                    $link->__set('outertext', "<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
-
-                }
+                $link->__set('outertext',"<noscript data-rapidload-delayed>" . $link->innertext() . "</noscript>");
             }
         }
 
@@ -261,7 +250,7 @@ class Javascript_Enqueue
             return;
         }
 
-        if(!self::is_js($link) || self::is_file_excluded($link->src, 'uucss_minify_excluded_js_files')){
+        if(!self::is_js($link) || self::is_file_excluded($link->src, 'uucss_exclude_files_from_minify_js')){
             return;
         }
 
