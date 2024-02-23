@@ -144,9 +144,9 @@ class MinifyCSS_Enqueue
         return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
     }
 
-    private function is_file_excluded( $file) {
+    private function is_file_excluded($file) {
 
-        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($options['uucss_minify_excluded_files']) ? explode( ',', $options['uucss_minify_excluded_files'] ) : [];
+        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($options['uucss_minify_excluded_files']) ? explode( "\n", $options['uucss_minify_excluded_files'] ) : [];
 
         foreach ( $files as $excluded_file ) {
 
