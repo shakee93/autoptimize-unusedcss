@@ -261,7 +261,7 @@ class Javascript_Enqueue
             return;
         }
 
-        if(!self::is_js($link) || self::is_file_excluded($link->src)){
+        if(!self::is_js($link) || self::is_file_excluded($link->src, 'uucss_minify_excluded_js_files')){
             return;
         }
 

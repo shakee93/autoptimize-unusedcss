@@ -264,6 +264,7 @@ class RapidLoad_Module
                     'uucss_queue_interval' => isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : 600,
                     'uucss_disable_add_to_queue' => isset($options['uucss_disable_add_to_queue']) && $options['uucss_disable_add_to_queue'] == "1" ? true : false,
                     'uucss_disable_add_to_re_queue' => isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1" ? true : false,
+                    'preload_internal_links' => isset($options['preload_internal_links']) && $options['preload_internal_links'] == "1" ? true : false,
                 ]
             ],
             'css' => [
@@ -318,6 +319,7 @@ class RapidLoad_Module
                     'uucss_excluded_js_files_from_defer' => isset($options['uucss_excluded_js_files_from_defer']) ? $options['uucss_excluded_js_files_from_defer'] : null,
                     'uucss_load_scripts_on_user_interaction' => isset($options['uucss_load_scripts_on_user_interaction']) ? $options['uucss_load_scripts_on_user_interaction'] : null,
                     'uucss_exclude_files_from_delay_js' => isset($options['uucss_exclude_files_from_delay_js']) ? $options['uucss_exclude_files_from_delay_js'] : null,
+                    'uucss_exclude_files_from_minify_js' => isset($options['uucss_exclude_files_from_minify_js']) ? $options['uucss_exclude_files_from_minify_js'] : null,
                 ]
             ],
             'image-delivery' => [
@@ -334,6 +336,7 @@ class RapidLoad_Module
                     'uucss_generate_blurry_place_holder' => isset($options['uucss_generate_blurry_place_holder']) && $options['uucss_generate_blurry_place_holder'] == "1" ? true : false,
                     'uucss_lazy_load_iframes' => isset($options['uucss_lazy_load_iframes']) && $options['uucss_lazy_load_iframes'] == "1" ? true : false,
                     'uucss_set_width_and_height' => isset($options['uucss_set_width_and_height']) && $options['uucss_set_width_and_height'] == "1" ? true : false,
+                    'uucss_exclude_images_from_set_width_and_height' => isset($options['uucss_exclude_images_from_set_width_and_height']) ? $options['uucss_exclude_images_from_set_width_and_height'] : '',
                 ]
             ],
             'cdn' => [
