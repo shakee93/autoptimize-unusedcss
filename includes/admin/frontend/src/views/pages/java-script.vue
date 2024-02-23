@@ -302,7 +302,7 @@ export default {
       Object.keys(this.javascript).map((key) => {
         if (this.id === this.javascript[key].id) {
           const options = this.javascript[key].options;
-          console.log(options);
+         // console.log(options);
           this.onData.uucss_load_js_method.defer_inline_js = options.defer_inline_js
           this.onData.minify_js = options.minify_js
           this.onData.preload_internal_links = options.preload_internal_links
