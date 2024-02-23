@@ -50,9 +50,9 @@
             <div class="flex">
               <div class="pr-1">
                 <div class="flex items-center mr-4 mt-3">
-                  <div @click="onData.uucss_minify = !onData.uucss_minify" :class="onData.uucss_minify? 'bg-purple':''"
+                  <div @click="onData.uucss_minify.status = !onData.uucss_minify.status" :class="onData.uucss_minify.status? 'bg-purple':''"
                        class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                    <svg v-if="onData.uucss_minify" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                    <svg v-if="onData.uucss_minify.status" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
                          class="transform scale-125">
                       <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                     </svg>
@@ -61,22 +61,22 @@
                 </div>
               </div>
               <div>
-                <h1 @click="onData.uucss_minify = !onData.uucss_minify" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
+                <h1 @click="onData.uucss_minify.status = !onData.uucss_minify.status" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
                 <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from CSS files.</p>
               </div>
             </div>
-            <div :class="!onData.uucss_minify? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.uucss_minify.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font ">Exclude Minify CSS Files</h1>
                 <p class="text-sm pb-3 text-gray-font">These CSS files will be forcefully excluded from optimization.</p>
 
                 <div class="grid mb-5">
                 <textarea
-                    v-model="onData.uucss_excluded_files"
-                    @focus="focus='exclude'" @blur="focus = null"
+                    v-model="onData.uucss_minify.options.uucss_minify_excluded_files"
+                    @focus="focus='excludeMinify'" @blur="focus = null"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                  <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                  <div :class="focus==='excludeMinify'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">CSS file(s) to be excluded one CSS file per line.</p>
                   </div>
@@ -328,7 +328,8 @@ export default {
           this.onData.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
           this.onData.remove_unused_css = option.unused_css.status === 'on';
           this.onData.uucss_enable_rules = option.uucss_enable_rules;
-          this.onData.uucss_minify = option.uucss_minify;
+          this.onData.uucss_minify.status = option.uucss_minify.status === 'on';
+          this.onData.uucss_minify.options.uucss_minify_excluded_files = option.uucss_minify.options.uucss_minify_excluded_files?.split(",").join("\r\n");
           this.onData.turn_on_group_by_pages = window.uucss_global.total_jobs > 200;
           this.onData.uucss_inline_css = option.unused_css.options.uucss_inline_css;
           this.onData.rapidload_aggregate_css = option.rapidload_aggregate_css;
@@ -376,9 +377,9 @@ export default {
         uucss_excluded_files: this.onData.uucss_excluded_files,
         uucss_enable_cpcss: this.onData.critical_css.status,
         uucss_enable_rules: this.onData.uucss_enable_rules,
-        uucss_minify: this.onData.uucss_minify,
+        uucss_minify: this.onData.uucss_minify.status,
+        uucss_minify_excluded_files: this.onData.uucss_minify.options.uucss_minify_excluded_files,
         uucss_enable_uucss: this.onData.remove_unused_css,
-        // uucss_inline_css: this.onData.uucss_inline_css,
         uucss_inline_css: false,
         rapidload_aggregate_css: this.onData.rapidload_aggregate_css,
       }
@@ -469,7 +470,12 @@ export default {
       rapidload_aggregate_css: false,
       uucss_inline_css: false,
       turn_on_group_by_pages: false,
-      uucss_minify: false,
+      uucss_minify:{
+        status: false,
+        options:{
+          uucss_minify_excluded_files: '',
+        }
+      },
       uucss_enable_rules: false,
       remove_unused_css: false,
       uucss_excluded_files: '',
