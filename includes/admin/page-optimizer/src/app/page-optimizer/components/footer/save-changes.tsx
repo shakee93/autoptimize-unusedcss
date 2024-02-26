@@ -27,7 +27,7 @@ import {fetchData} from "../../../../store/app/appActions";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, RootState} from "../../../../store/app/appTypes";
+import {AppAction, FETCH_DATA_REQUEST, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
 import {CSSDelivery} from "app/page-optimizer/components/icons/icon-svg";
@@ -36,6 +36,7 @@ import Accordion from "components/accordion";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import TooltipText from "components/ui/tooltip-text";
+import Loading from "components/loading";
 
 const SaveChanges = () => {
 
@@ -169,6 +170,10 @@ const SaveChanges = () => {
             </div>,
             onClick : () => {
                 submitSettings(true)
+                //console.log("test")
+               // dispatch(fetchData(options, url, true));
+               // dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+               // setInProgress(true);
             },
             action_text: "Save & Analyze"
         },
@@ -351,7 +356,9 @@ const SaveChanges = () => {
             </Dialog>
             <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
         </Mode>
-
+        {/*<Mode>*/}
+        {/*    {inProgress && <Loading />}*/}
+        {/*</Mode>*/}
     </>
 }
 

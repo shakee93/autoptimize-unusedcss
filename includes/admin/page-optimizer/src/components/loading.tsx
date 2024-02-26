@@ -12,7 +12,7 @@ const Loading = ({ url } : { url: string} ) => {
         'Cooking your results',
         'Finding the best settings for your page',
         'Almost there',
-        'It\' taking longer than expected. Appreciate your patience',
+        'It\'s taking longer than expected. Appreciate your patience',
     ])
 
     useEffect(() => {
