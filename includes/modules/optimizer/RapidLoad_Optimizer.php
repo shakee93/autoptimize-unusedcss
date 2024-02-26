@@ -328,6 +328,10 @@ class RapidLoad_Optimizer
             'uucss_load_js_method',
             'uucss_enable_javascript',
             'uucss_enable_font_optimization',
+            'delay_javascript',
+            'uucss_exclude_files_from_delay_js',
+            'uucss_exclude_files_from_minify_js',
+            'uucss_excluded_js_files_from_defer',
         ];
 
         if(self::$global){
@@ -336,6 +340,7 @@ class RapidLoad_Optimizer
                     self::$global_options[$key] = self::$options[$key];
                 }
             }
+            error_log(json_encode(self::$global_options, JSON_PRETTY_PRINT));
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
@@ -487,8 +492,8 @@ class RapidLoad_Optimizer
                                     }
                                     case 'uucss_exclude_files_from_delay_js':{
                                         $input->control_values = JavaScript::get_dynamic_exclusion_list();
-                                        if(isset(self::$merged_options['uucss_dynamic_js_exclusion_list']) && !empty(self::$merged_options['uucss_dynamic_js_exclusion_list'])){
-                                            $input->value = explode("\n", self::$merged_options['uucss_dynamic_js_exclusion_list']);
+                                        if(isset(self::$merged_options['uucss_exclude_files_from_delay_js']) && !empty(self::$merged_options['uucss_exclude_files_from_delay_js'])){
+                                            $input->value = explode("\n", self::$merged_options['uucss_exclude_files_from_delay_js']);
                                         }else{
                                             $input->value = [];
                                         }
@@ -498,48 +503,50 @@ class RapidLoad_Optimizer
                                 }
                             }
 
+                        }else{
+                            if(!isset($input->key)){
+                                continue;
+                            }
+                            if(isset(self::$merged_options[$input->key])){
+                                if($input->key == "uucss_load_js_method"){
+                                    $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
+                                }else{
+                                    $input->value = self::$merged_options[$input->key];
+                                }
+                            }
+                            if($input->key == "uucss_enable_uucss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                                if(!$data->exist()){
+                                    $data->save();
+                                }
+                                $settings->{'status'} = [
+                                    'status' => $data->status,
+                                    'stats' => $data->get_stats(),
+                                    'warnings' => $data->get_warnings(),
+                                    'error' => $data->get_error()
+                                ];
+                            }
+                            if($input->key == "uucss_enable_cpcss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                                if(!$data->exist()){
+                                    $data->save();
+                                }
+                                $settings->{'status'} = [
+                                    'status' => $data->status,
+                                    'error' => $data->get_error()
+                                ];
+                            }
+                            $cache_file = RapidLoad_Cache_Store::get_cache_file(self::$job->url);
+                            if($input->key == "uucss_enable_cache"){
+                                $settings->{'status'} = [
+                                    'status' => @file_exists($cache_file),
+                                    'file' => $cache_file,
+                                    'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
+                                ];
+                            }
                         }
 
-                        if(!isset($input->key)){
-                            continue;
-                        }
-                        if(isset(self::$merged_options[$input->key])){
-                            if($input->key == "uucss_load_js_method"){
-                                $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
-                            }else{
-                                $input->value = self::$merged_options[$input->key];
-                            }
-                        }
-                        if($input->key == "uucss_enable_uucss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if(!$data->exist()){
-                                $data->save();
-                            }
-                            $settings->{'status'} = [
-                                'status' => $data->status,
-                                'stats' => $data->get_stats(),
-                                'warnings' => $data->get_warnings(),
-                                'error' => $data->get_error()
-                            ];
-                        }
-                        if($input->key == "uucss_enable_cpcss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if(!$data->exist()){
-                                $data->save();
-                            }
-                            $settings->{'status'} = [
-                                'status' => $data->status,
-                                'error' => $data->get_error()
-                            ];
-                        }
-                        $cache_file = RapidLoad_Cache_Store::get_cache_file(self::$job->url);
-                        if($input->key == "uucss_enable_cache"){
-                            $settings->{'status'} = [
-                                'status' => @file_exists($cache_file),
-                                'file' => $cache_file,
-                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
-                            ];
-                        }
+
                     }
                 }
             }
@@ -803,7 +810,7 @@ class RapidLoad_Optimizer
                                 case 'button' : {
                                     if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
                                         if(is_array($input->value)){
-                                            self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                            self::$options['uucss_exclude_files_from_delay_js'] = implode("\n",$input->value);
                                         }
                                     }
                                     break;
