@@ -438,7 +438,7 @@ class Javascript_Enqueue
 
             if(self::is_regex_expression($_file)){
 
-                $excluded = preg_match($_file, $file);
+                $excluded = @preg_match($_file, $file);
 
             }
 
