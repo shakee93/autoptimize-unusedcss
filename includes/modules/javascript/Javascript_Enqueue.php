@@ -89,6 +89,10 @@ class Javascript_Enqueue
                 continue;
             }
 
+            if($original_src && self::is_file_excluded($original_src)){
+                continue;
+            }
+
             if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
                 $this->minify_js($link);
             }

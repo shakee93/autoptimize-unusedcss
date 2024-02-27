@@ -399,6 +399,10 @@ class RapidLoad_Image_Enqueue
                         continue;
                     }
 
+                    if($this->is_file_excluded($iframe->srcdoc)){
+                        continue;
+                    }
+
                     if($this->is_youtube_iframe($iframe->srcdoc)){
                         $this->handle_youtube_iframe($iframe, $iframe->srcdoc);
                     }else{
@@ -506,7 +510,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
+                if($this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_file_excluded($img->src) || $this->is_lcp_image($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -585,6 +589,10 @@ class RapidLoad_Image_Enqueue
                 foreach ( $images as $img ) {
 
                     if($this->is_file_excluded($img->{$attribute['attr']},'uucss_exclude_images_from_set_width_and_height')){
+                        continue;
+                    }
+
+                    if($this->is_file_excluded($img->{$attribute['attr']},'uucss_exclude_images')){
                         continue;
                     }
 

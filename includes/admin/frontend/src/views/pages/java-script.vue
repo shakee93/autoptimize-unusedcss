@@ -59,8 +59,8 @@
               <div :class="!onData.minify_js? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
 
                 <div class="mt-5">
-                  <h1 class="font-normal text-base text-black-font">Exclude Javascript from Deferring</h1>
-                  <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from deferring.</p>
+                  <h1 class="font-normal text-base text-black-font">Exclude Javascript from Minify</h1>
+                  <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from being minified.</p>
 
                   <div class="grid mb-5">
                 <textarea
@@ -233,7 +233,7 @@
           </div>
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
-            <p class="text-sm pb-3 text-gray-font">These JS files will be forcefully excluded from optimization.</p>
+            <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from all optimizations.</p>
                 <textarea
                     v-model="onData.uucss_excluded_js_files"
                     @focus="focus='exclude-js'" @blur="focus = null"
