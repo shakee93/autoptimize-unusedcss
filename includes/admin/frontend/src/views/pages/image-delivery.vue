@@ -97,8 +97,8 @@
               </div>
 
               <div class="mt-5">
-                <h1 class="font-normal text-base text-black-font">Exclude Images from Modern</h1>
-                <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
+                <h1 class="font-normal text-base text-black-font">Exclude from Serve next-gen Images</h1>
+                <p class="text-sm pb-3 text-gray-font">These images will be excluded from being converted to modern formats.</p>
                 <textarea
                     v-model="onData.uucss_exclude_images_from_modern_images"
                     @focus="focus='excludeModern'" @blur="focus = null"
@@ -210,7 +210,7 @@
               <div :class="!onData.uucss_set_width_and_height? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
                 <div class="mt-5">
                   <h1 class="font-normal text-base text-black-font">Exclude Width and Height</h1>
-                  <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
+                  <p class="text-sm pb-3 text-gray-font">These images will be excluded from inserting a width and height</p>
                   <textarea
                       v-model="onData.uucss_exclude_images_from_set_width_and_height"
                       @focus="focus='excludeWidth'" @blur="focus = null"
@@ -245,7 +245,7 @@
           <div class="grid">
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
-              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN.</p>
+              <p class="text-sm pb-3 text-gray-font">Exclude these images from all optimizations.</p>
               <textarea
                   v-model="onData.uucss_exclude_images"
                   @focus="focus='exclude-images'" @blur="focus = null"

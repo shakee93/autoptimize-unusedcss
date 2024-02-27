@@ -67,8 +67,8 @@
             </div>
             <div :class="!onData.uucss_minify.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
-                <h1 class="font-normal text-base text-black-font ">Exclude Minify CSS Files</h1>
-                <p class="text-sm pb-3 text-gray-font">These CSS files will be forcefully excluded from optimization.</p>
+                <h1 class="font-normal text-base text-black-font ">Exclude CSS from Minify</h1>
+                <p class="text-sm pb-3 text-gray-font">These CSS files will be excluded from being minified.</p>
 
                 <div class="grid mb-5">
                 <textarea
@@ -198,8 +198,8 @@
               </div>
 
               <div class="mt-5">
-                <h1 class="font-normal text-base text-black-font ">Exclude CSS Files</h1>
-                <p class="text-sm pb-3 text-gray-font">These CSS files will be forcefully excluded from optimization.</p>
+                <h1 class="font-normal text-base text-black-font ">Exclude CSS from Remove Unused CSS</h1>
+                <p class="text-sm pb-3 text-gray-font">These CSS files will be excluded from Remove Unused CSS optimization.</p>
 
                 <div class="grid mb-5">
                 <textarea
