@@ -331,6 +331,7 @@ class RapidLoad_Optimizer
             'uucss_exclude_files_from_delay_js',
             'delay_javascript_callback',
             'uucss_excluded_js_files',
+            'uucss_dynamic_js_exclusion_list',
             //image
             'uucss_enable_image_delivery',
             'uucss_support_next_gen_formats',
@@ -509,8 +510,8 @@ class RapidLoad_Optimizer
                                     }
                                     case 'uucss_exclude_files_from_delay_js':{
                                         $input->control_values = JavaScript::get_dynamic_exclusion_list();
-                                        if(isset(self::$merged_options['uucss_exclude_files_from_delay_js']) && !empty(self::$merged_options['uucss_exclude_files_from_delay_js'])){
-                                            $input->value = explode("\n", self::$merged_options['uucss_exclude_files_from_delay_js']);
+                                        if(isset(self::$merged_options['uucss_dynamic_js_exclusion_list']) && !empty(self::$merged_options['uucss_dynamic_js_exclusion_list'])){
+                                            $input->value = explode("\n", self::$merged_options['uucss_dynamic_js_exclusion_list']);
                                         }else{
                                             $input->value = [];
                                         }
@@ -827,7 +828,7 @@ class RapidLoad_Optimizer
                                 case 'button' : {
                                     if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
                                         if(is_array($input->value)){
-                                            self::$options['uucss_exclude_files_from_delay_js'] = implode("\n",$input->value);
+                                            self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
                                         }
                                     }
                                     break;
