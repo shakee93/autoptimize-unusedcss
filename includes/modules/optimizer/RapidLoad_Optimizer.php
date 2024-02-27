@@ -311,27 +311,44 @@ class RapidLoad_Optimizer
         }
 
         $options = [
-            'uucss_support_next_gen_formats',
-            'uucss_image_optimize_level',
-            'uucss_set_width_and_height',
-            'uucss_self_host_google_fonts',
-            'uucss_lazy_load_images',
-            'uucss_exclude_above_the_fold_images',
-            'uucss_lazy_load_iframes',
+            //css
+            'uucss_enable_css',
             'uucss_minify',
-            'uucss_enable_uucss',
-            'uucss_inline_css',
+            'uucss_minify_excluded_files',
             'uucss_enable_cpcss',
             'uucss_enable_cpcss_mobile',
             'uucss_additional_css',
-            'minify_js',
-            'uucss_load_js_method',
+            'uucss_enable_uucss',
+            'remove_cpcss_on_user_interaction',
+            'uucss_excluded_files',
+            //js
             'uucss_enable_javascript',
-            'uucss_enable_font_optimization',
+            'minify_js',
+            'uucss_exclude_files_from_minify_js',
+            'uucss_load_js_method',
+            'uucss_excluded_js_files_from_defer',
             'delay_javascript',
             'uucss_exclude_files_from_delay_js',
-            'uucss_exclude_files_from_minify_js',
-            'uucss_excluded_js_files_from_defer',
+            'delay_javascript_callback',
+            'uucss_excluded_js_files',
+            //image
+            'uucss_enable_image_delivery',
+            'uucss_support_next_gen_formats',
+            'uucss_image_optimize_level',
+            'uucss_generate_blurry_place_holder',
+            'uucss_exclude_images_from_modern_images',
+            'uucss_lazy_load_images',
+            'uucss_exclude_above_the_fold_images',
+            'uucss_exclude_above_the_fold_image_count',
+            'uucss_lazy_load_iframes',
+            'uucss_exclude_images_from_lazy_load',
+            'uucss_set_width_and_height',
+            'uucss_exclude_images_from_set_width_and_height',
+            //font
+            'uucss_enable_font_optimization',
+            'uucss_self_host_google_fonts',
+            'uucss_preload_font_urls',
+
         ];
 
         if(self::$global){
