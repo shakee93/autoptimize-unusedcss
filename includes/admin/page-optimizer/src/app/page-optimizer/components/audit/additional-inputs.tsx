@@ -90,50 +90,43 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
             acc[item.type] = [];
         }
         // const isValueIncluded = value.includes(item.id);
-       // const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
-        const isValueIncluded = item.exclusions.every(exclusion => value.includes(exclusion));
+        const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
+       // const isValueIncluded = item.exclusions.every(exclusion => value.includes(exclusion));
         acc[item.type].push({ ...item, isSelected: isValueIncluded });
         return acc;
     }, {});
 
 
-    // const handleSwitchChange = (isChecked: boolean, itemId: string) => {
-    //     const updatedValue = isChecked
-    //         ? [...(value || []), itemId]
-    //         : (value || []).filter((id: string) => id !== itemId);
-    //
-    //     update(updatedValue, input.key);
-    //
-    //     console.log(updatedValue)
-    // };
+    const handleSwitchChange = (isChecked: boolean, itemId: string) => {
+        const updatedValue = isChecked
+            ? [...(value || []), itemId]
+            : (value || []).filter((id: string) => id !== itemId);
+
+        update(updatedValue, input.key);
+
+        console.log(updatedValue)
+    };
+
 
 
     // const handleSwitchChange = (isChecked: boolean, exclusions: string[]) => {
-    //     const updatedValue = isChecked
-    //         ? [...(value || []), ...exclusions]
-    //         : (value || []).filter((ex: string) => !exclusions.includes(ex));
+    //     const updatedValue = value || [];
+    //
+    //     if (isChecked) {
+    //         exclusions.forEach(exclusion => {
+    //             updatedValue.push(exclusion);
+    //         });
+    //     } else {
+    //         exclusions.forEach(exclusion => {
+    //             const index = updatedValue.indexOf(exclusion);
+    //             if (index !== -1) {
+    //                 updatedValue.splice(index, 1);
+    //             }
+    //         });
+    //     }
     //
     //     update(updatedValue, input.key);
-    //
-    //  //   console.log(updatedValue);
     // };
-    const handleSwitchChange = (isChecked: boolean, exclusions: string[]) => {
-        const updatedValue = value || [];
-
-        if (isChecked) {
-            exclusions.forEach(exclusion => {
-                updatedValue.push(exclusion);
-            });
-        } else {
-            exclusions.forEach(exclusion => {
-                const index = updatedValue.indexOf(exclusion);
-                if (index !== -1) {
-                    updatedValue.splice(index, 1);
-                }
-            });
-        }
-        update(updatedValue, input.key);
-    };
 
 
 
@@ -229,8 +222,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    <Switch
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
-                                       //onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
                                    />
 
                                </div>
@@ -245,8 +238,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    <Switch
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
-                                       //onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
 
                                    />
 
@@ -262,8 +255,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    <Switch
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
-                                       //onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
+                                       onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
 
                                    />
 
