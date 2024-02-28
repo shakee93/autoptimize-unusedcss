@@ -152,13 +152,13 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                <Label htmlFor="name" className="flex ml-4 text-left w-full dark:text-brand-300">
                    <span>{input.control_label}</span>
                </Label>
-               <FocusLock>
+               {/*<FocusLock>*/}
                <Textarea className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {
                    e.preventDefault()
                    update(e.target.value, input.key)
                    e.target.focus()
                }} />
-               </FocusLock>
+               {/*</FocusLock>*/}
            </>
 
        }
