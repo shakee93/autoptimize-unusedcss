@@ -1,6 +1,6 @@
 import {Label} from "components/ui/label";
 import {Input} from "components/ui/input";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState, useRef} from "react";
 import {Switch} from "components/ui/switch";
 import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -127,11 +127,16 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     //
     //     update(updatedValue, input.key);
     // };
+    const [textValue, setTextValue] = useState(value);
 
-
-
-
-
+    const handleChange = (e) => {
+        e.preventDefault();
+        setTextValue(e.target.value);
+        update(e.target.value, input.key);
+        setTimeout(() => {
+            e.target.focus();
+        }, 0);
+    };
 
     return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
@@ -152,13 +157,23 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                <Label htmlFor="name" className="flex ml-4 text-left w-full dark:text-brand-300">
                    <span>{input.control_label}</span>
                </Label>
+
                {/*<FocusLock>*/}
-               <Textarea className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {
-                   e.preventDefault()
-                   update(e.target.value, input.key)
-                   e.target.focus()
-               }} />
+               {/*    <Textarea ref={textareaRef} id={input.key} className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {*/}
+               {/*        e.preventDefault()*/}
+               {/*        update(e.target.value, input.key)*/}
+               {/*        e.target.focus()*/}
+               {/*        focusTextarea()*/}
+               {/*    }}*/}
+               {/*    />*/}
                {/*</FocusLock>*/}
+
+               <Textarea id={input.key} className="focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"  value={textValue}
+                         onChange={handleChange}
+               />
+
+
+
            </>
 
        }
