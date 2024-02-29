@@ -34,9 +34,9 @@ class OptimizerJS
         add_action('rapidload/enqueue/optimize-js', function ($link, $job, $strategy, $options){
 
             $options = $strategy === "mobile" ? $job->get_mobile_options(true) : $job->get_desktop_options(true);
-            //error_log(json_encode($options, JSON_PRETTY_PRINT));
+
             if(isset($options['individual-file-actions']) && !empty($options['individual-file-actions']) && is_array($options['individual-file-actions'])){
-                //error_log(json_encode($options['individual-file-actions'], JSON_PRETTY_PRINT));
+
                 foreach ($options['individual-file-actions'] as $file_action){
                     if(isset($file_action->type) && $file_action->type == "js"){
                         if( isset($file_action->url) && !filter_var($file_action->url, FILTER_VALIDATE_URL) === false){

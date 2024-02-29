@@ -358,7 +358,6 @@ class RapidLoad_Optimizer
                     self::$global_options[$key] = self::$options[$key];
                 }
             }
-            error_log(json_encode(self::$global_options, JSON_PRETTY_PRINT));
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
