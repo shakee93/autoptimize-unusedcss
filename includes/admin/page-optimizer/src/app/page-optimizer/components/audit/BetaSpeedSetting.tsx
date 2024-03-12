@@ -69,7 +69,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 
     if (status.status === 'failed') {
         return (
-
         <>
             <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg '>
                 <Indicator className='fill-rose-600'>
@@ -89,12 +88,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 
     if(status.status === 'queued') {
         return (
-            // <Indicator className='animate-pulse fill-amber-500'>
-            //     <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
-            //         Waiting in the queue
-            //     </div>
-            // </Indicator>
-
         <>
             <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg '>
                 <Circle className={cn(
@@ -108,7 +101,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 
     if(status.status === 'processing') {
         return (
-        // <InProgress/>
         <>
             <div className=' flex gap-2 items-center text-xs w-fit rounded-lg'>
                 <Loader className='w-4 animate-spin text-brand-800'/>
@@ -120,12 +112,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
 
     if(status.status === 'success') {
         return (
-            // <Indicator className='fill-green-600'>
-            //     <div className='flex gap-2 items-center'>
-            //         <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
-            //     </div>
-            // </Indicator>
-
             <>
                 <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>
                     <Circle className={cn(
@@ -135,7 +121,6 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
             </>
         )
     }
-
     return <></>;
 })
 
@@ -144,8 +129,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
     if (!settings) {
         return <></>
-    }else{
-        // console.log(settings);
     }
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -166,11 +149,9 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         if (changed) {
             setUpdates(
                 updates.map(_i => {
-
                     if (_i.key === key) {
                         _i.value = val
                     }
-
                     return _i;
                 })
             )
@@ -192,10 +173,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         css : <CSSDelivery/>,
     }), [])
 
-
-    // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
-    // console.log(additionalInputs);
 
     const saveAdditionalSettings = useCallback( () => {
 
@@ -206,22 +184,16 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         setOpen(false);
     }, [updates, open])
 
-
-
-
-
     const buttonAction = async (input: AuditSettingInput) => {
         setLoading(true)
 
         try {
-
             let api = new ApiService(options, undefined, input.action || input.value || undefined )
             await api.post()
 
             toast({
                 description: <div className='flex w-full gap-2 text-center'>Your action is successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
             })
-
         } catch (error: any) {
 
             setLoading(false)
@@ -229,7 +201,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                 description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
             })
         }
-
         setLoading(false);
     }
 
@@ -245,8 +216,15 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         updateValue(settings, newCheckboxState, mainInput.key);
     };
 
-    return (
+    const [showStatus, setShowStatus] = useState(false);
+    useEffect(() => {
+        if(settings.status && mainInput.value){
+            setShowStatus(true)
+        }
+      //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
+    },[]);
 
+    return (
         <>
         <div
             key={index}
@@ -256,10 +234,8 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
             )}
         >
             {showIcons && icons[settings.category as keyof typeof icons]}
-
             {!hideActions && (
                 <>
-
                     {mainInput && (
                         <>
                             {mainInput.control_type === 'checkbox' && (
@@ -282,8 +258,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
                                           }}/>
                                 </>
-
-
                             )}
                         </>
                     )}
@@ -294,7 +268,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                     <div className='select-none cursor-pointer' onClick={handleCheckboxClick}>{settings.name}</div>
                     {!hideActions && (
                         <>
-
                             {mainInput && (
                                 <>
                                     {mainInput.control_type === 'button' && (
@@ -306,12 +279,10 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 </>
                             )}
 
-
-
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        <DialogTrigger disabled asChild>
+                                        <DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>
                                                     <Cog6ToothIcon className='w-5 text-brand-400'/>
@@ -331,7 +302,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                 {additionalInputs.map((input, index) =>
                                                     <div key={index} >
                                                         <Fields input={input} updates={updates} update={update} />
-
                                                     </div>
                                                 )}
                                             </div>
@@ -343,14 +313,10 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
                                         </DialogContent>
                                     </Dialog>
-
-
                                 )}
-
-
                             </Mode>
 
-                            {settings.status && (
+                            {showStatus && (
                                 <div className='px-1'>
                                     <Status status={settings.status}/>
                                 </div>
@@ -361,11 +327,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                     <Lock className='w-4 text-brand-400'/>
                                 </TooltipText>
                             </Mode>
-
-
-
-
-
                         </>
 
                     )}

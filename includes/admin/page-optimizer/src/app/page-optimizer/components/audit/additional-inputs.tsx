@@ -1,6 +1,6 @@
 import {Label} from "components/ui/label";
 import {Input} from "components/ui/input";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState, useRef} from "react";
 import {Switch} from "components/ui/switch";
 import {InputProps, Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
@@ -74,8 +74,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 toast({
                     description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
                 })
-
-
             }
             setLoading(false)
         }
@@ -83,9 +81,9 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [activeCategory, setActiveCategory]= useState('third_party')
 
-    const filteredValues = (input?.control_values as ControlValue[])?.filter(
-        (value) => value.type === activeCategory
-    );
+    // const filteredValues = (input?.control_values as ControlValue[])?.filter(
+    //     (value) => value.type === activeCategory
+    // );
 
     const groupedData = (input?.control_values as ControlValue[])?.reduce((acc: {[key: string]: ControlValue[]}, item: ControlValue) => {
         if (!acc[item.type]) {
@@ -93,6 +91,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }
         // const isValueIncluded = value.includes(item.id);
         const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
+       // const isValueIncluded = item.exclusions.every(exclusion => value.includes(exclusion));
         acc[item.type].push({ ...item, isSelected: isValueIncluded });
         return acc;
     }, {});
@@ -105,11 +104,39 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         update(updatedValue, input.key);
 
-      //  console.log(updatedValue)
+        console.log(updatedValue)
     };
 
 
 
+    // const handleSwitchChange = (isChecked: boolean, exclusions: string[]) => {
+    //     const updatedValue = value || [];
+    //
+    //     if (isChecked) {
+    //         exclusions.forEach(exclusion => {
+    //             updatedValue.push(exclusion);
+    //         });
+    //     } else {
+    //         exclusions.forEach(exclusion => {
+    //             const index = updatedValue.indexOf(exclusion);
+    //             if (index !== -1) {
+    //                 updatedValue.splice(index, 1);
+    //             }
+    //         });
+    //     }
+    //
+    //     update(updatedValue, input.key);
+    // };
+    const [textValue, setTextValue] = useState(value);
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        setTextValue(e.target.value);
+        update(e.target.value, input.key);
+        setTimeout(() => {
+            e.target.focus();
+        }, 0);
+    };
 
     return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
@@ -126,19 +153,27 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }
 
        {input.control_type === 'textarea' &&
-
-
            <>
                <Label htmlFor="name" className="flex ml-4 text-left w-full dark:text-brand-300">
                    <span>{input.control_label}</span>
                </Label>
-               <FocusLock>
-               <Textarea className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {
-                   e.preventDefault()
-                   update(e.target.value, input.key)
-                   e.target.focus()
-               }} />
-               </FocusLock>
+
+               {/*<FocusLock>*/}
+               {/*    <Textarea ref={textareaRef} id={input.key} className="focus:outline-none focus-visible:ring-0 dark:text-brand-300" value={value} onChange={e =>  {*/}
+               {/*        e.preventDefault()*/}
+               {/*        update(e.target.value, input.key)*/}
+               {/*        e.target.focus()*/}
+               {/*        focusTextarea()*/}
+               {/*    }}*/}
+               {/*    />*/}
+               {/*</FocusLock>*/}
+
+               <Textarea id={input.key} className="focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"  value={textValue}
+                         onChange={handleChange}
+               />
+
+
+
            </>
 
        }
@@ -203,6 +238,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
                                    />
 
                                </div>
@@ -218,6 +254,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
+
                                    />
 
                                </div>
@@ -233,6 +271,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                        checked={item?.isSelected}
                                        //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
+                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
+
                                    />
 
                                </div>

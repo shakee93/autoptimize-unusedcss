@@ -156,6 +156,14 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.15 - 29/02/2024 =
+ * fix: known bugs
+
+= 2.2.14 - 20/02/2024 =
+ * feat: deferring the youtube videos by displaying the poster image until user interacts
+ * feat: add delay exclusions with easy UI
+ * fix: delay js legacy compatibility
+
 = 2.2.13 - 31/01/2024 =
  * fix: broken Titan Optimizer for some users
 

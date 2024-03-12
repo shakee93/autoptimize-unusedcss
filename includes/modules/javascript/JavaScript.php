@@ -283,6 +283,11 @@ class JavaScript
             $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
             $plugin_name = $plugin_data['Name'];
             $path = str_replace(basename($plugin), "", $plugin);
+
+            if (strpos($path, 'autoptimize-unusedcss') !== false || strpos($path, 'unusedcss') !== false) {
+                continue;
+            }
+
             $exclusion_list[] = [
                 'type' => "plugins",
                 'name' => $plugin_name,

@@ -311,23 +311,45 @@ class RapidLoad_Optimizer
         }
 
         $options = [
-            'uucss_support_next_gen_formats',
-            'uucss_image_optimize_level',
-            'uucss_set_width_and_height',
-            'uucss_self_host_google_fonts',
-            'uucss_lazy_load_images',
-            'uucss_exclude_above_the_fold_images',
-            'uucss_lazy_load_iframes',
+            //css
+            'uucss_enable_css',
             'uucss_minify',
-            'uucss_enable_uucss',
-            'uucss_inline_css',
+            'uucss_minify_excluded_files',
             'uucss_enable_cpcss',
             'uucss_enable_cpcss_mobile',
             'uucss_additional_css',
-            'minify_js',
-            'uucss_load_js_method',
+            'uucss_enable_uucss',
+            'remove_cpcss_on_user_interaction',
+            'uucss_excluded_files',
+            //js
             'uucss_enable_javascript',
+            'minify_js',
+            'uucss_exclude_files_from_minify_js',
+            'uucss_load_js_method',
+            'uucss_excluded_js_files_from_defer',
+            'delay_javascript',
+            'uucss_exclude_files_from_delay_js',
+            'delay_javascript_callback',
+            'uucss_excluded_js_files',
+            'uucss_dynamic_js_exclusion_list',
+            //image
+            'uucss_enable_image_delivery',
+            'uucss_support_next_gen_formats',
+            'uucss_image_optimize_level',
+            'uucss_generate_blurry_place_holder',
+            'uucss_exclude_images_from_modern_images',
+            'uucss_lazy_load_images',
+            'uucss_exclude_above_the_fold_images',
+            'uucss_exclude_above_the_fold_image_count',
+            'uucss_lazy_load_iframes',
+            'uucss_exclude_images_from_lazy_load',
+            'uucss_set_width_and_height',
+            'uucss_exclude_images_from_set_width_and_height',
+            //font
             'uucss_enable_font_optimization',
+            'uucss_self_host_google_fonts',
+            'uucss_preload_font_urls',
+
         ];
 
         if(self::$global){
@@ -498,48 +520,50 @@ class RapidLoad_Optimizer
                                 }
                             }
 
+                        }else{
+                            if(!isset($input->key)){
+                                continue;
+                            }
+                            if(isset(self::$merged_options[$input->key])){
+                                if($input->key == "uucss_load_js_method"){
+                                    $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
+                                }else{
+                                    $input->value = self::$merged_options[$input->key];
+                                }
+                            }
+                            if($input->key == "uucss_enable_uucss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                                if(!$data->exist()){
+                                    $data->save();
+                                }
+                                $settings->{'status'} = [
+                                    'status' => $data->status,
+                                    'stats' => $data->get_stats(),
+                                    'warnings' => $data->get_warnings(),
+                                    'error' => $data->get_error()
+                                ];
+                            }
+                            if($input->key == "uucss_enable_cpcss"){
+                                $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                                if(!$data->exist()){
+                                    $data->save();
+                                }
+                                $settings->{'status'} = [
+                                    'status' => $data->status,
+                                    'error' => $data->get_error()
+                                ];
+                            }
+                            $cache_file = RapidLoad_Cache_Store::get_cache_file(self::$job->url);
+                            if($input->key == "uucss_enable_cache"){
+                                $settings->{'status'} = [
+                                    'status' => @file_exists($cache_file),
+                                    'file' => $cache_file,
+                                    'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
+                                ];
+                            }
                         }
 
-                        if(!isset($input->key)){
-                            continue;
-                        }
-                        if(isset(self::$merged_options[$input->key])){
-                            if($input->key == "uucss_load_js_method"){
-                                $input->value = self::$merged_options[$input->key] == "defer" || self::$merged_options[$input->key] == "1";
-                            }else{
-                                $input->value = self::$merged_options[$input->key];
-                            }
-                        }
-                        if($input->key == "uucss_enable_uucss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if(!$data->exist()){
-                                $data->save();
-                            }
-                            $settings->{'status'} = [
-                                'status' => $data->status,
-                                'stats' => $data->get_stats(),
-                                'warnings' => $data->get_warnings(),
-                                'error' => $data->get_error()
-                            ];
-                        }
-                        if($input->key == "uucss_enable_cpcss"){
-                            $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if(!$data->exist()){
-                                $data->save();
-                            }
-                            $settings->{'status'} = [
-                                'status' => $data->status,
-                                'error' => $data->get_error()
-                            ];
-                        }
-                        $cache_file = RapidLoad_Cache_Store::get_cache_file(self::$job->url);
-                        if($input->key == "uucss_enable_cache"){
-                            $settings->{'status'} = [
-                                'status' => @file_exists($cache_file),
-                                'file' => $cache_file,
-                                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
-                            ];
-                        }
+
                     }
                 }
             }
@@ -802,7 +826,9 @@ class RapidLoad_Optimizer
                                 }
                                 case 'button' : {
                                     if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
-                                        self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                        if(is_array($input->value)){
+                                            self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
+                                        }
                                     }
                                     break;
                                 }

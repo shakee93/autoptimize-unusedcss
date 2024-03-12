@@ -96,22 +96,20 @@
                 </div>
               </div>
 
-<!--              <div class="mt-5">-->
+              <div class="mt-5">
+                <h1 class="font-normal text-base text-black-font">Exclude from Serve next-gen Images</h1>
+                <p class="text-sm pb-3 text-gray-font">These images will be excluded from being converted to modern formats.</p>
+                <textarea
+                    v-model="onData.uucss_exclude_images_from_modern_images"
+                    @focus="focus='excludeModern'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                <div :class="focus==='excludeModern'? 'bg-purple-lite':'bg-gray-lite-background'"
+                     class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                  <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>
+                </div>
 
-<!--                <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>-->
-<!--                <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>-->
-<!--                <textarea-->
-<!--                    v-model="onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load"-->
-<!--                    @focus="focus='exclude'" @blur="focus = null"-->
-<!--                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"-->
-<!--                    id="force-include" type="text" placeholder=""></textarea>-->
-<!--                <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"-->
-<!--                     class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">-->
-<!--                  <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>-->
-<!--                </div>-->
-
-<!--              </div>-->
-
+              </div>
             </div>
           </div>
 
@@ -171,7 +169,6 @@
               </div>
 
               <div class="mt-5">
-
                 <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
                 <textarea
@@ -209,6 +206,23 @@
                   <p class="text-sm text-gray-font">Include width and height attributes for these images.</p>
                 </div>
               </div>
+
+              <div :class="!onData.uucss_set_width_and_height? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+                <div class="mt-5">
+                  <h1 class="font-normal text-base text-black-font">Exclude Width and Height</h1>
+                  <p class="text-sm pb-3 text-gray-font">These images will be excluded from inserting a width and height</p>
+                  <textarea
+                      v-model="onData.uucss_exclude_images_from_set_width_and_height"
+                      @focus="focus='excludeWidth'" @blur="focus = null"
+                      class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                      id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='excludeWidth'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
 
@@ -231,7 +245,7 @@
           <div class="grid">
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
-              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN.</p>
+              <p class="text-sm pb-3 text-gray-font">Exclude these images from all optimizations.</p>
               <textarea
                   v-model="onData.uucss_exclude_images"
                   @focus="focus='exclude-images'" @blur="focus = null"
@@ -307,6 +321,8 @@ export default {
           this.onData.uucss_preload_lcp_image = options.uucss_preload_lcp_image
           this.onData.uucss_set_width_and_height = options.uucss_set_width_and_height
           this.onData.uucss_exclude_images = options.uucss_exclude_images
+          this.onData.uucss_exclude_images_from_modern_images = options.uucss_exclude_images_from_modern_images
+          this.onData.uucss_exclude_images_from_set_width_and_height = options.uucss_exclude_images_from_set_width_and_height
         }
       });
       this.beforeSave = this.onData;
@@ -351,6 +367,8 @@ export default {
         uucss_preload_lcp_image : this.onData.uucss_preload_lcp_image,
         uucss_set_width_and_height : this.onData.uucss_set_width_and_height,
         uucss_exclude_images: this.onData.uucss_exclude_images,
+        uucss_exclude_images_from_modern_images: this.onData.uucss_exclude_images_from_modern_images,
+        uucss_exclude_images_from_set_width_and_height: this.onData.uucss_exclude_images_from_set_width_and_height,
         uucss_enable_image_delivery : true,
       }
 
@@ -398,6 +416,8 @@ export default {
       onData: {
         compression_level: 'lossless',
         next_gen_image: false,
+        uucss_exclude_images_from_modern_images: '',
+        uucss_exclude_images_from_set_width_and_height: '',
         uucss_exclude_images: [],
         uucss_lazy_load_images: {
           status: false,
