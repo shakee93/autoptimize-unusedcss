@@ -1,9 +1,18 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState } from "react";
+import {cn} from "lib/utils";
 
-const Loading = ({ url } : { url: string} ) => {
+interface LoadingProps {
+    url: string;
+    countDown?: boolean;
+    customMessage?: string;
+    customMessageAfter?: string;
+    className?: string;
+}
+
+const Loading: React.FC<LoadingProps> = ({ url, countDown , customMessage, customMessageAfter, className}) => {
 
     const [seconds, setSeconds] = useState(39);
-    const [messageBelow, setMessageBelow] = useState('Arriving in');
+    const [messageBelow, setMessageBelow] = useState(customMessage? customMessage: 'Arriving in');
     const [message, setMessage] = useState(0)
     const [messages, setMessages] = useState([
         'Running analysis',
@@ -37,22 +46,37 @@ const Loading = ({ url } : { url: string} ) => {
     }, [])
 
     return (
-        <div className='absolute top-1/2 flex w-full items-center gap-4 text-center'>
-            <div className='w-full flex flex-col gap-6'>
-                <div>{messages[message]}...</div>
-
-                <div className='relative w-72 mx-auto h-1.5 bg-violet-100 overflow-hidden'>
-                    <div className='will-change absolute animate-rl-loading-loop h-1.5 w-24 translate-x-1/2 bg-[#7F54B3]'></div>
-                </div>
-                <div className='text-xs text-brand-500'>
+        <>
+        {countDown ? (
+                <div className={cn(
+                    ' text-xs ',
+                    className
+                )}>
                     {seconds > 0 ? (
-                        <p>{messageBelow} {seconds} seconds...</p>
+                        <p>{messageBelow} {seconds} {customMessageAfter? customMessageAfter : 'seconds...'}</p>
                     ) : (
                         <p>{messageBelow}</p>
                     )}
                 </div>
-            </div>
-        </div>
+            ): (
+                <div className='absolute top-1/2 flex w-full items-center gap-4 text-center'>
+                    <div className='w-full flex flex-col gap-6'>
+                        <div>{messages[message]}...</div>
+
+                        <div className='relative w-72 mx-auto h-1.5 bg-violet-100 overflow-hidden'>
+                            <div className='will-change absolute animate-rl-loading-loop h-1.5 w-24 translate-x-1/2 bg-[#7F54B3]'></div>
+                        </div>
+                        <div className='text-xs text-brand-500'>
+                            {seconds > 0 ? (
+                                <p>{messageBelow} {seconds} seconds...</p>
+                            ) : (
+                                <p>{messageBelow}</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

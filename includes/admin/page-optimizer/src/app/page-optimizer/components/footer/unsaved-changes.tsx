@@ -12,6 +12,9 @@ import useSubmitSettings from "hooks/useSubmitSettings";
 import {XIcon} from "lucide-react";
 import { Cancel } from "@radix-ui/react-alert-dialog"
 import TooltipText from "components/ui/tooltip-text";
+import {setCommonState} from "../../../../store/common/commonActions";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction, RootState} from "../../../../store/app/appTypes";
 
 interface Props {
     children: ReactNode
@@ -40,11 +43,13 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
 
     const submit = async () => {
 
-        await submitSettings(action === 'Save & Analyze');
+        //await submitSettings(action === 'Save & Analyze');
 
-        setTimeout(() => {
-            onClick();
-        }, 800);
+        await submitSettings(action === 'Save');
+        onClick();
+        // setTimeout(() => {
+        //     onClick();
+        // }, 10);
 
     }
 

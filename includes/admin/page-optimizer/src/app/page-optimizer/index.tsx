@@ -34,7 +34,7 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, activeMetric } = useCommonDispatch()
+    const { dispatch, activeMetric, inProgress } = useCommonDispatch()
 
     const {
         options,
@@ -45,7 +45,6 @@ export default function PageOptimizer() {
     } = useAppContext()
 
     let url = options?.optimizer_url;
-
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
@@ -84,60 +83,59 @@ export default function PageOptimizer() {
                 savingData && 'relative overflow-hidden'
             )}>
 
-                {!loading ? (
-                    <>
-                        <OptimizerInprogress />
-                    </>
-                    // <section
-                    //     ref={optimizerContainer}
-                    //     className={cn(
-                    //     'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px] mt-4',
-                    // )}>
-                    //
-                    //     {(savingData || invalidatingCache) && (
-                    //         <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
-                    //             <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
-                    //                 <Loader className='w-5 animate-spin'/>
-                    //                 {savingData && 'Saving Changes...'}
-                    //                 {invalidatingCache && 'Flushing Cache...'}
-                    //             </div>
-                    //         </div>
-                    //     )}
-                    //
-                    //     {error ?
-                    //         <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
-                    //             <ErrorFetch className='items-center' error={error}/>
-                    //         </div> :
-                    //     <>
-                    //
-                    //         {togglePerformance && (
-                    //             <aside className="col-span-12 lg:col-span-3">
-                    //                 <div className="text-lg ml-5  flex items-center gap-2">
-                    //                     <Circle style={{
-                    //                         fill: progressbarColor
-                    //                     }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
-                    //                     Page Insights {togglePerformance && <TogglePerformance/>} </div>
-                    //                 <div   className="widgets pt-4 flex">
-                    //                     <PageSpeedScore/>
-                    //                 </div>
-                    //             </aside>
-                    //         )}
-                    //         <article className={cn(
-                    //             togglePerformance ? 'col-span-12 lg:col-span-9' : 'col-span-12',
-                    //         )}>
-                    //
-                    //             <AnimatePresence initial={true} mode='wait'>
-                    //                 {activeMetric ? (
-                    //                     <SpeedIndex/>
-                    //                 ) : (
-                    //                     <SlideUp uuid='perf'>
-                    //                         <Performance/>
-                    //                     </SlideUp>
-                    //                 )}
-                    //             </AnimatePresence>
-                    //         </article>
-                    //     </>}
-                    // </section>
+                {!loading && !inProgress? (
+                    <section
+                        ref={optimizerContainer}
+                        className={cn(
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px] mt-4',
+                    )}>
+
+                        {(savingData || invalidatingCache) && (
+                            <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                                <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
+                                    <Loader className='w-5 animate-spin'/>
+                                    {savingData && 'Saving Changes...'}
+                                    {invalidatingCache && 'Flushing Cache...'}
+                                </div>
+                            </div>
+                        )}
+
+                        {error ?
+                            <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
+                                <ErrorFetch className='items-center' error={error}/>
+                            </div> :
+                        <>
+
+                            {togglePerformance && (
+                                <aside className="col-span-12 lg:col-span-3">
+                                    <div className="text-lg ml-5  flex items-center gap-2">
+                                        <Circle style={{
+                                            fill: progressbarColor
+                                        }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
+                                        Page Insights {togglePerformance && <TogglePerformance/>} </div>
+                                    <div   className="widgets pt-4 flex">
+                                        <PageSpeedScore/>
+                                    </div>
+                                </aside>
+                            )}
+                            <article className={cn(
+                                togglePerformance ? 'col-span-12 lg:col-span-9' : 'col-span-12',
+                            )}>
+
+                                <AnimatePresence initial={true} mode='wait'>
+                                    {activeMetric ? (
+                                        <SpeedIndex/>
+                                    ) : (
+                                        <SlideUp uuid='perf'>
+                                            <Performance/>
+                                        </SlideUp>
+                                    )}
+                                </AnimatePresence>
+                            </article>
+                        </>}
+                    </section>
+                ) : inProgress && !savingData ?(
+                    <OptimizerInprogress />
                 ) : (
                     <Loading url={url}/>
                 )}

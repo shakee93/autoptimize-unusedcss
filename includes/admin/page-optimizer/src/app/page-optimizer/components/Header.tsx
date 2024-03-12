@@ -102,8 +102,10 @@ const Header = ({ url }: { url: string}) => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                                dispatch(fetchData(options, url, true))
+                                // dispatch(fetchData(options, url, true))
+                                dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
+
                             }} >
                             <TooltipText
                                 text='Analyze the page'>

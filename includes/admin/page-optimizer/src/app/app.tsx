@@ -10,6 +10,7 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
+import {setCommonState} from "../store/common/commonActions";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -53,6 +54,7 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         dispatch(fetchData(options, options.optimizer_url, false))
+        dispatch(setCommonState('inProgress', false))
     }, [dispatch, activeReport]);
 
 

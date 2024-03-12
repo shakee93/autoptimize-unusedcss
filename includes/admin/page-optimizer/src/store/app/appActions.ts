@@ -139,7 +139,7 @@ const initiateSettings = (audits: Audit[]) => {
     }))
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -155,12 +155,12 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
-
+           
             if (activeReportData.loading) {
                 return;
             }
 
-            if (activeReportData.data && !reload) {
+            if (activeReportData.data && !reload && !inprogress) {
                 return;
             }
 
