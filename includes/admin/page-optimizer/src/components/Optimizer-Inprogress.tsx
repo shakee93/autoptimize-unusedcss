@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {CheckCircleIcon} from "@heroicons/react/24/solid";
 import {Loader, Monitor, RefreshCw} from "lucide-react";
-import { FaceSmileIcon, FaceFrownIcon } from "@heroicons/react/24/outline";
+import { FaceSmileIcon, FaceFrownIcon, QueueListIcon, ArrowPathRoundedSquareIcon  } from "@heroicons/react/24/outline";
 import {useAppContext} from "../context/app";
 import {optimizerData} from "../store/app/appSelector";
 import CountdownTimer from './ui/CountdownTimer';
@@ -15,37 +15,20 @@ import Loading from "components/loading";
 import {m, AnimatePresence} from "framer-motion";
 import {Button} from "components/ui/button";
 import {cn} from "lib/utils";
-import ItemChecker from "components/ui/checkLoading";
+
 
 const OptimizerInprogress = () => {
 
     const { data, loading, error, settings } = useSelector(optimizerData);
     const [fetchCalled, setFetchCalled] = useState(false);
-    const { options, savingData } = useAppContext();
+    const { options, savingData, setShowInprogress } = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
-    const [ranOnce, setRanOnce] = useState(false);
+    const {activeReport} = useSelector((state: RootState) => state.app);
     const {inProgress } = useCommonDispatch()
+    const loadingStatuses = ['failed', 'queued', 'processing'];
 
-    useEffect(() => {
-        if (!ranOnce) {
-            const timer = setTimeout(() => {
-
-                console.log('Code executed after 3 seconds');
-                setRanOnce(true);
-              //  dispatch(setCommonState('inProgress', false))
-            }, 10000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [ranOnce]);
-
-
-
-
-
-
+    const [checkCircleCount, setCheckCircleCount] = useState(0);
 
     const filteredSettings = settings?.filter(setting => {
         return setting.inputs.some(input => input.control_type === "checkbox" && input.value === true);
@@ -59,37 +42,58 @@ const OptimizerInprogress = () => {
 
     useEffect(() => {
         if (!filteredSettings) return;
+
         const interval = setInterval(() => {
             setCurrentIndex(prevIndex => {
-                // If all settings have been processed, clear the interval
                 if (prevIndex === filteredSettings.length - 1) {
                     clearInterval(interval);
                     return prevIndex;
                 }
-                return prevIndex + 1; // Move to the next setting
+                return prevIndex + 1;
             });
-        }, 3000); // Change setting every 3 seconds
+        }, 2000);
 
-        return () => clearInterval(interval); // Cleanup on component unmount
+        return () => clearInterval(interval);
     }, [filteredSettings]);
 
 
     useEffect(() => {
-        // if (!filteredSettings) return;
         filteredSettings?.forEach(setting => {
-            if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS', 'Images']) && setting.status?.status !== 'success') {
-
-                const intervalId = setInterval(() => {
+            if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
+                setTimeout(() => {
                     dispatch(fetchData(options, url, false, true));
-
                 }, 10000);
-
-                return () => clearInterval(intervalId);
             }
         });
 
-
     }, [dispatch, activeReport, settings]);
+
+    useEffect(() => {
+        if (!filteredSettings) return;
+
+        let count = 0;
+        for (let index = 0; index < filteredSettings.length; index++) {
+            const setting = filteredSettings[index];
+            if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
+                continue;
+            }
+            if (index <= currentIndex) {
+                count++;
+            }
+        }
+        setCheckCircleCount(count);
+    }, [filteredSettings, currentIndex]);
+
+    useEffect(() => {
+        if(checkCircleCount  == filteredSettings?.length){
+            const timer = setTimeout(() => {
+                //dispatch(setCommonState('inProgress', false));
+                setShowInprogress(false);
+                dispatch(fetchData(options, url, true));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [checkCircleCount]);
 
     return (
        <m.div
@@ -98,7 +102,7 @@ const OptimizerInprogress = () => {
            exit={{ opacity: 0 }}
            transition={{
                ease: 'linear',
-               duration: 0.04,
+               duration: 0.5,
            }}>
 
                <div className='py-20 grid justify-center items-center '>
@@ -111,61 +115,57 @@ const OptimizerInprogress = () => {
                                <div key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
-                                           {includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS', 'Images']) && setting.status?.status != 'success' ? (
-                                               <Loader className='w-5 animate-spin text-brand-800'/>
-                                           ) : (index <= currentIndex ? (
+                                           {/*{includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status != 'success' ? (*/}
+                                           {/*    <Loader className='w-5 animate-spin text-brand-800'/>*/}
+                                           {/*) : (index <= currentIndex ? (*/}
+                                           {/*        <CheckCircleIcon className="w-7 h-7 fill-green-600" />*/}
+                                           {/*        ) : (*/}
+                                           {/*             <Loader className='w-5 animate-spin text-brand-800'/>*/}
+                                           {/*        )*/}
+                                           {/*)}*/}
+
+                                           <React.Fragment key={index}>
+                                               {includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success' ? (
+                                                   <Loader className='w-5 animate-spin text-brand-800'/>
+                                               ) : (
+                                                   index <= currentIndex ? (
                                                        <CheckCircleIcon className="w-7 h-7 fill-green-600" />
                                                    ) : (
-                                                        <Loader className='w-5 animate-spin text-brand-800'/>
+                                                       <Loader className='w-5 animate-spin text-brand-800'/>
                                                    )
-                                           )}
-
-
+                                               )}
+                                           </React.Fragment>
 
                                        </div>
                                        <h1 className="text-base">{setting.name.includes('Cache' ) ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
                                    </div>
 
                                    <div className="ml-3.5 grid gap-2 border-l my-2">
-                                       {includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS', 'Images']) && setting.status ? (
+                                       {includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success' ? (
 
                                            <>
                                                <div className="ml-[29px] ">
-                                                   {/*<p>{setting.status.status}</p>*/}
+                                                   <Loading className={'text-sm text-gray-500 -mt-2'} customMessage={'Processing in progress — just '} customMessageAfter={'seconds to completion. Hang tight!'} url={url} countDown={true}/>
 
-                                                   {setting.status.status === 'success' && index <= currentIndex ?
-                                                       (
-                                                           <div className="border-2 border-green-600 bg-green-100/30 rounded-xl px-4 py-3 mt-1">
-                                                               <div className="flex gap-2 items-center relative">
-                                                                   <FaceSmileIcon className="h-6 w-6 text-green-600" />
-                                                                   <h3 className="text-sm">Successfully optimize</h3>
-                                                               </div>
-                                                               {/*<div className="ml-8">*/}
-                                                               {/*    <Loading className={''} customMessage={'Processing in progress — just '} customMessageAfter={'seconds to completion. Hang tight!'} url={url} countDown={true}/>*/}
-                                                               {/*</div>*/}
+                                                   <div className={`border-2 rounded-xl px-4 py-3 mt-1.5 ${setting.status?.status === 'failed' && index <= currentIndex ? ' border-red-600 bg-red-100/30' : 'border-orange-400 bg-orange-100/30'}`}>
+                                                       <div className="flex gap-2 items-center relative">
+                                                           {setting.status?.status === 'queued' ? <QueueListIcon className="h-6 w-6" />: setting.status?.status === 'processing' ? <ArrowPathRoundedSquareIcon className="h-6 w-6" /> : <FaceFrownIcon className="h-6 w-6 text-red-600" />}
+                                                           <h3 className="text-sm">{setting.status?.status && setting.status?.status.charAt(0).toUpperCase() + setting.status?.status.slice(1) + ' to optimize'}</h3>
+
+                                                       </div>
+                                                       {loadingStatuses.includes(setting.status?.status || '') &&(
+                                                           <div className="ml-8">
+                                                               <Loading className={'text-gray-500'} customMessage={'Processing in progress — just '} customMessageAfter={'seconds to completion. Hang tight!'} url={url} countDown={true}/>
                                                            </div>
-                                                       ):(
-                                                           <>
-                                                               <Loading className={'text-sm'} customMessage={'Processing in progress — just '} customMessageAfter={'seconds to completion. Hang tight!'} url={url} countDown={true}/>
-                                                               <div className="border-2 border-red-600 bg-red-100/30 rounded-xl px-4 py-3 mt-1">
-                                                                   <div className="flex gap-2 items-center relative">
-                                                                       <FaceFrownIcon className="h-6 w-6 text-red-600" />
-                                                                       <h3 className="text-sm"> Failed to optimize</h3>
-                                                                   </div>
-                                                                   <div className="ml-8">
-                                                                       <Loading className={''} customMessage={'Processing in progress — just '} customMessageAfter={'seconds to completion. Hang tight!'} url={url} countDown={true}/>
-                                                                   </div>
-                                                               </div>
-                                                           </>
-
                                                        )}
+                                                   </div>
 
 
                                                </div>
                                            </>
 
                                        ): index !== filteredSettings.length - 1 && (
-                                           <div className="py-4"></div>
+                                           <div className="py-3"></div>
                                        )}
 
                                    </div>
@@ -174,14 +174,16 @@ const OptimizerInprogress = () => {
 
                        </div>
 
-
-
                        <div className="inline-block border-t w-full">
                            <div className="space-y-5 px-16 py-6">
                                <div className="flex gap-4 items-center">
                         <span className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
+                            {checkCircleCount == filteredSettings?.length ?
+                                ( <CheckCircleIcon className="w-7 h-7 fill-green-600" />):(
+                                    <Loader className='w-5 animate-spin text-brand-800'/>
+                                )}
                         </span>
-                                   <p>{currentIndex + 1} out of 6 steps are completed...</p>
+                                   <p className="text-gray-400">{checkCircleCount} out of {filteredSettings?.length} steps are completed...</p>
                                </div>
                            </div>
                        </div>
@@ -194,7 +196,8 @@ const OptimizerInprogress = () => {
                            <Button
                                onClick={() => {
                                dispatch(fetchData(options, url, true))
-                               dispatch(setCommonState('inProgress', false))
+                               //dispatch(setCommonState('inProgress', false))
+                                   setShowInprogress(false);
                            }}
                                    className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>
                                <RefreshCw className={cn(

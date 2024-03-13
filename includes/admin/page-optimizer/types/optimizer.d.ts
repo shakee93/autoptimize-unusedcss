@@ -2,6 +2,7 @@
 
 interface OptimizerResults  {
     performance: number
+    job_id?: string;
     audits: Audit[]
     metrics: Metric[],
     loadingExperience?: LoadingExperience

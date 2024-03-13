@@ -30,6 +30,8 @@ interface OptimizerContextProps {
     optimizerContainer: RefObject<HTMLElement>
     invalidatingCache: boolean
     setInvalidatingCache: Dispatch<SetStateAction<boolean>>;
+    showInprogress: boolean;
+    setShowInprogress: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
@@ -44,6 +46,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
+    const [showInprogress, setShowInprogress] = useState<boolean>(false);
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);
@@ -140,7 +143,9 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             setSavingData,
             optimizerContainer,
             invalidatingCache,
-            setInvalidatingCache
+            setInvalidatingCache,
+            showInprogress,
+            setShowInprogress
         }}>
             {children}
         </AppContext.Provider>

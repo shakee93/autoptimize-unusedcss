@@ -23,7 +23,7 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
+    const {showOptimizer, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
@@ -54,7 +54,8 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         dispatch(fetchData(options, options.optimizer_url, false))
-        dispatch(setCommonState('inProgress', false))
+        //dispatch(setCommonState('inProgress', false))
+        setShowInprogress(false);
     }, [dispatch, activeReport]);
 
 

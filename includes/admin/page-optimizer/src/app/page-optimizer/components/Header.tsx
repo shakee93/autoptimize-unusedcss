@@ -40,14 +40,16 @@ const Header = ({ url }: { url: string}) => {
         setShowOptimizer ,
         options,
         version,
-        mode
+        mode,
+        showInprogress,
+        setShowInprogress
     } = useAppContext()
 
     const { activeReport,
         loading, error,
         settings
     } = useSelector(optimizerData);
-
+    const {inProgress } = useCommonDispatch()
     const {
         activeTab,
         activeMetric,
@@ -93,9 +95,9 @@ const Header = ({ url }: { url: string}) => {
                     <div className='flex overflow-hidden border rounded-2xl shadow'>
                         <UrlPreview/>
                         <UnsavedChanges
-                            title='Analyze without Saving?'
+                            title='Analyze without applying optimization?'
                             description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
-                            action='Save & Analyze'
+                            action='Apply Optimization'
                             cancel='Discard & Analyze'
                             onCancel={() => {
                                 dispatch(fetchData(options, url, true))
@@ -103,7 +105,7 @@ const Header = ({ url }: { url: string}) => {
                             }}
                             onClick={() =>  {
                                 // dispatch(fetchData(options, url, true))
-                                dispatch(setCommonState('inProgress', true))
+                               // dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
 
                             }} >
@@ -116,7 +118,7 @@ const Header = ({ url }: { url: string}) => {
                                                'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
                                            )}
                                            variant='outline'>
-                                    <div className='flex flex-col gap-[1px] items-center'>
+                                    <div className={`flex flex-col gap-[1px] items-center`}>
                                         <RefreshCw className={cn(
                                             'w-4 -mt-0.5',
                                             loading && 'animate-spin'
@@ -150,7 +152,7 @@ const Header = ({ url }: { url: string}) => {
 
 
             <div className='flex relative gap-4 items-center'>
-                {!loading && (
+                {!loading && !showInprogress && (
                     <>
                     {!error && <SaveChanges/>}
                     </>
@@ -159,7 +161,10 @@ const Header = ({ url }: { url: string}) => {
                 <UnsavedChanges
                     onCancel={() => { setShowOptimizer(false) }}
                     cancel='Discard & Leave'
-                    onClick={() => { setShowOptimizer(false) }} >
+                    onClick={() => {
+                        setShowOptimizer(false);
+                        setShowInprogress(false);
+                    }} >
                     <TooltipText text='Close Optimizer'>
                         <LogOut className={cn(
                             'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',

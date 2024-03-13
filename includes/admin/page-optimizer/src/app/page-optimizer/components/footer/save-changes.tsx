@@ -37,6 +37,7 @@ import useSubmitSettings from "hooks/useSubmitSettings";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import TooltipText from "components/ui/tooltip-text";
 import Loading from "components/loading";
+import {setCommonState} from "../../../../store/common/commonActions";
 
 const SaveChanges = () => {
 
@@ -111,13 +112,13 @@ const SaveChanges = () => {
         },
         {
             text: <div className='flex w-full items-center justify-between'>
-                Save & Analyze
+                {/*Save & Analyze*/} Apply Optimization
                 {/*<TooltipText text='2 Optimizations are in progess'>*/}
                 {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
                 {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
                 {/*</TooltipText>*/}
             </div>,
-            title: 'Save Changes and Analyze?',
+            title: 'Do you want to Apply Optimization?',
             description: <div className=''>
                 {/*{false ?*/}
                 {inProgressSettings.length > 0 ?
@@ -164,18 +165,14 @@ const SaveChanges = () => {
                     </div>
                 :
                     <div>
-                        You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.
+                        You have made changes to your settings. Click 'Apply Optimization' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.
                     </div>
                 }
             </div>,
             onClick : () => {
-                submitSettings(true)
-                //console.log("test")
-               // dispatch(fetchData(options, url, true));
-               // dispatch({ type: FETCH_DATA_REQUEST, activeReport });
-               // setInProgress(true);
+                submitSettings(false)
             },
-            action_text: "Save & Analyze"
+            action_text: "Apply Optimization"
         },
         {
             text: 'Save this for Entire Site',

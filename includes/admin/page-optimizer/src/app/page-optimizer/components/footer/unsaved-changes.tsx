@@ -15,6 +15,8 @@ import TooltipText from "components/ui/tooltip-text";
 import {setCommonState} from "../../../../store/common/commonActions";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../store/app/appTypes";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {useAppContext} from "../../../../context/app";
 
 interface Props {
     children: ReactNode
@@ -30,11 +32,12 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
 
     const { touched, fresh } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
-
+    const {inProgress } = useCommonDispatch()
+    const {showInprogress} = useAppContext()
     // console.log(fresh, touched);
     // return <>{children}</>;
 
-    if (!(fresh ? true : touched)) {
+    if (!(fresh ? true : touched) || showInprogress) {
         return <div onClick={e => onClick()} >
             {children}
         </div>
@@ -44,8 +47,7 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
     const submit = async () => {
 
         //await submitSettings(action === 'Save & Analyze');
-
-        await submitSettings(action === 'Save');
+        await submitSettings(false);
         onClick();
         // setTimeout(() => {
         //     onClick();

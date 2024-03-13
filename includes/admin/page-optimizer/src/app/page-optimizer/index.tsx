@@ -34,7 +34,8 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, activeMetric, inProgress } = useCommonDispatch()
+    const { dispatch, activeMetric } = useCommonDispatch()
+    const { showInprogress } = useAppContext();
 
     const {
         options,
@@ -83,7 +84,7 @@ export default function PageOptimizer() {
                 savingData && 'relative overflow-hidden'
             )}>
 
-                {!loading && !inProgress? (
+                {!loading && !showInprogress? (
                     <section
                         ref={optimizerContainer}
                         className={cn(
@@ -134,7 +135,7 @@ export default function PageOptimizer() {
                             </article>
                         </>}
                     </section>
-                ) : inProgress && !savingData ?(
+                ) : showInprogress && !savingData ?(
                     <OptimizerInprogress />
                 ) : (
                     <Loading url={url}/>
