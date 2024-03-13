@@ -85,7 +85,7 @@ class RapidLoad_Optimizer
             'titan_reset_to_default' => 'titan_reset_to_default',
             'latest_page_speed' => 'latest_page_speed',
             'preload_page' => 'preload_page',
-            'rapidlaod_css_job_status' => 'rapidlaod_css_job_status',
+            'rapidload_css_job_status' => 'rapidload_css_job_status',
         ];
 
         foreach ($actions as $action => $method) {
@@ -94,7 +94,7 @@ class RapidLoad_Optimizer
         }
     }
 
-    public function rapidlaod_css_job_status(){
+    public function rapidload_css_job_status(){
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'uucss';
