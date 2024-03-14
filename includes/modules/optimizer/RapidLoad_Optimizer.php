@@ -84,13 +84,31 @@ class RapidLoad_Optimizer
             'optimizer_update_settings' => 'handle_ajax_optimizer_update_settings',
             'titan_reset_to_default' => 'titan_reset_to_default',
             'latest_page_speed' => 'latest_page_speed',
-            'preload_page' => 'preload_page'
+            'preload_page' => 'preload_page',
+            'rapidload_css_job_status' => 'rapidload_css_job_status',
         ];
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
             add_action("wp_ajax_nopriv_$action", [$this, $method]);
         }
+    }
+
+    public function rapidload_css_job_status(){
+
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'uucss';
+
+        $url = $this->transform_url($url);
+
+        $job = new RapidLoad_Job([
+            'url' => $url
+        ]);
+
+        $job_data = new RapidLoad_Job_Data($job,$type);
+
+        wp_send_json_success((array)$job_data);
+
     }
 
     public function latest_page_speed(){

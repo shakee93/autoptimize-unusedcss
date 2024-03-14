@@ -634,6 +634,8 @@ trait RapidLoad_Utils {
 
     public static function get_width_height($file_path){
 
+        $file_path = urldecode($file_path);
+
         if (!is_file($file_path)) {
             return false;
         }
