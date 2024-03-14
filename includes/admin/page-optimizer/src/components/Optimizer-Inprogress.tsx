@@ -9,7 +9,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {AppAction, RootState} from "../store/app/appTypes";
-import {changeReport, fetchData} from "../store/app/appActions";
+import {changeReport, fetchData, getCSSStatus} from "../store/app/appActions";
 import {setCommonState} from "../store/common/commonActions";
 import Loading from "components/loading";
 import {m, AnimatePresence} from "framer-motion";
@@ -24,7 +24,7 @@ const OptimizerInprogress = () => {
     const { options, savingData, setShowInprogress } = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
-    const {activeReport} = useSelector((state: RootState) => state.app);
+    const {activeReport, cssStatus} = useSelector((state: RootState) => state.app);
     const {inProgress } = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
 
@@ -42,7 +42,7 @@ const OptimizerInprogress = () => {
 
     useEffect(() => {
         if (!filteredSettings) return;
-
+        console.log(settings);
         const interval = setInterval(() => {
             setCurrentIndex(prevIndex => {
                 if (prevIndex === filteredSettings.length - 1) {
@@ -59,9 +59,11 @@ const OptimizerInprogress = () => {
 
     useEffect(() => {
         filteredSettings?.forEach(setting => {
-            if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
+            if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && cssStatus?.cpcss?.status !== 'success') {
                 setTimeout(() => {
-                    dispatch(fetchData(options, url, false, true));
+                  //  dispatch(fetchData(options, url, false, true));
+                    dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']))
+
                 }, 10000);
             }
         });
@@ -74,6 +76,7 @@ const OptimizerInprogress = () => {
         let count = 0;
         for (let index = 0; index < filteredSettings.length; index++) {
             const setting = filteredSettings[index];
+            //includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success'
             if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
                 continue;
             }
@@ -87,9 +90,9 @@ const OptimizerInprogress = () => {
     useEffect(() => {
         if(checkCircleCount  == filteredSettings?.length){
             const timer = setTimeout(() => {
-                //dispatch(setCommonState('inProgress', false));
                 setShowInprogress(false);
                 dispatch(fetchData(options, url, true));
+                //dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']))
             }, 3000);
             return () => clearTimeout(timer);
         }

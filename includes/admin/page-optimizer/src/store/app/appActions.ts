@@ -8,7 +8,8 @@ import {
     FETCH_DATA_SUCCESS,
     RootState,
     UPDATE_FILE_ACTION,
-    UPDATE_SETTINGS
+    UPDATE_SETTINGS,
+    GET_CSS_STATUS_SUCCESS
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -137,6 +138,28 @@ const initiateSettings = (audits: Audit[]) => {
             )
         }))
     }))
+}
+
+export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const cssJobStatus = await api.getCSSJobStatus(url, types);
+            console.log(cssJobStatus);
+            dispatch({
+                type: GET_CSS_STATUS_SUCCESS,
+                payload: cssJobStatus
+            })
+
+        } catch (error) {
+            console.error('Error fetching CSS job status:', error);
+        }
+
+
+    }
 }
 
 export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {

@@ -168,6 +168,25 @@ class ApiService {
        }
     }
 
+    async getCSSJobStatus(url: string, types: string[]): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_css_job_status');
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('types', types.join(','))
+
+            const response = await fetch(this.baseURL, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 

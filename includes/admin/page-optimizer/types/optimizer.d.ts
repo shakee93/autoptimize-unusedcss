@@ -205,6 +205,16 @@ interface Metric {
 
 type ReportType = 'mobile' | 'desktop'
 
+interface CSSJobStatus {
+    status: string;
+}
+
+interface CSSStatusResponse {
+    uucss: CSSJobStatus;
+    cpcss: CSSJobStatus;
+}
+
+
 interface Revision {
     created_at: string
     id: number
