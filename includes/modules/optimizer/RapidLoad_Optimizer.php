@@ -97,7 +97,6 @@ class RapidLoad_Optimizer
     public function rapidload_css_job_status(){
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'uucss';
 
         $url = $this->transform_url($url);
 
@@ -105,9 +104,18 @@ class RapidLoad_Optimizer
             'url' => $url
         ]);
 
-        $job_data = new RapidLoad_Job_Data($job,$type);
+        $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
+        $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
 
-        wp_send_json_success((array)$job_data);
+
+        wp_send_json_success([
+            'uucss' => [
+                'status' => $job_data_uucss->status,
+            ],
+            'cpcss' => [
+                'status' => $job_data_cpcss->status,
+            ]
+        ]);
 
     }
 
