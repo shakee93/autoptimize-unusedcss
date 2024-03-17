@@ -147,11 +147,10 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
 
         try {
-            const cssJobStatus = await api.getCSSJobStatus(url, types);
-            console.log(cssJobStatus);
+            const cssJobStatusResult = await api.getCSSJobStatus(url, types);
             dispatch({
                 type: GET_CSS_STATUS_SUCCESS,
-                payload: cssJobStatus
+                payload : cssJobStatusResult.data
             })
 
         } catch (error) {

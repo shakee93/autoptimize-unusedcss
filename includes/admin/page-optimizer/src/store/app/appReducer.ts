@@ -5,11 +5,13 @@ import {
     FETCH_DATA_FAILURE,
     FETCH_DATA_REQUEST,
     FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
-    UPDATE_SETTINGS
+    UPDATE_SETTINGS,
+    GET_CSS_STATUS_SUCCESS
 } from "./appTypes";
 
 const initialState: AppState = {
     activeReport: 'desktop',
+    cssStatus: null,
     mobile: {
         original: null,
         changes: {
@@ -41,6 +43,11 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case GET_CSS_STATUS_SUCCESS:
+            return {
+                ...state,
+                cssStatus: action.payload
+            };
         case FETCH_DATA_REQUEST:
             return {
                 ...state,

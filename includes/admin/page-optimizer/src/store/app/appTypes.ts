@@ -51,7 +51,8 @@ export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
-    payload: CSSStatusResponse;
+    payload : CSSStatusResponse,
+
 }
 
 interface FetchDataRequestAction {
