@@ -163,12 +163,12 @@ const OptimizerInprogress = () => {
 
                                            <React.Fragment key={index}>
                                                {checkStatusCondition(setting.name) ? (
-                                                   <Loader className='w-5 animate-spin text-brand-800'/>
+                                                   <Loader className='w-5 animate-spin'/>
                                                ) : (
                                                    index <= currentIndex ? (
                                                        <CheckCircleIcon className="w-7 h-7 fill-green-600" />
                                                    ) : (
-                                                       <Loader className='w-5 animate-spin text-brand-800'/>
+                                                       <Loader className='w-5 animate-spin'/>
                                                    )
                                                )}
                                            </React.Fragment>
@@ -181,7 +181,7 @@ const OptimizerInprogress = () => {
                                        {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>
                                                <div className="ml-[29px]">
-                                                   <Loading className={'text-sm text-gray-500 -mt-2'}
+                                                   <Loading className={'text-sm text-gray-500 dark:text-brand-400 -mt-2'}
                                                             customMessage={'Processing in progress — just '}
                                                             customMessageAfter={'seconds to completion. Hang tight!'}
                                                             url={url} countDown={true} />
@@ -193,12 +193,12 @@ const OptimizerInprogress = () => {
                                                                className="h-6 w-6" /> : cssStatus?.cpcss?.status === 'processing' || cssStatus?.uucss?.status === 'processing' ?
                                                                <ArrowPathRoundedSquareIcon className="h-6 w-6" /> :
                                                                <FaceFrownIcon className="h-6 w-6 text-red-600" />}
-                                                           <h3 className="text-sm">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>
+                                                           <h3 className="text-sm ">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>
 
                                                        </div>
                                                        {(loadingStatuses.includes(cssStatus?.cpcss?.status || '') || loadingStatuses.includes(cssStatus?.uucss?.status || '')) && (
                                                            <div className="ml-8">
-                                                               <Loading className={'text-gray-500'}
+                                                               <Loading className={'text-gray-500 dark:text-brand-400'}
                                                                         customMessage={'Processing in progress — just '}
                                                                         customMessageAfter={'seconds to completion. Hang tight!'}
                                                                         url={url} countDown={true} />
@@ -228,7 +228,7 @@ const OptimizerInprogress = () => {
                         <span className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                             {checkCircleCount == filteredSettings?.length ?
                                 ( <CheckCircleIcon className="w-7 h-7 fill-green-600" />):(
-                                    <Loader className='w-5 animate-spin text-brand-800'/>
+                                    <Loader className='w-5 animate-spin'/>
                                 )}
                         </span>
                                    <p className="text-gray-400">{checkCircleCount} out of {filteredSettings?.length} steps are completed...</p>

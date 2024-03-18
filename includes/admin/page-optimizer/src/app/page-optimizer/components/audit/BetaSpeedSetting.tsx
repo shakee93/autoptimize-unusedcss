@@ -103,7 +103,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
         return (
         <>
             <div className=' flex gap-2 items-center text-xs w-fit rounded-lg'>
-                <Loader className='w-4 animate-spin text-brand-800'/>
+                <Loader className='w-4 animate-spin '/>
                 Optimization in progress
             </div>
         </>
