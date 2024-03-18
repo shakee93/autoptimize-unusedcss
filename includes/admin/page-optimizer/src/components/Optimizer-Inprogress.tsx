@@ -67,28 +67,36 @@ const OptimizerInprogress = () => {
         return () => clearInterval(interval);
     }, [filteredSettings]);
 
+    const [statusSent, setStatusSent] = useState(false);
 
     useEffect(() => {
         intervalRef.current = setInterval(() => {
-            filteredSettings?.forEach(setting => {
+            const statusNeedsUpdate = filteredSettings?.some(setting => {
                 if ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success') ||
                     (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success')) {
-                    dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
-                } else {
-                    if (intervalRef.current) {
-                        clearInterval(intervalRef.current);
-                    }
+                    return true;
                 }
+                return false;
             });
-        }, 10000);
 
+            if (statusNeedsUpdate && !statusSent) {
+                dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
+                setStatusSent(true);
+
+                setTimeout(() => {
+                    setStatusSent(false);
+                }, 9000);
+            }
+        }, 10000);
 
         return () => {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
         };
-    }, [dispatch, settings, checkCircleCount, cssStatus, filteredSettings, options, url]);
+    }, [dispatch, cssStatus, filteredSettings, options, url, statusSent]);
+
+
 
     useEffect(() => {
 
@@ -97,9 +105,6 @@ const OptimizerInprogress = () => {
         let count = 0;
         for (let index = 0; index < filteredSettings.length; index++) {
             const setting = filteredSettings[index];
-            // if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
-            //     continue;
-            // }
             if (includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success') {
                 continue;
             }
@@ -149,18 +154,6 @@ const OptimizerInprogress = () => {
                                <div key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
-                                           {/*<React.Fragment key={index}>*/}
-                                           {/*    {includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success' ? (*/}
-                                           {/*        <Loader className='w-5 animate-spin text-brand-800'/>*/}
-                                           {/*    ) : (*/}
-                                           {/*        index <= currentIndex ? (*/}
-                                           {/*            <CheckCircleIcon className="w-7 h-7 fill-green-600" />*/}
-                                           {/*        ) : (*/}
-                                           {/*            <Loader className='w-5 animate-spin text-brand-800'/>*/}
-                                           {/*        )*/}
-                                           {/*    )}*/}
-                                           {/*</React.Fragment>*/}
-
                                            <React.Fragment key={index}>
                                                {checkStatusCondition(setting.name) ? (
                                                    <Loader className='w-5 animate-spin'/>
