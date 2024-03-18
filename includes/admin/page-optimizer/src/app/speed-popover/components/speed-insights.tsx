@@ -34,7 +34,7 @@ import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import ErrorFetch from "components/ErrorFetch";
 import {cn} from "lib/utils";
 
-const Content = () => {
+const Content = ({  dashboard = false }: { dashboard?: boolean }) => {
 
     const {setShowOptimizer, options, version} = useAppContext()
     const {data, error, loading, activeReport} = useSelector(optimizerData);
@@ -159,8 +159,9 @@ const Content = () => {
     return (
         <div
             className={cn(
-                'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-w-[565px] min-h-[295px] w-fit py-6 px-6  mx-16 my-2 ',
-                'backdrop-blur-md bg-brand-100/90 dark:bg-brand-900/95 shadow-xl rounded-[50px] border border-brand-500/20 '
+                'relative text-base text-brand-950 dark:text-brand-50 flex flex-col justify-center min-h-[295px] w-fit py-6 px-6  ',
+                'backdrop-blur-md  dark:bg-brand-900/95 border border-brand-500/20 ',
+                dashboard? 'min-w-[652px] rounded-3xl bg-brand-0':'mx-16 my-2 shadow-xl min-w-[565px] rounded-[50px] bg-brand-100/90'
             )}>
             <div className='flex gap-6'>
                 <div className='flex flex-col gap-3 px-4 items-center'>
@@ -263,8 +264,9 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children}: {
+const SpeedInsights = ({children, dashboardMode = false}: {
     children: ReactNode,
+    dashboardMode?: boolean,
 }) => {
 
     const {options} = useAppContext()
@@ -273,22 +275,30 @@ const SpeedInsights = ({children}: {
     const root = options?.plugin_url
 
     return (
-        <HoverCard
-            // open={true}
-            openDelay={0}>
-            <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
-                <HoverCardTrigger asChild>
-                    <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
-                        {children}
-                    </div>
-                </HoverCardTrigger>
-            </a>
-            <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
-                <Content/>
-            </HoverCardContent>
-        </HoverCard>
+        <>
+        {dashboardMode ?(
+                <Content dashboard={true}/>
+            ):(
+                <HoverCard
+                    // open={true}
+                    openDelay={0}>
+                    <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
+                        <HoverCardTrigger asChild>
+                            <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+                                {children}
+                            </div>
+                        </HoverCardTrigger>
+                    </a>
+                    <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+                        <Content/>
+                    </HoverCardContent>
+                </HoverCard>
+            )}
+        </>
     );
 
 }
 
 export default SpeedInsights
+
+

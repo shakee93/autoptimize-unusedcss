@@ -32,7 +32,7 @@ const LicenseWidget = () => {
                     </div>
                     <div className="text-lg font-bold">Abdul Azeez</div>
                 </div>
-                <div className="content flex flex-col px-6 py-6 dark:bg-brand-900 bg-brand-200/30 m-6 rounded-3xl">
+                <div className="content flex flex-col px-6 py-6 dark:bg-brand-900 bg-brand-100/90 m-6 rounded-3xl">
                     <div className='flex justify-end'>
 
                     </div>

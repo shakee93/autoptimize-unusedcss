@@ -27,6 +27,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
 import {JsonView} from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
+import SpeedInsights from "../speed-popover/components/speed-insights";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -88,7 +89,7 @@ export default function Dashbaord() {
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                            'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[84px] mt-4',
+                            'relative container grid grid-cols-4 gap-8 pt-[84px] mt-4',
                         )}>
 
                         {(savingData || invalidatingCache) && (
@@ -107,19 +108,19 @@ export default function Dashbaord() {
                             </div> :
                             <>
 
-                                <div className="col-span-12 lg:col-span-3">
+                                <div className="">
 
                                     <div   className="widgets pt-4 flex">
                                         <PageSpeedWidget/>
                                     </div>
                                 </div>
-                                <div className="col-span-12 lg:col-span-3">
+                                <div className="">
 
                                     <div   className="widgets pt-4 flex">
                                         <CacheSummary/>
                                     </div>
                                 </div>
-                                <div className="col-span-12 lg:col-span-3">
+                                <div className="">
 
                                     <div   className="widgets pt-4 gap-4 grid">
                                         <UnusedCSSSummary
@@ -148,27 +149,34 @@ export default function Dashbaord() {
 
                                     </div>
                                 </div>
-                                <div className="col-span-12 lg:col-span-3">
+                                <div className="">
 
                                     <div   className="widgets pt-4 gap-4 grid">
                                         <LicenseWidget/>
                                         <CDNSummary/>
                                     </div>
                                 </div>
-                                <article className={cn(
-                                     'col-span-12'
-                                )}>
+                                <div className="col-span-2">
+                                    <div className="widgets pt-4 gap-4 grid">
+                                        <SpeedInsights dashboardMode={true}>
 
-                                    {/*<AnimatePresence initial={true} mode='wait'>*/}
-                                    {/*    {activeMetric ? (*/}
-                                    {/*        <SpeedIndex/>*/}
-                                    {/*    ) : (*/}
-                                    {/*        <SlideUp uuid='perf'>*/}
-                                    {/*            <Performance/>*/}
-                                    {/*        </SlideUp>*/}
-                                    {/*    )}*/}
-                                    {/*</AnimatePresence>*/}
-                                </article>
+                                        </SpeedInsights>
+                                    </div>
+                                </div>
+                                {/*<article className={cn(*/}
+                                {/*     'col-span-12'*/}
+                                {/*)}>*/}
+
+                                {/*    /!*<AnimatePresence initial={true} mode='wait'>*!/*/}
+                                {/*    /!*    {activeMetric ? (*!/*/}
+                                {/*    /!*        <SpeedIndex/>*!/*/}
+                                {/*    /!*    ) : (*!/*/}
+                                {/*    /!*        <SlideUp uuid='perf'>*!/*/}
+                                {/*    /!*            <Performance/>*!/*/}
+                                {/*    /!*        </SlideUp>*!/*/}
+                                {/*    /!*    )}*!/*/}
+                                {/*    /!*</AnimatePresence>*!/*/}
+                                {/*</article>*/}
                             </>}
                     </section>
                 ) : (
