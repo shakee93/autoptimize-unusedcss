@@ -100,7 +100,6 @@ const OptimizerInprogress = () => {
             // if (includesStatusSettings(setting.name, ['Critical CSS', 'Unused CSS']) && setting.status?.status !== 'success') {
             //     continue;
             // }
-            // console.log( "Data cpcss:", includesStatusSettings(setting.name, ['Critical CSS']), cssStatus?.cpcss?.status);
             if (includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success') {
                 continue;
             }
@@ -125,6 +124,11 @@ const OptimizerInprogress = () => {
         }
     }, [checkCircleCount]);
 
+    // Define a function to check status condition
+    const checkStatusCondition = (name: string) => {
+        return includesStatusSettings(name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success'
+    };
+
     return (
        <m.div
            initial={{ opacity: 0 }}
@@ -145,8 +149,20 @@ const OptimizerInprogress = () => {
                                <div key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
+                                           {/*<React.Fragment key={index}>*/}
+                                           {/*    {includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success' ? (*/}
+                                           {/*        <Loader className='w-5 animate-spin text-brand-800'/>*/}
+                                           {/*    ) : (*/}
+                                           {/*        index <= currentIndex ? (*/}
+                                           {/*            <CheckCircleIcon className="w-7 h-7 fill-green-600" />*/}
+                                           {/*        ) : (*/}
+                                           {/*            <Loader className='w-5 animate-spin text-brand-800'/>*/}
+                                           {/*        )*/}
+                                           {/*    )}*/}
+                                           {/*</React.Fragment>*/}
+
                                            <React.Fragment key={index}>
-                                               {includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success' ? (
+                                               {checkStatusCondition(setting.name) ? (
                                                    <Loader className='w-5 animate-spin text-brand-800'/>
                                                ) : (
                                                    index <= currentIndex ? (
@@ -162,7 +178,7 @@ const OptimizerInprogress = () => {
                                    </div>
 
                                    <div className="ml-3.5 grid gap-2 border-l my-2">
-                                       {cssStatus != null && (includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success' || includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.cpcss?.status !== 'success') ? (
+                                       {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>
                                                <div className="ml-[29px]">
                                                    <Loading className={'text-sm text-gray-500 -mt-2'}
