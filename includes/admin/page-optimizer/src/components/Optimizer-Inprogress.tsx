@@ -12,7 +12,7 @@ import {AppAction, RootState} from "../store/app/appTypes";
 import {changeReport, fetchData, getCSSStatus} from "../store/app/appActions";
 import {setCommonState} from "../store/common/commonActions";
 import Loading from "components/loading";
-import {m, AnimatePresence} from "framer-motion";
+import {m, AnimatePresence, motion } from "framer-motion";
 import {Button} from "components/ui/button";
 import {cn} from "lib/utils";
 
@@ -62,7 +62,7 @@ const OptimizerInprogress = () => {
                 }
                 return prevIndex + 1;
             });
-        }, 2000);
+        }, 1300);
 
         return () => clearInterval(interval);
     }, [filteredSettings]);
@@ -147,11 +147,16 @@ const OptimizerInprogress = () => {
                <div className='py-20 grid justify-center items-center '>
                    <div className="mb-3.5 rounded-[40px] min-w-[650px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
 
-                       <div className=" px-16 py-10 ">
+                       <div className="px-16 py-10">
 
                            {filteredSettings?.map((setting, index: number) => (
 
-                               <div key={index} className="grid font-medium">
+                               <motion.div
+                                   initial={{opacity: 0, y: 80}}
+                                   animate={{opacity: 1, y: 0}}
+                                   exit={{opacity: 0, y: -20}}
+                                   transition={{ delay: index * 0.5 }}
+                                   key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                                            <React.Fragment key={index}>
@@ -170,35 +175,83 @@ const OptimizerInprogress = () => {
                                        <h1 className="text-base">{setting.name.includes('Cache' ) ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
                                    </div>
 
+                                   {/*<div className="ml-3.5 grid gap-2 border-l my-2">*/}
+                                   {/*    {cssStatus != null && (checkStatusCondition(setting.name)) ? (*/}
+                                   {/*        <>*/}
+                                   {/*            <div className="ml-[29px]">*/}
+                                   {/*                <Loading className={'text-sm text-gray-500 dark:text-brand-400 -mt-2'}*/}
+                                   {/*                         customMessage={'Processing in progress — just '}*/}
+                                   {/*                         customMessageAfter={'seconds to completion. Hang tight!'}*/}
+                                   {/*                         url={url} countDown={true} />*/}
+
+                                   {/*                <div*/}
+                                   {/*                    className={`border-2 rounded-xl px-4 py-3 mt-1.5 ${(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') && index <= currentIndex ? ' border-red-600 bg-red-100/30' : 'border-orange-400 bg-orange-100/30'}`}>*/}
+                                   {/*                    <div className="flex gap-2 items-center relative">*/}
+                                   {/*                        {(cssStatus?.cpcss?.status === 'queued' || cssStatus?.uucss?.status === 'queued') ? <QueueListIcon*/}
+                                   {/*                            className="h-6 w-6" /> : cssStatus?.cpcss?.status === 'processing' || cssStatus?.uucss?.status === 'processing' ?*/}
+                                   {/*                            <ArrowPathRoundedSquareIcon className="h-6 w-6" /> :*/}
+                                   {/*                            <FaceFrownIcon className="h-6 w-6 text-red-600" />}*/}
+                                   {/*                        <h3 className="text-sm ">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>*/}
+
+                                   {/*                    </div>*/}
+                                   {/*                    {(loadingStatuses.includes(cssStatus?.cpcss?.status || '') || loadingStatuses.includes(cssStatus?.uucss?.status || '')) && (*/}
+                                   {/*                        <div className="ml-8">*/}
+                                   {/*                            <Loading className={'text-gray-500 dark:text-brand-400'}*/}
+                                   {/*                                     customMessage={'Processing in progress — just '}*/}
+                                   {/*                                     customMessageAfter={'seconds to completion. Hang tight!'}*/}
+                                   {/*                                     url={url} countDown={true} />*/}
+                                   {/*                        </div>*/}
+                                   {/*                    )}*/}
+                                   {/*                </div>*/}
+
+
+                                   {/*            </div>*/}
+                                   {/*        </>*/}
+
+                                   {/*    ) : index !== filteredSettings.length - 1 && (*/}
+                                   {/*        <div className="py-3"></div>*/}
+                                   {/*    )*/}
+                                   {/*    }*/}
+
+
+                                   {/*</div>*/}
+
                                    <div className="ml-3.5 grid gap-2 border-l my-2">
                                        {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>
                                                <div className="ml-[29px]">
                                                    <Loading className={'text-sm text-gray-500 dark:text-brand-400 -mt-2'}
-                                                            customMessage={'Processing in progress — just '}
+                                                            //customMessage={'Processing in progress — just '}
+                                                            customMessage={
+                                                                ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ||
+                                                                    (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) ? (
+                                                                    (
+                                                                        (includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ?
+                                                                            cssStatus?.cpcss?.status : cssStatus?.uucss?.status
+                                                                    ).charAt(0).toUpperCase() + (
+                                                                        (includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ?
+                                                                            cssStatus?.cpcss?.status : cssStatus?.uucss?.status
+                                                                    ).slice(1) + ' to optimize — just '
+                                                                ) : ''
+                                                            }
                                                             customMessageAfter={'seconds to completion. Hang tight!'}
                                                             url={url} countDown={true} />
 
+                                                   {(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') &&
                                                    <div
-                                                       className={`border-2 rounded-xl px-4 py-3 mt-1.5 ${(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') && index <= currentIndex ? ' border-red-600 bg-red-100/30' : 'border-orange-400 bg-orange-100/30'}`}>
+                                                       className={`border-2 rounded-xl px-4 py-3 mt-1.5 border-red-600 bg-red-100/30`}>
                                                        <div className="flex gap-2 items-center relative">
-                                                           {(cssStatus?.cpcss?.status === 'queued' || cssStatus?.uucss?.status === 'queued') ? <QueueListIcon
-                                                               className="h-6 w-6" /> : cssStatus?.cpcss?.status === 'processing' || cssStatus?.uucss?.status === 'processing' ?
-                                                               <ArrowPathRoundedSquareIcon className="h-6 w-6" /> :
-                                                               <FaceFrownIcon className="h-6 w-6 text-red-600" />}
+                                                           <FaceFrownIcon className="h-6 w-6 text-red-600" />
                                                            <h3 className="text-sm ">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>
-
                                                        </div>
-                                                       {(loadingStatuses.includes(cssStatus?.cpcss?.status || '') || loadingStatuses.includes(cssStatus?.uucss?.status || '')) && (
-                                                           <div className="ml-8">
-                                                               <Loading className={'text-gray-500 dark:text-brand-400'}
-                                                                        customMessage={'Processing in progress — just '}
-                                                                        customMessageAfter={'seconds to completion. Hang tight!'}
-                                                                        url={url} countDown={true} />
-                                                           </div>
-                                                       )}
+                                                       <div className="ml-8">
+                                                           <Loading className={'text-gray-500 dark:text-brand-400'}
+                                                                    customMessage={'Processing in progress — just '}
+                                                                    customMessageAfter={'seconds to completion. Hang tight!'}
+                                                                    url={url} countDown={true} />
+                                                       </div>
                                                    </div>
-
+                                                   }
 
                                                </div>
                                            </>
@@ -210,7 +263,7 @@ const OptimizerInprogress = () => {
 
 
                                    </div>
-                               </div>
+                               </motion.div>
                            ))}
 
                        </div>
