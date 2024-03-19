@@ -111,9 +111,15 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'uucss' => [
                 'status' => $job_data_uucss->status,
+                'error' => $job_data_uucss->error,
+                'warnings' => $job_data_uucss->warnings,
+                'stats' => $job_data_uucss->stats
             ],
             'cpcss' => [
                 'status' => $job_data_cpcss->status,
+                'error' => $job_data_cpcss->error,
+                'warnings' => $job_data_cpcss->warnings,
+                'stats' => $job_data_cpcss->stats
             ]
         ]);
 
