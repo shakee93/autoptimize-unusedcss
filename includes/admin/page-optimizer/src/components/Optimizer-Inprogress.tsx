@@ -222,7 +222,7 @@ const OptimizerInprogress = () => {
 
                                    {/*</div>*/}
 
-                                   <div className="ml-3.5 grid gap-2 border-l my-2">
+                                   <div className="ml-3.5 grid gap-2 border-l my-1">
                                        {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>
                                                <div className="ml-[29px]">
@@ -243,7 +243,8 @@ const OptimizerInprogress = () => {
                                                             customMessageAfter={'seconds to completion. Hang tight!'}
                                                             url={url} countDown={true} />
 
-                                                   {(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') &&
+                                                   {(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') ?
+                                                       (
                                                    <div
                                                        className={`border-2 rounded-xl px-4 py-3 mt-1.5 border-red-600 bg-red-100/30`}>
                                                        <div className="flex gap-2 items-center relative">
@@ -252,12 +253,9 @@ const OptimizerInprogress = () => {
                                                        </div>
                                                        <div className="ml-8">
                                                            <p className={'text-gray-500 dark:text-brand-400'}>{(includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status)? unserialize(cssStatus?.cpcss?.error) : unserialize(cssStatus?.uucss?.error)}</p>
-                                                           {/*<Loading className={'text-gray-500 dark:text-brand-400'}*/}
-                                                           {/*         customMessage={'Processing in progress — just '}*/}
-                                                           {/*         customMessageAfter={'seconds to completion. Hang tight!'}*/}
-                                                           {/*         url={url} countDown={true} />*/}
                                                        </div>
                                                    </div>
+                                                       ):(<div className="py-1.5"></div>)
                                                    }
 
                                                </div>
