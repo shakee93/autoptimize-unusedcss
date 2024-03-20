@@ -134,6 +134,12 @@ const OptimizerInprogress = () => {
         return includesStatusSettings(name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success'
     };
 
+    function unserialize(serializedString : any) {
+
+        const serializedData = serializedString.match(/a:\d+:{.*?}/)[0];
+        const unescapedData = serializedData.replace(/\\"/g, '"');
+        return eval("(" + unescapedData + ")");
+    }
     return (
        <m.div
            initial={{ opacity: 0 }}
@@ -245,10 +251,11 @@ const OptimizerInprogress = () => {
                                                            <h3 className="text-sm ">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>
                                                        </div>
                                                        <div className="ml-8">
-                                                           <Loading className={'text-gray-500 dark:text-brand-400'}
-                                                                    customMessage={'Processing in progress — just '}
-                                                                    customMessageAfter={'seconds to completion. Hang tight!'}
-                                                                    url={url} countDown={true} />
+                                                           <p className={'text-gray-500 dark:text-brand-400'}>{(includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status)? unserialize(cssStatus?.cpcss?.error) : unserialize(cssStatus?.uucss?.error)}</p>
+                                                           {/*<Loading className={'text-gray-500 dark:text-brand-400'}*/}
+                                                           {/*         customMessage={'Processing in progress — just '}*/}
+                                                           {/*         customMessageAfter={'seconds to completion. Hang tight!'}*/}
+                                                           {/*         url={url} countDown={true} />*/}
                                                        </div>
                                                    </div>
                                                    }
