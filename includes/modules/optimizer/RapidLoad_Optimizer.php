@@ -84,13 +84,45 @@ class RapidLoad_Optimizer
             'optimizer_update_settings' => 'handle_ajax_optimizer_update_settings',
             'titan_reset_to_default' => 'titan_reset_to_default',
             'latest_page_speed' => 'latest_page_speed',
-            'preload_page' => 'preload_page'
+            'preload_page' => 'preload_page',
+            'rapidload_css_job_status' => 'rapidload_css_job_status',
         ];
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
             add_action("wp_ajax_nopriv_$action", [$this, $method]);
         }
+    }
+
+    public function rapidload_css_job_status(){
+
+        $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+
+        $url = $this->transform_url($url);
+
+        $job = new RapidLoad_Job([
+            'url' => $url
+        ]);
+
+        $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
+        $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+
+
+        wp_send_json_success([
+            'uucss' => [
+                'status' => $job_data_uucss->status,
+                'error' => $job_data_uucss->error,
+                'warnings' => $job_data_uucss->warnings,
+                'stats' => $job_data_uucss->stats
+            ],
+            'cpcss' => [
+                'status' => $job_data_cpcss->status,
+                'error' => $job_data_cpcss->error,
+                'warnings' => $job_data_cpcss->warnings,
+                'stats' => $job_data_cpcss->stats
+            ]
+        ]);
+
     }
 
     public function latest_page_speed(){
