@@ -89,7 +89,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
     if(status.status === 'queued') {
         return (
         <>
-            <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg '>
+            <div className='flex gap-2 items-center text-xs w-fit rounded-lg'>
                 <Circle className={cn(
                     'animate-pulse w-2.5 fill-amber-500 stroke-0'
                 )}/>

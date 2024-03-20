@@ -255,7 +255,7 @@ const OptimizerInprogress = () => {
                                                            <p className={'text-gray-500 dark:text-brand-400'}>{(includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status)? unserialize(cssStatus?.cpcss?.error) : unserialize(cssStatus?.uucss?.error)}</p>
                                                        </div>
                                                    </div>
-                                                       ):(<div className="py-1.5"></div>)
+                                                       ):(<div className="py-2"></div>)
                                                    }
 
                                                </div>
