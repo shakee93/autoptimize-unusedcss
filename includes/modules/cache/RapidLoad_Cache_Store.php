@@ -713,6 +713,7 @@ class RapidLoad_Cache_Store
         $new_settings_file_contents .= ' *' . PHP_EOL;
         $new_settings_file_contents .= ' * @site  ' . home_url() . PHP_EOL;
         $new_settings_file_contents .= ' * @time  ' . self::get_current_time() . PHP_EOL;
+        $new_settings_file_contents .= ' */' . PHP_EOL;
         $new_settings_file_contents .= PHP_EOL;
         $new_settings_file_contents .= 'return ' . var_export( $settings, true ) . ';';
 
