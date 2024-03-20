@@ -713,20 +713,6 @@ class RapidLoad_Cache_Store
         $new_settings_file_contents .= ' *' . PHP_EOL;
         $new_settings_file_contents .= ' * @site  ' . home_url() . PHP_EOL;
         $new_settings_file_contents .= ' * @time  ' . self::get_current_time() . PHP_EOL;
-        $new_settings_file_contents .= ' *' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.5.0' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_site_cache_on_saved_post` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_complete_cache_on_saved_post` setting was removed.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_site_cache_on_new_comment` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_complete_cache_on_new_comment` setting was removed.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_site_cache_on_changed_plugin` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.0  The `clear_complete_cache_on_changed_plugin` setting was removed.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.1  The `clear_site_cache_on_saved_comment` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.6.1  The `clear_site_cache_on_new_comment` setting was removed.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.7.0  The `mobile_cache` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.8.0  The `use_trailing_slashes` setting was added.' . PHP_EOL;
-        $new_settings_file_contents .= ' * @since  1.8.0  The `permalink_structure` setting was deprecated.' . PHP_EOL;
-        $new_settings_file_contents .= ' */' . PHP_EOL;
         $new_settings_file_contents .= PHP_EOL;
         $new_settings_file_contents .= 'return ' . var_export( $settings, true ) . ';';
 
