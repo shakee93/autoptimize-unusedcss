@@ -284,6 +284,10 @@ class RapidLoad_Enqueue {
             return false;
         }
 
+        if(isset($this->options['rapidload_test_mode']) && $this->options['rapidload_test_mode'] == "1"){
+            return false;
+        }
+
         return apply_filters('uucss/enabled', true);
 
     }

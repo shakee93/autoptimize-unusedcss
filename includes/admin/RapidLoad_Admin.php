@@ -659,6 +659,11 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['rapidload_test_mode'])){
+
+            $options['rapidload_test_mode'] = ($_REQUEST['rapidload_test_mode'] == 'true' ? 1 : 0);
+        }
+
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
 
         wp_send_json_success(RapidLoad_Base::get()->modules()->active_modules());
