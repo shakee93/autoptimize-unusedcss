@@ -868,6 +868,8 @@
 
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#">Remove</a></li>');
 
+                        $content.find('ul').append('<li data-action_name="preview"><a data-action_name="preview" target="_blank" href="' + data.url + '">Preview</a></li>');
+
                         return $content.wrap('<div></div>').parent().html();
                     },
                     onClickOutside(instance, event) {
@@ -911,6 +913,12 @@
                             var action = $this.data('action_name');
 
                             switch (action) {
+                                case 'preview':{
+                                    let dynamicUrl = $(this).attr('href').toString();
+                                    let additionalParam = "rapidload_preview_optimization";
+                                    window.open(dynamicUrl + (dynamicUrl.includes("?") ? "&" : "?") + additionalParam, "_blank");
+                                    break;
+                                }
                                 case 'requeue_url':{
                                     requeue('current', {url : data.url},null, 'url')
                                     break;
@@ -1507,7 +1515,7 @@
                         }
 
                         $content.find('ul').append('<li data-action_name="remove"><a data-action_name="remove" href="#" data-url="'+ data.url + '" data-rule="'+ data.rule + '" data-regex="'+ data.regex + '" data-index="'+ dataIndex + '">Remove</a></li>');
-
+                        $content.find('ul').append('<li data-action_name="preview"><a data-action_name="preview" target="_blank" href="' + data.url + '">Preview</a></li>');
                         return $content.wrap('<div></div>').parent().html();
                     },
                     onClickOutside(instance, event) {
@@ -1554,6 +1562,12 @@
                             var url = $this.data('url');
 
                             switch (action) {
+                                case 'preview':{
+                                    let dynamicUrl = $(this).attr('href').toString();
+                                    let additionalParam = "rapidload_preview_optimization";
+                                    window.open(dynamicUrl + (dynamicUrl.includes("?") ? "&" : "?") + additionalParam, "_blank");
+                                    break;
+                                }
                                 case 'requeue_rule':{
                                     requeue('current', {
                                         url : url,

@@ -76,6 +76,13 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
+            if (isset($_REQUEST['rapidload_preview_optimization'])) {
+                add_filter('determine_current_user', function (){
+                    return 0;
+                }, 99);
+                show_admin_bar(false);
+            }
+
             self::fetch_options();
 
             if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
