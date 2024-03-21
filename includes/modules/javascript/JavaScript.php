@@ -37,7 +37,7 @@ class JavaScript
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
-        $this->enqueue_admin_scripts();
+        //$this->enqueue_admin_scripts();
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 

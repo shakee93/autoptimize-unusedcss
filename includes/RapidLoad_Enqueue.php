@@ -284,6 +284,10 @@ class RapidLoad_Enqueue {
             return false;
         }
 
+        if(isset($_REQUEST['rapidload_preview_optimization'])){
+            return true;
+        }
+
         if(isset($this->options['rapidload_test_mode']) && $this->options['rapidload_test_mode'] == "1" && !isset($_REQUEST['disable_rapidload_test_mode'])){
             return false;
         }
@@ -472,6 +476,10 @@ class RapidLoad_Enqueue {
     }
 
     function enabled_frontend() {
+
+        if(isset($_REQUEST['rapidload_preview_optimization'])){
+            return true;
+        }
 
         if ( is_user_logged_in() ) {
             return false;
