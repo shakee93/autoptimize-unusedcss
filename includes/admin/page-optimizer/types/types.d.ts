@@ -49,5 +49,6 @@ interface Help{
 }
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
+type settingsMode = 'starter' | 'accelerate' | 'turboMax';
 
 declare const __OPTIMIZER_VERSION__ : string

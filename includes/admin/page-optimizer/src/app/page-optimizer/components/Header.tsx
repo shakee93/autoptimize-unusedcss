@@ -11,7 +11,7 @@ import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchData} from "../../../store/app/appActions";
+import {changeReport, fetchData, getCSSStatus} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
@@ -31,6 +31,8 @@ import equal from 'fast-deep-equal/es6/react'
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import {Switch} from "components/ui/switch";
+import {getTestModeStatus} from "../../../store/app/appActions";
 
 const Header = ({ url }: { url: string}) => {
 
@@ -58,7 +60,9 @@ const Header = ({ url }: { url: string}) => {
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
-
+    useEffect(() => {
+        dispatch(getTestModeStatus(options, url, 'true'));
+    }, [dispatch]);
 
     return (
 
@@ -154,7 +158,18 @@ const Header = ({ url }: { url: string}) => {
             <div className='flex relative gap-4 items-center'>
                 {!loading && !showInprogress && (
                     <>
-                    {!error && <SaveChanges/>}
+                    {!error && (
+                        <>
+
+                            <div className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
+                                <div>Test Mode</div>
+                                <Switch
+                                    checked={true}
+                                />
+                            </div>
+                            <SaveChanges />
+                        </>
+                    )}
                     </>
                 )}
 
