@@ -376,7 +376,6 @@ class UnusedCSS
 
         if (! $this->async ) {
 
-            $args['immediate'] = true;
             $this->init_async_store($this->job_data, $args);
 
         }else if(isset( $args['immediate'] )){
