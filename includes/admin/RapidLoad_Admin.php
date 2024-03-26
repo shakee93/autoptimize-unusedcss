@@ -61,14 +61,14 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
-        if(!isset($_REQUEST['test_mode'])){
-            if(isset($options['rapidload_test_mode'])){
+        if(!isset($_REQUEST['test_mode']) || empty($_REQUEST['test_mode'])){
+            if(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"){
                 wp_send_json_success([
-                    'status' => $options['rapidload_test_mode']
+                    'status' => true
                 ]);
             }else{
                 wp_send_json_success([
-                    'status' => "0"
+                    'status' => false
                 ]);
             }
         }
