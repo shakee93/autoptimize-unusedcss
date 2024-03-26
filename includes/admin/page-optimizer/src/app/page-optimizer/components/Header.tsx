@@ -34,6 +34,7 @@ import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
 
+
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
@@ -58,11 +59,35 @@ const Header = ({ url }: { url: string}) => {
         dispatch: commonDispatch
     } = useCommonDispatch()
 
+    const {testMode} = useSelector((state: RootState) => state.app);
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
 
     useEffect(() => {
-        dispatch(getTestModeStatus(options, url, 'true'));
+        dispatch(getTestModeStatus(options, url, ''));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (testMode) {
+            setLocalSwitchState(testMode.status || false);
+        }
+        console.log("Test Mode: ", testMode?.status);
+    }, [testMode]);
+
+    const handleSwitchChange = (isChecked: boolean) => {
+        setLocalSwitchState(isChecked);
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = setTimeout(() => {
+            dispatch(getTestModeStatus(options, url, String(isChecked))); // Dispatch API call
+        }, 200);
+        setTimeoutId(newTimeoutId);
+    };
 
     return (
 
@@ -163,8 +188,12 @@ const Header = ({ url }: { url: string}) => {
 
                             <div className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
                                 <div>Test Mode</div>
+                                <p></p>
                                 <Switch
-                                    checked={true}
+                                    checked={localSwitchState}
+                                    //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
+                                    onCheckedChange={(checked) => handleSwitchChange(checked)}
+
                                 />
                             </div>
                             <SaveChanges />

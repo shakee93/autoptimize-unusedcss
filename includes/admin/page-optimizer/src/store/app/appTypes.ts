@@ -8,7 +8,7 @@ export interface RootState {
 export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
-    testMode: TestMode;
+    testMode: TestMode | null;
     mobile: {
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
