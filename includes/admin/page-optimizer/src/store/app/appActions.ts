@@ -9,7 +9,8 @@ import {
     RootState,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE
+    GET_CSS_STATUS_SUCCESS,
+    UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -169,10 +170,10 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode: 
 
         try {
             const fetchTestModeData = await api.getTestMode(url, mode);
-            console.log("test Mode: ",  fetchTestModeData);
+            console.log("Mode: ",  fetchTestModeData?.data?.status);
             dispatch({
                 type: UPDATE_TEST_MODE,
-                payload : fetchTestModeData
+                payload : fetchTestModeData?.data
             })
 
         } catch (error) {

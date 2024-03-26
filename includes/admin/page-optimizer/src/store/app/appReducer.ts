@@ -6,12 +6,13 @@ import {
     FETCH_DATA_REQUEST,
     FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS
+    GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE
 } from "./appTypes";
 
 const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
+    testMode: null,
     mobile: {
         original: null,
         changes: {
@@ -47,6 +48,11 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
             return {
                 ...state,
                 cssStatus: action.payload
+            };
+        case UPDATE_TEST_MODE:
+            return {
+                ...state,
+                testMode: action.payload
             };
         case FETCH_DATA_REQUEST:
             return {

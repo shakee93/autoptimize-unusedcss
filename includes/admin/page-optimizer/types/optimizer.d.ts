@@ -216,7 +216,7 @@ interface CSSStatusResponse {
 }
 
 interface TestMode {
-    test_mode: string;
+    status: boolean;
 }
 
 interface Revision {

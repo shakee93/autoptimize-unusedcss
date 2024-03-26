@@ -211,7 +211,7 @@ const SaveChanges = () => {
 
     return <>
         <Mode>
-            <div className='flex gap-2 items-center'>
+            <div className='flex gap-2 items-center flex-none'>
                 <AlertDialog open={open} onOpenChange={setOpen}>
                     <DropdownMenu>
                         <Button
