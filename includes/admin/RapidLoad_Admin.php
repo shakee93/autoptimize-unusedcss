@@ -59,15 +59,29 @@ class RapidLoad_Admin
 
     public function rapidload_switch_test_mode(){
 
-        $status = isset($_REQUEST['test_mode']) && $_REQUEST['test_mode'] == "true" ? "1" : "0";
-
         $options = RapidLoad_Base::fetch_options();
+
+        if(!isset($_REQUEST['test_mode'])){
+            if(isset($options['rapidload_test_mode'])){
+                wp_send_json_success([
+                    'status' => $options['rapidload_test_mode']
+                ]);
+            }else{
+                wp_send_json_success([
+                    'status' => "0"
+                ]);
+            }
+        }
+
+        $status = $_REQUEST['test_mode'] == "true" ? "1" : "0";
 
         $options['rapidload_test_mode'] = $status;
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
 
-        wp_send_json_success($status);
+        wp_send_json_success([
+            'status' => $options['rapidload_test_mode'] == "1"
+        ]);
 
     }
 
