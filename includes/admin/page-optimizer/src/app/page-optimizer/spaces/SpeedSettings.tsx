@@ -16,7 +16,9 @@ import {
     CloudDeliveryDuotone,
     ImageDeliverySVGDuotone,
     JavascriptDeliveryDuotone,
-    FontDeliveryDuotone, CSSDeliveryDuotone
+    FontDeliveryDuotone, CSSDeliveryDuotone,
+    Starter, Accelerate, TurboMax
+
 } from "app/page-optimizer/components/icons/icon-svg";
 import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
@@ -47,8 +49,18 @@ const SpeedSettings = ({}) => {
     const {dispatch, openCategory, activeTab} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
+    const modes = ['starter', 'accelerate', 'turboMax'];
 
+    let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
+    if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
+        savedSettingsMode = 'starter';
+    }
 
+    const [settingsMode, setSettingsMode] = React.useState(savedSettingsMode);
+
+    useEffect(() => {
+        localStorage.setItem('settingsMode', settingsMode);
+    }, [settingsMode]);
 
     const icons :  {
         [key in SettingsCategory]: React.ReactElement;
@@ -90,7 +102,9 @@ const SpeedSettings = ({}) => {
         });
         return grouped;
     };
-
+    // useEffect(() => {
+    //     console.log(settingsMode)
+    // },[settingsMode]);
 
     useEffect(() => {
      //   console.log(settings)
@@ -252,6 +266,38 @@ const SpeedSettings = ({}) => {
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-4 pb-2 mt-2 rounded-3xl'>
         <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
+        <div className="py-4">
+            <h3 className="font-medium">Performance Gears</h3>
+            <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+        </div>
+
+        <div className="flex gap-4">
+            {modes.map((mode, index) => (
+                <div
+                    key={index}
+                    className={`flex px-4 py-4 min-w-[156px] min-h-[156px] items-center justify-center w-fit rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === settingsMode ? ' border-purple-700' : ''}`}
+                    onClick={e => {
+                        setSettingsMode(mode as settingsMode);
+                        dispatch(setCommonState('settingsMode', mode));
+                    }}
+                >
+                    <div className="flex flex-col gap-1 items-center text-center">
+                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
+                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
+                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
+                        <div>
+                            <p className="font-medium">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
+                            {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <div className="py-4">
+            <h3 className="font-medium">Recommended Settings</h3>
+        </div>
+
         <ul className='flex gap-3 ml-12'>
             {categoryOrder.map((category: SettingsCategory, index) => (
                 <li key={index} onClick={e => {

@@ -215,6 +215,9 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface TestMode {
+    test_mode: string;
+}
 
 interface Revision {
     created_at: string

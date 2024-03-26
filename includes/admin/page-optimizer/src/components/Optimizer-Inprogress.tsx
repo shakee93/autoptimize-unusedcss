@@ -122,14 +122,11 @@ const OptimizerInprogress = () => {
             const timer = setTimeout(() => {
                 setShowInprogress(false);
                 dispatch(fetchData(options, url, true));
-                // dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']))
-                // console.log("Status", cssStatus)
             }, 3000);
             return () => clearTimeout(timer);
         }
     }, [checkCircleCount]);
 
-    // Define a function to check status condition
     const checkStatusCondition = (name: string) => {
         return includesStatusSettings(name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success'  || includesStatusSettings(name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success'
     };
@@ -150,7 +147,8 @@ const OptimizerInprogress = () => {
                duration: 0.5,
            }}>
 
-               <div className='py-20 grid justify-center items-center '>
+               <div className='py-20 grid justify-center items-center h-screen'>
+                   <div>
                    <div className="mb-3.5 rounded-[40px] min-w-[650px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
 
                        <div className="px-16 py-10">
@@ -307,6 +305,7 @@ const OptimizerInprogress = () => {
                            </Button>
                        </div>
 
+                   </div>
                    </div>
                </div>
 

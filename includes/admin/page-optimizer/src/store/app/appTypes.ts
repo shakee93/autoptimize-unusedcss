@@ -8,6 +8,7 @@ export interface RootState {
 export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
+    testMode: TestMode;
     mobile: {
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
@@ -48,10 +49,17 @@ export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
+export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
     payload : CSSStatusResponse,
+
+}
+
+interface UpdateTestMode {
+    type: typeof UPDATE_TEST_MODE,
+    payload : TestMode,
 
 }
 
@@ -101,5 +109,5 @@ interface UpdateFileActionAction {
 
 
 // Define the combined action type
-export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess;
+export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
 

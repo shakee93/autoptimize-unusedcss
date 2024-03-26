@@ -9,7 +9,7 @@ import {
     RootState,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS
+    GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -155,6 +155,28 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
 
         } catch (error) {
             console.error('Error fetching CSS job status:', error);
+        }
+
+
+    }
+}
+
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode: string): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const fetchTestModeData = await api.getTestMode(url, mode);
+            console.log("test Mode: ",  fetchTestModeData);
+            dispatch({
+                type: UPDATE_TEST_MODE,
+                payload : fetchTestModeData
+            })
+
+        } catch (error) {
+            console.error('Error on Test Mode:', error);
         }
 
 

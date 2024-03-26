@@ -12,6 +12,7 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
+        settingsMode?: settingsMode | '';
     }
     desktop : {
         activeTab: AuditTypes;
@@ -21,6 +22,7 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
+        settingsMode?: settingsMode | '';
     }
 
 };
