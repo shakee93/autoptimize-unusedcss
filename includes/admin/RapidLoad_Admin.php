@@ -80,7 +80,7 @@ class RapidLoad_Admin
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
 
         wp_send_json_success([
-            'status' => $options['rapidload_test_mode']
+            'status' => $options['rapidload_test_mode'] == "1"
         ]);
 
     }
