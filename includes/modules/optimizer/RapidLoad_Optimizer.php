@@ -107,6 +107,7 @@ class RapidLoad_Optimizer
         $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
         $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
 
+        $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
 
         wp_send_json_success([
             'uucss' => [
@@ -120,6 +121,11 @@ class RapidLoad_Optimizer
                 'error' => $job_data_cpcss->error,
                 'warnings' => $job_data_cpcss->warnings,
                 'stats' => $job_data_cpcss->stats
+            ],
+            'cache' => [
+                'status' => @file_exists($cache_file),
+                'file' => $cache_file,
+                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
             ]
         ]);
 
