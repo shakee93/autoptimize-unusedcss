@@ -1010,6 +1010,11 @@ class RapidLoad_Optimizer
         }
 
         $url = $_REQUEST['url'];
+
+        if(self::$global_options['rapidload_test_mode'] && self::$global_options['rapidload_test_mode'] == "1"){
+            $url = add_query_arg('rapidload_preview_optimization', 'true', $url);
+        }
+
         $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
 
         $response = wp_remote_get( $url, array( 'timeout' => 30, 'headers' => [
