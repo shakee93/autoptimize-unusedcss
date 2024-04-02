@@ -19,6 +19,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_uucss_logs', [$this, 'rapidload_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_rapidload_logs']);
             add_action('wp_ajax_uucss_license', [ $this, 'uucss_license' ] );
+            add_action('wp_ajax_rapidload_image_usage', [ $this, 'rapidload_image_usage' ] );
+            add_action('wp_ajax_rapidload_cdn_usage', [ $this, 'rapidload_cdn_usage' ] );
             add_action('wp_ajax_uucss_deactivate', [ $this, 'ajax_deactivate' ] );
             add_action('wp_ajax_uucss_connect', [ $this, 'uucss_connect' ] );
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
@@ -1199,6 +1201,42 @@ class RapidLoad_Admin
             RapidLoad_Base::fetch_options(false);
         }
 
+    }
+
+    public function rapidload_image_usage(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->get( 'image-usage', [
+            'url' => $this->transform_url(get_site_url()),
+        ]);
+
+        if ( is_wp_error( $data ) ) {
+            wp_send_json_error('Something went wrong');
+        }
+
+        wp_send_json_success((array)$data->data);
+    }
+
+    public function rapidload_cdn_usage(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $options = RapidLoad_Base::fetch_options();
+
+        $data = $api->get( 'cdn-usage', [
+            'zone_id' => isset($options['uucss_cdn_zone_id']) ? $options['uucss_cdn_zone_id'] : '',
+        ]);
+
+        if ( is_wp_error( $data ) ) {
+            wp_send_json_error('Something went wrong');
+        }
+
+        wp_send_json_success((array)$data->data);
     }
 
     public function uucss_license() {
