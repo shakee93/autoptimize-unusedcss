@@ -62,6 +62,7 @@ const SpeedSettings = ({}) => {
         localStorage.setItem('settingsMode', settingsMode);
     }, [settingsMode]);
 
+
     const icons :  {
         [key in SettingsCategory]: React.ReactElement;
     } = useMemo(() => ( {
@@ -132,7 +133,6 @@ const SpeedSettings = ({}) => {
             dispatch(setCommonState('openCategory', 'css'));
         }
 
-
     }, [data, settings]);
 
 
@@ -174,7 +174,7 @@ const SpeedSettings = ({}) => {
 
 
     useEffect(() => {
-    //    console.log("Group Settings");
+     //   console.log("mode: ", settingsMode);
     }, [groupedSettings]);
 
 
@@ -224,10 +224,75 @@ const SpeedSettings = ({}) => {
             setSortedStatus(false);
 
         }
-
+       // console.log('Not Passed Audits', notPassedAudits)
 
     }, [ groupedSettings]);
 
+
+
+    const settingsModeOnChange = (mode: string) => {
+        if (!notPassedAudits) {
+            return;
+        }
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+
+        notPassedAudits.forEach(settings => {
+            const [mainInput] = settings.inputs
+
+            let settingsToReturn;
+
+            if (mode === 'starter' && starterLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+            } else if (mode === 'accelerate' && accelerateLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+            } else if (mode === 'turboMax' && turboMaxLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+
+            }
+            if (settingsToReturn) {
+                updateValue(settingsToReturn, true, mainInput.key);
+            }else{
+                updateValue(settings, false, mainInput.key);
+            }
+
+         //   console.log(mode , ' : ', settingsToReturn)
+          //  updateValue(settings, true, mainInput.key);
+
+        });
+      //  console.log(notPassedAudits)
+
+    };
+
+    useEffect(() => {
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+
+        const trueControlLabels: any[] = [];
+
+            notPassedAudits.forEach(settings => {
+                const [mainInput] = settings.inputs
+
+                if (mainInput.value) {
+                    trueControlLabels.push(mainInput.control_label);
+                }
+
+            });
+
+        if (trueControlLabels.every(label => starterLabels.includes(label))) {
+            setSettingsMode('starter')
+        } else if (trueControlLabels.every(label => accelerateLabels.includes(label))) {
+            setSettingsMode('accelerate')
+        } else if (trueControlLabels.every(label => turboMaxLabels.includes(label))) {
+            setSettingsMode('turboMax')
+        } else {
+            setSettingsMode('custom')
+        }
+    })
 
     const actionRequired = (item: AuditSetting): boolean => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -279,6 +344,7 @@ const SpeedSettings = ({}) => {
                     onClick={e => {
                         setSettingsMode(mode as settingsMode);
                         dispatch(setCommonState('settingsMode', mode));
+                        settingsModeOnChange(mode);
                     }}
                 >
                     <div className="flex flex-col gap-1 items-center text-center">
@@ -336,7 +402,7 @@ const SpeedSettings = ({}) => {
                                animate={{ opacity: 1}}
                                transition={{ duration: 0.3 }}
                         >
-                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
+                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true}/>
                         </m.div>
                         )}</li>
                 ))}

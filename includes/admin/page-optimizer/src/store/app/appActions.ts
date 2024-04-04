@@ -162,15 +162,14 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
     }
 }
 
-export const getTestModeStatus = (options: WordPressOptions, url: string, mode: string): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
 
         try {
-            const fetchTestModeData = await api.getTestMode(url, mode);
-            console.log("Mode: ",  fetchTestModeData?.data?.status);
+            const fetchTestModeData = await api.getTestMode(url, mode || '');
             dispatch({
                 type: UPDATE_TEST_MODE,
                 payload : fetchTestModeData?.data

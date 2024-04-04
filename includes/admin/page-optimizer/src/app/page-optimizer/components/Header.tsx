@@ -66,14 +66,13 @@ const Header = ({ url }: { url: string}) => {
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
 
     useEffect(() => {
-        dispatch(getTestModeStatus(options, url, ''));
+        dispatch(getTestModeStatus(options, url));
     }, [dispatch]);
 
     useEffect(() => {
         if (testMode) {
             setLocalSwitchState(testMode.status || false);
         }
-        console.log("Test Mode: ", testMode?.status);
     }, [testMode]);
 
     const handleSwitchChange = (isChecked: boolean) => {
@@ -84,7 +83,7 @@ const Header = ({ url }: { url: string}) => {
         }
 
         const newTimeoutId = setTimeout(() => {
-            dispatch(getTestModeStatus(options, url, String(isChecked))); // Dispatch API call
+            dispatch(getTestModeStatus(options, url, String(isChecked)));
         }, 200);
         setTimeoutId(newTimeoutId);
     };

@@ -16,7 +16,7 @@ import ReactDOM from 'react-dom';
 import { Checkbox } from "components/ui/checkbox";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateSettings} from "../../../../store/app/appActions";
 
 import AppButton from "components/ui/app-button"
@@ -49,14 +49,17 @@ import ApiService from "../../../../services/api";
 import {toast} from "components/ui/use-toast";
 import SlideLeft from "components/animation/SlideLeft";
 import {AnimatePresence} from "framer-motion";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
+import {optimizerData} from "../../../../store/app/appSelector";
 
 interface SettingItemProps {
     updateValue: ( setting: AuditSetting, value: any, key: any ) => void
     settings?: AuditSetting;
     index: number;
-    showIcons?: boolean
-    hideActions?: boolean
-    actionRequired: boolean
+    showIcons?: boolean;
+    hideActions?: boolean;
+    actionRequired: boolean;
 }
 
 export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
@@ -136,6 +139,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = useState(false)
 
+
     const [mainInput, ...additionalInputs] = useMemo(() => settings.inputs, [settings])
 
     const [updates, setUpdates] = useState<{
@@ -203,9 +207,10 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         }
         setLoading(false);
     }
+    const {settingsMode} = useCommonDispatch();
 
     const [checkboxState, setCheckboxState] = useState(mainInput.value);
-
+//old code
     const handleCheckboxClick = () => {
         if (!actionRequired || ['onboard', 'preview'].includes(mode)) {
             return;
@@ -215,14 +220,66 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
         updateValue(settings, newCheckboxState, mainInput.key);
     };
+//old code end
+
+
+
+
+    // useEffect(() => {
+    //     if (!actionRequired) {
+    //         return;
+    //     }
+    //
+    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+    //
+    //     if (settingsMode === 'starter') {
+    //         setCheckboxState(starterLabels.includes(mainInput.control_label));
+    //     } else if (settingsMode === 'accelerate') {
+    //         setCheckboxState(accelerateLabels.includes(mainInput.control_label));
+    //     } else if (settingsMode === 'turboMax') {
+    //         setCheckboxState(turboMaxLabels.includes(mainInput.control_label));
+    //     } else {
+    //        // setCheckboxState(mainInput.value);
+    //     }
+    //
+    //    // updateValue(settings, checkboxState, mainInput.key);
+    //     //console.log(checkboxState)
+    // }, [settingsMode, mainInput, settings]);
+
+
+    // const handleCheckboxClick = () => {
+    //
+    //
+    //     const newCheckboxState = !checkboxState;
+    //     setCheckboxState(newCheckboxState);
+    //     updateValue(settings, newCheckboxState, mainInput.key);
+    //
+    //     // if (settingsMode === 'starter' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'Minify Javascript'
+    //     //     || settingsMode === 'accelerate' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Minify Javascript' && mainInput.control_label !== 'Defer Javascript'
+    //     //     || settingsMode === 'turboMax' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Minify Javascript' && mainInput.control_label !== 'Defer Javascript' && mainInput.control_label !== 'Delay Javascript' ) {
+    //     //     dispatch(setCommonState('settingsMode', 'custom'));
+    //     // }
+    //     const commonConditions = mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'Minify Javascript';
+    //     const additionalConditions = (settingsMode === 'accelerate' || settingsMode === 'turboMax') && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Defer Javascript' && (settingsMode === 'turboMax' ? mainInput.control_label !== 'Delay Javascript' : true);
+    //
+    //     if (commonConditions && additionalConditions) {
+    //         dispatch(setCommonState('settingsMode', 'custom'));
+    //     }
+    // };
+
 
     const [showStatus, setShowStatus] = useState(false);
     useEffect(() => {
         if(settings.status && mainInput.value){
             setShowStatus(true)
         }
+
       //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
     },[]);
+
+
 
     return (
         <>
@@ -257,6 +314,10 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               updateValue(settings, c, mainInput.key);
 
                                           }}/>
+                                {/*    <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}*/}
+                                {/*              className={actionRequired ? '' : 'border-dashed'}*/}
+                                {/*              checked={checkboxState}*/}
+                                {/*              onCheckedChange={handleCheckboxClick}/>*/}
                                 </>
                             )}
                         </>
@@ -282,7 +343,9 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        <DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
+                                        {/*<DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>*/}
+
+                                        <DialogTrigger disabled asChild className={`${!checkboxState || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>
                                                     <Cog6ToothIcon className='w-5 text-brand-400'/>
