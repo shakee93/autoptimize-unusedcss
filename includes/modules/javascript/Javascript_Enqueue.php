@@ -327,7 +327,7 @@ class Javascript_Enqueue
 
                 if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
 
-                    if(isset($link->defer) && isset($link->async)){
+                    if(isset($link->defer) || isset($link->async)){
                         return;
                     }
 
@@ -343,7 +343,7 @@ class Javascript_Enqueue
 
         }elseif (self::is_inline_script($link)){
 
-            if(($js_to_be_delay || $js_to_be_defer) && (!self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js') && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
+            if(($js_to_be_delay && !self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js')) || ($js_to_be_defer && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
 
                 $this->defer_inline_js($link);
 
