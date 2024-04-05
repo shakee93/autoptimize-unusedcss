@@ -257,15 +257,11 @@ class RapidLoad_Image_Enqueue
 
                                 $url = $this->extractUrl($match[1]);
 
-                                if ($this->is_file_excluded($url)) {
+                                if ($this->is_file_excluded($url,'uucss_exclude_images_from_lazy_load')) {
                                     continue;
                                 }
 
                                 $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-
-                                if ($this->is_file_excluded($url)) {
-                                    continue;
-                                }
 
                                 if (in_array($urlExt, $this->imgExt)) {
                                     $background_image_found = true;
