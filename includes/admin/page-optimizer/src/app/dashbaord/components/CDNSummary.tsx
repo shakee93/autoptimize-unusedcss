@@ -28,35 +28,90 @@ const CDNSummary = () => {
 
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 py-6">
                     <div className='flex gap-2 items-center'>
-                        <div className="text-sm font-semibold dark:text-brand-300">CDN</div>
+                        <div className="text-base font-semibold dark:text-brand-300">Usage Summary</div>
                         <InformationCircleIcon className="h-[18px] w-[18px]" />
                     </div>
-                    <div className='flex justify-between items-center py-2'>
-                        <div className="text-sm font-semibold dark:text-brand-300 ">2.2GB used</div>
-                        <div className="text-sm font-semibold dark:text-brand-300 text-brand-400">10GB</div>
+
+                    <div className='my-2 mb-4'>
+
+
+                    <div className='flex items-center py-2'>
+                        <div className="text-sm dark:text-brand-300 gap-2 flex">
+                            <span className="font-semibold">CDN</span>
+                            <span className="text-brand-400">2.2GB / 10GB</span>
+                        </div>
                     </div>
-                    <div className='relative w-72 mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
+                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
                         <div className='will-change absolute  h-2.5 w-40 bg-[#7F54B3] rounded'></div>
                     </div>
                     <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">Limits will be updated on July 5</div>
 
-                    <div className='flex gap-2 items-center mt-5'>
-                        <div className="text-sm font-semibold dark:text-brand-300">Images</div>
-                        <InformationCircleIcon className="h-[18px] w-[18px]" />
-                    </div>
                     <div className='flex justify-between items-center py-2'>
-                        <div className="text-sm font-semibold dark:text-brand-300 ">2.2GB used</div>
-                        <div className="text-sm font-semibold dark:text-brand-300 text-brand-400">750MB</div>
+                        <div className="text-sm dark:text-brand-300 gap-2 flex">
+                            <span className="text-brand-400">Additional Usage</span>
+                        </div>
+                        <div className='flex gap-2.5 items-center'>
+                            <div className='flex items-center gap-1'>
+                                <div className="text-sm font-semibold dark:text-brand-300">Metering</div>
+                                <InformationCircleIcon className="h-[18px] w-[18px]" />
+                            </div>
+
+                            <Switch
+                                checked={true}
+                            />
+                        </div>
+
                     </div>
-                    <div className='relative w-72 mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
+                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
                         <div className='will-change absolute  h-2.5 w-24 bg-[#7F54B3] rounded'></div>
+                    </div>
+
+                    </div>
+                    {/*<div className='flex gap-2 items-center mt-5'>*/}
+                    {/*    <div className="text-sm font-semibold dark:text-brand-300">Images</div>*/}
+                    {/*    <InformationCircleIcon className="h-[18px] w-[18px]" />*/}
+                    {/*</div>*/}
+                    <div className='my-2 mb-4'>
+                    <div className='flex justify-between items-center py-2'>
+                        <div className="text-sm dark:text-brand-300 gap-2 flex">
+                            <span className="font-semibold">Images</span>
+                            <span className="text-brand-400">2.2GB / 10GB</span>
+                        </div>
+
+                    </div>
+                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
+                        <div className='will-change absolute  h-2.5 w-52 bg-[#7F54B3] rounded'></div>
                     </div>
                     <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">Limits will be updated on July 5</div>
 
-                    <button
-                        className="mt-6 justify-center cursor-pointer transition duration-300 bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 border border-violet-950  rounded-lg">
-                        Upgrade Subscription
-                    </button>
+                    <div className='flex justify-between items-center py-2'>
+                        <div className="text-sm dark:text-brand-300 gap-2 flex">
+                            <span className="text-brand-400">Additional Usage</span>
+                        </div>
+                        <div className='flex gap-2.5 items-center'>
+                            <div className='flex items-center gap-1'>
+                                <div className="text-///sm font-semibold dark:text-brand-300">Metering</div>
+                                <InformationCircleIcon className="h-[18px] w-[18px]" />
+                            </div>
+
+                            <Switch
+                                checked={true}
+                            />
+                        </div>
+
+                    </div>
+                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
+                        <div className='will-change absolute  h-2.5 w-24 bg-[#7F54B3] rounded'></div>
+                    </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button
+                            className="mt-2 justify-center cursor-pointer transition duration-300 bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 border border-violet-950  rounded-lg">
+                            Manage your usage
+                        </button>
+                    </div>
+
                 </div>
 
             </Card>

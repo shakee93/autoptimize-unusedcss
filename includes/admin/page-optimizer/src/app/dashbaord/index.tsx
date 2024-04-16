@@ -4,6 +4,7 @@ import LicenseWidget from "app/dashbaord/components/LicenseWidget";
 import UnusedCSSSummary from "app/dashbaord/components/UnusedCSSSummary";
 import CacheSummary from "app/dashbaord/components/CacheSummary";
 import CDNSummary from "app/dashbaord/components/CDNSummary";
+import OptimizerPagesTable from "app/dashbaord/components/OptimizerPagesTable";
 import Header from "app/page-optimizer/components/Header";
 
 import {useSelector} from "react-redux";
@@ -59,6 +60,34 @@ export default function Dashbaord() {
 
     }, [savingData])
 
+    const dummyTableData = [
+        {
+            urls: 'https://rapidload.io/..../autoptimize.css',
+            pageScore: '+11.01%',
+            updateDate: '2/24/2024',
+            actions: 'Optimize'
+        },
+        {
+            urls: 'https://example.com/style.css',
+            pageScore: '-5.32%',
+            updateDate: '3/12/2024',
+            actions: 'Optimize'
+        },
+        {
+            urls: 'https://dummywebsite.com/main.js',
+            pageScore: '+2.55%',
+            updateDate: '3/15/2024',
+            actions: 'Optimize'
+        },
+        {
+            urls: 'https://testsite.net/fonts.css',
+            pageScore: '+8.21%',
+            updateDate: '3/20/2024',
+            actions: 'Optimize'
+        },
+    ];
+
+
     return <>
 
 
@@ -89,7 +118,7 @@ export default function Dashbaord() {
                     <section
                         ref={optimizerContainer}
                         className={cn(
-                            'relative container grid grid-cols-4 gap-8 pt-[84px] mt-4',
+                            'relative container grid grid-cols-3 gap-6 pt-[84px] mt-4',
                         )}>
 
                         {(savingData || invalidatingCache) && (
@@ -108,59 +137,76 @@ export default function Dashbaord() {
                             </div> :
                             <>
 
-                                <div className="">
 
-                                    <div   className="widgets pt-4 flex">
-                                        <PageSpeedWidget/>
-                                    </div>
-                                </div>
-                                <div className="">
-
-                                    <div   className="widgets pt-4 flex">
-                                        <CacheSummary/>
-                                    </div>
-                                </div>
-                                <div className="">
-
-                                    <div   className="widgets pt-4 gap-4 grid">
-                                        <UnusedCSSSummary
-                                            settings={{
-                                                title: "Unused CSS summary",
-                                                total_jobs: 1000,
-                                                items: [
-                                                    { label: "Success jobs", value: "153 jobs", performance: 95 },
-                                                    { label: "Failed jobs", value: "153 jobs", performance: 95 },
-                                                    { label: "Warning jobs", value: "153 jobs", performance: 95 }
-                                                ]
-                                            }}
-                                        />
-
-                                        <UnusedCSSSummary
-                                            settings={{
-                                                title: "Critical CSS summary",
-                                                total_jobs: 1000,
-                                                items: [
-                                                    { label: "Success jobs", value: "153 jobs", performance: 95 },
-                                                    { label: "Failed jobs", value: "153 jobs", performance: 95 },
-                                                    { label: "Warning jobs", value: "153 jobs", performance: 95 }
-                                                ]
-                                            }}
-                                        />
-
-                                    </div>
-                                </div>
                                 <div className="">
 
                                     <div   className="widgets pt-4 gap-4 grid">
                                         <LicenseWidget/>
-                                        <CDNSummary/>
+
                                     </div>
                                 </div>
+
                                 <div className="col-span-2">
                                     <div className="widgets pt-4 gap-4 grid">
                                         <SpeedInsights dashboardMode={true}>
 
                                         </SpeedInsights>
+                                    </div>
+                                </div>
+
+                                <div className="">
+
+                                    <div   className="widgets flex">
+                                        <CDNSummary/>
+                                    </div>
+                                </div>
+                                <div className="">
+
+                                    <div   className="widgets flex">
+                                        <CacheSummary/>
+                                    </div>
+                                </div>
+
+                                <div className="">
+
+                                    <div   className="widgets gap-4 grid">
+                                        <UnusedCSSSummary
+                                            settings={[
+                                                {
+                                                    title: "Unused CSS summary",
+                                                    total_jobs: 1000,
+                                                    items: [
+                                                        { label: "Success jobs", value: "153 jobs", performance: 95 },
+                                                        { label: "Failed jobs", value: "153 jobs", performance: 95 },
+                                                        { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                    ]
+                                                },
+                                                {
+                                                    title: "Critical CSS summary",
+                                                    total_jobs: 1000,
+                                                    items: [
+                                                        { label: "Success jobs", value: "153 jobs", performance: 95 },
+                                                        { label: "Failed jobs", value: "153 jobs", performance: 95 },
+                                                        { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                    ]
+                                                }
+                                            ]}
+                                        />
+
+                                    </div>
+                                </div>
+
+                                <div className="col-span-3">
+                                    <div className="widgets gap-4 grid">
+                                       <OptimizerPagesTable
+                                           settings={
+                                               {
+                                                   title: "Optimize Pages",
+                                                   total_jobs: 1000,
+                                                   data: dummyTableData
+                                               }
+                                            }
+                                       />
                                     </div>
                                 </div>
                                 {/*<article className={cn(*/}

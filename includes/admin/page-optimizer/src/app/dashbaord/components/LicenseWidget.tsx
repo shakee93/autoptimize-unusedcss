@@ -23,16 +23,20 @@ const LicenseWidget = () => {
                   className={cn(
                       'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
                   )}>
-                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 pt-6">
-                    <div className='flex justify-between items-center'>
-                        <div className="text-lg font-bold text-brand-400 dark:text-brand-300">Welcome back,</div>
-                        <div className="">
-                            <CheckBadgeIcon className="h-6 w-6 text-white bg-green-500 rounded-full" />
+                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 pt-6 ">
+                    <div className="text-lg font-bold text-brand-400 dark:text-brand-300">Welcome back,</div>
+                    <div className="text-lg font-bold pb-2">Abdul Azeez</div>
+
+                    <div className="bg-green-500/10 px-2.5 py-1.5 rounded-xl w-fit">
+                        <div className="flex gap-2 items-center">
+                            <CheckBadgeIcon className="h-4 w-4 text-white bg-green-500 rounded-full" />
+                            <span className="text-xs text-green-600">Rapidload Activated</span>
                         </div>
                     </div>
-                    <div className="text-lg font-bold">Abdul Azeez</div>
+                    <div className="text-xs text-brand-500 dark:text-brand-300 font-light mt-2">Secured payments with Stripe.</div>
+
                 </div>
-                <div className="content flex flex-col px-6 py-6 dark:bg-brand-900 bg-brand-100/90 m-6 rounded-3xl">
+                <div className="content flex flex-col px-6 py-6 dark:bg-brand-900 bg-brand-100/90 my-3 mx-6 rounded-xl">
                     <div className='flex justify-end'>
 
                     </div>
@@ -84,22 +88,32 @@ const LicenseWidget = () => {
                 </div>
 
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 pb-6">
-                    <div className='flex justify-between items-center'>
-                        <div className='flex gap-2 items-center'>
-                            <div className="text-sm font-semibold dark:text-brand-300">Dev Mode</div>
-                            <InformationCircleIcon className="h-[18px] w-[18px]" />
+                    {/*<div className='flex justify-between items-center'>*/}
+                    {/*    <div className='flex gap-2 items-center'>*/}
+                    {/*        <div className="text-sm font-semibold dark:text-brand-300">Dev Mode</div>*/}
+                    {/*        <InformationCircleIcon className="h-[18px] w-[18px]" />*/}
+                    {/*    </div>*/}
+                    {/*    <Switch*/}
+                    {/*        checked={true}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
+                    <div className="text-xs text-brand-500 dark:text-brand-300 font-light">Your personal details are secured by RapidLoad.</div>
+                    <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-subgrid gap-3 col-span-3 justify-end">
+                            <div className="col-start-2">
+                                <button
+                                    className="mt-4 justify-center cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">
+                                    View My Account
+                                </button>
+                            </div>
+                            <div className="col-start-3">
+                                <button
+                                    className="mt-4 justify-center cursor-pointer transition duration-300 bg-purple-750 text-sm font-semibold text-white py-1.5 px-4 border border-purple rounded-lg">
+                                    Upgrade Plan
+                                </button>
+                            </div>
                         </div>
-                        <Switch
-                            checked={true}
-                        />
                     </div>
-                    <div className="text-xs text-brand-500 dark:text-brand-300 font-light">Explore Rapidload's Developer Mode without disrupting your
-                        visitors' browsing encounters.
-                    </div>
-                    <button
-                        className="mt-4 justify-center cursor-pointer transition duration-300 bg-purple-750 text-sm font-semibold text-white py-1.5 px-4 border border-purple rounded-lg">
-                        View My Account
-                    </button>
 
                 </div>
 

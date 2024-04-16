@@ -26,6 +26,7 @@ const Feedback = React.lazy(() =>
 interface PageSpeedScoreProps {
     pagespeed?: any;
     priority?: boolean;
+    dashboardMode?: boolean;
 }
 
 const MetricValue = ({ metric }: {metric: Metric}) => {
@@ -41,7 +42,7 @@ const MetricValue = ({ metric }: {metric: Metric}) => {
 }
 
 
-const PageSpeedWidget = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
+const PageSpeedWidget = ({pagespeed, priority = true, dashboardMode = false }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
     const [expanded, setExpanded] = useState(false)
 
@@ -104,18 +105,19 @@ const PageSpeedWidget = ({pagespeed, priority = true }: PageSpeedScoreProps) => 
 
     return <>
 
-        <div className='w-full flex flex-col gap-4'>
+        <div className={cn('w-full flex flex-col gap-4 ', dashboardMode? 'w-min min-w-[350px]' : '')}>
             <Card data-tour='speed-insights'
                   className={cn(
-                      'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
-                      expanded && 'border-brand-200 dark:border-brand-800'
+                      'overflow-hidden  border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                      expanded && 'border-brand-200 dark:border-brand-800',
+                      dashboardMode? '' : 'border'
                   )}>
                 <div
                     className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
-                            <div className='mt-6'>
+                            <div className= {`${dashboardMode? 'mt-3.5':'mt-6'}`}>
                                 {loading || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>
                                 ) : (
@@ -144,7 +146,7 @@ const PageSpeedWidget = ({pagespeed, priority = true }: PageSpeedScoreProps) => 
                             Values are estimated and may vary with Google Page Speed Insights.
                         </div>
                     </div>
-                    <div className="flex justify-around text-sm gap-4 font-normal w-full mb-5 text-brand-700 dark:text-brand-300">
+                    <div className={`flex justify-around text-sm gap-4 font-normal w-full text-brand-700 dark:text-brand-300 ${dashboardMode? '': 'mb-5 '}`}>
                         <div className="flex lg:flex-col xl:flex-row items-center gap-1">
                             <PerformanceIcons icon={'fail'}/>
                             0-49
@@ -168,7 +170,7 @@ const PageSpeedWidget = ({pagespeed, priority = true }: PageSpeedScoreProps) => 
 
                 {(data?.metrics && !expanded) && (
                     <>
-                        <div className='flex justify-around mb-3 px-2'
+                        <div className={`flex justify-around ${dashboardMode ? '' : 'mb-3 px-2 '}`}
                              onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
                         >
                             {data.metrics.map(metric => (
@@ -207,11 +209,16 @@ const PageSpeedWidget = ({pagespeed, priority = true }: PageSpeedScoreProps) => 
                 )}
             </Card>
 
-            <SideBarActions/>
+            {!dashboardMode && (
+                <>
+                    <SideBarActions/>
 
-            <Suspense>
-                <Feedback key={key}/>
-            </Suspense>
+                    <Suspense>
+                        <Feedback key={key}/>
+                    </Suspense>
+                </>
+            )}
+
 
             {/*{data?.loadingExperience?.metrics && (*/}
             {/*    <Card>*/}

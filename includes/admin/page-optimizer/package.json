@@ -62,7 +62,7 @@
     "@types/react-redux": "^7.1.25",
     "@wordpress/dom-ready": "^3.38.0",
     "axios": "^1.4.0",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "compare-versions": "^6.1.0",
