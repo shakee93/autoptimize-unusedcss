@@ -16,7 +16,9 @@ import {
     CloudDeliveryDuotone,
     ImageDeliverySVGDuotone,
     JavascriptDeliveryDuotone,
-    FontDeliveryDuotone, CSSDeliveryDuotone
+    FontDeliveryDuotone, CSSDeliveryDuotone,
+    Starter, Accelerate, TurboMax
+
 } from "app/page-optimizer/components/icons/icon-svg";
 import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
@@ -47,7 +49,18 @@ const SpeedSettings = ({}) => {
     const {dispatch, openCategory, activeTab} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
+    const modes = ['starter', 'accelerate', 'turboMax'];
 
+    let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
+    if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
+        savedSettingsMode = 'starter';
+    }
+
+    const [settingsMode, setSettingsMode] = React.useState(savedSettingsMode);
+
+    useEffect(() => {
+        localStorage.setItem('settingsMode', settingsMode);
+    }, [settingsMode]);
 
 
     const icons :  {
@@ -90,7 +103,9 @@ const SpeedSettings = ({}) => {
         });
         return grouped;
     };
-
+    // useEffect(() => {
+    //     console.log(settingsMode)
+    // },[settingsMode]);
 
     useEffect(() => {
      //   console.log(settings)
@@ -117,7 +132,6 @@ const SpeedSettings = ({}) => {
         }else{
             dispatch(setCommonState('openCategory', 'css'));
         }
-
 
     }, [data, settings]);
 
@@ -158,13 +172,9 @@ const SpeedSettings = ({}) => {
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
 
-    useEffect(() => {
-       // console.log("Test")
-    },[]);
 
     useEffect(() => {
-    //    console.log("Group Settings");
-        // Rest of your code
+     //   console.log("mode: ", settingsMode);
     }, [groupedSettings]);
 
 
@@ -183,20 +193,7 @@ const SpeedSettings = ({}) => {
 
             categoryOrder.forEach((category) => {
                 if (groupedSettings[category]) {
-                    // const sorted = groupedSettings[category].slice().sort((a, b) => {
-                    //     const aValue = a.inputs[0].value;
-                    //     const bValue = b.inputs[0].value;
-                    //
-                    //     if (aValue && !bValue) return -1;
-                    //     if (!aValue && bValue) return 1;
-                    //
-                    //     const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
-                    //     const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
-                    //     if (aHasFailedAudit && !bHasFailedAudit) return -1;
-                    //     if (!aHasFailedAudit && bHasFailedAudit) return 1;
-                    //
-                    //     return 0;
-                    // });
+
                     const sorted = groupedSettings[category].slice().sort((a, b) => {
                         const aHasFailedAudit = a.audits.some((audit) => audit.type !== 'passed_audit');
                         const bHasFailedAudit = b.audits.some((audit) => audit.type !== 'passed_audit');
@@ -225,13 +222,77 @@ const SpeedSettings = ({}) => {
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
             setSortedStatus(false);
-          //  console.log(passedAudits, notPassedAudits)
 
         }
-
+       // console.log('Not Passed Audits', notPassedAudits)
 
     }, [ groupedSettings]);
 
+
+
+    const settingsModeOnChange = (mode: string) => {
+        if (!notPassedAudits) {
+            return;
+        }
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+
+        notPassedAudits.forEach(settings => {
+            const [mainInput] = settings.inputs
+
+            let settingsToReturn;
+
+            if (mode === 'starter' && starterLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+            } else if (mode === 'accelerate' && accelerateLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+            } else if (mode === 'turboMax' && turboMaxLabels.includes(mainInput.control_label)) {
+                settingsToReturn = settings;
+
+            }
+            if (settingsToReturn) {
+                updateValue(settingsToReturn, true, mainInput.key);
+            }else{
+                updateValue(settings, false, mainInput.key);
+            }
+
+         //   console.log(mode , ' : ', settingsToReturn)
+          //  updateValue(settings, true, mainInput.key);
+
+        });
+      //  console.log(notPassedAudits)
+
+    };
+
+    useEffect(() => {
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+
+        const trueControlLabels: any[] = [];
+
+            notPassedAudits.forEach(settings => {
+                const [mainInput] = settings.inputs
+
+                if (mainInput.value) {
+                    trueControlLabels.push(mainInput.control_label);
+                }
+
+            });
+
+        if (trueControlLabels.every(label => starterLabels.includes(label))) {
+            setSettingsMode('starter')
+        } else if (trueControlLabels.every(label => accelerateLabels.includes(label))) {
+            setSettingsMode('accelerate')
+        } else if (trueControlLabels.every(label => turboMaxLabels.includes(label))) {
+            setSettingsMode('turboMax')
+        } else {
+            setSettingsMode('custom')
+        }
+    })
 
     const actionRequired = (item: AuditSetting): boolean => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -241,7 +302,6 @@ const SpeedSettings = ({}) => {
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
     const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
-    const [showButtonFadeIn, setShowButtonFadeIn] = useState(false);
     const {options} = useAppContext()
 
     useEffect(() => {
@@ -271,6 +331,39 @@ const SpeedSettings = ({}) => {
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-4 pb-2 mt-2 rounded-3xl'>
         <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
+        <div className="py-4">
+            <h3 className="font-medium">Performance Gears</h3>
+            <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+        </div>
+
+        <div className="flex gap-4">
+            {modes.map((mode, index) => (
+                <div
+                    key={index}
+                    className={`flex px-4 py-4 min-w-[156px] min-h-[156px] items-center justify-center w-fit rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === settingsMode ? ' border-purple-700' : ''}`}
+                    onClick={e => {
+                        setSettingsMode(mode as settingsMode);
+                        dispatch(setCommonState('settingsMode', mode));
+                        settingsModeOnChange(mode);
+                    }}
+                >
+                    <div className="flex flex-col gap-1 items-center text-center">
+                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
+                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
+                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
+                        <div>
+                            <p className="font-medium">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
+                            {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <div className="py-4">
+            <h3 className="font-medium">Recommended Settings</h3>
+        </div>
+
         <ul className='flex gap-3 ml-12'>
             {categoryOrder.map((category: SettingsCategory, index) => (
                 <li key={index} onClick={e => {
@@ -280,8 +373,6 @@ const SpeedSettings = ({}) => {
                 }}>
                     <m.div
                         id={category}
-                        // initial={{ opacity: 0, y: -5 }}
-                        // animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }} className={cn(
                         'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
@@ -302,11 +393,7 @@ const SpeedSettings = ({}) => {
 
         </ul>
 
-        <m.div
-            // initial={{ opacity: 0}}
-            // animate={{ opacity: 1}}
-            // transition={{ duration: 0.5 }}
-        >
+        <div>
             <ul>
 
                 {notPassedAudits.map((item: AuditSetting, itemIndex) => (
@@ -315,7 +402,7 @@ const SpeedSettings = ({}) => {
                                animate={{ opacity: 1}}
                                transition={{ duration: 0.3 }}
                         >
-                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true} />
+                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true}/>
                         </m.div>
                         )}</li>
                 ))}
@@ -381,7 +468,7 @@ const SpeedSettings = ({}) => {
                     </m.div>
                 }
             </ul>
-        </m.div>
+        </div>
     </div>
 }
 

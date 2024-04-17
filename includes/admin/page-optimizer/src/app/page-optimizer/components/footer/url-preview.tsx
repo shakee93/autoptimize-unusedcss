@@ -12,8 +12,8 @@ import {AppState, RootState} from "../../../../store/app/appTypes";
 const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
-    const {data, loading} = useSelector(optimizerData);
-    const { mobile, desktop  } = useSelector((state: RootState) => state.app);
+    const {data, loading, error, activeReport} = useSelector(optimizerData);
+    const {mobile, desktop} = useSelector((state: RootState) => state.app);
 
     const {
         togglePerformance,
@@ -22,86 +22,52 @@ const UrlPreview = () => {
 
     const url = options.optimizer_url
 
-    return <div  className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
-        {/*{togglePerformance ? (*/}
-        {/*    <div className={cn(*/}
-        {/*        'h-fit w-fit  flex items-center justify-center rounded-md',*/}
-        {/*        isFaviconLoaded ? 'flex' : 'hidden'*/}
-        {/*    )*/}
-        {/*    }>*/}
-        {/*        <img onLoad={e => setIsFaviconLoaded(true)}*/}
-        {/*             className='w-8 min-h-[32px] rounded-md p-1 bg-brand-200 dark:bg-brand-700' src={`https://www.google.com/s2/favicons?domain=${url}&sz=128`} alt=""/>*/}
-        {/*    </div>*/}
-        {/*) : (*/}
-        {/*    <div className='px-[5px]'>*/}
-        {/*        <div className='w-6'>*/}
-        {/*            <CircularProgressbarWithChildren styles={buildStyles({*/}
-        {/*                pathColor: '#0bb42f'*/}
-        {/*            })} value={data?.performance ? data.performance : 0} strokeWidth={12}>*/}
-        {/*                <span className='text-xxs text-brand-500'> {data?.performance ? data.performance : 0}</span>*/}
-        {/*            </CircularProgressbarWithChildren>*/}
-        {/*        </div>*/}
-        {/*    </div>*/}
-        {/*)}*/}
+    return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
         <div>
-                      <div
-                          // target="_blank"
-                          // href={url}
-                           className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl' >
-                          {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url}
-                          {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
-                      </div>
-
             <div
-                 className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
-                {loading ?
-                    <div className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
-                    <>
-                        {data?.loadingExperience?.timestamp &&
-                            <>
-                                Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
-                            </>
-                        }
-
-                        {desktop?.data?.performance &&
-                            <>
-                                <Dot className='w-6 text-brand-400'/>
-                                <div className='flex gap-1 items-center'>
-
-                                    {(desktop.revisions.length > 0
-                                        && desktop.revisions[0].data.performance <= desktop?.data?.performance) ?
-                                        <span className={cn(
-                                            ' flex items-center',
-                                            desktop.data.performance !== desktop.revisions[0].data.performance && 'text-green-600'
-                                        )}>{desktop?.data?.performance} {desktop.data.performance !== desktop.revisions[0].data.performance && <ArrowUp className='w-3'/>} </span>
-                                        :
-                                        <span className='text-red-600 flex items-center'>{desktop?.data?.performance} <ArrowDown className='w-3'/></span>
-                                    } Desktop
-                                </div>
-                            </>
-                        }
-
-
-                        {mobile?.data?.performance &&
-                            <>
-                                <Dot className='w-6 text-brand-400'/>
-                                <div className='flex gap-1 items-center'>
-
-                                    {(mobile.revisions.length > 0
-                                        && mobile.revisions[0].data.performance <= mobile?.data?.performance) ?
-                                        <span className={cn(
-                                            ' flex items-center',
-                                            mobile.data.performance !== mobile.revisions[0].data.performance && 'text-green-600'
-                                        )}>{mobile?.data?.performance} {mobile.data.performance !== mobile.revisions[0].data.performance && <ArrowUp className='w-3'/>} </span>
-                                        :
-                                        <span className='flex items-center'>{mobile?.data?.performance} <ArrowDown className='w-3'/></span>
-                                    } Mobile
-                                </div>
-                            </>
-                        }
-                    </>}
-
+                // target="_blank"
+                // href={url}
+                className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
+                {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url}
+                {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
             </div>
+
+            {!error &&
+                <div
+                    className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
+                    {loading ?
+                        <div
+                            className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
+                        <>
+                            {data?.loadingExperience?.timestamp &&
+                                <>
+                                    Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
+                                </>
+                            }
+
+                            {activeReport === 'mobile' && desktop?.data?.performance &&
+                                <>
+                                    <Dot className='w-6 text-brand-400'/>
+                                    <div className='flex gap-1 items-center'>
+                                        {desktop?.data?.performance} Desktop
+                                    </div>
+                                </>
+                            }
+
+
+                            {activeReport === 'desktop' && mobile?.data?.performance &&
+                                <>
+                                    <Dot className='w-6 text-brand-400'/>
+                                    <div className='flex gap-1 items-center'>
+                                        {mobile?.data?.performance}  Mobile
+                                    </div>
+                                </>
+                            }
+                        </>}
+
+                </div>
+
+            }
         </div>
     </div>
 }

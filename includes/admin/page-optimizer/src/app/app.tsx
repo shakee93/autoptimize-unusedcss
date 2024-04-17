@@ -13,6 +13,7 @@ import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
 import Header from "app/page-optimizer/components/Header";
 import {cn} from "lib/utils";
+import {setCommonState} from "../store/common/commonActions";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -25,7 +26,7 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, version, setShowOptimizer, mode, options} = useAppContext()
+    const {showOptimizer, version, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
@@ -56,6 +57,8 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         dispatch(fetchData(options, options.optimizer_url, false))
+        //dispatch(setCommonState('inProgress', false))
+        setShowInprogress(false);
     }, [dispatch, activeReport]);
 
     const hash = window.location.hash.replace("#", "");
@@ -77,7 +80,7 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         window.location.hash = '#' + activeRoute
     }, [activeRoute])
-    
+
     useEffect(() => {
         const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
 

@@ -361,7 +361,7 @@ class RapidLoad_Cache
 
     public static function clear_cache_on_post_save( $post ) {
 
-        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post'] ) {
+        if ( isset(RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post']) && RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post'] ) {
             self::clear_site_cache();
         } else {
             self::clear_post_cache( $post );

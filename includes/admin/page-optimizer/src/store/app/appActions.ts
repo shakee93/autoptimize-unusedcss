@@ -8,7 +8,9 @@ import {
     FETCH_DATA_SUCCESS,
     RootState,
     UPDATE_FILE_ACTION,
-    UPDATE_SETTINGS
+    UPDATE_SETTINGS,
+    GET_CSS_STATUS_SUCCESS,
+    UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -139,7 +141,49 @@ const initiateSettings = (audits: Audit[]) => {
     }))
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const cssJobStatusResult = await api.getCSSJobStatus(url, types);
+            dispatch({
+                type: GET_CSS_STATUS_SUCCESS,
+                payload : cssJobStatusResult.data
+            })
+
+        } catch (error) {
+            console.error('Error fetching CSS job status:', error);
+        }
+
+
+    }
+}
+
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const fetchTestModeData = await api.getTestMode(url, mode || '');
+            dispatch({
+                type: UPDATE_TEST_MODE,
+                payload : fetchTestModeData?.data
+            })
+
+        } catch (error) {
+            console.error('Error on Test Mode:', error);
+        }
+
+
+    }
+}
+
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -155,12 +199,12 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
-
+           
             if (activeReportData.loading) {
                 return;
             }
 
-            if (activeReportData.data && !reload) {
+            if (activeReportData.data && !reload && !inprogress) {
                 return;
             }
 

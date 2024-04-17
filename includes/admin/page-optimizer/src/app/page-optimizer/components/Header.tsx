@@ -11,7 +11,7 @@ import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchData} from "../../../store/app/appActions";
+import {changeReport, fetchData, getCSSStatus} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
@@ -22,6 +22,7 @@ import {
     GraduationCapIcon,
     LogOut,
     Monitor,
+    RefreshCw,
     MoreHorizontal,
     MoreVertical,
     RefreshCcw
@@ -36,6 +37,9 @@ import equal from 'fast-deep-equal/es6/react'
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import {Switch} from "components/ui/switch";
+import {getTestModeStatus} from "../../../store/app/appActions";
+
 
 const Header = () => {
 
@@ -45,27 +49,55 @@ const Header = () => {
         setShowOptimizer ,
         options,
         version,
-        mode
+        mode,
+        showInprogress,
+        setShowInprogress
     } = useAppContext()
 
     const { activeReport,
-        loading
+        loading, error,
+        settings
     } = useSelector(optimizerData);
-
+    const {inProgress } = useCommonDispatch()
     const {
+        activeTab,
+        activeMetric,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
-
+    const {testMode} = useSelector((state: RootState) => state.app);
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
 
+    useEffect(() => {
+        dispatch(getTestModeStatus(options, url));
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (testMode) {
+            setLocalSwitchState(testMode.status || false);
+        }
+    }, [testMode]);
     const url = options.optimizer_url
 
+    const handleSwitchChange = (isChecked: boolean) => {
+        setLocalSwitchState(isChecked);
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = setTimeout(() => {
+            dispatch(getTestModeStatus(options, url, String(isChecked)));
+        }, 200);
+        setTimeoutId(newTimeoutId);
+    };
 
     return (
 
-        <header className='sticky top-[32px] z-[10000] w-full px-6 py-3 flex gap-3 justify-between border-b dark:bg-brand-930 bg-brand-50'>
+        <header className='sticky top-[32px] z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
@@ -92,17 +124,19 @@ const Header = () => {
                     <div className='flex overflow-hidden border rounded-2xl shadow'>
                         <UrlPreview/>
                         <UnsavedChanges
-                            title='Analyze without Saving?'
+                            title='Analyze without applying optimization?'
                             description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
-                            action='Save & Analyze'
+                            action='Apply Optimization'
                             cancel='Discard & Analyze'
                             onCancel={() => {
                                 dispatch(fetchData(options, url, true))
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                                dispatch(fetchData(options, url, true))
+                                // dispatch(fetchData(options, url, true))
+                               // dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
+
                             }} >
                             <TooltipText
                                 text='Analyze the page'>
@@ -113,8 +147,8 @@ const Header = () => {
                                                'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
                                            )}
                                            variant='outline'>
-                                    <div className='flex flex-col gap-[1px] items-center'>
-                                        <RefreshCcw className={cn(
+                                    <div className={`flex flex-col gap-[1px] items-center`}>
+                                        <RefreshCw className={cn(
                                             'w-4 -mt-0.5',
                                             loading && 'animate-spin'
                                         )}/>
@@ -147,7 +181,40 @@ const Header = () => {
 
 
             <div className='flex relative gap-4 items-center'>
-                <SaveChanges/>
+                {!loading && !showInprogress && (
+                    <>
+                    {!error && (
+                        <>
+
+                            <div className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
+                                <div>Test Mode</div>
+                                <p></p>
+                                <Switch
+                                    checked={localSwitchState}
+                                    //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
+                                    onCheckedChange={(checked) => handleSwitchChange(checked)}
+
+                                />
+                            </div>
+                            <SaveChanges />
+                        </>
+                    )}
+                    </>
+                )}
+
+                <UnsavedChanges
+                    onCancel={() => { setShowOptimizer(false) }}
+                    cancel='Discard & Leave'
+                    onClick={() => {
+                        setShowOptimizer(false);
+                        setShowInprogress(false);
+                    }} >
+                    <TooltipText text='Close Optimizer'>
+                        <LogOut className={cn(
+                            'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
+                        )} />
+                    </TooltipText>
+                </UnsavedChanges>
             </div>
         </header>
 

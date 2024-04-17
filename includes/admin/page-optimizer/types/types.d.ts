@@ -18,6 +18,7 @@ interface WordPressOptions {
     titan_stylesheet_url?: string
     api_root?: string
     rest_url: string
+    license_key?: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
@@ -48,5 +49,6 @@ interface Help{
 }
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
+type settingsMode = 'starter' | 'accelerate' | 'turboMax' | 'custom';
 
 declare const __OPTIMIZER_VERSION__ : string

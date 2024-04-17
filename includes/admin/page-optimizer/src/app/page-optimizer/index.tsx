@@ -10,6 +10,7 @@ import {cn} from "lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
+import OptimizerInprogress from "components/Optimizer-Inprogress";
 import {optimizerData} from "../../store/app/appSelector";
 import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
@@ -34,6 +35,7 @@ export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
+    const { showInprogress } = useAppContext();
 
     const {
         options,
@@ -44,7 +46,6 @@ export default function PageOptimizer() {
     } = useAppContext()
 
     let url = options?.optimizer_url;
-
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
@@ -82,7 +83,7 @@ export default function PageOptimizer() {
                 savingData && 'relative overflow-hidden'
             )}>
 
-                {!loading ? (
+                {!loading && !showInprogress? (
                     <section
                         ref={optimizerContainer}
                         className={cn(
@@ -133,6 +134,8 @@ export default function PageOptimizer() {
                             </article>
                         </>}
                     </section>
+                ) : showInprogress && !savingData ?(
+                    <OptimizerInprogress />
                 ) : (
                     <Loading url={url}/>
                 )}

@@ -47,13 +47,13 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
-        $this->lazy_load_iframes();
-
-        $this->preload_images();
+        //$this->preload_images();
 
         $this->set_width_and_height();
 
         $this->lazy_load_images();
+
+        $this->lazy_load_iframes();
 
         // replacing urls
 
@@ -186,6 +186,10 @@ class RapidLoad_Image_Enqueue
                 }
 
                 if($this->is_file_excluded($video->{'poster'})){
+                    continue;
+                }
+
+                if($this->is_file_excluded($video->{'poster'},'uucss_exclude_images_from_modern_images')){
                     continue;
                 }
 
@@ -330,13 +334,9 @@ class RapidLoad_Image_Enqueue
                     }
                 }
 
-
-                //$style->__set('innertext', $cssDocument->render());
             }
 
         }
-
-
 
         return [
             'dom' => $this->dom,
@@ -393,32 +393,113 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $iframes as $index => $iframe ) {
 
-                if($this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
-                    continue;
-                }
-
-                if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
-                    continue;
-                }
-
                 if ($iframe->srcdoc) {
-                    $iframe->{'data-rapidload-lazy-srcdoc'} = $iframe->srcdoc;
-                    $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
-                    $iframe->{'data-rapidload-lazy-method'} = 'viewport';
-                    $iframe->{'data-rapidload-lazy-attributes'} = 'srcdoc,src';
-                    unset($iframe->{'data-src'});
-                    unset($iframe->{'srcdoc'});
-                    unset($iframe->{'src'});
+
+                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
+                        continue;
+                    }
+
+                    if($this->is_file_excluded($iframe->srcdoc)){
+                        continue;
+                    }
+
+                    if($this->is_youtube_iframe($iframe->srcdoc)){
+                        $this->handle_youtube_iframe($iframe, $iframe->srcdoc);
+                    }else{
+                        $iframe->{'data-rapidload-lazy-srcdoc'} = $iframe->srcdoc;
+                        $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
+                        $iframe->{'data-rapidload-lazy-method'} = 'viewport';
+                        $iframe->{'data-rapidload-lazy-attributes'} = 'srcdoc,src';
+                        unset($iframe->{'data-src'});
+                        unset($iframe->{'srcdoc'});
+                        unset($iframe->{'src'});
+                        $iframe->loading = "lazy";
+                    }
+
+
                 }else{
-                    $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
-                    $iframe->{'data-rapidload-lazy-method'} = 'viewport';
-                    $iframe->{'data-rapidload-lazy-attributes'} = 'src';
-                    unset($iframe->{'data-src'});
-                    unset($iframe->{'src'});
+
+                    if($this->is_file_excluded($iframe->src, 'uucss_exclude_images_from_lazy_load')){
+                        continue;
+                    }
+
+                    if($this->is_youtube_iframe($iframe->src)){
+                        $this->handle_youtube_iframe($iframe, $iframe->src);
+                    }else{
+                        $iframe->{'data-rapidload-lazy-src'} = $iframe->src ? $iframe->src : $iframe->{'data-src'};
+                        $iframe->{'data-rapidload-lazy-method'} = 'viewport';
+                        $iframe->{'data-rapidload-lazy-attributes'} = 'src';
+                        unset($iframe->{'data-src'});
+                        unset($iframe->{'src'});
+                        $iframe->loading = "lazy";
+                    }
                 }
 
-                $iframe->loading = "lazy";
+
             }
+        }
+    }
+
+    function handle_youtube_iframe($iframe, $src) {
+        $video_id = $this->get_youtube_video_id($src);
+        $video_poster = $this->get_youtube_poster($video_id);
+
+        if ($video_poster) {
+            $youtube_embed_url = $src;
+            if (strpos($youtube_embed_url, '?') === false) {
+                $youtube_embed_url .= '?autoplay=1';
+            } else {
+                if (strpos($youtube_embed_url, 'autoplay=') !== false) {
+                    $youtube_embed_url = preg_replace('/autoplay=[0-9]*/', 'autoplay=1', $youtube_embed_url);
+                } else {
+                    $youtube_embed_url .= '&autoplay=1';
+                }
+            }
+            $iframe->src = $youtube_embed_url;
+
+            $script = '<script>document.addEventListener("DOMContentLoaded",function(){var e=document.querySelectorAll(".rapidload-yt-play-button-' . $video_id . '");e.forEach(function(e){e.addEventListener("click",function(){var t=this.parentElement;this.style.display="none";var n=t.querySelector("iframe"),r=t.querySelector(".rapidload-yt-poster-image-' . $video_id . '");r&& (r.style.display="none");var o=t.querySelector("noscript");o&&(o.outerHTML=o.innerHTML)})})});</script>';
+
+            $styles = '<style>.rapidload-yt-video-container-' . $video_id . '{position: relative;top: 0;left:0;width:100%;height:100%;display:flex;justify-content:center;background-color:black}.rapidload-yt-poster-image-' . $video_id . '{display:block;height:auto}.rapidload-yt-play-button-' . $video_id . '{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;background-image:url(\'data:image/svg+xml,%3Csvg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"%3E%3Cpath class="ytp-large-play-button-bg" d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="%23f00"%3E%3C/path%3E%3Cpath d="M 45,24 27,14 27,34" fill="%23fff"%3E%3C/path%3E%3C/svg%3E\');background-size:cover;cursor:pointer;}</style>';
+
+            $play_button = $styles . '<div class="rapidload-yt-play-button-' . $video_id . '"></div>' . $script;
+
+            $iframe->outertext = '<div class="rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image-' . $video_id . '" alt="" src="' . RapidLoad_Image::get_replaced_url($video_poster, null, $iframe->width, $iframe->height, ['retina' => 'ret_img']) . '" width="' . $iframe->width . '" height="' . $iframe->height . '"/></div>';
+        }
+    }
+
+
+    function is_youtube_iframe($iframe_src) {
+        $domain = parse_url($iframe_src, PHP_URL_HOST);
+        if (strpos($domain, 'youtube.com') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_youtube_video_id($embedUrl) {
+        $pattern = '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/';
+        preg_match($pattern, $embedUrl, $matches);
+        if (isset($matches[1])) {
+            return $matches[1];
+        } else {
+            return false;
+        }
+    }
+
+    public function get_youtube_poster($videoId) {
+        if ($videoId) {
+            return $this->fetch_highest_res_youtube_poster($videoId);
+        }
+        return false;
+    }
+
+    public function fetch_highest_res_youtube_poster($videoid) {
+        $resolutions = ['maxresdefault', 'hqdefault', 'mqdefault'];
+        foreach($resolutions as $res) {
+            $imgUrl = "https://i.ytimg.com/vi/{$videoid}/{$res}.jpg";
+            if(@getimagesize(($imgUrl)))
+                return $imgUrl;
         }
     }
 
@@ -429,7 +510,7 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $images as $index => $img ) {
 
-                if($this->is_file_excluded($img->src) || $this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_lcp_image($img->src)){
+                if($this->is_file_excluded($img->src, 'uucss_exclude_images_from_lazy_load') || $this->is_file_excluded($img->src) || $this->is_lcp_image($img->src)){
                     $img->loading = "eager";
                     $img->decoding = "sync";
                     $img->fetchpriority = "high";
@@ -507,7 +588,11 @@ class RapidLoad_Image_Enqueue
 
                 foreach ( $images as $img ) {
 
-                    if($this->is_file_excluded($img->{$attribute['attr']})){
+                    if($this->is_file_excluded($img->{$attribute['attr']},'uucss_exclude_images_from_set_width_and_height')){
+                        continue;
+                    }
+
+                    if($this->is_file_excluded($img->{$attribute['attr']},'uucss_exclude_images')){
                         continue;
                     }
 
@@ -642,7 +727,7 @@ class RapidLoad_Image_Enqueue
 
             if(self::is_regex_expression($exclude_file)){
 
-                $excluded = preg_match($exclude_file, $file);
+                $excluded = @preg_match($exclude_file, $file);
 
             }
 

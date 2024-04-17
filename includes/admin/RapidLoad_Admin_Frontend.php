@@ -916,7 +916,7 @@ class RapidLoad_Admin_Frontend
 
         wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], UUCSS_VERSION);
+        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.min.js',[], UUCSS_VERSION);
 
         $data = array(
             'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'

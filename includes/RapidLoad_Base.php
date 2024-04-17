@@ -76,6 +76,13 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
+            if (isset($_REQUEST['rapidload_preview_optimization'])) {
+                add_filter('determine_current_user', function (){
+                    return 0;
+                }, 99);
+                show_admin_bar(false);
+            }
+
             self::fetch_options();
 
             if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
@@ -155,6 +162,16 @@ class RapidLoad_Base
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
+    }
+
+    public static function get_license_key(){
+
+        $options = self::fetch_options();
+
+        if(isset($options['uucss_api_key'])){
+            return $options['uucss_api_key'];
+        }
+        return null;
     }
 
     function merge_job_options($option){
@@ -417,7 +434,7 @@ class RapidLoad_Base
         }
 
         ?>
-        <hr class="rapidload-major-update-separator"/>
+        <!--<hr class="rapidload-major-update-separator"/>
         <div class="rapidload-major-update-message">
             <div class="rapidload-major-update-message-icon">
                 <span class="dashicons dashicons-info-outline"></span>
@@ -431,7 +448,7 @@ class RapidLoad_Base
                 </div>
             </div>
         </div>
-        <p style="display: none" class="empty">
+        <p style="display: none" class="empty">-->
         <?php
 
     }
@@ -572,6 +589,9 @@ class RapidLoad_Base
     public static function get_default_options(){
         return [
             'uucss_enable_css' => "1",
+            'uucss_fontface' => "1",
+            'uucss_keyframes' => "1",
+            'uucss_variables' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
             'uucss_support_next_gen_formats' => "1",

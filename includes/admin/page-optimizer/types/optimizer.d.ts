@@ -2,6 +2,7 @@
 
 interface OptimizerResults  {
     performance: number
+    job_id?: string;
     audits: Audit[]
     metrics: Metric[],
     loadingExperience?: LoadingExperience
@@ -168,12 +169,20 @@ interface AuditSetting {
 
 interface AuditSettingInput {
     control_type: ControlTypes;
-    control_values: string[];
+    control_values:  ControlValue[] | string [] ;
     control_payload: string;
     control_label: string;
     value: any;
     key: any;
     action: string
+}
+
+interface ControlValue {
+    type: string;
+    name: string;
+    id: string;
+    isSelected: boolean;
+    exclusions: string[];
 }
 
 type ControlTypes = 'checkbox' | 'textarea' | 'tickbox' | string
@@ -195,6 +204,20 @@ interface Metric {
 }
 
 type ReportType = 'mobile' | 'desktop'
+
+interface CSSJobStatus {
+    status: string;
+    error: string;
+}
+
+interface CSSStatusResponse {
+    uucss: CSSJobStatus;
+    cpcss: CSSJobStatus;
+}
+
+interface TestMode {
+    status: boolean;
+}
 
 interface Revision {
     created_at: string

@@ -9,6 +9,7 @@ import {optimizerData} from "../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../store/app/appTypes";
 import { compareVersions } from 'compare-versions';
+import {setCommonState} from "../store/common/commonActions";
 
 const useSubmitSettings = () => {
 
@@ -20,7 +21,8 @@ const useSubmitSettings = () => {
         setSavingData,
         invalidatingCache,
         setInvalidatingCache,
-        global
+        global,
+        setShowInprogress
     } = useAppContext()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -36,7 +38,7 @@ const useSubmitSettings = () => {
         useSelector(optimizerData)
 
 
-    let url = options?.optimizer_url;
+    const url = options?.optimizer_url;
     const { toast } = useToast()
 
 
@@ -79,21 +81,21 @@ const useSubmitSettings = () => {
                         url
                     })
 
-                    let rest = api.rest()
+                    const rest = api.rest()
 
                     if(compareVersions(options?.rapidload_version, '2.2.11') > 0){
                         await api.post(`preload_page`, {
                             url: options.optimizer_url,
                             user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                            nonce: options.nonce,
-                            job_id: data.job_id,
+                            nonce: options.nonce as string,
+                            job_id: data?.job_id as string,
                         });
                     }else{
                         await rest.request('/ping', {
                             'url' : options.optimizer_url,
                             'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                            'nonce': options.nonce,
-                            'job_id': data.job_id
+                            'nonce': options?.nonce as string,
+                            'job_id': data?.job_id as string,
                         })
                     }
 
@@ -107,7 +109,12 @@ const useSubmitSettings = () => {
                 }
 
                 dispatch(fetchData(options, url, true));
+
+            }else if(!analyze){
+               // dispatch(setCommonState('inProgress', true))
+                setShowInprogress(true);
             }
+
 
 
         } catch (error: any) {

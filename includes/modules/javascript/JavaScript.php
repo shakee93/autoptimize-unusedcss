@@ -37,9 +37,17 @@ class JavaScript
             return $this->get_cached_file($js_file, apply_filters('uucss/enqueue/cache-file-url/cdn', null));
         },10,1);
 
-        $this->enqueue_admin_scripts();
+        //$this->enqueue_admin_scripts();
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
+
+
+        add_filter('rapidload/js/excluded-files', function ($list){
+            if(defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED') && RAPIDLOAD_PAGE_OPTIMIZER_ENABLED){
+                $list = $this->get_dynamic_exclusions($list);
+            }
+            return $list;
+        }, 10);
     }
 
     public function vanish() {
@@ -181,5 +189,170 @@ class JavaScript
             trim($this->base, "/"),
             $file_url
         ] );
+    }
+
+    public static function get_third_party_scripts(){
+        return[
+            [
+                'type' => "third_party",
+                'name' => "Amazon Ads",
+                'id' => "amazon_ads",
+                'exclusions' => [
+                    "amazon-adsystem.com"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google AdSense",
+                'id' => "google_adsense",
+                'exclusions' => [
+                    "adsbygoogle"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google Analytics",
+                'id' => "google_analytics",
+                'exclusions' => [
+                    "/google-analytics\.com\/analytics\.js/",
+                    "/ga\( '/",
+                    "/ga\('/"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google Maps",
+                'id' => "google_maps",
+                'exclusions' => [
+                    "maps.googleapis.com",
+                    "maps.google.com"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google Optimize",
+                'id' => "google_optimize",
+                'exclusions' => [
+                    "a,s,y,n,c,h,i,d,e",
+                    "/googleoptimize.com\/optimize.js/",
+                    "async-hide"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google Recaptcha",
+                'id' => "google_recaptcha",
+                'exclusions' => [
+                    "recaptcha"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Google Tag Manager",
+                'id' => "google_tag_manager",
+                'exclusions' => [
+                    "/gtag\/js/",
+                    "/gtag\(/",
+                    "/gtm.js/",
+                    "async-hide"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Facebook",
+                'id' => "facebook",
+                'exclusions' => [
+                    "connect.facebook.net/en_US/fbevents.js"
+                ],
+            ],
+            [
+                'type' => "third_party",
+                'name' => "Hotjar",
+                'id' => "hotjar",
+                'exclusions' => [
+                    "/static.hotjar.com/c/hotjar/"
+                ],
+            ],
+        ];
+    }
+
+    public static function get_dynamic_exclusion_list(){
+        $plugins = self::get_active_plugins();
+        $exclusion_list = [];
+        foreach ($plugins as $plugin){
+            $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+            $plugin_name = $plugin_data['Name'];
+            $path = str_replace(basename($plugin), "", $plugin);
+
+            if (strpos($path, 'autoptimize-unusedcss') !== false || strpos($path, 'unusedcss') !== false) {
+                continue;
+            }
+
+            $exclusion_list[] = [
+                'type' => "plugins",
+                'name' => $plugin_name,
+                'id' => str_replace(" ","_", strtolower($plugin_name)),
+                'exclusions' => [
+                    "/plugins/" . $path,
+                    "/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js/",
+                    "/jquery-migrate(.min)?.js/",
+                ],
+            ];
+        }
+        $exclusion_list[] = [
+            'type' => "theme",
+            'name' => self::get_active_theme(),
+            'id' => str_replace(" ","_", strtolower(self::get_active_theme())),
+            'exclusions' => [
+                get_template_directory_uri(),
+                "/jquery-?[0-9.](.*)(.min|.slim|.slim.min)?.js/",
+                "/jquery-migrate(.min)?.js/",
+            ],
+        ];
+        $third_party_scripts = self::get_third_party_scripts();
+        return array_merge($third_party_scripts, $exclusion_list);
+    }
+
+    public static function get_active_theme() {
+        $theme = wp_get_theme();
+        $parent = $theme->get_template();
+        if ( ! empty( $parent ) ) {
+            return $parent;
+        }
+        return $theme->get( 'Name' );
+    }
+
+    public static function get_active_plugins() {
+        $plugins = (array) get_option( 'active_plugins', [] );
+
+        if ( ! is_multisite() ) {
+            return $plugins;
+        }
+
+        return array_merge(
+            $plugins,
+            array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) )
+        );
+    }
+
+    public function get_dynamic_exclusions($exclude = []){
+
+        $exclusions = self::get_dynamic_exclusion_list();
+
+        $dynamic_js_exclusion = isset($this->options['uucss_dynamic_js_exclusion_list']) && !empty($this->options['uucss_dynamic_js_exclusion_list']) ? explode("\n", $this->options['uucss_dynamic_js_exclusion_list']) : [];
+
+        foreach ($dynamic_js_exclusion as $id){
+
+            $key = array_search($id, array_column($exclusions, 'id'), true);
+
+            if(isset($key) && is_numeric($key)){
+
+                $exclude = array_merge($exclude, $exclusions[$key]['exclusions']);
+
+            }
+        }
+
+        return array_unique($exclude);
+
     }
 }

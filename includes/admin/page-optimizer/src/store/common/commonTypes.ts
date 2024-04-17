@@ -3,6 +3,7 @@ export type CommonState = {
     mode: RapidLoadOptimizerModes,
     modeData?: RapidLoadOptimizerModeData
     isTourOpen: boolean
+
     mobile : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
@@ -10,6 +11,8 @@ export type CommonState = {
         openAudits: string[];
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
+        inProgress: boolean;
+        settingsMode?: settingsMode | '';
     }
     desktop : {
         activeTab: AuditTypes;
@@ -18,6 +21,8 @@ export type CommonState = {
         openAudits: string[];
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
+        inProgress: boolean;
+        settingsMode?: settingsMode | '';
     }
 
 };

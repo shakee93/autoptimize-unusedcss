@@ -110,6 +110,8 @@
 
         await preloadScripts(totalScripts)
 
+        load_inline_delayed();
+
         for (const script of totalScripts) {
             loadScript(script);
         }
@@ -142,4 +144,17 @@
             removeEventListener(event, listener);
         });
     }
+
+    function load_inline_delayed(){
+        Array.from(document.getElementsByTagName('noscript')).forEach(function(e){
+            var tag = e.getAttribute('data-rapidload-delayed');
+            if(tag !== null && tag !== undefined) {
+                var newScript = document.createElement('script');
+                var inlineScript = document.createTextNode(e.innerHTML);
+                newScript.appendChild(inlineScript);
+                e.parentNode.insertBefore(newScript, e);
+            }}
+        );
+    }
+
 })();

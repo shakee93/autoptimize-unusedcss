@@ -20,7 +20,7 @@ const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
+  <div
     ref={ref}
     className={cn(
       "fixed inset-0 z-[120000] bg-background/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
@@ -39,7 +39,7 @@ const DialogContent = React.forwardRef<
       document.getElementById('rapidload-optimizer-shadow-dom')?.shadowRoot?.getElementById('rapidload-page-optimizer-wrapper')
       || document.body
   }>
-    <DialogOverlay className='cursor-auto' />
+    <DialogOverlay className='cursor-auto' >
     <DialogPrimitive.Content asChild
       ref={ref}
       {...props}
@@ -55,6 +55,8 @@ const DialogContent = React.forwardRef<
           </DialogPrimitive.Close>
       </div>
     </DialogPrimitive.Content>
+    </DialogOverlay>
+
   </DialogPortal>
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName

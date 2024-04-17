@@ -35,6 +35,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
             add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
+            add_action('wp_ajax_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
                 add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -53,6 +54,34 @@ class RapidLoad_Admin
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function rapidload_switch_test_mode(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(!isset($_REQUEST['test_mode']) || empty($_REQUEST['test_mode'])){
+            if(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"){
+                wp_send_json_success([
+                    'status' => true
+                ]);
+            }else{
+                wp_send_json_success([
+                    'status' => false
+                ]);
+            }
+        }
+
+        $status = $_REQUEST['test_mode'] == "true" ? "1" : "0";
+
+        $options['rapidload_test_mode'] = $status;
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+
+        wp_send_json_success([
+            'status' => $options['rapidload_test_mode'] == "1"
+        ]);
 
     }
 
@@ -236,6 +265,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_minify_excluded_files'])){
+
+            $options['uucss_minify_excluded_files'] = $_REQUEST['uucss_minify_excluded_files'];
+
+        }
+
         if(isset($_REQUEST['rapidload_aggregate_css'])){
 
             $options['rapidload_aggregate_css'] = ($_REQUEST['rapidload_aggregate_css'] == 'true' ? "1" : null);
@@ -405,6 +440,12 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_excluded_js_files'])){
 
             $options['uucss_excluded_js_files'] = $_REQUEST['uucss_excluded_js_files'];
+
+        }
+
+        if(isset($_REQUEST['delay_javascript_callback'])){
+
+            $options['delay_javascript_callback'] = $_REQUEST['delay_javascript_callback'];
 
         }
 
@@ -645,6 +686,11 @@ class RapidLoad_Admin
 
             RapidLoad_Cache::update_settings($args);
 
+        }
+
+        if(isset($_REQUEST['rapidload_test_mode'])){
+
+            $options['rapidload_test_mode'] = ($_REQUEST['rapidload_test_mode'] == 'true' ? 1 : 0);
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
