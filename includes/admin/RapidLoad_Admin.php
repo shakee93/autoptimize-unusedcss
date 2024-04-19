@@ -31,6 +31,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
+            add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_cdn_metering']);
+            add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -56,6 +58,48 @@ class RapidLoad_Admin
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function rapidload_enable_cdn_metering(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(!isset($options['uucss_cdn_zone_id'])){
+            wp_send_json_error('cdn zone id not set');
+        }
+
+        $api = new RapidLoad_Api();
+
+        $response = $api->post('enable-cdn-metering',[
+           'zone_id' =>  $options['uucss_cdn_zone_id']
+        ]);
+
+        if(is_wp_error($response)){
+            wp_send_json_error($api->extract_error($response));
+        }
+
+        wp_send_json_success([
+            'success' => true
+        ]);
+
+    }
+
+    public function rapidload_enable_image_metering(){
+
+        $api = new RapidLoad_Api();
+
+        $response = $api->post('enable-cdn-metering',[
+            'url' =>  site_url()
+        ]);
+
+        if(is_wp_error($response)){
+            wp_send_json_error($api->extract_error($response));
+        }
+
+        wp_send_json_success([
+            'success' => true
+        ]);
 
     }
 
