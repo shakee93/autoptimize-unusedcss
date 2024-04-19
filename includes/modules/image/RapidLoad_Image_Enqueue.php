@@ -306,7 +306,9 @@ class RapidLoad_Image_Enqueue
 
                         $urlExt = pathinfo($match, PATHINFO_EXTENSION);
                         if (in_array($urlExt, $this->imgExt)) {
-                            $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn);
+                            $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn,false,false, [
+                                'retina' => 'ret_img'
+                            ]);
                             $style->__set('innertext', str_replace($match,$replace_url,$style->innertext));
                             $url_replaced = true;
                         }
