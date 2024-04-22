@@ -207,6 +207,24 @@ class ApiService {
         }
     }
 
+    async getLicense(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'uucss_license');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 

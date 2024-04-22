@@ -10,7 +10,7 @@ import {
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
     GET_CSS_STATUS_SUCCESS,
-    UPDATE_TEST_MODE
+    UPDATE_TEST_MODE, GET_LICENSE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -177,6 +177,27 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
 
         } catch (error) {
             console.error('Error on Test Mode:', error);
+        }
+
+
+    }
+}
+
+export const updateLicense = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const fetchLicense = await api.getLicense();
+            dispatch({
+                type: GET_LICENSE,
+                payload : fetchLicense?.data
+            })
+
+        } catch (error) {
+            console.error('Error on License:', error);
         }
 
 

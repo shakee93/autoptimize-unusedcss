@@ -9,6 +9,8 @@ export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
+    license: License | null;
+    generalSettings: GeneralSettings | null;
     mobile: {
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
@@ -50,6 +52,18 @@ export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
+export const UPDATE_DASHBOARD_GENERALSETTINGS = 'UPDATE_DASHBOARD_GENERALSETTINGS';
+export const GET_LICENSE = 'GET_LICENSE';
+
+interface GetLicense {
+    type: typeof GET_LICENSE,
+    payload : License,
+}
+
+interface UpdateGeneralSettings {
+    type: typeof UPDATE_DASHBOARD_GENERALSETTINGS,
+    payload : GeneralSettings,
+}
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
@@ -109,5 +123,5 @@ interface UpdateFileActionAction {
 
 
 // Define the combined action type
-export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
+export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateGeneralSettings | GetLicense;
 

@@ -39,7 +39,7 @@ import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
-
+import {updateLicense} from "../../../store/app/appActions";
 
 const Header = () => {
 
@@ -65,7 +65,7 @@ const Header = () => {
         dispatch: commonDispatch
     } = useCommonDispatch()
 
-    const {testMode} = useSelector((state: RootState) => state.app);
+    const {testMode, license} = useSelector((state: RootState) => state.app);
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -73,7 +73,17 @@ const Header = () => {
 
     useEffect(() => {
         dispatch(getTestModeStatus(options, url));
+        dispatch(updateLicense(options));
+
     }, [dispatch]);
+
+    useEffect(() => {
+        if (license) {
+            console.log('License : ',license);
+           // console.log("General Settings: ", window.uucss_global.active_modules.general)
+            localStorage.setItem('RapidloadLicense', JSON.stringify(license));
+        }
+    }, [license]);
 
     useEffect(() => {
         if (testMode) {

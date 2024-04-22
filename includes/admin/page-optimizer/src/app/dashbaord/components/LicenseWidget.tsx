@@ -1,16 +1,25 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useState, useEffect} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { CheckBadgeIcon, EyeIcon, EyeSlashIcon,InformationCircleIcon  } from "@heroicons/react/24/outline";
 import {Switch} from "components/ui/switch";
 import {Label} from "components/ui/label";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/app/appTypes";
 
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
-    const email = "azeez@freshpixl.com";
-    const expdate = "Oct 24";
-    const license = "Professional";
+    const [license, setLicense] = useState<License | null>(null);
+
+    useEffect(() => {
+        const storedLicense = localStorage.getItem('RapidloadLicense');
+        if (storedLicense) {
+            setLicense(JSON.parse(storedLicense));
+            console.log(storedLicense)
+        }
+        console.log(window?.uucss_global?.active_modules.general)
+    }, []);
 
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
@@ -25,7 +34,7 @@ const LicenseWidget = () => {
                   )}>
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 pt-6 ">
                     <div className="text-lg font-bold text-brand-400 dark:text-brand-300">Welcome back,</div>
-                    <div className="text-lg font-bold pb-2">Abdul Azeez</div>
+                    <div className="text-lg font-bold pb-2">{license?.name}</div>
 
                     <div className="bg-green-500/10 px-2.5 py-1.5 rounded-xl w-fit">
                         <div className="flex gap-2 items-center">
@@ -59,28 +68,25 @@ const LicenseWidget = () => {
 
                             <div className="text-sm font-semibold">
                                 {isVisible ? (
-                                    email
+                                    license?.email
                                 ) : (
-                                    '*'.repeat(email.length)
+                                    '*'.repeat((license?.email|| '').length)
                                 )}</div>
                         </div>
                         <div>
                             <div className="text-sm font-semibold text-indigo-800">Exp. date:</div>
                             <div className="text-sm font-semibold">
-                                {isVisible ? (
-                                    expdate
-                                ) : (
-                                    '*'.repeat(expdate.length)
-                                )}</div>
+                                {isVisible ? (license?.next_billing ? new Date(license.next_billing * 1000).toLocaleDateString() : '') : '*'.repeat((license?.next_billing ?? '').toString().length)}
+                            </div>
                         </div>
 
                         <div>
                             <div className="text-sm font-semibold text-indigo-800">License:</div>
                             <div className="text-sm font-semibold">
                                 {isVisible ? (
-                                    license
+                                    license?.plan
                                 ) : (
-                                    '*'.repeat(license.length)
+                                    '*'.repeat(( license?.plan || '').length)
                                 )}</div>
                         </div>
 

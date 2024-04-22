@@ -5,6 +5,7 @@ import UnusedCSSSummary from "app/dashbaord/components/UnusedCSSSummary";
 import CacheSummary from "app/dashbaord/components/CacheSummary";
 import CDNSummary from "app/dashbaord/components/CDNSummary";
 import OptimizerPagesTable from "app/dashbaord/components/OptimizerPagesTable";
+import GeneralSettings from "app/dashbaord/components/GeneralSettings";
 import Header from "app/page-optimizer/components/Header";
 
 import {useSelector} from "react-redux";
@@ -207,6 +208,12 @@ export default function Dashbaord() {
                                                }
                                             }
                                        />
+                                    </div>
+                                </div>
+
+                                <div className="col-span-3">
+                                    <div className="widgets gap-4 grid">
+                                       <GeneralSettings/>
                                     </div>
                                 </div>
                                 {/*<article className={cn(*/}

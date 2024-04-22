@@ -219,6 +219,27 @@ interface TestMode {
     status: boolean;
 }
 
+interface License {
+    email: string;
+    licensedDomain: string;
+    name: string;
+    plan: string;
+    next_billing: number;
+    siteUrl: string;
+}
+
+interface GeneralSettings {
+    excludeUrl: string[];
+    minifyHtml: boolean;
+    queryString: boolean;
+    preloadLinks: boolean;
+    debugMode: boolean;
+    queueRunJob: number;
+    queueRunJobInterval: number;
+    disableAutoQueue: boolean;
+    disableReQueue: boolean;
+}
+
 interface Revision {
     created_at: string
     id: number
