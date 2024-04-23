@@ -459,9 +459,9 @@ class RapidLoad_Image_Enqueue
 
             $styles = '<style>.rapidload-yt-video-container-' . $video_id . '{position: absolute;top: 0;left:0;width:100%;height:100%;display:flex;justify-content:center;background-color:black}.rapidload-yt-poster-image-' . $video_id . '{display:block;height:auto}.rapidload-yt-play-button-' . $video_id . '{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;background-image:url(\'data:image/svg+xml,%3Csvg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"%3E%3Cpath class="ytp-large-play-button-bg" d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="%23f00"%3E%3C/path%3E%3Cpath d="M 45,24 27,14 27,34" fill="%23fff"%3E%3C/path%3E%3C/svg%3E\');background-size:cover;cursor:pointer;}</style>';
 
-            $play_button = $styles . '<div class="rapidload-yt-play-button-' . $video_id . '"></div>' . $script;
+            $play_button = $styles . '<div class="rapidload-yt-play-button rapidload-yt-play-button-' . $video_id . '"></div>' . $script;
 
-            $iframe->outertext = '<div class="rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image-' . $video_id . '" alt="" src="' . RapidLoad_Image::get_replaced_url($video_poster, null, $iframe->width, $iframe->height, ['retina' => 'ret_img']) . '" width="' . $iframe->width . '" height="' . $iframe->height . '"/></div>';
+            $iframe->outertext = '<div class="rapidload-yt-video-container rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image rapidload-yt-poster-image-' . $video_id . '" alt="" src="' . RapidLoad_Image::get_replaced_url($video_poster, null, $iframe->width, $iframe->height, ['retina' => 'ret_img']) . '" width="' . $iframe->width . '" height="' . $iframe->height . '"/></div>';
         }
     }
 
