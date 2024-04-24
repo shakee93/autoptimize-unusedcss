@@ -51,7 +51,7 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-
+    const [activatedSettings, setActivatedSettings] = useState<string[]>([]);
     // let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
     // if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
     //     savedSettingsMode = 'starter';
@@ -278,12 +278,17 @@ const SpeedSettings = ({}) => {
 
                 if (mainInput.value) {
                     trueControlLabels.push(mainInput.control_label);
+
                 }
                 if(!mainInput.value){
                     falseControlLabels.push(mainInput.control_label);
                 }
 
             });
+
+
+        // console.log("trueControlLabels: ",trueControlLabels)
+        // console.log("falseControlLabels: ",falseControlLabels)
 
         const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
 
@@ -295,7 +300,9 @@ const SpeedSettings = ({}) => {
             setActiveSettingsMode('turboMax')
         } else {
             setActiveSettingsMode('custom')
+         //   setActivatedSettings(trueControlLabels);
         }
+
 
     })
 
@@ -377,7 +384,16 @@ const SpeedSettings = ({}) => {
 
         <div className="py-4">
             <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)} Activated</h3>
-            <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            {activeSettingsMode === 'starter' ? (
+                <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>
+            ) : activeSettingsMode === 'accelerate' ? (
+                <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>
+            ) : activeSettingsMode === 'turboMax' ? (
+                <span className="font-normal text-sm">Accelerator mode + advanced JavaScript handling techniques, including delaying JavaScript execution for peak performance.</span>
+            ) :
+                <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by Customized settings.</span>
+
+            }
         </div>
 
         <div>
