@@ -50,13 +50,14 @@ const SpeedSettings = ({}) => {
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
+    const [customMode, setCustomMode] = useState(false);
 
-    let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
-    if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
-        savedSettingsMode = 'starter';
-    }
-
-    const [activeSettingsMode, setActiveSettingsMode] = React.useState(savedSettingsMode);
+    // let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
+    // if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
+    //     savedSettingsMode = 'starter';
+    // }
+    // const [activeSettingsMode, setActiveSettingsMode] = React.useState(savedSettingsMode);
+    const [activeSettingsMode, setActiveSettingsMode] = useState('');
 
     useEffect(() => {
       //  localStorage.setItem('settingsMode', activeSettingsMode);
@@ -103,12 +104,9 @@ const SpeedSettings = ({}) => {
         });
         return grouped;
     };
-    useEffect(() => {
-        console.log("dispatch :", settingsMode)
-    },[activeSettingsMode]);
+
 
     useEffect(() => {
-     //   console.log(settings)
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -266,34 +264,42 @@ const SpeedSettings = ({}) => {
 
     };
 
-    // useEffect(() => {
-    //
-    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
-    //
-    //     const trueControlLabels: any[] = [];
-    //
-    //         notPassedAudits.forEach(settings => {
-    //             const [mainInput] = settings.inputs
-    //
-    //             if (mainInput.value) {
-    //                 trueControlLabels.push(mainInput.control_label);
-    //             }
-    //
-    //         });
-    //
-    //     if (trueControlLabels.every(label => starterLabels.includes(label))) {
-    //         setSettingsMode('starter')
-    //     } else if (trueControlLabels.every(label => accelerateLabels.includes(label))) {
-    //         setSettingsMode('accelerate')
-    //     } else if (trueControlLabels.every(label => turboMaxLabels.includes(label))) {
-    //         setSettingsMode('turboMax')
-    //     } else {
-    //         setSettingsMode('custom')
-    //     }
-    //     console.log("Mode: ",settingsMode)
-    // })
+    useEffect(() => {
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+
+        const trueControlLabels: any[] = [];
+        const falseControlLabels: any[] = [];
+
+            notPassedAudits.forEach(settings => {
+                const [mainInput] = settings.inputs
+
+                if (mainInput.value) {
+                    trueControlLabels.push(mainInput.control_label);
+                }
+                if(!mainInput.value){
+                    falseControlLabels.push(mainInput.control_label);
+                }
+
+            });
+
+        const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
+
+        if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
+            setActiveSettingsMode('starter')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
+            setActiveSettingsMode('accelerate')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
+            setActiveSettingsMode('turboMax')
+        } else {
+            setActiveSettingsMode('custom')
+        }
+
+    })
+
+
 
     const actionRequired = (item: AuditSetting): boolean => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -377,7 +383,11 @@ const SpeedSettings = ({}) => {
         <div>
             <button
                 key={activeCategory}
-                onClick={() => {setActiveSettingsMode('custom'); dispatch(setCommonState('settingsMode', 'custom'));}}
+                onClick={() => {
+                   // setActiveSettingsMode('custom');
+                    dispatch(setCommonState('settingsMode', 'custom'));
+                    setCustomMode(prevMode => !prevMode);
+                }}
                 className={cn(
                     `select-non w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
@@ -386,16 +396,17 @@ const SpeedSettings = ({}) => {
             >
                 Customize Settings {" "} <ChevronDownIcon className={cn(
                 'w-4 rounded-[15px] transition-transform',
-                activeSettingsMode === 'custom' && '-rotate-180'
+                customMode && '-rotate-180'
             )} />
 
             </button>
         </div>
 
-        {activeSettingsMode === 'custom' &&
+        {customMode &&
             <>
         <div className="py-4">
-            <h3 className="font-semibold">Recommended Settings</h3>
+            {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
+            <div className="px-0.5 py-[1px] dark:bg-brand-950 bg-brand-0 rounded-full"></div>
         </div>
 
         <ul className='flex gap-3 ml-12'>
