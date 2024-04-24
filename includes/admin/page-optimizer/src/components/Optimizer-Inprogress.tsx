@@ -25,7 +25,7 @@ const OptimizerInprogress = () => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
     const {activeReport, cssStatus} = useSelector((state: RootState) => state.app);
-    const {inProgress } = useCommonDispatch()
+    const {inProgress, settingsMode } = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
     const intervalRef = useRef<NodeJS.Timer | null>(null);
 
@@ -43,6 +43,7 @@ const OptimizerInprogress = () => {
 
     useEffect(() => {
         dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
+        localStorage.setItem('settingsMode', settingsMode as settingsMode);
     }, [dispatch]);
 
     useEffect(() => {
