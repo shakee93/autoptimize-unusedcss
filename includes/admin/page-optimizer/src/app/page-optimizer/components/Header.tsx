@@ -132,7 +132,7 @@ const Header = ({ url }: { url: string}) => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                                if(!inProgress){
+                                if(!inProgress || !loading){
                                     dispatch(fetchData(options, url, true))
                                 }
                                 // dispatch(fetchData(options, url, true))
