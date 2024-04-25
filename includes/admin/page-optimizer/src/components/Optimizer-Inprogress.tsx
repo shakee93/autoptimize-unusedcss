@@ -47,8 +47,7 @@ const OptimizerInprogress = () => {
     }, [dispatch]);
 
     useEffect(() => {
-
-        console.log("Optimizer component: ", cssStatus);
+    //    console.log("Optimizer component: ", cssStatus);
     }, [cssStatus]);
 
     useEffect(() => {
@@ -122,6 +121,7 @@ const OptimizerInprogress = () => {
         if(checkCircleCount  == filteredSettings?.length){
             const timer = setTimeout(() => {
                 setShowInprogress(false);
+                dispatch(setCommonState('inProgress', false))
                 dispatch(fetchData(options, url, true));
             }, 3000);
             return () => clearTimeout(timer);
@@ -294,8 +294,8 @@ const OptimizerInprogress = () => {
                            <Button
                                onClick={() => {
                                dispatch(fetchData(options, url, true))
-                               //dispatch(setCommonState('inProgress', false))
-                                   setShowInprogress(false);
+                               dispatch(setCommonState('inProgress', false))
+                               setShowInprogress(false);
                            }}
                                    className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>
                                <RefreshCw className={cn(

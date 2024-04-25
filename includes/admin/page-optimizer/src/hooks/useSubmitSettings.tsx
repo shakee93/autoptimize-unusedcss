@@ -112,7 +112,7 @@ const useSubmitSettings = () => {
                 dispatch(fetchData(options, url, true));
 
             }else if(!analyze){
-               // dispatch(setCommonState('inProgress', true))
+                dispatch(setCommonState('inProgress', true))
                 setShowInprogress(true);
 
             }

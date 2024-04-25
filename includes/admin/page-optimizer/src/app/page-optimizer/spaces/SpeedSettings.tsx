@@ -46,7 +46,7 @@ const SpeedSettings = ({}) => {
     const {settings, data, activeReport} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab, settingsMode} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
@@ -333,6 +333,13 @@ const SpeedSettings = ({}) => {
 
     }, [groupedSettings]);
 
+    useEffect(() => {
+        if(auditsReturn){
+            setCustomMode(true);
+            dispatch(setCommonState('auditsReturn', false));
+        }
+    },[auditsReturn]);
+
     const setShowHideState = (category: string) => {
         setCategoryStates((prevStates) => ({
             ...prevStates,
@@ -389,10 +396,9 @@ const SpeedSettings = ({}) => {
             ) : activeSettingsMode === 'accelerate' ? (
                 <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>
             ) : activeSettingsMode === 'turboMax' ? (
-                <span className="font-normal text-sm">Accelerator mode + advanced JavaScript handling techniques, including delaying JavaScript execution for peak performance.</span>
+                <span className="font-normal text-sm">Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.</span>
             ) :
-                <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by Customized settings.</span>
-
+                <span className="font-normal text-sm">Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance.</span>
             }
         </div>
 
