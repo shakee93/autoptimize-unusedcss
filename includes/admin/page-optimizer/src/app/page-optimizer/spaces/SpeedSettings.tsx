@@ -343,9 +343,9 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 pt-4 pb-4 mt-2 rounded-3xl'>
-        <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
-        <div className="py-4">
+    return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
+        {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
+        <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
@@ -420,9 +420,10 @@ const SpeedSettings = ({}) => {
 
         {customMode &&
             <>
-        <div className="py-4">
+        <div className="py-3 relative">
             {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
-            <div className="px-0.5 py-[1px] dark:bg-brand-950 bg-brand-0 rounded-full"></div>
+            <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
+
         </div>
 
         <ul className='flex gap-3 ml-12'>

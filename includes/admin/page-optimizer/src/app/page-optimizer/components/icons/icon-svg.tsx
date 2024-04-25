@@ -235,15 +235,15 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
     const strokeWidth = 2;
 
     return (
-        <div className='absolute -top-3 -left-4'>
+        <div className='absolute -left-7 top-0.5'>
             {!animate &&
             <svg className={`absolute selectionBar`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path className='dark:stroke-brand-600 stroke-brand-300' d={adjustedPath}  strokeWidth={strokeWidth} />
+                <path className='dark:stroke-brand-600 stroke-purple-800/10' d={adjustedPath}  strokeWidth={strokeWidth} />
             </svg>
             }
 
             <svg width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path className='dark:stroke-brand-500 stroke-brand-200' d={adjustedPath} strokeWidth={strokeWidth} />
+                <path className='dark:stroke-brand-500 stroke-purple-600/10' d={adjustedPath} strokeWidth={strokeWidth} />
             </svg>
         </div>
     );
