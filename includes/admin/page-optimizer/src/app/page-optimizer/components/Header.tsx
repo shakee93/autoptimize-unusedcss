@@ -56,6 +56,7 @@ const Header = ({ url }: { url: string}) => {
     const {
         activeTab,
         activeMetric,
+        settingsMode,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
@@ -68,6 +69,14 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         dispatch(getTestModeStatus(options, url));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(settingsMode==='turboMax' && !localSwitchState){
+            handleSwitchChange(true)
+        } else if(!testMode){
+            setLocalSwitchState(false);
+        }
+    }, [settingsMode]);
 
     useEffect(() => {
         if (testMode) {
@@ -132,6 +141,7 @@ const Header = ({ url }: { url: string}) => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
+
                                 if(!inProgress || !loading){
                                     dispatch(fetchData(options, url, true))
                                 }

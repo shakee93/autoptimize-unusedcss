@@ -1,7 +1,7 @@
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
-import {CheckCircle2, Circle} from "lucide-react";
+import {CheckCircle2, Circle, LogOut} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
     CloudDelivery,
@@ -29,7 +29,22 @@ import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
-import {useAppContext} from "../../../context/app"; // Import the new component
+import {useAppContext} from "../../../context/app";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import TooltipText from "components/ui/tooltip-text";
+import {Cog6ToothIcon} from "@heroicons/react/20/solid";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
+import AppButton from "components/ui/app-button";
+import Mode from "app/page-optimizer/components/Mode";
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes"; // Import the new component
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -52,12 +67,14 @@ const SpeedSettings = ({}) => {
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
     const [activatedSettings, setActivatedSettings] = useState<string[]>([]);
+
     // let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
     // if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
     //     savedSettingsMode = 'starter';
     // }
     // const [activeSettingsMode, setActiveSettingsMode] = React.useState(savedSettingsMode);
     const [activeSettingsMode, setActiveSettingsMode] = useState('');
+    const [customChanges, setCustomChanges] = useState(activeSettingsMode === 'custom');
 
     useEffect(() => {
       //  localStorage.setItem('settingsMode', activeSettingsMode);
@@ -229,6 +246,10 @@ const SpeedSettings = ({}) => {
 
 
     const settingsModeOnChange = (mode: string) => {
+
+        setActiveSettingsMode(mode as settingsMode);
+        dispatch(setCommonState('settingsMode', mode));
+
         if (!notPassedAudits) {
             return;
         }
@@ -261,6 +282,7 @@ const SpeedSettings = ({}) => {
 
         });
       //  console.log(notPassedAudits)
+
 
     };
 
@@ -350,6 +372,10 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
+
+    const customUnsavedChanges = useRef<HTMLDivElement>(null);
+    const [tempMode, setTempMode] = useState('');
+
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
         <div className="pb-4">
@@ -363,9 +389,12 @@ const SpeedSettings = ({}) => {
                     key={index}
                     className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700' : ''}`}
                     onClick={e => {
-                        setActiveSettingsMode(mode as settingsMode);
-                        dispatch(setCommonState('settingsMode', mode));
-                        settingsModeOnChange(mode);
+                        setTempMode(mode);
+                        if(activeSettingsMode === 'custom'){
+                            customUnsavedChanges.current?.click();
+                        }else{
+                            settingsModeOnChange(mode);
+                        }
                     }}
                 >
 
@@ -389,8 +418,22 @@ const SpeedSettings = ({}) => {
             ))}
         </div>
 
+
+        <UnsavedChanges
+            title='Do you want to do the changes'
+            description="Your changes are not saved yet. If you change the performance mode now, your recent edits won't be included."
+            action='Activate'
+            performanceGear={true}
+            cancel='Cancel'
+            onClick={() => {
+                settingsModeOnChange(tempMode);
+            }} >
+            <div ref={customUnsavedChanges}></div>
+        </UnsavedChanges>
+
+
         <div className="py-4">
-            <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)} Activated</h3>
+            <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode==='custom'? ' Settings': '' } Activated</h3>
             {activeSettingsMode === 'starter' ? (
                 <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>
             ) : activeSettingsMode === 'accelerate' ? (
