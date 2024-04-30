@@ -198,7 +198,7 @@ const Header = ({ url }: { url: string}) => {
                     {!error && (
                         <>
 
-                            <div className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
+                            <div className="text-sm flex gap-1 items-center ml-4 text-left w-full dark:text-brand-300">
                                 <div>Test Mode</div>
                                 <p></p>
                                 <Switch

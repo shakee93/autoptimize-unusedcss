@@ -38,11 +38,14 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
     // console.log(fresh, touched);
     // return <>{children}</>;
 
-    if (!(fresh ? true : touched) || showInprogress) {
-        return <div onClick={e => onClick()} >
-            {children}
-        </div>
+    if(!performanceGear){
+        if (!(fresh ? true : touched) || showInprogress) {
+            return <div onClick={e => onClick()} >
+                {children}
+            </div>
+        }
     }
+
 
     const submit = async () => {
 

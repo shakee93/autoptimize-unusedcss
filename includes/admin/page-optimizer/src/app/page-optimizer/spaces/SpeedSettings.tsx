@@ -58,7 +58,7 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport} = useSelector(optimizerData);
+    const {settings, data, activeReport, touched, fresh} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory, activeTab, settingsMode, auditsReturn} = useCommonDispatch()
@@ -74,7 +74,6 @@ const SpeedSettings = ({}) => {
     // }
     // const [activeSettingsMode, setActiveSettingsMode] = React.useState(savedSettingsMode);
     const [activeSettingsMode, setActiveSettingsMode] = useState('');
-    const [customChanges, setCustomChanges] = useState(activeSettingsMode === 'custom');
 
     useEffect(() => {
       //  localStorage.setItem('settingsMode', activeSettingsMode);
@@ -122,6 +121,10 @@ const SpeedSettings = ({}) => {
         return grouped;
     };
 
+    const [settingsEffectCount, setSettingsEffectCount] = useState(0);
+    useEffect(()=>{
+        setSettingsEffectCount(prevCount => prevCount + 1);
+    },[settings])
 
     useEffect(() => {
 
@@ -190,6 +193,7 @@ const SpeedSettings = ({}) => {
 
     useEffect(() => {
      //   console.log("mode: ", activeSettingsMode);
+       // customUnsavedChanges.current?.click();
     }, [groupedSettings]);
 
 
@@ -243,10 +247,15 @@ const SpeedSettings = ({}) => {
 
     }, [ groupedSettings]);
 
+    const customUnsavedChanges = useRef<HTMLDivElement>(null);
+    const [tempMode, setTempMode] = useState('');
 
+    const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-    const settingsModeOnChange = (mode: string) => {
-
+        if(activeSettingsMode === 'custom' && !activate && settingsEffectCount > 0 ){
+            customUnsavedChanges.current?.click();
+         //   console.log('activeSettingsMode: ', activeSettingsMode)
+        }else{
         setActiveSettingsMode(mode as settingsMode);
         dispatch(setCommonState('settingsMode', mode));
 
@@ -279,10 +288,8 @@ const SpeedSettings = ({}) => {
 
          //   console.log(mode , ' : ', settingsToReturn)
           //  updateValue(settings, true, mainInput.key);
-
         });
-      //  console.log(notPassedAudits)
-
+        }
 
     };
 
@@ -373,8 +380,8 @@ const SpeedSettings = ({}) => {
     );
 
 
-    const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState('');
+
+
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
@@ -387,14 +394,11 @@ const SpeedSettings = ({}) => {
             {modes.map((mode, index) => (
                 <div
                     key={index}
-                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700' : ''}`}
+                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700 dark:border-purple-700' : ''}`}
                     onClick={e => {
                         setTempMode(mode);
-                        if(activeSettingsMode === 'custom'){
-                            customUnsavedChanges.current?.click();
-                        }else{
-                            settingsModeOnChange(mode);
-                        }
+                        settingsModeOnChange(mode);
+
                     }}
                 >
 
@@ -426,7 +430,7 @@ const SpeedSettings = ({}) => {
             performanceGear={true}
             cancel='Cancel'
             onClick={() => {
-                settingsModeOnChange(tempMode);
+                settingsModeOnChange(tempMode, true);
             }} >
             <div ref={customUnsavedChanges}></div>
         </UnsavedChanges>
@@ -455,7 +459,7 @@ const SpeedSettings = ({}) => {
                 }}
                 className={cn(
                     `select-non w-fit transition-all rounded-2xl cursor-pointer  
-          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
             >
