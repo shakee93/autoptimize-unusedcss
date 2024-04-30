@@ -121,10 +121,11 @@ const SpeedSettings = ({}) => {
         return grouped;
     };
 
-    const [settingsEffectCount, setSettingsEffectCount] = useState(0);
-    useEffect(()=>{
-        setSettingsEffectCount(prevCount => prevCount + 1);
-    },[settings])
+    // const [settingsEffectCount, setSettingsEffectCount] = useState(0);
+    // useEffect(()=>{
+    //     console.log(settingsEffectCount)
+    //     setSettingsEffectCount(prevCount => prevCount + 1);
+    // },[settings])
 
     useEffect(() => {
 
@@ -252,7 +253,7 @@ const SpeedSettings = ({}) => {
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-        if(activeSettingsMode === 'custom' && !activate && settingsEffectCount > 0 ){
+        if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
          //   console.log('activeSettingsMode: ', activeSettingsMode)
         }else{
@@ -424,8 +425,8 @@ const SpeedSettings = ({}) => {
 
 
         <UnsavedChanges
-            title='Do you want to do the changes'
-            description="Your changes are not saved yet. If you change the performance mode now, your recent edits won't be included."
+            title='Modified changes'
+            description="Switching to Performance Modes will result in the loss of any customized settings."
             action='Activate'
             performanceGear={true}
             cancel='Cancel'
