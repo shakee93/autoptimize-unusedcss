@@ -253,6 +253,8 @@ const SpeedSettings = ({}) => {
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
+        console.log(activeSettingsMode)
+
         if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
          //   console.log('activeSettingsMode: ', activeSettingsMode)
