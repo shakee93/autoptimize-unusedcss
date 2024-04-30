@@ -251,14 +251,54 @@ const SpeedSettings = ({}) => {
     const customUnsavedChanges = useRef<HTMLDivElement>(null);
     const [tempMode, setTempMode] = useState('');
 
+    // const settingsModeOnChange = (mode: string, activate?: boolean) => {
+    //
+    //     console.log(activeSettingsMode)
+    //
+    //     if(activeSettingsMode === 'custom' && !activate ){
+    //         customUnsavedChanges.current?.click();
+    //      //   console.log('activeSettingsMode: ', activeSettingsMode)
+    //     }else{
+    //     setActiveSettingsMode(mode as settingsMode);
+    //     dispatch(setCommonState('settingsMode', mode));
+    //
+    //     if (!notPassedAudits) {
+    //         return;
+    //     }
+    //
+    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+    //
+    //     notPassedAudits.forEach(settings => {
+    //         const [mainInput] = settings.inputs
+    //
+    //         let settingsToReturn;
+    //
+    //         if (mode === 'starter' && starterLabels.includes(mainInput.control_label)) {
+    //             settingsToReturn = settings;
+    //         } else if (mode === 'accelerate' && accelerateLabels.includes(mainInput.control_label)) {
+    //             settingsToReturn = settings;
+    //         } else if (mode === 'turboMax' && turboMaxLabels.includes(mainInput.control_label)) {
+    //             settingsToReturn = settings;
+    //
+    //         }
+    //         if (settingsToReturn) {
+    //             updateValue(settingsToReturn, true, mainInput.key);
+    //         }else{
+    //             updateValue(settings, false, mainInput.key);
+    //         }
+    //
+    //      //   console.log(mode , ' : ', settingsToReturn)
+    //       //  updateValue(settings, true, mainInput.key);
+    //     });
+    //     }
+    //
+    // };
+
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
         console.log(activeSettingsMode)
-
-        if(activeSettingsMode === 'custom' && !activate ){
-            customUnsavedChanges.current?.click();
-         //   console.log('activeSettingsMode: ', activeSettingsMode)
-        }else{
         setActiveSettingsMode(mode as settingsMode);
         dispatch(setCommonState('settingsMode', mode));
 
@@ -289,10 +329,9 @@ const SpeedSettings = ({}) => {
                 updateValue(settings, false, mainInput.key);
             }
 
-         //   console.log(mode , ' : ', settingsToReturn)
-          //  updateValue(settings, true, mainInput.key);
+            //   console.log(mode , ' : ', settingsToReturn)
+            //  updateValue(settings, true, mainInput.key);
         });
-        }
 
     };
 
