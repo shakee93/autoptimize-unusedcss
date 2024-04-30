@@ -24,7 +24,7 @@ import {
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {AnimatePresence} from "framer-motion";
+import {m, AnimatePresence, motion} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
@@ -33,7 +33,6 @@ import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
-
 
 const Header = ({ url }: { url: string}) => {
 
@@ -98,7 +97,17 @@ const Header = ({ url }: { url: string}) => {
     };
 
     return (
-
+        <>
+            {localSwitchState &&
+            <motion.div  initial={{ opacity: 0, y: -10 }} // Start position above the header
+                         animate={{ opacity: 1, y: 0 }} // End position at the header
+                         exit={{ opacity: 0, y: -10 }} // Exit animation, back above the header
+                         transition={{
+                             ease: 'linear',
+                             duration: 0.5,
+                         }}
+                         className="z-[110000] w-full text-sm bg-purple-700/30 items-center text-center py-2"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
+            }
         <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
@@ -229,7 +238,7 @@ const Header = ({ url }: { url: string}) => {
                 </UnsavedChanges>
             </div>
         </header>
-
+        </>
     )
 }
 
