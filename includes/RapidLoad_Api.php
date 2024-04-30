@@ -6,6 +6,7 @@ class RapidLoad_Api
 {
     use RapidLoad_Utils;
 
+
     public static $apiUrl = 'https://api.rapidload.io/api/v1';
 
     public $apiKey = null;
