@@ -98,16 +98,7 @@ const Header = ({ url }: { url: string}) => {
 
     return (
         <>
-            {localSwitchState &&
-            <motion.div  initial={{ opacity: 0, y: -10 }} // Start position above the header
-                         animate={{ opacity: 1, y: 0 }} // End position at the header
-                         exit={{ opacity: 0, y: -10 }} // Exit animation, back above the header
-                         transition={{
-                             ease: 'linear',
-                             duration: 0.5,
-                         }}
-                         className="z-[110000] w-full text-sm bg-purple-700/30 items-center text-center py-2"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
-            }
+
         <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
                 <div className='relative'>
@@ -238,6 +229,16 @@ const Header = ({ url }: { url: string}) => {
                 </UnsavedChanges>
             </div>
         </header>
+            {localSwitchState && !loading && !showInprogress &&
+            <motion.div  initial={{ opacity: 0, y: -10 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         exit={{ opacity: 0, y: -10 }}
+                         transition={{
+                             ease: 'easeInOut',
+                             duration: 0.5,
+                         }}
+                         className="z-[100000] w-full text-[13px] bg-purple-700/30 items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
+            }
         </>
     )
 }

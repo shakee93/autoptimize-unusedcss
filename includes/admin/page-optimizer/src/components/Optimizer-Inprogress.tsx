@@ -62,7 +62,7 @@ const OptimizerInprogress = () => {
                 }
                 return prevIndex + 1;
             });
-        }, 1300);
+        }, 2800);
 
         return () => clearInterval(interval);
     }, [filteredSettings]);
@@ -160,7 +160,7 @@ const OptimizerInprogress = () => {
                                    initial={{opacity: 0, y: 80}}
                                    animate={{opacity: 1, y: 0}}
                                    exit={{opacity: 0, y: -20}}
-                                   transition={{ delay: index * 0.5 }}
+                                   transition={{ delay: index * 1.5 }}
                                    key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
@@ -254,14 +254,20 @@ const OptimizerInprogress = () => {
                                                            <p className={'text-gray-500 dark:text-brand-400'}>{(includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status)? unserialize(cssStatus?.cpcss?.error) : unserialize(cssStatus?.uucss?.error)}</p>
                                                        </div>
                                                    </div>
-                                                       ):(<div className="py-2"></div>)
+                                                       ):(<motion.div initial={{opacity: 0, y: 80}}
+                                                               animate={{opacity: 1, y: 0}}
+                                                               exit={{opacity: 0, y: -20}}
+                                                               transition={{ delay: index * 0.3 }}
+                                                               key={index} className="py-2"></motion.div>)
                                                    }
 
                                                </div>
                                            </>
 
                                        ) : index !== filteredSettings.length - 1 && (
-                                           <div className="py-3"></div>
+                                           <div className="py-3 fadeInFromTopAnimation"></div>
+
+
                                        )
                                        }
 
@@ -269,7 +275,6 @@ const OptimizerInprogress = () => {
                                    </div>
                                </motion.div>
                            ))}
-
                        </div>
 
                        <div className="inline-block border-t w-full">

@@ -255,3 +255,11 @@ export const TitanLogo:FC<SvgProps> = ({cls}) => (
         <path d="M13.5798 8.20254L10.5266 16.6329L13.5798 16.6937L11.0431 23.0886L19.0937 13.6709L15.9038 13.5949L19.4734 8.14178L13.5798 8.20254Z" fill="white"/>
     </svg>
 );
+
+export const SettingsStraightLine:FC<SvgProps> = ({cls}) => (
+    <div className='absolute -top-3 left-[90px] '>
+    <svg className={`${cls}`} width="2" height="18" viewBox="0 0 2 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 0L1 18" stroke="#D4D4D8" strokeWidth="2"/>
+    </svg>
+    </div>
+);
