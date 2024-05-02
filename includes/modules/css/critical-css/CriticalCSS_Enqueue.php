@@ -131,7 +131,7 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if(!$this->is_mobile || apply_filters('rapidload/cpcss/set-preload-css', false)){
+            if(!$this->is_mobile && apply_filters('rapidload/cpcss/set-preload-css', true)){
                 $sheet->onload = "this.onload=null;this.rel='stylesheet'";
                 $sheet->rel = "preload";
                 $sheet->as = "style";

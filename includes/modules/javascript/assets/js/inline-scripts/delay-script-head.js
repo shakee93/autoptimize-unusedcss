@@ -27,8 +27,12 @@
             if ((this === document && document.readyState !== 'loading') ||
                 (this === window && document.readyState !== 'loading' )) {
                 setTimeout(() => {
-
-                    listener.call(this, new Event(type));
+                    if (typeof listener !== 'function') {
+                        return;
+                    }
+                    if(listener){
+                        listener.call(this, new Event(type));
+                    }
                 }, 10);
 
             } else {
