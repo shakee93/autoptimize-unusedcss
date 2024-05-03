@@ -161,5 +161,5 @@
   opacity: 0;
   position: relative;
   top: -10px;
-  animation: fadeInFromTop 0.5s ease forwards;
+  animation: fadeInFromTop 3s ease forwards;
 }
