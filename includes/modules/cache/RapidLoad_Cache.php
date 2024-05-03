@@ -657,7 +657,7 @@ class RapidLoad_Cache
 
             if (RapidLoad_Cache_Engine::is_cacheable( $content ) && !RapidLoad_Cache_Engine::bypass_cache()) {
 
-                RapidLoad_Cache_Store::cache_page( $content );
+                RapidLoad_Cache_Store::cache_page( str_replace("</body>","<div id='rapidload-cache-status' style='display:none;text-align:center;background-color:#a080c6;padding:1px;color:white;font-weight:500;'><p>Served by RapidLoad Cache</p></div>",$content) );
             }
 
         }

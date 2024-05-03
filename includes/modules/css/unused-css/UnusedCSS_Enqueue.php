@@ -18,6 +18,8 @@ class UnusedCSS_Enqueue
     private $is_mobile;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job_data)
     {
         $this->options = RapidLoad_Base::get_merged_options();
@@ -32,7 +34,7 @@ class UnusedCSS_Enqueue
 
         $this->warnings = $this->job_data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 10);
     }
 
     function enqueue_frontend_scripts(){
@@ -110,6 +112,8 @@ class UnusedCSS_Enqueue
 
         foreach ( $sheets as $sheet ) {
 
+            $_frontend_data = [];
+
             do_action('rapidload/enqueue/before-optimize-css', $sheet, $this->job_data, $this->strategy);
 
             $parent = $sheet->parent();
@@ -161,6 +165,8 @@ class UnusedCSS_Enqueue
 
                 }
 
+                $_frontend_data['href'] =  $sheet->href;
+
                 // check if we found a script index and the file exists
                 if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
 
@@ -187,6 +193,8 @@ class UnusedCSS_Enqueue
 
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
+
+                    $_frontend_data['new_href'] = $sheet->href;
 
                     if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1" && apply_filters('rapidload/enqueue/inline-small-css/enable', false)) {
 
@@ -218,14 +226,21 @@ class UnusedCSS_Enqueue
 
                             $this->warnings[] = $warning;
 
+                            $_frontend_data['new_href'] = false;
+
                         }
 
                     }
 
                 }
             }
-
+            if(!empty($_frontend_data)){
+                $this->frontend_data['uucss'][] = $_frontend_data;
+            }
         }
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
     }
 
     public function replace_inline_css(){

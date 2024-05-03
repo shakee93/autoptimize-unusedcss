@@ -42,6 +42,45 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 99);
+
+    }
+
+    public function update_content($state){
+
+        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview_optimization'])){
+
+            $head = $state['dom']->find('head', 0);
+
+            // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
+            $content = "//!injected by RapidLoad \n
+            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview_optimization')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
+
+            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.min.js';
+
+                if (file_exists($filePath)) {
+                    $content = file_get_contents($filePath);
+                }
+            }
+
+            $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[]);
+
+            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
+            $first_child = $head->first_child();
+            $first_child->__set('outertext', $script . $first_child->outertext);
+
+            $body = $state['dom']->find('body', 0);
+
+            $frontend_data_content = '<div id="rapidload-optimizer-stat-container" style="display: none;padding: 1px 20px;background-color: #a080c6;color: white;"><ul><li>Critical CSS : <span id="rapidload-cpcss-stat">N/A</span></li><li>Unused CSS : <span id="rapidload-uucss-stat">N/A</span></li><li>Minify CSS : <span id="rapidload-minify-css-stat">N/A</span></li><li>Font Optimization : <span id="rapidload-font-stat">N/A</span></li><li>JS Optimization : <span id="rapidload-js-stat">N/A</span></li><li>Image Optimization : <span id="rapidload-image-stat">N/A</span></li><li>CDN Service : <span id="rapidload-cdn-stat">N/A</span></li></ul></div>';
+
+            $last_child = $body->last_child();
+
+            $last_child->__set('outertext', $last_child->outertext . $frontend_data_content);
+
+        }
+
+        return $state;
     }
 
     public function register_rest_routes(){
@@ -154,7 +193,7 @@ class RapidLoad_Optimizer
 
     public function titan_reset_to_default(){
 
-        $this->pre_optimizer_function();
+        //$this->pre_optimizer_function();
 
         if(isset(self::$strategy)){
             if(self::$strategy == "mobile"){
