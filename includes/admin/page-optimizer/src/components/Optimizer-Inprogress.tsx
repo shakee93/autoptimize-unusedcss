@@ -221,11 +221,7 @@ const OptimizerInprogress = () => {
                                                            <p className={'text-gray-500 dark:text-brand-400'}>{(includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status)? unserialize(cssStatus?.cpcss?.error) : unserialize(cssStatus?.uucss?.error)}</p>
                                                        </div>
                                                    </div>
-                                                       ):(<motion.div initial={{opacity: 0, y: 80}}
-                                                               animate={{opacity: 1, y: 0}}
-                                                               exit={{opacity: 0, y: -20}}
-                                                               transition={{ delay: index * 0.3 }}
-                                                               key={index} className="py-2"></motion.div>)
+                                                       ):(<div className="py-2"></div>)
                                                    }
 
                                                </div>
