@@ -204,6 +204,28 @@ export const updateLicense = (options: WordPressOptions): ThunkAction<void, Root
     }
 }
 
+
+export const saveGeneralSettings = (options: WordPressOptions, url: string, mode?: string): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const fetchTestModeData = await api.updateGeneralSettings(url, mode || '');
+            dispatch({
+                type: UPDATE_TEST_MODE,
+                payload : fetchTestModeData?.data
+            })
+
+        } catch (error) {
+            console.error('Error on Test Mode:', error);
+        }
+
+
+    }
+}
+
 export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);

@@ -225,6 +225,26 @@ class ApiService {
         }
     }
 
+    async updateGeneralSettings(url: string, mode: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'update_rapidload_settings');
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('test_mode', mode)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 
