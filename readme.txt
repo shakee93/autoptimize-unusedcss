@@ -18,7 +18,6 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
 
 
-
 ### Unlock the speed monster in you with these features
 
 - **Titan Optimizer**
