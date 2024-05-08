@@ -4,7 +4,7 @@ Donate link:
 Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: trunk
+Stable tag: 2.2.15
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
