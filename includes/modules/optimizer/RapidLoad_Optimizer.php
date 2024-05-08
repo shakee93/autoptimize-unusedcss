@@ -64,7 +64,9 @@ class RapidLoad_Optimizer
                 }
             }
 
-            $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[]);
+            $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[
+                'server' => $this->get_server_type()
+            ]);
 
             $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
             $first_child = $head->first_child();
@@ -81,6 +83,30 @@ class RapidLoad_Optimizer
         }
 
         return $state;
+    }
+
+    public function get_server_type() {
+        // Check if the SERVER_SOFTWARE key exists
+        if (isset($_SERVER['SERVER_SOFTWARE'])) {
+            // Get the server software information
+            $server_software = $_SERVER['SERVER_SOFTWARE'];
+
+            // Check if the server is Apache
+            if (stripos($server_software, 'Apache') !== false) {
+                return ['server_type' => 'Apache', 'full_info' => $server_software];
+            }
+            // Check if the server is Nginx
+            elseif (stripos($server_software, 'nginx') !== false) {
+                return ['server_type' => 'Nginx', 'full_info' => $server_software];
+            }
+            // Server type is unknown or another server
+            else {
+                return ['server_type' => 'Unknown', 'full_info' => $server_software];
+            }
+        } else {
+            // Server software information is not available
+            return ['server_type' => 'Unknown', 'full_info' => 'Not available'];
+        }
     }
 
     public function register_rest_routes(){
