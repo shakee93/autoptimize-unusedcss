@@ -1,7 +1,7 @@
 === RapidLoad 2.2 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
+Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
 Tested up to: 6.4
 Stable tag: 2.2.15
