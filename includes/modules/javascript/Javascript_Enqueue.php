@@ -322,7 +322,9 @@ class Javascript_Enqueue
 
         }
 
-        $link->setAttribute('src', $minified_url);
+        if(@file_exists($minified_file)){
+            $link->setAttribute('src', $minified_url);
+        }
 
         $_frontend_data['new_src'] = $minified_url;
 
