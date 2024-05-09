@@ -302,7 +302,9 @@ class Javascript_Enqueue
 
         }
 
-        $link->setAttribute('src', $minified_url);
+        if(@file_exists($minified_file)){
+            $link->setAttribute('src', $minified_url);
+        }
 
     }
 
@@ -310,6 +312,10 @@ class Javascript_Enqueue
 
         if(!isset($link->type)){
             $link->type = 'text/javascript';
+        }
+
+        if(isset($link->crossorigin)){
+            unset($link->crossorigin);
         }
 
         if(apply_filters('rapidload/webfont/handle', false, $link)){
