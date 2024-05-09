@@ -314,10 +314,6 @@ class Javascript_Enqueue
             $link->type = 'text/javascript';
         }
 
-        if(isset($link->crossorigin)){
-            unset($link->crossorigin);
-        }
-
         if(apply_filters('rapidload/webfont/handle', false, $link)){
             return;
         }
