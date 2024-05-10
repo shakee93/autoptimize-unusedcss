@@ -559,7 +559,11 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
-        $result->settingsMode = $request->get_param('settingsMode');
+        $titan_gear = get_option('rapidload_titan_gear');
+
+        if(isset($titan_gear) && !isset($result->settingsMode)){
+            $result->settingsMode = $titan_gear;
+        }
 
         $response = $this->fetch_page_speed($url, $result);
 
