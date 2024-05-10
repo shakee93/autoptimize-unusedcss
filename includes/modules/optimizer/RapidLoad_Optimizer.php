@@ -505,8 +505,10 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
-        if(isset($_REQUEST['settingsMode']) && !isset($result->settingsMode)){
-            $result->settingsMode = $_REQUEST['settingsMode'];
+        $titan_gear = get_option('rapidload_titan_gear');
+
+        if(isset($titan_gear) && !isset($result->settingsMode)){
+            $result->settingsMode = $titan_gear;
         }
 
         $response = $this->fetch_page_speed($url, $result);
@@ -879,6 +881,10 @@ class RapidLoad_Optimizer
     public function optimizer_update_settings($result){
 
         $preload_images = [];
+
+        if(isset($result->settingsMode)){
+            update_option('rapidload_titan_gear', $result->settingsMode);
+        }
 
         if(isset($result->audits) && is_array($result->audits)){
 
