@@ -67,18 +67,14 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activatedSettings, setActivatedSettings] = useState<string[]>([]);
 
-    // let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
-    // if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
-    //     savedSettingsMode = 'starter';
-    // }
-    // const [activeSettingsMode, setActiveSettingsMode] = React.useState(savedSettingsMode);
-    const [activeSettingsMode, setActiveSettingsMode] = useState('');
+    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
 
     useEffect(() => {
-      //  localStorage.setItem('settingsMode', activeSettingsMode);
-    }, [activeSettingsMode]);
+      console.log(data)
+      console.log(data?.settingsMode)
+        console.log(activeSettingsMode)
+    });
 
 
     const icons :  {
@@ -295,47 +291,47 @@ const SpeedSettings = ({}) => {
 
     };
 
-    useEffect(() => {
-
-        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
-
-        const trueControlLabels: any[] = [];
-        const falseControlLabels: any[] = [];
-
-            notPassedAudits.forEach(settings => {
-                const [mainInput] = settings.inputs
-
-                if (mainInput.value) {
-                    trueControlLabels.push(mainInput.control_label);
-
-                }
-                if(!mainInput.value){
-                    falseControlLabels.push(mainInput.control_label);
-                }
-
-            });
-
-
-        // console.log("trueControlLabels: ",trueControlLabels)
-        // console.log("falseControlLabels: ",falseControlLabels)
-
-        const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
-
-        if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
-            setActiveSettingsMode('starter')
-        } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
-            setActiveSettingsMode('accelerate')
-        } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
-            setActiveSettingsMode('turboMax')
-        } else {
-            setActiveSettingsMode('custom')
-         //   setActivatedSettings(trueControlLabels);
-        }
-
-
-    })
+    // useEffect(() => {
+    //
+    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+    //
+    //     const trueControlLabels: any[] = [];
+    //     const falseControlLabels: any[] = [];
+    //
+    //         notPassedAudits.forEach(settings => {
+    //             const [mainInput] = settings.inputs
+    //
+    //             if (mainInput.value) {
+    //                 trueControlLabels.push(mainInput.control_label);
+    //
+    //             }
+    //             if(!mainInput.value){
+    //                 falseControlLabels.push(mainInput.control_label);
+    //             }
+    //
+    //         });
+    //
+    //
+    //     // console.log("trueControlLabels: ",trueControlLabels)
+    //     // console.log("falseControlLabels: ",falseControlLabels)
+    //
+    //     const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
+    //
+    //     if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
+    //         setActiveSettingsMode('starter')
+    //     } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
+    //         setActiveSettingsMode('accelerate')
+    //     } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
+    //         setActiveSettingsMode('turboMax')
+    //     } else {
+    //         setActiveSettingsMode('custom')
+    //      //   setActivatedSettings(trueControlLabels);
+    //     }
+    //
+    //
+    // },[settings])
 
 
 

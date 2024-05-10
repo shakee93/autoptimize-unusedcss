@@ -5,6 +5,7 @@ interface OptimizerResults  {
     job_id?: string;
     audits: Audit[]
     metrics: Metric[],
+    settingsMode: settingsMode,
     loadingExperience?: LoadingExperience
     originLoadingExperience?: LoadingExperience
     grouped: {

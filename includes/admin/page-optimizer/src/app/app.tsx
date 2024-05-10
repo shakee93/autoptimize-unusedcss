@@ -11,6 +11,7 @@ import {Toaster} from "components/ui/toaster";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
 import {setCommonState} from "../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))

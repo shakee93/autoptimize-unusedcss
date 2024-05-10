@@ -27,7 +27,9 @@ const useSubmitSettings = () => {
     } = useAppContext()
 
 
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { settingsMode } = useCommonDispatch()
 
     const {
         fresh,
@@ -38,6 +40,12 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
+    // const updatedData = {
+    //     ...data,
+    //     settingsMode: settingsMode,
+    // };
+
+    // console.log(data);
 
     const url = options?.optimizer_url;
     const { toast } = useToast()
@@ -61,7 +69,8 @@ const useSubmitSettings = () => {
                 activeReport,
                 data,
                 global,
-                analyze
+                analyze,
+                settingsMode
             );
 
             toast({
@@ -130,7 +139,7 @@ const useSubmitSettings = () => {
         setSavingData(false)
         setInvalidatingCache(false)
 
-    }, [data, activeReport,  savingData, invalidatingCache])
+    }, [data, activeReport,  savingData, invalidatingCache, settingsMode])
 
     return {
         submitSettings

@@ -7,8 +7,7 @@ function TestModeNotification() {
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
-            // Adjust the threshold according to your design
-            const threshold = 200; // Adjust as needed
+            const threshold = 200;
 
             if (scrollTop > threshold) {
                 setIsVisible(true);

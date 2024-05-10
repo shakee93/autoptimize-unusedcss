@@ -207,7 +207,7 @@ class ApiService {
         }
     }
 
-    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
+    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean, settingsMode: string) {
         try {
 
             const query = new URLSearchParams();
@@ -223,6 +223,7 @@ class ApiService {
 
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('settingsMode', settingsMode)
 
             const response = await fetch(this.baseURL, {
                 method: "POST",
