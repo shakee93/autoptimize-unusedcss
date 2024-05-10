@@ -505,7 +505,7 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
-        if(isset($_REQUEST['settingsMode'])){
+        if(isset($_REQUEST['settingsMode']) && !isset($result->settingsMode)){
             $result->settingsMode = $_REQUEST['settingsMode'];
         }
 
