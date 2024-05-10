@@ -505,6 +505,10 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
+        if(isset($_REQUEST['settingsMode'])){
+            $result->settingsMode = $_REQUEST['settingsMode'];
+        }
+
         $response = $this->fetch_page_speed($url, $result);
 
         if(isset($response['success']) && $response['success']){
@@ -553,7 +557,7 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
-        $result->settings_gear = $request->get_param('settingsMode');
+        $result->settingsMode = $request->get_param('settingsMode');
 
         $response = $this->fetch_page_speed($url, $result);
 
