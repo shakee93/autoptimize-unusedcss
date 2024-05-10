@@ -13,12 +13,14 @@ class MinifyCSS_Enqueue
     private $settings;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job)
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 50);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
     }
 
     public function update_content($state){
@@ -58,6 +60,10 @@ class MinifyCSS_Enqueue
 
         }
 
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
+
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -68,6 +74,8 @@ class MinifyCSS_Enqueue
 
     public function minify_css($link){
 
+        $_frontend_data = [];
+
         if(!self::is_css($link) || $this->is_file_excluded($link->href)){
             return;
         }
@@ -75,6 +83,8 @@ class MinifyCSS_Enqueue
         if(!$this->str_contains($link->href, ".css")){
             return;
         }
+
+        $_frontend_data['href'] =  $link->href;
 
         $file_path = self::get_file_path_from_url($link->href);
 
@@ -113,6 +123,11 @@ class MinifyCSS_Enqueue
 
         $link->href = $minified_url;
 
+        $_frontend_data['new_href'] = $link->href;
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['minify_css'][] = $_frontend_data;
+        }
     }
 
     public function minify_inline_css($style){

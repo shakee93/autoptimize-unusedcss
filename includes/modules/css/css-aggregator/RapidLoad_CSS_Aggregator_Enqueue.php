@@ -20,7 +20,7 @@ class RapidLoad_CSS_Aggregator_Enqueue
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
     }
 
     public function update_content($state){

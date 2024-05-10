@@ -25,6 +25,8 @@ class Javascript_Enqueue
     private $default_js_exclusion_pattern;
     private $dynamic_exclusions;
 
+    private $frontend_data = [];
+
     public function __construct($job)
     {
         $this->job = $job;
@@ -173,6 +175,10 @@ class Javascript_Enqueue
             $body->appendChild($node);
         }
 
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
+
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -200,7 +206,11 @@ class Javascript_Enqueue
 
     public function load_scripts_on_user_interaction($link, $original_src = null){
 
+        $_frontend_data = [];
+
         if(self::is_js($link)){
+
+            $_frontend_data['src'] = $link->src;
 
             if(self::is_file_excluded($link->src) || self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
                 return;
@@ -213,6 +223,7 @@ class Javascript_Enqueue
             if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
                 if(self::is_load_on_user_interaction($link->src) || self::is_load_on_user_interaction($original_src)){
 
+                    $_frontend_data['delayed'] = true;
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
                     unset($link->src);
@@ -224,6 +235,7 @@ class Javascript_Enqueue
                     return;
                 }
 
+                $_frontend_data['delayed'] = true;
                 $data_attr = "data-rapidload-src";
                 $link->{$data_attr} = $link->src;
 
@@ -246,9 +258,15 @@ class Javascript_Enqueue
             }
         }
 
+        if(!empty($_frontend_data)){
+            $this->frontend_data['js']['delay'][] = $_frontend_data;
+        }
+
     }
 
     public function minify_js($link){
+
+        $_frontend_data = [];
 
         if(defined('SCRIPT_DEBUG') && boolval(SCRIPT_DEBUG) == true){
             return;
@@ -257,6 +275,8 @@ class Javascript_Enqueue
         if(!self::is_js($link) || self::is_file_excluded($link->src, 'uucss_exclude_files_from_minify_js')){
             return;
         }
+
+        $_frontend_data['src'] = $link->src;
 
         $file_path = self::get_file_path_from_url(apply_filters('uucss/enqueue/js-url', $link->src));
 
@@ -302,11 +322,19 @@ class Javascript_Enqueue
 
         }
 
-        $link->setAttribute('src', $minified_url);
+        if(@file_exists($minified_file)){
+            $link->setAttribute('src', $minified_url);
+        }
+
+        $_frontend_data['new_src'] = $minified_url;
+
+        $this->frontend_data['js']['minify'][] = $_frontend_data;
 
     }
 
     public function optimize_js_delivery($link){
+
+        $_frontend_data = [];
 
         if(!isset($link->type)){
             $link->type = 'text/javascript';
@@ -323,6 +351,8 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
+            $_frontend_data['src'] = $link->src;
+
             if($js_to_be_defer){
 
                 if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
@@ -337,6 +367,8 @@ class Javascript_Enqueue
 
                     $link->defer = true;
                     unset($link->async);
+
+                    $_frontend_data['deferred'] = true;
                 }
 
             }
@@ -349,6 +381,10 @@ class Javascript_Enqueue
 
             }
 
+        }
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['js']['defer'][] = $_frontend_data;
         }
 
     }
