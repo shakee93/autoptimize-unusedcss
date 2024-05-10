@@ -40,10 +40,10 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
-    // const updatedData = {
-    //     ...data,
-    //     settingsMode: settingsMode,
-    // };
+    const updatedData = {
+        ...data,
+        settingsMode: settingsMode,
+    };
 
     // console.log(data);
 
@@ -67,10 +67,9 @@ const useSubmitSettings = () => {
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                data,
+                updatedData,
                 global,
                 analyze,
-                settingsMode
             );
 
             toast({

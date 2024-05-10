@@ -94,6 +94,7 @@ class ApiService {
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
                 method: data ? "POST": "GET",
@@ -207,7 +208,7 @@ class ApiService {
         }
     }
 
-    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean, settingsMode: string) {
+    async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 
             const query = new URLSearchParams();
@@ -223,7 +224,7 @@ class ApiService {
 
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
-            this.baseURL.searchParams.append('settingsMode', settingsMode)
+            // this.baseURL.searchParams.append('settingsMode', settingsMode)
 
             const response = await fetch(this.baseURL, {
                 method: "POST",

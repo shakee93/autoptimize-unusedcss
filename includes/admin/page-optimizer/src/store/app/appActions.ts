@@ -213,7 +213,7 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
-                reload
+                reload,
             );
             
             dispatch({ type: FETCH_DATA_SUCCESS, payload: {
