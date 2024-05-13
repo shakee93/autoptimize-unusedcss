@@ -324,11 +324,11 @@ const SpeedSettings = ({}) => {
         const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
 
         if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
-            setActiveSettingsMode('starter')
+          //  setActiveSettingsMode('starter')
         } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
-            setActiveSettingsMode('accelerate')
+          //  setActiveSettingsMode('accelerate')
         } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
-            setActiveSettingsMode('turboMax')
+          //  setActiveSettingsMode('turboMax')
         } else {
             setActiveSettingsMode('custom')
          //   setActivatedSettings(trueControlLabels);
@@ -456,7 +456,7 @@ const SpeedSettings = ({}) => {
             <button
                 key={activeCategory}
                 onClick={() => {
-                   // setActiveSettingsMode('custom');
+                    setActiveSettingsMode('custom');
                     dispatch(setCommonState('settingsMode', 'custom'));
                     setCustomMode(prevMode => !prevMode);
                 }}
