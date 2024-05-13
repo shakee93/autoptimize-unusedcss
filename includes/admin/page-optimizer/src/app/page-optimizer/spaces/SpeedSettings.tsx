@@ -71,9 +71,9 @@ const SpeedSettings = ({}) => {
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
 
     useEffect(() => {
-      console.log(data)
-      console.log(data?.settingsMode)
-        console.log(activeSettingsMode)
+      // console.log(data)
+      // console.log(data?.settingsMode)
+      //   console.log(data?.settingsMode)
     });
 
 
@@ -261,11 +261,15 @@ const SpeedSettings = ({}) => {
             return;
         }
 
+        const allAudits = passedAudits.concat(notPassedAudits);
+
         const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
         const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
 
-        notPassedAudits.forEach(settings => {
+
+        // notPassedAudits.forEach(settings => {
+        allAudits.forEach(settings => {
             const [mainInput] = settings.inputs
 
             let settingsToReturn;
@@ -291,47 +295,47 @@ const SpeedSettings = ({}) => {
 
     };
 
-    // useEffect(() => {
-    //
-    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
-    //
-    //     const trueControlLabels: any[] = [];
-    //     const falseControlLabels: any[] = [];
-    //
-    //         notPassedAudits.forEach(settings => {
-    //             const [mainInput] = settings.inputs
-    //
-    //             if (mainInput.value) {
-    //                 trueControlLabels.push(mainInput.control_label);
-    //
-    //             }
-    //             if(!mainInput.value){
-    //                 falseControlLabels.push(mainInput.control_label);
-    //             }
-    //
-    //         });
-    //
-    //
-    //     // console.log("trueControlLabels: ",trueControlLabels)
-    //     // console.log("falseControlLabels: ",falseControlLabels)
-    //
-    //     const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
-    //
-    //     if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
-    //         setActiveSettingsMode('starter')
-    //     } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
-    //         setActiveSettingsMode('accelerate')
-    //     } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
-    //         setActiveSettingsMode('turboMax')
-    //     } else {
-    //         setActiveSettingsMode('custom')
-    //      //   setActivatedSettings(trueControlLabels);
-    //     }
-    //
-    //
-    // },[settings])
+    useEffect(() => {
+
+        // console.log("update triggered")
+
+        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+        const allAudits = passedAudits.concat(notPassedAudits);
+
+        const trueControlLabels: any[] = [];
+        const falseControlLabels: any[] = [];
+
+        // notPassedAudits.forEach(settings => {
+            allAudits.forEach(settings => {
+                const [mainInput] = settings.inputs
+
+                if (mainInput.value) {
+                    trueControlLabels.push(mainInput.control_label);
+
+                }
+                if(!mainInput.value){
+                    falseControlLabels.push(mainInput.control_label);
+                }
+
+            });
+
+        const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
+
+        if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
+            setActiveSettingsMode('starter')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
+            setActiveSettingsMode('accelerate')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
+            setActiveSettingsMode('turboMax')
+        } else {
+            setActiveSettingsMode('custom')
+         //   setActivatedSettings(trueControlLabels);
+        }
+
+
+    })
 
 
 

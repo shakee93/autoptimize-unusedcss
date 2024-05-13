@@ -223,53 +223,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 //old code end
 
 
-
-
-    // useEffect(() => {
-    //     if (!actionRequired) {
-    //         return;
-    //     }
-    //
-    //     const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-    //     const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    //     const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
-    //
-    //     if (settingsMode === 'starter') {
-    //         setCheckboxState(starterLabels.includes(mainInput.control_label));
-    //     } else if (settingsMode === 'accelerate') {
-    //         setCheckboxState(accelerateLabels.includes(mainInput.control_label));
-    //     } else if (settingsMode === 'turboMax') {
-    //         setCheckboxState(turboMaxLabels.includes(mainInput.control_label));
-    //     } else {
-    //        // setCheckboxState(mainInput.value);
-    //     }
-    //
-    //    // updateValue(settings, checkboxState, mainInput.key);
-    //     //console.log(checkboxState)
-    // }, [settingsMode, mainInput, settings]);
-
-
-    // const handleCheckboxClick = () => {
-    //
-    //
-    //     const newCheckboxState = !checkboxState;
-    //     setCheckboxState(newCheckboxState);
-    //     updateValue(settings, newCheckboxState, mainInput.key);
-    //
-    //     // if (settingsMode === 'starter' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'Minify Javascript'
-    //     //     || settingsMode === 'accelerate' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Minify Javascript' && mainInput.control_label !== 'Defer Javascript'
-    //     //     || settingsMode === 'turboMax' && mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Minify Javascript' && mainInput.control_label !== 'Defer Javascript' && mainInput.control_label !== 'Delay Javascript' ) {
-    //     //     dispatch(setCommonState('settingsMode', 'custom'));
-    //     // }
-    //     const commonConditions = mainInput.control_label !== 'Remove Unused CSS' && mainInput.control_label !== 'Enable Critical CSS' && mainInput.control_label !== 'Minify Javascript';
-    //     const additionalConditions = (settingsMode === 'accelerate' || settingsMode === 'turboMax') && mainInput.control_label !== 'RapidLoad CDN' && mainInput.control_label !== 'Serve next-gen Images' && mainInput.control_label !== 'Lazy Load Iframes' && mainInput.control_label !== 'Lazy Load Images' && mainInput.control_label !== 'Exclude LCP image from Lazy Load' && mainInput.control_label !== 'Add Width and Height Attributes' && mainInput.control_label !== 'Defer Javascript' && (settingsMode === 'turboMax' ? mainInput.control_label !== 'Delay Javascript' : true);
-    //
-    //     if (commonConditions && additionalConditions) {
-    //         dispatch(setCommonState('settingsMode', 'custom'));
-    //     }
-    // };
-
-
     const [showStatus, setShowStatus] = useState(false);
     useEffect(() => {
         if(settings.status && mainInput.value){
@@ -297,27 +250,33 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <>
-                                {!actionRequired &&
-                                    <div className="absolute">
-                                        <TooltipText text={<>No Action Required</>}>
-                                            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>
-                                        </TooltipText>
-                                    </div>
+                                {/*{!actionRequired &&*/}
+                                {/*    <div className="absolute">*/}
+                                {/*        <TooltipText text={<>No Action Required</>}>*/}
+                                {/*            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>*/}
+                                {/*        </TooltipText>*/}
+                                {/*    </div>*/}
 
-                                }
+                                {/*}*/}
 
-                                <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
-                                          className={actionRequired ? '' : 'border-dashed'}
-                                          checked={mainInput.value}
-                                          onCheckedChange={(c: boolean) =>{
-                                              setCheckboxState(c);
-                                              updateValue(settings, c, mainInput.key);
+                                    <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                              className={actionRequired ? '' : 'border-dashed'}
+                                              checked={mainInput.value}
+                                              onCheckedChange={(c: boolean) =>{
+                                                  setCheckboxState(c);
+                                                  updateValue(settings, c, mainInput.key);
 
-                                          }}/>
-                                {/*    <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}*/}
-                                {/*              className={actionRequired ? '' : 'border-dashed'}*/}
-                                {/*              checked={checkboxState}*/}
-                                {/*              onCheckedChange={handleCheckboxClick}/>*/}
+                                              }}/>
+
+                                {/*<Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}*/}
+                                {/*          className={actionRequired ? '' : 'border-dashed'}*/}
+                                {/*          checked={mainInput.value}*/}
+                                {/*          onCheckedChange={(c: boolean) =>{*/}
+                                {/*              setCheckboxState(c);*/}
+                                {/*              updateValue(settings, c, mainInput.key);*/}
+
+                                {/*          }}/>*/}
+
                                 </>
                             )}
                         </>
@@ -344,8 +303,8 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         {/*<DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>*/}
-
-                                        <DialogTrigger disabled asChild className={`${!checkboxState || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
+                                        {/*action required is removed from the line below after !checkboxstate || !actionRequired*/}
+                                        <DialogTrigger disabled asChild className={`${!mainInput.value ? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>
                                                     <Cog6ToothIcon className='w-5 text-brand-400'/>
