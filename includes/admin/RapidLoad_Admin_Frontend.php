@@ -56,6 +56,10 @@ class RapidLoad_Admin_Frontend
                 }, 10, 2);
 
             }
+
+            if(isset($_REQUEST['rapidload_preview_optimization'])){
+                $this->load_preview_scripts();
+            }
         });
 
         $this->load_legacy_ajax();
@@ -960,17 +964,16 @@ class RapidLoad_Admin_Frontend
 
         wp_register_script( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.js',[], UUCSS_VERSION);
 
-        /*$data = array(
-            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
+        $data = array(
+            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/rapidload-previe/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'optimizer_url' => $this->transform_url($this->get_current_url()),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
-        );*/
+        );
 
-        //wp_localize_script( 'rapidload_page_optimizer', 'rapidload_admin', $data );
+        wp_localize_script( 'rapidload_page_preview', 'rapidload_page_preview', $data );
 
-        //wp_enqueue_script( 'rapidload_page_optimizer' );
+        wp_enqueue_script( 'rapidload_page_preview' );
 
     }
 
