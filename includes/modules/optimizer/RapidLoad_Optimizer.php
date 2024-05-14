@@ -50,7 +50,7 @@ class RapidLoad_Optimizer
 
         if(isset($state['dom']) && isset($_REQUEST['rapidload_preview_optimization'])){
 
-            $head = $state['dom']->find('head', 0);
+            /*$head = $state['dom']->find('head', 0);
 
             // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
             $content = "//!injected by RapidLoad \n
@@ -70,11 +70,11 @@ class RapidLoad_Optimizer
 
             $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
             $first_child = $head->first_child();
-            $first_child->__set('outertext', $script . $first_child->outertext);
+            $first_child->__set('outertext', $script . $first_child->outertext);*/
 
             $body = $state['dom']->find('body', 0);
 
-            $frontend_data_content = '<div id="rapidload-optimizer-stat-container" style="display: none;padding: 1px 20px;background-color: #a080c6;color: white;"><ul><li>Critical CSS : <span id="rapidload-cpcss-stat">N/A</span></li><li>Unused CSS : <span id="rapidload-uucss-stat">N/A</span></li><li>Minify CSS : <span id="rapidload-minify-css-stat">N/A</span></li><li>Font Optimization : <span id="rapidload-font-stat">N/A</span></li><li>JS Optimization : <span id="rapidload-js-stat">N/A</span></li><li>Image Optimization : <span id="rapidload-image-stat">N/A</span></li><li>CDN Service : <span id="rapidload-cdn-stat">N/A</span></li></ul></div>';
+            $frontend_data_content = '<div id="rapidload-preview-container"></div>';
 
             $last_child = $body->last_child();
 
