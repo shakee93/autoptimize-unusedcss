@@ -70,11 +70,6 @@ const SpeedSettings = ({}) => {
 
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
 
-    useEffect(() => {
-      // console.log(data)
-      // console.log(data?.settingsMode)
-      //   console.log(data?.settingsMode)
-    });
 
 
     const icons :  {
@@ -117,12 +112,6 @@ const SpeedSettings = ({}) => {
         });
         return grouped;
     };
-
-    // const [settingsEffectCount, setSettingsEffectCount] = useState(0);
-    // useEffect(()=>{
-    //     console.log(settingsEffectCount)
-    //     setSettingsEffectCount(prevCount => prevCount + 1);
-    // },[settings])
 
     useEffect(() => {
 
