@@ -953,6 +953,27 @@ class RapidLoad_Admin_Frontend
 
     }
 
+    public function load_preview_scripts()
+    {
+
+        wp_enqueue_style( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.css',[],UUCSS_VERSION);
+
+        wp_register_script( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.js',[], UUCSS_VERSION);
+
+        /*$data = array(
+            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
+            'plugin_url' => UUCSS_PLUGIN_URL,
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'optimizer_url' => $this->transform_url($this->get_current_url()),
+            'nonce' => wp_create_nonce( 'uucss_nonce' ),
+        );*/
+
+        //wp_localize_script( 'rapidload_page_optimizer', 'rapidload_admin', $data );
+
+        //wp_enqueue_script( 'rapidload_page_optimizer' );
+
+    }
+
 
     public function load_on_board_scripts()
     {
