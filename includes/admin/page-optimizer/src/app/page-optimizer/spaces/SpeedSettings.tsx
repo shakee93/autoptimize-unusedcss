@@ -1,7 +1,7 @@
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
-import {CheckCircle2, Circle} from "lucide-react";
+import {CheckCircle2, Circle, LogOut} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
     CloudDelivery,
@@ -12,6 +12,7 @@ import {
     PageCache,
     AuditsLine,
     SettingsLine,
+    SettingsStraightLine,
     PageCacheDuotone,
     CloudDeliveryDuotone,
     ImageDeliverySVGDuotone,
@@ -24,12 +25,27 @@ import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetti
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon } from "@heroicons/react/24/solid";
+import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon  } from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
-import {useAppContext} from "../../../context/app"; // Import the new component
+import {useAppContext} from "../../../context/app";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import TooltipText from "components/ui/tooltip-text";
+import {Cog6ToothIcon} from "@heroicons/react/20/solid";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
+import AppButton from "components/ui/app-button";
+import Mode from "app/page-optimizer/components/Mode";
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes"; // Import the new component
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -43,24 +59,17 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport} = useSelector(optimizerData);
+    const {settings, data, activeReport, touched, fresh} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
+    const [customMode, setCustomMode] = useState(false);
 
-    let savedSettingsMode = localStorage.getItem('settingsMode') as settingsMode;
-    if (!savedSettingsMode || !modes.includes(savedSettingsMode)) {
-        savedSettingsMode = 'starter';
-    }
+    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
 
-    const [settingsMode, setSettingsMode] = React.useState(savedSettingsMode);
-
-    useEffect(() => {
-        localStorage.setItem('settingsMode', settingsMode);
-    }, [settingsMode]);
 
 
     const icons :  {
@@ -103,12 +112,8 @@ const SpeedSettings = ({}) => {
         });
         return grouped;
     };
-    // useEffect(() => {
-    //     console.log(settingsMode)
-    // },[settingsMode]);
 
     useEffect(() => {
-     //   console.log(settings)
 
         const grouped = groupByCategory(settings || []);
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
@@ -174,7 +179,8 @@ const SpeedSettings = ({}) => {
 
 
     useEffect(() => {
-     //   console.log("mode: ", settingsMode);
+     //   console.log("mode: ", activeSettingsMode);
+       // customUnsavedChanges.current?.click();
     }, [groupedSettings]);
 
 
@@ -228,18 +234,31 @@ const SpeedSettings = ({}) => {
 
     }, [ groupedSettings]);
 
+    const customUnsavedChanges = useRef<HTMLDivElement>(null);
+    const [tempMode, setTempMode] = useState('');
 
+    const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-    const settingsModeOnChange = (mode: string) => {
+        if(activeSettingsMode === 'custom' && !activate ){
+            customUnsavedChanges.current?.click();
+         //   console.log('activeSettingsMode: ', activeSettingsMode)
+        }else{
+        setActiveSettingsMode(mode as settingsMode);
+        dispatch(setCommonState('settingsMode', mode));
+
         if (!notPassedAudits) {
             return;
         }
+
+        const allAudits = passedAudits.concat(notPassedAudits);
 
         const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
         const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
 
-        notPassedAudits.forEach(settings => {
+
+        // notPassedAudits.forEach(settings => {
+        allAudits.forEach(settings => {
             const [mainInput] = settings.inputs
 
             let settingsToReturn;
@@ -260,39 +279,54 @@ const SpeedSettings = ({}) => {
 
          //   console.log(mode , ' : ', settingsToReturn)
           //  updateValue(settings, true, mainInput.key);
-
         });
-      //  console.log(notPassedAudits)
+        }
 
     };
 
     useEffect(() => {
 
+        // console.log("update triggered")
+
         const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
         const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+        const allAudits = passedAudits.concat(notPassedAudits);
 
         const trueControlLabels: any[] = [];
+        const falseControlLabels: any[] = [];
 
-            notPassedAudits.forEach(settings => {
+        // notPassedAudits.forEach(settings => {
+            allAudits.forEach(settings => {
                 const [mainInput] = settings.inputs
 
                 if (mainInput.value) {
                     trueControlLabels.push(mainInput.control_label);
+
+                }
+                if(!mainInput.value){
+                    falseControlLabels.push(mainInput.control_label);
                 }
 
             });
 
-        if (trueControlLabels.every(label => starterLabels.includes(label))) {
-            setSettingsMode('starter')
-        } else if (trueControlLabels.every(label => accelerateLabels.includes(label))) {
-            setSettingsMode('accelerate')
-        } else if (trueControlLabels.every(label => turboMaxLabels.includes(label))) {
-            setSettingsMode('turboMax')
+        const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
+
+        if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
+          //  setActiveSettingsMode('starter')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
+          //  setActiveSettingsMode('accelerate')
+        } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
+          //  setActiveSettingsMode('turboMax')
         } else {
-            setSettingsMode('custom')
+            setActiveSettingsMode('custom')
+         //   setActivatedSettings(trueControlLabels);
         }
+
+
     })
+
+
 
     const actionRequired = (item: AuditSetting): boolean => {
         const hasPassedAudit = item.inputs[0].value && item.audits.some((a) => a.type === 'passed_audit');
@@ -319,6 +353,13 @@ const SpeedSettings = ({}) => {
 
     }, [groupedSettings]);
 
+    useEffect(() => {
+        if(auditsReturn){
+            setCustomMode(true);
+            dispatch(setCommonState('auditsReturn', false));
+        }
+    },[auditsReturn]);
+
     const setShowHideState = (category: string) => {
         setCategoryStates((prevStates) => ({
             ...prevStates,
@@ -329,10 +370,15 @@ const SpeedSettings = ({}) => {
         (item) => item.category === activeCategory
     );
 
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-4 pt-4 pb-2 mt-2 rounded-3xl'>
-        <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
-        <div className="py-4">
-            <h3 className="font-medium">Performance Gears</h3>
+
+
+
+
+    return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
+        {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
+        <SettingsStraightLine/>
+        <div className="pb-4">
+            <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
@@ -340,28 +386,89 @@ const SpeedSettings = ({}) => {
             {modes.map((mode, index) => (
                 <div
                     key={index}
-                    className={`flex px-4 py-4 min-w-[156px] min-h-[156px] items-center justify-center w-fit rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === settingsMode ? ' border-purple-700' : ''}`}
+                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700 dark:border-purple-700' : ''}`}
                     onClick={e => {
-                        setSettingsMode(mode as settingsMode);
-                        dispatch(setCommonState('settingsMode', mode));
+                        setTempMode(mode);
                         settingsModeOnChange(mode);
+
                     }}
                 >
-                    <div className="flex flex-col gap-1 items-center text-center">
+
+                    <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
+                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (
+                            <div className="absolute ml-28 -mt-4">
+                                <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                            </div>
+                        )}
+
                         {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
                         {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
                         {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
                         <div>
-                            <p className="font-medium">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
+                            <p className="font-semibold ">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
                             {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
                         </div>
+
                     </div>
                 </div>
             ))}
         </div>
 
+
+        <UnsavedChanges
+            title='Modified changes'
+            description="Switching to Performance Modes will result in the loss of any customized settings."
+            action='Activate'
+            performanceGear={true}
+            cancel='Cancel'
+            onClick={() => {
+                settingsModeOnChange(tempMode, true);
+            }} >
+            <div ref={customUnsavedChanges}></div>
+        </UnsavedChanges>
+
+
         <div className="py-4">
-            <h3 className="font-medium">Recommended Settings</h3>
+            <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode==='custom'? ' Settings': '' } Activated</h3>
+            {activeSettingsMode === 'starter' ? (
+                <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>
+            ) : activeSettingsMode === 'accelerate' ? (
+                <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>
+            ) : activeSettingsMode === 'turboMax' ? (
+                <span className="font-normal text-sm">Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.</span>
+            ) :
+                <span className="font-normal text-sm">Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance.</span>
+            }
+        </div>
+
+        <div>
+            <button
+                key={activeCategory}
+                onClick={() => {
+                    setActiveSettingsMode('custom');
+                    dispatch(setCommonState('settingsMode', 'custom'));
+                    setCustomMode(prevMode => !prevMode);
+                }}
+                className={cn(
+                    `select-non w-fit transition-all rounded-2xl cursor-pointer  
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
+                    activeSettingsMode === 'custom' && 'border-purple-700'
+                )}
+            >
+                Customize Settings {" "} <ChevronDownIcon className={cn(
+                'w-4 rounded-[15px] transition-transform',
+                customMode && '-rotate-180'
+            )} />
+
+            </button>
+        </div>
+
+        {customMode &&
+            <>
+        <div className="py-3 relative">
+            {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
+            <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
+
         </div>
 
         <ul className='flex gap-3 ml-12'>
@@ -469,6 +576,8 @@ const SpeedSettings = ({}) => {
                 }
             </ul>
         </div>
+            </>
+        }
     </div>
 }
 

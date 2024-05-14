@@ -235,15 +235,15 @@ export const SettingsLine: FC<SvgProps & { width?: number, category: string }> =
     const strokeWidth = 2;
 
     return (
-        <div className='absolute -top-3 -left-4'>
+        <div className='absolute -left-7 top-0.5'>
             {!animate &&
             <svg className={`absolute selectionBar`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path className='dark:stroke-brand-600 stroke-brand-300' d={adjustedPath}  strokeWidth={strokeWidth} />
+                <path className='dark:stroke-brand-600 stroke-purple-800/10' d={adjustedPath}  strokeWidth={strokeWidth} />
             </svg>
             }
 
             <svg width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path className='dark:stroke-brand-500 stroke-brand-200' d={adjustedPath} strokeWidth={strokeWidth} />
+                <path className='dark:stroke-brand-500 stroke-purple-600/10' d={adjustedPath} strokeWidth={strokeWidth} />
             </svg>
         </div>
     );
@@ -254,4 +254,12 @@ export const TitanLogo:FC<SvgProps> = ({cls}) => (
         <path d="M20.2937 0H9.70633C4.34567 0 0 4.34567 0 9.70633V20.2937C0 25.6543 4.34567 30 9.70633 30H20.2937C25.6543 30 30 25.6543 30 20.2937V9.70633C30 4.34567 25.6543 0 20.2937 0Z" fill="#2E223D"/>
         <path d="M13.5798 8.20254L10.5266 16.6329L13.5798 16.6937L11.0431 23.0886L19.0937 13.6709L15.9038 13.5949L19.4734 8.14178L13.5798 8.20254Z" fill="white"/>
     </svg>
+);
+
+export const SettingsStraightLine:FC<SvgProps> = ({cls}) => (
+    <div className='absolute -top-3 left-7'>
+        <svg className={`${cls}`} width="62" height="15" viewBox="0 0 62 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 0.5V1C1 4.86599 4.13401 8 8 8H54C57.866 8 61 11.134 61 15V15" stroke="#D4D4D8" strokeWidth="2"/>
+        </svg>
+    </div>
 );

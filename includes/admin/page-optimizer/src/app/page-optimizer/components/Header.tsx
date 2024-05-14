@@ -30,7 +30,7 @@ import {
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {AnimatePresence} from "framer-motion";
+import {m, AnimatePresence, motion} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
@@ -41,7 +41,7 @@ import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
 import {updateLicense} from "../../../store/app/appActions";
 
-const Header = () => {
+const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
 
@@ -62,6 +62,7 @@ const Header = () => {
     const {
         activeTab,
         activeMetric,
+        settingsMode,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
@@ -86,6 +87,14 @@ const Header = () => {
     }, [license]);
 
     useEffect(() => {
+        if(settingsMode==='turboMax' && !localSwitchState){
+            handleSwitchChange(true)
+        } else if(!testMode){
+            setLocalSwitchState(false);
+        }
+    }, [settingsMode]);
+
+    useEffect(() => {
         if (testMode) {
             setLocalSwitchState(testMode.status || false);
         }
@@ -106,9 +115,16 @@ const Header = () => {
     };
 
     return (
+        <>
 
         <header className='sticky top-[32px] z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
+                <div className='relative'>
+                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                    {version && (
+                        <span className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
+                    )}
+                </div>
                 <div className='flex flex-column items-center gap-3'>
                     <div data-tour='switch-report-strategy' className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                         <div className={cn(
@@ -143,6 +159,10 @@ const Header = () => {
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
+
+                                if(!inProgress || !loading){
+                                    dispatch(fetchData(options, url, true))
+                                }
                                 // dispatch(fetchData(options, url, true))
                                // dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
@@ -196,7 +216,7 @@ const Header = () => {
                     {!error && (
                         <>
 
-                            <div className="flex gap-2 items-center ml-4 text-left w-full dark:text-brand-300">
+                            <div className="text-sm flex gap-1 items-center ml-4 text-left w-full dark:text-brand-300">
                                 <div>Test Mode</div>
                                 <p></p>
                                 <Switch
@@ -227,7 +247,17 @@ const Header = () => {
                 </UnsavedChanges>
             </div>
         </header>
-
+            {localSwitchState && !loading && !showInprogress &&
+            <motion.div  initial={{ opacity: 0, y: -10 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         exit={{ opacity: 0, y: -10 }}
+                         transition={{
+                             ease: 'easeInOut',
+                             duration: 0.5,
+                         }}
+                         className="z-[100000] w-full text-[13px] bg-purple-700/30 items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
+            }
+        </>
     )
 }
 

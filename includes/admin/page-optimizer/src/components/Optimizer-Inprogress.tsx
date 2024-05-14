@@ -25,7 +25,7 @@ const OptimizerInprogress = () => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
     const {activeReport, cssStatus} = useSelector((state: RootState) => state.app);
-    const {inProgress } = useCommonDispatch()
+    const {inProgress, settingsMode } = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
     const intervalRef = useRef<NodeJS.Timer | null>(null);
 
@@ -43,11 +43,11 @@ const OptimizerInprogress = () => {
 
     useEffect(() => {
         dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
+        localStorage.setItem('settingsMode', settingsMode as settingsMode);
     }, [dispatch]);
 
     useEffect(() => {
-
-        console.log("Optimizer component: ", cssStatus);
+    //    console.log("Optimizer component: ", cssStatus);
     }, [cssStatus]);
 
     useEffect(() => {
@@ -62,7 +62,7 @@ const OptimizerInprogress = () => {
                 }
                 return prevIndex + 1;
             });
-        }, 1300);
+        }, 2800);
 
         return () => clearInterval(interval);
     }, [filteredSettings]);
@@ -121,6 +121,7 @@ const OptimizerInprogress = () => {
         if(checkCircleCount  == filteredSettings?.length){
             const timer = setTimeout(() => {
                 setShowInprogress(false);
+                dispatch(setCommonState('inProgress', false))
                 dispatch(fetchData(options, url, true));
             }, 3000);
             return () => clearTimeout(timer);
@@ -154,12 +155,12 @@ const OptimizerInprogress = () => {
                        <div className="px-16 py-10">
 
                            {filteredSettings?.map((setting, index: number) => (
-
+                            <>
                                <motion.div
                                    initial={{opacity: 0, y: 80}}
                                    animate={{opacity: 1, y: 0}}
                                    exit={{opacity: 0, y: -20}}
-                                   transition={{ delay: index * 0.5 }}
+                                   transition={{ delay: index * 1.5 }}
                                    key={index} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
@@ -178,49 +179,16 @@ const OptimizerInprogress = () => {
                                        </div>
                                        <h1 className="text-base">{setting.name.includes('Cache' ) ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
                                    </div>
-
-                                   {/*<div className="ml-3.5 grid gap-2 border-l my-2">*/}
-                                   {/*    {cssStatus != null && (checkStatusCondition(setting.name)) ? (*/}
-                                   {/*        <>*/}
-                                   {/*            <div className="ml-[29px]">*/}
-                                   {/*                <Loading className={'text-sm text-gray-500 dark:text-brand-400 -mt-2'}*/}
-                                   {/*                         customMessage={'Processing in progress — just '}*/}
-                                   {/*                         customMessageAfter={'seconds to completion. Hang tight!'}*/}
-                                   {/*                         url={url} countDown={true} />*/}
-
-                                   {/*                <div*/}
-                                   {/*                    className={`border-2 rounded-xl px-4 py-3 mt-1.5 ${(cssStatus?.cpcss?.status === 'failed' || cssStatus?.uucss?.status === 'failed') && index <= currentIndex ? ' border-red-600 bg-red-100/30' : 'border-orange-400 bg-orange-100/30'}`}>*/}
-                                   {/*                    <div className="flex gap-2 items-center relative">*/}
-                                   {/*                        {(cssStatus?.cpcss?.status === 'queued' || cssStatus?.uucss?.status === 'queued') ? <QueueListIcon*/}
-                                   {/*                            className="h-6 w-6" /> : cssStatus?.cpcss?.status === 'processing' || cssStatus?.uucss?.status === 'processing' ?*/}
-                                   {/*                            <ArrowPathRoundedSquareIcon className="h-6 w-6" /> :*/}
-                                   {/*                            <FaceFrownIcon className="h-6 w-6 text-red-600" />}*/}
-                                   {/*                        <h3 className="text-sm ">{((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) || (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status)) && (((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).charAt(0).toUpperCase() + ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status) ? cssStatus?.cpcss?.status : cssStatus?.uucss?.status).slice(1) + ' to optimize')}</h3>*/}
-
-                                   {/*                    </div>*/}
-                                   {/*                    {(loadingStatuses.includes(cssStatus?.cpcss?.status || '') || loadingStatuses.includes(cssStatus?.uucss?.status || '')) && (*/}
-                                   {/*                        <div className="ml-8">*/}
-                                   {/*                            <Loading className={'text-gray-500 dark:text-brand-400'}*/}
-                                   {/*                                     customMessage={'Processing in progress — just '}*/}
-                                   {/*                                     customMessageAfter={'seconds to completion. Hang tight!'}*/}
-                                   {/*                                     url={url} countDown={true} />*/}
-                                   {/*                        </div>*/}
-                                   {/*                    )}*/}
-                                   {/*                </div>*/}
+                               </motion.div>
 
 
-                                   {/*            </div>*/}
-                                   {/*        </>*/}
 
-                                   {/*    ) : index !== filteredSettings.length - 1 && (*/}
-                                   {/*        <div className="py-3"></div>*/}
-                                   {/*    )*/}
-                                   {/*    }*/}
-
-
-                                   {/*</div>*/}
-
-                                   <div className="ml-3.5 grid gap-2 border-l my-1">
+                                <motion.div initial={{opacity: 0, y: 80}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: -20}}
+                                            transition={{ delay: index * 1.8 }}
+                                            key={index}
+                                            className="ml-3.5 grid gap-2 border-l my-1">
                                        {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>
                                                <div className="ml-[29px]">
@@ -260,15 +228,15 @@ const OptimizerInprogress = () => {
                                            </>
 
                                        ) : index !== filteredSettings.length - 1 && (
-                                           <div className="py-3"></div>
+                                            <div className="py-3"></div>
+
+                                                // <></>
                                        )
                                        }
+                                   </motion.div>
 
-
-                                   </div>
-                               </motion.div>
+                            </>
                            ))}
-
                        </div>
 
                        <div className="inline-block border-t w-full">
@@ -293,8 +261,8 @@ const OptimizerInprogress = () => {
                            <Button
                                onClick={() => {
                                dispatch(fetchData(options, url, true))
-                               //dispatch(setCommonState('inProgress', false))
-                                   setShowInprogress(false);
+                               dispatch(setCommonState('inProgress', false))
+                               setShowInprogress(false);
                            }}
                                    className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>
                                <RefreshCw className={cn(

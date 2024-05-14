@@ -102,7 +102,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
     return <>
-
+        {/*min-w-[310px]*/}
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='speed-insights'
                 className={cn(

@@ -26,9 +26,10 @@ interface Props {
     description?: string
     action?: string
     cancel?: string
+    performanceGear?: boolean
 }
 
-const UnsavedChanges = ({children , onClick, title, description, action = 'Save & Exit', onCancel, cancel }: Props) => {
+const UnsavedChanges = ({children , onClick, title, description, action = 'Save & Exit', onCancel, cancel, performanceGear }: Props) => {
 
     const { touched, fresh } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
@@ -37,17 +38,21 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
     // console.log(fresh, touched);
     // return <>{children}</>;
 
-    if (!(fresh ? true : touched) || showInprogress) {
-        return <div onClick={e => onClick()} >
-            {children}
-        </div>
+    if(!performanceGear){
+        if (!(fresh ? true : touched) || showInprogress) {
+            return <div onClick={e => onClick()} >
+                {children}
+            </div>
+        }
     }
 
 
     const submit = async () => {
 
         //await submitSettings(action === 'Save & Analyze');
-        await submitSettings(false);
+        if(!performanceGear){
+            await submitSettings(false);
+        }
         onClick();
         // setTimeout(() => {
         //     onClick();

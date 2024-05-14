@@ -14,6 +14,7 @@ import {useRootContext} from "../context/root";
 import Header from "app/page-optimizer/components/Header";
 import {cn} from "lib/utils";
 import {setCommonState} from "../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))

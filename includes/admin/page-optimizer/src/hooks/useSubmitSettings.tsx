@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import ApiService from "../services/api";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {fetchData} from "../store/app/appActions";
@@ -10,6 +10,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../store/app/appTypes";
 import { compareVersions } from 'compare-versions';
 import {setCommonState} from "../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const useSubmitSettings = () => {
 
@@ -25,8 +26,10 @@ const useSubmitSettings = () => {
         setShowInprogress
     } = useAppContext()
 
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
+
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { settingsMode } = useCommonDispatch()
 
     const {
         fresh,
@@ -37,6 +40,12 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
+    const updatedData = {
+        ...data,
+        settingsMode: settingsMode,
+    };
+
+    // console.log(data);
 
     const url = options?.optimizer_url;
     const { toast } = useToast()
@@ -58,9 +67,9 @@ const useSubmitSettings = () => {
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                data,
+                updatedData,
                 global,
-                analyze
+                analyze,
             );
 
             toast({
@@ -111,8 +120,9 @@ const useSubmitSettings = () => {
                 dispatch(fetchData(options, url, true));
 
             }else if(!analyze){
-               // dispatch(setCommonState('inProgress', true))
+                dispatch(setCommonState('inProgress', true))
                 setShowInprogress(true);
+
             }
 
 
@@ -128,7 +138,7 @@ const useSubmitSettings = () => {
         setSavingData(false)
         setInvalidatingCache(false)
 
-    }, [data, activeReport,  savingData, invalidatingCache])
+    }, [data, activeReport,  savingData, invalidatingCache, settingsMode])
 
     return {
         submitSettings

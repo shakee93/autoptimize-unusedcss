@@ -12,6 +12,7 @@ export interface AppState {
     license: License | null;
     generalSettings: GeneralSettings | null;
     mobile: {
+        settingsMode: settingsMode,
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
         error?: string | null;
@@ -28,6 +29,7 @@ export interface AppState {
 
     },
     desktop: {
+        settingsMode: settingsMode,
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
         error?: string | null;
