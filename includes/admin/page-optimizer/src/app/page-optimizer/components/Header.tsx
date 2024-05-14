@@ -41,6 +41,7 @@ import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
 import {updateLicense} from "../../../store/app/appActions";
 
+// const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
