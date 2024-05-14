@@ -28,6 +28,34 @@ import {Status} from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {Checkbox} from "components/ui/checkbox";
 import {getTestModeStatus, updateLicense} from "../../../store/app/appActions";
 
+interface GeneralOptions {
+    uucss_excluded_links?: string[];
+    rapidload_minify_html?: boolean;
+    uucss_query_string?: boolean;
+    preload_internal_links?: boolean;
+    uucss_enable_debug?: boolean;
+    uucss_jobs_per_queue?: string;
+    uucss_queue_interval?: string;
+    uucss_disable_add_to_queue?: boolean;
+    uucss_disable_add_to_re_queue?: boolean;
+}
+
+interface ActiveModules {
+    general: {
+        options: GeneralOptions;
+    };
+}
+
+interface UucssGlobal {
+    active_modules?: ActiveModules;
+}
+
+declare global {
+    interface Window {
+        uucss_global?: UucssGlobal;
+    }
+}
+
 const GeneralSettings = () => {
 
     const [settingsData, setSettingsData] = useState<GeneralSettings>({
@@ -58,19 +86,22 @@ const GeneralSettings = () => {
 
     useEffect(() => {
         console.log("General Settings: ", window.uucss_global?.active_modules?.general)
-        const GeneralSettings = window.uucss_global?.active_modules?.general.options;
+        // const GeneralSettings = window.uucss_global?.active_modules?.general.options;
 
-        setSettingsData({
-            excludeUrl: GeneralSettings.uucss_excluded_links || [],
-            minifyHtml: !!GeneralSettings.rapidload_minify_html,
-            queryString: !!GeneralSettings.uucss_query_string,
-            preloadLinks: !!GeneralSettings.preload_internal_links,
-            debugMode: !!GeneralSettings.uucss_enable_debug,
-            queueRunJob: parseInt(GeneralSettings.uucss_jobs_per_queue),
-            queueRunJobInterval: parseInt(GeneralSettings.uucss_queue_interval),
-            disableAutoQueue: !!GeneralSettings.uucss_disable_add_to_queue,
-            disableReQueue: !!GeneralSettings.uucss_disable_add_to_re_queue,
-        });
+        if (window.uucss_global?.active_modules?.general) {
+            const GeneralSettings = window.uucss_global.active_modules.general.options;
+            setSettingsData({
+                excludeUrl: GeneralSettings.uucss_excluded_links || [],
+                minifyHtml: !!GeneralSettings.rapidload_minify_html,
+                queryString: !!GeneralSettings.uucss_query_string,
+                preloadLinks: !!GeneralSettings.preload_internal_links,
+                debugMode: !!GeneralSettings.uucss_enable_debug,
+                queueRunJob: parseInt(GeneralSettings.uucss_jobs_per_queue || '0'),
+                queueRunJobInterval: parseInt(GeneralSettings.uucss_queue_interval || '0'),
+                disableAutoQueue: !!GeneralSettings.uucss_disable_add_to_queue,
+                disableReQueue: !!GeneralSettings.uucss_disable_add_to_re_queue,
+            });
+        }
     }, []);
 
     return ( <>

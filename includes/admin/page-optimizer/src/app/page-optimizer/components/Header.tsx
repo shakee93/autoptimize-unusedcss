@@ -42,7 +42,7 @@ import {getTestModeStatus} from "../../../store/app/appActions";
 import {updateLicense} from "../../../store/app/appActions";
 
 // const Header = ({ url }: { url: string}) => {
-const Header = ({ url }: { url: string}) => {
+const Header = () => {
 
     const tourPromptKey = 'titan-tour-prompt'
 
