@@ -964,7 +964,7 @@ class RapidLoad_Admin_Frontend
         wp_register_script( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.js',[], UUCSS_VERSION);
 
         $data = array(
-            'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/rapidload-previe/dist',
+            'page_preview_base' => UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce' => wp_create_nonce( 'uucss_nonce' ),
