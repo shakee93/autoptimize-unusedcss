@@ -161,7 +161,7 @@ const OptimizerInprogress = () => {
                                    animate={{opacity: 1, y: 0}}
                                    exit={{opacity: 0, y: -20}}
                                    transition={{ delay: index * 1.5 }}
-                                   key={index} className="grid font-medium">
+                                   key={setting.name + index + '-div1'} className="grid font-medium">
                                    <div className="flex gap-4 items-center relative">
                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                                            <React.Fragment key={index}>
@@ -187,7 +187,7 @@ const OptimizerInprogress = () => {
                                             animate={{opacity: 1, y: 0}}
                                             exit={{opacity: 0, y: -20}}
                                             transition={{ delay: index * 1.8 }}
-                                            key={index}
+                                            key={setting.name + index + '-div2'}
                                             className="ml-3.5 grid gap-2 border-l my-1">
                                        {cssStatus != null && (checkStatusCondition(setting.name)) ? (
                                            <>

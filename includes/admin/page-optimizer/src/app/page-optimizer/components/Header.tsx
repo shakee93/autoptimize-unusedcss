@@ -2,7 +2,7 @@ import {
     ArrowPathIcon,
     ArrowTopRightOnSquareIcon,
     ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon
+    DevicePhoneMobileIcon, XMarkIcon, EyeIcon
 } from "@heroicons/react/24/outline";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import React, {useEffect, useMemo, useState} from "react";
@@ -199,7 +199,9 @@ const Header = ({ url }: { url: string}) => {
                     {!error && (
                         <>
 
-                            <div className="text-sm flex gap-1 items-center ml-4 text-left w-full dark:text-brand-300">
+
+
+                            <div className="text-sm flex gap-1 justify-end items-center ml-4 text-left w-full dark:text-brand-300">
                                 <div>Test Mode</div>
                                 <p></p>
                                 <Switch
@@ -209,23 +211,38 @@ const Header = ({ url }: { url: string}) => {
 
                                 />
                             </div>
-                            <SaveChanges />
+
+                            {localSwitchState && !loading && !showInprogress &&
+                                <button
+                                    onClick={() => {
+                                        window.open(options.optimizer_url+ '?rapidload_preview_optimization', '_blank');
+                                    }}
+                                    className='flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-200/80 dark:bg-primary dark:hover:bg-primary/90  px-4 py-2 pr-10'>
+                                    <img className='w-6'
+                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/preview-eye.gif`) : '/preview-eye.gif'}
+                                    />
+                                    Preview
+                                </button>
+                            }
+                            <SaveChanges/>
                         </>
                     )}
                     </>
                 )}
 
                 <UnsavedChanges
-                    onCancel={() => { setShowOptimizer(false) }}
+                    onCancel={() => {
+                        setShowOptimizer(false)
+                    }}
                     cancel='Discard & Leave'
                     onClick={() => {
                         setShowOptimizer(false);
                         setShowInprogress(false);
-                    }} >
+                    }}>
                     <TooltipText text='Close Optimizer'>
                         <LogOut className={cn(
                             'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                        )} />
+                        )}/>
                     </TooltipText>
                 </UnsavedChanges>
             </div>

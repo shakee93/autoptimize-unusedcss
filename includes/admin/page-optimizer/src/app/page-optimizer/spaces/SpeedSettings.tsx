@@ -67,7 +67,7 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-
+    const [activeOptimizationMode, setActiveOptimizationMode ] = useState(data?.settingsMode);
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
 
 
@@ -252,9 +252,9 @@ const SpeedSettings = ({}) => {
 
         const allAudits = passedAudits.concat(notPassedAudits);
 
-        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript', 'Enable Critical CSS'];
 
 
         // notPassedAudits.forEach(settings => {
@@ -288,9 +288,9 @@ const SpeedSettings = ({}) => {
 
         // console.log("update triggered")
 
-        const starterLabels = ['Remove Unused CSS', 'Enable Critical CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+        const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript'];
+        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript', 'Enable Critical CSS'];
         const allAudits = passedAudits.concat(notPassedAudits);
 
         const trueControlLabels: any[] = [];
@@ -395,11 +395,17 @@ const SpeedSettings = ({}) => {
                 >
 
                     <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (
+                        {/*{['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (*/}
+                        {/*    <div className="absolute ml-28 -mt-4">*/}
+                        {/*        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
+                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeOptimizationMode === mode && (
                             <div className="absolute ml-28 -mt-4">
                                 <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                             </div>
                         )}
+
 
                         {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
                         {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
@@ -455,18 +461,24 @@ const SpeedSettings = ({}) => {
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
             >
+                {activeOptimizationMode === 'custom' &&
+                    <div className="">
+                        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                    </div>
+                }
+
                 Customize Settings {" "} <ChevronDownIcon className={cn(
                 'w-4 rounded-[15px] transition-transform',
                 customMode && '-rotate-180'
-            )} />
+            )}/>
 
             </button>
         </div>
 
         {customMode &&
             <>
-        <div className="py-3 relative">
-            {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
+                <div className="py-3 relative">
+                    {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
             <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
 
         </div>
