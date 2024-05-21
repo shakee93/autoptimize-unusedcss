@@ -257,7 +257,7 @@ const Header = ({ url }: { url: string}) => {
                              ease: 'easeInOut',
                              duration: 0.5,
                          }}
-                         className="z-[100000] w-full text-[13px] bg-purple-700/30 items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
+                         className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
             }
         </>
     )
