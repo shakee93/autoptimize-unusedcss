@@ -17,7 +17,7 @@ if ( ! defined( 'RAPIDLOAD_CACHE_DIR' ) ) {
 }
 
 if ( ! defined( 'RAPIDLOAD_CONSTANT_FILE' ) ) {
-    define( 'RAPIDLOAD_CONSTANT FILE', __DIR__ . '/constants.php' );
+    define( 'RAPIDLOAD_CONSTANT_FILE', __DIR__ . '/constants.php' );
 }
 
 if ( ! defined( 'RAPIDLOAD_INDEX_FILE' ) ) {
