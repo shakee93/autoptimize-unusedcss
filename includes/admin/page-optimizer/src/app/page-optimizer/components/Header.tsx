@@ -50,7 +50,9 @@ const Header = ({ url }: { url: string}) => {
 
     const { activeReport,
         loading, error,
-        settings
+        settings,
+        data,
+        revisions
     } = useSelector(optimizerData);
     const {inProgress } = useCommonDispatch()
     const {
@@ -212,7 +214,7 @@ const Header = ({ url }: { url: string}) => {
                                 />
                             </div>
 
-                            {localSwitchState && !loading && !showInprogress &&
+                            {localSwitchState && !loading && !showInprogress && revisions.length > 0 &&
                                 <button
                                     onClick={() => {
                                         window.open(options.optimizer_url+ '?rapidload_preview_optimization', '_blank');
