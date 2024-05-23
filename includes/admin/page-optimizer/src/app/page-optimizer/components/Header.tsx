@@ -4,6 +4,7 @@ import {
     ComputerDesktopIcon,
     DevicePhoneMobileIcon, XMarkIcon, EyeIcon
 } from "@heroicons/react/24/outline";
+import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import React, {useEffect, useMemo, useState} from "react";
 import {useAppContext} from "../../../context/app";
@@ -33,6 +34,7 @@ import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import {Switch} from "components/ui/switch";
 import {getTestModeStatus} from "../../../store/app/appActions";
+import {useToast} from "components/ui/use-toast";
 
 // const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
@@ -86,15 +88,37 @@ const Header = ({ url }: { url: string}) => {
         }
     }, [testMode]);
 
-    const handleSwitchChange = (isChecked: boolean) => {
+    const { toast } = useToast();
+
+    const handleSwitchChange = async (isChecked: boolean) => {
         setLocalSwitchState(isChecked);
 
         if (timeoutId) {
             clearTimeout(timeoutId);
         }
 
-        const newTimeoutId = setTimeout(() => {
-            dispatch(getTestModeStatus(options, url, String(isChecked)));
+        const newTimeoutId = setTimeout(async () => {
+            const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
+            if (result.success) {
+                toast({
+                    description: (
+                        <div className='flex w-full gap-2 text-center'>
+                            Test Mode turned {localSwitchState? 'off': 'on'} successfully
+                            <CheckCircleIcon className='w-5 text-green-600' />
+                        </div>
+                    ),
+                });
+            } else {
+                toast({
+                    description: (
+                        <div className='flex w-full gap-2 text-center'>
+                            Failed to turn on Test mode: {result.error}
+                            <XCircleIcon className='w-5 text-red-600' />
+                        </div>
+                    ),
+                });
+                setLocalSwitchState(false);
+            }
         }, 200);
         setTimeoutId(newTimeoutId);
     };
