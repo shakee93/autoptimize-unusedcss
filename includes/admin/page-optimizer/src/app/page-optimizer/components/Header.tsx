@@ -2,7 +2,7 @@ import {
     ArrowPathIcon,
     ArrowTopRightOnSquareIcon,
     ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon, EyeIcon
+    DevicePhoneMobileIcon, XMarkIcon, EyeIcon, InformationCircleIcon
 } from "@heroicons/react/24/outline";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import ThemeSwitcher from "components/ui/theme-switcher";
@@ -102,10 +102,16 @@ const Header = ({ url }: { url: string}) => {
             if (result.success) {
                 toast({
                     description: (
-                        <div className='flex w-full gap-2 text-center'>
-                            Test Mode turned {localSwitchState? 'off': 'on'} successfully
-                            <CheckCircleIcon className='w-5 text-green-600' />
-                        </div>
+                        <>
+                            <div className='flex w-full gap-2 text-center'>
+                                Test Mode turned {localSwitchState ? 'off' : 'on'} successfully
+                                <CheckCircleIcon className='w-5 text-green-600'/>
+                            </div>
+                            <div className='flex w-full gap-2 text-center'>
+                                <InformationCircleIcon className='w-5 text-green-600'/>
+                                Test Mode changes are on live
+                            </div>
+                        </>
                     ),
                 });
             } else {
