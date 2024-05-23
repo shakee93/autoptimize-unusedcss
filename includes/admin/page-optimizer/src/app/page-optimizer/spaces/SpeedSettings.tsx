@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
-import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef} from "react";
+import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef, MouseEventHandler } from "react";
 import {CheckCircle2, Circle, LogOut} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
@@ -68,8 +68,8 @@ const SpeedSettings = ({}) => {
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
     const [activeOptimizationMode, setActiveOptimizationMode ] = useState(data?.settingsMode);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'accelerate');
-
+    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
+    const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
 
 
     const icons :  {
@@ -324,8 +324,19 @@ const SpeedSettings = ({}) => {
         }
 
 
-    })
+    });
 
+    const settingsDescriptions: { [key in settingsMode]: string } = {
+        starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
+        accelerate: "Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.",
+        turboMax: "Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
+        custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
+    };
+
+    // const settingsModeOnEnter= (mode: string) : MouseEventHandler<HTMLDivElement>   => () => {
+    //     setMouseOnSettingsGear(mode);
+    // };
+    const currentMode: settingsMode = (mouseOnSettingsGear || activeSettingsMode) as settingsMode;
 
 
     const actionRequired = (item: AuditSetting): boolean => {
@@ -392,15 +403,13 @@ const SpeedSettings = ({}) => {
                         settingsModeOnChange(mode);
 
                     }}
+                    onMouseEnter={() => setMouseOnSettingsGear(mode)}
+                    onMouseLeave={() => setMouseOnSettingsGear('')}
                 >
 
                     <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
-                        {/*{['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (*/}
-                        {/*    <div className="absolute ml-28 -mt-4">*/}
-                        {/*        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeOptimizationMode === mode && (
+
+                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (
                             <div className="absolute ml-28 -mt-4">
                                 <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                             </div>
@@ -435,33 +444,41 @@ const SpeedSettings = ({}) => {
 
 
         <div className="py-4">
-            <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode==='custom'? ' Settings': '' } Activated</h3>
-            {activeSettingsMode === 'starter' ? (
-                <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>
-            ) : activeSettingsMode === 'accelerate' ? (
-                <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>
-            ) : activeSettingsMode === 'turboMax' ? (
-                <span className="font-normal text-sm">Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.</span>
-            ) :
-                <span className="font-normal text-sm">Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance.</span>
-            }
+            {mouseOnSettingsGear ? (
+                <h3 className="font-semibold">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+            ) : (
+                <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+            )}
+            {/*{activeSettingsMode === 'starter' || mouseOnSettingsGear === 'starter' ? (*/}
+            {/*    <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>*/}
+            {/*) : activeSettingsMode === 'accelerate' || mouseOnSettingsGear === 'accelerate' ? (*/}
+            {/*    <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>*/}
+            {/*) : activeSettingsMode === 'turboMax' || mouseOnSettingsGear === 'turboMax' ? (*/}
+            {/*    <span className="font-normal text-sm">Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.</span>*/}
+            {/*) : mouseOnSettingsGear === 'custom' ? (*/}
+            {/*    <span className="font-normal text-sm">Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance.</span>*/}
+            {/*) : ''}*/}
+            <span
+                className="font-normal text-sm">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>
-            <button
+            <div
                 key={activeCategory}
                 onClick={() => {
                     setActiveSettingsMode('custom');
                     dispatch(setCommonState('settingsMode', 'custom'));
                     setCustomMode(prevMode => !prevMode);
                 }}
+                onMouseEnter={() => setMouseOnSettingsGear('custom')}
+                onMouseLeave={() => setMouseOnSettingsGear('')}
                 className={cn(
                     `select-non w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
             >
-                {activeOptimizationMode === 'custom' &&
+                {activeSettingsMode === 'custom' &&
                     <div className="">
                         <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                     </div>
@@ -472,7 +489,7 @@ const SpeedSettings = ({}) => {
                 customMode && '-rotate-180'
             )}/>
 
-            </button>
+            </div>
         </div>
 
         {customMode &&
