@@ -177,12 +177,26 @@ const SpeedSettings = ({}) => {
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
 
+    const [initiateCustomMessage, setInitiateCustomMessage] = useState(false);
 
     useEffect(() => {
-     //   console.log("mode: ", activeSettingsMode);
-       // customUnsavedChanges.current?.click();
-    }, [groupedSettings]);
+     //   console.log("settings changes");
+     //   customUnsavedChanges.current?.click();
+        if(activeSettingsMode === 'custom'){
+            setInitiateCustomMessage(true);
+        }else{
+            setInitiateCustomMessage(false);
+        }
+    }, [settings]);
 
+    useEffect(() => {
+
+        if(activeSettingsMode === 'custom'){
+            setCustomMode(true);
+        }else{
+            setCustomMode(false);
+        }
+    });
 
 
     useEffect(() => {
@@ -239,7 +253,7 @@ const SpeedSettings = ({}) => {
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-        if(activeSettingsMode === 'custom' && !activate ){
+        if(activeSettingsMode === 'custom' && !activate && initiateCustomMessage ){
             customUnsavedChanges.current?.click();
          //   console.log('activeSettingsMode: ', activeSettingsMode)
         }else{
@@ -438,6 +452,7 @@ const SpeedSettings = ({}) => {
             cancel='Cancel'
             onClick={() => {
                 settingsModeOnChange(tempMode, true);
+
             }} >
             <div ref={customUnsavedChanges}></div>
         </UnsavedChanges>
