@@ -21,7 +21,7 @@ import {
     Loader,
     LogOut,
     Monitor,
-    RefreshCw
+    RefreshCw, ThumbsUpIcon
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
@@ -79,7 +79,28 @@ const Header = ({ url }: { url: string}) => {
 
     useEffect(() => {
         if(settingsMode==='turboMax' && !localSwitchState){
-            handleSwitchChange(true)
+            const toastInstance = toast({
+                description: (
+                    <>
+                        <div className='flex w-full gap-2 text-center items-center'>
+                            <InformationCircleIcon className='w-5 text-orange-600'/>
+                            Do you want to turn on test mode?
+                            <AppButton onClick={e => {
+                                handleSwitchChange(true);
+                            }} variant='outline'>
+                                Yes
+                            </AppButton>
+                            <AppButton onClick={e => {
+                                // Dismiss the toast immediately
+                                toastInstance.dismiss();
+                            }} variant='outline'>
+                                No
+                            </AppButton>
+                        </div>
+                    </>
+                ),
+            }, 50000);
+
         } else if(!testMode){
             setLocalSwitchState(false);
         }
@@ -210,23 +231,6 @@ const Header = ({ url }: { url: string}) => {
                                 </AppButton>
                             </TooltipText>
                         </UnsavedChanges>
-                        {/*<TooltipText*/}
-                        {/*    text='Switch URL to optimize'>*/}
-                        {/*    <AppButton asChild={true} data-tour='analyze'*/}
-
-                        {/*               className={cn(*/}
-                        {/*                   'transition-none rounded-none h-12 pl-3 pr-3.5' +*/}
-                        {/*                   ' border-l border-r-0 border-t-0 border-b-0 bg-transparent hover:opacity-100',*/}
-                        {/*               )}*/}
-                        {/*               variant='outline'>*/}
-                        {/*        <div className='flex flex-col gap-[1px] items-center'>*/}
-                        {/*            <ArrowDownUp className={cn(*/}
-                        {/*                'w-4 -mt-0.5'*/}
-                        {/*            )}/>*/}
-                        {/*            <span className='text-xxs font-normal text-brand-500'>Switch</span>*/}
-                        {/*        </div>*/}
-                        {/*    </AppButton>*/}
-                        {/*</TooltipText>*/}
                     </div>
                 </div>
             </div>
