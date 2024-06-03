@@ -183,9 +183,10 @@ const OptimizerInprogress = () => {
 
 
 
-                                <motion.div initial={{opacity: 0, y: 80}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: -20}}
+                                <motion.div
+                                            // initial={{opacity: 0, y: 80}}
+                                            // animate={{opacity: 1, y: 0}}
+                                            // exit={{opacity: 0, y: -20}}
                                             transition={{ delay: index * 1.8 }}
                                             key={setting.name + index + '-div2'}
                                             className="ml-3.5 grid gap-2 border-l my-1">

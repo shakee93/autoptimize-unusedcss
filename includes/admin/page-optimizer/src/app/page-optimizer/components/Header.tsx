@@ -18,6 +18,7 @@ import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
+    Loader,
     LogOut,
     Monitor,
     RefreshCw
@@ -69,6 +70,8 @@ const Header = ({ url }: { url: string}) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
+    const [previewButton, setPreviewButton]= useState<boolean>(false);
+    const [testModeLoading, setTestModeLoading]= useState<boolean>(false);
 
     useEffect(() => {
         dispatch(getTestModeStatus(options, url));
@@ -85,13 +88,15 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         if (testMode) {
             setLocalSwitchState(testMode.status || false);
+            setPreviewButton(true);
         }
     }, [testMode]);
 
     const { toast } = useToast();
 
     const handleSwitchChange = async (isChecked: boolean) => {
-        setLocalSwitchState(isChecked);
+      //  setLocalSwitchState(isChecked);
+        setTestModeLoading(true);
 
         if (timeoutId) {
             clearTimeout(timeoutId);
@@ -100,6 +105,7 @@ const Header = ({ url }: { url: string}) => {
         const newTimeoutId = setTimeout(async () => {
             const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
             if (result.success) {
+                setTestModeLoading(false);
                 toast({
                     description: (
                         <>
@@ -124,9 +130,11 @@ const Header = ({ url }: { url: string}) => {
                     ),
                 });
                 setLocalSwitchState(false);
+                setTestModeLoading(false);
             }
         }, 200);
         setTimeoutId(newTimeoutId);
+
     };
 
     return (
@@ -162,7 +170,7 @@ const Header = ({ url }: { url: string}) => {
                             </div>
                         </TooltipText>
                     </div>
-                    <div className='flex overflow-hidden border rounded-2xl shadow'>
+                    <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                         <UrlPreview/>
                         <UnsavedChanges
                             title='Analyze without applying optimization?'
@@ -232,30 +240,42 @@ const Header = ({ url }: { url: string}) => {
                         <>
 
 
+                            <div className="flex overflow-hidden border rounded-2xl shadow">
 
-                            <div className="text-sm flex gap-1 justify-end items-center ml-4 text-left w-full dark:text-brand-300">
-                                <div>Test Mode</div>
-                                <p></p>
-                                <Switch
-                                    checked={localSwitchState}
-                                    //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
-                                    onCheckedChange={(checked) => handleSwitchChange(checked)}
-
-                                />
-                            </div>
-
-                            {localSwitchState && !loading && !showInprogress && revisions.length > 0 &&
                                 <button
                                     onClick={() => {
-                                        window.open(options.optimizer_url+ '?rapidload_preview_optimization', '_blank');
+                                        window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
                                     }}
-                                    className='flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-200/80 dark:bg-primary dark:hover:bg-primary/90  px-4 py-2 pr-10'>
-                                    <img className='w-6'
-                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/preview-eye.gif`) : '/preview-eye.gif'}
-                                    />
+//cursor-not-allowed opacity-50 pointer-events-none
+                                    className={`flex gap-2 items-center text-sm h-10 rounded-[14px] bg-brand-200/80 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 m-1 pr-5 ${
+                                     revisions.length > 0 
+                                        ? '' : ''}`} data-tour="preview-button">
+
+                                    <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
                                     Preview
                                 </button>
-                            }
+
+                                <div
+                                    className="text-sm flex gap-1 justify-end items-center ml-4 mr-4 text-left w-full dark:text-brand-300" data-tour="test-mode">
+                                    <div>{testModeLoading ? ('Test Mode') : ('Test Mode')}</div>
+                                    {/*<p></p>*/}
+                                    {testModeLoading ? (
+                                        <Loader className='ml-2 mr-[7px] w-5 animate-spin'/>
+                                    ) : (
+                                        <Switch
+                                            checked={localSwitchState}
+                                            //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
+                                            onCheckedChange={(checked) => handleSwitchChange(checked)}
+
+                                        />
+                                    )
+                                    }
+
+
+                                </div>
+                            </div>
+
+
                             <SaveChanges/>
                         </>
                     )}
@@ -279,8 +299,8 @@ const Header = ({ url }: { url: string}) => {
                 </UnsavedChanges>
             </div>
         </header>
-            {localSwitchState && !loading && !showInprogress &&
-            <motion.div  initial={{ opacity: 0, y: -10 }}
+            {localSwitchState && !loading && !showInprogress && !testModeLoading &&
+                <motion.div  initial={{ opacity: 0, y: -10 }}
                          animate={{ opacity: 1, y: 0 }}
                          exit={{ opacity: 0, y: -10 }}
                          transition={{
