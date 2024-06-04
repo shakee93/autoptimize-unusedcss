@@ -67,7 +67,6 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activeOptimizationMode, setActiveOptimizationMode ] = useState(data?.settingsMode);
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
 
@@ -125,15 +124,12 @@ const SpeedSettings = ({}) => {
         const sortedGroupedSettings: GroupedSettings = {};
         sortedCategories.forEach((category) => {
             sortedGroupedSettings[category] = grouped[category as keyof typeof grouped];
-            //sortedGroupedSettings[category] = grouped[category];
         });
 
         setGroupedSettings(sortedGroupedSettings);
-       // setGroupedSettings(prevState => ({ ...prevState, ...sortedGroupedSettings }));
 
         if (openCategory) {
             setActiveCategory(openCategory);
-          // dispatch(setCommonState('openCategory', ''));
         }else{
             dispatch(setCommonState('openCategory', 'css'));
         }
@@ -187,7 +183,6 @@ const SpeedSettings = ({}) => {
         }else{
             setInitiateCustomMessage(false);
         }
-        console.log(settingsMode)
     }, [settings]);
 
 
@@ -237,7 +232,6 @@ const SpeedSettings = ({}) => {
             setSortedStatus(false);
 
         }
-      //  console.log('Not Passed Audits', notPassedAudits.map(item))
 
     }, [ groupedSettings]);
 
@@ -249,7 +243,6 @@ const SpeedSettings = ({}) => {
         //&& initiateCustomMessage
         if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
-         //   console.log('activeSettingsMode: ', activeSettingsMode)
         }else{
         setActiveSettingsMode(mode as settingsMode);
         dispatch(setCommonState('settingsMode', mode));
@@ -284,17 +277,12 @@ const SpeedSettings = ({}) => {
             }else{
                 updateValue(settings, false, mainInput.key);
             }
-
-         //   console.log(mode , ' : ', settingsToReturn)
-          //  updateValue(settings, true, mainInput.key);
         });
         }
 
     };
 
     useEffect(() => {
-
-        // console.log("update triggered")
 
         const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
@@ -341,9 +329,6 @@ const SpeedSettings = ({}) => {
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
-    // const settingsModeOnEnter= (mode: string) : MouseEventHandler<HTMLDivElement>   => () => {
-    //     setMouseOnSettingsGear(mode);
-    // };
     const currentMode: settingsMode = (mouseOnSettingsGear || activeSettingsMode) as settingsMode;
 
 
@@ -394,7 +379,6 @@ const SpeedSettings = ({}) => {
 
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
-        {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
@@ -466,8 +450,6 @@ const SpeedSettings = ({}) => {
             <div
                 key={activeCategory}
                 onClick={() => {
-                  //  setActiveSettingsMode('custom');
-                   // dispatch(setCommonState('settingsMode', 'custom'));
                     setTempMode('custom');
                     setCustomMode(prevMode => !prevMode);
                 }}
@@ -497,7 +479,6 @@ const SpeedSettings = ({}) => {
         {customMode &&
             <>
                 <div className="py-3 relative">
-                    {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
             <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
 
         </div>

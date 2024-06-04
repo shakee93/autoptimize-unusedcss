@@ -47,7 +47,6 @@ const OptimizerInprogress = () => {
     }, [dispatch]);
 
     useEffect(() => {
-    //    console.log("Optimizer component: ", cssStatus);
     }, [cssStatus]);
 
     useEffect(() => {
@@ -184,9 +183,9 @@ const OptimizerInprogress = () => {
 
 
                                 <motion.div
-                                            // initial={{opacity: 0, y: 80}}
-                                            // animate={{opacity: 1, y: 0}}
-                                            // exit={{opacity: 0, y: -20}}
+                                            initial={{opacity: 0, y: 80}}
+                                            animate={{opacity: 1, y: 0}}
+                                            exit={{opacity: 0, y: -20}}
                                             transition={{ delay: index * 1.8 }}
                                             key={setting.name + index + '-div2'}
                                             className="ml-3.5 grid gap-2 border-l my-1">
@@ -230,8 +229,6 @@ const OptimizerInprogress = () => {
 
                                        ) : index !== filteredSettings.length - 1 && (
                                             <div className="py-3"></div>
-
-                                                // <></>
                                        )
                                        }
                                    </motion.div>

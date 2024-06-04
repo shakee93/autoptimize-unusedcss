@@ -99,8 +99,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
             : (value || []).filter((id: string) => id !== itemId);
 
         update(updatedValue, input.key);
-
-        console.log(updatedValue)
     };
 
 
@@ -203,9 +201,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    {item?.name}
                                    <Switch
                                        checked={item?.isSelected}
-                                       //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
                                    />
 
                                </div>
@@ -219,10 +215,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    {item?.name}
                                    <Switch
                                        checked={item?.isSelected}
-                                       //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
-
                                    />
 
                                </div>
@@ -236,39 +229,13 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                    {item?.name}
                                    <Switch
                                        checked={item?.isSelected}
-                                       //checked={checkedStates[index]}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
-                                      // onCheckedChange={(checked) => handleSwitchChange(checked, item.exclusions)}
-
                                    />
 
                                </div>
                            ))}
                        </>
                    )}
-                   {/*{groupedData[activeCategory].map((item, index: number) => (*/}
-                   {/*    <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>*/}
-                   {/*        {item?.name}*/}
-                   {/*        <Switch*/}
-                   {/*            checked={item?.isSelected}*/}
-                   {/*            //checked={checkedStates[index]}*/}
-                   {/*            onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}*/}
-                   {/*        />*/}
-
-                   {/*    </div>*/}
-                   {/*))}*/}
-                   {/*{filteredValues.map((item, index: number) => (*/}
-                   {/*    <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>*/}
-                   {/*        {item?.name}*/}
-
-                   {/*        <Switch*/}
-                   {/*            checked={value ? value.includes(item.id) : false}*/}
-                   {/*            //checked={checkedStates[index]}*/}
-                   {/*            onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}*/}
-                   {/*        />*/}
-
-                   {/*    </div>*/}
-                   {/*))}*/}
                </div>
            </div>
        }

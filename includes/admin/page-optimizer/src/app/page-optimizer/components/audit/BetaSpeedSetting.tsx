@@ -228,8 +228,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         if(settings.status && mainInput.value){
             setShowStatus(true)
         }
-
-      //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
     },[]);
 
 
@@ -250,14 +248,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <>
-                                {/*{!actionRequired &&*/}
-                                {/*    <div className="absolute">*/}
-                                {/*        <TooltipText text={<>No Action Required</>}>*/}
-                                {/*            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>*/}
-                                {/*        </TooltipText>*/}
-                                {/*    </div>*/}
-
-                                {/*}*/}
 
                                     <Checkbox disabled={['onboard', 'preview'].includes(mode)}
                                               className={actionRequired ? '' : 'border-dashed'}
@@ -267,15 +257,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                   updateValue(settings, c, mainInput.key);
 
                                               }}/>
-
-                                {/*<Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}*/}
-                                {/*          className={actionRequired ? '' : 'border-dashed'}*/}
-                                {/*          checked={mainInput.value}*/}
-                                {/*          onCheckedChange={(c: boolean) =>{*/}
-                                {/*              setCheckboxState(c);*/}
-                                {/*              updateValue(settings, c, mainInput.key);*/}
-
-                                {/*          }}/>*/}
 
                                 </>
                             )}
@@ -302,8 +283,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        {/*<DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>*/}
-                                        {/*action required is removed from the line below after !checkboxstate || !actionRequired*/}
                                         <DialogTrigger disabled asChild className={`${!mainInput.value ? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>

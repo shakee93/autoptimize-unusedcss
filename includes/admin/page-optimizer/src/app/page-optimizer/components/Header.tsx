@@ -78,8 +78,9 @@ const Header = ({ url }: { url: string}) => {
     }, [dispatch]);
 
     useEffect(() => {
+        let toastInstance: ReturnType<typeof toast> | undefined;
         if(settingsMode==='turboMax' && !localSwitchState){
-            const toastInstance = toast({
+            toastInstance = toast({
                 description: (
                     <>
                         <div className='flex w-full gap-2 text-center items-center'>
@@ -92,7 +93,9 @@ const Header = ({ url }: { url: string}) => {
                             </AppButton>
                             <AppButton onClick={e => {
                                 // Dismiss the toast immediately
-                                toastInstance.dismiss();
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
                             }} variant='outline'>
                                 No
                             </AppButton>
@@ -101,6 +104,12 @@ const Header = ({ url }: { url: string}) => {
                 ),
             }, 50000);
 
+        }else if(settingsMode!='turboMax'){
+            console.log(settingsMode)
+            if (toastInstance) {
+                console.log("test")
+                toastInstance.dismiss();
+            }
         } else if(!testMode){
             setLocalSwitchState(false);
         }
@@ -207,8 +216,6 @@ const Header = ({ url }: { url: string}) => {
                                 if(!inProgress || !loading){
                                     dispatch(fetchData(options, url, true))
                                 }
-                                // dispatch(fetchData(options, url, true))
-                               // dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
 
                             }} >
@@ -242,8 +249,6 @@ const Header = ({ url }: { url: string}) => {
                     <>
                     {!error && (
                         <>
-
-
                             <div className="flex overflow-hidden border rounded-2xl shadow">
 
                                 <button
@@ -262,13 +267,11 @@ const Header = ({ url }: { url: string}) => {
                                 <div
                                     className="text-sm flex gap-1 justify-end items-center ml-4 mr-4 text-left w-full dark:text-brand-300" data-tour="test-mode">
                                     <div>{testModeLoading ? ('Test Mode') : ('Test Mode')}</div>
-                                    {/*<p></p>*/}
                                     {testModeLoading ? (
                                         <Loader className='ml-2 mr-[7px] w-5 animate-spin'/>
                                     ) : (
                                         <Switch
                                             checked={localSwitchState}
-                                            //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
                                             onCheckedChange={(checked) => handleSwitchChange(checked)}
 
                                         />

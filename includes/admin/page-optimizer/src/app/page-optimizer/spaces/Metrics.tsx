@@ -161,9 +161,7 @@ const Metrics = () => {
 
     return (
         <SlideUp uuid={activeMetric?.id ? activeMetric.id : 'no-key'}>
-            {/*<h2 className="text-lg ml-5 flex gap-2 font-normal items-center">*/}
-            {/*
-            {/*    Enhance {activeMetric?.title}</h2>*/}
+
             <div className='ml-6'>
                 {!togglePerformance && <TogglePerformance/>}
             </div>
