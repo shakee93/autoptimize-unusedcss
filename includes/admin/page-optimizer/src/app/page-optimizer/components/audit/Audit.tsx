@@ -255,7 +255,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                                         <TooltipText
                                             text={filesOrActions ? 'Show resources and actions' : 'Learn more about this audit'}
                                         >
-                                            <div onClick={() => setToggleFiles()}
+                                            <div data-tour={index === 0 ? "audits-show-actions" : undefined}  onClick={() => setToggleFiles()}
                                                  className={`min-w-[125px] cursor-pointer flex items-center gap-2 pl-4 pr-2 py-1.5 text-sm rounded-2xl dark:hover:bg-brand-800 hover:bg-brand-100 transition-colors ${toggleFiles ? ' dark:bg-brand-900 border ': 'border '}`}>
 
                                                 {filesOrActions ? (
@@ -272,6 +272,7 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
                                                         <MinusCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/> :
                                                         <InformationCircleIcon className='w-6 h-6 dark:text-brand-500 text-brand-900'/>
                                                 )}
+
                                             </div>
                                         </TooltipText>
                                     }

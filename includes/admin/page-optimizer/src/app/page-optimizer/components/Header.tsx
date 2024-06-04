@@ -2,7 +2,7 @@ import {
     ArrowPathIcon,
     ArrowTopRightOnSquareIcon,
     ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon, EyeIcon
+    DevicePhoneMobileIcon, XMarkIcon, EyeIcon, InformationCircleIcon
 } from "@heroicons/react/24/outline";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import ThemeSwitcher from "components/ui/theme-switcher";
@@ -18,9 +18,10 @@ import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
+    Loader,
     LogOut,
     Monitor,
-    RefreshCw
+    RefreshCw, ThumbsUpIcon
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
@@ -69,14 +70,46 @@ const Header = ({ url }: { url: string}) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
+    const [previewButton, setPreviewButton]= useState<boolean>(false);
+    const [testModeLoading, setTestModeLoading]= useState<boolean>(false);
 
     useEffect(() => {
         dispatch(getTestModeStatus(options, url));
     }, [dispatch]);
 
     useEffect(() => {
+        let toastInstance: ReturnType<typeof toast> | undefined;
         if(settingsMode==='turboMax' && !localSwitchState){
-            handleSwitchChange(true)
+            toastInstance = toast({
+                description: (
+                    <>
+                        <div className='flex w-full gap-2 text-center items-center'>
+                            <InformationCircleIcon className='w-5 text-orange-600'/>
+                            Do you want to turn on test mode?
+                            <AppButton onClick={e => {
+                                handleSwitchChange(true);
+                            }} variant='outline'>
+                                Yes
+                            </AppButton>
+                            <AppButton onClick={e => {
+                                // Dismiss the toast immediately
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                            }} variant='outline'>
+                                No
+                            </AppButton>
+                        </div>
+                    </>
+                ),
+            }, 50000);
+
+        }else if(settingsMode!='turboMax'){
+            console.log(settingsMode)
+            if (toastInstance) {
+                console.log("test")
+                toastInstance.dismiss();
+            }
         } else if(!testMode){
             setLocalSwitchState(false);
         }
@@ -85,13 +118,15 @@ const Header = ({ url }: { url: string}) => {
     useEffect(() => {
         if (testMode) {
             setLocalSwitchState(testMode.status || false);
+            setPreviewButton(true);
         }
     }, [testMode]);
 
     const { toast } = useToast();
 
     const handleSwitchChange = async (isChecked: boolean) => {
-        setLocalSwitchState(isChecked);
+      //  setLocalSwitchState(isChecked);
+        setTestModeLoading(true);
 
         if (timeoutId) {
             clearTimeout(timeoutId);
@@ -100,12 +135,19 @@ const Header = ({ url }: { url: string}) => {
         const newTimeoutId = setTimeout(async () => {
             const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
             if (result.success) {
+                setTestModeLoading(false);
                 toast({
                     description: (
-                        <div className='flex w-full gap-2 text-center'>
-                            Test Mode turned {localSwitchState? 'off': 'on'} successfully
-                            <CheckCircleIcon className='w-5 text-green-600' />
-                        </div>
+                        <>
+                            <div className='flex w-full gap-2 text-center'>
+                                Test Mode turned {localSwitchState ? 'off' : 'on'} successfully
+                                <CheckCircleIcon className='w-5 text-green-600'/>
+                            </div>
+                            <div className='flex w-full gap-2 text-center'>
+                                <InformationCircleIcon className='w-5 text-green-600'/>
+                                Test Mode changes are on live
+                            </div>
+                        </>
                     ),
                 });
             } else {
@@ -118,9 +160,11 @@ const Header = ({ url }: { url: string}) => {
                     ),
                 });
                 setLocalSwitchState(false);
+                setTestModeLoading(false);
             }
         }, 200);
         setTimeoutId(newTimeoutId);
+
     };
 
     return (
@@ -156,7 +200,7 @@ const Header = ({ url }: { url: string}) => {
                             </div>
                         </TooltipText>
                     </div>
-                    <div className='flex overflow-hidden border rounded-2xl shadow'>
+                    <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                         <UrlPreview/>
                         <UnsavedChanges
                             title='Analyze without applying optimization?'
@@ -172,8 +216,6 @@ const Header = ({ url }: { url: string}) => {
                                 if(!inProgress || !loading){
                                     dispatch(fetchData(options, url, true))
                                 }
-                                // dispatch(fetchData(options, url, true))
-                               // dispatch(setCommonState('inProgress', true))
                                 commonDispatch(setCommonState('openAudits', []))
 
                             }} >
@@ -196,23 +238,6 @@ const Header = ({ url }: { url: string}) => {
                                 </AppButton>
                             </TooltipText>
                         </UnsavedChanges>
-                        {/*<TooltipText*/}
-                        {/*    text='Switch URL to optimize'>*/}
-                        {/*    <AppButton asChild={true} data-tour='analyze'*/}
-
-                        {/*               className={cn(*/}
-                        {/*                   'transition-none rounded-none h-12 pl-3 pr-3.5' +*/}
-                        {/*                   ' border-l border-r-0 border-t-0 border-b-0 bg-transparent hover:opacity-100',*/}
-                        {/*               )}*/}
-                        {/*               variant='outline'>*/}
-                        {/*        <div className='flex flex-col gap-[1px] items-center'>*/}
-                        {/*            <ArrowDownUp className={cn(*/}
-                        {/*                'w-4 -mt-0.5'*/}
-                        {/*            )}/>*/}
-                        {/*            <span className='text-xxs font-normal text-brand-500'>Switch</span>*/}
-                        {/*        </div>*/}
-                        {/*    </AppButton>*/}
-                        {/*</TooltipText>*/}
                     </div>
                 </div>
             </div>
@@ -224,32 +249,40 @@ const Header = ({ url }: { url: string}) => {
                     <>
                     {!error && (
                         <>
+                            <div className="flex overflow-hidden border rounded-2xl shadow">
 
-
-
-                            <div className="text-sm flex gap-1 justify-end items-center ml-4 text-left w-full dark:text-brand-300">
-                                <div>Test Mode</div>
-                                <p></p>
-                                <Switch
-                                    checked={localSwitchState}
-                                    //onCheckedChange={(c: boolean) => dispatch(getTestModeStatus(options, url, String(c)))}
-                                    onCheckedChange={(checked) => handleSwitchChange(checked)}
-
-                                />
-                            </div>
-
-                            {localSwitchState && !loading && !showInprogress && revisions.length > 0 &&
                                 <button
                                     onClick={() => {
-                                        window.open(options.optimizer_url+ '?rapidload_preview_optimization', '_blank');
+                                        window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
                                     }}
-                                    className='flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-200/80 dark:bg-primary dark:hover:bg-primary/90  px-4 py-2 pr-10'>
-                                    <img className='w-6'
-                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/preview-eye.gif`) : '/preview-eye.gif'}
-                                    />
+//cursor-not-allowed opacity-50 pointer-events-none
+                                    className={`flex gap-2 items-center text-sm h-10 rounded-[14px] bg-brand-200/80 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 m-1 pr-5 ${
+                                     revisions.length > 0 
+                                        ? '' : ''}`} data-tour="preview-button">
+
+                                    <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
                                     Preview
                                 </button>
-                            }
+
+                                <div
+                                    className="text-sm flex gap-1 justify-end items-center ml-4 mr-4 text-left w-full dark:text-brand-300" data-tour="test-mode">
+                                    <div>{testModeLoading ? ('Test Mode') : ('Test Mode')}</div>
+                                    {testModeLoading ? (
+                                        <Loader className='ml-2 mr-[7px] w-5 animate-spin'/>
+                                    ) : (
+                                        <Switch
+                                            checked={localSwitchState}
+                                            onCheckedChange={(checked) => handleSwitchChange(checked)}
+
+                                        />
+                                    )
+                                    }
+
+
+                                </div>
+                            </div>
+
+
                             <SaveChanges/>
                         </>
                     )}
@@ -273,8 +306,8 @@ const Header = ({ url }: { url: string}) => {
                 </UnsavedChanges>
             </div>
         </header>
-            {localSwitchState && !loading && !showInprogress &&
-            <motion.div  initial={{ opacity: 0, y: -10 }}
+            {localSwitchState && !loading && !showInprogress && !testModeLoading &&
+                <motion.div  initial={{ opacity: 0, y: -10 }}
                          animate={{ opacity: 1, y: 0 }}
                          exit={{ opacity: 0, y: -10 }}
                          transition={{

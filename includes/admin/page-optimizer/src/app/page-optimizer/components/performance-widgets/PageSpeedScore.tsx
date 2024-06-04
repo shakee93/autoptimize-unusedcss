@@ -161,7 +161,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                 <AppButton
                     onClick={e => setExpanded(p => !p)}
-                    variant='outline' className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2'>
+                    variant='outline' className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2' data-tour="expand-metrics">
                     {expanded ? 'Collapse' : 'Expand' } Metrics
                 </AppButton>
 

@@ -67,7 +67,6 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activeOptimizationMode, setActiveOptimizationMode ] = useState(data?.settingsMode);
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
 
@@ -125,15 +124,12 @@ const SpeedSettings = ({}) => {
         const sortedGroupedSettings: GroupedSettings = {};
         sortedCategories.forEach((category) => {
             sortedGroupedSettings[category] = grouped[category as keyof typeof grouped];
-            //sortedGroupedSettings[category] = grouped[category];
         });
 
         setGroupedSettings(sortedGroupedSettings);
-       // setGroupedSettings(prevState => ({ ...prevState, ...sortedGroupedSettings }));
 
         if (openCategory) {
             setActiveCategory(openCategory);
-          // dispatch(setCommonState('openCategory', ''));
         }else{
             dispatch(setCommonState('openCategory', 'css'));
         }
@@ -180,23 +176,15 @@ const SpeedSettings = ({}) => {
     const [initiateCustomMessage, setInitiateCustomMessage] = useState(false);
 
     useEffect(() => {
-     //   console.log("settings changes");
-     //   customUnsavedChanges.current?.click();
+
         if(activeSettingsMode === 'custom'){
+            dispatch(setCommonState('settingsMode', 'custom'));
             setInitiateCustomMessage(true);
         }else{
             setInitiateCustomMessage(false);
         }
     }, [settings]);
 
-    useEffect(() => {
-
-        if(activeSettingsMode === 'custom'){
-            setCustomMode(true);
-        }else{
-            setCustomMode(false);
-        }
-    });
 
 
     useEffect(() => {
@@ -244,7 +232,6 @@ const SpeedSettings = ({}) => {
             setSortedStatus(false);
 
         }
-       // console.log('Not Passed Audits', notPassedAudits)
 
     }, [ groupedSettings]);
 
@@ -253,9 +240,9 @@ const SpeedSettings = ({}) => {
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-        if(activeSettingsMode === 'custom' && !activate && initiateCustomMessage ){
+        //&& initiateCustomMessage
+        if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
-         //   console.log('activeSettingsMode: ', activeSettingsMode)
         }else{
         setActiveSettingsMode(mode as settingsMode);
         dispatch(setCommonState('settingsMode', mode));
@@ -290,17 +277,12 @@ const SpeedSettings = ({}) => {
             }else{
                 updateValue(settings, false, mainInput.key);
             }
-
-         //   console.log(mode , ' : ', settingsToReturn)
-          //  updateValue(settings, true, mainInput.key);
         });
         }
 
     };
 
     useEffect(() => {
-
-        // console.log("update triggered")
 
         const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
         const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
@@ -334,11 +316,11 @@ const SpeedSettings = ({}) => {
           //  setActiveSettingsMode('turboMax')
         } else {
             setActiveSettingsMode('custom')
-         //   setActivatedSettings(trueControlLabels);
+            dispatch(setCommonState('settingsMode', 'custom'));
         }
 
 
-    });
+    },[settings]);
 
     const settingsDescriptions: { [key in settingsMode]: string } = {
         starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
@@ -347,9 +329,6 @@ const SpeedSettings = ({}) => {
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
-    // const settingsModeOnEnter= (mode: string) : MouseEventHandler<HTMLDivElement>   => () => {
-    //     setMouseOnSettingsGear(mode);
-    // };
     const currentMode: settingsMode = (mouseOnSettingsGear || activeSettingsMode) as settingsMode;
 
 
@@ -400,14 +379,13 @@ const SpeedSettings = ({}) => {
 
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
-        {/*<SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />*/}
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 inline-flex" data-tour="settings-gear">
             {modes.map((mode, index) => (
                 <div
                     key={index}
@@ -445,7 +423,7 @@ const SpeedSettings = ({}) => {
 
 
         <UnsavedChanges
-            title='Modified changes'
+            title='Modified Customize Settings changes'
             description="Switching to Performance Modes will result in the loss of any customized settings."
             action='Activate'
             performanceGear={true}
@@ -464,15 +442,6 @@ const SpeedSettings = ({}) => {
             ) : (
                 <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
-            {/*{activeSettingsMode === 'starter' || mouseOnSettingsGear === 'starter' ? (*/}
-            {/*    <span className="font-normal text-sm">Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.</span>*/}
-            {/*) : activeSettingsMode === 'accelerate' || mouseOnSettingsGear === 'accelerate' ? (*/}
-            {/*    <span className="font-normal text-sm">Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.</span>*/}
-            {/*) : activeSettingsMode === 'turboMax' || mouseOnSettingsGear === 'turboMax' ? (*/}
-            {/*    <span className="font-normal text-sm">Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.</span>*/}
-            {/*) : mouseOnSettingsGear === 'custom' ? (*/}
-            {/*    <span className="font-normal text-sm">Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance.</span>*/}
-            {/*) : ''}*/}
             <span
                 className="font-normal text-sm">{settingsDescriptions[currentMode]}</span>
         </div>
@@ -481,8 +450,7 @@ const SpeedSettings = ({}) => {
             <div
                 key={activeCategory}
                 onClick={() => {
-                    setActiveSettingsMode('custom');
-                    dispatch(setCommonState('settingsMode', 'custom'));
+                    setTempMode('custom');
                     setCustomMode(prevMode => !prevMode);
                 }}
                 onMouseEnter={() => setMouseOnSettingsGear('custom')}
@@ -492,6 +460,7 @@ const SpeedSettings = ({}) => {
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
+                data-tour="customize-settings"
             >
                 {activeSettingsMode === 'custom' &&
                     <div className="">
@@ -510,7 +479,6 @@ const SpeedSettings = ({}) => {
         {customMode &&
             <>
                 <div className="py-3 relative">
-                    {/*<h3 className="font-semibold">Recommended Settings</h3>*/}
             <SettingsLine width={getWidthForCategory(activeCategory)|| 220} category={activeCategory}  />
 
         </div>

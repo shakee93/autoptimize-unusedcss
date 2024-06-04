@@ -45,7 +45,6 @@ const useSubmitSettings = () => {
         settingsMode: settingsMode,
     };
 
-    // console.log(data);
 
     const url = options?.optimizer_url;
     const { toast } = useToast()
