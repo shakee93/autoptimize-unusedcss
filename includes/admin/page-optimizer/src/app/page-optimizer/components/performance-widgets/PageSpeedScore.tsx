@@ -25,7 +25,7 @@ import {getTestModeStatus} from "../../../../store/app/appActions";
 import {useToast} from "components/ui/use-toast";
 import {RootState} from "../../../../store/app/appTypes";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {SettingsStraightLine} from "app/page-optimizer/components/icons/icon-svg";
+import {SettingsLine, SettingsStraightLine, TestModeLine} from "app/page-optimizer/components/icons/icon-svg";
 
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
@@ -226,6 +226,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         {/*min-w-[310px]*/}
 
         <div className='w-full flex flex-col gap-4'>
+            <div>
             <div className='flex gap-2 justify-center'>
                 <div className='w-fit'>
                     <div data-tour='test-mode'
@@ -256,19 +257,22 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 </div>
                 <TooltipText text="Preview">
-                <button
-                    onClick={() => {
-                        window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
-                    }}
-                    className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 pr-3.5 ${
-                        revisions.length > 0
-                            ? '' : ''}`} data-tour="preview-button">
+                    <button
+                        onClick={() => {
+                            window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                        }}
+                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 pr-3.5 ${
+                            revisions.length > 0
+                                ? '' : ''}`} data-tour="preview-button">
 
-                    <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
-                </button>
+                        <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
+                    </button>
                 </TooltipText>
             </div>
-            <SettingsStraightLine/>
+            <div className="relative mt-4 -mb-2 rotate-180 ">
+                <TestModeLine width={localSwitchState? 110: 200} />
+            </div>
+            </div>
             <Card data-tour='speed-insights'
                   className={cn(
                       'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',

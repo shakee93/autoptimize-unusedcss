@@ -323,9 +323,9 @@ const SpeedSettings = ({}) => {
     },[settings]);
 
     const settingsDescriptions: { [key in settingsMode]: string } = {
-        starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
+        starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
         accelerate: "Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.",
-        turboMax: "Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
+        turboMax: "Unlock peak performance potential including Accelerator mode + generating critical CSS, advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
