@@ -40,11 +40,17 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
+    // const updatedData = {
+    //     ...data,
+    //     settingsMode: settingsMode,
+    // };
+
+    //omit grouped, metrics from data and updateData
+    const { grouped, metrics, ...restData } = data || {};
     const updatedData = {
-        ...data,
+        ...restData,
         settingsMode: settingsMode,
     };
-
 
     const url = options?.optimizer_url;
     const { toast } = useToast()
