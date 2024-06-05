@@ -1,13 +1,35 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vitejs.dev/config/
+import {defineConfig} from "vite";
+import {resolve} from "path";
+import react from "@vitejs/plugin-react";
+// @ts-ignore
+import packageJson from './package.json';
+import {dynamicBase} from "vite-plugin-dynamic-base";
 export default defineConfig((configEnv) => {
   const isDevelopment = configEnv.mode === "development";
   const generateSourceMaps = process.env.GENERATE_SOURCE_MAPS === 'true';
   const outDir = generateSourceMaps ? 'dist-debug' : 'dist';
-  return{
-    plugins: [react()],
+  return {
+    base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
+    plugins: [
+      react(),
+      dynamicBase({
+        publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
+        transformIndexHtml:  false
+      })
+    ],
+    define: {
+      '__OPTIMIZER_VERSION__': JSON.stringify(packageJson.version),
+    },
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './src'),
+        app: resolve(__dirname, "src", "app"),
+        components: resolve(__dirname, "src", "components"),
+        '@/components': resolve(__dirname, "src", "components"),
+        hooks: resolve(__dirname, "src", "hooks"),
+        lib: resolve(__dirname, "src", "lib"),
+      },
+    },
     build: {
       outDir: outDir,
       sourcemap: generateSourceMaps,
@@ -17,12 +39,18 @@ export default defineConfig((configEnv) => {
             ['core-vendor']: [
               'react',
               'react-dom',
+              'tailwind-merge',
+              'webfontloader'
             ],
             vendor: [
-
+              'prism-react-renderer',
+              '@tanstack/react-table',
+              '@radix-ui/react-toast',
+              '@radix-ui/react-select',
+              'focus-lock'
             ],
             animations: [
-
+              'framer-motion',
             ],
           },
           // entryFileNames: `assets/[name].js`,
@@ -32,5 +60,5 @@ export default defineConfig((configEnv) => {
         }
       }
     },
-  }
-})
+  };
+});
