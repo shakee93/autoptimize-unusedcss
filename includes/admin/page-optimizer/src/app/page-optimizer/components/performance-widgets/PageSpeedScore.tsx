@@ -12,7 +12,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonRootState, setCommonState} from "../../../../store/common/commonActions";
 import {
     Circle, GraduationCapIcon,
-    Hash, History, Monitor,
+    Hash, History, Loader, Monitor,
 } from "lucide-react";
 import SideBarActions from "app/page-optimizer/components/performance-widgets/SideBarActions";
 import xusePerformanceColors from "hooks/usePerformanceColors";
@@ -67,9 +67,10 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const {settingsMode} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(true);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
     const [previewButton, setPreviewButton]= useState<boolean>(false);
-    const [testModeLoading, setTestModeLoading]= useState<boolean>(false);
+    const [loadingStatus, setLoadingStatus] = useState(false);
+
     const { toast } = useToast();
 
     let url = options?.optimizer_url;
@@ -78,49 +79,14 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         dispatch(getTestModeStatus(options, url));
     }, [dispatch]);
 
-    useEffect(() => {
-        let toastInstance: ReturnType<typeof toast> | undefined;
-        if(settingsMode==='turboMax' && !localSwitchState){
-            toastInstance = toast({
-                description: (
-                    <>
-                        <div className='flex w-full gap-2 text-center items-center'>
-                            <InformationCircleIcon className='w-5 text-orange-600'/>
-                            Do you want to turn on test mode?
-                            <AppButton onClick={e => {
-                                handleSwitchChange(true);
-                            }} variant='outline'>
-                                Yes
-                            </AppButton>
-                            <AppButton onClick={e => {
-                                // Dismiss the toast immediately
-                                if (toastInstance) {
-                                    toastInstance.dismiss();
-                                }
-                            }} variant='outline'>
-                                No
-                            </AppButton>
-                        </div>
-                    </>
-                ),
-            }, 50000);
 
-        }else if(settingsMode!='turboMax'){
-            console.log(settingsMode)
-            if (toastInstance) {
-                console.log("test")
-                toastInstance.dismiss();
-            }
-        } else if(!testMode){
-           // setLocalSwitchState(false);
-        }
-    }, [settingsMode]);
 
     useEffect(() => {
         if (testMode) {
             setLocalSwitchState(testMode.status || false);
             setPreviewButton(true);
         }
+
     }, [testMode]);
 
 
@@ -128,7 +94,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const handleSwitchChange = async (isChecked: boolean) => {
 
         setLocalSwitchState(isChecked);
-        setTestModeLoading(true);
+        setLoadingStatus(true);
 
         if (timeoutId) {
             clearTimeout(timeoutId);
@@ -137,7 +103,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         const newTimeoutId = setTimeout(async () => {
             const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
             if (result.success) {
-                setTestModeLoading(false);
+                setLoadingStatus(false);
                 toast({
                     description: (
                         <>
@@ -162,12 +128,49 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     ),
                 });
                 setLocalSwitchState(false);
-                setTestModeLoading(false);
+                setLoadingStatus(false);
             }
         }, 200);
         setTimeoutId(newTimeoutId);
 
     };
+
+    useEffect(() => {
+        let toastInstance: ReturnType<typeof toast> | undefined;
+        if(settingsMode==='turboMax' && !localSwitchState){
+            toastInstance = toast({
+                description: (
+                    <>
+                        <div className='flex w-full gap-2 text-center items-center'>
+                            <InformationCircleIcon className='w-5 text-orange-600'/>
+                            Do you want to turn on test mode?
+
+                            <AppButton onClick={e => {
+                                handleSwitchChange(true);
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                            }} variant='outline'>
+                                Yes
+                            </AppButton>
+                            <AppButton onClick={e => {
+                                // Dismiss the toast immediately
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                            }} variant='outline'>
+                                No
+                            </AppButton>
+
+                        </div>
+                    </>
+                ),
+            }, true);
+
+        }else if(!testMode){
+            setLocalSwitchState(false);
+        }
+    }, [settingsMode]);
 
 
     const handleCoreWebClick = useCallback(() => {
@@ -234,7 +237,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
 
                         <div
-                            onClick={() => setLocalSwitchState(false)}
+                            onClick={() => handleSwitchChange(false)}
                             className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${localSwitchState ? 'text-brand-500' : ''}`}
                         >
                             <Circle
@@ -245,8 +248,8 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
 
                         <div
-                            onClick={() => setLocalSwitchState(true)}
-                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-6 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : ''}`}
+                            onClick={() => handleSwitchChange(true)}
+                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-6 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode
                         </div>
