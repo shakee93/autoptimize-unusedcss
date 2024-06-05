@@ -130,7 +130,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                 setLocalSwitchState(false);
                 setLoadingStatus(false);
             }
-        }, 200);
+        }, 1000);
         setTimeoutId(newTimeoutId);
 
     };
