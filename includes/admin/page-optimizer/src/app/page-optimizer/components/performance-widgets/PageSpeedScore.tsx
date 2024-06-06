@@ -214,6 +214,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
+    useEffect(() => {
+
+        if (!expanded) {
+            dispatch(setCommonState('activeMetric', null));
+        }
+
+    }, [expanded])
 
 
     return <>
