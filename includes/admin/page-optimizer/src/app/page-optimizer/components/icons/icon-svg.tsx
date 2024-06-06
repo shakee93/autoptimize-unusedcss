@@ -197,23 +197,6 @@ export const TurboMax:FC<SvgProps> = ({cls}) => (
         <path fillRule="evenodd" clipRule="evenodd" d="M73.1907 11.7255L68.4433 16.5382H68.2795L68.1158 16.3778C67.9521 15.7361 67.7884 15.0944 67.461 14.6131C67.1336 14.1319 66.8062 13.6506 66.3151 13.1693C66.1514 13.1693 66.1514 13.0089 66.1514 12.8485C66.1514 12.8485 66.1514 12.8485 66.3151 12.688L73.027 11.0838C73.1907 11.0838 73.1907 11.0838 73.1907 11.2442C73.3544 11.5651 73.3544 11.7255 73.1907 11.7255Z" fill="#5B3786"/>
     </svg>
 );
-// export const SettingsLine: FC<SvgProps & { width?: number }> = ({ width = 400 }) => {
-//     // Adjusting path values based on the new width
-//     const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
-//     const strokeWidth = 2;
-//     return (
-//         <>
-//             <svg className="mb-2 -mt-2 -ml-9 absolute selectionBar"  width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-//                 <path d={adjustedPath} stroke="#7E53B2" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}/>
-//             </svg>
-//             <svg className="mb-2 -mt-2 -ml-9" width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
-//                 <path d={adjustedPath} stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}/>
-//             </svg>
-//         </>
-//
-//
-// );
-// };
 
 
 export const SettingsLine: FC<SvgProps & { width?: number, category?: string }> = ({ width = 400, category }) => {

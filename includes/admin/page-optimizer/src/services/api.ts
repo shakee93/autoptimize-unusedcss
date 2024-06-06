@@ -66,7 +66,6 @@ class ApiService {
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
 
-
         try {
             let fresh = reload
             let data = null
@@ -118,7 +117,6 @@ class ApiService {
             if (responseData?.reload) {
                 return await this.fetchPageSpeed(url, activeReport, true);
             }
-
 
             return responseData
 

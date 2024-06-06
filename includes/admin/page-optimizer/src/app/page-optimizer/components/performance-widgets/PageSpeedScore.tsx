@@ -236,9 +236,9 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${localSwitchState ? 'text-brand-500' : ''}`}
                         >
                             <Circle
-                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? '' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}/>
+                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}/>
                             <Circle
-                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? '' : 'fill-green-600'} relative inline-flex`)}/>
+                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}/>
                             Live
                         </div>
 
@@ -250,17 +250,17 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
                 </div>
-                <TooltipText text="Preview">
-                    <button
+                <TooltipText text={loadingStatus ? "loading" : "Preview"} >
+                    <div
                         onClick={() => {
-                            window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                            {!loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');}
                         }}
                         className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 pr-3.5 ${
                             revisions.length > 0
                                 ? '' : ''}`} data-tour="preview-button">
 
-                        <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
-                    </button>
+                        { loadingStatus ? <Loader className='w-5 animate-spin'/>    :  <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>}
+                    </div>
                 </TooltipText>
             </div>
             <div className="relative mt-4 -mb-2 rotate-180 ">
