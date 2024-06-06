@@ -214,6 +214,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
+    useEffect(() => {
+
+        if (!expanded) {
+            dispatch(setCommonState('activeMetric', null));
+        }
+
+    }, [expanded])
 
 
     return <>
@@ -324,34 +331,39 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 </div>
 
-                <AppButton
-                    onClick={e => setExpanded(p => !p)}
-                    variant='outline'
-                    className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2'
-                    data-tour="expand-metrics">
-                    {expanded ? 'Collapse' : 'Expand'} Metrics
-                </AppButton>
+                <div className='border-t'>
+                    <AppButton
+                        onClick={e => setExpanded(p => !p)}
+                        variant='outline'
+                        className={cn(
+                            'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2',
+                            expanded && 'border-b-0'
+                        )}
+                        data-tour="expand-metrics">
+                        {expanded ? 'Collapse' : 'Expand'} Metrics
+                    </AppButton>
 
-                {(data?.metrics && !expanded) && (
-                    <>
-                        <div className='flex justify-around mb-3 px-2'
-                             onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
-                        >
-                            {data.metrics.map(metric => (
-                                <div key={metric.id}
-                                     onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
+                    {(data?.metrics && !expanded) && (
+                        <>
+                            <div className='flex justify-around my-2  px-2'
+                                 onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
+                            >
+                                {data.metrics.map(metric => (
+                                    <div key={metric.id}
+                                         onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
-                                     className='text-xs border text-center flex flex-col
-                             gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
-                                    <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
-                                    <MetricValue metric={metric}/>
-                                </div>
-                            ))}
-                        </div>
+                                         className='text-xs text-center flex flex-col
+                             gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
+                                        <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
+                                        <MetricValue metric={metric}/>
+                                    </div>
+                                ))}
+                            </div>
 
-                    </>
-                )}
+                        </>
+                    )}
 
+                </div>
 
                 {(data?.metrics && expanded) && (
                     <div className={cn(
