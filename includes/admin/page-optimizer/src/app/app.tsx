@@ -10,6 +10,8 @@ import {fetchData} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
+import {setCommonState} from "../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -22,7 +24,7 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
+    const {showOptimizer, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
@@ -53,6 +55,8 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         dispatch(fetchData(options, options.optimizer_url, false))
+        //dispatch(setCommonState('inProgress', false))
+        setShowInprogress(false);
     }, [dispatch, activeReport]);
 
 

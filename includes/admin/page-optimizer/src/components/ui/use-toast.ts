@@ -141,7 +141,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ ...props }: Toast) {
+function toast({ ...props }: Toast, autoCloseDuration = 3000) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -149,7 +149,19 @@ function toast({ ...props }: Toast) {
       type: "UPDATE_TOAST",
       toast: { ...props, id },
     })
-  const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
+  // const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
+
+  // Modified dismiss function to include a delay parameter with a default value
+  const dismiss = (delay: number | undefined = undefined) => {
+    setTimeout(() => {
+      dispatch({ type: "DISMISS_TOAST", toastId: id })
+    }, delay)
+  }
+
+  // Automatically dismiss after the specified duration unless user takes action
+  const autoDismissTimer = setTimeout(() => {
+    dismiss();
+  }, autoCloseDuration);
 
   dispatch({
     type: "ADD_TOAST",
@@ -158,7 +170,8 @@ function toast({ ...props }: Toast) {
       id,
       open: true,
       onOpenChange: (open) => {
-        if (!open) dismiss()
+        //if (!open) dismiss()
+        if (!open) clearTimeout(autoDismissTimer);
       },
     },
   })

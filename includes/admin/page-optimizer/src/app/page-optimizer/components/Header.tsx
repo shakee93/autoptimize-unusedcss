@@ -2,8 +2,9 @@ import {
     ArrowPathIcon,
     ArrowTopRightOnSquareIcon,
     ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon
+    DevicePhoneMobileIcon, XMarkIcon, EyeIcon, InformationCircleIcon
 } from "@heroicons/react/24/outline";
+import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import React, {useEffect, useMemo, useState} from "react";
 import {useAppContext} from "../../../context/app";
@@ -11,20 +12,21 @@ import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchData} from "../../../store/app/appActions";
+import {changeReport, fetchData, getCSSStatus} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
+    Loader,
     LogOut,
     Monitor,
-    RefreshCw
+    RefreshCw, ThumbsUpIcon
 } from "lucide-react";
 import { useTour } from '@reactour/tour'
 import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {AnimatePresence} from "framer-motion";
+import {m, AnimatePresence, motion} from "framer-motion";
 import ScaleUp from "components/animation/ScaleUp";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 import equal from 'fast-deep-equal/es6/react'
@@ -32,6 +34,7 @@ import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 
+// const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
 
     const tourPromptKey = 'titan-tour-prompt'
@@ -40,25 +43,32 @@ const Header = ({ url }: { url: string}) => {
         setShowOptimizer ,
         options,
         version,
-        mode
+        mode,
+        showInprogress,
+        setShowInprogress
     } = useAppContext()
 
     const { activeReport,
         loading, error,
-        settings
+        settings,
+        data,
+        revisions
     } = useSelector(optimizerData);
-
+    const {inProgress } = useCommonDispatch()
     const {
         activeTab,
         activeMetric,
+        settingsMode,
         dispatch: commonDispatch
     } = useCommonDispatch()
+
+    const {testMode} = useSelector((state: RootState) => state.app);
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
 
-
     return (
+        <>
 
         <header className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
             <div className='flex gap-12 items-center'>
@@ -90,20 +100,24 @@ const Header = ({ url }: { url: string}) => {
                             </div>
                         </TooltipText>
                     </div>
-                    <div className='flex overflow-hidden border rounded-2xl shadow'>
+                    <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                         <UrlPreview/>
                         <UnsavedChanges
-                            title='Analyze without Saving?'
+                            title='Analyze without applying optimization?'
                             description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
-                            action='Save & Analyze'
+                            action='Apply Optimization'
                             cancel='Discard & Analyze'
                             onCancel={() => {
                                 dispatch(fetchData(options, url, true))
                                 commonDispatch(setCommonState('openAudits', []))
                             }}
                             onClick={() =>  {
-                                dispatch(fetchData(options, url, true))
+
+                                if(!inProgress || !loading){
+                                    dispatch(fetchData(options, url, true))
+                                }
                                 commonDispatch(setCommonState('openAudits', []))
+
                             }} >
                             <TooltipText
                                 text='Analyze the page'>
@@ -114,7 +128,7 @@ const Header = ({ url }: { url: string}) => {
                                                'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
                                            )}
                                            variant='outline'>
-                                    <div className='flex flex-col gap-[1px] items-center'>
+                                    <div className={`flex flex-col gap-[1px] items-center`}>
                                         <RefreshCw className={cn(
                                             'w-4 -mt-0.5',
                                             loading && 'animate-spin'
@@ -124,23 +138,6 @@ const Header = ({ url }: { url: string}) => {
                                 </AppButton>
                             </TooltipText>
                         </UnsavedChanges>
-                        {/*<TooltipText*/}
-                        {/*    text='Switch URL to optimize'>*/}
-                        {/*    <AppButton asChild={true} data-tour='analyze'*/}
-
-                        {/*               className={cn(*/}
-                        {/*                   'transition-none rounded-none h-12 pl-3 pr-3.5' +*/}
-                        {/*                   ' border-l border-r-0 border-t-0 border-b-0 bg-transparent hover:opacity-100',*/}
-                        {/*               )}*/}
-                        {/*               variant='outline'>*/}
-                        {/*        <div className='flex flex-col gap-[1px] items-center'>*/}
-                        {/*            <ArrowDownUp className={cn(*/}
-                        {/*                'w-4 -mt-0.5'*/}
-                        {/*            )}/>*/}
-                        {/*            <span className='text-xxs font-normal text-brand-500'>Switch</span>*/}
-                        {/*        </div>*/}
-                        {/*    </AppButton>*/}
-                        {/*</TooltipText>*/}
                     </div>
                 </div>
             </div>
@@ -148,25 +145,44 @@ const Header = ({ url }: { url: string}) => {
 
 
             <div className='flex relative gap-4 items-center'>
-                {!loading && (
+                {!loading && !showInprogress && (
                     <>
-                    {!error && <SaveChanges/>}
+                    {!error && (
+                        <>
+                            <SaveChanges/>
+                        </>
+                    )}
                     </>
                 )}
 
                 <UnsavedChanges
-                    onCancel={() => { setShowOptimizer(false) }}
+                    onCancel={() => {
+                        setShowOptimizer(false)
+                    }}
                     cancel='Discard & Leave'
-                    onClick={() => { setShowOptimizer(false) }} >
+                    onClick={() => {
+                        setShowOptimizer(false);
+                        setShowInprogress(false);
+                    }}>
                     <TooltipText text='Close Optimizer'>
                         <LogOut className={cn(
                             'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                        )} />
+                        )}/>
                     </TooltipText>
                 </UnsavedChanges>
             </div>
         </header>
-
+            {!loading && !showInprogress && testMode &&
+                <motion.div  initial={{ opacity: 0, y: -10 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         exit={{ opacity: 0, y: -10 }}
+                         transition={{
+                             ease: 'easeInOut',
+                             duration: 0.5,
+                         }}
+                         className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
+            }
+        </>
     )
 }
 

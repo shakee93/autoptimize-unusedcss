@@ -25,6 +25,8 @@ class Javascript_Enqueue
     private $default_js_exclusion_pattern;
     private $dynamic_exclusions;
 
+    private $frontend_data = [];
+
     public function __construct($job)
     {
         $this->job = $job;
@@ -124,7 +126,7 @@ class Javascript_Enqueue
 
             // get the file content from ./assets/js/inline-scripts/delay-script-header.min.js
             $content = "//!injected by RapidLoad \n
-!function(){var d=['DOMContentLoaded','readystatechanges','load'],a=[window,document],t=EventTarget.prototype.dispatchEvent,s=EventTarget.prototype.addEventListener,i=EventTarget.prototype.removeEventListener,r=[],c=[];window.RaipdLoadJSDebug={capturedEvents:r,dispatchedEvents:c},EventTarget.prototype.addEventListener=function(e,t,...n){var i=!e.includes('RapidLoad:')&&!!c.find(t=>t.type===e)&&a.includes(this),o=!e.includes('RapidLoad:')&&!e.includes(':norapidload')&&d.includes(e)&&a.includes(this)&&'function'==typeof t;(o||o!==i&&i)&&(this===document&&'loading'!==document.readyState||this===window&&'loading'!==document.readyState?setTimeout(()=>{t.call(this,new Event(e))},10):r.push({target:this,type:e,listener:t,options:n})),e.includes(':norapidload')&&(e=e.replace(':norapidload','')),s.call(this,e,t,...n)},EventTarget.prototype.removeEventListener=function(e,n,...t){d.includes(e)&&a.includes(this)&&(r=r.filter(t=>!(t.type===e&&t.listener===n&&t.target===this))),i.call(this,e,n,...t)},EventTarget.prototype.dispatchEvent=function(e){return c.push(e),d.includes(e.type)&&a.includes(this)&&(r=r.filter(t=>t.type!==e.type||t.target!==this||(t.target.removeEventListener(t.type,t.listener,...t.options),!1))),t.call(this,e)},d.forEach(function(e){a.forEach(function(t){t.addEventListener(e,function(){})})})}();";
+!(function(){var supportedEvents=['DOMContentLoaded','readystatechanges','load'];var supportedTargets=[window,document];var originalDispatchEvent=EventTarget.prototype.dispatchEvent;var originalAddEventListener=EventTarget.prototype.addEventListener;var originalRemoveEventListener=EventTarget.prototype.removeEventListener;var capturedEvents=[];var dispatchedEvents=[];window.RaipdLoadJSDebug={capturedEvents:capturedEvents,dispatchedEvents:dispatchedEvents};EventTarget.prototype.addEventListener=function(type,listener,...options){var isDispatched=!type.includes('RapidLoad:')&&!!dispatchedEvents.find(e=>e.type===type)&&supportedTargets.includes(this);var catchEvent=!type.includes('RapidLoad:')&&!type.includes(':norapidload')&&supportedEvents.includes(type)&&supportedTargets.includes(this)&&typeof listener==='function';if(catchEvent||catchEvent!==isDispatched&&isDispatched){if(this===document&&document.readyState!=='loading'||this===window&&document.readyState!=='loading'){setTimeout(()=>{if(typeof listener!=='function'){return}if(listener){listener.call(this,new Event(type))}},10)}else{capturedEvents.push({target:this,type:type,listener:listener,options:options})}}if(type.includes(':norapidload')){type=type.replace(':norapidload','')}originalAddEventListener.call(this,type,listener,...options)};EventTarget.prototype.removeEventListener=function(type,listener,...options){if(supportedEvents.includes(type)&&supportedTargets.includes(this)){capturedEvents=capturedEvents.filter(e=>!(e.type===type&&e.listener===listener&&e.target===this))}originalRemoveEventListener.call(this,type,listener,...options)};EventTarget.prototype.dispatchEvent=function(event){dispatchedEvents.push(event);if(supportedEvents.includes(event.type)&&supportedTargets.includes(this)){capturedEvents=capturedEvents.filter(e=>{if(e.type===event.type&&e.target===this){e.target.removeEventListener(e.type,e.listener,...e.options);return false}return true})}return originalDispatchEvent.call(this,event)};supportedEvents.forEach(function(eventType){supportedTargets.forEach(function(target){target.addEventListener(eventType,function(){})})})})();";
 
             if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
                 $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/javascript/assets/js/inline-scripts/delay-script-head.js';
@@ -173,6 +175,10 @@ class Javascript_Enqueue
             $body->appendChild($node);
         }
 
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
+
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -200,7 +206,11 @@ class Javascript_Enqueue
 
     public function load_scripts_on_user_interaction($link, $original_src = null){
 
+        $_frontend_data = [];
+
         if(self::is_js($link)){
+
+            $_frontend_data['src'] = $link->src;
 
             if(self::is_file_excluded($link->src) || self::is_file_excluded($link->src,'uucss_exclude_files_from_delay_js')){
                 return;
@@ -213,6 +223,7 @@ class Javascript_Enqueue
             if(isset($this->options['uucss_load_scripts_on_user_interaction']) && !empty($this->options['uucss_load_scripts_on_user_interaction'])){
                 if(self::is_load_on_user_interaction($link->src) || self::is_load_on_user_interaction($original_src)){
 
+                    $_frontend_data['delayed'] = true;
                     $data_attr = "data-rapidload-src";
                     $link->{$data_attr} = $link->src;
                     unset($link->src);
@@ -224,6 +235,7 @@ class Javascript_Enqueue
                     return;
                 }
 
+                $_frontend_data['delayed'] = true;
                 $data_attr = "data-rapidload-src";
                 $link->{$data_attr} = $link->src;
 
@@ -246,9 +258,15 @@ class Javascript_Enqueue
             }
         }
 
+        if(!empty($_frontend_data)){
+            $this->frontend_data['js']['delay'][] = $_frontend_data;
+        }
+
     }
 
     public function minify_js($link){
+
+        $_frontend_data = [];
 
         if(defined('SCRIPT_DEBUG') && boolval(SCRIPT_DEBUG) == true){
             return;
@@ -257,6 +275,8 @@ class Javascript_Enqueue
         if(!self::is_js($link) || self::is_file_excluded($link->src, 'uucss_exclude_files_from_minify_js')){
             return;
         }
+
+        $_frontend_data['src'] = $link->src;
 
         $file_path = self::get_file_path_from_url(apply_filters('uucss/enqueue/js-url', $link->src));
 
@@ -302,11 +322,19 @@ class Javascript_Enqueue
 
         }
 
-        $link->setAttribute('src', $minified_url);
+        if(@file_exists($minified_file)){
+            $link->setAttribute('src', $minified_url);
+        }
+
+        $_frontend_data['new_src'] = $minified_url;
+
+        $this->frontend_data['js']['minify'][] = $_frontend_data;
 
     }
 
     public function optimize_js_delivery($link){
+
+        $_frontend_data = [];
 
         if(!isset($link->type)){
             $link->type = 'text/javascript';
@@ -323,11 +351,13 @@ class Javascript_Enqueue
 
         if(self::is_js($link)){
 
+            $_frontend_data['src'] = $link->src;
+
             if($js_to_be_defer){
 
                 if(!self::is_file_excluded($link->src) && !self::is_file_excluded($link->src, 'uucss_excluded_js_files_from_defer')){
 
-                    if(isset($link->defer) && isset($link->async)){
+                    if(isset($link->defer) || isset($link->async)){
                         return;
                     }
 
@@ -337,18 +367,24 @@ class Javascript_Enqueue
 
                     $link->defer = true;
                     unset($link->async);
+
+                    $_frontend_data['deferred'] = true;
                 }
 
             }
 
         }elseif (self::is_inline_script($link)){
 
-            if(($js_to_be_delay || $js_to_be_defer) && (!self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js') && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
+            if(($js_to_be_delay && !self::is_file_excluded($link->innertext(), 'uucss_exclude_files_from_delay_js')) || ($js_to_be_defer && !self::is_file_excluded($link->innertext(), 'uucss_excluded_js_files_from_defer'))){
 
                 $this->defer_inline_js($link);
 
             }
 
+        }
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['js']['defer'][] = $_frontend_data;
         }
 
     }

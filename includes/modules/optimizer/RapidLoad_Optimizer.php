@@ -42,6 +42,71 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 99);
+
+    }
+
+    public function update_content($state){
+
+        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview_optimization'])){
+
+            /*$head = $state['dom']->find('head', 0);
+
+            // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
+            $content = "//!injected by RapidLoad \n
+            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview_optimization')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
+
+            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.min.js';
+
+                if (file_exists($filePath)) {
+                    $content = file_get_contents($filePath);
+                }
+            }
+
+            $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[
+                'server' => $this->get_server_type()
+            ]);
+
+            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
+            $first_child = $head->first_child();
+            $first_child->__set('outertext', $script . $first_child->outertext);*/
+
+            $body = $state['dom']->find('body', 0);
+
+            $frontend_data_content = '<div id="rapidload-preview-container"></div>';
+
+            $last_child = $body->last_child();
+
+            $last_child->__set('outertext', $last_child->outertext . $frontend_data_content);
+
+        }
+
+        return $state;
+    }
+
+    public function get_server_type() {
+        // Check if the SERVER_SOFTWARE key exists
+        if (isset($_SERVER['SERVER_SOFTWARE'])) {
+            // Get the server software information
+            $server_software = $_SERVER['SERVER_SOFTWARE'];
+
+            // Check if the server is Apache
+            if (stripos($server_software, 'Apache') !== false) {
+                return ['server_type' => 'Apache', 'full_info' => $server_software];
+            }
+            // Check if the server is Nginx
+            elseif (stripos($server_software, 'nginx') !== false) {
+                return ['server_type' => 'Nginx', 'full_info' => $server_software];
+            }
+            // Server type is unknown or another server
+            else {
+                return ['server_type' => 'Unknown', 'full_info' => $server_software];
+            }
+        } else {
+            // Server software information is not available
+            return ['server_type' => 'Unknown', 'full_info' => 'Not available'];
+        }
     }
 
     public function register_rest_routes(){
@@ -107,6 +172,7 @@ class RapidLoad_Optimizer
         $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
         $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
 
+        $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
 
         wp_send_json_success([
             'uucss' => [
@@ -120,6 +186,11 @@ class RapidLoad_Optimizer
                 'error' => $job_data_cpcss->error,
                 'warnings' => $job_data_cpcss->warnings,
                 'stats' => $job_data_cpcss->stats
+            ],
+            'cache' => [
+                'status' => @file_exists($cache_file),
+                'file' => $cache_file,
+                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
             ]
         ]);
 
@@ -148,7 +219,7 @@ class RapidLoad_Optimizer
 
     public function titan_reset_to_default(){
 
-        $this->pre_optimizer_function();
+        //$this->pre_optimizer_function();
 
         if(isset(self::$strategy)){
             if(self::$strategy == "mobile"){
@@ -434,6 +505,12 @@ class RapidLoad_Optimizer
             $result = self::$job->get_last_optimization_revision(self::$strategy);
         }
 
+        $titan_gear = get_option('rapidload_titan_gear');
+
+        if(isset($titan_gear) && !isset($result->settingsMode)){
+            $result->settingsMode = $titan_gear;
+        }
+
         $response = $this->fetch_page_speed($url, $result);
 
         if(isset($response['success']) && $response['success']){
@@ -480,6 +557,12 @@ class RapidLoad_Optimizer
 
         if(!$result){
             $result = self::$job->get_last_optimization_revision(self::$strategy);
+        }
+
+        $titan_gear = get_option('rapidload_titan_gear');
+
+        if(isset($titan_gear) && !isset($result->settingsMode)){
+            $result->settingsMode = $titan_gear;
         }
 
         $response = $this->fetch_page_speed($url, $result);
@@ -803,6 +886,10 @@ class RapidLoad_Optimizer
 
         $preload_images = [];
 
+        if(isset($result->settingsMode)){
+            update_option('rapidload_titan_gear', $result->settingsMode);
+        }
+
         if(isset($result->audits) && is_array($result->audits)){
 
             foreach ($result->audits as $audit){
@@ -1004,6 +1091,11 @@ class RapidLoad_Optimizer
         }
 
         $url = $_REQUEST['url'];
+
+        if(self::$global_options['rapidload_test_mode'] && self::$global_options['rapidload_test_mode'] == "1"){
+            $url = add_query_arg('rapidload_preview_optimization', 'true', $url);
+        }
+
         $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
 
         $response = wp_remote_get( $url, array( 'timeout' => 30, 'headers' => [

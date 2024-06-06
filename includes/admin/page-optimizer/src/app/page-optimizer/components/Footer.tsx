@@ -54,8 +54,6 @@ const Footer = ({ } : FooterProps) => {
 
     const resetSettings = () => {
 
-        console.log('implement reset settings');
-
 
     }
 

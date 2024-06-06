@@ -27,7 +27,7 @@ import {fetchData} from "../../../../store/app/appActions";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, RootState} from "../../../../store/app/appTypes";
+import {AppAction, FETCH_DATA_REQUEST, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
 import {CSSDelivery} from "app/page-optimizer/components/icons/icon-svg";
@@ -36,6 +36,8 @@ import Accordion from "components/accordion";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import TooltipText from "components/ui/tooltip-text";
+import Loading from "components/loading";
+import {setCommonState} from "../../../../store/common/commonActions";
 
 const SaveChanges = () => {
 
@@ -110,13 +112,13 @@ const SaveChanges = () => {
         },
         {
             text: <div className='flex w-full items-center justify-between'>
-                Save & Analyze
+                {/*Save & Analyze*/} Apply Optimization
                 {/*<TooltipText text='2 Optimizations are in progess'>*/}
                 {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
                 {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
                 {/*</TooltipText>*/}
             </div>,
-            title: 'Save Changes and Analyze?',
+            title: 'Do you want to Apply Optimization?',
             description: <div className=''>
                 {/*{false ?*/}
                 {inProgressSettings.length > 0 ?
@@ -163,14 +165,14 @@ const SaveChanges = () => {
                     </div>
                 :
                     <div>
-                        You have made changes to your settings. Click 'Save Changes' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.
+                        You have made changes to your settings. Click 'Apply Optimization' to apply your modifications and re-analyze the page or 'Discard' to revert to the previous state.
                     </div>
                 }
             </div>,
             onClick : () => {
-                submitSettings(true)
+                submitSettings(false)
             },
-            action_text: "Save & Analyze"
+            action_text: "Apply Optimization"
         },
         {
             text: 'Save this for Entire Site',
@@ -209,7 +211,7 @@ const SaveChanges = () => {
 
     return <>
         <Mode>
-            <div className='flex gap-2 items-center'>
+            <div className='flex gap-2 items-center flex-none'>
                 <AlertDialog open={open} onOpenChange={setOpen}>
                     <DropdownMenu>
                         <Button
@@ -351,7 +353,9 @@ const SaveChanges = () => {
             </Dialog>
             <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
         </Mode>
-
+        {/*<Mode>*/}
+        {/*    {inProgress && <Loading />}*/}
+        {/*</Mode>*/}
     </>
 }
 

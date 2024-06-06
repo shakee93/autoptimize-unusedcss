@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import ApiService from "../services/api";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {fetchData} from "../store/app/appActions";
@@ -9,6 +9,8 @@ import {optimizerData} from "../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../store/app/appTypes";
 import { compareVersions } from 'compare-versions';
+import {setCommonState} from "../store/common/commonActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const useSubmitSettings = () => {
 
@@ -20,11 +22,14 @@ const useSubmitSettings = () => {
         setSavingData,
         invalidatingCache,
         setInvalidatingCache,
-        global
+        global,
+        setShowInprogress
     } = useAppContext()
 
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
+
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { settingsMode } = useCommonDispatch()
 
     const {
         fresh,
@@ -35,8 +40,14 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
+    //omit grouped, metrics from data and updateData
+    const { grouped, metrics, ...restData } = data || {};
+    const updatedData = {
+        ...restData,
+        settingsMode: settingsMode,
+    };
 
-    let url = options?.optimizer_url;
+    const url = options?.optimizer_url;
     const { toast } = useToast()
 
 
@@ -56,9 +67,9 @@ const useSubmitSettings = () => {
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                data,
+                updatedData,
                 global,
-                analyze
+                analyze,
             );
 
             toast({
@@ -79,21 +90,21 @@ const useSubmitSettings = () => {
                         url
                     })
 
-                    let rest = api.rest()
+                    const rest = api.rest()
 
                     if(compareVersions(options?.rapidload_version, '2.2.11') > 0){
                         await api.post(`preload_page`, {
                             url: options.optimizer_url,
                             user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                            nonce: options.nonce,
-                            job_id: data?.job_id,
+                            nonce: options.nonce as string,
+                            job_id: data?.job_id as string,
                         });
                     }else{
                         await rest.request('/ping', {
                             'url' : options.optimizer_url,
                             'user_agent' : activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                            'nonce': options.nonce,
-                            'job_id': data.job_id
+                            'nonce': options?.nonce as string,
+                            'job_id': data?.job_id as string,
                         })
                     }
 
@@ -107,7 +118,13 @@ const useSubmitSettings = () => {
                 }
 
                 dispatch(fetchData(options, url, true));
+
+            }else if(!analyze){
+                dispatch(setCommonState('inProgress', true))
+                setShowInprogress(true);
+
             }
+
 
 
         } catch (error: any) {
@@ -121,7 +138,7 @@ const useSubmitSettings = () => {
         setSavingData(false)
         setInvalidatingCache(false)
 
-    }, [data, activeReport,  savingData, invalidatingCache])
+    }, [data, activeReport,  savingData, invalidatingCache, settingsMode])
 
     return {
         submitSettings

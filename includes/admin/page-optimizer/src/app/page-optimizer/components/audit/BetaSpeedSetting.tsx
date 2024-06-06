@@ -16,7 +16,7 @@ import ReactDOM from 'react-dom';
 import { Checkbox } from "components/ui/checkbox";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateSettings} from "../../../../store/app/appActions";
 
 import AppButton from "components/ui/app-button"
@@ -49,14 +49,17 @@ import ApiService from "../../../../services/api";
 import {toast} from "components/ui/use-toast";
 import SlideLeft from "components/animation/SlideLeft";
 import {AnimatePresence} from "framer-motion";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../../store/common/commonActions";
+import {optimizerData} from "../../../../store/app/appSelector";
 
 interface SettingItemProps {
     updateValue: ( setting: AuditSetting, value: any, key: any ) => void
     settings?: AuditSetting;
     index: number;
-    showIcons?: boolean
-    hideActions?: boolean
-    actionRequired: boolean
+    showIcons?: boolean;
+    hideActions?: boolean;
+    actionRequired: boolean;
 }
 
 export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
@@ -89,7 +92,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
     if(status.status === 'queued') {
         return (
         <>
-            <div className='flex gap-2 items-center text-xs	border border-amber-500 w-fit rounded-lg '>
+            <div className='flex gap-2 items-center text-xs w-fit rounded-lg'>
                 <Circle className={cn(
                     'animate-pulse w-2.5 fill-amber-500 stroke-0'
                 )}/>
@@ -103,7 +106,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
         return (
         <>
             <div className=' flex gap-2 items-center text-xs w-fit rounded-lg'>
-                <Loader className='w-4 animate-spin text-brand-800'/>
+                <Loader className='w-4 animate-spin '/>
                 Optimization in progress
             </div>
         </>
@@ -135,6 +138,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     const { mode , options} = useAppContext()
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = useState(false)
+
 
     const [mainInput, ...additionalInputs] = useMemo(() => settings.inputs, [settings])
 
@@ -203,9 +207,10 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         }
         setLoading(false);
     }
+    const {settingsMode} = useCommonDispatch();
 
     const [checkboxState, setCheckboxState] = useState(mainInput.value);
-
+//old code
     const handleCheckboxClick = () => {
         if (!actionRequired || ['onboard', 'preview'].includes(mode)) {
             return;
@@ -215,14 +220,17 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
         updateValue(settings, newCheckboxState, mainInput.key);
     };
+//old code end
+
 
     const [showStatus, setShowStatus] = useState(false);
     useEffect(() => {
         if(settings.status && mainInput.value){
             setShowStatus(true)
         }
-      //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
     },[]);
+
+
 
     return (
         <>
@@ -240,23 +248,16 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <>
-                                {!actionRequired &&
-                                    <div className="absolute">
-                                        <TooltipText text={<>No Action Required</>}>
-                                            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>
-                                        </TooltipText>
-                                    </div>
 
-                                }
+                                    <Checkbox disabled={['onboard', 'preview'].includes(mode)}
+                                              className={actionRequired ? '' : 'border-dashed'}
+                                              checked={mainInput.value}
+                                              onCheckedChange={(c: boolean) =>{
+                                                  setCheckboxState(c);
+                                                  updateValue(settings, c, mainInput.key);
 
-                                <Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}
-                                          className={actionRequired ? '' : 'border-dashed'}
-                                          checked={mainInput.value}
-                                          onCheckedChange={(c: boolean) =>{
-                                              setCheckboxState(c);
-                                              updateValue(settings, c, mainInput.key);
+                                              }}/>
 
-                                          }}/>
                                 </>
                             )}
                         </>
@@ -282,7 +283,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        <DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
+                                        <DialogTrigger disabled asChild className={`${!mainInput.value ? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>
                                                     <Cog6ToothIcon className='w-5 text-brand-400'/>
