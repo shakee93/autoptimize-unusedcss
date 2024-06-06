@@ -124,6 +124,10 @@ class RapidLoad_Cache_Engine
 
             $query_string = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
 
+            if ( preg_match( "/rapidload_preview_optimization/", $query_string ) ) {
+                return false;
+            }
+
             if ( preg_match( $query_string_regex, $query_string ) ) {
                 return true;
             }
@@ -169,11 +173,12 @@ class RapidLoad_Cache_Engine
     }
 
     public static function deliver_cache() {
+        header( 'X-Cache-Handler: rapidload-cache-engine' );
 
         $cache_file = RapidLoad_Cache_Store::get_cache_file();
 
         if ( RapidLoad_Cache_Store::cache_exists( $cache_file ) && ! RapidLoad_Cache_Store::cache_expired( $cache_file ) && ! self::bypass_cache() ) {
-            header( 'X-Cache-Handler: rapidload-cache-engine' );
+            header( 'X-Cache-Status: HIT' );
 
             if ( strtotime( self::$request_headers['If-Modified-Since'] >= filemtime( $cache_file ) ) ) {
                 header( self::sanitize_server_input( $_SERVER['SERVER_PROTOCOL'] ) . ' 304 Not Modified', true, 304 );
@@ -208,6 +213,9 @@ class RapidLoad_Cache_Engine
 
             exit;
         }
+
+
+        header( 'X-Cache-Status: MISS' );
 
         self::$to_be_cached = true;
 

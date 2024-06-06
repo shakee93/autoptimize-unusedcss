@@ -119,8 +119,6 @@ class UnusedCSS_DB extends RapidLoad_DB{
             return [];
         }
 
-        $used_files = [];
-
         global $wpdb;
 
         $result = $wpdb->get_results( "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE job_type='uucss' AND status = 'success' AND job_id != " . $id, ARRAY_A);
@@ -135,24 +133,18 @@ class UnusedCSS_DB extends RapidLoad_DB{
 
             if(isset($res) && !empty($res)){
 
-                if(is_array($res)){
-                    $used = $res;
-                }elseif (gettype($res) == 'string'){
-                    $used = unserialize($res);
+                if(is_array($res) && isset($res['data'])){
+
+                    $res_data = unserialize($res['data']);
+
+                    if(!empty($res_data)){
+                        $used = array_merge($used, array_column($res_data, 'uucss'));
+                    }
                 }
-
-            }
-
-            if(is_array($used)){
-                $used_files = array_merge($used_files, $used);
             }
         }
 
-        if(!empty($used_files)){
-            return array_unique(array_column($used_files, 'uucss'));
-        }
-
-        return $used_files;
+        return array_values(array_unique($used));
     }
 
     static function get_original_file_name($path){

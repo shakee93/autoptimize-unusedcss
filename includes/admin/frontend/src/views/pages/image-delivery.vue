@@ -34,50 +34,50 @@
 
       <div>
         <div class="p-4 pl-32 pr-72">
-            <h1 class="font-normal text-base text-black-font">Compression Level</h1>
-            <p class="text-sm pb-3 text-gray-font">Choose the image compression level.</p>
-            <button v-on:click="onData.compression_level = 'lossy'"
-                    :class="{ active: onData.compression_level === 'lossy' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple	rounded-l-lg">
-              LOSSY
-            </button>
-
-            <button v-on:click="onData.compression_level = 'glossy'"
-                    :class="{ active: onData.compression_level === 'glossy' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y-2 border-purple">
-              GLOSSY
-            </button>
-            <button v-on:click="onData.compression_level = 'lossless'"
-                    :class="{ active: onData.compression_level === 'lossless' }"
-                    class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple rounded-r-lg">
-              LOSSLESS
-            </button>
-
-
-
-            <div class="mb-5 mt-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.next_gen_image = !onData.next_gen_image" :class="onData.next_gen_image? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.next_gen_image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
-
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <div @click="onData.next_gen_image = !onData.next_gen_image" :class="onData.next_gen_image? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                    <svg v-if="onData.next_gen_image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
                   </div>
+
                 </div>
-                <div>
-                  <h1 @click="onData.next_gen_image = !onData.next_gen_image" class="font-normal text-base text-black-font cursor-pointer">Serve next-gen Images (AVIF, WEBP)</h1>
-                  <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
-                </div>
+              </div>
+              <div>
+                <h1 @click="onData.next_gen_image = !onData.next_gen_image" class="font-normal text-base text-black-font cursor-pointer">Serve next-gen Images (AVIF, WEBP)</h1>
+                <p class="text-sm text-gray-font">Serve the images in next-gen image formats to all the browsers that support them.</p>
               </div>
             </div>
 
-          <div class="mb-5 mt-5">
-              <div class="flex">
+            <div :class="!onData.next_gen_image? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+              <div class="mt-5">
+                <h1 class="font-normal text-base text-black-font">Compression Level</h1>
+                <p class="text-sm pb-3 text-gray-font">Choose the image compression level.</p>
+                <button v-on:click="onData.compression_level = 'lossy'"
+                        :class="{ active: onData.compression_level === 'lossy' }"
+                        class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple	rounded-l-lg">
+                  LOSSY
+                </button>
+
+                <button v-on:click="onData.compression_level = 'glossy'"
+                        :class="{ active: onData.compression_level === 'glossy' }"
+                        class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-y-2 border-purple">
+                  GLOSSY
+                </button>
+                <button v-on:click="onData.compression_level = 'lossless'"
+                        :class="{ active: onData.compression_level === 'lossless' }"
+                        class="bg-transparent text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border-2 border-purple rounded-r-lg">
+                  LOSSLESS
+                </button>
+
+              </div>
+
+              <div class="flex mt-5">
                 <div class="pr-1">
                   <div class="flex items-center mr-4 mt-3">
                     <div @click="onData.uucss_generate_blurry_place_holder = !onData.uucss_generate_blurry_place_holder" :class="onData.uucss_generate_blurry_place_holder? 'bg-purple':''"
@@ -95,7 +95,23 @@
                   <p class="text-sm text-gray-font">Generate low quality blurry SVG image placeholders.</p>
                 </div>
               </div>
+
+              <div class="mt-5">
+                <h1 class="font-normal text-base text-black-font">Exclude from Serve next-gen Images</h1>
+                <p class="text-sm pb-3 text-gray-font">These images will be excluded from being converted to modern formats.</p>
+                <textarea
+                    v-model="onData.uucss_exclude_images_from_modern_images"
+                    @focus="focus='excludeModern'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                <div :class="focus==='excludeModern'? 'bg-purple-lite':'bg-gray-lite-background'"
+                     class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                  <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>
+                </div>
+
+              </div>
             </div>
+          </div>
 
 
           <div class="mb-5">
@@ -153,7 +169,6 @@
               </div>
 
               <div class="mt-5">
-
                 <h1 class="font-normal text-base text-black-font">Exclude Images/Iframes from Lazy Load</h1>
                 <p class="text-sm pb-3 text-gray-font">These images/iframes will be excluded from lazy-loading.</p>
                 <textarea
@@ -191,6 +206,23 @@
                   <p class="text-sm text-gray-font">Include width and height attributes for these images.</p>
                 </div>
               </div>
+
+              <div :class="!onData.uucss_set_width_and_height? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+                <div class="mt-5">
+                  <h1 class="font-normal text-base text-black-font">Exclude Width and Height</h1>
+                  <p class="text-sm pb-3 text-gray-font">These images will be excluded from inserting a width and height</p>
+                  <textarea
+                      v-model="onData.uucss_exclude_images_from_set_width_and_height"
+                      @focus="focus='excludeWidth'" @blur="focus = null"
+                      class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                      id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='excludeWidth'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Exclude images/iframes from RapidLoad enter each file in new line.</p>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
 
@@ -213,7 +245,7 @@
           <div class="grid">
             <div class="grid mb-5">
               <h1 class="font-normal text-base text-black-font">Exclude Images</h1>
-              <p class="text-sm pb-3 text-gray-font">Exclude these images from loading on-the-fly via CDN.</p>
+              <p class="text-sm pb-3 text-gray-font">Exclude these images from all optimizations.</p>
               <textarea
                   v-model="onData.uucss_exclude_images"
                   @focus="focus='exclude-images'" @blur="focus = null"
@@ -289,6 +321,8 @@ export default {
           this.onData.uucss_preload_lcp_image = options.uucss_preload_lcp_image
           this.onData.uucss_set_width_and_height = options.uucss_set_width_and_height
           this.onData.uucss_exclude_images = options.uucss_exclude_images
+          this.onData.uucss_exclude_images_from_modern_images = options.uucss_exclude_images_from_modern_images
+          this.onData.uucss_exclude_images_from_set_width_and_height = options.uucss_exclude_images_from_set_width_and_height
         }
       });
       this.beforeSave = this.onData;
@@ -333,6 +367,8 @@ export default {
         uucss_preload_lcp_image : this.onData.uucss_preload_lcp_image,
         uucss_set_width_and_height : this.onData.uucss_set_width_and_height,
         uucss_exclude_images: this.onData.uucss_exclude_images,
+        uucss_exclude_images_from_modern_images: this.onData.uucss_exclude_images_from_modern_images,
+        uucss_exclude_images_from_set_width_and_height: this.onData.uucss_exclude_images_from_set_width_and_height,
         uucss_enable_image_delivery : true,
       }
 
@@ -380,6 +416,8 @@ export default {
       onData: {
         compression_level: 'lossless',
         next_gen_image: false,
+        uucss_exclude_images_from_modern_images: '',
+        uucss_exclude_images_from_set_width_and_height: '',
         uucss_exclude_images: [],
         uucss_lazy_load_images: {
           status: false,

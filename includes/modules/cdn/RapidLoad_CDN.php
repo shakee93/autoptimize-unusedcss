@@ -14,7 +14,7 @@ class RapidLoad_CDN
 
         add_action('rapidload/validate-cdn', [$this, 'validate_cdn']);
 
-        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] == ""){
+        if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] != "1"){
             return;
         }
 
@@ -42,12 +42,20 @@ class RapidLoad_CDN
             unset($this->options['uucss_cdn_url']);
             unset($this->options['uucss_enable_cdn']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
+            RapidLoad_Base::update_option('rapidload_module_cdn',"");
             return true;
         }
 
         $response = $api->post('cdn',[
-            'url' => trailingslashit(site_url())
+            'url' => trailingslashit(site_url()),
+            'validate' => isset($this->options['uucss_cdn_dns_id']) && isset($this->options['uucss_cdn_zone_id']) && isset($this->options['uucss_cdn_url'])
         ]);
+
+        if(is_wp_error($response)){
+            if(wp_doing_ajax() && isset($_REQUEST['dashboard_cdn_validator'])){
+                wp_send_json_error($api->extract_error($response));
+            }
+        }
 
         if(isset($response->zone_id) && isset($response->dns_id) && isset($response->cdn_url)){
 
@@ -67,12 +75,12 @@ class RapidLoad_CDN
             $this->options['uucss_cdn_zone_id'] = $response->zone_id;
             $this->options['uucss_cdn_dns_id'] = $response->dns_id;
             $this->options['uucss_cdn_url'] = $response->cdn_url;
-            $this->options['uucss_enable_cdn'] = "1";
+            RapidLoad_Base::update_option('rapidload_module_cdn',"1");
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
 
-        if(wp_doing_ajax()){
+        if(wp_doing_ajax() && isset($_REQUEST['dashboard_cdn_validator'])){
             wp_send_json_success([
                 'uucss_cdn_zone_id' => $response->zone_id,
                 'uucss_cdn_dns_id' => $response->dns_id,

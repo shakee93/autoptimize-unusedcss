@@ -6,7 +6,7 @@ class RapidLoad_Admin_Bar {
     public function __construct()
     {
 
-        add_action( 'admin_bar_init', [$this,'rapidload_admin_bar_css'] );
+        add_action( 'wp_after_admin_bar_render', [$this,'rapidload_admin_bar_css'] );
         add_action('admin_bar_menu', [$this, 'add_rapidload_admin_bar_menu'], 100);
 
 //        wp_register_script( 'rapidload-page-optimizer-data', UUCSS_PLUGIN_URL .  'includes/admin/assets/js/page-optimizer/dist/page-optimizer-data.min.js', null, 111);
@@ -30,7 +30,9 @@ class RapidLoad_Admin_Bar {
             (!is_admin() && is_user_logged_in() && defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED')) ||
             (is_admin() && $page === 'rapidload')
         ) {
-            $this->load_optimizer_scripts();
+            add_action('init', function (){
+                $this->load_optimizer_scripts();
+            });
 
             add_action('wp_after_admin_bar_render', function () {
                 echo '<div id="rapidload-page-optimizer"></div>';
@@ -45,13 +47,21 @@ class RapidLoad_Admin_Bar {
     {
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
-        $package = 'https://unpkg.com/@rapidload/page-optimizer/dist';
+        $tag = apply_filters('rapidload/titan/tag', 'latest');
+
+        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
 
         if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
         }
 
-        wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
+        $debug_titan = apply_filters('rapidload/titan/debug', false);
+
+        if ($debug_titan) {
+            $package .= '-debug';
+        }
+
+        //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
         wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
 
@@ -62,6 +72,7 @@ class RapidLoad_Admin_Bar {
         }
 
         $data = array(
+            'titan_stylesheet_url' => $package .  '/assets/index.css',
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
@@ -86,7 +97,7 @@ class RapidLoad_Admin_Bar {
                     'tooltip' => 'Clear Page Cache',
                     'href' => wp_nonce_url( add_query_arg( array(
                         '_cache'  => 'rapidload-cache',
-                        '_action' => 'clear',
+                        '_action' => 'clearurl',
                         '_url' => $this->transform_url($this->get_current_url()),
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
                     'icon' => 'clear_page_cache'
@@ -100,48 +111,10 @@ class RapidLoad_Admin_Bar {
                     'icon' => 'clear_optimization'
                 ]
             ],
-            'group_by_conditions' => [
-                [
-                    'label' => 'Entire Site',
-                    'value' => 'all'
-                ],
-                [
-                    'label' => 'Archives',
-                    'value' => 'archive',
-                    'options' => [
-                        [
-                            'label' => 'All Archives',
-                            'value' => 'all',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Author Archive',
-                            'value' => 'author',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Date Archive',
-                            'value' => 'date',
-                            'group' => null
-                        ],
-                        [
-                            'label' => 'Posts Archive',
-                            'value' => 'author',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Categories',
-                            'value' => 'category',
-                            'group' => 'Posts Archive'
-                        ],
-                        [
-                            'label' => 'Tags',
-                            'value' => 'tag',
-                            'group' => 'Posts Archive'
-                        ],
-                    ]
-                ]
-            ]
+            'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
+            'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
+            'rest_url' => RapidLoadRestApi::rest_url(),
+            'license_key' => RapidLoad_Base::get_license_key()
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
@@ -214,15 +187,7 @@ class RapidLoad_Admin_Bar {
 
         if(apply_filters('rapidload/tool-bar-menu',true)){
 
-            $current_user = wp_get_current_user();
-
-            if(!$current_user){
-                return;
-            }
-
-            $user_role = $current_user->roles[0];
-
-            if ( $user_role !== 'customer' && $user_role !== 'subscriber' ) {
+            if ( current_user_can( 'manage_options' ) ) {
 
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload',

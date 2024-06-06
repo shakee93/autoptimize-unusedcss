@@ -9,7 +9,7 @@
 }
 
 @layer base {
-  :root {
+  :host, :root {
     --reactour-accent: #0e172a;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.92%;
@@ -109,3 +109,61 @@
   border-bottom: var(--rtp-arrow-border-bottom);
   border-left: var(--rtp-arrow-border-left);
 }
+
+.gradient-border {
+  position: relative;
+  border: solid 2px transparent;
+  background-clip: padding-box, border-box;
+  background-origin: border-box;
+  /* Rotate the gradient 90 degrees */
+  background-image: linear-gradient(white, white), linear-gradient(25deg, #b3bdcb, #4b5563);
+}
+
+.selectionBar {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 2s ease-in-out alternate forwards;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.optimizer-show-button-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInFromTopAnimation {
+  opacity: 0;
+  position: relative;
+  top: -10px;
+  animation: fadeInFromTop 3s ease forwards;
+}
+
+
+
+

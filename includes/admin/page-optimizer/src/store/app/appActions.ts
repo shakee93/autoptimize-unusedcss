@@ -8,7 +8,9 @@ import {
     FETCH_DATA_SUCCESS,
     RootState,
     UPDATE_FILE_ACTION,
-    UPDATE_SETTINGS
+    UPDATE_SETTINGS,
+    GET_CSS_STATUS_SUCCESS,
+    UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -86,7 +88,7 @@ const transformData = (data: any) => {
 
         return 0;
     }
-
+    
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
@@ -106,7 +108,8 @@ const transformData = (data: any) => {
         success: data.success,
         settings: initiateSettings(audits),
         revisions: data.data.revisions,
-        individual_file_actions: data.data['individual-file-actions']
+        individual_file_actions: data.data['individual-file-actions'],
+        state: data.state
     };
 
     return _data
@@ -121,10 +124,76 @@ const initiateSettings = (audits: Audit[]) => {
     const flattenedSettings = settings.flat();
 
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-    return uniqueSettings;
+
+
+    // convert 1's to true and false in checkbox
+    return uniqueSettings.map((s: AuditSetting) => ({
+        ...s,
+        inputs: s.inputs.map(input => ({
+            ...input,
+            ...(
+                input.control_type === 'checkbox' &&
+                {
+                    value: input.value === '1' || input.value === true
+                }
+            )
+        }))
+    }))
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+        try {
+            const cssJobStatusResult = await api.getCSSJobStatus(url, types);
+            dispatch({
+                type: GET_CSS_STATUS_SUCCESS,
+                payload : cssJobStatusResult.data
+            })
+
+        } catch (error) {
+            console.error('Error fetching CSS job status:', error);
+        }
+
+
+    }
+}
+// : ThunkAction<void, RootState, unknown, AnyAction> =>
+
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const fetchTestModeData = await api.getTestMode(url, mode || '');
+            dispatch({
+                type: UPDATE_TEST_MODE,
+                payload : fetchTestModeData?.data
+            })
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on Test Mode:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
+export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -140,12 +209,12 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
-
+           
             if (activeReportData.loading) {
                 return;
             }
 
-            if (activeReportData.data && !reload) {
+            if (activeReportData.data && !reload && !inprogress) {
                 return;
             }
 
@@ -154,7 +223,7 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
-                reload
+                reload,
             );
             
             dispatch({ type: FETCH_DATA_SUCCESS, payload: {

@@ -395,6 +395,9 @@ trait RapidLoad_Utils {
 
         $files = isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ? explode( ',', $options['uucss_excluded_files'] ) : [];
 
+        $files[] = "fonts.googleapis.com";
+        $files[] = "admin/rapidload-preview/dist";
+
         $files = apply_filters('uucss/excluded-files', $files);
 
         foreach ( $files as $excluded_file ) {
@@ -614,7 +617,12 @@ trait RapidLoad_Utils {
     }
 
     function is_regex_expression($string) {
-        return @preg_match($string, '') !== FALSE;
+        try {
+            @preg_match($string, '');
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public static function get_file_path_from_url($url)
@@ -626,6 +634,8 @@ trait RapidLoad_Utils {
     }
 
     public static function get_width_height($file_path){
+
+        $file_path = urldecode($file_path);
 
         if (!is_file($file_path)) {
             return false;

@@ -14,7 +14,7 @@ class RapidLoad_Image
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        if(!isset($this->options['uucss_enable_image_delivery']) || $this->options['uucss_enable_image_delivery'] == ""){
+        if(!isset($this->options['uucss_enable_image_delivery']) || $this->options['uucss_enable_image_delivery'] != "1"){
             return;
         }
 
@@ -65,7 +65,7 @@ class RapidLoad_Image
     public function enqueue_frontend_js(){
 
         ?>
-        <script type="text/javascript">
+        <script id="rapidload-image-handler" type="text/javascript" norapidload>
 
             (function(w, d){
                 w.rapidload_io_data = {
@@ -78,7 +78,7 @@ class RapidLoad_Image
                 var s = d.createElement("script");
                 s.defer = true;
                 s.type = "text/javascript";
-                s.src = "<?php echo self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION) ?>";
+                s.src = "<?php echo apply_filters('uucss/enqueue/cdn', self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION)) ?>";
                 b.appendChild(s);
             }(window, document));
 
@@ -99,6 +99,10 @@ class RapidLoad_Image
 
     public static function get_replaced_url($url, $cdn = null, $width = false, $height = false, $args = [])
     {
+        if(strpos( $url, self::$image_indpoint ) !== false){
+            return $url;
+        }
+
         if(!$cdn){
             $cdn = self::$image_indpoint;
         }

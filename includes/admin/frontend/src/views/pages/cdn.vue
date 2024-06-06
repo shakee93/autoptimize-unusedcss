@@ -67,7 +67,7 @@
                      @focus="focus='cdn-endpoint'"
                      @blur="focus=''"
                      style="padding-left:15px"
-                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                     class="cdn resize-none text-xs z-50 appearance-none border gray-border rounded-l-lg w-full py-2 px-3 h-[2.5rem] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent pointer-events-none cursor-default disabled"
                      id="cdn-url" type="text" placeholder="">
 
               <div class="mt-2.5 -ml-9 cursor-pointer z-50">
@@ -241,7 +241,7 @@ export default {
     },
     validateCDN(){
       this.refresh_element = true;
-      axios.post(window.uucss_global.ajax_url + '?action=validate_cdn' , {
+      axios.post(window.uucss_global.ajax_url + '?action=validate_cdn&dashboard_cdn_validator' , {
         headers: {
           'Content-Type':'multipart/form-data'
         }
@@ -256,7 +256,7 @@ export default {
           } )
           .catch(error => {
             this.errorMessage = error.message;
-
+            this.refresh_element = false;
           });
     },
     saveSettings(){

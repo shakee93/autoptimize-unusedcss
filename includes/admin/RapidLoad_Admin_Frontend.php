@@ -17,46 +17,52 @@ class RapidLoad_Admin_Frontend
 
         new RapidLoad_Admin_Bar();
 
-        if($this->is_rapidload_legacy_page()){
+        add_action('init', function (){
 
-            $this->load_legacy_scripts();
+            if($this->is_rapidload_legacy_page()){
 
-        }
+                $this->load_legacy_scripts();
+
+            }
+
+            if ($this->is_rapidload_page()) {
+
+                $this->load_scripts();
+
+                // TODO: temporary should be removed so it supports all the browsers
+                add_filter('script_loader_tag', function ($tag, $handle) {
+
+                    if ( 'rapidload_admin_frontend' !== $handle )
+                        return $tag;
+
+                    return str_replace( ' src', ' type="module" src', $tag );
+
+                }, 10, 2);
+
+            }
+
+            if ($this->is_rapidload_on_board()) {
+
+                $this->load_on_board_scripts();
+
+                // TODO: temporary should be removed so it supports all the browsers
+                add_filter('script_loader_tag', function ($tag, $handle) {
+
+                    if ( 'rapidload_admin_on_board' !== $handle )
+                        return $tag;
+
+                    return str_replace( ' src', ' type="module" src', $tag );
+
+                }, 10, 2);
+
+            }
+
+            if(isset($_REQUEST['rapidload_preview_optimization'])){
+                //$this->load_preview_scripts();
+            }
+        });
 
         $this->load_legacy_ajax();
-
-        if ($this->is_rapidload_page()) {
-
-            $this->load_scripts();
-
-            // TODO: temporary should be removed so it supports all the browsers
-            add_filter('script_loader_tag', function ($tag, $handle) {
-
-                if ( 'rapidload_admin_frontend' !== $handle )
-                    return $tag;
-
-                return str_replace( ' src', ' type="module" src', $tag );
-
-            }, 10, 2);
-
-        }
-
-
-        if ($this->is_rapidload_on_board()) {
-
-            $this->load_on_board_scripts();
-
-            // TODO: temporary should be removed so it supports all the browsers
-            add_filter('script_loader_tag', function ($tag, $handle) {
-
-                if ( 'rapidload_admin_on_board' !== $handle )
-                    return $tag;
-
-                return str_replace( ' src', ' type="module" src', $tag );
-
-            }, 10, 2);
-
-        }
 
         /*if($this->is_rapidload_page_optimizer()){
 
@@ -914,7 +920,7 @@ class RapidLoad_Admin_Frontend
 
         wp_enqueue_style( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.js',[], UUCSS_VERSION);
+        wp_register_script( 'rapidload_admin_frontend', UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist/assets/index.min.js',[], UUCSS_VERSION);
 
         $data = array(
             'frontend_base' => UUCSS_PLUGIN_URL .  'includes/admin/frontend/dist'
@@ -948,6 +954,25 @@ class RapidLoad_Admin_Frontend
         wp_enqueue_script( 'rapidload_page_optimizer' );
 
 
+
+    }
+
+    public function load_preview_scripts()
+    {
+        wp_enqueue_style( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.css',[],UUCSS_VERSION);
+
+        wp_register_script( 'rapidload_page_preview', UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist/assets/index.js',[], UUCSS_VERSION);
+
+        $data = array(
+            'page_preview_base' => UUCSS_PLUGIN_URL .  'includes/admin/rapidload-preview/dist',
+            'plugin_url' => UUCSS_PLUGIN_URL,
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'uucss_nonce' ),
+        );
+
+        wp_localize_script( 'rapidload_page_preview', 'rapidload_page_preview', $data );
+
+        wp_enqueue_script( 'rapidload_page_preview' );
 
     }
 

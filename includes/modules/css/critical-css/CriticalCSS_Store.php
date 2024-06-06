@@ -21,7 +21,7 @@ class CriticalCSS_Store
 
         $this->job_data = $job_data;
         $this->args = $args;
-        $this->options = RapidLoad_Base::fetch_options();
+        $this->options = RapidLoad_Base::get_merged_options();
         $this->file_system = new RapidLoad_FileSystem();
 
     }
@@ -31,6 +31,10 @@ class CriticalCSS_Store
         $uucss_api = new RapidLoad_Api();
 
         if(isset($this->args['immediate'])){
+
+            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
 
             $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
 

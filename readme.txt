@@ -1,10 +1,10 @@
-=== RapidLoad 2.1 - Speed Monster in One Plugin ===
+=== RapidLoad 2.2 - Speed Monster in One Plugin ===
 Contributors: shakee93, futtta
 Donate link:
-Tags: google page speed, unusedcss, criticalcss, critical css, autoptimize, rapidload, cdn, image optimization, cdn, optimize images
+Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: trunk
+Stable tag: 2.2.16
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -16,7 +16,6 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 **Automated site speed optimization for WordPress [PAID PREMIUM PLUGIN]**
 
 RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
-
 
 
 ### Unlock the speed monster in you with these features
@@ -155,6 +154,99 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.2.17 - 21/05/2024 =
+ * feat: enable optimization gears in Titan
+ * fix: known bugs
+
+= 2.2.16 - 08/05/2024 =
+ * fix: known bugs
+
+= 2.2.15 - 29/02/2024 =
+ * fix: known bugs
+
+= 2.2.14 - 20/02/2024 =
+ * feat: deferring the youtube videos by displaying the poster image until user interacts
+ * feat: add delay exclusions with easy UI
+ * fix: delay js legacy compatibility
+
+= 2.2.13 - 31/01/2024 =
+ * fix: broken Titan Optimizer for some users
+
+= 2.2.12 - 31/01/2024 =
+ * fix: vulnerable to SSRF
+
+= 2.2.11 - 26/01/2024 =
+ * fix: known bugs
+
+= 2.2.10 - 24/01/2024 =
+ * fix: vulnerable to SSRF
+
+= 2.2.9 - 26/12/2023 =
+ * fix: Fatal error when clearing product page cache
+
+= 2.2.8 - 25/12/2023 =
+ * fix: known bugs
+
+= 2.2.7 - 21/12/2023 =
+ * fix: set width and height not working for images
+
+= 2.2.6 - 18/12/2023 =
+ * fix: syntax error in rapidload dashboard
+
+= 2.2.5 - 18/12/2023 =
+ * fix: syntax error in rapidload dashboard
+
+= 2.2.4 - 15/12/2023 =
+ * improved: delay js event handling
+
+= 2.2.3 - 13/12/2023 =
+ * improved: delay js execution
+ * improved: delay js event handling
+
+= 2.2.2 - 13/12/2023 =
+ * improved: delay js execution
+ * improved: delay js event handling
+ * fix: known bugs
+
+= 2.2.1 - 05/12/2023 =
+ * fix: known bugs
+
+= 2.2.0 - 30/11/2023 =
+ * feat: Improved defer javascript handling with inline-scripts
+ * new: all the javascript files are delayed with new delay JS improvement
+ * new: topologically batched delayed javascript execution
+
+= 2.1.14 - 22/11/2023 =
+ * feat: add debug mode to titan
+ * fix: inline background images not optimizing
+ * fix: known bugs
+
+= 2.1.13 - 14/11/2023 =
+ * fix: known bugs
+
+= 2.1.12 - 14/11/2023 =
+ * fix: known bugs
+
+= 2.1.11 - 14/11/2023 =
+ * improve: CDN option not working in Titan Optimizer
+ * fix: known bugs
+
+= 2.1.10 - 06/11/2023 =
+ * improve: inline style minify
+
+= 2.1.9 - 31/10/2023 =
+ * fix: Dashboard UI
+
+= 2.1.8 - 31/10/2023 =
+ * fix: Dashboard UI
+ * fix: CDN purging
+
+= 2.1.7 - 27/10/2023 =
+ * improve: Titan optimizer options update
+
+= 2.1.6 - 27/10/2023 =
+ * fix: media library section break
 
 = 2.1.5 - 26/10/2023 =
  * fix: remove duplicate queries

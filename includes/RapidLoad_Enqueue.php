@@ -34,10 +34,6 @@ class RapidLoad_Enqueue {
 
                 if(RapidLoad_Base::get()->rules_enabled()){
 
-                    $this->group = $this->get_current_group();
-
-                    error_log(json_encode($this->group, JSON_PRETTY_PRINT));
-
                     $this->rule = $this->get_current_rule();
 
                 }
@@ -288,6 +284,10 @@ class RapidLoad_Enqueue {
             return false;
         }
 
+        if(isset($this->options['rapidload_test_mode']) && $this->options['rapidload_test_mode'] == "1" && !isset($_REQUEST['rapidload_preview_optimization'])){
+            return false;
+        }
+
         return apply_filters('uucss/enabled', true);
 
     }
@@ -342,9 +342,8 @@ class RapidLoad_Enqueue {
 
         $front_end_enabled['job_id_set'] = isset(RapidLoad_Enqueue::$job->id);
         $front_end_enabled['enabled'] = $this->enabled_frontend();
-        $front_end_enabled['no_uucss'] = !isset( $_REQUEST['no_uucss'] );
 
-        if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled'] && $front_end_enabled['no_uucss']){
+        if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled']){
             $this->replace_css(RapidLoad_Enqueue::$job);
         }
 
@@ -473,6 +472,10 @@ class RapidLoad_Enqueue {
     }
 
     function enabled_frontend() {
+
+        if(isset($_REQUEST['rapidload_preview_optimization'])){
+            return true;
+        }
 
         if ( is_user_logged_in() ) {
             return false;

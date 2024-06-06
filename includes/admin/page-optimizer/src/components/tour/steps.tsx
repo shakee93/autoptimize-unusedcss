@@ -34,9 +34,6 @@ const TourAuditOpen = ({audit}: { audit: Audit }) => {
     return <>
         <MousePointerClick
             onClick={() => {
-
-
-
             }}
             className='mb-2'/>
         Click the <span className='text-purple-750'>"Show Actions"</span> button to view detailed information on each
@@ -73,20 +70,20 @@ export const AuditSteps = (audit: Audit): StepType[] => {
                     `[data-tour="audit-${key}"] .audit-content`,
                 ],
         },
-        ...((audit.settings.length > 0 && remainingSettings.length > 0) ? [
-            {
-                selector: `[data-tour="${key}-recommended-settings"]`,
-                content: {
-                    // @ts-ignore
-                    header: `Tailored Recommendations`,
-                    body: <>
-                        Discover our suggestions for features. Toggle them on or off to fit your preferences seamlessly.
-                    </>
-                },
-                position: "top",
-            },
-
-        ] : []),
+        // ...((audit.settings.length > 0 && remainingSettings.length > 0) ? [
+        //     {
+        //         selector: `[data-tour="${key}-recommended-settings"]`,
+        //         content: {
+        //             // @ts-ignore
+        //             header: `Tailored Recommendations`,
+        //             body: <>
+        //                 Discover our suggestions for features. Toggle them on or off to fit your preferences seamlessly.
+        //             </>
+        //         },
+        //         position: "top",
+        //     },
+        //
+        // ] : []),
         ...(audit.files.items.length > 0 ? [
             {
                 selector: `[data-tour="${key}-group-0"]`,
@@ -157,12 +154,21 @@ let getElement = (selector: string) => {
 }
 
 const Steps: StepType[] = [
+
     {
         selector: '[data-tour="switch-report-strategy"]',
         content: {
             // @ts-ignore
             header: 'Select Mobile or Desktop',
             body: 'Pick a device to analyze and optimize the page.'
+        },
+    },
+    {
+        selector: '[data-tour="current-url"]',
+        content: {
+            // @ts-ignore
+            header: `Current URL`,
+            body: <> <MousePointerClick className='mb-2'/> This is the URL currently selected to configure, optimize, and analyze your site's performance.</>
         },
     },
     {
@@ -175,6 +181,50 @@ const Steps: StepType[] = [
         },
     },
     {
+        selector: '[data-tour="test-mode"]',
+        content: {
+            // @ts-ignore
+            header: `Test-Mode`,
+            body: <> <MousePointerClick className='mb-2'/> Enable this to keep RapidLoad changes from going live.</>
+        },
+    },
+    {
+        selector: '[data-tour="preview-button"]',
+        content: {
+            // @ts-ignore
+            header: `Preview`,
+            body: <> <MousePointerClick className='mb-2'/> Click to see how the page looks after applying RapidLoad optimization before going live.</>
+        },
+    },
+    {
+        selector: '[data-tour="speed-settings"]',
+        content: {
+            // @ts-ignore
+            header: `Speed Settings`,
+            body: <> <MousePointerClick className='mb-2'/> Configure the RapidLoad plugin with one-click gears.</>
+        },
+    },
+    {
+        selector: '[data-tour="settings-gear"]',
+        content: {
+            // @ts-ignore
+            header: `Performance gears`,
+            body: <> <MousePointerClick className='mb-2'/> Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.
+            </>
+        },
+        position: "right"
+    },
+    {
+        selector: '[data-tour="customize-settings"]',
+        content: {
+            // @ts-ignore
+            header: `Customize Settings`,
+            body: <> <MousePointerClick className='mb-2'/> Tailor your site's performance settings to your specific requirements.
+            </>
+        },
+        position: "right"
+    },
+    {
         selector: '[data-tour="speed-insights"]',
         content: {
             // @ts-ignore
@@ -184,28 +234,39 @@ const Steps: StepType[] = [
         position: "right"
     },
     {
-        selector: '[data-tour="metrics"]',
+        selector: '[data-tour="expand-metrics"]',
         content: {
             // @ts-ignore
-            header: `Dive Deeper into Metrics`,
+            header: `Metrics`,
             body: <> <MousePointerClick className='mb-2'/>
-                Click on individual metrics to uncover insights and get recommendations for enhancement.
+                Click on ”Expand Metrics” to identify individual metrics to uncover insights and get recommendations for enhancement.
             </>
         },
         position: "right"
     },
-    {
-        selector: '[data-tour="audits"]',
-        content: {
-            // @ts-ignore
-            header: `Performance Audits & Actions`,
-            body: <>
-                Discover the top audits needing attention and follow our recommended actions to enhance your page's
-                performance.
-            </>
-        },
-        position: "left"
-    },
+    // {
+    //     selector: '[data-tour="metrics"]',
+    //     content: {
+    //         // @ts-ignore
+    //         header: `Dive Deeper into Metrics`,
+    //         body: <> <MousePointerClick className='mb-2'/>
+    //             Click on individual metrics to uncover insights and get recommendations for enhancement.
+    //         </>
+    //     },
+    //     position: "right"
+    // },
+    // {
+    //     selector: '[data-tour="audits"]',
+    //     content: {
+    //         // @ts-ignore
+    //         header: `Performance Audits & Actions`,
+    //         body: <>
+    //             Discover the top audits needing attention and follow our recommended actions to enhance your page's
+    //             performance.
+    //         </>
+    //     },
+    //     position: "left"
+    // },
     {
         selector: '[data-tour="audit-groups"]',
         content: {
@@ -233,6 +294,7 @@ const Steps: StepType[] = [
                 </div>
         },
         position: "left",
+
     }
 ]
 

@@ -11,13 +11,17 @@ class RapidLoad_Font_Enqueue
     private $options;
     private $strategy;
     private $file_system;
+    private $font_handler;
 
-    public function __construct($job)
+    private $frontend_data = [];
+
+    public function __construct($job, $font_handler = null)
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
+        $this->font_handler = $font_handler;
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 80);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 70);
     }
 
     public function update_content($state){
@@ -144,6 +148,11 @@ class RapidLoad_Font_Enqueue
         $google_fonts = $this->dom->find('link[href*=fonts.googleapis.com]');
 
         foreach ($google_fonts as $google_font) {
+
+            $_frontend_data = [];
+
+            $_frontend_data['href'] =  $google_font->href;
+
             $version = substr(md5($google_font->href), 0, 15);
             $filename = $version . ".google-font.css";
 
@@ -158,11 +167,16 @@ class RapidLoad_Font_Enqueue
 
                 if(apply_filters('uucss/enqueue/inline/google-font', true)){
                     $content = @file_get_contents($file_path);
+                    if($this->font_handler){
+                        $content = $this->font_handler->add_display_swap_to_inline_styles($content);
+                    }
                     $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
                     $title_content = $this->dom->find( 'title' )[0]->outertext;
                     $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
                 }else{
                     $google_font->href = $file_url;
+                    $_frontend_data['new_href'] = $file_url;
+
                     if(isset($google_font->id)){
                         $google_font->{'data-id'} = $google_font->id;
                         $google_font->id = 'rapidload-google-font-' . $version;
@@ -174,6 +188,16 @@ class RapidLoad_Font_Enqueue
 
             }
         }
+
+        $this->frontend_data['font'] = [];
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['font']['google_fonts'][] = $_frontend_data;
+        }
+
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
 
         $inline_styles = $this->dom->find('style');
         $pattern = "/@import\s*'(https:\/\/fonts.googleapis.com[^']+)';/";

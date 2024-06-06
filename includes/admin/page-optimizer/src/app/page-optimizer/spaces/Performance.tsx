@@ -1,7 +1,7 @@
 import Card from "components/ui/card";
 import {AnimatePresence, m} from "framer-motion";
 import Audit from "app/page-optimizer/components/audit/Audit";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useMemo} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import {useAppContext} from "../../../context/app";
@@ -12,17 +12,39 @@ import {setCommonState} from "../../../store/common/commonActions";
 import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
-import {MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import {InformationCircleIcon} from "@heroicons/react/20/solid";
+import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
+import AuditList from "app/page-optimizer/components/AuditList";
+import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
+import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
+import AppButton from "components/ui/app-button";
+import Mode from "app/page-optimizer/components/Mode";
+import { Checkbox } from "components/ui/checkbox";
+import {
+    TitanLogo
+} from "app/page-optimizer/components/icons/icon-svg";
 
+
+const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
     const {data, loading, error} = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits} = useCommonDispatch()
+    const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
-
+    const [open, setOpen] = React.useState(false);
+    const [showNewTitanModelPopup, setShowNewTitanModelPopup]= useState( !!localStorage.getItem(welcomePopupKey));
     const {
         options,
         setOpenAudits,
@@ -31,15 +53,11 @@ const Performance = () => {
         savingData,
         togglePerformance,
         setTogglePerformance,
+        version
     } = useAppContext()
 
     const tabs: Tab[] = [
-        // {
-        //     key: "attention_required",
-        //     name: "Attention Required",
-        //     color: 'border-red-400',
-        //     activeColor: 'bg-red-400'
-        // },
+
         {
             key: "opportunities",
             name: "Opportunities",
@@ -58,40 +76,54 @@ const Performance = () => {
             color: 'border-green-600',
             activeColor: 'bg-green-600'
         },
+
     ];
 
+    const isOnboardMode = !['onboard', 'preview'].includes(mode);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
-                setIsSticky(!entry.isIntersecting);
-            },
-            { threshold: [1] }
-        );
+    useEffect(() =>{
 
-        if (navbarRef.current) {
-            observer.observe(navbarRef.current);
-        }
-
-        return () => {
-            if (navbarRef.current) {
-                observer.unobserve(navbarRef.current);
+        setTimeout(() => {
+            if(isOnboardMode && !showNewTitanModelPopup){
+                setShowNewTitanModelPopup(true);
+                setOpen(true);
             }
-        };
-    }, []);
+        }, 1000)
+
+    },[]);
+
+    const [isCheckedPopup, setIsCheckedPopup] = useState(false);
+    const saveNewTitanModelPopup = () => {
+
+        if (isCheckedPopup) {
+            localStorage.setItem(welcomePopupKey, 'true');
+        }
+        setOpen(false);
+    };
+
     return (
+
+
         <div data-tour='audits'>
-            <h2 className="text-lg mt-0.5 ml-5 mb-4 flex gap-2 font-normal items-center">
+            <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance/>}
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 z-10',
+                'tabs flex sticky gap-2 -top-1 z-10',
             )}>
+                <div
+
+                    onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
+                    className={cn(
+                        `dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                    )}
+                    data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+
                 <Card data-tour='audit-groups'
                       className={cn(
-                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3',
+                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
@@ -104,12 +136,12 @@ const Performance = () => {
                                    className={cn(
                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
                                        isSticky && 'py-3',
-                                       activeTab === tab.key ? "font-medium border-b border-b-purple-750" : "text-brand-500 dark:hover:text-brand-300"
+                                       activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                                    )}
                                    key={tab.key}
                                >
                                    {tab.name}
-                                   {(data && data?.audits.length > 0) && (
+                                   {(tab.key !== 'configurations' && data && data?.audits.length > 0) && (
                                        <div className={
                                            cn(
                                                'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
@@ -118,7 +150,6 @@ const Performance = () => {
                                                (activeTab === tab.key) && tab.activeColor,
                                            )}>
                             <span className={cn(
-                                'transition-colors',
                                 activeTab === tab.key && ' text-white dark:text-brand-900'
                             )}>
                                 {data?.grouped[`${tab.key}`].length}
@@ -149,52 +180,108 @@ const Performance = () => {
                     </div>
                 </Card>
             </div>
+
             <div className="audits pt-4 flex mb-24">
-                <AnimatePresence initial={false}>
-                    {(data?.grouped[activeTab] && data?.grouped[activeTab].length > 0) ? (
+                <div className='w-full'>
 
-                        <div className='grid grid-cols-12 gap-6 w-full relative '>
+                    <AnimatePresence initial={false}>
+                        <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
                             <div className='col-span-12 flex flex-col gap-4'>
+                                {activeTab === 'configurations' ?
+                                   <>
+                                       {/*<SetupChecklist/>*/}
+                                       <SpeedSettings/>
+                                   </>
+                                    :
+                                    <AuditList activeTab={activeTab}/>
 
-                                <SetupChecklist/>
+                                }
 
-                                {data?.grouped[activeTab] &&
-                                    data?.grouped[activeTab]?.map((audit: Audit, index: number) => (
-                                            <m.div
-                                                initial={{opacity: 0, y: 10}}
-                                                animate={{opacity: 1, y: 0}}
-                                                exit={{opacity: 0, y: -20}}
-                                                transition={{delay: index * 0.03}}
-                                                className='relative' key={audit.id}>
-                                                <Audit
-                                                    index={index} audit={audit}/>
-                                            </m.div>
-                                        )
-                                    )}
                             </div>
                         </div>
+                        <div key='audit-blank'>
+                            {(activeTab !== 'configurations' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
+                                <m.div
+                                    initial={{opacity: 0, y: 10}}
+                                    animate={{opacity: 1, y: 0}}
+                                    exit={{opacity: 0, y: -20}}
+                                    className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
 
-                    ) : (
-                        <m.div
-                            initial={{opacity: 0, y: 10}}
-                            animate={{opacity: 1, y: 0}}
-                            exit={{opacity: 0, y: -20}}
-                            className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
+                                    <div>
+                                        <img alt='Good Job!' className='w-64'
+                                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                    </div>
 
-                            <div>
-                                <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                            </div>
+                                    <span className='flex gap-2'>
+                                    Brilliantly done! It's clear you've mastered this.
+                                </span>
+                                </m.div>
 
-                            <span className='flex gap-2'>
-                                Brilliantly done! It's clear you've mastered this.
-                            </span>
-
-                        </m.div>
-                    )}
-                </AnimatePresence>
+                            )}
+                        </div>
+                    </AnimatePresence>
+                </div>
             </div>
+
+            <Mode>
+                {showNewTitanModelPopup  && (
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogContent asChild className="sm:max-w-[530px] cursor-auto">
+
+                            <DialogHeader className='px-6 pt-6 pb-1'>
+                                <div className='flex gap-2 items-center'>
+                                    <div className='relative'>
+                                        {/*<img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
+                                        <TitanLogo/>
+                                    </div>
+
+                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0)</DialogTitle>
+                                </div>
+
+                                <div className='relative py-4'>
+                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/screenflow.gif`) : '/screenflow.gif'} alt='Welcome to Titan'/>
+                                </div>
+                                <DialogDescription >
+                                    {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
+                                    <ul className="list-disc px-6">
+                                        <li>
+                                            Newly introduced <span className='font-semibold'>Speed Settings tab</span> which helps you find recommended settings quickly.
+                                        </li>
+                                        <li><span className="font-semibold">Simplified view</span> of metrics for easier
+                                            comprehension.
+                                        </li>
+                                        <li>Recommend settings for Audits that impact your site.</li>
+                                        <li>Resolved Audits are kept under <span className="font-semibold">additional settings</span>.
+                                        </li>
+                                    </ul>
+                                </DialogDescription>
+
+
+                            </DialogHeader>
+
+                            <DialogFooter className='px-6 py-3 border-t'>
+                                <label className="flex py-2 absolute items-center left-6">
+                                    <Checkbox  onCheckedChange={(c: boolean) =>{
+                                        setIsCheckedPopup(c)
+                                    }}/>
+                                    <span className="text-muted-foreground select-none">Don't show this again</span>
+                                </label>
+                                <AppButton onClick={e => saveNewTitanModelPopup()} className='text-sm'>Explore Now</AppButton>
+                                <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
+                            </DialogFooter>
+
+                        </DialogContent>
+                    </Dialog>
+
+
+                )}
+
+
+            </Mode>
         </div>
+
     )
+
 }
 
 export default Performance

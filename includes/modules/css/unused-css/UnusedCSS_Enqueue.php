@@ -18,6 +18,8 @@ class UnusedCSS_Enqueue
     private $is_mobile;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job_data)
     {
         $this->options = RapidLoad_Base::get_merged_options();
@@ -32,14 +34,14 @@ class UnusedCSS_Enqueue
 
         $this->warnings = $this->job_data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 10);
     }
 
     function enqueue_frontend_scripts(){
 
         if(isset($this->job_data->id) && $this->job_data->status == 'success' && !empty($this->files)){
 
-            wp_register_script( 'rapidload', UUCSS_PLUGIN_URL . 'assets/js/rapidload.frontend.min.js?v=i', [ 'jquery' ], UUCSS_VERSION );
+            wp_register_script( 'rapidload', false, [], UUCSS_VERSION );
             wp_localize_script( 'rapidload', 'rapidload', [
                 'files' => $this->files,
                 'do_not_load_original_css' => apply_filters('rapidload/frontend/do-not-load/original-css', false),
@@ -79,6 +81,27 @@ class UnusedCSS_Enqueue
             ];
         }
 
+        $body = $this->dom->find('body', 0);
+
+        // get the file content from ./assets/js/inline-scripts/delay-script-footer.min.js
+        $content = "//!injected by RapidLoad \n
+            !(function(){var RapidLoad=function(){var fired=false;var fired_inline=false;var load_css=function(uucss){var files=document.querySelectorAll('link[data-href]');if(!files.length||fired){return}for(var i=0;i<files.length;i++){var file=files[i];var original=uucss.find(function(i){return file.getAttribute('data-href').includes(i.uucss)});if(!original){return}let link=file.cloneNode();link.href=original.original_relative?original.original_relative:original.original;link.rel='stylesheet';link.as='style';link.removeAttribute('data-href');link.removeAttribute('data-media');if(window.rapidload&&window.rapidload.frontend_debug==='1'){link.removeAttribute('uucss');link.setAttribute('uucss-reverted','')}link.prev=file;link.addEventListener('load',function(e){setTimeout(function(element){if(element.prev)element.prev.remove()},5e3,this)});file.parentNode.insertBefore(link,file.nextSibling);fired=true}};var load_inline_css=function(uucss){var inlined_styles=document.querySelectorAll('style[data-href]');if(!inlined_styles.length||fired_inline){return}for(var i=0;i<inlined_styles.length;i++){var inlines_style=inlined_styles[i];var original=uucss.find(function(x){return inlines_style.getAttribute('data-href').includes(x.uucss)});if(!original){return}var link=document.createElement('link');link.rel='stylesheet';link.as='style';link.type='text/css';link.href=original.original_relative?original.original_relative:original.original;link.media=inlines_style.getAttribute('data-media');link.prev=inlines_style;link.addEventListener('load',function(e){setTimeout(function(element){if(element.prev)element.prev.remove()},5e3,this)});inlines_style.parentNode.insertBefore(link,inlines_style.nextSibling);fired_inline=true}};this.add_events=function(){if(!window.rapidload||!window.rapidload.files||!window.rapidload.files.length){return}if(window.rapidload.do_not_load_original_css){return}['mousemove','touchstart','keydown'].forEach(function(event){var listener=function(){load_css(window.rapidload.files);load_inline_css(window.rapidload.files);removeEventListener(event,listener)};addEventListener(event,listener)})};this.add_events()};document.addEventListener('DOMContentLoaded',function(event){new RapidLoad})})();";
+
+        if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+            $filePath = RAPIDLOAD_PLUGIN_DIR . '/assets/js/rapidload.frontend.min.js';
+
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+            }
+        }
+
+        $node = $this->dom->createElement('script', "" . $content . "");
+
+        $node->setAttribute('id', 'rapidload-frontend-js');
+        $node->setAttribute('type', 'text/javascript');
+        $node->setAttribute('norapidload','');
+        $body->appendChild($node);
+
         if($this->dom && $this->inject){
 
             if(RapidLoad_Enqueue::$frontend_debug){
@@ -110,6 +133,8 @@ class UnusedCSS_Enqueue
 
         foreach ( $sheets as $sheet ) {
 
+            $_frontend_data = [];
+
             do_action('rapidload/enqueue/before-optimize-css', $sheet, $this->job_data, $this->strategy);
 
             $parent = $sheet->parent();
@@ -121,6 +146,8 @@ class UnusedCSS_Enqueue
             $link = $sheet->href;
 
             $this->inject->found_sheets = true;
+
+            $file_missing_error = "RapidLoad optimized version for the file missing.";
 
             if ( self::is_css( $sheet ) && !$this->is_file_excluded($this->options, $link)) {
 
@@ -135,6 +162,8 @@ class UnusedCSS_Enqueue
                     if(isset($url_parts['path'])){
 
                         $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
+
+                        $file_missing_error .= (":" . $search_link);
 
                         $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
 
@@ -156,6 +185,8 @@ class UnusedCSS_Enqueue
                     $key = isset($this->files) ? $file : null;
 
                 }
+
+                $_frontend_data['href'] =  $sheet->href;
 
                 // check if we found a script index and the file exists
                 if ( is_numeric( $key ) && $this->file_system->exists( UnusedCSS::$base_dir . '/' . $this->files[ $key ]['uucss'] ) ) {
@@ -184,7 +215,9 @@ class UnusedCSS_Enqueue
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
 
-                    if ( isset( $this->options['uucss_inline_css'] ) ) {
+                    $_frontend_data['new_href'] = $sheet->href;
+
+                    if ( isset( $this->options['uucss_inline_css'] ) && $this->options['uucss_inline_css'] == "1" && apply_filters('rapidload/enqueue/inline-small-css/enable', false)) {
 
                         $this->inline_sheet($sheet, $uucss_file);
                     }
@@ -207,11 +240,14 @@ class UnusedCSS_Enqueue
                         if(!in_array($link, array_column($this->warnings, 'file'))){
 
                             $warning = [
+                                "id" => $this->job_data->job->id,
                                 "file" => $link,
-                                "message" => "RapidLoad optimized version for the file missing."
+                                "message" => $file_missing_error
                             ];
 
                             $this->warnings[] = $warning;
+
+                            $_frontend_data['new_href'] = false;
 
                         }
 
@@ -219,8 +255,13 @@ class UnusedCSS_Enqueue
 
                 }
             }
-
+            if(!empty($_frontend_data)){
+                $this->frontend_data['uucss'][] = $_frontend_data;
+            }
         }
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
     }
 
     public function replace_inline_css(){
@@ -345,6 +386,10 @@ class UnusedCSS_Enqueue
     }
 
     private function inline_sheet( $sheet, $link ) {
+
+        if(isset($sheet->{'data-media'}) && $sheet->{'data-media'} == "print"){
+            return;
+        }
 
         $inline = $this->get_inline_content( $link );
 

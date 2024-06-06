@@ -36,7 +36,7 @@
       <div>
         <div class="p-4 pl-32 pr-72">
 
-          <div class="grid">
+
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -55,30 +55,50 @@
                   <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files.</p>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div class="grid">
-            <div class="mb-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
+              <div :class="!onData.minify_js? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+
+                <div class="mt-5">
+                  <h1 class="font-normal text-base text-black-font">Exclude Javascript from Minify</h1>
+                  <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from being minified.</p>
+
+                  <div class="grid mb-5">
+                <textarea
+                    v-model="onData.uucss_exclude_files_from_minify_js"
+                    @focus="focus='exclude'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                    <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                         class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                      <p class="text-sm text-dark-gray-font">JS files to be excluded one JS file per line.</p>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>
-                  <p class="text-sm text-gray-font">Preload Links</p>
-                </div>
               </div>
             </div>
-          </div>
+
+
+<!--          <div class="grid">-->
+<!--            <div class="mb-5">-->
+<!--              <div class="flex">-->
+<!--                <div class="pr-1">-->
+<!--                  <div class="flex items-center mr-4 mt-3">-->
+<!--                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"-->
+<!--                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">-->
+<!--                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"-->
+<!--                           class="transform scale-125">-->
+<!--                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>-->
+<!--                      </svg>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>-->
+<!--                  <p class="text-sm text-gray-font">Preload Links</p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
 
           <div class="mb-5">
@@ -102,24 +122,6 @@
             </div>
 
             <div :class="!onData.uucss_load_js_method.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
-              <div class="flex mt-5">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" :class="onData.uucss_load_js_method.defer_inline_js? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.uucss_load_js_method.defer_inline_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
-
-                  </div>
-                </div>
-                <div class="mt-2.5">
-                  <h1 @click="onData.uucss_load_js_method.defer_inline_js = !onData.uucss_load_js_method.defer_inline_js" class="font-normal text-base text-black-font cursor-pointer">Defer Inline Javascript</h1>
-<!--                  <p class="text-sm text-gray-font">Defer inline Javascript</p>-->
-                </div>
-              </div>
 
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Deferring</h1>
@@ -128,16 +130,14 @@
                 <div class="grid mb-5">
                 <textarea
                     v-model="onData.uucss_load_js_method.uucss_excluded_js_files_from_defer"
-                    @focus="focus='exclude'" @blur="focus = null"
+                    @focus="focus='excludeJsDefer'" @blur="focus = null"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                  <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                  <div :class="focus==='excludeJsDefer'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">JS files to be excluded one JS file per line.</p>
                   </div>
                 </div>
-
-
               </div>
             </div>
           </div>
@@ -158,23 +158,74 @@
                 </div>
               </div>
               <div class="mt-2.5">
-                <h1 @click="onData.delay_javascript = !onData.delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascripts to Load on User Interaction</h1>
-<!--                <p class="text-sm pb-3 text-gray-font">Feed set of domains to delay load</p>-->
+                <h1 @click="onData.delay_javascript = !onData.delay_javascript" class="font-normal text-base text-black-font cursor-pointer">Delay Javascript</h1>
+                <p class="text-sm pb-3 text-gray-font">Loading JS files on user interaction</p>
               </div>
             </div>
-            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-5">
               <div>
+                <h1 class="font-normal text-base text-black-font">Exclude Javascript from Delaying</h1>
+                <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
+
                 <div class="grid">
                 <textarea
-                    v-model="onData.uucss_load_scripts_on_user_interaction"
+                    v-model="onData.uucss_exclude_files_from_delay_js"
                     @focus="focus='delay'" @blur="focus = null"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">JS files to be delayed on user interaction from RapidLoad enter each file in new line.</p>
+                    <p class="text-sm text-dark-gray-font">JS files to be excluded from delay. Enter each file in new line.</p>
                   </div>
                 </div>
+                <div v-if="isInputEmpty !== true "  class="grid pb-5">
+                  <h1 class="font-normal text-base text-black-font pt-5">Delaying only selected Javascript (Legacy)</h1>
+                  <div class="mb-5 mt-3 bg-yellow-50 border border-yellow-300 rounded-lg px-4 py-3 shadow-md" role="alert">
+                    <div class="flex">
+                      <div class="py-1 pr-2">
+                        <svg fill="#FFCC00" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30px" height="30px" viewBox="0 0 554.2 554.199" xml:space="preserve" stroke="#FFCC00">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                          <g id="SVGRepo_iconCarrier"> <g> <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6 c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8 C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416 c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8 s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/> </g> </g>
+                      </svg>
+                      </div>
+                      <div>
+                        <p class="pt-2 font-semibold text-sm text-yellow-600 leading-5">This option is deprecated from version 2.2. </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <textarea
+                    v-model="onData.uucss_load_scripts_on_user_interaction"
+                    @focus="focus='delay'" @blur="handleEmptyInput"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Delayed JS files will load on user interaction. Enter each file in new line.</p>
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div class="pt-3">
+                <h1 class="font-normal text-base text-black-font">Callback Script</h1>
+                <p class="text-sm pb-3 text-gray-font">These scripts will be executed after delayed JS files are loaded.</p>
+
+                <div class="grid">
+                <textarea
+                    v-model="onData.delay_javascript_callback"
+                    @focus="focus='delay'" @blur="focus = null"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    id="force-include" type="text" placeholder=""></textarea>
+                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">Inline scripts to be executed.</p>
+                  </div>
+                </div>
+
+
 
               </div>
             </div>
@@ -182,7 +233,7 @@
           </div>
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
-            <p class="text-sm pb-3 text-gray-font">These JS files will be forcefully excluded from optimization.</p>
+            <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from all optimizations.</p>
                 <textarea
                     v-model="onData.uucss_excluded_js_files"
                     @focus="focus='exclude-js'" @blur="focus = null"
@@ -214,7 +265,8 @@
       <div class="pb-6">
       </div>
     </div>
-    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave" @confirm="handleConfirm" @cancel="handleCancel"></popup>
+    <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave('save')" @confirm="handleConfirm('save')" @cancel="handleCancel('save')"></popup>
+    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>
 
   </main>
 
@@ -226,6 +278,7 @@ import Vue3TagsInput from 'vue3-tags-input';
 import messageBox from "../../components/messageBox.vue";
 import axios from "axios";
 import popup from "../../components/popup.vue";
+import legacyPopup from "../../components/legacyPopup.vue";
 
 export default {
   name: "java-script",
@@ -234,6 +287,7 @@ export default {
     Vue3TagsInput,
     messageBox,
     popup,
+    legacyPopup,
   },
 
   mounted() {
@@ -248,6 +302,7 @@ export default {
       Object.keys(this.javascript).map((key) => {
         if (this.id === this.javascript[key].id) {
           const options = this.javascript[key].options;
+         // console.log(options);
           this.onData.uucss_load_js_method.defer_inline_js = options.defer_inline_js
           this.onData.minify_js = options.minify_js
           this.onData.preload_internal_links = options.preload_internal_links
@@ -255,7 +310,10 @@ export default {
           this.onData.uucss_excluded_js_files = options.uucss_excluded_js_files
           this.onData.uucss_load_js_method.status = options.uucss_load_js_method === 'defer'
           this.onData.uucss_load_scripts_on_user_interaction = options.uucss_load_scripts_on_user_interaction
+          this.onData.uucss_exclude_files_from_delay_js = options.uucss_exclude_files_from_delay_js
           this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer = options.uucss_excluded_js_files_from_defer
+          this.onData.delay_javascript_callback = options.delay_javascript_callback?.replace(/\\/g, '')
+          this.onData.uucss_exclude_files_from_minify_js = options.uucss_exclude_files_from_minify_js?.replace(/\\/g, '')
         }
 
       });
@@ -263,27 +321,57 @@ export default {
       this.beforeSave = this.onData;
       this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
+    if (this.onData.uucss_load_scripts_on_user_interaction === "" || this.onData.uucss_load_scripts_on_user_interaction == null) {
+      this.isInputEmpty = true;
+    }
   },
   methods: {
+    handleEmptyInput() {
+      this.focus = null;
+      if (this.onData.uucss_load_scripts_on_user_interaction === "" ) {
+       this.legacyPopup = true;
+      }
+    },
+    handleConfirm(model) {
 
-    handleConfirm() {
-      this.saveSettings();
-      this.handleDontSave();
+      if(model === 'save'){
+        this.saveSettings();
+        this.handleDontSave('save');
+      }else if(model === 'legacy'){
+        this.saveSettings();
+        this.handleDontSave('legacy');
+        this.isInputEmpty = true;
+      }
+
     },
 
-    handleDontSave(){
-      this.confirmStatus = true;
-      this.popupVisible= false;
-      const back = document.getElementById('rp-back');
-      back.click();
+    handleDontSave(model){
+      if(model === 'save'){
+        this.confirmStatus = true;
+        this.popupVisible= false;
+        const back = document.getElementById('rp-back');
+        back.click();
+      }else if(model === 'legacy'){
+        this.legacyPopup = false;
+      }
+
     },
-    handleCancel() {
-      this.popupVisible= false;
+    handleCancel(model) {
+      if(model === 'save'){
+        this.popupVisible= false;
+      }else if(model === 'legacy'){
+        this.legacyPopup = false;
+      }
+
     },
 
 
     doc(){
       window.open('https://docs.rapidload.io/features/javascript-delivery', '_blank');
+    },
+
+    readMore(){
+      window.open('https://docs.rapidload.io/guides/delay-js-ver-2.2', '_blank');
     },
 
     dataSaved(){
@@ -294,15 +382,18 @@ export default {
     async saveSettings() {
       this.loading = true;
       const data = {
-        defer_inline_js: this.onData.uucss_load_js_method.defer_inline_js,
+        // defer_inline_js: this.onData.uucss_load_js_method.defer_inline_js,
+        defer_inline_js: false,
         minify_js: this.onData.minify_js,
         preload_internal_links: this.onData.preload_internal_links,
         delay_javascript: this.onData.delay_javascript,
         uucss_excluded_js_files: this.onData.uucss_excluded_js_files,
         uucss_load_js_method: this.onData.uucss_load_js_method.status ? 'defer' : 'none',
         uucss_load_scripts_on_user_interaction: this.onData.uucss_load_scripts_on_user_interaction,
+        uucss_exclude_files_from_delay_js: this.onData.uucss_exclude_files_from_delay_js,
         uucss_excluded_js_files_from_defer: this.onData.uucss_load_js_method.uucss_excluded_js_files_from_defer,
-
+        delay_javascript_callback: this.onData.delay_javascript_callback,
+        uucss_exclude_files_from_minify_js: this.onData.uucss_exclude_files_from_minify_js
       }
 
       await axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce, data, {
@@ -341,6 +432,8 @@ export default {
 
   data() {
     return {
+      legacyPopup: false,
+      isInputEmpty : false,
       javascript: [],
       id: 'javascript',
       saved: false,
@@ -360,7 +453,10 @@ export default {
           uucss_excluded_js_files_from_defer: [],
         },
         uucss_excluded_js_files: [],
+        delay_javascript_callback: '',
         uucss_load_scripts_on_user_interaction: [],
+        uucss_exclude_files_from_delay_js: [],
+        uucss_exclude_files_from_minify_js: '',
       },
 
       beforeSave:{},

@@ -1,18 +1,33 @@
 <?php
 
-$rapidload_constants = [
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-    'RAPIDLOAD_PLUGIN_DIR' => __DIR__,
-    'RAPIDLOAD_SETTINGS_DIR'   => WP_CONTENT_DIR . '/settings/rapidload',
-    'RAPIDLOAD_CACHE_DIR' => WP_CONTENT_DIR . '/cache/rapidload-cache',
-    'RAPIDLOAD_CONSTANT_FILE' => __DIR__ . '/constants.php',
-    'RAPIDLOAD_INDEX_FILE'     => ABSPATH . 'index.php',
-    'UUCSS_VERSION' => '2.1.5',
-    'UUCSS_CACHE_CHILD_DIR' =>  '/cache/rapidload/',
-];
+if ( ! defined( 'RAPIDLOAD_PLUGIN_DIR' ) ) {
+    define( 'RAPIDLOAD_PLUGIN_DIR', __DIR__ );
+}
 
-foreach ( $rapidload_constants as $rapidload_constant_name => $rapidload_constant_value ) {
-    if ( ! defined( $rapidload_constant_name ) && $rapidload_constant_value !== null ) {
-        define( $rapidload_constant_name, $rapidload_constant_value );
-    }
+if ( ! defined( 'RAPIDLOAD_SETTINGS_DIR' ) ) {
+    define( 'RAPIDLOAD_SETTINGS_DIR', WP_CONTENT_DIR . '/settings/rapidload' );
+}
+
+if ( ! defined( 'RAPIDLOAD_CACHE_DIR' ) ) {
+    define( 'RAPIDLOAD_CACHE_DIR', WP_CONTENT_DIR . '/cache/rapidload-cache' );
+}
+
+if ( ! defined( 'RAPIDLOAD_CONSTANT_FILE' ) ) {
+    define( 'RAPIDLOAD_CONSTANT_FILE', __DIR__ . '/constants.php' );
+}
+
+if ( ! defined( 'RAPIDLOAD_INDEX_FILE' ) ) {
+    define( 'RAPIDLOAD_INDEX_FILE', ABSPATH . 'index.php' );
+}
+
+if ( ! defined( 'UUCSS_VERSION' ) ) {
+    define( 'UUCSS_VERSION', '2.2.16' );
+}
+
+if ( ! defined( 'UUCSS_CACHE_CHILD_DIR' ) ) {
+    define( 'UUCSS_CACHE_CHILD_DIR', '/cache/rapidload/' );
 }

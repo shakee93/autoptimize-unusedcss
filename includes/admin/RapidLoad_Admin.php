@@ -19,6 +19,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_uucss_logs', [$this, 'rapidload_logs']);
             add_action('wp_ajax_clear_uucss_logs', [$this, 'clear_rapidload_logs']);
             add_action('wp_ajax_uucss_license', [ $this, 'uucss_license' ] );
+            add_action('wp_ajax_rapidload_image_usage', [ $this, 'rapidload_image_usage' ] );
+            add_action('wp_ajax_rapidload_cdn_usage', [ $this, 'rapidload_cdn_usage' ] );
             add_action('wp_ajax_uucss_deactivate', [ $this, 'ajax_deactivate' ] );
             add_action('wp_ajax_uucss_connect', [ $this, 'uucss_connect' ] );
             add_action('wp_ajax_clear_page_cache', [$this, 'clear_page_cache']);
@@ -29,15 +31,19 @@ class RapidLoad_Admin
             add_action('wp_ajax_update_rapidload_settings', [$this, 'update_rapidload_settings']);
             add_action('wp_ajax_purge_rapidload_cdn', [$this, 'purge_rapidload_cdn']);
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
+            add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_cdn_metering']);
+            add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
             add_action('wp_ajax_titan_checklist_cron', [$this, 'titan_checklist_cron']);
             add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
+            add_action('wp_ajax_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
-                add_action('wp_ajax_noriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
+                add_action('wp_ajax_nopriv_clear_page_cache', [$this, 'clear_page_cache']);
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
                 add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
                 add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
@@ -52,6 +58,76 @@ class RapidLoad_Admin
         add_filter('uucss/api/options', [$this, 'inject_cloudflare_settings'], 10 , 1);
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
+
+    }
+
+    public function rapidload_enable_cdn_metering(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(!isset($options['uucss_cdn_zone_id'])){
+            wp_send_json_error('cdn zone id not set');
+        }
+
+        $api = new RapidLoad_Api();
+
+        $response = $api->post('enable-cdn-metering',[
+           'zone_id' =>  $options['uucss_cdn_zone_id']
+        ]);
+
+        if(is_wp_error($response)){
+            wp_send_json_error($api->extract_error($response));
+        }
+
+        wp_send_json_success([
+            'success' => true
+        ]);
+
+    }
+
+    public function rapidload_enable_image_metering(){
+
+        $api = new RapidLoad_Api();
+
+        $response = $api->post('enable-cdn-metering',[
+            'url' =>  site_url()
+        ]);
+
+        if(is_wp_error($response)){
+            wp_send_json_error($api->extract_error($response));
+        }
+
+        wp_send_json_success([
+            'success' => true
+        ]);
+
+    }
+
+    public function rapidload_switch_test_mode(){
+
+        $options = RapidLoad_Base::fetch_options();
+
+        if(!isset($_REQUEST['test_mode']) || empty($_REQUEST['test_mode'])){
+            if(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"){
+                wp_send_json_success([
+                    'status' => true
+                ]);
+            }else{
+                wp_send_json_success([
+                    'status' => false
+                ]);
+            }
+        }
+
+        $status = $_REQUEST['test_mode'] == "true" ? "1" : "0";
+
+        $options['rapidload_test_mode'] = $status;
+
+        RapidLoad_Base::update_option('autoptimize_uucss_settings', $options);
+
+        wp_send_json_success([
+            'status' => $options['rapidload_test_mode'] == "1"
+        ]);
 
     }
 
@@ -210,8 +286,8 @@ class RapidLoad_Admin
 
         $options = RapidLoad_Base::fetch_options();
 
-        if(!isset($options['uucss_cdn_zone_id']) || $options['uucss_cdn_zone_id'] != "1"){
-            wp_send_json_success(true);
+        if(!isset($options['uucss_cdn_zone_id'])){
+            wp_send_json_error(false);
         }
 
         $api = new RapidLoad_Api();
@@ -232,6 +308,12 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_minify'])){
 
             $options['uucss_minify'] = ($_REQUEST['uucss_minify'] == 'true' ? "1" : null);
+
+        }
+
+        if(isset($_REQUEST['uucss_minify_excluded_files'])){
+
+            $options['uucss_minify_excluded_files'] = $_REQUEST['uucss_minify_excluded_files'];
 
         }
 
@@ -354,6 +436,10 @@ class RapidLoad_Admin
 
                 $options['whitelist_packs'] = $_REQUEST['whitelist_packs'];
 
+            }else{
+
+                $options['whitelist_packs'] = [];
+
             }
 
 
@@ -403,6 +489,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['delay_javascript_callback'])){
+
+            $options['delay_javascript_callback'] = $_REQUEST['delay_javascript_callback'];
+
+        }
+
         if(isset($_REQUEST['uucss_excluded_js_files_from_defer'])){
 
             $options['uucss_excluded_js_files_from_defer'] = $_REQUEST['uucss_excluded_js_files_from_defer'];
@@ -412,6 +504,12 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_load_scripts_on_user_interaction'])){
 
             $options['uucss_load_scripts_on_user_interaction'] = $_REQUEST['uucss_load_scripts_on_user_interaction'];
+
+        }
+
+        if(isset($_REQUEST['uucss_exclude_files_from_delay_js'])){
+
+            $options['uucss_exclude_files_from_delay_js'] = $_REQUEST['uucss_exclude_files_from_delay_js'];
 
         }
 
@@ -523,6 +621,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_exclude_images_from_modern_images'])){
+
+                $options['uucss_exclude_images_from_modern_images'] = $_REQUEST['uucss_exclude_images_from_modern_images'];
+
+            }
+
             if(isset($_REQUEST['uucss_preload_lcp_image'])){
 
                 $options['uucss_preload_lcp_image'] = $_REQUEST['uucss_preload_lcp_image'];
@@ -628,6 +732,11 @@ class RapidLoad_Admin
 
             RapidLoad_Cache::update_settings($args);
 
+        }
+
+        if(isset($_REQUEST['rapidload_test_mode'])){
+
+            $options['rapidload_test_mode'] = ($_REQUEST['rapidload_test_mode'] == 'true' ? 1 : 0);
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings',$options);
@@ -1136,6 +1245,42 @@ class RapidLoad_Admin
             RapidLoad_Base::fetch_options(false);
         }
 
+    }
+
+    public function rapidload_image_usage(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $data = $api->get( 'image-usage', [
+            'url' => $this->transform_url(get_site_url()),
+        ]);
+
+        if ( is_wp_error( $data ) ) {
+            wp_send_json_error('Something went wrong');
+        }
+
+        wp_send_json_success((array)$data->data);
+    }
+
+    public function rapidload_cdn_usage(){
+
+        self::verify_nonce();
+
+        $api = new RapidLoad_Api();
+
+        $options = RapidLoad_Base::fetch_options();
+
+        $data = $api->get( 'cdn-usage', [
+            'zone_id' => isset($options['uucss_cdn_zone_id']) ? $options['uucss_cdn_zone_id'] : '',
+        ]);
+
+        if ( is_wp_error( $data ) ) {
+            wp_send_json_error('Something went wrong');
+        }
+
+        wp_send_json_success((array)$data->data);
     }
 
     public function uucss_license() {

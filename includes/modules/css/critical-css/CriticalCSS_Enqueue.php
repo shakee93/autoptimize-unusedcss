@@ -17,6 +17,8 @@ class CriticalCSS_Enqueue
     private $is_mobile;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job_data)
     {
         $this->file_system = new RapidLoad_FileSystem();
@@ -26,7 +28,7 @@ class CriticalCSS_Enqueue
         $this->data = $job_data->data;
         $this->warnings = $this->job_data->get_warnings();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 30);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
     }
 
     function update_content($state){
@@ -58,7 +60,7 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']);
+        $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1";
 
         if($this->is_mobile){
             $this->data = str_replace(".css","-mobile.css", $this->data);
@@ -131,7 +133,7 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if(!$this->is_mobile){
+            if(!$this->is_mobile && apply_filters('rapidload/cpcss/set-preload-css', true)){
                 $sheet->onload = "this.onload=null;this.rel='stylesheet'";
                 $sheet->rel = "preload";
                 $sheet->as = "style";
@@ -165,9 +167,20 @@ class CriticalCSS_Enqueue
             return;
         }
 
-        $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content);
+        $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content, ($this->is_mobile ? 'mobile' : 'desktop'));
 
         $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
+
+        $_frontend_data['data-mode'] = ($this->is_mobile ? 'mobile' : 'desktop');
+        $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $this->data;
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['cpcss'] = $_frontend_data;
+        }
+
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
 
         if(isset($this->dom->find( 'title' )[0])){
 

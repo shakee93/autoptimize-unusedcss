@@ -103,6 +103,27 @@
             </div>
           </div>
 
+          <div class="grid">
+            <div class="mb-5">
+              <div class="flex">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>
+                  <p class="text-sm text-gray-font">Preload Links</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
             <div class="mb-5">
               <div class="flex">
@@ -295,7 +316,7 @@ export default {
           this.onData.rapidload_minify_html = option.rapidload_minify_html;
           this.onData.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
           this.onData.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";
-
+          this.onData.preload_internal_links = option.preload_internal_links;
 
         }
 
@@ -376,6 +397,7 @@ export default {
         uucss_queue_interval : this.onData.queue_option.uucss_queue_interval === '1 Hour' ? this.onData.queue_option.uucss_queue_interval.replace(/\D/g,'')*6000 : this.onData.queue_option.uucss_queue_interval.replace(/\D/g,'')*60,
         uucss_disable_add_to_queue : this.onData.queue_option.uucss_disable_add_to_queue,
         uucss_disable_add_to_re_queue : this.onData.queue_option.uucss_disable_add_to_re_queue,
+        preload_internal_links: this.onData.preload_internal_links
       }
       axios.post(window.uucss_global.ajax_url + '?action=update_rapidload_settings&nonce='+window.uucss_global.nonce , data,{
         headers: {
@@ -422,6 +444,7 @@ export default {
       debug_logs_settings: '/debug-logs',
 
       onData: {
+        preload_internal_links: false,
         uucss_enable_debug: false,
         uucss_query_string: false,
         rapidload_minify_html: false,

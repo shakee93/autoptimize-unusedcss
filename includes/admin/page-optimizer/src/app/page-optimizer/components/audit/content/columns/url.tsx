@@ -24,7 +24,7 @@ const AuditColumnUrl = ({audit, cell, heading} : AuditColumnUrlProps) => {
         passed = cell.row.getValue('passed')
     }
     
-    if (isImageAudit(audit.id) || value?.file_type?.value === 'image') {
+    if (!value.toString().startsWith('data:image') && (isImageAudit(audit.id) || value?.file_type?.value === 'image')) {
         return <AuditColumnImage cell={cell}/>;
     } else if (isUrl(value)) {
         return (

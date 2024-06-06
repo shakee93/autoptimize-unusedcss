@@ -325,11 +325,13 @@ export default {
       this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
     }
 
+
   },
   computed: {
     whitelist_render(){
      // return this.whitelist_packs = ['Elementor','pluginone']
       return this.onData.whitelist_packs.map(function (wp) {
+        console.log("i am here", wp)
         let item = wp.split(':')
         return item[1];
       })
@@ -389,24 +391,34 @@ export default {
                  return value.id + ':' + value.name;
                })
                const uniqueWhitelist = newWhitelist.map(function (wp) {
+
                  let item = wp.split(':')
+                 console.log('New Whitelist: ', item[1]);
                  return item[1];
+
                })
-               const uniqueSuggetested = this.onData.suggested_whitelist_packs.map(function (wp) {
-                 let item = wp.split(':')
-                 return item[1];
-               })
+               if(this.onData.suggested_whitelist_packs.length > 0){
+                 const uniqueSuggetested = this.onData.suggested_whitelist_packs.map(function (wp) {
+                   let item = wp.split(':')
+                   return item[1];
+                 })
 
-               const uniqueItems = uniqueWhitelist.filter(item => !uniqueSuggetested.includes(item));
+                 const uniqueItems = uniqueWhitelist.filter(item => !uniqueSuggetested.includes(item));
 
-               if(uniqueItems.length > 0){
-                 const foundItem = newWhitelist.find(item => item.includes(uniqueItems));
-                 console.log("Found Item: "+ foundItem);
-                 this.onData.whitelist_packs.push(foundItem);
+                 if(uniqueItems.length > 0){
+                   const foundItem = newWhitelist.find(item => item.includes(uniqueItems));
+                   console.log("Found Item: "+ foundItem);
+                   this.onData.whitelist_packs.push(foundItem);
 
-                 this.onData.suggested_whitelist_packs = newWhitelist;
+                   this.onData.suggested_whitelist_packs = newWhitelist;
+                 }
+               }else if(this.onData.suggested_whitelist_packs.length === 0){
+                 const pushWhiteList = newWhitelist.map((item)=>{return item});
+                 this.onData.whitelist_packs = pushWhiteList;
                }
+
                const uniqueWhitelistPacks = this.onData.whitelist_packs.filter((item, index, arr) => {
+
                  const textAfterColon = item.split(":")[1];
                  return index === arr.findIndex((i) => i.split(":")[1] === textAfterColon);
                });

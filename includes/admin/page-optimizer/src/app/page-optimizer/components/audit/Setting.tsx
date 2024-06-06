@@ -8,6 +8,10 @@ import {
     CloudDelivery,
     PageCache,
 } from '../icons/icon-svg';
+import ReactDOM from 'react-dom';
+// import { Dialog, Transition } from '@headlessui/react';
+// import { X } from "lucide-react";
+
 
 import { Switch } from "components/ui/switch"
 import {ThunkDispatch} from "redux-thunk";
@@ -33,7 +37,7 @@ import {Circle, GanttChart, Loader, Lock, RefreshCcw, Settings, SettingsIcon} fr
 import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import {Textarea} from "components/ui/textarea";
 import {JsonView} from "react-json-view-lite";
-import AdditionalInputs from "app/page-optimizer/components/audit/additional-inputs";
+import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import TooltipText from "components/ui/tooltip-text";
 import Mode from "app/page-optimizer/components/Mode";
 import {useAppContext} from "../../../../context/app";
@@ -47,13 +51,62 @@ import SlideLeft from "components/animation/SlideLeft";
 import {AnimatePresence} from "framer-motion";
 
 interface SettingItemProps {
-    audit: Audit
+    updateValue: ( setting: AuditSetting, value: any, key: any ) => void
     settings?: AuditSetting;
     index: number;
+    showIcons?: boolean
     hideActions?: boolean
 }
 
-const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
+export const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
+
+    if (!status) {
+        return  <></>
+    }
+
+    if (status.status === 'failed') {
+        return (
+            <Indicator className='fill-rose-600'>
+                <div className='flex flex-col gap-0.5'>
+                        <span className='flex gap-2 items-center'>
+                            <Circle className='w-2 fill-rose-500 stroke-0'/>
+                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
+                        </span>
+                    <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
+                </div>
+            </Indicator>
+        );
+    }
+
+    if(status.status === 'queued') {
+        return (
+            <Indicator className='animate-pulse fill-amber-500'>
+                <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
+                    Waiting in the queue
+                </div>
+            </Indicator>
+        )
+    }
+
+    if(status.status === 'processing') {
+        return <InProgress/>
+    }
+
+    if(status.status === 'success') {
+        return (
+            <Indicator className='fill-green-600'>
+                <div className='flex gap-2 items-center'>
+                    <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
+                </div>
+            </Indicator>
+        )
+    }
+
+    return <></>;
+})
+
+
+const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: SettingItemProps) => {
 
     if (!settings) {
         return <></>
@@ -104,23 +157,13 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     }), [])
 
 
-    const updateValue = useCallback( (value: any, key: string) => {
-
-        dispatch(updateSettings(
-            audit,
-            settings,
-            key,
-            value
-        ));
-    }, [settings])
-
     // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])
 
     const saveAdditionalSettings = useCallback( () => {
 
         updates.forEach(({key, value}) => {
-            updateValue(value, key)
+            updateValue(settings, value, key)
         })
 
         setOpen(false);
@@ -128,59 +171,15 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
 
 
     // TODO: temp fix for scroll view leakage
-    useEffect(() => {
-        const content =  document.getElementById('rapidload-page-optimizer-content')
-        content?.scrollTo(0, 0)
+    // useEffect(() => {
+    //     if (open) {
+    //         const content =  document.getElementById('rapidload-page-optimizer-content');
+    //         content?.scrollTo(0, 0)
+    //     }
+    // }, [open])
 
-    }, [open])
 
 
-    const Status = React.memo(({ status } : { status: AuditSetting['status']}) => {
-
-        if (!status) {
-            return  <></>
-        }
-
-        if (status.status === 'failed') {
-            return (
-                <Indicator className='fill-rose-600'>
-                    <div className='flex flex-col gap-0.5'>
-                        <span className='flex gap-2 items-center'>
-                            <Circle className='w-2 fill-rose-500 stroke-0'/>
-                            Error while optimizing {status.error?.code && `(Code: ${status.error?.code})`}
-                        </span>
-                        <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
-                    </div>
-                </Indicator>
-            );
-        }
-
-        if(status.status === 'queued') {
-            return (
-                <Indicator className='animate-pulse fill-amber-500'>
-                    <div className='flex gap-2 items-center'><GanttChart className='w-4 animate-pulse text-amber-500'/>
-                        Waiting in the queue
-                    </div>
-                </Indicator>
-            )
-        }
-
-        if(status.status === 'processing') {
-            return <InProgress/>
-        }
-
-        if(status.status === 'success') {
-            return (
-                <Indicator className='fill-green-600'>
-                    <div className='flex gap-2 items-center'>
-                        <CheckCircleIcon className='w-5 text-green-600 dark:text-brand-800'/>Successfully Optimized
-                    </div>
-                </Indicator>
-            )
-        }
-
-        return <></>;
-    })
 
     const buttonAction = async (input: AuditSettingInput) => {
         setLoading(true)
@@ -208,10 +207,14 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
     return (
         <div
             key={index}
-            className="relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center px-0.5 pr-2 py-1"
+            className={cn(
+                'relative flex cursor-pointer gap-2 font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-brand-50 border w-fit rounded-xl items-center pr-2 py-1',
+                showIcons ? 'px-0.5': 'px-2'
+            )}
         >
 
-            {icons[settings.category as keyof typeof icons]} {settings.name}
+            {showIcons && icons[settings.category as keyof typeof icons]}
+            {settings.name}
 
             {!hideActions && (
                 <>
@@ -221,7 +224,8 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                             {mainInput.control_type === 'checkbox' && (
                                 <Switch disabled={['onboard', 'preview'].includes(mode)}
                                         checked={mainInput.value}
-                                        onCheckedChange={(c: boolean) => updateValue(c, mainInput.key)}/>
+                                        onCheckedChange={(c: boolean) => updateValue(settings, c, mainInput.key)}/>
+
                             )}
                             {mainInput.control_type === 'button' && (
                                 <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
@@ -249,22 +253,34 @@ const Setting = ({audit, settings, index, hideActions}: SettingItemProps) => {
                                     </div>
                                 </DialogTrigger>
                                 <DialogContent asChild className="sm:max-w-[450px] cursor-auto">
+
                                     <DialogHeader className='border-b px-6 py-7'>
                                         <DialogTitle>{settings.name} Settings</DialogTitle>
                                         <DialogDescription>
                                             Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
                                         </DialogDescription>
                                     </DialogHeader>
+
                                     <div className="grid gap-4 px-6 py-4">
-                                        <AdditionalInputs updates={updates} update={update} data={additionalInputs}/>
+                                        {additionalInputs.map((input, index) =>
+                                            <div key={index} >
+                                                <Fields input={input} updates={updates} update={update} />
+                                            </div>
+                                        )}
                                     </div>
+
                                     <DialogFooter className='px-6 py-3 border-t'>
                                         <AppButton onClick={e => saveAdditionalSettings()} className='text-sm'>Save changes</AppButton>
                                         <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
                                     </DialogFooter>
+
                                 </DialogContent>
                             </Dialog>
+
+
                         )}
+
+
                     </Mode>
 
                     <Mode mode='onboard'>

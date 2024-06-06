@@ -13,12 +13,14 @@ class MinifyCSS_Enqueue
     private $settings;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job)
     {
         $this->job = $job;
         $this->file_system = new RapidLoad_FileSystem();
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 50);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 40);
     }
 
     public function update_content($state){
@@ -58,6 +60,10 @@ class MinifyCSS_Enqueue
 
         }
 
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
+
         return [
             'dom' => $this->dom,
             'inject' => $this->inject,
@@ -68,13 +74,17 @@ class MinifyCSS_Enqueue
 
     public function minify_css($link){
 
-        if(!self::is_css($link) || $this->is_file_excluded($this->options, $link->href)){
+        $_frontend_data = [];
+
+        if(!self::is_css($link) || $this->is_file_excluded($link->href)){
             return;
         }
 
         if(!$this->str_contains($link->href, ".css")){
             return;
         }
+
+        $_frontend_data['href'] =  $link->href;
 
         $file_path = self::get_file_path_from_url($link->href);
 
@@ -88,14 +98,14 @@ class MinifyCSS_Enqueue
 
         $version = substr(hash_file('md5', $file_path), 0, 12);
 
-        $filename = basename(preg_replace('/\?.*/', '', $link->href));
+        $filename = basename(preg_replace('/\?.*/', '', $file_path));
 
         if(!$filename){
             return;
         }
 
         if($this->str_contains($filename, ".min.css")){
-            $filename = str_replace(".min.css","-{$version}.min.css", $filename);
+            return;
         }else if($this->str_contains($filename, ".css")){
             $filename = str_replace(".css","-{$version}.min.css", $filename);
         }
@@ -113,15 +123,20 @@ class MinifyCSS_Enqueue
 
         $link->href = $minified_url;
 
+        $_frontend_data['new_href'] = $link->href;
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['minify_css'][] = $_frontend_data;
+        }
     }
 
     public function minify_inline_css($style){
 
-        $version = substr(md5($style->innertext), 0, 12);
+        /*$version = substr(md5($style->innertext), 0, 12);
 
         $filename = $version . '.min.css';
 
-        $minified_file = MinifyCSS::$base_dir . '/' . $filename;
+        $minified_file = MinifyCSS::$base_dir . '/rpd-inline-style-' . $filename;
 
         $file_exist = $this->file_system->exists($minified_file);
 
@@ -134,10 +149,30 @@ class MinifyCSS_Enqueue
 
         if($this->file_system->exists($minified_file)){
             $style->__set('innertext',file_get_contents($minified_file));
-        }
+        }*/
+        $minifier = new \MatthiasMullie\Minify\CSS();
+        $minifier->add($style->innertext);
+        $style->__set('innertext',$minifier->minify());
     }
 
     private static function is_css( $el ) {
         return $el->rel === 'stylesheet' || ($el->rel === 'preload' && $el->as === 'style');
+    }
+
+    private function is_file_excluded($file) {
+
+        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($options['uucss_minify_excluded_files']) ? explode( "\n", $options['uucss_minify_excluded_files'] ) : [];
+
+        foreach ( $files as $excluded_file ) {
+
+            if($this->str_contains( trim($excluded_file), '*' ) && self::is_path_glob_matched($file, trim($excluded_file))){
+                return true;
+            }else if ( $this->str_contains( $file, trim($excluded_file) ) ) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 }

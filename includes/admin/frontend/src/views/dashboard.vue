@@ -420,8 +420,13 @@ export default {
     window.addEventListener('rapidLoad:optimizer-mounted', () => {
       if (this.on_board_complete ==='') {
          this.welcomeModel=true;
-      }else if(window.location.href.indexOf("nonce") > -1){
-        this.openOptimizer();
+      }else if(window.location.href.indexOf("source=rapidload_app") > -1 && localStorage.getItem('RapidLoadOptimizer') !== 'true'){
+
+        if(this.db_tobe_updated===''){
+          localStorage.setItem('RapidLoadOptimizer', 'true');
+          this.openOptimizer();
+        }
+
       }
     });
 
@@ -457,6 +462,7 @@ export default {
     });
 
     this.items_data = activeModules
+    //console.log(this.items_data);
 
     if (this.items_data) {
       Object.keys(this.items_data).map((key) => {
@@ -490,6 +496,7 @@ export default {
       }).then((response)=>{
 
         if(response.data?.success){
+
           window.location.reload();
         }else{
           this.updateError = response.data?.error;
@@ -507,7 +514,8 @@ export default {
 
     openOptimizer() {
       if (window.RapidLoadOptimizer) {
-        window.RapidLoadOptimizer.showOptimizer(true)
+        window.RapidLoadOptimizer.showOptimizer(true);
+
       }
     },
 
@@ -619,16 +627,33 @@ export default {
 
       this.axios_request = axios.CancelToken.source();
       const cancelToken = this.axios_request.token;
+      const data = {
+        toggle: toggle,
+        module: module,
+      };
 
+      //this.store_toggle_data.push(data);
       axios.post(window.uucss_global?.ajax_url + '?action=activate_module&module='+module+'&active='+toggle + '&nonce='+window.uucss_global?.nonce, {
         cancelToken: cancelToken
       })
           .then(response => {
             response.data
             window.uucss_global.active_modules = response.data.data
-
             this.loading = false;
+            const activeModules = [];
 
+            Object.keys(response.data.data).forEach((a) => {
+              activeModules.push(response.data.data[a])
+            });
+
+            for (const item of activeModules) {
+              if (item.id === data.module ) {
+                if(item.status !== data.toggle){
+                //  console.log("Mistmatch")
+                  // console.log(`Mismatch found for module ${data.module}: Toggle is ${data.toggle}, but status is ${item.status}`);
+                }
+              }
+            }
             this.items.map((item)=>{
              // item.status = response.data.data[item.id].status === "on";
             })
@@ -671,6 +696,8 @@ export default {
 
   data() {
     return {
+      update_databse: false,
+      store_toggle_data: [],
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       home_url: window.uucss_global.home_url,

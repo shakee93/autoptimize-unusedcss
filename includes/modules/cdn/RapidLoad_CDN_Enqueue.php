@@ -11,11 +11,13 @@ class RapidLoad_CDN_Enqueue
     private $options;
     private $strategy;
 
+    private $frontend_data = [];
+
     public function __construct($job)
     {
         $this->job = $job;
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 80);
     }
 
     public function update_content($state){
@@ -90,6 +92,10 @@ class RapidLoad_CDN_Enqueue
         $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';
         $first_child = $head->first_child();
         $first_child->__set('outertext', $preconnect . $first_child->outertext);
+
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,['cdn' => 'enabled']);
+        });
 
         return [
             'dom' => $this->dom,

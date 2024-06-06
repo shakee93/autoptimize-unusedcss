@@ -95,6 +95,15 @@ class RapidLoad_Job{
         unset($data['id']);
         unset($data['parent']);
 
+        if(RapidLoad_DB::$current_version < 1.6){
+            if(isset($data['desktop_options'])){
+                unset($data['desktop_options']);
+            }
+            if(isset($data['mobile_options'])){
+                unset($data['mobile_options']);
+            }
+        }
+
         if(isset($this->id)){
 
             $wpdb->update(
@@ -222,7 +231,7 @@ class RapidLoad_Job{
 
     function get_desktop_options($transformed = false, $recursive = false){
 
-        if(isset($this->desktop_options) && !empty($this->mobile_options)){
+        if(isset($this->desktop_options) && !empty($this->desktop_options)){
             return !$transformed ? unserialize($this->desktop_options) : $this->transform_individual_file_actions(unserialize($this->desktop_options));
         }
         if(!$recursive){
@@ -367,8 +376,14 @@ class RapidLoad_Job{
 
             }
 
+            $files = array_map('serialize', $files);
+
+            $files = array_unique($files);
+
+            $files = array_map('unserialize', $files);
+
             if(!empty($files)){
-                $options['individual-file-actions'] = $files;
+                $options['individual-file-actions'] = array_values($files);
             }
         }
 

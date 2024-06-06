@@ -32,20 +32,70 @@ class RapidLoad_Base
         'blocklist'
     ];
 
+    public static $modules = [];
+
     public function __construct()
     {
-        self::fetch_options();
+        self::$modules = [
+            [
+                'name' => 'Cache',
+                'key' => 'uucss_enable_cache',
+                'option_name' => 'rapidload_module_cache'
+            ],
+            [
+                'name' => 'CDN',
+                'key' => 'uucss_enable_cdn',
+                'option_name' => 'rapidload_module_cdn'
+            ],
+            [
+                'name' => 'CSS',
+                'key' => 'uucss_enable_css',
+                'option_name' => 'rapidload_module_css'
+            ],
+            [
+                'name' => 'Font',
+                'key' => 'uucss_enable_font_optimization',
+                'option_name' => 'rapidload_module_font'
+            ],
+            [
+                'name' => 'Javascript',
+                'key' => 'uucss_enable_javascript',
+                'option_name' => 'rapidload_module_js'
+            ],
+            [
+                'name' => 'Image',
+                'key' => 'uucss_enable_image_delivery',
+                'option_name' => 'rapidload_module_image'
+            ],
+            [
+                'name' => 'Titan',
+                'key' => 'uucss_enable_page_optimizer',
+                'option_name' => 'rapidload_module_titan'
+            ],
+        ];
 
-        add_filter('rapidload/options', [$this, 'merge_job_options']);
+        add_action('plugins_loaded', function (){
 
-        self::get_merged_options();
+            if (isset($_REQUEST['rapidload_preview_optimization'])) {
+                add_filter('determine_current_user', function (){
+                    return 0;
+                }, 99);
+                show_admin_bar(false);
+            }
 
-        add_action('init', function (){
+            self::fetch_options();
+
+            if(isset(self::$options['uucss_enable_page_optimizer']) && self::$options['uucss_enable_page_optimizer'] == "1"){
+                add_filter('rapidload/options', [$this, 'merge_job_options']);
+            }
+
+            self::get_merged_options();
 
             RapidLoad_DB::update_db_version();
 
             self::activateByLicenseKey();
             self::activate();
+            self::flush_rapidload();
 
             if(is_admin()){
 
@@ -99,24 +149,29 @@ class RapidLoad_Base
                 //add_action( 'admin_notices', [ $this, 'rapidload_display_global_notification' ] );
             }
 
+            $this->container['feedback'] = new RapidLoad_Feedback();
+            $this->container['buffer'] = new RapidLoad_Buffer();
             $this->container['modules'] = new RapidLoad_Module();
             $this->container['queue'] = new RapidLoad_Queue();
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
-
-            //$this->container['page_optimizer_data'] = new RapidLoad_Admin_Bar();
+            $this->container['rest_api'] = new RapidLoadRestApi();
+            $this->container['enqueue'] = new RapidLoad_Enqueue();
 
         });
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
-        add_action('plugins_loaded', function (){
+    }
 
-            $this->container['feedback'] = new RapidLoad_Feedback();
-            $this->container['buffer'] = new RapidLoad_Buffer();
-            $this->container['enqueue'] = new RapidLoad_Enqueue();
+    public static function get_license_key(){
 
-        });
+        $options = self::fetch_options();
+
+        if(isset($options['uucss_api_key'])){
+            return $options['uucss_api_key'];
+        }
+        return null;
     }
 
     function merge_job_options($option){
@@ -322,7 +377,7 @@ class RapidLoad_Base
                 'activation_url' => self::activation_url('authorize' ),
                 'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
-                'total_jobs' => RapidLoad_DB::get_total_job_count(),
+                //'total_jobs' => RapidLoad_DB::get_total_job_count(),
                 'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
@@ -379,7 +434,7 @@ class RapidLoad_Base
         }
 
         ?>
-        <hr class="rapidload-major-update-separator"/>
+        <!--<hr class="rapidload-major-update-separator"/>
         <div class="rapidload-major-update-message">
             <div class="rapidload-major-update-message-icon">
                 <span class="dashicons dashicons-info-outline"></span>
@@ -393,7 +448,7 @@ class RapidLoad_Base
                 </div>
             </div>
         </div>
-        <p style="display: none" class="empty">
+        <p style="display: none" class="empty">-->
         <?php
 
     }
@@ -428,13 +483,30 @@ class RapidLoad_Base
             return self::$options;
         }
 
-        if(is_multisite()){
+        $is_multisite = is_multisite();
+
+        if($is_multisite){
 
             self::$options = get_blog_option(get_current_blog_id(), 'autoptimize_uucss_settings', self::get_default_options());
 
         }else{
 
             self::$options = get_site_option( 'autoptimize_uucss_settings', self::get_default_options() );
+        }
+
+        foreach (self::$modules as $module){
+
+            $def_value = isset(self::$options[$module['key']]) ? self::$options[$module['key']] : "";
+
+            if($is_multisite){
+
+                self::$options[$module['key']] = get_blog_option(get_current_blog_id(), $module['option_name'], $def_value);
+
+            }else{
+
+                self::$options[$module['key']] = get_site_option( $module['option_name'], $def_value );
+            }
+
         }
 
         return self::$options;
@@ -451,6 +523,20 @@ class RapidLoad_Base
         }
 
         self::$paged_options = apply_filters('rapidload/options', self::$options);
+
+        if(isset($_REQUEST['rapidload_delay_js']) && $_REQUEST['rapidload_delay_js'] == "1"){
+            self::$paged_options['delay_javascript'] = "1";
+            self::$paged_options['uucss_enable_javascript'] = "1";
+        }
+        if(isset($_REQUEST['rapidload_defer_js']) && $_REQUEST['rapidload_defer_js'] == "1"){
+            self::$paged_options['uucss_load_js_method'] = "defer";
+            self::$paged_options['uucss_enable_javascript'] = "1";
+        }
+        if(isset($_REQUEST['rapidload_enable_cpcss']) && $_REQUEST['rapidload_enable_cpcss'] == "1"){
+            self::$paged_options['uucss_enable_cpcss'] = "1";
+            self::$paged_options['uucss_enable_cpcss_mobile'] = "1";
+            self::$paged_options['uucss_enable_css'] = "1";
+        }
 
         return self::$paged_options;
     }
@@ -503,14 +589,17 @@ class RapidLoad_Base
     public static function get_default_options(){
         return [
             'uucss_enable_css' => "1",
+            'uucss_fontface' => "1",
+            'uucss_keyframes' => "1",
+            'uucss_variables' => "1",
             'uucss_enable_uucss' => "1",
             'uucss_minify' => "1",
-            'uucss_inline_css' => "1",
             'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
+            'uucss_enable_page_optimizer' => "1"
         ];
     }
 
@@ -552,6 +641,14 @@ class RapidLoad_Base
 
             header( 'Location: ' . admin_url( 'admin.php?page=rapidload') );
             exit;
+        }
+
+    }
+
+    public static function flush_rapidload(){
+
+        if(isset($_REQUEST['flush_rapidload'])){
+            RapidLoad_DB::flush_all_rapidload(get_current_blog_id());
         }
 
     }

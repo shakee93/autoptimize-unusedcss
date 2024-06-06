@@ -14,6 +14,10 @@ class RapidLoad_Cache
     {
         self::$options = RapidLoad_Base::fetch_options();
 
+        add_action( 'uucss/cached', [$this, 'clear_cache'], 10, 2 );
+
+        add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
+
         if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
             return;
         }
@@ -25,10 +29,6 @@ class RapidLoad_Cache
         add_filter('rapidload/active-module/options', [$this, 'update_module_options']);
 
         add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_items' ), 90 );
-
-        add_action( 'uucss/cached', [$this, 'clear_cache'], 10, 2 );
-
-        add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
         add_action( 'wp_initialize_site', array( __CLASS__, 'install_later' ) );
 
@@ -69,7 +69,9 @@ class RapidLoad_Cache
         add_action( 'rapidload_cache_site_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
         add_action( 'rapidload_cache_page_cache_cleared', array( __CLASS__, 'on_cache_created_cleared' ), 10, 3 );
 
-        self::process_clear_cache_request();
+        add_action('init', function (){
+            self::process_clear_cache_request();
+        });
     }
 
     public function add_notification($notifications)
@@ -359,7 +361,7 @@ class RapidLoad_Cache
 
     public static function clear_cache_on_post_save( $post ) {
 
-        if ( RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post'] ) {
+        if ( isset(RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post']) && RapidLoad_Cache_Engine::$settings['clear_site_cache_on_saved_post'] ) {
             self::clear_site_cache();
         } else {
             self::clear_post_cache( $post );
@@ -550,6 +552,7 @@ class RapidLoad_Cache
 
         if ( isset( $args['url'] ) ) {
             self::clear_page_cache_by_url( $args['url'] );
+//            wp_remote_get( $args['url'] );
         }
 
     }
@@ -577,7 +580,7 @@ class RapidLoad_Cache
                     '_action' => 'clear',
                 ) ), 'rapidload_cache_clear_cache_nonce' ),
                 'parent' => 'rapidload',
-                'title'  => '<span class="ab-item">' . $title . '</span>',
+                'title'  => '<span class="ab-label">' . $title . '</span>',
                 'meta'   => array( 'title' => $title ),
             )
         );
@@ -591,7 +594,7 @@ class RapidLoad_Cache
                         '_action' => 'clearurl',
                     ) ), 'rapidload_cache_clear_cache_nonce' ),
                     'parent' => 'rapidload',
-                    'title'  => '<span class="ab-item">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
+                    'title'  => '<span class="ab-label">' . esc_html__( 'Clear Page Cache', 'rapidload-cache' ) . '</span>',
                     'meta'   => array( 'title' => esc_html__( 'Clear Page Cache', 'rapidload-cache' ) ),
                 )
             );
@@ -618,6 +621,7 @@ class RapidLoad_Cache
 
             self::clear_page_cache_by_url( $url );
         } elseif ( $_GET['_action'] === 'clear' ) {
+
             self::each_site( ( is_multisite() && is_network_admin() ), 'self::clear_site_cache', array(), true );
         }
 
@@ -653,7 +657,7 @@ class RapidLoad_Cache
 
             if (RapidLoad_Cache_Engine::is_cacheable( $content ) && !RapidLoad_Cache_Engine::bypass_cache()) {
 
-                RapidLoad_Cache_Store::cache_page( $content );
+                RapidLoad_Cache_Store::cache_page( str_replace("</body>","<div id='rapidload-cache-status' style='display:none;text-align:center;background-color:#a080c6;padding:1px;color:white;font-weight:500;'><p>Served by RapidLoad Cache</p></div>",$content) );
             }
 
         }
@@ -823,7 +827,7 @@ class RapidLoad_Cache
             'clear_site_cache_on_saved_user'     => 0,
             'clear_site_cache_on_changed_plugin' => 0,
             'convert_image_urls_to_webp'         => 0,
-            'mobile_cache'                       => 0,
+            'mobile_cache'                       => 1,
             'compress_cache'                     => 0,
             'minify_html'                        => 1,
             'minify_inline_css_js'               => 0,
@@ -1060,15 +1064,19 @@ class RapidLoad_Cache
         $callback_return   = array();
 
         foreach ( $blog_ids as $blog_id ) {
-            self::switch_to_blog( $blog_id, $restart_engine, $skip_active_check );
+            try {
+                self::switch_to_blog( $blog_id, $restart_engine, $skip_active_check );
 
-            if ( ($skip_active_check || self::is_rapidload_active()) && is_callable($callback)) {
-                $callback_return[ $blog_id ] = call_user_func_array( $callback, $callback_params );
+                if ( ($skip_active_check || self::is_rapidload_active()) && is_callable($callback)) {
+                    $callback_return[ $blog_id ] = call_user_func_array( $callback, $callback_params );
+                }
+
+                $_restart_engine = ( $restart_engine && $blog_id === $last_blog_id ) ? true : false;
+
+                self::restore_current_blog( $_restart_engine, $skip_active_check );
+            }catch (Exception $exception){
+
             }
-
-            $_restart_engine = ( $restart_engine && $blog_id === $last_blog_id ) ? true : false;
-
-            self::restore_current_blog( $_restart_engine, $skip_active_check );
         }
 
         return $callback_return;
