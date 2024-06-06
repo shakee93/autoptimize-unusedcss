@@ -67,19 +67,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const {settingsMode} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(false);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
     const [previewButton, setPreviewButton]= useState<boolean>(false);
     const [loadingStatus, setLoadingStatus] = useState(false);
 
     const { toast } = useToast();
 
     let url = options?.optimizer_url;
-
-    useEffect(() => {
-        dispatch(getTestModeStatus(options, url));
-    }, [dispatch]);
-
-
 
     useEffect(() => {
         if (testMode) {
