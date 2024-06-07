@@ -26,12 +26,15 @@ import {useToast} from "components/ui/use-toast";
 import {RootState} from "../../../../store/app/appTypes";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {SettingsLine, SettingsStraightLine, TestModeLine} from "app/page-optimizer/components/icons/icon-svg";
+import { useTestModeUtils } from 'hooks/testModeUtils';
 
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
 
-
-
+interface TestModeResult {
+    success: boolean;
+    error?: string; // Optional as it might not always be present
+}
 interface PageSpeedScoreProps {
     pagespeed?: any;
     priority?: boolean;
@@ -63,15 +66,15 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
 
     //Test Mode
-    const {options,} = useAppContext();
-    const {settingsMode} = useCommonDispatch();
+    const {options} = useAppContext();
+    const {settingsMode, testModeStatus} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
     const [previewButton, setPreviewButton]= useState<boolean>(false);
     const [loadingStatus, setLoadingStatus] = useState(false);
 
-    const { toast } = useToast();
+    const { handleTestModeSwitchChange } = useTestModeUtils();
 
     let url = options?.optimizer_url;
 
@@ -90,82 +93,21 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setLocalSwitchState(isChecked);
         setLoadingStatus(true);
 
-        if (timeoutId) {
-            clearTimeout(timeoutId);
+        const result = await handleTestModeSwitchChange( isChecked) as TestModeResult;
+        if (result && result.success) {
+            setLoadingStatus(false);
+
+        } else {
+           setLocalSwitchState(false);
+           setLoadingStatus(false);
         }
 
-        const newTimeoutId = setTimeout(async () => {
-            const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
-            if (result.success) {
-                setLoadingStatus(false);
-                toast({
-                    description: (
-                        <>
-                            <div className='flex w-full gap-2 text-center'>
-                                Test Mode turned {localSwitchState ? 'off' : 'on'} successfully
-                                <CheckCircleIcon className='w-5 text-green-600'/>
-                            </div>
-                            <div className='flex w-full gap-2 text-center'>
-                                <InformationCircleIcon className='w-5 text-green-600'/>
-                                Test Mode changes are on live
-                            </div>
-                        </>
-                    ),
-                });
-            } else {
-                toast({
-                    description: (
-                        <div className='flex w-full gap-2 text-center'>
-                            Failed to turn on Test mode: {result.error}
-                            <XCircleIcon className='w-5 text-red-600' />
-                        </div>
-                    ),
-                });
-                setLocalSwitchState(false);
-                setLoadingStatus(false);
-            }
-        }, 1000);
-        setTimeoutId(newTimeoutId);
 
     };
 
     useEffect(() => {
-        let toastInstance: ReturnType<typeof toast> | undefined;
-        if(settingsMode==='turboMax' && !localSwitchState){
-            toastInstance = toast({
-                description: (
-                    <>
-                        <div className='flex w-full gap-2 text-center items-center'>
-                            <InformationCircleIcon className='w-5 text-orange-600'/>
-                            Do you want to turn on test mode?
-
-                            <AppButton onClick={e => {
-                                handleSwitchChange(true);
-                                if (toastInstance) {
-                                    toastInstance.dismiss();
-                                }
-                            }} variant='outline'>
-                                Yes
-                            </AppButton>
-                            <AppButton onClick={e => {
-                                // Dismiss the toast immediately
-                                if (toastInstance) {
-                                    toastInstance.dismiss();
-                                }
-                            }} variant='outline'>
-                                No
-                            </AppButton>
-
-                        </div>
-                    </>
-                ),
-            }, true);
-
-        }else if(!testMode){
-            setLocalSwitchState(false);
-        }
-    }, [settingsMode]);
-
+        setLocalSwitchState(testModeStatus);
+    }, [testModeStatus]);
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -239,7 +181,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
 
                         <div
-                            onClick={() => handleSwitchChange(false)}
+                            onClick={async () => {
+                                if (!localSwitchState) {
+                                    await handleSwitchChange(false);
+                                }
+                            }}
                             className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${localSwitchState ? 'text-brand-500' : ''}`}
                         >
                             <Circle
@@ -250,7 +196,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
 
                         <div
-                            onClick={() => handleSwitchChange(true)}
+                            onClick={async () => {
+                                if (!localSwitchState) {
+                                    await handleSwitchChange(true);
+                                }
+                            }}
                             className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-6 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode

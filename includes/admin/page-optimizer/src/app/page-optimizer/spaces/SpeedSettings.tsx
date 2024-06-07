@@ -45,7 +45,11 @@ import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import AppButton from "components/ui/app-button";
 import Mode from "app/page-optimizer/components/Mode";
-import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes"; // Import the new component
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
+import {InformationCircleIcon} from "@heroicons/react/24/outline";
+import {useToast} from "components/ui/use-toast";
+import {RootState} from "../../../store/app/appTypes"; // Import the new component
+import { useTestModeUtils } from 'hooks/testModeUtils';
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -69,7 +73,10 @@ const SpeedSettings = ({}) => {
     const [customMode, setCustomMode] = useState(false);
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
-
+    const { toast } = useToast();
+    const {testMode} = useSelector((state: RootState) => state.app);
+    const { handleTestModeSwitchChange } = useTestModeUtils();
+    const {options} = useAppContext()
 
     const icons :  {
         [key in SettingsCategory]: React.ReactElement;
@@ -240,7 +247,8 @@ const SpeedSettings = ({}) => {
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
 
-        //&& initiateCustomMessage
+        handleTestModeSettingsChange(mode);
+
         if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
         }else{
@@ -281,6 +289,46 @@ const SpeedSettings = ({}) => {
         }
 
     };
+
+    const handleTestModeSettingsChange = async (gearSettingsMode: string,) => {
+        let toastInstance: ReturnType<typeof toast> | undefined;
+        if( gearSettingsMode==="turboMax" && !testMode){
+            toastInstance = toast({
+                description: (
+                    <>
+                        <div className='flex w-full gap-2 text-center items-center'>
+                            <InformationCircleIcon className='w-5 text-orange-600'/>
+                            Do you want to turn on test mode?
+
+                            <AppButton onClick={async e => {
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                                await handleTestModeSwitchChange( true)
+                            }} variant='outline'>
+                                Yes
+                            </AppButton>
+                            <AppButton onClick={e => {
+                                // Dismiss the toast immediately
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                            }} variant='outline'>
+                                No
+                            </AppButton>
+
+                        </div>
+                    </>
+                ),
+            },99999999);
+
+        }
+        if (toastInstance) {
+         //   console.log('condition: ',toastInstance)
+          //  toastInstance.dismiss();
+        }
+       // console.log(toastInstance)
+    }
 
     useEffect(() => {
 
@@ -340,7 +388,7 @@ const SpeedSettings = ({}) => {
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
     const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
-    const {options} = useAppContext()
+
 
     useEffect(() => {
 

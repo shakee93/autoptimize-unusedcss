@@ -141,7 +141,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ ...props }: Toast, autoClose = false) {
+function toast({ ...props }: Toast, closeDuration= 3000) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -157,13 +157,12 @@ function toast({ ...props }: Toast, autoClose = false) {
       ...props,
       id,
       open: true,
+      duration: closeDuration,
       onOpenChange: (open) => {
-        if(!autoClose){
-          if (!open) dismiss()
-        }
+        if (!open) dismiss();
       },
     },
-  })
+  });
 
   return {
     id: id,

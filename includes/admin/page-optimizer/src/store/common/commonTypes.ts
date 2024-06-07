@@ -13,6 +13,7 @@ export type CommonState = {
         storePassedAudits?:string[];
         inProgress: boolean;
         settingsMode: settingsMode;
+        testModeStatus: boolean;
         auditsReturn: boolean;
     }
     desktop : {
@@ -24,6 +25,7 @@ export type CommonState = {
         storePassedAudits?:string[];
         inProgress: boolean;
         settingsMode: settingsMode;
+        testModeStatus: boolean;
         auditsReturn: boolean;
     }
 
