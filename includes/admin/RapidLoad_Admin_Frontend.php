@@ -57,7 +57,7 @@ class RapidLoad_Admin_Frontend
 
             }
 
-            if(isset($_REQUEST['rapidload_preview_optimization'])){
+            if(isset($_REQUEST['rapidload_preview'])){
                 //$this->load_preview_scripts();
             }
         });

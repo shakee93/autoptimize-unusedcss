@@ -48,13 +48,13 @@ class RapidLoad_Optimizer
 
     public function update_content($state){
 
-        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview_optimization'])){
+        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
             /*$head = $state['dom']->find('head', 0);
 
             // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
             $content = "//!injected by RapidLoad \n
-            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview_optimization')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
+            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
 
             if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
                 $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.min.js';
@@ -1093,7 +1093,7 @@ class RapidLoad_Optimizer
         $url = $_REQUEST['url'];
 
         if(self::$global_options['rapidload_test_mode'] && self::$global_options['rapidload_test_mode'] == "1"){
-            $url = add_query_arg('rapidload_preview_optimization', 'true', $url);
+            $url = add_query_arg('rapidload_preview', 'true', $url);
         }
 
         $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;
