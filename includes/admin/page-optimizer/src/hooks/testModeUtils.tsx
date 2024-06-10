@@ -19,7 +19,7 @@ export const useTestModeUtils = () => {
         return new Promise(async (resolve, reject) => {
             try {
                 dispatch(setCommonState('testModeStatus', isChecked));
-
+                dispatch(setCommonState('testModeLoading', true));
                 if (timeoutId) {
                     clearTimeout(timeoutId);
                 }
@@ -47,6 +47,7 @@ export const useTestModeUtils = () => {
                             ),
                         }, 5000);
                         dispatch(setCommonState('testModeStatus', false));
+                        dispatch(setCommonState('testModeLoading', false));
                     }
                     resolve(result); // Resolve with the result
                 }, 1000);

@@ -14,6 +14,7 @@ export type CommonState = {
         inProgress: boolean;
         settingsMode: settingsMode;
         testModeStatus: boolean;
+        testModeLoading: boolean;
         auditsReturn: boolean;
     }
     desktop : {
@@ -26,6 +27,7 @@ export type CommonState = {
         inProgress: boolean;
         settingsMode: settingsMode;
         testModeStatus: boolean;
+        testModeLoading: boolean;
         auditsReturn: boolean;
     }
 

@@ -31,10 +31,6 @@ import { useTestModeUtils } from 'hooks/testModeUtils';
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
 
-interface TestModeResult {
-    success: boolean;
-    error?: string; // Optional as it might not always be present
-}
 interface PageSpeedScoreProps {
     pagespeed?: any;
     priority?: boolean;
@@ -67,7 +63,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     //Test Mode
     const {options} = useAppContext();
-    const {settingsMode, testModeStatus} = useCommonDispatch();
+    const {settingsMode, testModeStatus, testModeLoading} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
@@ -89,25 +85,13 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
 
     const handleSwitchChange = async (isChecked: boolean) => {
-
-        setLocalSwitchState(isChecked);
-        setLoadingStatus(true);
-
-        const result = await handleTestModeSwitchChange( isChecked) as TestModeResult;
-        if (result && result.success) {
-            setLoadingStatus(false);
-
-        } else {
-           setLocalSwitchState(false);
-           setLoadingStatus(false);
-        }
-
-
+       await handleTestModeSwitchChange( isChecked);
     };
 
     useEffect(() => {
         setLocalSwitchState(testModeStatus);
-    }, [testModeStatus]);
+        setLoadingStatus(testModeLoading);
+    }, [testModeStatus, testModeLoading]);
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
