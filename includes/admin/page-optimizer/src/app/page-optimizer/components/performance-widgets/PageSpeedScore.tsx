@@ -196,7 +196,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         onClick={() => {
                             {!loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');}
                         }}
-                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 pr-3.5 ${
+                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 ${
                             revisions.length > 0
                                 ? '' : ''}`} data-tour="preview-button">
 
